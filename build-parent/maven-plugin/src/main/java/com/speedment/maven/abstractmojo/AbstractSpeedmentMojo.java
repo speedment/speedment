@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,9 +30,10 @@ import com.speedment.maven.component.MavenPathComponent;
 import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
+import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
-import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
@@ -204,13 +205,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
         // Configure config file location
         if (hasConfigFile()) {
-            result = ApplicationBuilder.standard(classLoader)
+            result = ApplicationBuilders.standard(classLoader)
                 .withParam(METADATA_LOCATION, configLocation().toAbsolutePath().toString());
         } else if (hasConfigFile(DEFAULT_CONFIG)) {
-            result = ApplicationBuilder.standard(classLoader)
+            result = ApplicationBuilders.standard(classLoader)
                 .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
         } else {
-            result = ApplicationBuilder.empty(classLoader);
+            result = ApplicationBuilders.empty(classLoader);
         }
 
         //

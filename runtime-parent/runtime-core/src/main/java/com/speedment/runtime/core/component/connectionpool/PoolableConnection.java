@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,7 +24,7 @@ import java.sql.SQLException;
 /**
  * A connection in a {@link ConnectionPoolComponent} that in addition to 
  * the standard JDBC methods also has information about when it was 
- * created and twhen it expires, among other things.
+ * created and when it expires, among other things.
  * 
  * @author  Per Minborg
  * @since   2.2.0

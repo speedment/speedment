@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,9 +20,23 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+
+import com.speedment.common.codegen.internal.java.view.trait.HasAnnotationUsageView;
+import com.speedment.common.codegen.internal.java.view.trait.HasCodeView;
+import com.speedment.common.codegen.internal.java.view.trait.HasFieldsView;
+import com.speedment.common.codegen.internal.java.view.trait.HasGenericsView;
+import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
+import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
+import com.speedment.common.codegen.internal.java.view.trait.HasThrowsView;
 import com.speedment.common.codegen.model.Constructor;
+import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.trait.HasName;
 import com.speedment.common.codegen.util.Formatting;
+
+import static com.speedment.common.codegen.model.modifier.Modifier.ABSTRACT;
+import static com.speedment.common.codegen.model.modifier.Modifier.PRIVATE;
+import static com.speedment.common.codegen.model.modifier.Modifier.PROTECTED;
+import static com.speedment.common.codegen.model.modifier.Modifier.PUBLIC;
 import static com.speedment.common.codegen.util.Formatting.*;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,33 +46,48 @@ import java.util.stream.Collectors;
  * 
  * @author Emil Forslund
  */
-public final class ConstructorView implements Transform<Constructor, String> {
+public final class ConstructorView
+implements Transform<Constructor, String>,
+           HasThrowsView<Constructor>,
+           HasGenericsView<Constructor>,
+           HasFieldsView<Constructor>,
+           HasJavadocView<Constructor>,
+           HasAnnotationUsageView<Constructor>,
+           HasCodeView<Constructor>,
+           HasModifiersView<Constructor> {
 
-	@Override
+    @Override
+    public String fieldSeparator(Constructor model) {
+        if (model.getFields().size() >= 3
+        ||  model.getFields().stream()
+            .anyMatch(f -> !f.getAnnotations().isEmpty())) {
+            return "," + nl() + tab() + tab();
+        } else return ", ";
+    }
+
+    @Override
+    public String throwsSuffix(Constructor model) {
+        return " ";
+    }
+
+    @Override
 	public Optional<String> transform(Generator gen, Constructor model) {
         requireNonNulls(gen, model);
-        
-		return Optional.of(
-			ifelse(gen.on(model.getJavadoc()), s -> s + nl(), "") +
-			gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(" ", "", " ")) +
-			renderName(gen, model)
+
+        return Optional.of(
+            renderJavadoc(gen, model) +
+            renderAnnotations(gen, model) +
+            renderModifiers(gen, model, PUBLIC, PRIVATE, PROTECTED) +
+            renderGenerics(gen, model) +
+            renderName(gen, model)
                 .orElseThrow(() -> new UnsupportedOperationException(
                     "Could not find a nameable parent of constructor."
                 )) +
-			gen.onEach(model.getFields()).collect(
-				Collectors.joining(
-                    fieldSeparator(model), 
-                    (model.getFields().size() > 3) ? "(" + nl() + tab() + tab() : "(", 
-                    ")"
-                )
-			) + " " + 
-            gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(", ", "throws ", " ")) +
-            block(
-				model.getCode().stream().collect(
-					Collectors.joining(nl())
-				)
-			)
-		);
+            ((splitFields(model)) ? "(" + nl() + tab() + tab() : "(") +
+            renderFields(gen, model) + ") " +
+            renderThrows(gen, model) +
+            renderCode(gen, model)
+        );
 	}
 	
     /**
@@ -74,15 +103,13 @@ public final class ConstructorView implements Transform<Constructor, String> {
 
         return gen.getRenderStack()
             .fromTop(HasName.class)
-            .filter(n -> model != n)
             .map(HasName<?>::getName)
             .map(Formatting::shortName)
             .findFirst();
 	}
-    
-    private String fieldSeparator(Constructor model) {
-        if (model.getFields().size() > 3) {
-            return "," + nl() + tab() + tab();
-        } else return ", ";
+
+    private boolean splitFields(Constructor model) {
+        return model.getFields().size() >= 3 || model.getFields().stream()
+            .anyMatch(f -> !f.getAnnotations().isEmpty());
     }
 }

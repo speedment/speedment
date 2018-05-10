@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -55,7 +55,7 @@ public final class MethodView implements Transform<Method, String>,
             renderGenerics(gen, model) +
             renderType(gen, model) +
             renderName(gen, model) + 
-            ((model.getFields().size() > 3) ? "(" + nl() + tab() + tab() : "(") +
+            ((splitFields(model)) ? "(" + nl() + tab() + tab() : "(") +
             renderFields(gen, model) + ") " +
             renderThrows(gen, model) + 
             renderCode(gen, model)
@@ -64,11 +64,8 @@ public final class MethodView implements Transform<Method, String>,
     
     @Override
     public String fieldSeparator(Method model) {
-        if (model.getFields().size() > 3
-        ||  model.getFields().stream()
-                .anyMatch(f -> !f.getAnnotations().isEmpty())) {
-            return "," + nl() + tab() + tab();
-        } else return ", ";
+        if (splitFields(model)) return "," + nl() + tab() + tab();
+        else return ", ";
     }
 
     @Override
@@ -79,5 +76,10 @@ public final class MethodView implements Transform<Method, String>,
     @Override
     public boolean useTripleDot() {
         return true;
+    }
+
+    private boolean splitFields(Method model) {
+	    return model.getFields().size() >= 3 || model.getFields().stream()
+            .anyMatch(f -> !f.getAnnotations().isEmpty());
     }
 }

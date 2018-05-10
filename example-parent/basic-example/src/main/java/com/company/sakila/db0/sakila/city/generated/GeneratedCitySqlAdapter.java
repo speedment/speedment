@@ -3,12 +3,9 @@ package com.company.sakila.db0.sakila.city.generated;
 import com.company.sakila.db0.sakila.city.City;
 import com.company.sakila.db0.sakila.city.CityImpl;
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -23,7 +20,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCitySqlAdapter {
+public abstract class GeneratedCitySqlAdapter implements SqlAdapter<City> {
     
     private final TableIdentifier<City> tableIdentifier;
     
@@ -31,27 +28,31 @@ public abstract class GeneratedCitySqlAdapter {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "city");
     }
     
-    @ExecuteBefore(RESOLVED)
-    void installMethodName(@WithState(RESOLVED) SqlStreamSupplierComponent streamSupplierComponent,
-            @WithState(RESOLVED) SqlPersistenceComponent persistenceComponent) {
-        streamSupplierComponent.install(tableIdentifier, this::apply);
-        persistenceComponent.install(tableIdentifier);
-    }
-    
-    protected City apply(ResultSet resultSet) throws SpeedmentException {
-        final City entity = createEntity();
-        try {
-            entity.setCityId(     resultSet.getInt(1)       );
-            entity.setCity(       resultSet.getString(2)    );
-            entity.setCountryId(  resultSet.getInt(3)       );
-            entity.setLastUpdate( resultSet.getTimestamp(4) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected City apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setCityId(     resultSet.getInt(1 + offset))
+            .setCity(       resultSet.getString(2 + offset))
+            .setCountryId(  resultSet.getInt(3 + offset))
+            .setLastUpdate( resultSet.getTimestamp(4 + offset))
+            ;
     }
     
     protected CityImpl createEntity() {
         return new CityImpl();
+    }
+    
+    @Override
+    public TableIdentifier<City> identifier() {
+        return tableIdentifier;
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, City> entityMapper() {
+        return entityMapper(0);
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, City> entityMapper(int offset) {
+        return rs -> apply(rs, offset);
     }
 }

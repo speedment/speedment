@@ -25,9 +25,7 @@ public abstract class GeneratedFilmActorImpl implements FilmActor {
     private int filmId;
     private Timestamp lastUpdate;
     
-    protected GeneratedFilmActorImpl() {
-        
-    }
+    protected GeneratedFilmActorImpl() {}
     
     @Override
     public int getActorId() {

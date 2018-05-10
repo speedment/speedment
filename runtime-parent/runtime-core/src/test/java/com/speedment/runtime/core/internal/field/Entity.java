@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -39,22 +39,22 @@ public interface Entity {
         }
 
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return columnName;
         }
 
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return "my_dbms";
         }
 
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return "my_schema";
         }
 
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return "my_table";
         }
     }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,10 +23,10 @@ public class ColumnLabelImpl implements ColumnLabel {
     private final String label;
 
     public ColumnLabelImpl(ColumnIdentifier<?> identifier) {
-        label = identifier.getDbmsName() + "." +
-            identifier.getSchemaName() + "." +
-            identifier.getTableName() + "." +
-            identifier.getColumnName();
+        label = identifier.getDbmsId() + "." +
+            identifier.getSchemaId() + "." +
+            identifier.getTableId() + "." +
+            identifier.getColumnId();
     }
 
     @Override

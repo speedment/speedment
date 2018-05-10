@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,21 +23,21 @@ import com.speedment.generator.translator.exception.SpeedmentTranslatorException
 import com.speedment.runtime.config.trait.HasTypeMapper;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.bigdecimal.BigDecimalToDouble;
+import com.speedment.runtime.typemapper.bytes.ByteZeroOneToBooleanMapper;
 import com.speedment.runtime.typemapper.doubles.DoubleToFloatMapper;
 import com.speedment.runtime.typemapper.doubles.PrimitiveDoubleToFloatMapper;
 import com.speedment.runtime.typemapper.integer.*;
+import com.speedment.runtime.typemapper.largeobject.BlobToBigIntegerMapper;
 import com.speedment.runtime.typemapper.largeobject.BlobToByteArrayMapper;
 import com.speedment.runtime.typemapper.largeobject.ClobToStringMapper;
 import com.speedment.runtime.typemapper.longs.*;
+import com.speedment.runtime.typemapper.other.BinaryToBigIntegerMapper;
 import com.speedment.runtime.typemapper.other.BinaryToByteArrayMapper;
 import com.speedment.runtime.typemapper.other.BinaryToUuidMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.typemapper.shorts.PrimitiveShortToByteMapper;
 import com.speedment.runtime.typemapper.shorts.ShortToByteMapper;
-import com.speedment.runtime.typemapper.string.StringToLocaleMapper;
-import com.speedment.runtime.typemapper.string.TrueFalseStringToBooleanMapper;
-import com.speedment.runtime.typemapper.string.YNStringToBooleanMapper;
-import com.speedment.runtime.typemapper.string.YesNoStringToBooleanMapper;
+import com.speedment.runtime.typemapper.string.*;
 import com.speedment.runtime.typemapper.time.*;
 
 import java.math.BigDecimal;
@@ -68,11 +68,17 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Date.class,      DateToLocalDateMapper::new);
         install(Date.class,      DateToLongMapper::new);
         install(Date.class,      DateToIntMapper::new);
+        install(Date.class,      DateToPrimitiveIntMapper::new);
+        install(Date.class,      DateToPrimitiveLongMapper::new);
         install(Timestamp.class, TimestampToLongMapper::new);
         install(Timestamp.class, TimestampToIntMapper::new);
+        install(Timestamp.class, TimestampToPrimitiveLongMapper::new);
+        install(Timestamp.class, TimestampToPrimitiveIntMapper::new);
         install(Timestamp.class, TimestampToLocalDateTimeMapper::new);
         install(Time.class,      TimeToLongMapper::new);
         install(Time.class,      TimeToIntMapper::new);
+        install(Time.class,      TimeToPrimitiveLongMapper::new);
+        install(Time.class,      TimeToPrimitiveIntMapper::new);
         install(Time.class,      TimeToLocalTimeMapper::new);
         install(Short.class,     ShortEpochDaysToLocalDateMapper::new);
         install(Integer.class,   IntEpochDaysToLocalDateMapper::new);
@@ -82,6 +88,8 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(String.class, TrueFalseStringToBooleanMapper::new);
         install(String.class, YesNoStringToBooleanMapper::new);
         install(String.class, YNStringToBooleanMapper::new);
+        install(String.class, StringToBigIntegerMapper::new);
+        install(String.class, StringToBigDecimalMapper::new);
 
         // Special BigDecimal object mappers
         install(BigDecimal.class, BigDecimalToDouble::new);
@@ -89,7 +97,8 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         // Special Large object mappers
         install(Clob.class, ClobToStringMapper::new);
         install(Blob.class, BlobToByteArrayMapper::new);
-        
+        install(Blob.class, BlobToBigIntegerMapper::new);
+
         // Special Long mappers
         install(Long.class, LongToIntegerMapper::new);
         install(Long.class, LongToShortMapper::new);
@@ -107,6 +116,9 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Integer.class, PrimitiveIntegerToByteMapper::new);
         install(Integer.class, DateIntToShortMapper::new);
         install(Integer.class, DateIntToPrimitiveShortMapper::new);
+
+        // Special Byte mappers
+        install(Byte.class, ByteZeroOneToBooleanMapper::new);
 
         // Special Short mappers
         install(Short.class, ShortToByteMapper::new);
@@ -129,6 +141,7 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         // Others
         install(Object.class, BinaryToUuidMapper::new);
         install(Object.class, BinaryToByteArrayMapper::new);
+        install(Object.class, BinaryToBigIntegerMapper::new);
     }
 
     @Override

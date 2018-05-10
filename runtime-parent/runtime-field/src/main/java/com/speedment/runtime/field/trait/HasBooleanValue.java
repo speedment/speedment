@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -63,7 +63,8 @@ public interface HasBooleanValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, boolean value) {
-        return setter().setAsBoolean(entity, value);
+        setter().setAsBoolean(entity, value);
+        return entity;
     }
     
     /**

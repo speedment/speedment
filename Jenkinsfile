@@ -22,7 +22,9 @@ pipeline {
         //    }
         //}
     }
+    
     post {
+        
         always {
             // Archive Unit and integration test results, if any
             junit allowEmptyResults: true,

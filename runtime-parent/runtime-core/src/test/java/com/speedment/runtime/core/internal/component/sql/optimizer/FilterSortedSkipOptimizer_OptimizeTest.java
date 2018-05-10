@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.component.sql.optimizer;
 
-import com.speedment.runtime.core.internal.component.sql.optimizer.FilterSortedSkipOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
@@ -82,7 +81,7 @@ public class FilterSortedSkipOptimizer_OptimizeTest {
 
                 return 1l;
             },
-            f -> f.identifier().getColumnName(),
+            f -> f.identifier().getColumnId(),
             f -> Object.class
         );
     }

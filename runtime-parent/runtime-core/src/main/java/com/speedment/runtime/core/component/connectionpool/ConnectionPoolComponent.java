@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -109,20 +109,6 @@ public interface ConnectionPoolComponent {
      */
     int getMaxRetainSize();
 
-    /**
-     * Sets the maximum number of connection this pool will retain when
-     * connections are returned. If the number of connections in the pool
-     * exceeds this number of connections, a connection that is returned will be
-     * discarded and will not recycled.
-     *
-     * @param size is the maximum number of connection this pool will retain
-     * when connections are returned
-     *
-     * @deprecated This method will be removed in coming APIs. Use configuration
-     * parameters instead.
-     */
-    @Deprecated
-    void setMaxRetainSize(int size);
 
     /**
      * Returns the maximum age for recyclable connections. Connections older
@@ -132,16 +118,5 @@ public interface ConnectionPoolComponent {
      */
     long getMaxAge();
 
-    /**
-     * Sets the maximum age for recyclable connections. Connections older that
-     * this age will be discarded.
-     *
-     * @param maxAge the maximum age for recyclable connections
-     *
-     * @deprecated This method will be removed in coming APIs. Use configuration
-     * parameters instead.
-     */
-    @Deprecated
-    void setMaxAge(long maxAge);
 
 }

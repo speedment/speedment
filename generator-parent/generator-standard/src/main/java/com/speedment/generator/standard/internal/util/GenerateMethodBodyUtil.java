@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,7 +25,6 @@ import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -40,39 +39,39 @@ import static java.util.stream.Collectors.joining;
 
 /**
  *
- * @author  Emil Forslund
- * @since   3.0.0
+ * @author Emil Forslund
+ * @since 3.0.0
  */
 public final class GenerateMethodBodyUtil {
 
     public static Method generateFields(
-            TranslatorSupport<Table> support,
-            File file,
-            String methodName,
-            Supplier<Stream<? extends Column>> columnsSupplier) {
+        TranslatorSupport<Table> support,
+        File file,
+        String methodName,
+        Supplier<Stream<? extends Column>> columnsSupplier) {
 
-        return Method.of(methodName, 
-                DefaultType.stream(
-                    SimpleParameterizedType.create(
-                        com.speedment.runtime.field.Field.class,
-                        support.entityType()
-                    )
+        return Method.of(methodName,
+            DefaultType.stream(
+                SimpleParameterizedType.create(
+                    com.speedment.runtime.field.Field.class,
+                    support.entityType()
                 )
             )
+        )
             .public_().add(OVERRIDE)
             .add(generateFieldsBody(support, file, columnsSupplier));
     }
 
     public static String[] generateFieldsBody(
-            TranslatorSupport<Table> support,
-            File file,
-            Supplier<Stream<? extends Column>> columnsSupplier) {
+        TranslatorSupport<Table> support,
+        File file,
+        Supplier<Stream<? extends Column>> columnsSupplier) {
 
         file.add(Import.of(Stream.class));
 
         // If there are no matching columns:
         if (columnsSupplier.get().noneMatch($ -> true)) {
-            return new String[] {"return Stream.empty();"};
+            return new String[]{"return Stream.empty();"};
         } else {
             final List<String> rows = new LinkedList<>();
 
@@ -89,45 +88,40 @@ public final class GenerateMethodBodyUtil {
             return rows.toArray(new String[rows.size()]);
         }
     }
-    
+
     @FunctionalInterface
     public interface ReadFromResultSet {
+
         String readFromResultSet(File file, Column c, AtomicInteger position);
     }
 
     public static String[] generateApplyResultSetBody(
-            ReadFromResultSet readFromResultSet,
-            TranslatorSupport<Table> support,
-            File file,
-            Supplier<Stream<? extends Column>> columnsSupplier) {
+        ReadFromResultSet readFromResultSet,
+        TranslatorSupport<Table> support,
+        File file,
+        Supplier<Stream<? extends Column>> columnsSupplier) {
 
         file.add(Import.of(SQLException.class));
-        
+
         final List<String> rows = new LinkedList<>();
-        rows.add("final " + support.entityName() + " entity = createEntity();");
+        rows.add("return createEntity()");
 
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
         final AtomicInteger position = new AtomicInteger(1);
         columnsSupplier.get()
             .filter(HasEnabled::isEnabled)
-            .forEachOrdered(c -> 
-                streamBuilder.add("entity.set" +
-                    support.namer().javaTypeName(c.getJavaName()) + "(\t " +
-                    readFromResultSet.readFromResultSet(file, c, position) +
-                    " \t);")
+            .forEachOrdered(c
+                -> streamBuilder.add(indent(".set"
+                + support.namer().javaTypeName(c.getJavaName()) + "(\t "
+                + readFromResultSet.readFromResultSet(file, c, position)
+                + ")"))
             );
-
-        rows.add(
-            "try " + block(streamBuilder.build()) +
-            " catch (final " + SQLException.class.getSimpleName() + " sqle) " + block(
-            "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
-        ));
-        rows.add("return entity;");
-
+        streamBuilder.add(indent(";"));
+        streamBuilder.build().forEachOrdered(rows::add);
         return rows.toArray(new String[rows.size()]);
     }
-    
+
     private GenerateMethodBodyUtil() {
         throw new UnsupportedOperationException();
     }

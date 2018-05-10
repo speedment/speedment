@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,6 +17,7 @@
 package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.compute.ToFloat;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.FloatFieldImpl;
 import com.speedment.runtime.field.method.FloatGetter;
@@ -37,7 +38,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see ReferenceField
  */
 @GeneratedCode(value = "Speedment")
-public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTITY, D>, HasComparableOperators<ENTITY, Float> {
+public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTITY, D>, HasComparableOperators<ENTITY, Float>, ToFloat<ENTITY> {
     
     /**
      * Creates a new {@link FloatField} using the default implementation.
@@ -60,5 +61,10 @@ public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTI
         return new FloatFieldImpl<>(
             identifier, getter, setter, typeMapper, unique
         );
+    }
+    
+    @Override
+    default float applyAsFloat(ENTITY entity) {
+        return getAsFloat(entity);
     }
 }

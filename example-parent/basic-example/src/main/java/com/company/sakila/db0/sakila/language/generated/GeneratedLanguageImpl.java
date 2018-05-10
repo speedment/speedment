@@ -22,9 +22,7 @@ public abstract class GeneratedLanguageImpl implements Language {
     private String name;
     private Timestamp lastUpdate;
     
-    protected GeneratedLanguageImpl() {
-        
-    }
+    protected GeneratedLanguageImpl() {}
     
     @Override
     public short getLanguageId() {

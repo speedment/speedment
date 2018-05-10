@@ -4,12 +4,12 @@ import com.company.sakila.db0.sakila.address.Address;
 import com.company.sakila.db0.sakila.staff.Staff;
 import com.company.sakila.db0.sakila.store.Store;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.example.typemapper.IntegerZeroOneToYesNoTypeMapper;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.runtime.field.ComparableField;
-import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.IntForeignKeyField;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.ShortField;
@@ -116,11 +116,11 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getActive()} method.
      */
-    IntField<Staff, Integer> ACTIVE = IntField.create(
+    StringField<Staff, Integer> ACTIVE = StringField.create(
         Identifier.ACTIVE,
         Staff::getActive,
         Staff::setActive,
-        TypeMapper.primitive(),
+        new IntegerZeroOneToYesNoTypeMapper(),
         false
     );
     /**
@@ -219,7 +219,7 @@ public interface GeneratedStaff {
      * 
      * @return the active of this Staff
      */
-    int getActive();
+    String getActive();
     
     /**
      * Returns the username of this Staff. The username field corresponds to the
@@ -315,7 +315,7 @@ public interface GeneratedStaff {
      * @param active to set of this Staff
      * @return       this Staff instance
      */
-    Staff setActive(int active);
+    Staff setActive(String active);
     
     /**
      * Sets the username of this Staff. The username field corresponds to the
@@ -376,34 +376,34 @@ public interface GeneratedStaff {
         PASSWORD    ("password"),
         LAST_UPDATE ("last_update");
         
-        private final String columnName;
+        private final String columnId;
         private final TableIdentifier<Staff> tableIdentifier;
         
-        Identifier(String columnName) {
-            this.columnName      = columnName;
-            this.tableIdentifier = TableIdentifier.of(    getDbmsName(), 
-                getSchemaName(), 
-                getTableName());
+        Identifier(String columnId) {
+            this.columnId        = columnId;
+            this.tableIdentifier = TableIdentifier.of(    getDbmsId(), 
+                getSchemaId(), 
+                getTableId());
         }
         
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return "db0";
         }
         
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return "sakila";
         }
         
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return "staff";
         }
         
         @Override
-        public String getColumnName() {
-            return this.columnName;
+        public String getColumnId() {
+            return this.columnId;
         }
         
         @Override

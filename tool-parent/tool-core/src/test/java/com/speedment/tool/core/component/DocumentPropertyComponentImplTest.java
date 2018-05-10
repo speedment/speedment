@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,11 +17,11 @@
 package com.speedment.tool.core.component;
 
 import com.speedment.generator.core.GeneratorBundle;
+import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.mutator.DbmsMutator;
-import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.*;
@@ -51,7 +51,7 @@ public class DocumentPropertyComponentImplTest {
 
     @Before
     public void setUp() {
-        speedment = ApplicationBuilder.empty()
+        speedment = ApplicationBuilders.empty()
             .withBundle(GeneratorBundle.class)
             .withBundle(ToolBundle.class)
             .withSkipCheckDatabaseConnectivity()

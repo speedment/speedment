@@ -3,12 +3,9 @@ package com.company.sakila.db0.sakila.address.generated;
 import com.company.sakila.db0.sakila.address.Address;
 import com.company.sakila.db0.sakila.address.AddressImpl;
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -23,7 +20,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedAddressSqlAdapter {
+public abstract class GeneratedAddressSqlAdapter implements SqlAdapter<Address> {
     
     private final TableIdentifier<Address> tableIdentifier;
     
@@ -31,32 +28,36 @@ public abstract class GeneratedAddressSqlAdapter {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "address");
     }
     
-    @ExecuteBefore(RESOLVED)
-    void installMethodName(@WithState(RESOLVED) SqlStreamSupplierComponent streamSupplierComponent,
-            @WithState(RESOLVED) SqlPersistenceComponent persistenceComponent) {
-        streamSupplierComponent.install(tableIdentifier, this::apply);
-        persistenceComponent.install(tableIdentifier);
-    }
-    
-    protected Address apply(ResultSet resultSet) throws SpeedmentException {
-        final Address entity = createEntity();
-        try {
-            entity.setAddressId(  resultSet.getInt(1)       );
-            entity.setAddress(    resultSet.getString(2)    );
-            entity.setAddress2(   resultSet.getString(3)    );
-            entity.setDistrict(   resultSet.getString(4)    );
-            entity.setCityId(     resultSet.getInt(5)       );
-            entity.setPostalCode( resultSet.getString(6)    );
-            entity.setPhone(      resultSet.getString(7)    );
-            entity.setLocation(   resultSet.getBlob(8)      );
-            entity.setLastUpdate( resultSet.getTimestamp(9) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Address apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setAddressId(  resultSet.getInt(1 + offset))
+            .setAddress(    resultSet.getString(2 + offset))
+            .setAddress2(   resultSet.getString(3 + offset))
+            .setDistrict(   resultSet.getString(4 + offset))
+            .setCityId(     resultSet.getInt(5 + offset))
+            .setPostalCode( resultSet.getString(6 + offset))
+            .setPhone(      resultSet.getString(7 + offset))
+            .setLocation(   resultSet.getBlob(8 + offset))
+            .setLastUpdate( resultSet.getTimestamp(9 + offset))
+            ;
     }
     
     protected AddressImpl createEntity() {
         return new AddressImpl();
+    }
+    
+    @Override
+    public TableIdentifier<Address> identifier() {
+        return tableIdentifier;
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Address> entityMapper() {
+        return entityMapper(0);
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Address> entityMapper(int offset) {
+        return rs -> apply(rs, offset);
     }
 }

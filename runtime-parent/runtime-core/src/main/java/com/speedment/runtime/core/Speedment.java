@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -33,7 +33,7 @@ import java.util.Optional;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-public interface Speedment {
+public interface Speedment extends AutoCloseable {
     
     /**
      * Returns the specified component from the platform, or if it does not
@@ -69,10 +69,12 @@ public interface Speedment {
      */
     <ENTITY> ManagerConfigurator<ENTITY> configure(Class<? extends Manager<ENTITY>> manager);
     
-    /**
-     * Stops the Speedment instance and deallocates any allocated resources.
-     * After stop() has been called, the Speedment instance can not be called
+   /**
+     * Closes the Speedment instance and deallocates any allocated resources.
+     * After close() has been called, the Speedment instance can not be called
      * any more.
      */
-    void stop();
+    @Override
+    void close();
+    
 }

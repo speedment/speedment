@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,14 +26,11 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.identifier.trait.HasColumnName;
-import com.speedment.runtime.config.identifier.trait.HasDbmsName;
-import com.speedment.runtime.config.identifier.trait.HasSchemaName;
-import com.speedment.runtime.config.identifier.trait.HasTableName;
+import com.speedment.runtime.config.identifier.trait.HasColumnId;
+import com.speedment.runtime.config.identifier.trait.HasDbmsId;
+import com.speedment.runtime.config.identifier.trait.HasSchemaId;
+import com.speedment.runtime.config.identifier.trait.HasTableId;
 import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
-import com.speedment.runtime.core.internal.DefaultApplicationMetadata;
-import com.speedment.runtime.core.internal.EmptyApplicationMetadata;
 import com.speedment.runtime.core.manager.Manager;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -55,13 +52,12 @@ public interface ApplicationBuilder<
      * applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the dbms
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName> BUILDER withDbms(I id, Consumer<Dbms> consumer) {
+    default <I extends HasDbmsId> BUILDER withDbms(I id, Consumer<Dbms> consumer) {
         return withDbms(id, (app, t) -> consumer.accept(t));
     }
 
@@ -70,16 +66,15 @@ public interface ApplicationBuilder<
      * applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param identifier of the dbms
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName> BUILDER withDbms(I identifier, BiConsumer<Injector, Dbms> consumer) {
+    default <I extends HasDbmsId> BUILDER withDbms(I identifier, BiConsumer<Injector, Dbms> consumer) {
         return with(
             Dbms.class,
-            identifier.getDbmsName(),
+            identifier.getDbmsId(),
             consumer
         );
     }
@@ -89,13 +84,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the schema
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName> BUILDER withSchema(I id, Consumer<Schema> consumer) {
+    default <I extends HasDbmsId & HasSchemaId> BUILDER withSchema(I id, Consumer<Schema> consumer) {
         return withSchema(id, (app, t) -> consumer.accept(t));
     }
 
@@ -104,16 +98,15 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param identifier of the schema
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName> BUILDER withSchema(I identifier, BiConsumer<Injector, Schema> consumer) {
+    default <I extends HasDbmsId & HasSchemaId> BUILDER withSchema(I identifier, BiConsumer<Injector, Schema> consumer) {
         return with(
             Schema.class,
-            identifier.getDbmsName() + "." + identifier.getSchemaName(),
+            identifier.getDbmsId() + "." + identifier.getSchemaId(),
             consumer
         );
     }
@@ -123,13 +116,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the table
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName> BUILDER withTable(I id, Consumer<Table> consumer) {
+    default <I extends HasDbmsId & HasSchemaId & HasTableId> BUILDER withTable(I id, Consumer<Table> consumer) {
         return withTable(id, (app, t) -> consumer.accept(t));
     }
 
@@ -138,16 +130,15 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param identifier of the table
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName> BUILDER withTable(I identifier, BiConsumer<Injector, Table> consumer) {
+    default <I extends HasDbmsId & HasSchemaId & HasTableId> BUILDER withTable(I identifier, BiConsumer<Injector, Table> consumer) {
         return with(
             Table.class,
-            identifier.getDbmsName() + "." + identifier.getSchemaName() + "." + identifier.getTableName(),
+            identifier.getDbmsId() + "." + identifier.getSchemaId() + "." + identifier.getTableId(),
             consumer
         );
     }
@@ -157,13 +148,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the column
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> BUILDER withColumn(I id, Consumer<Column> consumer) {
+    default <I extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> BUILDER withColumn(I id, Consumer<Column> consumer) {
         return withColumn(id, (app, t) -> consumer.accept(t));
     }
 
@@ -172,16 +162,15 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the column
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> BUILDER withColumn(I id, BiConsumer<Injector, Column> consumer) {
+    default <I extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> BUILDER withColumn(I id, BiConsumer<Injector, Column> consumer) {
         return with(
             Column.class,
-            id.getDbmsName() + "." + id.getSchemaName() + "." + id.getTableName() + "." + id.getColumnName(),
+            id.getDbmsId() + "." + id.getSchemaId() + "." + id.getTableId() + "." + id.getColumnId(),
             consumer
         );
     }
@@ -286,8 +275,8 @@ public interface ApplicationBuilder<
      * @param password to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withPassword(I id, char[] password) {
-        return withPassword(id.getDbmsName(), password);
+    default <I extends HasDbmsId> BUILDER withPassword(I id, char[] password) {
+        return withPassword(id.getDbmsId(), password);
     }
 
     /**
@@ -327,8 +316,8 @@ public interface ApplicationBuilder<
      * @param password to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withPassword(I id, String password) {
-        return withPassword(id.getDbmsName(), password);
+    default <I extends HasDbmsId> BUILDER withPassword(I id, String password) {
+        return withPassword(id.getDbmsId(), password);
     }
 
     /**
@@ -364,8 +353,8 @@ public interface ApplicationBuilder<
      * @param username to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withUsername(I id, String username) {
-        return withUsername(id.getDbmsName(), username);
+    default <I extends HasDbmsId> BUILDER withUsername(I id, String username) {
+        return withUsername(id.getDbmsId(), username);
     }
 
     /**
@@ -401,8 +390,8 @@ public interface ApplicationBuilder<
      * @param ipAddress to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withIpAddress(I id, String ipAddress) {
-        return withIpAddress(id.getDbmsName(), ipAddress);
+    default <I extends HasDbmsId> BUILDER withIpAddress(I id, String ipAddress) {
+        return withIpAddress(id.getDbmsId(), ipAddress);
     }
 
     /**
@@ -438,8 +427,8 @@ public interface ApplicationBuilder<
      * @param port to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withPort(I id, int port) {
-        return withPort(id.getDbmsName(), port);
+    default <I extends HasDbmsId> BUILDER withPort(I id, int port) {
+        return withPort(id.getDbmsId(), port);
     }
 
     /**
@@ -509,8 +498,8 @@ public interface ApplicationBuilder<
      * @param connectionUrl to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withConnectionUrl(I id, String connectionUrl) {
-        return withConnectionUrl(id.getDbmsName(), connectionUrl);
+    default <I extends HasDbmsId> BUILDER withConnectionUrl(I id, String connectionUrl) {
+        return withConnectionUrl(id.getDbmsId(), connectionUrl);
     }
 
     /**
@@ -565,24 +554,6 @@ public interface ApplicationBuilder<
     BUILDER withComponent(Class<?> componentClass);
 
     /**
-     * Adds a custom component implementation class. The specified class will be
-     * instantiated using its default constructor and fields annotated with
-     * {@link Inject} will be dependency injected. Methods annotated with
-     * {@link ExecuteBefore} will also be executed as part of the application
-     * configuration phase.
-     *
-     * @deprecated The parameter {@code key} is not forwarded to the dependency
-     * injection framework, so this method has exactly the same behavior as
-     * {@link #withComponent(java.lang.Class) }, so it is redundant.
-     *
-     * @param key the key to store it under
-     * @param componentClass the implementation class
-     * @return this instance
-     */
-    @Deprecated
-    BUILDER withComponent(String key, Class<?> componentClass);
-
-    /**
      * Adds a custom bundle of dependency injectable implementation classes.
      * <p>
      * The specified classes will be instantiated using its default constructor
@@ -611,7 +582,7 @@ public interface ApplicationBuilder<
      * @see com.speedment.runtime.core.ApplicationBuilder.LogType for standard
      * implementation
      */
-    BUILDER withLogging(HasLogglerName namer);
+    BUILDER withLogging(HasLoggerName namer);
 
     /**
      * Allows {@link java.util.stream.Stream#iterator() } and 
@@ -642,86 +613,6 @@ public interface ApplicationBuilder<
     APP build();
 
     /**
-     * Creates and returns a new empty {@code ApplicationBuilder}.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @return a new empty ApplicationBuilder
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        empty() {
-        return (BUILDER) new DefaultApplicationBuilder(
-            EmptyApplicationMetadata.class
-        );
-    }
-
-    /**
-     * Creates and returns a new empty {@code ApplicationBuilder}.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @param classLoader the class loader to use in the injector
-     * @return a new empty ApplicationBuilder
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        empty(ClassLoader classLoader) {
-        return (BUILDER) new DefaultApplicationBuilder(
-            classLoader,
-            EmptyApplicationMetadata.class
-        );
-    }
-
-    /**
-     * Creates and returns a new standard ApplicationBuilder. The configuration
-     * is read from a JSON file.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @return a new standard ApplicationBuilder
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        standard() {
-        return (BUILDER) new DefaultApplicationBuilder(
-            DefaultApplicationMetadata.class
-        );
-    }
-
-    /**
-     * Creates and returns a new standard ApplicationBuilder. The configuration
-     * is read from a JSON file.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @param classLoader the class loader to use in the injector
-     * @return a new standard ApplicationBuilder
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        standard(ClassLoader classLoader) {
-        return (BUILDER) new DefaultApplicationBuilder(
-            classLoader,
-            DefaultApplicationMetadata.class
-        );
-    }
-
-    /**
-     * Creates and returns a new ApplicationBuilder configured with the given
-     * ApplicationMetadata class.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @param applicationMetadataclass with configuration
-     *
-     * @return a new ApplicationBuilder configured with the given
-     * ApplicationMetadata class
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        create(Class<? extends ApplicationMetadata> applicationMetadataclass) {
-        return (BUILDER) new DefaultApplicationBuilder(
-            applicationMetadataclass
-        );
-    }
-
-    /**
      * Interface used for getting logger names. See
      * {@link com.speedment.runtime.core.ApplicationBuilder.LogType LogType} for
      * standard implementations of this interface.
@@ -729,7 +620,7 @@ public interface ApplicationBuilder<
      * @see LogType
      */
     @FunctionalInterface
-    interface HasLogglerName {
+    interface HasLoggerName {
 
         String getLoggerName();
     }
@@ -737,7 +628,7 @@ public interface ApplicationBuilder<
     /**
      * The type of logging to change the settings for.
      */
-    enum LogType implements HasLogglerName {
+    enum LogType implements HasLoggerName {
 
         /**
          * Logging related to querying the data source.

@@ -2,7 +2,7 @@
 <!--
 
 
-    Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+    Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License"); You may not
     use this file except in compliance with the License. You may obtain a copy of
@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.22</version>
+    <version>3.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
@@ -52,7 +52,6 @@
         <module>tool-parent</module>
         <module>build-parent</module>
         <module>plugin-parent</module>
-        <module>connector-parent</module>
         <module>archetype-parent</module>
         <module>example-parent</module>
     </modules>
@@ -153,6 +152,10 @@
             <name>Ameya Ketkar (GitHub:ameyaKetkar)</name>
             <timezone>America/Los_Angeles</timezone>
         </contributor>
+        <contributor>
+            <name>Julia Gustafsson (GitHub:julgus)</name>
+            <timezone>America/Los_Angeles</timezone>
+        </contributor>
     </contributors>
 	
     <!-- Distribution Details -->
@@ -189,7 +192,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.5.0</version>
                     
                     <extensions>true</extensions>
                     <inherited>true</inherited>
@@ -359,7 +362,7 @@
                     <plugins>
                         <plugin>
                             <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>2.10.4</version>
+                            <version>2.10.4</version> <!-- later versions does not support aggregate? -->
                             
                             <inherited>true</inherited>
 
@@ -380,8 +383,16 @@
                                         <packages>com.speedment.common.codegen:com.speedment.common.codegen.*</packages>
                                     </group>
                                     <group>
+                                        <title>Runtime Application</title>
+                                        <packages>com.speedment.runtime.application:com.speedment.runtime.application.*</packages>
+                                    </group>
+                                    <group>
                                         <title>Runtime Database Model</title>
                                         <packages>com.speedment.runtime.config:com.speedment.runtime.config.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Expressions</title>
+                                        <packages>com.speedment.runtime.compute:com.speedment.runtime.compute.*</packages>
                                     </group>
                                     <group>
                                         <title>Runtime Type Mappers</title>
@@ -390,6 +401,14 @@
                                     <group>
                                         <title>Runtime Fields and Predicates</title>
                                         <packages>com.speedment.runtime.field:com.speedment.runtime.field.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Bulk Updates</title>
+                                        <packages>com.speedment.runtime.bulk:com.speedment.runtime.bulk.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Join</title>
+                                        <packages>com.speedment.runtime.join:com.speedment.runtime.join.*</packages>
                                     </group>
                                     <group>
                                         <title>Runtime Core</title>
@@ -406,6 +425,10 @@
                                     <group>
                                         <title>Generator Core</title>
                                         <packages>com.speedment.generator.core:com.speedment.generator.core.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Tool Actions</title>
+                                        <packages>com.speedment.tool.actions:com.speedment.tool.actions.*</packages>
                                     </group>
                                     <group>
                                         <title>Tool Configuration</title>
@@ -476,7 +499,7 @@
                         <configuration>
                             <header>license_header.txt</header>
                             <properties>
-                                <currentYear>2017</currentYear>
+                                <currentYear>2018</currentYear>
                             </properties>
                             <excludes>
                                 <exclude>**/README</exclude>

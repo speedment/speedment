@@ -2,6 +2,7 @@ package com.company.sakila.db0.sakila.country.generated;
 
 import com.company.sakila.db0.sakila.country.Country;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.Field;
 import java.util.List;
@@ -20,6 +21,12 @@ import static java.util.Collections.unmodifiableList;
 @GeneratedCode("Speedment")
 public interface GeneratedCountryManager extends Manager<Country> {
     
+    TableIdentifier<Country> IDENTIFIER = TableIdentifier.of(
+        "db0",
+        "sakila",
+        "country"
+    )
+    ;
     List<Field<Country>> FIELDS = unmodifiableList(asList(
         Country.COUNTRY_ID,
         Country.COUNTRY,

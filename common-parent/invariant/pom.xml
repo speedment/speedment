@@ -2,7 +2,7 @@
 <!--
 
 
-    Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+    Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License"); You may not
     use this file except in compliance with the License. You may obtain a copy of
@@ -25,11 +25,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.0.13</version>        
+        <version>3.1.0-SNAPSHOT</version>        
     </parent>
     
     <artifactId>invariant</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Invariant</name>
@@ -41,14 +41,6 @@
     
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <configuration>
-                    <skipStaging>true</skipStaging>
-                </configuration>
-            </plugin>
-                        
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -65,8 +57,8 @@
     
     <profiles>
         <profile>
-            <id>release</id>
-            <build>
+            <id>release</id>             
+            <build>                        
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -77,6 +69,15 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                     </plugin>
+                    
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <configuration>
+                            <skipStaging>true</skipStaging>
+                        </configuration>
+                    </plugin>
+                    
                 </plugins>
             </build>
         </profile>

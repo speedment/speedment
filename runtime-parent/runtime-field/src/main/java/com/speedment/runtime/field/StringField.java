@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,12 +17,15 @@
 package com.speedment.runtime.field;
 
 
+import com.speedment.runtime.compute.ToStringNullable;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.StringFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasStringOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
+
+import java.util.function.Predicate;
 
 /**
  * A field that represents a string column.
@@ -39,7 +42,8 @@ import com.speedment.runtime.typemapper.TypeMapper;
  */
 public interface StringField<ENTITY, D> extends
     ComparableField<ENTITY, D, String>, 
-    HasStringOperators<ENTITY, D> {
+    HasStringOperators<ENTITY, D>,
+    ToStringNullable<ENTITY> {
 
     /**
      * Creates a new {@link StringField} using the default implementation. 
@@ -65,5 +69,17 @@ public interface StringField<ENTITY, D> extends
             identifier, getter, setter, typeMapper, unique
         );
     }
-    
+
+    @Override
+    Predicate<ENTITY> isNull();
+
+    @Override
+    default Predicate<ENTITY> isNotNull() {
+        return isNull().negate();
+    }
+
+    @Override
+    default String apply(ENTITY object) {
+        return get(object);
+    }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
  */
 package com.speedment.common.tuple;
 
+import com.speedment.common.tuple.getter.TupleGetter;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -49,4 +50,28 @@ public interface TupleOfNullables extends BasicTuple<Optional<Object>> {
             .map(clazz::cast);
     }
 
+     /**
+     * Returns a getter method for the specified ordinal element.
+     *
+     * @param index    the position of the element to return
+     * @param <TUPLE>  the type of the tuple
+     * @param <R>      the type of the returned element
+     * @return         the created getter
+     */
+    static <TUPLE extends TupleOfNullables, R> TupleGetter<TUPLE, R> getter(int index) {
+        return new TupleGetter<TUPLE, R>() {
+            @Override
+            public int index() {
+                return index;
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public R apply(TUPLE tuple) {
+                return (R) tuple.get(index);
+            }
+        };
+    }
+    
+    
 }

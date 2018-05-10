@@ -39,9 +39,7 @@ public abstract class GeneratedFilmImpl implements Film {
     private String specialFeatures;
     private Timestamp lastUpdate;
     
-    protected GeneratedFilmImpl() {
-        
-    }
+    protected GeneratedFilmImpl() {}
     
     @Override
     public int getFilmId() {

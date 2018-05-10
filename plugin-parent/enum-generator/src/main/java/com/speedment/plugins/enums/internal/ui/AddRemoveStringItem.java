@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -40,7 +40,6 @@ import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
@@ -82,8 +81,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
+import java.sql.ResultSet;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.stream.Collectors.joining;
@@ -315,6 +316,7 @@ extends AbstractLabelTooltipItem {
                         .withParam("temp.table", tableName)
                         .withParam("temp.column", columnName)
                         .withComponent(SingleColumnManager.class)
+                        .withComponent(SingleColumnSqlAdapter.class)
                         .beforeInitialized(PasswordComponent.class, passw -> {
                             LOGGER.info("Installing Password...");
                             passw.put(dbmsName, password);
@@ -400,22 +402,22 @@ extends AbstractLabelTooltipItem {
         }
 
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return dbms;
         }
 
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return table;
         }
 
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return column;
         }
 
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return schema;
         }
 
@@ -425,10 +427,10 @@ extends AbstractLabelTooltipItem {
             if (!(o instanceof ColumnIdentifier)) return false;
 
             final ColumnIdentifier<?> that = (ColumnIdentifier<?>) o;
-            return dbms.equals(that.getDbmsName())
-                && schema.equals(that.getSchemaName())
-                && table.equals(that.getTableName())
-                && column.equals(that.getColumnName());
+            return dbms.equals(that.getDbmsId())
+                && schema.equals(that.getSchemaId())
+                && table.equals(that.getTableId())
+                && column.equals(that.getColumnId());
         }
 
         @Override
@@ -451,6 +453,41 @@ extends AbstractLabelTooltipItem {
         }
     }
 
+    private static class SingleColumnSqlAdapter implements SqlAdapter<String> {
+        
+        private TableIdentifier<String> tableId;
+        
+        @Config(name = "temp.dbms", value = "")
+        private String dbms;
+        @Config(name = "temp.schema", value = "")
+        private String schema;
+        @Config(name = "temp.table", value = "")
+        private String table;
+        @Config(name = "temp.column", value = "")
+        private String column;
+
+        @ExecuteBefore(State.INITIALIZED)
+        void setFieldAndTableId() {
+            this.tableId = TableIdentifier.of(dbms, schema, table);
+        }
+                
+        @Override
+        public TableIdentifier<String> identifier() {
+            return tableId;
+        }
+
+        @Override
+        public SqlFunction<ResultSet, String> entityMapper() {
+            return in -> in.getString(column);
+        }
+
+        @Override
+        public SqlFunction<ResultSet, String> entityMapper(int offset) {
+            return entityMapper(); // We do not use index and offset
+        }
+        
+    }
+    
     private static class SingleColumnManager implements Manager<String> {
 
         private StringField<String, String> field;
@@ -469,7 +506,7 @@ extends AbstractLabelTooltipItem {
             this.tableId = TableIdentifier.of(dbms, schema, table);
             this.field   = StringField.create(
                 new TempColumnIdentifier(dbms, schema, table, column),
-                e -> e, (e, s) -> e,
+                e -> e, (e, s) -> {},
                 TypeMapper.identity(),
                 false
             );
@@ -481,12 +518,6 @@ extends AbstractLabelTooltipItem {
                 @WithState(State.INITIALIZED) ProjectComponent projectComponent) {
             Objects.requireNonNull(projectComponent);
             managerComponent.put(this);
-        }
-
-        @ExecuteBefore(RESOLVED)
-        void configureSqlStreamSupplier(
-                @WithState(RESOLVED) SqlStreamSupplierComponent sql) {
-            sql.install(tableId, in -> in.getString(column));
         }
 
         @Override

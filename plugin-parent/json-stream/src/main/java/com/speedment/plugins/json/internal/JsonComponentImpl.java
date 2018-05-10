@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -74,11 +74,11 @@ public final class JsonComponentImpl implements JsonComponent {
 
         final Set<String> fieldNames = Stream.of(fields)
             .map(Field::identifier)
-            .map(ColumnIdentifier::getColumnName)
+            .map(ColumnIdentifier::getColumnId)
             .collect(toSet());
 
         manager.fields()
-            .filter(f -> fieldNames.contains(f.identifier().getColumnName()))
+            .filter(f -> fieldNames.contains(f.identifier().getColumnId()))
             .forEachOrdered(f
                 -> formatter.put(jsonField(projectComponent.getProject(), f.identifier()),
                     f.getter()::apply

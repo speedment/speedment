@@ -23,9 +23,7 @@ public abstract class GeneratedActorImpl implements Actor {
     private String lastName;
     private Timestamp lastUpdate;
     
-    protected GeneratedActorImpl() {
-        
-    }
+    protected GeneratedActorImpl() {}
     
     @Override
     public int getActorId() {

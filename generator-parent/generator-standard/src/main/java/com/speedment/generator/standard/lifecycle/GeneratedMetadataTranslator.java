@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,7 +28,6 @@ import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.component.InfoComponent;
-import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +36,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.util.Formatting.indent;
+import com.speedment.runtime.application.AbstractApplicationMetadata;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 

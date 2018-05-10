@@ -33,9 +33,7 @@ public abstract class GeneratedAddressImpl implements Address {
     private Blob location;
     private Timestamp lastUpdate;
     
-    protected GeneratedAddressImpl() {
-        
-    }
+    protected GeneratedAddressImpl() {}
     
     @Override
     public int getAddressId() {

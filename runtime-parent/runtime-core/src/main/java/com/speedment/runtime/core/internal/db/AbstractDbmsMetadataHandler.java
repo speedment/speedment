@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -68,10 +68,10 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
     private final static Class<?> DEFAULT_MAPPING = Object.class;
     
-    private @Inject ConnectionPoolComponent connectionPoolComponent;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject ProjectComponent projectComponent;
-    private JavaTypeMap javaTypeMap;
+    @Inject private ConnectionPoolComponent connectionPoolComponent;
+    @Inject private DbmsHandlerComponent dbmsHandlerComponent;
+    @Inject private ProjectComponent projectComponent;
+    @Inject private JavaTypeMap javaTypeMap;
     
     protected AbstractDbmsMetadataHandler() {}
     
@@ -301,7 +301,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         requireNonNulls(sqlTypeMapping, dbms, schema, progressListener);
         
         // If the wrapped task has already been cancelled, there is no point in going on.
-        if (sqlTypeMapping.isCancelled()) return CompletableFuture.completedFuture(null);
+        if (sqlTypeMapping.isCancelled()) {
+            return CompletableFuture.completedFuture(null);
+        }
 
         final String action = actionName(schema);
         LOGGER.info(action);
@@ -489,7 +491,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         // Fix #566: Some connectors throw an exception if getIndexInfo() is
         // invoked for a database VIEW.
-        if (table.isView()) return;
+        if (table.isView()) {
+            return;
+        }
 
         final Schema schema = table.getParentOrThrow();
         final SqlSupplier<ResultSet> supplier = ()
@@ -498,7 +502,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 jdbcSchemaLookupName(schema),
                 metaDataTableNameForIndexes(table), // Todo: break out in protected method
                 false,
-                false
+                // 'true' below might speed up metadata retrieval since approximations can be used
+                // See https://github.com/speedment/speedment-enterprise/issues/168
+                true 
             );
 
         final AbstractDbmsOperationHandler.TableChildMutator<Index, ResultSet> mutator = (index, rs) -> {

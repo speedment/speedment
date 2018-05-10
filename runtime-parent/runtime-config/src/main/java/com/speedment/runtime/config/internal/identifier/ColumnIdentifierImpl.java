@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -52,22 +52,22 @@ implements ColumnIdentifier<ENTITY> {
     }
 
     @Override
-    public String getDbmsName() {
+    public String getDbmsId() {
         return dbmsName;
     }
 
     @Override
-    public String getSchemaName() {
+    public String getSchemaId() {
         return schemaName;
     }
 
     @Override
-    public String getTableName() {
+    public String getTableId() {
         return tableName;
     }
 
     @Override
-    public String getColumnName() {
+    public String getColumnId() {
         return columnName;
     }
 
@@ -77,18 +77,18 @@ implements ColumnIdentifier<ENTITY> {
         if (!(o instanceof ColumnIdentifier)) return false;
 
         final ColumnIdentifier<?> that = (ColumnIdentifier<?>) o;
-        return getDbmsName().equals(that.getDbmsName())
-            && getSchemaName().equals(that.getSchemaName())
-            && getTableName().equals(that.getTableName())
-            && getColumnName().equals(that.getColumnName());
+        return getDbmsId().equals(that.getDbmsId())
+            && getSchemaId().equals(that.getSchemaId())
+            && getTableId().equals(that.getTableId())
+            && getColumnId().equals(that.getColumnId());
     }
 
     @Override
     public int hashCode() {
-        int result = getDbmsName().hashCode();
-        result = 31 * result + getSchemaName().hashCode();
-        result = 31 * result + getTableName().hashCode();
-        result = 31 * result + getColumnName().hashCode();
+        int result = getDbmsId().hashCode();
+        result = 31 * result + getSchemaId().hashCode();
+        result = 31 * result + getTableId().hashCode();
+        result = 31 * result + getColumnId().hashCode();
         return result;
     }
 

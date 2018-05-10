@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,9 +19,10 @@ package com.speedment.generator.standard.lifecycle;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
+import com.speedment.runtime.application.AbstractApplicationBuilder;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.core.internal.AbstractApplicationBuilder;
+
 
 /**
  *

@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,6 +17,7 @@
 package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.compute.ToLong;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.LongFieldImpl;
 import com.speedment.runtime.field.method.LongGetter;
@@ -37,7 +38,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see ReferenceField
  */
 @GeneratedCode(value = "Speedment")
-public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY, D>, HasComparableOperators<ENTITY, Long> {
+public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY, D>, HasComparableOperators<ENTITY, Long>, ToLong<ENTITY> {
     
     /**
      * Creates a new {@link LongField} using the default implementation.
@@ -60,5 +61,10 @@ public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY
         return new LongFieldImpl<>(
             identifier, getter, setter, typeMapper, unique
         );
+    }
+    
+    @Override
+    default long applyAsLong(ENTITY entity) {
+        return getAsLong(entity);
     }
 }

@@ -22,9 +22,7 @@ public abstract class GeneratedCategoryImpl implements Category {
     private String name;
     private Timestamp lastUpdate;
     
-    protected GeneratedCategoryImpl() {
-        
-    }
+    protected GeneratedCategoryImpl() {}
     
     @Override
     public short getCategoryId() {

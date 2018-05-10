@@ -3,12 +3,9 @@ package com.company.sakila.db0.sakila.language.generated;
 import com.company.sakila.db0.sakila.language.Language;
 import com.company.sakila.db0.sakila.language.LanguageImpl;
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -23,7 +20,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedLanguageSqlAdapter {
+public abstract class GeneratedLanguageSqlAdapter implements SqlAdapter<Language> {
     
     private final TableIdentifier<Language> tableIdentifier;
     
@@ -31,26 +28,30 @@ public abstract class GeneratedLanguageSqlAdapter {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "language");
     }
     
-    @ExecuteBefore(RESOLVED)
-    void installMethodName(@WithState(RESOLVED) SqlStreamSupplierComponent streamSupplierComponent,
-            @WithState(RESOLVED) SqlPersistenceComponent persistenceComponent) {
-        streamSupplierComponent.install(tableIdentifier, this::apply);
-        persistenceComponent.install(tableIdentifier);
-    }
-    
-    protected Language apply(ResultSet resultSet) throws SpeedmentException {
-        final Language entity = createEntity();
-        try {
-            entity.setLanguageId( resultSet.getShort(1)     );
-            entity.setName(       resultSet.getString(2)    );
-            entity.setLastUpdate( resultSet.getTimestamp(3) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Language apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setLanguageId( resultSet.getShort(1 + offset))
+            .setName(       resultSet.getString(2 + offset))
+            .setLastUpdate( resultSet.getTimestamp(3 + offset))
+            ;
     }
     
     protected LanguageImpl createEntity() {
         return new LanguageImpl();
+    }
+    
+    @Override
+    public TableIdentifier<Language> identifier() {
+        return tableIdentifier;
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Language> entityMapper() {
+        return entityMapper(0);
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Language> entityMapper(int offset) {
+        return rs -> apply(rs, offset);
     }
 }

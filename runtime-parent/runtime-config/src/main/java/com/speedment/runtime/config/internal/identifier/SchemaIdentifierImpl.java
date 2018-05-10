@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -37,12 +37,12 @@ public final class SchemaIdentifierImpl<ENTITY> implements SchemaIdentifier<ENTI
     }
 
     @Override
-    public String getDbmsName() {
+    public String getDbmsId() {
         return dbmsName;
     }
 
     @Override
-    public String getSchemaName() {
+    public String getSchemaId() {
         return schemaName;
     }
 
@@ -59,8 +59,8 @@ public final class SchemaIdentifierImpl<ENTITY> implements SchemaIdentifier<ENTI
         if (obj instanceof SchemaIdentifier) {
             final SchemaIdentifier<?> that = (SchemaIdentifier<?>) obj;
             return 
-                Objects.equals(dbmsName, that.getDbmsName()) &&
-                Objects.equals(schemaName, that.getSchemaName());
+                Objects.equals(dbmsName, that.getDbmsId()) &&
+                Objects.equals(schemaName, that.getSchemaId());
         }
         return false;
     }

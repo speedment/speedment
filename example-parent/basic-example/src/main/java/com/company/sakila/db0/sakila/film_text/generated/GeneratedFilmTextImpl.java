@@ -23,9 +23,7 @@ public abstract class GeneratedFilmTextImpl implements FilmText {
     private String title;
     private String description;
     
-    protected GeneratedFilmTextImpl() {
-        
-    }
+    protected GeneratedFilmTextImpl() {}
     
     @Override
     public short getFilmId() {

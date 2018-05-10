@@ -34,9 +34,7 @@ public abstract class GeneratedPaymentImpl implements Payment {
     private Timestamp paymentDate;
     private Timestamp lastUpdate;
     
-    protected GeneratedPaymentImpl() {
-        
-    }
+    protected GeneratedPaymentImpl() {}
     
     @Override
     public int getPaymentId() {

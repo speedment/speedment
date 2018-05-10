@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,8 +24,8 @@ import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
-import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
+import com.speedment.runtime.application.AbstractApplicationMetadata;
+import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import java.nio.file.Path;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;

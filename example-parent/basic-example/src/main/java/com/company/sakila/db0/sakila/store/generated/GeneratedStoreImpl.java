@@ -26,9 +26,7 @@ public abstract class GeneratedStoreImpl implements Store {
     private int addressId;
     private Timestamp lastUpdate;
     
-    protected GeneratedStoreImpl() {
-        
-    }
+    protected GeneratedStoreImpl() {}
     
     @Override
     public short getStoreId() {

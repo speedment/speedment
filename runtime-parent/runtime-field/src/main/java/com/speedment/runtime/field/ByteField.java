@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,6 +17,7 @@
 package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.compute.ToByte;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.ByteFieldImpl;
 import com.speedment.runtime.field.method.ByteGetter;
@@ -37,7 +38,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see ReferenceField
  */
 @GeneratedCode(value = "Speedment")
-public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY, D>, HasComparableOperators<ENTITY, Byte> {
+public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY, D>, HasComparableOperators<ENTITY, Byte>, ToByte<ENTITY> {
     
     /**
      * Creates a new {@link ByteField} using the default implementation.
@@ -60,5 +61,10 @@ public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY
         return new ByteFieldImpl<>(
             identifier, getter, setter, typeMapper, unique
         );
+    }
+    
+    @Override
+    default byte applyAsByte(ENTITY entity) {
+        return getAsByte(entity);
     }
 }

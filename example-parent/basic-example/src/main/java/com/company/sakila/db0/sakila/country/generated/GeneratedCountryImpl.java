@@ -22,9 +22,7 @@ public abstract class GeneratedCountryImpl implements Country {
     private String country;
     private Timestamp lastUpdate;
     
-    protected GeneratedCountryImpl() {
-        
-    }
+    protected GeneratedCountryImpl() {}
     
     @Override
     public int getCountryId() {

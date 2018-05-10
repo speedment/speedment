@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -106,11 +106,6 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     
     @Override
     public LongFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
-        return comparator();
-    }
-    
-    @Override
-    public LongFieldComparator<ENTITY, D> comparatorNullFieldsLast() {
         return comparator();
     }
     

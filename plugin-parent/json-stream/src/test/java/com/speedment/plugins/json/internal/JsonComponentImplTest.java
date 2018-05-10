@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -29,14 +29,12 @@ import com.speedment.plugins.json.JsonEncoder;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.HashMap;
-import java.util.Map;
+
 import static java.util.Objects.requireNonNull;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -145,28 +143,28 @@ public class JsonComponentImplTest {
 
             Identifier(String columnName) {
                 this.columnName = columnName;
-                this.tableIdentifier = TableIdentifier.of(getDbmsName(),
-                    getSchemaName(),
-                    getTableName());
+                this.tableIdentifier = TableIdentifier.of(getDbmsId(),
+                    getSchemaId(),
+                    getTableId());
             }
 
             @Override
-            public String getDbmsName() {
+            public String getDbmsId() {
                 return "db0";
             }
 
             @Override
-            public String getSchemaName() {
+            public String getSchemaId() {
                 return "schema";
             }
 
             @Override
-            public String getTableName() {
+            public String getTableId() {
                 return "person";
             }
 
             @Override
-            public String getColumnName() {
+            public String getColumnId() {
                 return this.columnName;
             }
 

@@ -41,8 +41,8 @@ implements GeneratedFilmCategoryManager {
     @Override
     public Stream<Field<FilmCategory>> primaryKeyFields() {
         return Stream.of(
-            FilmCategory.CATEGORY_ID,
-            FilmCategory.FILM_ID
+            FilmCategory.FILM_ID,
+            FilmCategory.CATEGORY_ID
         );
     }
 }

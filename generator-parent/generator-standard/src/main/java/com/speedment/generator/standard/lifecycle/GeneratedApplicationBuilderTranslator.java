@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,7 +30,6 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.InfoComponent;
-import com.speedment.runtime.core.internal.AbstractApplicationBuilder;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -44,6 +43,7 @@ import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.util.Formatting.nl;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator.METADATA;
+import com.speedment.runtime.application.AbstractApplicationBuilder;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;

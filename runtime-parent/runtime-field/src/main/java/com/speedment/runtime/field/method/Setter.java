@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -31,10 +31,9 @@ public interface Setter<ENTITY> {
      * 
      * @param entity  the entity to set in
      * @param value   the value to set to
-     * @return        a reference to the entity
      * 
      * @throws ClassCastException  if the specified value is of the wrong type
      */
-    ENTITY set(ENTITY entity, Object value) throws ClassCastException;
+    void set(ENTITY entity, Object value) throws ClassCastException;
     
 }

@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code ShortSetter<ENTITY>} has the following signature:
  * {@code
  *     interface ENTITY {
- *         ENTITY setXXX(short value);
+ *         void setXXX(short value);
  *     }
  * }
  * 
@@ -47,15 +47,14 @@ public interface ShortSetter<ENTITY> extends Setter<ENTITY> {
      * 
      * @param instance the instance to set it in
      * @param value    the new value
-     * @return         a reference to that instance
      */
-    ENTITY setAsShort(ENTITY instance, short value);
+    void setAsShort(ENTITY instance, short value);
     
     @Override
-    default ENTITY set(ENTITY instance, Object value) {
+    default void set(ENTITY instance, Object value) {
         requireNonNull(value, "Attempting to set primitive short field to null.");
         @SuppressWarnings("unchecked")
         final Short casted = (Short) value;
-        return setAsShort(instance, casted);
+        setAsShort(instance, casted);
     }
 }

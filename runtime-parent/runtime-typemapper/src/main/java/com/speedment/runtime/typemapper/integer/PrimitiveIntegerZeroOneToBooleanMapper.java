@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,17 +22,17 @@ import java.lang.reflect.Type;
 
 /**
  *
- * @author  Roberts Vartins
- * @since   2.3.5
+ * @author Roberts Vartins
+ * @since 2.3.5
  */
-public final class PrimitiveIntegerZeroOneToBooleanMapper 
-implements TypeMapper<Integer, Boolean> {
+public final class PrimitiveIntegerZeroOneToBooleanMapper
+    implements TypeMapper<Integer, Boolean> {
 
     @Override
     public String getLabel() {
         return "Integer (0|1) to boolean (primitive)";
     }
-    
+
     @Override
     public Type getJavaType(Column column) {
         return boolean.class;
@@ -47,4 +47,10 @@ implements TypeMapper<Integer, Boolean> {
     public Integer toDatabaseType(Boolean value) {
         return value == null ? null : value ? 1 : 0;
     }
+
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+
 }

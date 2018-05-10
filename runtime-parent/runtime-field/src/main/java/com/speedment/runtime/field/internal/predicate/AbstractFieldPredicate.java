@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -60,7 +60,7 @@ implements FieldPredicate<ENTITY> {
     }
 
     @Override
-    public boolean test(ENTITY instance) {
+    public boolean applyAsBoolean(ENTITY instance) {
         return tester.test(instance);
     }
 
@@ -83,10 +83,10 @@ implements FieldPredicate<ENTITY> {
         sb.append(getClass().getSimpleName())
             .append(" {")
             .append("field: ")
-            .append(cId.getDbmsName()).append('.')
-            .append(cId.getSchemaName()).append('.')
-            .append(cId.getTableName()).append('.')
-            .append(cId.getColumnName())
+            .append(cId.getDbmsId()).append('.')
+            .append(cId.getSchemaId()).append('.')
+            .append(cId.getTableId()).append('.')
+            .append(cId.getColumnId())
             .append(", type: '").append(predicateType).append("'");
 
         Cast.cast(this, Tuple.class).ifPresent(tuple -> {

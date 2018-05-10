@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -44,22 +44,22 @@ public final class BasicEntity {
         }
 
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return "test_dbms";
         }
 
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return "test_schema";
         }
 
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return "test_table";
         }
 
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return columnName;
         }
     }

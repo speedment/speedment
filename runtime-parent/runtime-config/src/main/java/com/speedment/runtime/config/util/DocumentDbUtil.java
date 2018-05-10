@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -29,10 +29,10 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.config.identifier.trait.HasColumnName;
-import com.speedment.runtime.config.identifier.trait.HasDbmsName;
-import com.speedment.runtime.config.identifier.trait.HasSchemaName;
-import com.speedment.runtime.config.identifier.trait.HasTableName;
+import com.speedment.runtime.config.identifier.trait.HasColumnId;
+import com.speedment.runtime.config.identifier.trait.HasDbmsId;
+import com.speedment.runtime.config.identifier.trait.HasSchemaId;
+import com.speedment.runtime.config.identifier.trait.HasTableId;
 import com.speedment.runtime.config.trait.HasEnabled;
 import java.util.Optional;
 import java.util.function.Function;
@@ -222,19 +222,19 @@ public final class DocumentDbUtil {
     }
     
     public static Optional<? extends Column> referencedColumnIfPresent(Project project, ColumnIdentifier<?> identifier) {
-        return referencedColumnIfPresent(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName(), identifier.getColumnName());
+        return referencedColumnIfPresent(project, identifier.getDbmsId(), identifier.getSchemaId(), identifier.getTableId(), identifier.getColumnId());
     }
     
     public static Optional<? extends Table> referencedTableIfPresent(Project project, ColumnIdentifier<?> identifier) {
-        return referencedTableIfPresent(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName());
+        return referencedTableIfPresent(project, identifier.getDbmsId(), identifier.getSchemaId(), identifier.getTableId());
     }
     
     public static Optional<? extends Schema> referencedSchemaIfPresent(Project project, ColumnIdentifier<?> identifier) {
-        return referencedSchemaIfPresent(project, identifier.getDbmsName(), identifier.getSchemaName());
+        return referencedSchemaIfPresent(project, identifier.getDbmsId(), identifier.getSchemaId());
     }
     
     public static Optional<? extends Dbms> referencedDbmsIfPresent(Project project, ColumnIdentifier<?> identifier) {
-        return referencedDbmsIfPresent(project, identifier.getDbmsName());
+        return referencedDbmsIfPresent(project, identifier.getDbmsId());
     }
     
     public static Optional<? extends Column> referencedColumnIfPresent(Project project, String dbmsId, String schemaId, String tableId, String columnId) {
@@ -262,20 +262,20 @@ public final class DocumentDbUtil {
         return project.dbmses().filter(dbms -> dbmsId.equals(dbms.getId())).findAny();
     }
     
-    public static <T extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> Column referencedColumn(Project project, T identifier) {
-        return referencedColumn(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName(), identifier.getColumnName());
+    public static <T extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> Column referencedColumn(Project project, T identifier) {
+        return referencedColumn(project, identifier.getDbmsId(), identifier.getSchemaId(), identifier.getTableId(), identifier.getColumnId());
     }
     
-    public static <T extends HasDbmsName & HasSchemaName & HasTableName> Table referencedTable(Project project, T identifier) {
-        return referencedTable(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName());
+    public static <T extends HasDbmsId & HasSchemaId & HasTableId> Table referencedTable(Project project, T identifier) {
+        return referencedTable(project, identifier.getDbmsId(), identifier.getSchemaId(), identifier.getTableId());
     }
     
-    public static <T extends HasDbmsName & HasSchemaName> Schema referencedSchema(Project project, T identifier) {
-        return referencedSchema(project, identifier.getDbmsName(), identifier.getSchemaName());
+    public static <T extends HasDbmsId & HasSchemaId> Schema referencedSchema(Project project, T identifier) {
+        return referencedSchema(project, identifier.getDbmsId(), identifier.getSchemaId());
     }
     
-    public static Dbms referencedDbms(Project project, HasDbmsName identifier) {
-        return referencedDbms(project, identifier.getDbmsName());
+    public static Dbms referencedDbms(Project project, HasDbmsId identifier) {
+        return referencedDbms(project, identifier.getDbmsId());
     }
     
     public static Column referencedColumn(Project project, String dbmsName, String schemaName, String tableName, String columnName) {

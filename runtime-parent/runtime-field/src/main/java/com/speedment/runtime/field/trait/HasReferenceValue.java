@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -64,7 +64,8 @@ public interface HasReferenceValue<ENTITY, D, V> extends Field<ENTITY> {
      * @return the entity itself
      */
     default ENTITY set(ENTITY e, V value) {
-        return setter().apply(e, value);
+        setter().accept(e, value);
+        return e;
     }
 
     /**

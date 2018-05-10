@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -202,7 +202,10 @@ public class TypeViewTest {
             "        this.builder = new PersonImpl.Builder();\n" +
             "    }\n" +
             "    \n" +
-            "    public Person create(long id, String firstname, String lastname) {\n" +
+            "    public Person create(\n" +
+            "            long id,\n" +
+            "            String firstname,\n" +
+            "            String lastname) {\n" +
             "        return builder\n" +
             "            .withId(id)\n" +
             "            .withFirstname(firstname)\n" +

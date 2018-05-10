@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.runtime.compute.ToDoubleNullable;
+import com.speedment.runtime.compute.ToEnumNullable;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.EnumFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
@@ -27,6 +29,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.EnumSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
 
 /**
  * A field representing an {@code Enum} value in the entity.
@@ -38,7 +41,8 @@ import java.util.function.Predicate;
  */
 public interface EnumField<ENTITY, D, E extends Enum<E>>
 extends ComparableField<ENTITY, D, E>,
-        HasStringOperators<ENTITY, D> {
+        HasStringOperators<ENTITY, D>,
+        ToEnumNullable<ENTITY, E> {
 
     /**
      * Returns the enum class of this field.
@@ -198,6 +202,24 @@ extends ComparableField<ENTITY, D, E>,
      * @return           the predicate
      */
     Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion);
+
+    @Override
+    Predicate<ENTITY> isNull();
+
+    @Override
+    default Predicate<ENTITY> isNotNull() {
+        return isNull().negate();
+    }
+
+    @Override
+    default E apply(ENTITY entity) {
+        return get(entity);
+    }
+
+    @Override
+    default ToDoubleNullable<ENTITY> mapToDoubleIfPresent(ToDoubleFunction<E> mapper) {
+        return ComparableField.super.mapToDoubleIfPresent(mapper);
+    }
 
     /**
      * Create a new instance of this interface using the default implementation.

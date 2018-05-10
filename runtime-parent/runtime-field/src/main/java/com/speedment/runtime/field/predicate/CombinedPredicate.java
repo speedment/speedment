@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,7 +17,9 @@
 package com.speedment.runtime.field.predicate;
 
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
+
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -90,6 +92,19 @@ public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
     }
 
     /**
+     * Creates and returns a new CombinedPredicate that is the logical AND
+     * combination of the given predicates.
+     *
+     * @param <ENTITY> entity type
+     * @param predicates the predicates that make up the AND operation
+     * @return a new CombinedPredicate that is the logical AND combination of
+     * the given predicates
+     */
+    static <ENTITY> CombinedPredicate<ENTITY> and(List<Predicate<? super ENTITY>> predicates) {
+        return new AbstractCombinedPredicate.AndCombinedBasePredicate<>(predicates);
+    }
+
+    /**
      * Creates and returns a new CombinedPredicate that is the logical OR
      * combination of the given predicates.
      *
@@ -107,4 +122,16 @@ public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
         );
     }
 
+    /**
+     * Creates or returns a new CombinedPredicate that is the logical OR
+     * combination of the given predicates.
+     *
+     * @param <ENTITY> entity type
+     * @param predicates the predicates that make up the OR operation
+     * @return a new CombinedPredicate that is the logical OR combination of
+     * the given predicates
+     */
+    static <ENTITY> CombinedPredicate<ENTITY> or(List<Predicate<? super ENTITY>> predicates) {
+        return new AbstractCombinedPredicate.OrCombinedBasePredicate<>(predicates);
+    }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -136,22 +136,22 @@ public class ByteFieldComparatorImplTest {
 
         final ColumnIdentifier<ByteValue> BYTE_IDENTIFIER = new ColumnIdentifier<ByteValue>() {
             @Override
-            public String getDbmsName() {
+            public String getDbmsId() {
                 return "db0";
             }
 
             @Override
-            public String getSchemaName() {
+            public String getSchemaId() {
                 return "schema";
             }
 
             @Override
-            public String getTableName() {
+            public String getTableId() {
                 return "byte_value";
             }
 
             @Override
-            public String getColumnName() {
+            public String getColumnId() {
                 return "byte";
             }
 

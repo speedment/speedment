@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -83,6 +83,15 @@ public interface InfoComponent  {
      * Speedment implements
      */
     String getSpecificationVersion();
+
+    /**
+     * Returns the non-null "nick-name" of the specification that this
+     * Speedment implements.
+     *
+     * @return the non-null "nick-name" of the specification that this
+     * Speedment implements
+     */
+    String getSpecificationNickname();
 
      /**
      * Returns if this version is intended for production use.

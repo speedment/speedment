@@ -114,34 +114,34 @@ public interface GeneratedCountry {
         COUNTRY     ("country"),
         LAST_UPDATE ("last_update");
         
-        private final String columnName;
+        private final String columnId;
         private final TableIdentifier<Country> tableIdentifier;
         
-        Identifier(String columnName) {
-            this.columnName      = columnName;
-            this.tableIdentifier = TableIdentifier.of(    getDbmsName(), 
-                getSchemaName(), 
-                getTableName());
+        Identifier(String columnId) {
+            this.columnId        = columnId;
+            this.tableIdentifier = TableIdentifier.of(    getDbmsId(), 
+                getSchemaId(), 
+                getTableId());
         }
         
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return "db0";
         }
         
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return "sakila";
         }
         
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return "country";
         }
         
         @Override
-        public String getColumnName() {
-            return this.columnName;
+        public String getColumnId() {
+            return this.columnId;
         }
         
         @Override

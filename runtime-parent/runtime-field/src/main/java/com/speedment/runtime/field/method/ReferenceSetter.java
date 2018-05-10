@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,9 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-
-
-import java.util.function.BiFunction;
+import java.util.function.BiConsumer;
 
 /**
  * A short-cut functional reference to the {@code setXXX(value)} method for a
@@ -28,7 +26,7 @@ import java.util.function.BiFunction;
  * A {@code ReferenceSetter<ENTITY, V>} has the following signature:
  * {@code
  *      interface ENTITY {
- *          ENTITY setXXX(V value);
+ *          void setXXX(V value);
  *      }
  * }
  * 
@@ -41,13 +39,13 @@ import java.util.function.BiFunction;
 
 @FunctionalInterface
 public interface ReferenceSetter<ENTITY, V> 
-extends Setter<ENTITY>, BiFunction<ENTITY, V, ENTITY> {
+extends Setter<ENTITY>, BiConsumer<ENTITY, V> {
 
     @Override
-    default ENTITY set(ENTITY entity, Object value) throws ClassCastException {
+    default void set(ENTITY entity, Object value) throws ClassCastException {
         @SuppressWarnings("unchecked")
         final V casted = (V) value;
-        return apply(entity, casted);
+        accept(entity, casted);
     }
     
 }

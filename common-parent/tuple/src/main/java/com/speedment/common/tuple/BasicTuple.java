@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -32,18 +32,6 @@ public interface BasicTuple<R> {
      * @return the degree of the Tuple
      */
     int degree();
-
-    /**
-     * Returns the degree of the BasicTuple.
-     *
-     * @return the degree of the BasicTuple
-     * @deprecated use {@link #degree() } instead. This method will be removed\
-     * in the next major API version
-     */
-    @Deprecated
-    default int length() {
-        return degree();
-    }
 
     /**
      * Gets the tuple element at the given index. For example, get(0) will

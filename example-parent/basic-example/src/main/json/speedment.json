@@ -1,5 +1,7 @@
 {
   "config" : {
+    "speedmentVersion" : "Speedment:3.1.0-SNAPSHOT",
+    "nameProtected" : false,
     "expanded" : true,
     "companyName" : "company",
     "appId" : "3a4ca9ae-9edc-496d-9fe3-38e607885df5",
@@ -20,7 +22,8 @@
                     "expanded" : true,
                     "name" : "actor_id",
                     "id" : "actor_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -128,7 +131,8 @@
                     "expanded" : true,
                     "name" : "address_id",
                     "id" : "address_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -280,7 +284,8 @@
                     "expanded" : true,
                     "name" : "category_id",
                     "id" : "category_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -363,7 +368,8 @@
                     "expanded" : true,
                     "name" : "city_id",
                     "id" : "city_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -452,7 +458,8 @@
                     "expanded" : true,
                     "name" : "country_id",
                     "id" : "country_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -469,7 +476,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -490,7 +498,8 @@
                     "nullable" : false,
                     "name" : "country",
                     "id" : "country",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -498,7 +507,8 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   }
                 ],
                 "name" : "country",
@@ -522,7 +532,8 @@
                       }
                     ],
                     "name" : "fk_customer_address",
-                    "id" : "fk_customer_address"
+                    "id" : "fk_customer_address",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -539,7 +550,8 @@
                       }
                     ],
                     "name" : "fk_customer_store",
-                    "id" : "fk_customer_store"
+                    "id" : "fk_customer_store",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -548,7 +560,8 @@
                     "expanded" : true,
                     "name" : "customer_id",
                     "id" : "customer_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -565,7 +578,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -580,7 +594,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_address_id"
+                    "id" : "idx_fk_address_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -595,7 +610,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_store_id"
+                    "id" : "idx_fk_store_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -610,7 +626,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_last_name"
+                    "id" : "idx_last_name",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -622,7 +639,8 @@
                     "autoIncrement" : true,
                     "name" : "customer_id",
                     "id" : "customer_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -631,7 +649,8 @@
                     "nullable" : false,
                     "name" : "store_id",
                     "id" : "store_id",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -639,7 +658,8 @@
                     "nullable" : false,
                     "name" : "first_name",
                     "id" : "first_name",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -647,7 +667,8 @@
                     "nullable" : false,
                     "name" : "last_name",
                     "id" : "last_name",
-                    "ordinalPosition" : 4
+                    "ordinalPosition" : 4,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -655,7 +676,8 @@
                     "nullable" : true,
                     "name" : "email",
                     "id" : "email",
-                    "ordinalPosition" : 5
+                    "ordinalPosition" : 5,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -664,7 +686,8 @@
                     "nullable" : false,
                     "name" : "address_id",
                     "id" : "address_id",
-                    "ordinalPosition" : 6
+                    "ordinalPosition" : 6,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -673,7 +696,8 @@
                     "nullable" : false,
                     "name" : "active",
                     "id" : "active",
-                    "ordinalPosition" : 7
+                    "ordinalPosition" : 7,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -681,7 +705,8 @@
                     "nullable" : false,
                     "name" : "create_date",
                     "id" : "create_date",
-                    "ordinalPosition" : 8
+                    "ordinalPosition" : 8,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -689,11 +714,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 9
+                    "ordinalPosition" : 9,
+                    "enabled" : true
                   }
                 ],
                 "name" : "customer",
-                "id" : "customer"
+                "id" : "customer",
+                "enabled" : true
               },
               {
                 "foreignKeys" : [
@@ -712,7 +739,8 @@
                       }
                     ],
                     "name" : "fk_film_language",
-                    "id" : "fk_film_language"
+                    "id" : "fk_film_language",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -729,7 +757,8 @@
                       }
                     ],
                     "name" : "fk_film_language_original",
-                    "id" : "fk_film_language_original"
+                    "id" : "fk_film_language_original",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -738,7 +767,8 @@
                     "expanded" : true,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -755,7 +785,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -770,7 +801,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_film_rating"
+                    "id" : "idx_film_rating",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -785,7 +817,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_language_id"
+                    "id" : "idx_fk_language_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -800,7 +833,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_original_language_id"
+                    "id" : "idx_fk_original_language_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -815,7 +849,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_title"
+                    "id" : "idx_title",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -827,7 +862,8 @@
                     "autoIncrement" : true,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -835,7 +871,8 @@
                     "nullable" : false,
                     "name" : "title",
                     "id" : "title",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -843,7 +880,8 @@
                     "nullable" : true,
                     "name" : "description",
                     "id" : "description",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Date",
@@ -851,7 +889,8 @@
                     "nullable" : true,
                     "name" : "release_year",
                     "id" : "release_year",
-                    "ordinalPosition" : 4
+                    "ordinalPosition" : 4,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -860,7 +899,8 @@
                     "nullable" : false,
                     "name" : "language_id",
                     "id" : "language_id",
-                    "ordinalPosition" : 5
+                    "ordinalPosition" : 5,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -868,7 +908,8 @@
                     "nullable" : true,
                     "name" : "original_language_id",
                     "id" : "original_language_id",
-                    "ordinalPosition" : 6
+                    "ordinalPosition" : 6,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -877,7 +918,8 @@
                     "nullable" : false,
                     "name" : "rental_duration",
                     "id" : "rental_duration",
-                    "ordinalPosition" : 7
+                    "ordinalPosition" : 7,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.math.BigDecimal",
@@ -885,7 +927,8 @@
                     "nullable" : false,
                     "name" : "rental_rate",
                     "id" : "rental_rate",
-                    "ordinalPosition" : 8
+                    "ordinalPosition" : 8,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -893,7 +936,8 @@
                     "nullable" : true,
                     "name" : "length",
                     "id" : "length",
-                    "ordinalPosition" : 9
+                    "ordinalPosition" : 9,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.math.BigDecimal",
@@ -901,7 +945,8 @@
                     "nullable" : false,
                     "name" : "replacement_cost",
                     "id" : "replacement_cost",
-                    "ordinalPosition" : 10
+                    "ordinalPosition" : 10,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -910,7 +955,8 @@
                     "enumConstants" : "G,PG,PG-13,R,NC-17",
                     "name" : "rating",
                     "id" : "rating",
-                    "ordinalPosition" : 11
+                    "ordinalPosition" : 11,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -918,7 +964,8 @@
                     "nullable" : true,
                     "name" : "special_features",
                     "id" : "special_features",
-                    "ordinalPosition" : 12
+                    "ordinalPosition" : 12,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -926,11 +973,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 13
+                    "ordinalPosition" : 13,
+                    "enabled" : true
                   }
                 ],
                 "name" : "film",
-                "id" : "film"
+                "id" : "film",
+                "enabled" : true
               },
               {
                 "foreignKeys" : [
@@ -949,7 +998,8 @@
                       }
                     ],
                     "name" : "fk_film_actor_actor",
-                    "id" : "fk_film_actor_actor"
+                    "id" : "fk_film_actor_actor",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -966,7 +1016,8 @@
                       }
                     ],
                     "name" : "fk_film_actor_film",
-                    "id" : "fk_film_actor_film"
+                    "id" : "fk_film_actor_film",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -975,13 +1026,15 @@
                     "expanded" : true,
                     "name" : "actor_id",
                     "id" : "actor_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "expanded" : true,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -1005,7 +1058,8 @@
                         "ordinalPosition" : 2
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1020,7 +1074,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_film_id"
+                    "id" : "idx_fk_film_id",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -1031,7 +1086,8 @@
                     "nullable" : false,
                     "name" : "actor_id",
                     "id" : "actor_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -1040,7 +1096,8 @@
                     "nullable" : false,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1048,11 +1105,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   }
                 ],
                 "name" : "film_actor",
-                "id" : "film_actor"
+                "id" : "film_actor",
+                "enabled" : true
               },
               {
                 "foreignKeys" : [
@@ -1071,7 +1130,8 @@
                       }
                     ],
                     "name" : "fk_film_category_category",
-                    "id" : "fk_film_category_category"
+                    "id" : "fk_film_category_category",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1088,7 +1148,8 @@
                       }
                     ],
                     "name" : "fk_film_category_film",
-                    "id" : "fk_film_category_film"
+                    "id" : "fk_film_category_film",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -1097,13 +1158,15 @@
                     "expanded" : true,
                     "name" : "category_id",
                     "id" : "category_id",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "expanded" : true,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -1127,7 +1190,8 @@
                         "ordinalPosition" : 2
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1142,7 +1206,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "fk_film_category_category"
+                    "id" : "fk_film_category_category",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -1153,7 +1218,8 @@
                     "nullable" : false,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -1162,7 +1228,8 @@
                     "nullable" : false,
                     "name" : "category_id",
                     "id" : "category_id",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1170,11 +1237,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   }
                 ],
                 "name" : "film_category",
-                "id" : "film_category"
+                "id" : "film_category",
+                "enabled" : true
               },
               {
                 "expanded" : true,
@@ -1183,7 +1252,8 @@
                     "expanded" : true,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -1200,7 +1270,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1222,7 +1293,8 @@
                         "ordinalPosition" : 2
                       }
                     ],
-                    "id" : "idx_title_description"
+                    "id" : "idx_title_description",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -1233,7 +1305,8 @@
                     "nullable" : false,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -1241,7 +1314,8 @@
                     "nullable" : false,
                     "name" : "title",
                     "id" : "title",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -1249,11 +1323,13 @@
                     "nullable" : true,
                     "name" : "description",
                     "id" : "description",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   }
                 ],
                 "name" : "film_text",
-                "id" : "film_text"
+                "id" : "film_text",
+                "enabled" : true
               },
               {
                 "foreignKeys" : [
@@ -1272,7 +1348,8 @@
                       }
                     ],
                     "name" : "fk_inventory_film",
-                    "id" : "fk_inventory_film"
+                    "id" : "fk_inventory_film",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1289,7 +1366,8 @@
                       }
                     ],
                     "name" : "fk_inventory_store",
-                    "id" : "fk_inventory_store"
+                    "id" : "fk_inventory_store",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -1298,7 +1376,8 @@
                     "expanded" : true,
                     "name" : "inventory_id",
                     "id" : "inventory_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -1315,7 +1394,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1330,7 +1410,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_film_id"
+                    "id" : "idx_fk_film_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1352,7 +1433,8 @@
                         "ordinalPosition" : 2
                       }
                     ],
-                    "id" : "idx_store_id_film_id"
+                    "id" : "idx_store_id_film_id",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -1364,7 +1446,8 @@
                     "autoIncrement" : true,
                     "name" : "inventory_id",
                     "id" : "inventory_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -1373,7 +1456,8 @@
                     "nullable" : false,
                     "name" : "film_id",
                     "id" : "film_id",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -1382,7 +1466,8 @@
                     "nullable" : false,
                     "name" : "store_id",
                     "id" : "store_id",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1390,11 +1475,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 4
+                    "ordinalPosition" : 4,
+                    "enabled" : true
                   }
                 ],
                 "name" : "inventory",
-                "id" : "inventory"
+                "id" : "inventory",
+                "enabled" : true
               },
               {
                 "expanded" : true,
@@ -1403,7 +1490,8 @@
                     "expanded" : true,
                     "name" : "language_id",
                     "id" : "language_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -1420,7 +1508,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -1432,7 +1521,8 @@
                     "autoIncrement" : true,
                     "name" : "language_id",
                     "id" : "language_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -1440,7 +1530,8 @@
                     "nullable" : false,
                     "name" : "name",
                     "id" : "name",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1448,11 +1539,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   }
                 ],
                 "name" : "language",
-                "id" : "language"
+                "id" : "language",
+                "enabled" : true
               },
               {
                 "foreignKeys" : [
@@ -1471,7 +1564,8 @@
                       }
                     ],
                     "name" : "fk_payment_customer",
-                    "id" : "fk_payment_customer"
+                    "id" : "fk_payment_customer",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1488,7 +1582,8 @@
                       }
                     ],
                     "name" : "fk_payment_rental",
-                    "id" : "fk_payment_rental"
+                    "id" : "fk_payment_rental",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1505,7 +1600,8 @@
                       }
                     ],
                     "name" : "fk_payment_staff",
-                    "id" : "fk_payment_staff"
+                    "id" : "fk_payment_staff",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -1514,7 +1610,8 @@
                     "expanded" : true,
                     "name" : "payment_id",
                     "id" : "payment_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -1531,7 +1628,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1546,7 +1644,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "fk_payment_rental"
+                    "id" : "fk_payment_rental",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1561,7 +1660,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_customer_id"
+                    "id" : "idx_fk_customer_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1576,7 +1676,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_staff_id"
+                    "id" : "idx_fk_staff_id",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -1588,7 +1689,8 @@
                     "autoIncrement" : true,
                     "name" : "payment_id",
                     "id" : "payment_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -1597,7 +1699,8 @@
                     "nullable" : false,
                     "name" : "customer_id",
                     "id" : "customer_id",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -1606,7 +1709,8 @@
                     "nullable" : false,
                     "name" : "staff_id",
                     "id" : "staff_id",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -1614,7 +1718,8 @@
                     "nullable" : true,
                     "name" : "rental_id",
                     "id" : "rental_id",
-                    "ordinalPosition" : 4
+                    "ordinalPosition" : 4,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.math.BigDecimal",
@@ -1622,7 +1727,8 @@
                     "nullable" : false,
                     "name" : "amount",
                     "id" : "amount",
-                    "ordinalPosition" : 5
+                    "ordinalPosition" : 5,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1630,7 +1736,8 @@
                     "nullable" : false,
                     "name" : "payment_date",
                     "id" : "payment_date",
-                    "ordinalPosition" : 6
+                    "ordinalPosition" : 6,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1638,11 +1745,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 7
+                    "ordinalPosition" : 7,
+                    "enabled" : true
                   }
                 ],
                 "name" : "payment",
-                "id" : "payment"
+                "id" : "payment",
+                "enabled" : true
               },
               {
                 "foreignKeys" : [
@@ -1661,7 +1770,8 @@
                       }
                     ],
                     "name" : "fk_rental_customer",
-                    "id" : "fk_rental_customer"
+                    "id" : "fk_rental_customer",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1678,7 +1788,8 @@
                       }
                     ],
                     "name" : "fk_rental_inventory",
-                    "id" : "fk_rental_inventory"
+                    "id" : "fk_rental_inventory",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1695,7 +1806,8 @@
                       }
                     ],
                     "name" : "fk_rental_staff",
-                    "id" : "fk_rental_staff"
+                    "id" : "fk_rental_staff",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -1704,7 +1816,8 @@
                     "expanded" : true,
                     "name" : "rental_id",
                     "id" : "rental_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -1721,7 +1834,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1750,7 +1864,8 @@
                         "ordinalPosition" : 2
                       }
                     ],
-                    "id" : "rental_date"
+                    "id" : "rental_date",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1765,7 +1880,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_customer_id"
+                    "id" : "idx_fk_customer_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1780,7 +1896,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_inventory_id"
+                    "id" : "idx_fk_inventory_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1795,7 +1912,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_staff_id"
+                    "id" : "idx_fk_staff_id",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -1807,7 +1925,8 @@
                     "autoIncrement" : true,
                     "name" : "rental_id",
                     "id" : "rental_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1815,7 +1934,8 @@
                     "nullable" : false,
                     "name" : "rental_date",
                     "id" : "rental_date",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -1824,7 +1944,8 @@
                     "nullable" : false,
                     "name" : "inventory_id",
                     "id" : "inventory_id",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -1833,7 +1954,8 @@
                     "nullable" : false,
                     "name" : "customer_id",
                     "id" : "customer_id",
-                    "ordinalPosition" : 4
+                    "ordinalPosition" : 4,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1841,7 +1963,8 @@
                     "nullable" : true,
                     "name" : "return_date",
                     "id" : "return_date",
-                    "ordinalPosition" : 5
+                    "ordinalPosition" : 5,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -1850,7 +1973,8 @@
                     "nullable" : false,
                     "name" : "staff_id",
                     "id" : "staff_id",
-                    "ordinalPosition" : 6
+                    "ordinalPosition" : 6,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -1858,11 +1982,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 7
+                    "ordinalPosition" : 7,
+                    "enabled" : true
                   }
                 ],
                 "name" : "rental",
-                "id" : "rental"
+                "id" : "rental",
+                "enabled" : true
               },
               {
                 "foreignKeys" : [
@@ -1881,7 +2007,8 @@
                       }
                     ],
                     "name" : "fk_staff_address",
-                    "id" : "fk_staff_address"
+                    "id" : "fk_staff_address",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1898,7 +2025,8 @@
                       }
                     ],
                     "name" : "fk_staff_store",
-                    "id" : "fk_staff_store"
+                    "id" : "fk_staff_store",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -1907,7 +2035,8 @@
                     "expanded" : true,
                     "name" : "staff_id",
                     "id" : "staff_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -1924,7 +2053,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1939,7 +2069,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_address_id"
+                    "id" : "idx_fk_address_id",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -1954,7 +2085,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_store_id"
+                    "id" : "idx_fk_store_id",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -1966,7 +2098,8 @@
                     "autoIncrement" : true,
                     "name" : "staff_id",
                     "id" : "staff_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -1974,7 +2107,8 @@
                     "nullable" : false,
                     "name" : "first_name",
                     "id" : "first_name",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -1982,7 +2116,8 @@
                     "nullable" : false,
                     "name" : "last_name",
                     "id" : "last_name",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -1991,7 +2126,8 @@
                     "nullable" : false,
                     "name" : "address_id",
                     "id" : "address_id",
-                    "ordinalPosition" : 4
+                    "ordinalPosition" : 4,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Blob",
@@ -1999,7 +2135,8 @@
                     "nullable" : true,
                     "name" : "picture",
                     "id" : "picture",
-                    "ordinalPosition" : 5
+                    "ordinalPosition" : 5,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -2007,7 +2144,8 @@
                     "nullable" : true,
                     "name" : "email",
                     "id" : "email",
-                    "ordinalPosition" : 6
+                    "ordinalPosition" : 6,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -2016,16 +2154,21 @@
                     "nullable" : false,
                     "name" : "store_id",
                     "id" : "store_id",
-                    "ordinalPosition" : 7
+                    "ordinalPosition" : 7,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
-                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "nameProtected" : true,
                     "expanded" : true,
+                    "typeMapper" : "com.speedment.example.typemapper.IntegerZeroOneToYesNoTypeMapper",
                     "nullable" : false,
+                    "autoIncrement" : false,
                     "name" : "active",
+                    "nullableImplementation" : "OPTIONAL",
                     "id" : "active",
-                    "ordinalPosition" : 8
+                    "ordinalPosition" : 8,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -2033,7 +2176,8 @@
                     "nullable" : false,
                     "name" : "username",
                     "id" : "username",
-                    "ordinalPosition" : 9
+                    "ordinalPosition" : 9,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.String",
@@ -2041,7 +2185,8 @@
                     "nullable" : true,
                     "name" : "password",
                     "id" : "password",
-                    "ordinalPosition" : 10
+                    "ordinalPosition" : 10,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -2049,11 +2194,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 11
+                    "ordinalPosition" : 11,
+                    "enabled" : true
                   }
                 ],
                 "name" : "staff",
-                "id" : "staff"
+                "id" : "staff",
+                "enabled" : true
               },
               {
                 "foreignKeys" : [
@@ -2072,7 +2219,8 @@
                       }
                     ],
                     "name" : "fk_store_address",
-                    "id" : "fk_store_address"
+                    "id" : "fk_store_address",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -2089,7 +2237,8 @@
                       }
                     ],
                     "name" : "fk_store_staff",
-                    "id" : "fk_store_staff"
+                    "id" : "fk_store_staff",
+                    "enabled" : true
                   }
                 ],
                 "expanded" : true,
@@ -2098,7 +2247,8 @@
                     "expanded" : true,
                     "name" : "store_id",
                     "id" : "store_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   }
                 ],
                 "indexes" : [
@@ -2115,7 +2265,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_unique_manager"
+                    "id" : "idx_unique_manager",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -2130,7 +2281,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "PRIMARY"
+                    "id" : "PRIMARY",
+                    "enabled" : true
                   },
                   {
                     "expanded" : false,
@@ -2145,7 +2297,8 @@
                         "ordinalPosition" : 1
                       }
                     ],
-                    "id" : "idx_fk_address_id"
+                    "id" : "idx_fk_address_id",
+                    "enabled" : true
                   }
                 ],
                 "columns" : [
@@ -2157,7 +2310,8 @@
                     "autoIncrement" : true,
                     "name" : "store_id",
                     "id" : "store_id",
-                    "ordinalPosition" : 1
+                    "ordinalPosition" : 1,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Short",
@@ -2166,7 +2320,8 @@
                     "nullable" : false,
                     "name" : "manager_staff_id",
                     "id" : "manager_staff_id",
-                    "ordinalPosition" : 2
+                    "ordinalPosition" : 2,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.lang.Integer",
@@ -2175,7 +2330,8 @@
                     "nullable" : false,
                     "name" : "address_id",
                     "id" : "address_id",
-                    "ordinalPosition" : 3
+                    "ordinalPosition" : 3,
+                    "enabled" : true
                   },
                   {
                     "databaseType" : "java.sql.Timestamp",
@@ -2183,11 +2339,13 @@
                     "nullable" : false,
                     "name" : "last_update",
                     "id" : "last_update",
-                    "ordinalPosition" : 4
+                    "ordinalPosition" : 4,
+                    "enabled" : true
                   }
                 ],
                 "name" : "store",
-                "id" : "store"
+                "id" : "store",
+                "enabled" : true
               }
             ],
             "expanded" : true,

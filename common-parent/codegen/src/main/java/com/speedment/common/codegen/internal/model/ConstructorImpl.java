@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,6 +20,7 @@ import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.modifier.Modifier;
 
@@ -41,6 +42,7 @@ public final class ConstructorImpl implements Constructor {
 
     private Javadoc javadoc;
     private final List<AnnotationUsage> annotations;
+    private final List<Generic> generics;
     private final List<Field> params;
     private final List<String> code;
     private final Set<Modifier> modifiers;
@@ -53,12 +55,13 @@ public final class ConstructorImpl implements Constructor {
      * the {@link Constructor#of()} method!
      */
     public ConstructorImpl() {
-        javadoc = null;
+        javadoc     = null;
         annotations = new ArrayList<>();
-        params = new ArrayList<>();
-        code = new ArrayList<>();
-        modifiers = new HashSet<>();
-        exceptions = new HashSet<>();
+        generics    = new ArrayList<>();
+        params      = new ArrayList<>();
+        code        = new ArrayList<>();
+        modifiers   = new HashSet<>();
+        exceptions  = new HashSet<>();
     }
 
     /**
@@ -66,13 +69,14 @@ public final class ConstructorImpl implements Constructor {
      *
      * @param prototype the prototype
      */
-    protected ConstructorImpl(final Constructor prototype) {
-        javadoc = requireNonNull(prototype).getJavadoc().map(Copier::copy).orElse(null);
+    private ConstructorImpl(final Constructor prototype) {
+        javadoc     = requireNonNull(prototype).getJavadoc().map(Copier::copy).orElse(null);
         annotations = Copier.copy(prototype.getAnnotations());
-        params = Copier.copy(prototype.getFields());
-        code = Copier.copy(prototype.getCode(), c -> c);
-        modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
-        exceptions = new LinkedHashSet<>(prototype.getExceptions());
+        generics    = Copier.copy(prototype.getGenerics());
+        params      = Copier.copy(prototype.getFields());
+        code        = Copier.copy(prototype.getCode(), c -> c);
+        modifiers   = Copier.copy(prototype.getModifiers(), Modifier::copy, EnumSet.noneOf(Modifier.class));
+        exceptions  = new LinkedHashSet<>(prototype.getExceptions());
     }
 
     @Override
@@ -107,6 +111,11 @@ public final class ConstructorImpl implements Constructor {
     }
 
     @Override
+    public List<Generic> getGenerics() {
+        return generics;
+    }
+
+    @Override
     public Set<Type> getExceptions() {
         return exceptions;
     }
@@ -121,6 +130,7 @@ public final class ConstructorImpl implements Constructor {
         int hash = 5;
         hash = 43 * hash + Objects.hashCode(this.javadoc);
         hash = 43 * hash + Objects.hashCode(this.annotations);
+        hash = 43 * hash + Objects.hashCode(this.generics);
         hash = 43 * hash + Objects.hashCode(this.params);
         hash = 43 * hash + Objects.hashCode(this.code);
         hash = 43 * hash + Objects.hashCode(this.modifiers);
@@ -144,6 +154,9 @@ public final class ConstructorImpl implements Constructor {
             return false;
         }
         if (!Objects.equals(this.annotations, other.annotations)) {
+            return false;
+        }
+        if (!Objects.equals(this.generics, other.generics)) {
             return false;
         }
         if (!Objects.equals(this.params, other.params)) {

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.internal.identifier;
 
-import com.speedment.runtime.config.identifier.SchemaIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
@@ -39,17 +38,17 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
     }
 
     @Override
-    public String getDbmsName() {
+    public String getDbmsId() {
         return dbmsName;
     }
 
     @Override
-    public String getSchemaName() {
+    public String getSchemaId() {
         return schemaName;
     }
 
     @Override
-    public String getTableName() {
+    public String getTableId() {
         return tableName;
     }
 
@@ -65,9 +64,9 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
         }
         if (obj instanceof TableIdentifier) {
             final TableIdentifier<?> that = (TableIdentifier<?>) obj;
-            return Objects.equals(dbmsName, that.getDbmsName())
-                && Objects.equals(schemaName, that.getSchemaName())
-                && Objects.equals(tableName, that.getTableName());
+            return Objects.equals(dbmsName, that.getDbmsId())
+                && Objects.equals(schemaName, that.getSchemaId())
+                && Objects.equals(tableName, that.getTableId());
         }
         return false;
     }
