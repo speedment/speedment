@@ -7,7 +7,7 @@ Speedment is a Java Stream ORM Toolkit and Runtime
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Homer.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="400px" />
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Homer.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="360px" />
 
 The toolkit analyzes the metadata of an existing legacy SQL database 
 and creates a Java representation of the data model which together with 
