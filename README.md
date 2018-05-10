@@ -1,4 +1,4 @@
-Speedment is a Java 8 Stream ORM Toolkit and Runtime
+Speedment is a Java Stream ORM Toolkit and Runtime
 ====================================================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime)
@@ -7,12 +7,12 @@ Speedment is a Java 8 Stream ORM Toolkit and Runtime
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-<img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/wiki/frontpage/Forest.png" alt="Spire the Hare" title="Spire" align="right" width="240px" />
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Homer.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="240px" />
 
 The toolkit analyzes the metadata of an existing legacy SQL database 
 and creates a Java representation of the data model which together with 
 the Speedment runtime allows the user to create scalable and efficient 
-Java applications using **standard Java 8** streams without any
+Java applications using **standard Java** streams without any
 specific query language or any new API. 
 
 ### One-liner
