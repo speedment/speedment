@@ -63,7 +63,7 @@ You can read the online [Speedment User's Guide here](https://speedment.github.i
 
 Quick Start
 -----------
-Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute by setting up a POM file for your project by using the [Initializer](https://www.speedment.com/initializer/).
+Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute:
 
 * [Installing Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
 * [Connect to Your Database](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-UI)
