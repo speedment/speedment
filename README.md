@@ -1,18 +1,18 @@
-Speedment is a Java 8 Stream ORM Toolkit and Runtime
+Speedment is a Java Stream ORM Toolkit and Runtime
 ====================================================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime)
-[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/runtime-deploy/badge.svg)](http://www.javadoc.io/doc/com.speedment/runtime-deploy)
+[![Javadocs](http://www.javadoc.io/badge/com.speedment/runtime-deploy.svg)](http://www.javadoc.io/doc/com.speedment/runtime-deploy)
 [![Build Status](https://travis-ci.org/speedment/speedment.svg?branch=develop-3.0)](https://travis-ci.org/speedment/speedment)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-<img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/wiki/frontpage/Forest.png" alt="Spire the Hare" title="Spire" align="right" width="240px" />
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Homer.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="360px" />
 
 The toolkit analyzes the metadata of an existing legacy SQL database 
 and creates a Java representation of the data model which together with 
 the Speedment runtime allows the user to create scalable and efficient 
-Java applications using **standard Java 8** streams without any
+Java applications using **standard Java** streams without any
 specific query language or any new API. 
 
 ### One-liner
@@ -37,7 +37,7 @@ WHERE
     (`length` > 120)
 ```
 
-No need for manually writing SQL-queies any more. Remain in a pure Java world!
+No need for manually writing SQL-queries any more. Remain in a pure Java world!
 
 ### Expressing SQL as Java 8 Streams
 When we started the open-source project Speedment, the main objective was to remove the polyglot requirement for Java database application developers. After all, we all love Java and why should we need to know SQL when, instead, we could derive the same semantics directly from Java streams? When one takes a closer look at this objective, it turns out that there is a remarkable resemblance between Java streams and SQL as summarized in this simplified table:
@@ -61,64 +61,36 @@ When we started the open-source project Speedment, the main objective was to rem
 ## Documentation 
 You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
 
-## Tutorials
+Quick Start
+-----------
+Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute:
 
+* [Installing Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
+* [Connect to Your Database](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-UI)
+
+## Tutorials
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
 
 ### Basics
-* [Tutorial 1 - Set up the IDE](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
-* [Tutorial 2 - Get started with the UI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-UI)
-* [Tutorial 3 - Hello Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Hello-Speedment)
-* [Tutorial 4 - A First Stream from Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-A-First-Stream-from-Speedment)
+* [Tutorial 1 - Hello Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Hello-Speedment)
+* [Tutorial 2 - A First Stream from Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-A-First-Stream-from-Speedment)
+
 
 ### Sample applications
-* [Tutorial 5 - Speedment Spring Boot Integration; REST assured - it is easy](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Spring-Boot-Integration)
-* [Tutorial 6 - Speedment filters based on Json Web Tokens](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Stream-Filters-Using-JWT-Data)
-* [Tutorial 7 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
-* [Tutorial 8 - Log errors in a database](https://github.com/speedment/speedment/wiki/Tutorial:-Log-errors-in-a-database)
-* [Tutorial 9 - Use Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
-* [Tutorial 10 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
+* [Tutorial 3 - Speedment Spring Boot Integration; REST assured - it is easy](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Spring-Boot-Integration)
+* [Tutorial 4 - Speedment filters based on Json Web Tokens](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Stream-Filters-Using-JWT-Data)
+* [Tutorial 5 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
+* [Tutorial 6 - Log errors in a database](https://github.com/speedment/speedment/wiki/Tutorial:-Log-errors-in-a-database)
+* [Tutorial 7 - Use Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
+* [Tutorial 8 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
 
 ### Extending Speedment
-* [Tutorial 11 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
-* [Tutorial 12 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
-
-Quick Start
------------
-Assuming you have Maven installed and a relational database available, you can try out Speedment in a minute either by setting up a POM file for your project or launching a Maven archetype template.
-
-#### Setup a POM file
-Use the Speedment [Initializer](https://www.speedment.com/initializer/) to get a POM template for your project.
-
-#### Launch Archtype Directly
-Running the following from a command-line:
-
-###### MySQL
-```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
-```
-
-###### PostgreSQL
-```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
-```
-
-###### MariaDB
-```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
-```
-
-A graphical dialog will prompt for database connection details.
-
-1. Enter database name and credentials and press **Connect**.
-2. Press the **Generate** button and then quit the tool. 
-
-Now you have a demo project set up with generated application code in the directory `speedment-demo`. To learn more about how to leverage the generated Speedment classes and the Speedment runtime in your project, please see the following tutorials and guides.
+* [Tutorial 9 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
+* [Tutorial 10 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
 
 Examples
 --------
 Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database called "Sakila" avaiable. Sakila can be downloaded directly form Oracle [here](https://dev.mysql.com/doc/index-other.html) 
-
 
 ### Query with Optimised Stream Predicate Short-Circuit
 Search for a long film (of length greater than 120 minutes):
