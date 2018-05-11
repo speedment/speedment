@@ -1,6 +1,6 @@
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Duke-Spire.png?raw=true" alt="Spire the Hare" title="Spire" align="center" width="250px"/>
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Duke-Spire.png?raw=true" alt="Spire the Hare" title="Spire" align="middle" width="250px"/>
 
-Speedment is a Java Stream ORM Toolkit and Runtime
+Java Stream ORM
 ====================================================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime)
