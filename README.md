@@ -71,6 +71,30 @@ When we started the open-source project Speedment, the main objective was to rem
 ## Documentation 
 You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
 
+Features
+--------
+Here are some of the many features packed into the Speedment framework!
+
+### Database Centric
+Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
+
+### Code Generation
+Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Nice if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated using an intuitive UI or programatically using your own code.
+
+### Modular Design
+Speedment is built with the ambition to be completely modular! If you don't like the current implementation of a certain function, plug in you own! Do you have a suggestion for an alternative way of solving a complex problem? Share it with the community!
+
+### Type Safety
+When the database structure changes during development of a software there is always a risk that bugs sneak into the application. Thats why type-safety is such a big deal! With Speedment, you will notice if something is wrong seconds after you generate your code instead of weeks into the testing phase.
+
+### Null Protection
+Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers have been called the billion-dollar-mistake of java, but at the same time they are used in almost every software project out there. To minimize the production risks of using null values, Speedment analyzes if null values are allowed by a column in the database and wraps the values as appropriate in Java 8 Optionals.
+
+### Requirements
+Speedment comes with support for the following databases out-of-the-box:
+* MySQL
+* MariaDB
+* PostgreSQL
 
 ## Tutorials
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
@@ -78,7 +102,6 @@ The tutorials are divided into three sections. The basics are covered in the fir
 ### Basics
 * [Tutorial 1 - Hello Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Hello-Speedment)
 * [Tutorial 2 - A First Stream from Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-A-First-Stream-from-Speedment)
-
 
 ### Sample applications
 * [Tutorial 3 - Speedment Spring Boot Integration; REST assured - it is easy](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Spring-Boot-Integration)
@@ -129,7 +152,7 @@ List<Film> stream = films.stream()
     .filter(Film.RATING.equal("PG-13"))
     .sorted(Film.LENGTH.comparator())
     .skip(page * PAGE_SIZE)
-    .limit(PAGE_SIZE);
+    .limit(PAGE_SIZE)
     .collect(toList());
 ``` 
 
@@ -365,139 +388,6 @@ So when we need to use a manager in a SpringMVC Controller, we can now simply au
 ```java
     private @Autowired FilmManager films;
 ```
-
-
-Features
---------
-Here are some of the many features packed into the Speedment framework!
-
-### Database Centric
-Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
-
-### Code Generation
-Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Nice if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated [using an intuitive UI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-UI) or programatically using your own code.
-
-### Modular Design
-Speedment is built with the ambition to be completely modular! If you don't like the current implementation of a certain function, plug in you own! Do you have a suggestion for an alternative way of solving a complex problem? Share it with the community!
-
-### Type Safety
-When the database structure changes during development of a software there is always a risk that bugs sneak into the application. Thats why type-safety is such a big deal! With Speedment, you will notice if something is wrong seconds after you generate your code instead of weeks into the testing phase.
-
-### Null Protection
-Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers have been called the billion-dollar-mistake of java, but at the same time they are used in almost every software project out there. To minimize the production risks of using null values, Speedment analyzes if null values are allowed by a column in the database and wraps the values as appropriate in Java 8 Optionals.
-
-
-Using Maven
------------
-The easiest way to get started with Speedment and Maven is to use one of [the existing archetypes](https://github.com/speedment/speedment-archetypes). An archetype is similar to a template project. When you start a new project, it will add all the dependencies you need to your `pom.xml`-file so that you can begin program immediately.
-
-If you do not want to use an archetype, for an example if you already have a project you want to use Speedment with, you can always write your `pom.xml`-file manually. Just add the following lines (between the ... marker lines) to your project's `pom.xml` file. Make sure to use the latest `${speedment.version}` available
-
-#### MySQL
-```xml
-<build>
-    <plugins>
-        
-        <plugin>
-            <groupId>com.speedment</groupId>
-            <artifactId>speedment-maven-plugin</artifactId>
-            <version>${speedment.version}</version>
-        </plugin>
-        
-    </plugins>
-</build>
-<dependencies>
-    
-    <dependency>
-        <groupId>com.speedment</groupId>
-        <artifactId>runtime</artifactId>
-        <version>${speedment.version}</version>
-        <type>pom</type>
-    </dependency>
-    <dependency>
-        <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId>
-        <version>5.1.42</version>
-        <scope>runtime</scope>
-    </dependency>
-    
-</dependencies>
-```
-
-
-#### PostgreSQL
-```xml
-
-<build>
-    <plugins>
-        
-        <plugin>
-            <groupId>com.speedment</groupId>
-            <artifactId>speedment-maven-plugin</artifactId>
-            <version>${speedment.version}</version>
-        </plugin>
-        
-    </plugins>
-</build>
-<dependencies>
-    
-    <dependency>
-        <groupId>com.speedment</groupId>
-        <artifactId>runtime</artifactId>
-        <version>${speedment.version}</version>
-        <type>pom</type>
-    </dependency>
-    <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>42.0.0</version>
-        <scope>runtime</scope>
-    </dependency>
-    
-</dependencies>
-
-```
-
-#### MariaDB
-```xml
-<build>
-    <plugins>
-        
-        <plugin>
-            <groupId>com.speedment</groupId>
-            <artifactId>speedment-maven-plugin</artifactId>
-            <version>${speedment.version}</version>
-        </plugin>
-        
-    </plugins>
-</build>
-<dependencies>
-    
-    <dependency>
-        <groupId>com.speedment</groupId>
-        <artifactId>runtime</artifactId>
-        <version>${speedment.version}</version>
-        <type>pom</type>
-    </dependency>
-    <dependency>
-        <groupId>org.mariadb.jdbc</groupId>
-        <artifactId>mariadb-java-client</artifactId>
-        <version>2.0.1</version>
-        <scope>runtime</scope>
-    </dependency>
-    
-</dependencies>
-
-```
-
-Again, make sure that you use the latest `${speedment.version}` available.
-
-### Requirements
-Speedment comes with support for the following databases out-of-the-box:
-* MySQL
-* MariaDB
-* PostgreSQL
-
 
 This site covers the **Speedment Open Source** project available under the 
 [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). The 
