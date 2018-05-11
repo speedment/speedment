@@ -1,3 +1,5 @@
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Duke-Spire.png?raw=true" alt="Spire the Hare" title="Spire" align="center" width="250px"/>
+
 Speedment is a Java Stream ORM Toolkit and Runtime
 ====================================================
 
@@ -6,13 +8,22 @@ Speedment is a Java Stream ORM Toolkit and Runtime
 [![Build Status](https://travis-ci.org/speedment/speedment.svg?branch=develop-3.0)](https://travis-ci.org/speedment/speedment)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Duke-Spire.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="250px"/>
 
 Speedment is an open source Java Stream ORM toolkit and runtime. The toolkit analyzes the metadata of an existing SQL database and automatically creates a Java representation of the data model. This powerful ORM enables you to create scalable and efficient Java applications using **standard Java** streams with no need to type SQL or use any new API. 
 
 Speedment was originally developed by researchers and engineers based in Palo Alto with the purpose to simplify and streamline the development of Java database applications by leveraging the Java 8 Stream API. The current version is Speedment Homer (3.1), which like all major Speedment versions is named after a street in Palo Alto.
 
 Speedment is licensed under the business-friendly Apache 2 license. Contribution from users are encouraged. Please feel free to request new features, suggest improvements and file bug reports.
+
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Spire-Quick-Start.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="200px" />
+
+Quick Start
+-----------
+
+Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute:
+
+* [Start a New Speedment Maven Project](https://github.com/speedment/speedment/wiki/Start-a-New-Speedment-Maven-Project)
+* [Connect to Your Database](https://github.com/speedment/speedment/wiki/Connect-to-Your-Database)
 
 ### One-liner
 Search for a long film (of length greater than 120 minutes):
@@ -60,15 +71,6 @@ When we started the open-source project Speedment, the main objective was to rem
 ## Documentation 
 You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
 
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Spire-Quick-Start.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="200px" />
-
-Quick Start
------------
-
-Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute:
-
-* [Start a New Speedment Maven Project](https://github.com/speedment/speedment/wiki/Start-a-New-Speedment-Maven-Project)
-* [Connect to Your Database](https://github.com/speedment/speedment/wiki/Connect-to-Your-Database)
 
 ## Tutorials
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
