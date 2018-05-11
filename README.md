@@ -1,4 +1,4 @@
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Duke-Spire.png?raw=true" alt="Spire the Hare" title="Spire" align="middle" width="250px"/>
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Duke-Spire.png?raw=true" alt="Spire the Hare" title="Spire" width="250px">
 
 Java Stream ORM
 ====================================================
