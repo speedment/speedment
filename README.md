@@ -123,7 +123,7 @@ private static final long PAGE_SIZE = 50;
 long page = 3;
 List<Film> stream = films.stream();
     .filter(Film.RATING.equal("PG-13"));
-    .sorted(Film.LENGTH)
+    .sorted(Film.LENGTH.comparator())
     .skip(page * PAGE_SIZE)
     .limit(PAGE_SIZE);
     .collect(toList());
