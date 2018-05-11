@@ -61,12 +61,12 @@ When we started the open-source project Speedment, the main objective was to rem
 ## Documentation 
 You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
 
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Spire-Quick-Start.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="200px" />
+
 Quick Start
 -----------
 
 Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute:
-
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Spire-Quick-Start.png?raw=true" alt="Spire the Hare" title="Spire" align="left" width="200px" />
 
 * [Installing Speedment](https://github.com/speedment/speedment/wiki/Installing-Speedment)
 * [Connect to Your Database](https://github.com/speedment/speedment/wiki/Connect-to-Your-Database)
