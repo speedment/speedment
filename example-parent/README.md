@@ -11,6 +11,11 @@ Download and install the database content on your target machine before running 
 Speedment Examples
 ==================
 
+1. [Query with Optimised Stream Predicate Short-Circuit](#markdown-header-query-with-optimised-stream-predicate-short-circuit)
+
+2. [Query with Optimised Paging](#markdown-header-query-with-optimised-paging)
+
+
 ### Query with Optimised Stream Predicate Short-Circuit
 Search for a long film (of length greater than 120 minutes):
 ```java
