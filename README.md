@@ -11,7 +11,7 @@ Java Stream ORM
 
 Speedment is an open source Java Stream ORM toolkit and runtime. The toolkit analyzes the metadata of an existing SQL database and automatically creates a Java representation of the data model. This powerful ORM enables you to create scalable and efficient Java applications using **standard Java** streams with no need to type SQL or use any new API. 
 
-Speedment was originally developed by researchers and engineers based in Palo Alto with the purpose to simplify and streamline the development of Java database applications by leveraging the Java 8 Stream API. The current version is Speedment Homer (3.1), which like all major Speedment versions is named after a street in Palo Alto.
+Speedment was originally developed by researchers and engineers based in Palo Alto with the purpose to simplify and streamline the development of Java database applications by leveraging the Java 8 Stream API. 
 
 Speedment is licensed under the business-friendly Apache 2 license. Contribution from users are encouraged. Please feel free to request new features, suggest improvements and file bug reports.
 
@@ -31,8 +31,8 @@ There is a remarkable resemblance between Java streams and SQL as summarized in 
 
 <img align="left" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
 
-### One-liner
-Search for a long film (of length greater than 120 minutes):
+#### Example
+Search in a film database for films with a length greater than 120 minutes:
 ```java
 // Searches are optimized in the background!
 Optional<Film> longFilm = films.stream()
@@ -54,7 +54,8 @@ WHERE
 ```
 
 
-# Resources 
+Resources 
+-----------
 
 ### Documentation 
 You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
