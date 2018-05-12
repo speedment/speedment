@@ -25,11 +25,8 @@ Assuming you have Maven installed and a relational database available, you can s
 * [Start a New Speedment Maven Project](https://github.com/speedment/speedment/wiki/Start-a-New-Speedment-Maven-Project)
 * [Connect to Your Database](https://github.com/speedment/speedment/wiki/Connect-to-Your-Database)
 
-
-Resources
+Expressing SQL as Java 8 Streams
 -----------
-
-### Expressing SQL as Java 8 Streams
 There is a remarkable resemblance between Java streams and SQL as summarized in the simplified table. This means there is no need for manually writing SQL-queries any more. You can remain in a pure Java world!
 
 <img align="left" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
