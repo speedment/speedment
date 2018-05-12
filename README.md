@@ -36,18 +36,18 @@ There is a remarkable resemblance between Java streams and SQL as summarized in 
  -| SQL         | Java 8 Stream Equivalent          |
  -| :---------- | :-------------------------------- |
  -| `FROM`       | `stream()`   |
+ -| `COUNT`      | `count()`    |
+ -| `LIMIT`      | `limit()`    |
+ -| `DISTINCT`   | `distinct()` |
  -| `SELECT`     | `map()`      |
  -| `WHERE`      | `filter()` (before collecting) |
  -| `HAVING`     | `filter()` (after collecting) |
  -| `JOIN`       | `flatMap()`  |
- -| `DISTINCT`   | `distinct()` |
  -| `UNION`      | `concat(s0, s1).distinct()` |
  -| `ORDER BY`   | `sorted()`   |
  -| `OFFSET`     | `skip()`     |
- -| `LIMIT`      | `limit()`    |
  -| `GROUP BY`   | `collect(groupingBy())` |
- -| `COUNT`      | `count()`    |
- -
+-
  
 
 <img align="left" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
