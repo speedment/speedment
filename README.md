@@ -49,24 +49,9 @@ WHERE
 
 No need for manually writing SQL-queries any more. Remain in a pure Java world!
 
+<img align="center" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
 ### Expressing SQL as Java 8 Streams
-When we started the open-source project Speedment, the main objective was to remove the polyglot requirement for Java database application developers. After all, we all love Java and why should we need to know SQL when, instead, we could derive the same semantics directly from Java streams? When one takes a closer look at this objective, it turns out that there is a remarkable resemblance between Java streams and SQL as summarized in this simplified table:
-
-| SQL         | Java 8 Stream Equivalent          |
-| :---------- | :-------------------------------- |
-| `FROM`       | `stream()`   |
-| `SELECT`     | `map()`      |
-| `WHERE`      | `filter()` (before collecting) |
-| `HAVING`     | `filter()` (after collecting) |
-| `JOIN`       | `flatMap()`  |
-| `DISTINCT`   | `distinct()` |
-| `UNION`      | `concat(s0, s1).distinct()` |
-| `ORDER BY`   | `sorted()`   |
-| `OFFSET`     | `skip()`     |
-| `LIMIT`      | `limit()`    |
-| `GROUP BY`   | `collect(groupingBy())` |
-| `COUNT`      | `count()`    |
-
+When we started the open-source project Speedment, the main objective was to remove the polyglot requirement for Java database application developers. After all, we all love Java and why should we need to know SQL when, instead, we could derive the same semantics directly from Java streams? When one takes a closer look at this objective, it turns out that there is a remarkable resemblance between Java streams and SQL as summarized in the simplified table to the right.
 
 ## Documentation 
 You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
