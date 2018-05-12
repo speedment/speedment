@@ -12,9 +12,20 @@ Speedment Examples
 ==================
 
 1. [Query with Optimised Stream Predicate Short-Circuit](#query-with-optimised-stream-predicate-short-circuit)
-
-2. [Query with Optimised Paging](#markdown-header-query-with-optimised-paging)
-
+2. [Query with Optimised Paging](#query-with-optimised-paging)
+3. [Classification](#classification)
+4. [Joins](#joins)
+5. [One-to-many](#one-to-many)
+6. [Many-to-one](#many-to-one)
+7. [Many-to-many](#many-to-many)
+8. [Entities are Linked](#entities-are-linked)
+9. [Easy Initialization](#easy-initialization)
+10. [Easy Persistance](#easy-persistance)
+11. [Update](#update)
+12. [Remove](#remove)
+13. [Transactions](#transactions)
+14. [Full Transparancy](#full-transparency)
+15. [Integration with Spring Boot](#integration-with-spring-boot)
 
 ### Query with Optimised Stream Predicate Short-Circuit
 Search for a long film (of length greater than 120 minutes):
