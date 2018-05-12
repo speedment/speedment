@@ -30,25 +30,7 @@ Resources
 -----------
 
 ### Expressing SQL as Java 8 Streams
-There is a remarkable resemblance between Java streams and SQL as summarized in the simplified table.
-
--
- -| SQL         | Java 8 Stream Equivalent          |
- -| :---------- | :-------------------------------- |
- -| `FROM`       | `stream()`   |
- -| `COUNT`      | `count()`    |
- -| `LIMIT`      | `limit()`    |
- -| `DISTINCT`   | `distinct()` |
- -| `SELECT`     | `map()`      |
- -| `WHERE`      | `filter()` (before collecting) |
- -| `HAVING`     | `filter()` (after collecting) |
- -| `JOIN`       | `flatMap()`  |
- -| `UNION`      | `concat(s0, s1).distinct()` |
- -| `ORDER BY`   | `sorted()`   |
- -| `OFFSET`     | `skip()`     |
- -| `GROUP BY`   | `collect(groupingBy())` |
--
- 
+There is a remarkable resemblance between Java streams and SQL as summarized in the simplified table. This means there is no need for manually writing SQL-queries any more. You can remain in a pure Java world!
 
 <img align="left" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
 
@@ -74,7 +56,6 @@ WHERE
     (`length` > 120)
 ```
 
-No need for manually writing SQL-queries any more. Remain in a pure Java world!
 
 # Resources 
 
