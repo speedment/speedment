@@ -1,15 +1,12 @@
-This module shows basic examples of how to use Speedment including standard problems solving such as many-to-many, paging etc.
-
-[![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-<img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/wiki/frontpage/Homer.png" alt="Spire the Hare" title="Spire" align="right" width="240px" />
-
-#### Requirements
-The examples make use of the "sakila" example database available directly from Oracle [here](https://dev.mysql.com/doc/index-other.html). 
-Download and install the database content on your target machine before running any of the examples.
-
 Speedment Examples
 ==================
+[![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+This module shows basic examples of how to use Speedment including standard problems solving such as many-to-many, paging etc.
+
+### Requirements
+The examples make use of the "sakila" example database available directly from Oracle [here](https://dev.mysql.com/doc/index-other.html). 
+Download and install the database content on your target machine before running any of the examples.
 
 1. [Query with Optimised Stream Predicate Short-Circuit](#query-with-optimised-stream-predicate-short-circuit)
 2. [Query with Optimised Paging](#query-with-optimised-paging)
