@@ -25,6 +25,11 @@ Assuming you have Maven installed and a relational database available, you can s
 * [Start a New Speedment Maven Project](https://github.com/speedment/speedment/wiki/Start-a-New-Speedment-Maven-Project)
 * [Connect to Your Database](https://github.com/speedment/speedment/wiki/Connect-to-Your-Database)
 
+### Expressing SQL as Java 8 Streams
+There is a remarkable resemblance between Java streams and SQL as summarized in the simplified table.
+
+<img align="left" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
+
 ### One-liner
 Search for a long film (of length greater than 120 minutes):
 ```java
@@ -48,11 +53,6 @@ WHERE
 ```
 
 No need for manually writing SQL-queries any more. Remain in a pure Java world!
-
-<img align="right" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
-
-### Expressing SQL as Java 8 Streams
-When we started the open-source project Speedment, the main objective was to remove the polyglot requirement for Java database application developers. After all, we all love Java and why should we need to know SQL when, instead, we could derive the same semantics directly from Java streams? When one takes a closer look at this objective, it turns out that there is a remarkable resemblance between Java streams and SQL as summarized in the simplified table to the right.
 
 ## Documentation 
 You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
