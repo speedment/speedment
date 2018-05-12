@@ -20,7 +20,7 @@ Speedment Examples
 7. [Many-to-many](#many-to-many)
 8. [Entities are Linked](#entities-are-linked)
 9. [Easy Initialization](#easy-initialization)
-10. [Easy Persistance](#easy-persistance)
+10. [Easy Persistence](#easy-persistence)
 11. [Update](#update)
 12. [Remove](#remove)
 13. [Transactions](#transactions)
