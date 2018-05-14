@@ -13,20 +13,19 @@ Speedment is an open source Java Stream ORM toolkit and runtime. The toolkit ana
 
 Speedment was originally developed by researchers and engineers based in Palo Alto with the purpose to simplify and streamline the development of Java database applications by leveraging the Java 8 Stream API. 
 
-Speedment is licensed under the business-friendly Apache 2 license. Contribution from users are encouraged. Please feel free to request new features, suggest improvements and file bug reports.
+Speedment is licensed under the business-friendly Apache 2 license. Contribution from users is encouraged. Please feel free to request new features, suggest improvements and file bug reports. Read more about contributing [here](https://github.com/speedment/speedment/blob/master/CONTRIBUTING.md). 
 
 <img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Spire-Quick-Start.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="200px" />
 
-Quick Start
------------
+## Quick Start
 
 Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute:
 
 * [Start a New Speedment Maven Project](https://github.com/speedment/speedment/wiki/Start-a-New-Speedment-Maven-Project)
 * [Connect to Your Database](https://github.com/speedment/speedment/wiki/Connect-to-Your-Database)
 
-Expressing SQL as Java 8 Streams
------------
+## Expressing SQL as Java 8 Streams
+
 There is a remarkable resemblance between Java streams and SQL as summarized in the simplified table. This means there is no need for manually writing SQL-queries any more. You can remain in a pure Java world!
 
 <img align="left" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
@@ -54,14 +53,17 @@ WHERE
 ```
 
 
-Resources 
------------
+## Resources 
 
 ### Documentation 
-You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
+You can read the online Speedment User Guide [here](https://speedment.github.io/speedment-doc/introduction.html).
+
+### JavaDoc
+The latest online JavaDocs are available [here](http://www.javadoc.io/doc/com.speedment/runtime-deploy/3.1.0). 
 
 ### Examples 
-You can find many examles in the User's Guide as well as in our examples folder here on GitHub.  https://github.com/speedment/speedment/tree/master/example-parent
+There are a number of examples in the [example-parent folder] 
+(https://github.com/speedment/speedment/tree/master/example-parent) as well as in the User Guide. 
 
 ### Tutorials
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
@@ -82,8 +84,7 @@ The tutorials are divided into three sections. The basics are covered in the fir
 * [Tutorial 9 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
 * [Tutorial 10 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
 
-Features
---------
+## Features
 Here are some of the many features packed into the Speedment framework!
 
 ### Database Centric
@@ -101,29 +102,34 @@ When the database structure changes during development of a software there is al
 ### Null Protection
 Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers have been called the billion-dollar-mistake of java, but at the same time they are used in almost every software project out there. To minimize the production risks of using null values, Speedment analyzes if null values are allowed by a column in the database and wraps the values as appropriate in Java 8 Optionals.
 
-### Requirements
+## Requirements
 Speedment comes with support for the following databases out-of-the-box:
+
 * MySQL
 * MariaDB
 * PostgreSQL
 
+Speedment requires `Java 8` or later. Make sure your IDE is configured to use JDK 8 (version 1.8.0_40 or newer).
+
+## Need help? 
+If you need assistance or have questions of any sort, don't hesitate to reach out to the Speedment developers and other community members via [the Gitter chatroom](https://gitter.im/speedment/speedment). 
+ 
+## Contributing 
+Since Speedment is an open source project, pull requests and improvement suggestions from the community are gladly accepted. Read more [here](https://github.com/speedment/speedment/blob/master/CONTRIBUTING.md) on how to contribute to Speedment.
+
+## Licenses
+### Speedment Open Source 
 This site covers the **Speedment Open Source** project available under the 
-[Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). The 
-enterprise product with support for commercial 
+[Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). 
+
+### Speedment Enterprise
+The enterprise product with support for commercial 
 databases (i.e. Oracle, MS SQL Server, DB2, AS400) and in-JVM-memory acceleration can be found at 
 [www.speedment.com](http://speedment.com/).
 
-Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8 (version 1.8.0_40 or newer).
+## Copyright
 
-License
--------
-
-Speedment is available under the [Apache 2 License](http://www.apache.org/licenses/LICENSE-2.0).
-
-
-#### Copyright
-
-Copyright (c) 2014-2017, Speedment, Inc. All Rights Reserved.
+Copyright (c) 2014-2018, Speedment, Inc. All Rights Reserved.
 Visit [www.speedment.com](http://www.speedment.com/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
@@ -131,4 +137,3 @@ Visit [www.speedment.com](http://www.speedment.com/) for more info.
 [![Beacon](http://stat.speedment.com:8081/Beacon?site=GitHub&path=main)](https://some-site.com)
 
 [Github activity visualized](https://www.youtube.com/watch?v=Rmc_3lLZQpM)
-
