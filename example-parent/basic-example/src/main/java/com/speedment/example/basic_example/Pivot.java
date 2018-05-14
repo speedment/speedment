@@ -61,6 +61,7 @@ public class Pivot {
 
     private void run() {
         pivot();
+        pivotCustom();
     }
 
     private void pivot() {
@@ -88,5 +89,53 @@ public class Pivot {
         });
 
     }
+
+    private void pivotCustom() {
+        ExampleUtil.log("pivotCustom");
+
+        Join<ActorRating> join = joinComponent
+            .from(FilmActorManager.IDENTIFIER)
+            .innerJoinOn(Film.FILM_ID).equal(FilmActor.FILM_ID)
+            .innerJoinOn(Actor.ACTOR_ID).equal(FilmActor.ACTOR_ID)
+            .build(ActorRating::new);
+
+        Map<Actor, Map<String, Long>> pivot = join.stream()
+            .collect(
+                groupingBy(
+                    ActorRating::actor, // Applies Actor as classifier
+                    groupingBy(
+                        ActorRating::rating, // Applies rating as second level classifier
+                        counting() // Counts the elements
+                        )
+                    )
+                );
+
+        pivot.forEach((k, v) -> {                            // keys: Actor, values: Map<String, Long>
+            System.out.format("%22s  %5s %n", k.getFirstName() + " " + k.getLastName(), v);
+        });
+
+    }
+
+
+    private static class ActorRating {
+        private final Actor actor;
+        private final String rating;
+
+        public ActorRating(FilmActor fa, Film film, Actor actor) {
+            // fa is not used
+            this.actor = actor;
+            this.rating = film.getRating().get();
+        }
+
+        public Actor actor() {
+            return actor;
+        }
+
+        public String rating() {
+            return rating;
+        }
+
+    }
+
 
 }
