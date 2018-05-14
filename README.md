@@ -62,8 +62,7 @@ You can read the online Speedment User Guide [here](https://speedment.github.io/
 The latest online JavaDocs are available [here](http://www.javadoc.io/doc/com.speedment/runtime-deploy/3.1.0). 
 
 ### Examples 
-There are a number of examples in the [example-parent folder] 
-(https://github.com/speedment/speedment/tree/master/example-parent) as well as in the User Guide. 
+There are a number of examples in the [example-parent folder](https://github.com/speedment/speedment/tree/master/example-parent) as well as in the User Guide. 
 
 ### Tutorials
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
