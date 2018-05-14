@@ -50,6 +50,7 @@
         <injector.version>1.2.1</injector.version>
         <rest.version>1.0.4</rest.version>
         <lazy.version>1.0.3</lazy.version>
+        <mapbuilder.version>1.0.0-SNAPSHOT</mapbuilder.version>
         <mapstream.version>2.3.5</mapstream.version>
         <mutablestream.version>1.0.0</mutablestream.version>
         <singletonstream.version>1.0.1</singletonstream.version>
@@ -95,6 +96,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>logger</artifactId>
                 <version>${logger.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>mapbuilder</artifactId>
+                <version>${mapbuilder.version}</version>
             </dependency>
 
             <dependency>

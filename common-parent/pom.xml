@@ -51,6 +51,7 @@
         <module>injector</module>
         <module>rest</module>
         <module>lazy</module>
+        <module>mapbuilder</module>
         <module>mapstream</module>
         <module>mutablestream</module>
         <module>singletonstream</module>
