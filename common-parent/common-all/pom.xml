@@ -49,6 +49,7 @@
         <codegenxml.version>1.0.3</codegenxml.version>
         <injector.version>1.2.1</injector.version>
         <rest.version>1.0.4</rest.version>
+        <restservice.version>1.0.0-SNAPSHOT</restservice.version>
         <lazy.version>1.0.3</lazy.version>
         <mapbuilder.version>1.0.0-SNAPSHOT</mapbuilder.version>
         <mapstream.version>2.3.5</mapstream.version>
@@ -132,6 +133,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>rest</artifactId>
                 <version>${rest.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>rest-service</artifactId>
+                <version>${restservice.version}</version>
             </dependency>
 
             <dependency>
