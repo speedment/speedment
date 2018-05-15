@@ -54,7 +54,7 @@ public interface HasCreateJoin8 {
      * @param t4 identifier of the fifths table
      * @param t5 identifier of the sixth table
      * @param t6 identifier of the seventh table
-     * @param t7 identifier of the seventh table
+     * @param t7 identifier of the eighth table
      * @return a new Join object
      *
      * @throws NullPointerException if any of the provided arguments are
