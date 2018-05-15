@@ -31,7 +31,7 @@ There is a remarkable resemblance between Java streams and SQL as summarized in 
 <img align="left" src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/SQL-Stream.png?raw=true." alt="Streams to SQL" width="400px">
 
 #### Example
-Search in a film database for films with a length greater than 120 minutes:
+Search in a film database for a film with a length greater than 120 minutes:
 ```java
 // Searches are optimized in the background!
 Optional<Film> longFilm = films.stream()
@@ -126,7 +126,5 @@ Copyright (c) 2014-2018, Speedment, Inc. All Rights Reserved.
 Visit [www.speedment.com](http://www.speedment.com/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
-
-[![Beacon](http://stat.speedment.com:8081/Beacon?site=GitHub&path=main)](https://some-site.com)
 
 [Github activity visualized](https://www.youtube.com/watch?v=Rmc_3lLZQpM)
