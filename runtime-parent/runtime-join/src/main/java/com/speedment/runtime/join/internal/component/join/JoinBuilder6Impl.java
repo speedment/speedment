@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.common.function.Function5;
 import com.speedment.common.function.Function6;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2.JoinBuilder3.JoinBuilder4.JoinBuilder5;
+import com.speedment.runtime.join.builder.JoinBuilder6;
+import com.speedment.runtime.join.builder.JoinBuilder7;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
 
@@ -34,8 +34,8 @@ import static java.util.Objects.requireNonNull;
  * @author Per Minborg
  */
 final class JoinBuilder6Impl<T0, T1, T2, T3, T4, T5>
-    extends AbstractJoinBuilder<T5, JoinBuilder5.JoinBuilder6<T0, T1, T2, T3, T4, T5>>
-    implements JoinBuilder5.JoinBuilder6<T0, T1, T2, T3, T4, T5> {
+    extends AbstractJoinBuilder<T5, JoinBuilder6<T0, T1, T2, T3, T4, T5>>
+    implements JoinBuilder6<T0, T1, T2, T3, T4, T5> {
 
     JoinBuilder6Impl(AbstractJoinBuilder<?, ?> previousStage, StageBean<T5> current) {
         super(previousStage, current);

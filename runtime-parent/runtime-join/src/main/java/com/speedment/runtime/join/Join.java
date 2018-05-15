@@ -24,8 +24,10 @@ import java.util.stream.Stream;
  * This interface represent a Join operation from which Streams of the joined
  * tables can be obtained.
  *
- * @author Per Minborg
  * @param <T> the composite type of entity types
+ *
+ * @author Per Minborg
+ * @since  3.1.0
  */
 public interface Join<T> {
 
@@ -90,6 +92,6 @@ public interface Join<T> {
      * @see java.util.stream
      * @see Stream
      */
-    public Stream<T> stream();
+    Stream<T> stream();
 
 }
