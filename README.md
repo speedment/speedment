@@ -102,13 +102,15 @@ When the database structure changes during development of a software there is al
 Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers have been called the billion-dollar-mistake of java, but at the same time they are used in almost every software project out there. To minimize the production risks of using null values, Speedment analyzes if null values are allowed by a column in the database and wraps the values as appropriate in Java 8 Optionals.
 
 ## Requirements
-Speedment comes with support for the following databases out-of-the-box:
+Speedment requires `Java 8` or later. Make sure your IDE is configured to use JDK 8 (version 1.8.0_40 or newer).
 
+## Requirements
+Speedment Open Source comes with support for the following databases out-of-the-box:
 * MySQL
 * MariaDB
 * PostgreSQL
 
-Speedment requires `Java 8` or later. Make sure your IDE is configured to use JDK 8 (version 1.8.0_40 or newer).
+For Enterprise database connectors see [www.speedment.com](www.speedment.com/pricing). 
 
 ## Need help? 
 If you need assistance or have questions of any sort, don't hesitate to reach out to the Speedment developers and other community members via [the Gitter chatroom](https://gitter.im/speedment/speedment). 
