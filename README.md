@@ -79,11 +79,6 @@ WHERE
 * **Streams are Lazy** - Content from the database is pulled as elements are needed and consumed<br>
 * **Pipeline Introspection** - Optimized performance by short circuiting of stream operations<br>
 
-## Resources 
-* **Documentation** - Read the [Speedment User Guide](https://speedment.github.io/speedment-doc/introduction.html).
-* **JavaDocs** - Latest [Speedment JavaDocs](http://www.javadoc.io/doc/com.speedment/runtime-deploy/3.1.0). 
-* **Examples** - There are 15 detailed examples [here](https://github.com/speedment/speedment/tree/master/example-parent) and more can be found in the User Guide provided above. 
-
 ## Tutorials
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
 
@@ -103,6 +98,13 @@ The tutorials are divided into three sections. The basics are covered in the fir
 * [Tutorial 9 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
 * [Tutorial 10 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
 
+## Resources 
+* **Documentation** - Read the [Speedment User Guide](https://speedment.github.io/speedment-doc/introduction.html).
+* **JavaDocs** - Latest [Speedment JavaDocs](http://www.javadoc.io/doc/com.speedment/runtime-deploy/3.1.0). 
+* **Examples** - There are 15 detailed examples [here](https://github.com/speedment/speedment/tree/master/example-parent) and more can be found in the User Guide provided above. 
+* **Gitter Chatroom** - Reach out to the Speedment developers and other community members via [the Gitter chatroom](https://gitter.im/speedment/speedment). 
+* **Creating a Pull Request** - Pull requests and improvement suggestions from the community are gladly accepted. Find more information [here](https://github.com/speedment/speedment/blob/master/CONTRIBUTING.md).
+
 ## Requirements
 Speedment requires `Java 8` or later. Make sure your IDE is configured to use JDK 8 (version 1.8.0_40 or newer).
 
@@ -113,21 +115,10 @@ Speedment Open Source comes with support for the following databases out-of-the-
 
 For Enterprise database connectors see [www.speedment.com](www.speedment.com/pricing). 
 
-## Need help? 
-If you need assistance or have questions of any sort, don't hesitate to reach out to the Speedment developers and other community members via [the Gitter chatroom](https://gitter.im/speedment/speedment). 
- 
-## Contributing 
-Since Speedment is an open source project, pull requests and improvement suggestions from the community are gladly accepted. Read more [here](https://github.com/speedment/speedment/blob/master/CONTRIBUTING.md) on how to contribute to Speedment.
-
 ## Licenses
-### Speedment Open Source 
-This site covers the **Speedment Open Source** project available under the 
+* **Speedment Open Source** - This site covers the Speedment Open Source project available under the 
 [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). 
-
-### Speedment Enterprise
-The enterprise product with support for commercial 
-databases (i.e. Oracle, MS SQL Server, DB2, AS400) and in-JVM-memory acceleration can be found at 
-[www.speedment.com](http://speedment.com/).
+* **Speedment Enterprise** - The enterprise product with support for commercial databases (i.e. Oracle, MS SQL Server, DB2, AS400) and in-JVM-memory acceleration can be found at [www.speedment.com](http://speedment.com/).
 
 ## Copyright
 
