@@ -77,7 +77,7 @@ public class Optimization {
         long count = films.stream()
             .filter(Film.RATING.equal("PG-13"))
             .filter(Film.LENGTH.greaterThan(75))
-            .map(Film::getTitle)
+            .map(Film.TITLE)
             .sorted()
             .count();
 
