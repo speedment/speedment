@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.ComparableField;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
@@ -45,7 +46,7 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> 
-implements ComparableField<ENTITY, D, V> {
+implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
 
     private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, V> getter;
@@ -108,6 +109,36 @@ implements ComparableField<ENTITY, D, V> {
     @Override
     public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
+    }
+
+    @Override
+    public Field<ENTITY> getField() {
+        return this;
+    }
+
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+
+    @Override
+    public boolean isReversed() {
+        return false;
+    }
+
+    @Override
+    public FieldComparator<ENTITY> reversed() {
+        return comparator().reversed();
+    }
+
+    @Override
+    public int compare(ENTITY first, ENTITY second) {
+        final V f = get(first);
+        final V s = get(second);
+        if (f == null && s == null) return 0;
+        else if (f == null) return 1;
+        else if (s == null) return -1;
+        else return f.compareTo(s);
     }
 
     ////////////////////////////////////////////////////////////////////////////

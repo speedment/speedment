@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.EnumField;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
@@ -45,7 +46,8 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.10
  */
 public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
-implements EnumField<ENTITY, D, E> {
+implements EnumField<ENTITY, D, E>,
+           FieldComparator<ENTITY> {
 
     private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, E> getter;
@@ -135,6 +137,36 @@ implements EnumField<ENTITY, D, E> {
     @Override
     public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
+    }
+
+    @Override
+    public Field<ENTITY> getField() {
+        return this;
+    }
+
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+
+    @Override
+    public boolean isReversed() {
+        return false;
+    }
+
+    @Override
+    public FieldComparator<ENTITY> reversed() {
+        return comparator().reversed();
+    }
+
+    @Override
+    public int compare(ENTITY first, ENTITY second) {
+        final E f = get(first);
+        final E s = get(second);
+        if (f == null && s == null) return 0;
+        else if (f == null) return 1;
+        else if (s == null) return -1;
+        else return f.compareTo(s);
     }
 
     ////////////////////////////////////////////////////////////////////////////
