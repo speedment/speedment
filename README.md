@@ -86,18 +86,28 @@ The tutorials are divided into three sections. The basics are covered in the fir
 ## Features
 
 ### View Database Tables as Standard Java Streams
-* **Pure Java** - Stream API instead of SQL eliminates the need of a query language 
-* **Dynamic Joins** - Ability to perform joins as Java streams on the application side
-* **Parallel Streams** - Workload can automatically be divided over several threads
+
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/stream-api.png?raw=true" alt="Stream API" title="Stream API" align="right" width="200px" />
+
+* **Pure Java** - Stream API instead of SQL eliminates the need of a query language<br>
+* **Dynamic Joins** - Ability to perform joins as Java streams on the application side<br>
+* **Parallel Streams** - Workload can automatically be divided over several threads<br>
+<br>
 
 ### Short and Concise Type Safe Code 
-* **Code Generation** - Automatic Java representation of the latest state of your database eliminates boilerplate code and the need of manually writing Java Entity classes while minimizing the risk for bugs. 
-* **Null Protection** - Minimizes the risk involved with database null values by wrapping to Java Optionals 
-* **Enum Integration** - Mapping of String columns to Java Enums increases memory efficiency and type safety
+
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/type-safety.png?raw=true" alt="Type Safety" title="Type Safety" align="right" width="200px" />
+
+* **Code Generation** - Automatic Java representation of the latest state of your database eliminates boilerplate code and the need of manually writing Java Entity classes while minimizing the risk for bugs.<br>
+* **Null Protection** - Minimizes the risk involved with database null values by wrapping to Java Optionals<br>
+* **Enum Integration** - Mapping of String columns to Java Enums increases memory efficiency and type safety<br>
+
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/lazy-evaluation.png?raw=true" alt="Lazy Evaluation" title="Lazy Evaluation" align="right" width="200px" />
 
 ### Lazy Evaluation for Increased Performance
-* **Streams are Lazy** - Content from the database is pulled as elements are needed and consumed 
-* **Pipeline Introspection** - Optimized performance by short circuiting of stream operations
+
+* **Streams are Lazy** - Content from the database is pulled as elements are needed and consumed<br>
+* **Pipeline Introspection** - Optimized performance by short circuiting of stream operations<br>
 
 ## Requirements
 Speedment requires `Java 8` or later. Make sure your IDE is configured to use JDK 8 (version 1.8.0_40 or newer).
