@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.common.function.Function7;
 import com.speedment.common.function.Function8;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2.JoinBuilder3.JoinBuilder4.JoinBuilder5.JoinBuilder6.JoinBuilder7.JoinBuilder8;
+import com.speedment.runtime.join.builder.JoinBuilder8;
+import com.speedment.runtime.join.builder.JoinBuilder9;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
 

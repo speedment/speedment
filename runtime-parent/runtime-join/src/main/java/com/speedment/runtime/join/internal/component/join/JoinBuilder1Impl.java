@@ -18,10 +18,9 @@ package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.join.JoinComponent.JoinBuilder1;
-import com.speedment.runtime.join.JoinComponent.JoinBuilder1.AfterJoin;
-import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2;
+import com.speedment.runtime.join.builder.JoinBuilder1;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
+import com.speedment.runtime.join.builder.JoinBuilder2;
 import com.speedment.runtime.join.stage.JoinType;
 
 /**

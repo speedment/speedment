@@ -20,20 +20,19 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.join.trait.*;
 
 /**
- * JoinStreamSupplierComponent that can be used to create Join objects
+ * Stream Supplier Component that can be used to create Join objects.
  *
  * @author Per Minborg
+ * @since  3.1.0
  */
 @InjectKey(JoinStreamSupplierComponent.class)
 public interface JoinStreamSupplierComponent
-    extends
-    HasCreateJoin2,
-    HasCreateJoin3,
-    HasCreateJoin4,
-    HasCreateJoin5,
-    HasCreateJoin6,
-    HasCreateJoin7,
-    HasCreateJoin8,
-    HasCreateJoin9,
-    HasCreateJoin10
-{}
+extends HasCreateJoin2,
+        HasCreateJoin3,
+        HasCreateJoin4,
+        HasCreateJoin5,
+        HasCreateJoin6,
+        HasCreateJoin7,
+        HasCreateJoin8,
+        HasCreateJoin9,
+        HasCreateJoin10 {}

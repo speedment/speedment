@@ -26,7 +26,15 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
-import com.speedment.runtime.join.internal.component.stream.sql.*;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin10;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin2;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin3;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin4;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin5;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin6;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin7;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin8;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin9;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.join.trait.*;
 

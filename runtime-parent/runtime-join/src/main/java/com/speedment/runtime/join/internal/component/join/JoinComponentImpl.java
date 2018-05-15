@@ -20,6 +20,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.JoinComponent;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
+import com.speedment.runtime.join.builder.JoinBuilder1;
 
 /**
  *

@@ -19,7 +19,7 @@ package com.speedment.runtime.join.internal.component.join;
 import com.speedment.common.function.Function10;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2.JoinBuilder3.JoinBuilder4.JoinBuilder5.JoinBuilder6.JoinBuilder7.JoinBuilder8.JoinBuilder9.JoinBuilder10;
+import com.speedment.runtime.join.builder.JoinBuilder10;
 import com.speedment.runtime.join.stage.Stage;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
