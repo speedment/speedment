@@ -84,27 +84,24 @@ The tutorials are divided into three sections. The basics are covered in the fir
 * [Tutorial 10 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
 
 ## Features
-Here are some of the many features packed into the Speedment framework!
 
-### Database Centric
-Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
+### View Database Tables as Standard Java Streams
+* **Pure Java** - Stream API instead of SQL eliminates the need of a query language 
+* **Dynamic Joins** - Ability to perform joins as Java streams on the application side
+* **Parallel Streams** - Workload can automatically be divided over several threads
 
-### Code Generation
-Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Nice if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated using an intuitive UI or programatically using your own code.
+### Short and Concise Type Safe Code 
+* **Code Generation** - Automatic Java representation of the latest state of your database eliminates boilerplate code and the need of manually writing Java Entity classes while minimizing the risk for bugs. 
+* **Null Protection** - Minimizes the risk involved with database null values by wrapping to Java Optionals 
+* **Enum Integration** - Mapping of String columns to Java Enums increases memory efficiency and type safety
 
-### Modular Design
-Speedment is built with the ambition to be completely modular! If you don't like the current implementation of a certain function, plug in you own! Do you have a suggestion for an alternative way of solving a complex problem? Share it with the community!
-
-### Type Safety
-When the database structure changes during development of a software there is always a risk that bugs sneak into the application. Thats why type-safety is such a big deal! With Speedment, you will notice if something is wrong seconds after you generate your code instead of weeks into the testing phase.
-
-### Null Protection
-Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers have been called the billion-dollar-mistake of java, but at the same time they are used in almost every software project out there. To minimize the production risks of using null values, Speedment analyzes if null values are allowed by a column in the database and wraps the values as appropriate in Java 8 Optionals.
+### Lazy Evaluation for Increased Performance
+* **Streams are Lazy** - Content from the database is pulled as elements are needed and consumed 
+* **Pipeline Introspection** - Optimized performance by short circuiting of stream operations
 
 ## Requirements
 Speedment requires `Java 8` or later. Make sure your IDE is configured to use JDK 8 (version 1.8.0_40 or newer).
 
-## Requirements
 Speedment Open Source comes with support for the following databases out-of-the-box:
 * MySQL
 * MariaDB
