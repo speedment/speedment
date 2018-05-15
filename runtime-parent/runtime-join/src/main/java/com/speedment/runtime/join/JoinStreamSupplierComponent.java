@@ -17,11 +17,7 @@
 package com.speedment.runtime.join;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.join.trait.HasCreateJoin2;
-import com.speedment.runtime.join.trait.HasCreateJoin3;
-import com.speedment.runtime.join.trait.HasCreateJoin4;
-import com.speedment.runtime.join.trait.HasCreateJoin5;
-import com.speedment.runtime.join.trait.HasCreateJoin6;
+import com.speedment.runtime.join.trait.*;
 
 /**
  * JoinStreamSupplierComponent that can be used to create Join objects
@@ -35,4 +31,9 @@ public interface JoinStreamSupplierComponent
     HasCreateJoin3,
     HasCreateJoin4,
     HasCreateJoin5,
-    HasCreateJoin6 {}
+    HasCreateJoin6,
+    HasCreateJoin7,
+    HasCreateJoin8,
+    HasCreateJoin9,
+    HasCreateJoin10
+{}

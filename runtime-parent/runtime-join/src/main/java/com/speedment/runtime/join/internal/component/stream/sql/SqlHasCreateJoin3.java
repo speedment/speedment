@@ -53,13 +53,13 @@ public final class SqlHasCreateJoin3
         final TableIdentifier<T1> t1, 
         final TableIdentifier<T2> t2
     ) {
-        final SqlFunction<ResultSet, T0> rsMapper1 = rsMapper(stages, 0, t0);
-        final SqlFunction<ResultSet, T1> rsMapper2 = rsMapper(stages, 1, t1);
-        final SqlFunction<ResultSet, T2> rsMapper3 = rsMapper(stages, 2, t2);
+        final SqlFunction<ResultSet, T0> rsMapper0 = rsMapper(stages, 0, t0);
+        final SqlFunction<ResultSet, T1> rsMapper1 = rsMapper(stages, 1, t1);
+        final SqlFunction<ResultSet, T2> rsMapper2 = rsMapper(stages, 2, t2);
         final SqlFunction<ResultSet, T> rsMapper = rs -> constructor.apply(
+            rsMapper0.apply(rs),
             rsMapper1.apply(rs),
-            rsMapper2.apply(rs),
-            rsMapper3.apply(rs)
+            rsMapper2.apply(rs)
         );
         return newJoin(stages, rsMapper);
     }
