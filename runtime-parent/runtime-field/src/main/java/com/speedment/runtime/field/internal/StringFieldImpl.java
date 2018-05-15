@@ -17,12 +17,20 @@
 package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.predicate.reference.*;
-import com.speedment.runtime.field.internal.predicate.string.*;
+import com.speedment.runtime.field.internal.predicate.string.StringContainsIgnoreCasePredicate;
+import com.speedment.runtime.field.internal.predicate.string.StringContainsPredicate;
+import com.speedment.runtime.field.internal.predicate.string.StringEndsWithIgnoreCasePredicate;
+import com.speedment.runtime.field.internal.predicate.string.StringEndsWithPredicate;
+import com.speedment.runtime.field.internal.predicate.string.StringEqualIgnoreCasePredicate;
+import com.speedment.runtime.field.internal.predicate.string.StringIsEmptyPredicate;
+import com.speedment.runtime.field.internal.predicate.string.StringStartsWithIgnoreCasePredicate;
+import com.speedment.runtime.field.internal.predicate.string.StringStartsWithPredicate;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -43,7 +51,9 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
+public final class StringFieldImpl<ENTITY, D>
+implements StringField<ENTITY, D>,
+           FieldComparator<ENTITY> {
 
     private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, String> getter;
@@ -108,6 +118,35 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
+    @Override
+    public Field<ENTITY> getField() {
+        return this;
+    }
+
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+
+    @Override
+    public boolean isReversed() {
+        return false;
+    }
+
+    @Override
+    public FieldComparator<ENTITY> reversed() {
+        return comparator().reversed();
+    }
+
+    @Override
+    public int compare(ENTITY first, ENTITY second) {
+        final String f = get(first);
+        final String s = get(second);
+        if (f == null && s == null) return 0;
+        else if (f == null) return 1;
+        else if (s == null) return -1;
+        else return f.compareTo(s);
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     //                               Operators                                //

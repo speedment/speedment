@@ -16,13 +16,18 @@
  */
 package com.speedment.runtime.field.trait;
 
+import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.predicate.Inclusion;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toSet;
@@ -39,7 +44,7 @@ import static java.util.stream.Collectors.toSet;
  * @since 2.2.0
  */
 public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
-extends Field<ENTITY> {
+extends Field<ENTITY>, HasCompare<ENTITY> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -276,4 +281,39 @@ extends Field<ENTITY> {
      * this Field is <em>not in</em> the given Set
      */
     Predicate<ENTITY> notIn(Collection<V> values);
+
+    @Override
+    default Comparator<ENTITY> reversed() {
+        return comparator().reversed();
+    }
+
+    @Override
+    default Comparator<ENTITY> thenComparing(Comparator<? super ENTITY> other) {
+        return comparator().thenComparing(other);
+    }
+
+    @Override
+    default <U> Comparator<ENTITY> thenComparing(Function<? super ENTITY, ? extends U> keyExtractor, Comparator<? super U> keyComparator) {
+        return comparator().thenComparing(keyExtractor, keyComparator);
+    }
+
+    @Override
+    default <U extends Comparable<? super U>> Comparator<ENTITY> thenComparing(Function<? super ENTITY, ? extends U> keyExtractor) {
+        return comparator().thenComparing(keyExtractor);
+    }
+
+    @Override
+    default Comparator<ENTITY> thenComparingInt(ToIntFunction<? super ENTITY> keyExtractor) {
+        return comparator().thenComparingInt(keyExtractor);
+    }
+
+    @Override
+    default Comparator<ENTITY> thenComparingLong(ToLongFunction<? super ENTITY> keyExtractor) {
+        return comparator().thenComparingLong(keyExtractor);
+    }
+
+    @Override
+    default Comparator<ENTITY> thenComparingDouble(ToDoubleFunction<? super ENTITY> keyExtractor) {
+        return comparator().thenComparingDouble(keyExtractor);
+    }
 }

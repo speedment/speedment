@@ -19,6 +19,7 @@ package com.speedment.runtime.field.internal;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.EnumForeignKeyField;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
@@ -30,7 +31,11 @@ import com.speedment.runtime.field.internal.predicate.reference.ReferenceEqualPr
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceInPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNotNullPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNullPredicate;
-import com.speedment.runtime.field.method.*;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.method.FindFromNullable;
+import com.speedment.runtime.field.method.ReferenceGetter;
+import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -52,7 +57,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class EnumForeignKeyFieldImpl
     <ENTITY, D, E extends Enum<E>, FK>
-implements EnumForeignKeyField<ENTITY, D, E, FK> {
+implements EnumForeignKeyField<ENTITY, D, E, FK>,
+           FieldComparator<ENTITY> {
 
     private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, E> getter;
@@ -177,6 +183,36 @@ implements EnumForeignKeyField<ENTITY, D, E, FK> {
     @Override
     public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
+    }
+
+    @Override
+    public Field<ENTITY> getField() {
+        return this;
+    }
+
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+
+    @Override
+    public boolean isReversed() {
+        return false;
+    }
+
+    @Override
+    public FieldComparator<ENTITY> reversed() {
+        return comparator().reversed();
+    }
+
+    @Override
+    public int compare(ENTITY first, ENTITY second) {
+        final E f = get(first);
+        final E s = get(second);
+        if (f == null && s == null) return 0;
+        else if (f == null) return 1;
+        else if (s == null) return -1;
+        else return f.compareTo(s);
     }
 
     ////////////////////////////////////////////////////////////////////////////
