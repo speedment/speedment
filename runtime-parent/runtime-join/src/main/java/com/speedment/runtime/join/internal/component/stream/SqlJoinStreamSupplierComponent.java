@@ -16,10 +16,7 @@
  */
 package com.speedment.runtime.join.internal.component.stream;
 
-import com.speedment.common.function.Function5;
-import com.speedment.common.function.Function6;
-import com.speedment.common.function.QuadFunction;
-import com.speedment.common.function.TriFunction;
+import com.speedment.common.function.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.runtime.config.Project;
@@ -29,17 +26,10 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
-import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin2;
-import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin3;
-import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin4;
-import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin5;
-import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin6;
+import com.speedment.runtime.join.internal.component.stream.sql.*;
 import com.speedment.runtime.join.stage.Stage;
-import com.speedment.runtime.join.trait.HasCreateJoin2;
-import com.speedment.runtime.join.trait.HasCreateJoin3;
-import com.speedment.runtime.join.trait.HasCreateJoin4;
-import com.speedment.runtime.join.trait.HasCreateJoin5;
-import com.speedment.runtime.join.trait.HasCreateJoin6;
+import com.speedment.runtime.join.trait.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -58,6 +48,10 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
     private HasCreateJoin4 join4Creator;
     private HasCreateJoin5 join5Creator;
     private HasCreateJoin6 join6Creator;
+    private HasCreateJoin7 join7Creator;
+    private HasCreateJoin8 join8Creator;
+    private HasCreateJoin9 join9Creator;
+    private HasCreateJoin10 join10Creator;
 
     @Execute
     void init(
@@ -80,6 +74,10 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
         join4Creator = new SqlHasCreateJoin4(dbmsHandlerComponent, project, this::sqlAdapterMapper);
         join5Creator = new SqlHasCreateJoin5(dbmsHandlerComponent, project, this::sqlAdapterMapper);
         join6Creator = new SqlHasCreateJoin6(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join7Creator = new SqlHasCreateJoin7(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join8Creator = new SqlHasCreateJoin8(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join9Creator = new SqlHasCreateJoin9(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join10Creator = new SqlHasCreateJoin10(dbmsHandlerComponent, project, this::sqlAdapterMapper);
     }
 
     @Override
@@ -145,6 +143,74 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
     ) {
         return join6Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4, t5);
     }
+
+    @Override
+    public <T0, T1, T2, T3, T4, T5, T6, T> Join<T> createJoin(
+            List<Stage<?>> stages,
+            Function7<T0, T1, T2, T3, T4, T5, T6, T> constructor,
+            TableIdentifier<T0> t0,
+            TableIdentifier<T1> t1,
+            TableIdentifier<T2> t2,
+            TableIdentifier<T3> t3,
+            TableIdentifier<T4> t4,
+            TableIdentifier<T5> t5,
+            TableIdentifier<T6> t6
+    ) {
+        return join7Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4, t5, t6);
+    }
+
+    @Override
+    public <T0, T1, T2, T3, T4, T5, T6, T7, T> Join<T> createJoin(
+            List<Stage<?>> stages,
+            Function8<T0, T1, T2, T3, T4, T5, T6, T7, T> constructor,
+            TableIdentifier<T0> t0,
+            TableIdentifier<T1> t1,
+            TableIdentifier<T2> t2,
+            TableIdentifier<T3> t3,
+            TableIdentifier<T4> t4,
+            TableIdentifier<T5> t5,
+            TableIdentifier<T6> t6,
+            TableIdentifier<T7> t7
+    ) {
+        return join8Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4, t5, t6, t7);
+    }
+
+    @Override
+    public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T> Join<T> createJoin(
+            List<Stage<?>> stages,
+            Function9<T0, T1, T2, T3, T4, T5, T6, T7, T8, T> constructor,
+            TableIdentifier<T0> t0,
+            TableIdentifier<T1> t1,
+            TableIdentifier<T2> t2,
+            TableIdentifier<T3> t3,
+            TableIdentifier<T4> t4,
+            TableIdentifier<T5> t5,
+            TableIdentifier<T6> t6,
+            TableIdentifier<T7> t7,
+            TableIdentifier<T8> t8
+    ) {
+        return join9Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4, t5, t6, t7, t8);
+    }
+
+    @Override
+    public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T> Join<T> createJoin(
+            List<Stage<?>> stages,
+            Function10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T> constructor,
+            TableIdentifier<T0> t0,
+            TableIdentifier<T1> t1,
+            TableIdentifier<T2> t2,
+            TableIdentifier<T3> t3,
+            TableIdentifier<T4> t4,
+            TableIdentifier<T5> t5,
+            TableIdentifier<T6> t6,
+            TableIdentifier<T7> t7,
+            TableIdentifier<T8> t8,
+            TableIdentifier<T9> t9
+    ) {
+        return join10Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
+    }
+
+
 
     private <ENTITY> SqlAdapter<ENTITY> sqlAdapterMapper(TableIdentifier<ENTITY> identifier) {
         @SuppressWarnings("unchecked")

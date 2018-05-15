@@ -16,10 +16,7 @@
  */
 package com.speedment.runtime.join.internal.component.join.test_support;
 
-import com.speedment.common.function.Function5;
-import com.speedment.common.function.Function6;
-import com.speedment.common.function.QuadFunction;
-import com.speedment.common.function.TriFunction;
+import com.speedment.common.function.*;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
@@ -30,6 +27,10 @@ import com.speedment.runtime.join.internal.component.join.test_support.JoinTestU
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E3;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E4;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E5;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E6;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E7;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E8;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E9;
 import com.speedment.runtime.join.stage.Stage;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -49,6 +50,10 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
     private TableIdentifier<E3> t3;
     private TableIdentifier<E4> t4;
     private TableIdentifier<E5> t5;
+    private TableIdentifier<E6> t6;
+    private TableIdentifier<E7> t7;
+    private TableIdentifier<E8> t8;
+    private TableIdentifier<E9> t9;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -61,7 +66,11 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
             (TableIdentifier<E2>) null,
             (TableIdentifier<E3>) null,
             (TableIdentifier<E4>) null,
-            (TableIdentifier<E5>) null
+            (TableIdentifier<E5>) null,
+            (TableIdentifier<E6>) null,
+            (TableIdentifier<E7>) null,
+            (TableIdentifier<E8>) null,
+            (TableIdentifier<E9>) null
         );
         return empty();
     }
@@ -77,7 +86,11 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
             (TableIdentifier<E2>) t2,
             (TableIdentifier<E3>) null,
             (TableIdentifier<E4>) null,
-            (TableIdentifier<E5>) null
+            (TableIdentifier<E5>) null,
+            (TableIdentifier<E6>) null,
+            (TableIdentifier<E7>) null,
+            (TableIdentifier<E8>) null,
+            (TableIdentifier<E9>) null
         );
 
         return empty();
@@ -94,7 +107,11 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
             (TableIdentifier<E2>) t2,
             (TableIdentifier<E3>) t3,
             (TableIdentifier<E4>) null,
-            (TableIdentifier<E5>) null
+            (TableIdentifier<E5>) null,
+            (TableIdentifier<E6>) null,
+            (TableIdentifier<E7>) null,
+            (TableIdentifier<E8>) null,
+            (TableIdentifier<E9>) null
         );
 
         return empty();
@@ -111,7 +128,11 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
             (TableIdentifier<E2>) t2,
             (TableIdentifier<E3>) t3,
             (TableIdentifier<E4>) t4,
-            (TableIdentifier<E5>) null
+            (TableIdentifier<E5>) null,
+            (TableIdentifier<E6>) null,
+            (TableIdentifier<E7>) null,
+            (TableIdentifier<E8>) null,
+            (TableIdentifier<E9>) null
         );
 
         return empty();
@@ -128,7 +149,92 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
             (TableIdentifier<E2>) t2,
             (TableIdentifier<E3>) t3,
             (TableIdentifier<E4>) t4,
-            (TableIdentifier<E5>) t5
+            (TableIdentifier<E5>) t5,
+            (TableIdentifier<E6>) null,
+            (TableIdentifier<E7>) null,
+            (TableIdentifier<E8>) null,
+            (TableIdentifier<E9>) null
+        );
+        return empty();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T0, T1, T2, T3, T4, T5, T6, T> Join<T> createJoin(List<Stage<?>> stages, Function7<T0, T1, T2, T3, T4, T5, T6, T> constructor, TableIdentifier<T0> t0, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5, TableIdentifier<T6> t6) {
+        set(
+            stages,
+            constructor,
+            (TableIdentifier<E0>) t0,
+            (TableIdentifier<E1>) t1,
+            (TableIdentifier<E2>) t2,
+            (TableIdentifier<E3>) t3,
+            (TableIdentifier<E4>) t4,
+            (TableIdentifier<E5>) t5,
+            (TableIdentifier<E6>) t6,
+            (TableIdentifier<E7>) null,
+            (TableIdentifier<E8>) null,
+            (TableIdentifier<E9>) null
+        );
+        return empty();
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T0, T1, T2, T3, T4, T5, T6, T7, T> Join<T> createJoin(List<Stage<?>> stages, Function8<T0, T1, T2, T3, T4, T5, T6, T7, T> constructor, TableIdentifier<T0> t0, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5, TableIdentifier<T6> t6, TableIdentifier<T7> t7) {
+        set(
+                stages,
+                constructor,
+                (TableIdentifier<E0>) t0,
+                (TableIdentifier<E1>) t1,
+                (TableIdentifier<E2>) t2,
+                (TableIdentifier<E3>) t3,
+                (TableIdentifier<E4>) t4,
+                (TableIdentifier<E5>) t5,
+                (TableIdentifier<E6>) t6,
+                (TableIdentifier<E7>) t7,
+                (TableIdentifier<E8>) null,
+                (TableIdentifier<E9>) null
+        );
+        return empty();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T> Join<T> createJoin(List<Stage<?>> stages, Function9<T0, T1, T2, T3, T4, T5, T6, T7, T8, T> constructor, TableIdentifier<T0> t0, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5, TableIdentifier<T6> t6, TableIdentifier<T7> t7, TableIdentifier<T8> t8) {
+        set(
+                stages,
+                constructor,
+                (TableIdentifier<E0>) t0,
+                (TableIdentifier<E1>) t1,
+                (TableIdentifier<E2>) t2,
+                (TableIdentifier<E3>) t3,
+                (TableIdentifier<E4>) t4,
+                (TableIdentifier<E5>) t5,
+                (TableIdentifier<E6>) t6,
+                (TableIdentifier<E7>) t7,
+                (TableIdentifier<E8>) t8,
+                (TableIdentifier<E9>) null
+        );
+        return empty();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T> Join<T> createJoin(List<Stage<?>> stages, Function10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T> constructor, TableIdentifier<T0> t0, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5, TableIdentifier<T6> t6, TableIdentifier<T7> t7, TableIdentifier<T8> t8, TableIdentifier<T9> t9) {
+        set(
+                stages,
+                constructor,
+                (TableIdentifier<E0>) t0,
+                (TableIdentifier<E1>) t1,
+                (TableIdentifier<E2>) t2,
+                (TableIdentifier<E3>) t3,
+                (TableIdentifier<E4>) t4,
+                (TableIdentifier<E5>) t5,
+                (TableIdentifier<E6>) t6,
+                (TableIdentifier<E7>) t7,
+                (TableIdentifier<E8>) t8,
+                (TableIdentifier<E9>) t9
         );
         return empty();
     }
@@ -165,6 +271,22 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
         return t5;
     }
 
+    public TableIdentifier<E6> t6() {
+        return t6;
+    }
+
+    public TableIdentifier<E7> t7() {
+        return t7;
+    }
+
+    public TableIdentifier<E8> t8() {
+        return t8;
+    }
+
+    public TableIdentifier<E9> t9() {
+        return t9;
+    }
+
     public TableIdentifier<?> t(int index) {
         switch (index) {
             case 0:
@@ -179,11 +301,32 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
                 return t4();
             case 5:
                 return t5();
+            case 6:
+                return t6();
+            case 7:
+                return t7();
+            case 8:
+                return t8();
+            case 9:
+                return t9();
         }
         throw new IndexOutOfBoundsException(Integer.toString(index));
     }
 
-    private void set(List<Stage<?>> stages, Object constructor, TableIdentifier<E0> t0, TableIdentifier<E1> t1, TableIdentifier<E2> t2, TableIdentifier<E3> t3, TableIdentifier<E4> t4, TableIdentifier<E5> t5) {
+    private void set(
+            List<Stage<?>> stages,
+            Object constructor,
+            TableIdentifier<E0> t0,
+            TableIdentifier<E1> t1,
+            TableIdentifier<E2> t2,
+            TableIdentifier<E3> t3,
+            TableIdentifier<E4> t4,
+            TableIdentifier<E5> t5,
+            TableIdentifier<E6> t6,
+            TableIdentifier<E7> t7,
+            TableIdentifier<E8> t8,
+            TableIdentifier<E9> t9
+    ) {
         this.stages = stages;
         this.constructor = constructor;
         this.t0 = t0;
@@ -192,6 +335,10 @@ public class MockEmptyJoinStreamSupplierComponent implements JoinStreamSupplierC
         this.t3 = t3;
         this.t4 = t4;
         this.t5 = t5;
+        this.t6 = t6;
+        this.t7 = t7;
+        this.t8 = t8;
+        this.t9 = t9;
     }
 
     private <T> Join<T> empty() {
