@@ -53,7 +53,7 @@ public class CreateList {
 
         List<Film> list = films.stream()
                 .filter(Film.RATING.equal("PG-13"))
-                .sorted(Film.LENGTH.comparator())
+                .sorted(Film.LENGTH)
                 .collect(toList());
 
     }

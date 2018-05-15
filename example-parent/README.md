@@ -8,6 +8,7 @@ This module shows basic examples of how to use Speedment including standard prob
 The examples make use of the "sakila" example database available directly from Oracle [here](https://dev.mysql.com/doc/index-other.html). 
 Download and install the database content on your target machine before running any of the examples.
 
+### Table of Contents
 1. [Query with Optimised Stream Predicate Short-Circuit](#query-with-optimised-stream-predicate-short-circuit)
 2. [Query with Optimised Paging](#query-with-optimised-paging)
 3. [Classification](#classification)
@@ -26,7 +27,7 @@ Download and install the database content on your target machine before running 
 
 ### Query with Optimised Stream Predicate Short-Circuit
 Search for a long film (of length greater than 120 minutes):
-```java
+``` java
 // Searches are optimized in the background!
 Optional<Film> longFilm = films.stream()
     .filter(Film.LENGTH.greaterThan(120))
@@ -34,7 +35,7 @@ Optional<Film> longFilm = films.stream()
 ``` 
 
 Results in the following SQL query:
-```sql
+``` sql
 SELECT 
     `film_id`,`title`,`description`,`release_year`,
     `language_id`,`original_language_id`,`rental_duration`,`rental_rate`,
@@ -48,21 +49,21 @@ WHERE
 
 ### Query with Optimised Paging
 Show page 3 of PG-13 rated films sorted by length:
-```java
+``` java
 private static final long PAGE_SIZE = 50;
 
 // Even complex streams can be optimized!
 long page = 3;
 List<Film> stream = films.stream()
     .filter(Film.RATING.equal("PG-13"))
-    .sorted(Film.LENGTH.comparator())
+    .sorted(Film.LENGTH)
     .skip(page * PAGE_SIZE)
     .limit(PAGE_SIZE)
     .collect(toList());
 ``` 
 
 Results in the following SQL query:
-```sql
+``` sql
 SELECT 
     `film_id`,`title`,`description`,`release_year`,
     `language_id`,`original_language_id`,`rental_duration`,`rental_rate`,
@@ -79,12 +80,12 @@ LIMIT 50 OFFSET 150;
 
 ### Classification
 Create a Map with film ratings and the corresponding films:
-```
+``` java
 Map<String, List<Film>> map = films.stream()
     .collect(
         Collectors.groupingBy(
             // Apply this classifier
-            Film.RATING.getter()
+            Film.RATING
         )
     );
 ```
@@ -99,7 +100,7 @@ Rating PG    maps to 194 films
 
 ### Joins
 Define a Join relation:
-```
+``` java
 Join<Tuple2<Film, Language>> join = joinComponent
     .from(FilmManager.IDENTIFIER)
     .innerJoinOn(Language.LANGUAGE_ID).equal(Film.LANGUAGE_ID)
@@ -107,14 +108,14 @@ Join<Tuple2<Film, Language>> join = joinComponent
 ```
 
 Apply that join relation and print all films and their corresponding language:
-```java
+``` java
 join.stream()
     .map(t2 -> String.format("The film '%s' is in %s", t2.get0().getTitle(), t2.get1().getName()))
     .forEach(System.out::println);
 ```
 
 Apply that join relation and construct a Map with all languages and their corresponding films:
-```java
+``` java
 Map<Language, List<Tuple2<Film, Language>>> languageFilmMap = join.stream()
     .collect(
         // Apply this classifier
@@ -123,7 +124,7 @@ Map<Language, List<Tuple2<Film, Language>>> languageFilmMap = join.stream()
 ```
 ### One-to-many
 Print all Languages and their corresponding Films (A specific language can be spoken in many films):
-```Java
+``` Java
 Join<Tuple2<Language, Film>> join = joinComponent
     .from(LanguageManager.IDENTIFIER)
     .innerJoinOn(Film.LANGUAGE_ID).equal(Language.LANGUAGE_ID)
@@ -134,7 +135,7 @@ join.stream()
 ```
 ### Many-to-one
 Print all Films and their corresponding Languages (A Film can only have one language):
-```Java
+``` Java
 Join<Tuple2<Film, Language>> join = joinComponent
     .from(FilmManager.IDENTIFIER)
     .innerJoinOn(Language.LANGUAGE_ID).equal(Film.LANGUAGE_ID)
@@ -146,7 +147,7 @@ join.stream()
 
 ### Many-to-many
 Construct a Map with all Actors and the corresponding Films they have acted in:
-```java
+``` java
 Join<Tuple3<FilmActor, Film, Actor>> join = joinComponent
     .from(FilmActorManager.IDENTIFIER)
     .innerJoinOn(Film.FILM_ID).equal(FilmActor.FILM_ID)
@@ -167,7 +168,7 @@ Map<Actor, List<Film>> filmographies = join.stream()
 
 ### Entities are Linked
 No need for joins when there is a foreign key!
-```java
+``` java
 // Find any film where english is spoken
 Optional<Film> anyFilmInEnglish = languages.stream()
     .filter(Language.NAME.equal("English"))
@@ -183,7 +184,7 @@ Optional<Language> languageOfFilmWithId42 = films.stream()
 
 ### Easy Initialization
 The `SakilaApplication`, `SakilaApplicationBuilder` and `FilmManager` classes are generated automatically from the database.
-```java
+``` java
 final SakilaApplication app = new SakilaApplicationBuilder()
     .withPassword("myPwd729")
     .build();
@@ -196,7 +197,7 @@ final FilmActorManager filmActors = app.getOrThrow(FilmActorManager.class);
 
 ### Easy Persistence
 Entities can easily be persisted in a database.
-```java
+``` java
 Film newFilm = new FilmImpl();  // Creates a new empty Film
 newFilm.setTitle("Police Academy 13");
 newFilm.setRating("G");
@@ -208,14 +209,14 @@ Film persistedFilm = films.persist(newFilm);
 ```
 
 ### Update
-```java
+``` java
 films.stream()
     .filter(Film.ID.equal(42))   // Filters out all Films with ID = 42 (just one)
     .map(Film.LENGTH.setTo(143)) // Applies a setter that sets the length to 143
     .forEach(films.updater());   // Applies the updater function
 ```
 or another example
-```java
+``` java
 films.stream()
     .filter(Film.ID.between(48, 102))   // Filters out all Films with ID between 48 and 102
     .map(f -> f.setRentalDuration(f.getRentalDuration() + 1)) // Applies a lambda that increases their rental duration by one
@@ -223,7 +224,7 @@ films.stream()
 ```
 
 ### Remove
-```java
+``` java
 films.stream()
     .filter(Film.ID.equal(71))  // Filters out all Films with ID = 71 (just one)
     .forEach(films.remover());  // Applies the remover function
@@ -231,7 +232,7 @@ films.stream()
 
 
 ### Transactions
-```java
+``` java
 txHandler().createAndAccept(tx -> {
     final List<Film> filmsToUpdate = films.stream()
         .filter(Film.LENGTH.greaterThan(75))
@@ -243,7 +244,7 @@ txHandler().createAndAccept(tx -> {
 })
 ```
 Values can also be returned form a transaction as shown hereunder:
-```java
+``` java
 long rowCount = txHandler().createAndApply(tx -> 
     films.stream().count() + actors.stream().count()
     // Computes and returns the sum of rows in the two tables atomically   
@@ -252,7 +253,7 @@ long rowCount = txHandler().createAndApply(tx ->
 
 ### Full Transparency
 By appending a logger to the builder, you can follow exactly what happens behind the scenes.
-```java
+``` java
 SakilaApplication app = new SakilaApplicationBuilder()
     .withPassword("myPwd729")
     .withLogging(ApplicationBuilder.LogType.STREAM)
@@ -264,7 +265,7 @@ SakilaApplication app = new SakilaApplicationBuilder()
 
 ### Integration with Spring Boot
 It is easy to integrate Speedment with Spring Boot. Here is an example of a Configuration file for Spring:
-```java
+``` java
 @Configuration
 public class AppConfig {
     private @Value("${dbms.username}") String username;

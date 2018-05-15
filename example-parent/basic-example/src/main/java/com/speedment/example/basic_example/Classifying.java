@@ -54,7 +54,7 @@ public class Classifying {
             .collect(
                 Collectors.groupingBy(
                     // Apply this classifier
-                    f -> f.getRating().orElse("none")
+                    Film.RATING
                 )
             );
 

@@ -60,7 +60,7 @@ public class RestBackEnd {
         }
 
         return stream
-            .sorted(Film.LENGTH.comparator())
+            .sorted(Film.LENGTH)
             .skip(page * PAGE_SIZE)
             .limit(PAGE_SIZE);
 
@@ -70,8 +70,8 @@ public class RestBackEnd {
         System.out.format("serveFilmsVariant(String rating=%s, int page=%d) %n", rating, page);
 
         Stream<Film> stream = films.stream()
-            .sorted(Film.LENGTH.comparator().reversed())
-            .sorted(Film.RELEASE_YEAR.comparator())
+            .sorted(Film.LENGTH.reversed())
+            .sorted(Film.RELEASE_YEAR)
             .filter(Film.LENGTH.greaterThan(2));
 
         if (rating != null) {
@@ -89,7 +89,7 @@ public class RestBackEnd {
 
         return Stream.<UnaryOperator<Stream<Film>>>of(
             (s) -> rating == null ? s : s.filter(Film.RATING.equal(rating)),
-            s -> s.sorted(Film.LENGTH.comparator()),
+            s -> s.sorted(Film.LENGTH),
             s -> s.skip(page * PAGE_SIZE),
             s -> s.limit(PAGE_SIZE)
         ).reduce(
