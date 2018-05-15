@@ -40,12 +40,16 @@ import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
+import static com.speedment.runtime.join.JoinComponent.MAX_DEGREE;
 import static java.util.Collections.emptyList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -266,7 +270,9 @@ public final class JoinSqlUtil {
             .onClose(asynchronousQueryResult::close);
     }
 
-    private static final String[] ALIASES = {"A", "B", "C", "D", "E", "F"};
+    private static final String[] ALIASES = IntStream.range(0, MAX_DEGREE)
+            .mapToObj(i -> Character.toString((char) ('A' + i)))
+            .toArray(String[]::new);
 
     public static String tableAlias(int index) {
         requireNonNegative(index);
