@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.common.function.Function5;
-import com.speedment.common.function.Function6;
+import com.speedment.common.function.Function8;
+import com.speedment.common.function.Function9;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2.JoinBuilder3.JoinBuilder4.JoinBuilder5;
+import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2.JoinBuilder3.JoinBuilder4.JoinBuilder5.JoinBuilder6.JoinBuilder7.JoinBuilder8.JoinBuilder9;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
 
@@ -33,26 +33,26 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-final class JoinBuilder6Impl<T0, T1, T2, T3, T4, T5>
-    extends AbstractJoinBuilder<T5, JoinBuilder5.JoinBuilder6<T0, T1, T2, T3, T4, T5>>
-    implements JoinBuilder5.JoinBuilder6<T0, T1, T2, T3, T4, T5> {
+final class JoinBuilder9Impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
+    extends AbstractJoinBuilder<T8, JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8>>
+    implements JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8> {
 
-    JoinBuilder6Impl(AbstractJoinBuilder<?, ?> previousStage, StageBean<T5> current) {
+    JoinBuilder9Impl(AbstractJoinBuilder<?, ?> previousStage, StageBean<T8> current) {
         super(previousStage, current);
     }
 
     @Override
-    public <T6> AfterJoin<T0, T1, T2, T3, T4, T5, T6> innerJoinOn(HasComparableOperators<T6, ?> joinedField) {
+    public <T9> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> innerJoinOn(HasComparableOperators<T9, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.INNER_JOIN, joinedField));
     }
 
     @Override
-    public <T6> AfterJoin<T0, T1, T2, T3, T4, T5, T6> leftJoinOn(HasComparableOperators<T6, ?> joinedField) {
+    public <T9> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> leftJoinOn(HasComparableOperators<T9, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.LEFT_JOIN, joinedField));
     }
 
     @Override
-    public <T6> AfterJoin<T0, T1, T2, T3, T4, T5, T6> rightJoinOn(HasComparableOperators<T6, ?> joinedField) {
+    public <T9> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> rightJoinOn(HasComparableOperators<T9, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.RIGHT_JOIN, joinedField));
     }
 
@@ -62,23 +62,23 @@ final class JoinBuilder6Impl<T0, T1, T2, T3, T4, T5>
 //    }
 
     @Override
-    public <T6> JoinBuilder7<T0, T1, T2, T3, T4, T5, T6> crossJoin(TableIdentifier<T6> joinedTable) {
-        return new JoinBuilder7Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
+    public <T9> JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> crossJoin(TableIdentifier<T9> joinedTable) {
+        return new JoinBuilder10Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
     }
 
-    private final class AfterJoinImpl<T6>
-        extends BaseAfterJoin<T6, JoinBuilder7<T0, T1, T2, T3, T4, T5, T6>>
-        implements AfterJoin<T0, T1, T2, T3, T4, T5, T6> {
+    private final class AfterJoinImpl<T9>
+        extends BaseAfterJoin<T9, JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>
+        implements AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
 
-        private AfterJoinImpl(StageBean<T6> stageBean) {
-            super(JoinBuilder6Impl.this, stageBean, JoinBuilder7Impl::new);
+        private AfterJoinImpl(StageBean<T9> stageBean) {
+            super(JoinBuilder9Impl.this, stageBean, JoinBuilder10Impl::new);
         }
 
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Join<T> build(Function6<T0, T1, T2, T3, T4, T5, T> constructor) {
+    public <T> Join<T> build(Function9<T0, T1, T2, T3, T4, T5, T6, T7, T8, T> constructor) {
         requireNonNull(constructor);
         assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
@@ -90,7 +90,10 @@ final class JoinBuilder6Impl<T0, T1, T2, T3, T4, T5>
             (TableIdentifier<T2>) stages.get(2).identifier(),
             (TableIdentifier<T3>) stages.get(3).identifier(),
             (TableIdentifier<T4>) stages.get(4).identifier(),
-            (TableIdentifier<T5>) stages.get(5).identifier()
+            (TableIdentifier<T5>) stages.get(5).identifier(),
+            (TableIdentifier<T6>) stages.get(6).identifier(),
+            (TableIdentifier<T7>) stages.get(7).identifier(),
+            (TableIdentifier<T8>) stages.get(8).identifier()
         );
     }
 
