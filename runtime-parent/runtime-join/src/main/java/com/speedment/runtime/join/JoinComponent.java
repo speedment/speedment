@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.join;
 
-import com.speedment.common.function.QuadFunction;
-import com.speedment.common.function.TriFunction;
+import com.speedment.common.function.*;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.tuple.Tuple;
+import com.speedment.common.tuple.nullable.*;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.trait.HasDefaultBuild;
@@ -27,14 +27,8 @@ import com.speedment.runtime.join.trait.HasJoins;
 import com.speedment.runtime.join.trait.HasOnPredicates;
 import com.speedment.runtime.join.trait.HasWhere;
 import java.util.function.BiFunction;
-import com.speedment.common.function.Function5;
-import com.speedment.common.function.Function6;
+
 import com.speedment.common.tuple.TuplesOfNullables;
-import com.speedment.common.tuple.nullable.Tuple2OfNullables;
-import com.speedment.common.tuple.nullable.Tuple3OfNullables;
-import com.speedment.common.tuple.nullable.Tuple4OfNullables;
-import com.speedment.common.tuple.nullable.Tuple5OfNullables;
-import com.speedment.common.tuple.nullable.Tuple6OfNullables;
 
 /**
  * a JoinComponent can be used to create builders for creating Join objects.
@@ -293,8 +287,21 @@ public interface JoinComponent {
                         }
 
                         interface JoinBuilder6<T0, T1, T2, T3, T4, T5> extends
-                            HasWhere<T5, JoinBuilder6<T0, T1, T2, T3, T4, T5>>,
-                            HasDefaultBuild<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>> {
+                                HasJoins<JoinBuilder6.AfterJoin<T0, T1, T2, T3, T4, T5, ?>, JoinBuilder6.JoinBuilder7<T0, T1, T2, T3, T4, T5, ?>>,
+                                HasWhere<T5, JoinBuilder5.JoinBuilder6<T0, T1, T2, T3, T4, T5>>,
+                                HasDefaultBuild<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>> {
+
+                            @Override
+                            <T6> AfterJoin<T0, T1, T2, T3, T4, T5, T6> innerJoinOn(HasComparableOperators<T6, ?> joinedField);
+
+                            @Override
+                            <T6> AfterJoin<T0, T1, T2, T3, T4, T5, T6> leftJoinOn(HasComparableOperators<T6, ?> joinedField);
+
+                            @Override
+                            <T6> AfterJoin<T0, T1, T2, T3, T4, T5, T6> rightJoinOn(HasComparableOperators<T6, ?> joinedField);
+
+                            @Override
+                            <T6> JoinBuilder7<T0, T1, T2, T3, T4, T5, T6> crossJoin(TableIdentifier<T6> joinedTable);
 
                             @Override
                             default Join<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>> build() {
@@ -302,26 +309,211 @@ public interface JoinComponent {
                             }
 
                             /**
-                             * Creates and returns a new Join object where
-                             * elements in the Join object's stream method is
-                             * created using the provided {@code constructor}.
+                             * Creates and returns a new Join object where elements
+                             * in the Join object's stream method is created using
+                             * the provided {@code constructor}.
                              *
-                             * @param <T> the type of element in the Join
-                             * object's stream method.
-                             * @param constructor to use to create stream
-                             * elements.
-                             * @return a new Join object where elements in the
-                             * Join object's stream method is of a default
-                             * {@link Tuple} type
-                             *
-                             * @throws NullPointerException if the provided {@code constructor
-                             * } is {@code null}
+                             * @param <T>         the type of element in the Join object's
+                             *                    stream method.
+                             * @param constructor to use to create stream elements.
+                             * @return a new Join object where elements in the Join
+                             * object's stream method is of a default {@link Tuple}
+                             * type
+                             * @throws NullPointerException  if the provided {@code constructor
+                             *                               } is {@code null}
                              * @throws IllegalStateException if fields that are
-                             * added via the {@code on()
-                             * } method refers to tables that are not a part of
-                             * the join.
+                             *                               added via the {@code on()
+                             *                               } method refers to tables that are not a part of the
+                             *                               join.
                              */
                             <T> Join<T> build(Function6<T0, T1, T2, T3, T4, T5, T> constructor);
+
+                            interface AfterJoin<T0, T1, T2, T3, T4, T5, T6> extends
+                                    HasOnPredicates<JoinBuilder7<T0, T1, T2, T3, T4, T5, T6>> {
+
+                            }
+
+
+                            interface JoinBuilder7<T0, T1, T2, T3, T4, T5, T6> extends
+                                    HasJoins<JoinBuilder7.AfterJoin<T0, T1, T2, T3, T4, T5, T6, ?>, JoinBuilder7.JoinBuilder8<T0, T1, T2, T3, T4, T5, T6, ?>>,
+                                    HasWhere<T6, JoinBuilder6.JoinBuilder7<T0, T1, T2, T3, T4, T5, T6>>,
+                                    HasDefaultBuild<Tuple7OfNullables<T0, T1, T2, T3, T4, T5, T6>> {
+
+                                @Override
+                                <T7> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7> innerJoinOn(HasComparableOperators<T7, ?> joinedField);
+
+                                @Override
+                                <T7> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7> leftJoinOn(HasComparableOperators<T7, ?> joinedField);
+
+                                @Override
+                                <T7> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7> rightJoinOn(HasComparableOperators<T7, ?> joinedField);
+
+                                @Override
+                                <T7> JoinBuilder8<T0, T1, T2, T3, T4, T5, T6, T7> crossJoin(TableIdentifier<T7> joinedTable);
+
+                                @Override
+                                default Join<Tuple7OfNullables<T0, T1, T2, T3, T4, T5, T6>> build() {
+                                    return build(TuplesOfNullables::ofNullables);
+                                }
+
+                                /**
+                                 * Creates and returns a new Join object where elements
+                                 * in the Join object's stream method is created using
+                                 * the provided {@code constructor}.
+                                 *
+                                 * @param <T>         the type of element in the Join object's
+                                 *                    stream method.
+                                 * @param constructor to use to create stream elements.
+                                 * @return a new Join object where elements in the Join
+                                 * object's stream method is of a default {@link Tuple}
+                                 * type
+                                 * @throws NullPointerException  if the provided {@code constructor
+                                 *                               } is {@code null}
+                                 * @throws IllegalStateException if fields that are
+                                 *                               added via the {@code on()
+                                 *                               } method refers to tables that are not a part of the
+                                 *                               join.
+                                 */
+                                <T> Join<T> build(Function7<T0, T1, T2, T3, T4, T5, T6, T> constructor);
+
+                                interface AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7> extends
+                                        HasOnPredicates<JoinBuilder8<T0, T1, T2, T3, T4, T5, T6, T7>> {
+
+                                }
+
+
+                                interface JoinBuilder8<T0, T1, T2, T3, T4, T5, T6, T7> extends
+                                        HasJoins<JoinBuilder8.AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, ?>, JoinBuilder8.JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, ?>>,
+                                        HasWhere<T7, JoinBuilder7.JoinBuilder8<T0, T1, T2, T3, T4, T5, T6, T7>>,
+                                        HasDefaultBuild<Tuple8OfNullables<T0, T1, T2, T3, T4, T5, T6, T7>> {
+
+                                    @Override
+                                    <T8> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8> innerJoinOn(HasComparableOperators<T8, ?> joinedField);
+
+                                    @Override
+                                    <T8> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8> leftJoinOn(HasComparableOperators<T8, ?> joinedField);
+
+                                    @Override
+                                    <T8> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8> rightJoinOn(HasComparableOperators<T8, ?> joinedField);
+
+                                    @Override
+                                    <T8> JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8> crossJoin(TableIdentifier<T8> joinedTable);
+
+                                    @Override
+                                    default Join<Tuple8OfNullables<T0, T1, T2, T3, T4, T5, T6, T7>> build() {
+                                        return build(TuplesOfNullables::ofNullables);
+                                    }
+
+                                    /**
+                                     * Creates and returns a new Join object where elements
+                                     * in the Join object's stream method is created using
+                                     * the provided {@code constructor}.
+                                     *
+                                     * @param <T>         the type of element in the Join object's
+                                     *                    stream method.
+                                     * @param constructor to use to create stream elements.
+                                     * @return a new Join object where elements in the Join
+                                     * object's stream method is of a default {@link Tuple}
+                                     * type
+                                     * @throws NullPointerException  if the provided {@code constructor
+                                     *                               } is {@code null}
+                                     * @throws IllegalStateException if fields that are
+                                     *                               added via the {@code on()
+                                     *                               } method refers to tables that are not a part of the
+                                     *                               join.
+                                     */
+                                    <T> Join<T> build(Function8<T0, T1, T2, T3, T4, T5, T6, T7, T> constructor);
+
+                                    interface AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8> extends
+                                            HasOnPredicates<JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8>> {
+
+                                    }
+
+
+                                    interface JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8> extends
+                                            HasJoins<JoinBuilder9.AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, ?>, JoinBuilder9.JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, ?>>,
+                                            HasWhere<T8, JoinBuilder8.JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8>>,
+                                            HasDefaultBuild<Tuple9OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8>> {
+
+                                        @Override
+                                        <T9> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> innerJoinOn(HasComparableOperators<T9, ?> joinedField);
+
+                                        @Override
+                                        <T9> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> leftJoinOn(HasComparableOperators<T9, ?> joinedField);
+
+                                        @Override
+                                        <T9> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> rightJoinOn(HasComparableOperators<T9, ?> joinedField);
+
+                                        @Override
+                                        <T9> JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> crossJoin(TableIdentifier<T9> joinedTable);
+
+                                        @Override
+                                        default Join<Tuple9OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8>> build() {
+                                            return build(TuplesOfNullables::ofNullables);
+                                        }
+
+                                        /**
+                                         * Creates and returns a new Join object where elements
+                                         * in the Join object's stream method is created using
+                                         * the provided {@code constructor}.
+                                         *
+                                         * @param <T>         the type of element in the Join object's
+                                         *                    stream method.
+                                         * @param constructor to use to create stream elements.
+                                         * @return a new Join object where elements in the Join
+                                         * object's stream method is of a default {@link Tuple}
+                                         * type
+                                         * @throws NullPointerException  if the provided {@code constructor
+                                         *                               } is {@code null}
+                                         * @throws IllegalStateException if fields that are
+                                         *                               added via the {@code on()
+                                         *                               } method refers to tables that are not a part of the
+                                         *                               join.
+                                         */
+                                        <T> Join<T> build(Function9<T0, T1, T2, T3, T4, T5, T6, T7, T8, T> constructor);
+
+                                        interface AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> extends
+                                                HasOnPredicates<JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>> {
+
+                                        }
+
+                                        interface JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> extends
+                                                HasWhere<T9, JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>,
+                                                HasDefaultBuild<Tuple10OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>> {
+
+                                            @Override
+                                            default Join<Tuple10OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>> build() {
+                                                return build(TuplesOfNullables::ofNullables);
+                                            }
+
+                                            /**
+                                             * Creates and returns a new Join object where
+                                             * elements in the Join object's stream method is
+                                             * created using the provided {@code constructor}.
+                                             *
+                                             * @param <T>         the type of element in the Join
+                                             *                    object's stream method.
+                                             * @param constructor to use to create stream
+                                             *                    elements.
+                                             * @return a new Join object where elements in the
+                                             * Join object's stream method is of a default
+                                             * {@link Tuple} type
+                                             * @throws NullPointerException  if the provided {@code constructor
+                                             *                               } is {@code null}
+                                             * @throws IllegalStateException if fields that are
+                                             *                               added via the {@code on()
+                                             *                               } method refers to tables that are not a part of
+                                             *                               the join.
+                                             */
+                                            <T> Join<T> build(Function10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T> constructor);
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
 
                         }
 
