@@ -36,16 +36,16 @@
     -fx-speedment-gray:        #CBCAC9;
     -fx-speedment-darkgray:    #919190;
     
-    -fx-speedment-blue:        #0E8AC5;
-    -fx-speedment-green:       #87BD40;
-    -fx-speedment-orange:      #be9f41;
-    -fx-speedment-red:         #be4141;
+    -fx-speedment-blue:        #155d89;
+    -fx-speedment-green:       #3a9b79;
+    -fx-speedment-orange:      #ffcf38;
+    -fx-speedment-red:         #bf4545;
     
     -fx-speedment-lightgray:   #d5d5d5;
-    -fx-speedment-lightblue:   #45a6fc;
-    -fx-speedment-lightgreen:  #c3dea0;
-    -fx-speedment-lightred:    #dea1a1;
-    -fx-speedment-lightorange: #decfa1;
+    -fx-speedment-lightblue:   #93c0e4;
+    -fx-speedment-lightgreen:  #5abf95;
+    -fx-speedment-lightred:    #f2b3b3;
+    -fx-speedment-lightorange: #fff2c8;
 
     -fx-focus-color: -fx-speedment-blue;
     -fx-accent:      -fx-speedment-blue;
@@ -81,7 +81,7 @@
 }
 
 .tree-view .tree-cell:selected {
-    -fx-background-color: -fx-speedment-blue;
+    -fx-background-color: #5a98c8;
     -fx-background-radius: 0px;
     -fx-border-width: 0px;
     -fx-text-fill: white;
@@ -133,7 +133,7 @@
 .text-field:hover,
 .text-area:focused, 
 .text-area:hover {
-    -fx-border-color: -fx-speedment-green;
+    -fx-border-color: -fx-speedment-lightgreen;
 }
 
 /*** List Views ***/
@@ -168,7 +168,7 @@
 }
 
 .button:hover {
-    -fx-background-color: -fx-speedment-darkgray;
+    -fx-background-color: -fx-speedment-lightgreen;
 }
 
 .button .glyph-icon {
@@ -220,7 +220,7 @@
 
 .check-box *.box:hover,
 .check-box *.box:active {
-    -fx-border-color: -fx-speedment-green;
+    -fx-border-color: -fx-speedment-lightgreen;
 }
 
 /*** Split Panes ***/
