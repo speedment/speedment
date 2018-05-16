@@ -11,11 +11,11 @@ Java Stream ORM
 
 Speedment is an open source Java Stream ORM toolkit and runtime. The toolkit analyzes the metadata of an existing SQL database and automatically creates a Java representation of the data model. This powerful ORM enables you to create scalable and efficient Java applications using **standard Java** streams with no need to type SQL or use any new API. 
 
-Speedment was originally developed by researchers and engineers based in Palo Alto with the purpose to simplify and streamline the development of Java database applications by leveraging the Java 8 Stream API. 
+Speedment was originally developed by researchers and engineers based in Palo Alto with the purpose to simplify and streamline the development of Java database applications by leveraging the Java Stream API. 
 
 Speedment is licensed under the business-friendly Apache 2 license. Contribution from users is encouraged. Please feel free to request new features, suggest improvements and file bug reports. Read more about contributing [here](https://github.com/speedment/speedment/blob/master/CONTRIBUTING.md). 
 
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Spire-Quick-Start.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="200px" />
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/Spire-Quick-Start.png?raw=true" alt="Spire the Hare" title="Spire" align="right" width="20%" />
 
 ## Quick Start
 
@@ -24,7 +24,7 @@ Assuming you have Maven installed and a relational database available, you can s
 * [Start a New Speedment Maven Project](https://github.com/speedment/speedment/wiki/Start-a-New-Speedment-Maven-Project)
 * [Connect to Your Database](https://github.com/speedment/speedment/wiki/Connect-to-Your-Database)
 
-## Expressing SQL as Java 8 Streams
+## Expressing SQL as Java Streams
 
 There is a remarkable resemblance between Java streams and SQL as summarized in the simplified table. This means there is no need for manually writing SQL-queries any more. You can remain in a pure Java world!
 
@@ -54,10 +54,11 @@ WHERE
 <br>
 
 ## Features
+Speedment is equipped with the features listed below and more. 
 
 ### View Database Tables as Standard Java Streams
 
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/stream-api.png?raw=true" alt="Stream API" title="Stream API" align="right" width="200px" />
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/stream-api.png?raw=true" alt="Stream API" title="Stream API" align="right" width="25%" />
 
 * **Pure Java** - Stream API instead of SQL eliminates the need of a query language<br>
 * **Dynamic Joins** - Ability to perform joins as Java streams on the application side<br>
@@ -66,13 +67,13 @@ WHERE
 
 ### Short and Concise Type Safe Code 
 
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/type-safety.png?raw=true" alt="Type Safety" title="Type Safety" align="right" width="200px" />
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/type-safety.png?raw=true" alt="Type Safety" title="Type Safety" align="right" width="25%" />
 
 * **Code Generation** - Automatic Java representation of the latest state of your database eliminates boilerplate code and the need of manually writing Java Entity classes while minimizing the risk for bugs.<br>
 * **Null Protection** - Minimizes the risk involved with database null values by wrapping to Java Optionals<br>
 * **Enum Integration** - Mapping of String columns to Java Enums increases memory efficiency and type safety<br>
 
-<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/lazy-evaluation.png?raw=true" alt="Lazy Evaluation" title="Lazy Evaluation" align="right" width="200px" />
+<img src="https://github.com/speedment/speedment-resources/blob/master/src/main/resources/wiki/frontpage/lazy-evaluation.png?raw=true" alt="Lazy Evaluation" title="Lazy Evaluation" align="right" width="25%" />
 
 ### Lazy Evaluation for Increased Performance
 
