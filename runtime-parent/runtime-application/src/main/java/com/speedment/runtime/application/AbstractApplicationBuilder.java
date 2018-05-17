@@ -480,7 +480,7 @@ public abstract class AbstractApplicationBuilder<
         }
 
         if (info != upstreamInfo) {
-            LOGGER.info("Upstream version is " + upstreamInfo.getImplementationVersion() + " " + upstreamInfo.getSpecificationNickname() + ")");
+            LOGGER.info("Upstream version is " + upstreamInfo.getImplementationVersion() + " (" + upstreamInfo.getSpecificationNickname() + ")");
             if (!upstreamInfo.isProductionMode()) {
                 LOGGER.warn("Upstream version is NOT INTENDED FOR PRODUCTION USE!");
             }
