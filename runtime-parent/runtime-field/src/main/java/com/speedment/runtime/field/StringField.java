@@ -71,6 +71,9 @@ public interface StringField<ENTITY, D> extends
     }
 
     @Override
+    StringField<ENTITY, D> as(String label);
+
+    @Override
     Predicate<ENTITY> isNull();
 
     @Override

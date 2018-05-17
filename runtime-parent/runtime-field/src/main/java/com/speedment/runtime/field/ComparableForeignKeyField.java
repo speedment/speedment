@@ -74,4 +74,8 @@ extends ComparableField<ENTITY, D, V>,
             identifier, getter, setter, referenced, typeMapper, unique
         );
     }
+
+    @Override
+    ComparableForeignKeyField<ENTITY, D, V, FK> as(String label);
+
 }

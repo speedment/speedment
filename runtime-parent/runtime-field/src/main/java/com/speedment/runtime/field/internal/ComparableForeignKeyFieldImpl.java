@@ -67,22 +67,43 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
     private final HasComparableOperators<FK_ENTITY, V> referenced;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
+    private final String label;
 
     public ComparableForeignKeyFieldImpl(
-            ColumnIdentifier<ENTITY> identifier,
-            ReferenceGetter<ENTITY, V> getter,
-            ReferenceSetter<ENTITY, V> setter,
-            HasComparableOperators<FK_ENTITY, V> referenced,
-            TypeMapper<D, V> typeMapper,
-            boolean unique) {
-        
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, V> getter,
+        final ReferenceSetter<ENTITY, V> setter,
+        final HasComparableOperators<FK_ENTITY, V> referenced,
+        final TypeMapper<D, V> typeMapper,
+        final boolean unique
+    ) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
+        this.label      = identifier.getColumnId();
     }
+
+    private ComparableForeignKeyFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, V> getter,
+        final ReferenceSetter<ENTITY, V> setter,
+        final HasComparableOperators<FK_ENTITY, V> referenced,
+        final TypeMapper<D, V> typeMapper,
+        final boolean unique,
+        final String label
+    ) {
+        this.identifier = requireNonNull(identifier);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique     = unique;
+        this.label      = requireNonNull(label);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //                                Getters                                 //
@@ -144,6 +165,17 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
     @Override
     public boolean isUnique() {
         return unique;
+    }
+
+
+    @Override
+    public String label() {
+        return label;
+    }
+
+    @Override
+    public ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> as(String label) {
+        return new ComparableForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
     }
 
     ////////////////////////////////////////////////////////////////////////////

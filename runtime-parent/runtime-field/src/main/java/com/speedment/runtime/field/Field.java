@@ -44,4 +44,24 @@ public interface Field<ENTITY> extends
      * @return  {@code true} if unique
      */
     boolean isUnique();
+
+    /**
+     * Returns the label for this field. The default label is the column name
+     * for the field. A custom value can be set using the {@link #as(String)} method.
+     *
+     * @return the label for this field
+     */
+    String label();
+
+    /**
+     * Creates and returns a new Field with the provided {@code label}. The new Field
+     * will retain all other properties from this field except the label.
+     *
+     * @return a new Field with the given label
+     *
+     * @throws NullPointerException if the provided {@code label} is {@code null}
+     *
+     */
+    Field<ENTITY> as(String label);
+
 }

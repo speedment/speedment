@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.comparator.FieldComparator;
@@ -60,19 +61,37 @@ implements StringField<ENTITY, D>,
     private final ReferenceSetter<ENTITY, String> setter;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
+    private final String label;
 
     public StringFieldImpl(
-            ColumnIdentifier<ENTITY> identifier,
-            ReferenceGetter<ENTITY, String> getter,
-            ReferenceSetter<ENTITY, String> setter,
-            TypeMapper<D, String> typeMapper,
-            boolean unique) {
-        
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, String> getter,
+        final ReferenceSetter<ENTITY, String> setter,
+        final TypeMapper<D, String> typeMapper,
+        final boolean unique
+    ) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
+        this.label      = identifier.getColumnId();
+    }
+
+    public StringFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, String> getter,
+        final ReferenceSetter<ENTITY, String> setter,
+        final TypeMapper<D, String> typeMapper,
+        final boolean unique,
+        final String label
+    ) {
+        this.identifier = requireNonNull(identifier);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique     = unique;
+        this.label      = label;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -102,6 +121,17 @@ implements StringField<ENTITY, D>,
     @Override
     public boolean isUnique() {
         return unique;
+    }
+
+
+    @Override
+    public String label() {
+        return label;
+    }
+
+    @Override
+    public StringField<ENTITY, D> as(String label) {
+        return new StringFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
     }
 
     ////////////////////////////////////////////////////////////////////////////

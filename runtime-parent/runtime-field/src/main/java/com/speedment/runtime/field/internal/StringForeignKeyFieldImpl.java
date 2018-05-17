@@ -72,21 +72,41 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     private final StringField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
+    private final String label;
 
     public StringForeignKeyFieldImpl(
-            ColumnIdentifier<ENTITY> identifier,
-            ReferenceGetter<ENTITY, String> getter,
-            ReferenceSetter<ENTITY, String> setter,
-            StringField<FK_ENTITY, D> referenced,
-            TypeMapper<D, String> typeMapper,
-            boolean unique) {
-
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, String> getter,
+        final ReferenceSetter<ENTITY, String> setter,
+        final StringField<FK_ENTITY, D> referenced,
+        final TypeMapper<D, String> typeMapper,
+        final boolean unique
+    ) {
         this.identifier = requireNonNull(identifier);
         this.getter = requireNonNull(getter);
         this.setter = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique = unique;
+        this.label = identifier.getColumnId();
+    }
+
+    private StringForeignKeyFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, String> getter,
+        final ReferenceSetter<ENTITY, String> setter,
+        final StringField<FK_ENTITY, D> referenced,
+        final TypeMapper<D, String> typeMapper,
+        final boolean unique,
+        final String label
+    ) {
+        this.identifier = requireNonNull(identifier);
+        this.getter = requireNonNull(getter);
+        this.setter = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique = unique;
+        this.label = requireNonNull(label);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -150,6 +170,16 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     @Override
     public boolean isUnique() {
         return unique;
+    }
+
+    @Override
+    public String label() {
+        return label;
+    }
+
+    @Override
+    public StringForeignKeyField<ENTITY, D, FK_ENTITY> as(String label) {
+        return new StringForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
     }
 
     ////////////////////////////////////////////////////////////////////////////

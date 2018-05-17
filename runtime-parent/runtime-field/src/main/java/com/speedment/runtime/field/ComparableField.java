@@ -66,4 +66,8 @@ extends ReferenceField<ENTITY, D, V>,
             identifier, getter, setter, typeMapper, unique
         );
     }
+
+    @Override
+    ComparableField<ENTITY, D, V>  as(String label);
+
 }

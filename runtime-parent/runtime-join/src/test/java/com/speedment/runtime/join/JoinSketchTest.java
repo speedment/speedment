@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
+
+import com.speedment.runtime.field.trait.HasComparableOperators;
 import org.junit.Before;
 
 /**
@@ -43,7 +45,68 @@ public class JoinSketchTest {
     Manager<User> users = null;
     Manager<Picture> pictures = null;
     Manager<FrameType> frameTypes = null;
-    
+
+    /*
+    SELECT
+        m.title AS title,
+    	e0.address AS from_email,
+	    e1.address AS to_email
+    FROM Message AS m
+    LEFT JOIN User AS u0 ON m.from = u0.id
+    LEFT JOIN Email AS e0 ON u0.email = e0.id
+    LEFT JOIN User AS u1 ON m.to   = u1.id
+    LEFT JOIN Email AS e1 ON u1.email = e1.id;
+    */
+
+    private void problemTree() {
+
+        final Join<Tuple3OfNullables<User, User, User>> join = jc
+                .from(UserManager.IDENTIFIER)
+                .innerJoinOn(User.NAME).equal(User.NAME) // Referes to the first name (ok!)
+                .innerJoinOn(User.NAME).equal(User.NAME) // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
+                .build();
+
+
+        HasComparableOperators<User, ?> secondUserName =  User.NAME.as("Olle");
+
+        final Join<Tuple3OfNullables<User, User, User>> join2 = jc
+                .from(UserManager.IDENTIFIER)
+                .innerJoinOn(secondUserName).equal(User.NAME) // Referes to the first name (ok!)
+                .innerJoinOn(User.NAME).equal(secondUserName) // Referes to the second
+                .build();
+
+        final Join<Tuple3OfNullables<User, User, User>> join3 = jc
+                .from(UserManager.IDENTIFIER)
+                .innerJoinOn(User.NAME.as("Olle")).equal(User.NAME) // Referes to the first name (ok!)
+                .innerJoinOn(User.NAME).equal(User.NAME.as("Olle")) // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
+                        .build();
+
+
+//        final Join<Tuple3OfNullables<User, User, User>> join4 = jc
+//                .from(UserManager.IDENTIFIER)
+//                .innerJoinOn(User.NAME).as("Olle").equal(User.NAME) // Referes to the first name (ok!)
+//                .innerJoinOn(User.NAME).equal(User.NAME).from("Olle") // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
+//                .build();
+//
+//
+//
+//        final Join<Tuple3OfNullables<User, User, User>> join3 = jc
+//                .from(UserManager.IDENTIFIER)
+//                .innerJoinOn(User.NAME).equal(User.NAME) // Referes to the first name (ok!)
+//                .innerJoinOn(User.NAME).equal(User.NAME.compose(Tuple3OfNullables.getter1()) // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
+//                .build();
+
+
+        // SELECT * from USER AS A
+        //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
+        //  INNER JOIN USER AS C on A.NAME = C.NAME
+    }
+
+    private static <ENTITY, V extends Comparable<? super V>>  HasComparableOperators<User, V> as(HasComparableOperators<User, V> initial) {
+        return initial;
+    }
+
+
     private void test2Cartesian() {
         final Join<Tuple2<User, Picture>> join = jc
             .from(UserManager.IDENTIFIER)
@@ -146,7 +209,7 @@ public class JoinSketchTest {
         //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
     }
     
-        private void problem2() {
+    private void problem2() {
 
         final Join<Tuple3OfNullables<User, User, User>> join = jc
             .from(UserManager.IDENTIFIER)

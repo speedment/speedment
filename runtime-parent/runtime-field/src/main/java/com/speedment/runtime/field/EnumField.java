@@ -44,6 +44,10 @@ extends ComparableField<ENTITY, D, E>,
         HasStringOperators<ENTITY, D>,
         ToEnumNullable<ENTITY, E> {
 
+
+    @Override
+    EnumField<ENTITY, D, E> as(String label);
+
     /**
      * Returns the enum class of this field.
      *

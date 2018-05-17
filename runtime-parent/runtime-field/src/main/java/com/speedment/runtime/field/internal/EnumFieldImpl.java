@@ -46,8 +46,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.10
  */
 public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
-implements EnumField<ENTITY, D, E>,
-           FieldComparator<ENTITY> {
+    implements
+    EnumField<ENTITY, D, E>,
+    FieldComparator<ENTITY> {
 
     private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, E> getter;
@@ -57,15 +58,17 @@ implements EnumField<ENTITY, D, E>,
     private final Function<String, E> stringToEnum;
     private final Class<E> enumClass;
     private final EnumSet<E> constants;
+    private final String label;
 
-    public EnumFieldImpl(ColumnIdentifier<ENTITY> identifier,
-                         ReferenceGetter<ENTITY, E> getter,
-                         ReferenceSetter<ENTITY, E> setter,
-                         TypeMapper<D, E> typeMapper,
-                         Function<E, String> enumToString,
-                         Function<String, E> stringToEnum,
-                         Class<E> enumClass) {
-
+    public EnumFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, E> getter,
+        final ReferenceSetter<ENTITY, E> setter,
+        final TypeMapper<D, E> typeMapper,
+        final Function<E, String> enumToString,
+        final Function<String, E> stringToEnum,
+        final Class<E> enumClass
+    ) {
         this.identifier   = requireNonNull(identifier);
         this.getter       = requireNonNull(getter);
         this.setter       = requireNonNull(setter);
@@ -74,7 +77,30 @@ implements EnumField<ENTITY, D, E>,
         this.stringToEnum = requireNonNull(stringToEnum);
         this.enumClass    = requireNonNull(enumClass);
         this.constants    = EnumSet.allOf(enumClass);
+        this.label        = identifier.getColumnId();
     }
+
+    private EnumFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, E> getter,
+        final ReferenceSetter<ENTITY, E> setter,
+        final TypeMapper<D, E> typeMapper,
+        final Function<E, String> enumToString,
+        final Function<String, E> stringToEnum,
+        final Class<E> enumClass,
+        final String label
+    ) {
+        this.identifier   = requireNonNull(identifier);
+        this.getter       = requireNonNull(getter);
+        this.setter       = requireNonNull(setter);
+        this.typeMapper   = requireNonNull(typeMapper);
+        this.enumToString = requireNonNull(enumToString);
+        this.stringToEnum = requireNonNull(stringToEnum);
+        this.enumClass    = requireNonNull(enumClass);
+        this.constants    = EnumSet.allOf(enumClass);
+        this.label        = requireNonNull(label);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //                                Getters                                 //
@@ -123,6 +149,16 @@ implements EnumField<ENTITY, D, E>,
     @Override
     public boolean isUnique() {
         return false;
+    }
+
+    @Override
+    public String label() {
+        return label;
+    }
+
+    @Override
+    public EnumField<ENTITY, D, E> as(String label) {
+        return new EnumFieldImpl<>(identifier, getter, setter, typeMapper, enumToString, stringToEnum, enumClass, label);
     }
 
     ////////////////////////////////////////////////////////////////////////////

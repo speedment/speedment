@@ -46,6 +46,9 @@ public interface EnumForeignKeyField<ENTITY, D, E extends Enum<E>, FK>
 extends EnumField<ENTITY, D, E>,
         HasNullableFinder<ENTITY, FK> {
 
+    @Override
+    EnumForeignKeyField<ENTITY, D, E, FK> as(String label);
+
     /**
      * A method that takes a {@code String} and converts it into an enum for
      * this field.

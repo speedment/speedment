@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.field.EnumField;
 import com.speedment.runtime.field.EnumForeignKeyField;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
@@ -69,16 +70,18 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
     private final Function<String, E> stringToEnum;
     private final Class<E> enumClass;
     private final EnumSet<E> constants;
+    private final String label;
 
-    public EnumForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier,
-                                   ReferenceGetter<ENTITY, E> getter,
-                                   ReferenceSetter<ENTITY, E> setter,
-                                   TypeMapper<D, E> typeMapper,
-                                   HasComparableOperators<FK, E> referenced,
-                                   Function<E, String> enumToString,
-                                   Function<String, E> stringToEnum,
-                                   Class<E> enumClass) {
-
+    public EnumForeignKeyFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, E> getter,
+        final ReferenceSetter<ENTITY, E> setter,
+        final TypeMapper<D, E> typeMapper,
+        final HasComparableOperators<FK, E> referenced,
+        final Function<E, String> enumToString,
+        final Function<String, E> stringToEnum,
+        final Class<E> enumClass
+    ) {
         this.identifier   = requireNonNull(identifier);
         this.getter       = requireNonNull(getter);
         this.setter       = requireNonNull(setter);
@@ -88,7 +91,32 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
         this.stringToEnum = requireNonNull(stringToEnum);
         this.enumClass    = requireNonNull(enumClass);
         this.constants    = EnumSet.allOf(enumClass);
+        this.label        = identifier.getColumnId();
     }
+
+    private EnumForeignKeyFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, E> getter,
+        final ReferenceSetter<ENTITY, E> setter,
+        final TypeMapper<D, E> typeMapper,
+        final HasComparableOperators<FK, E> referenced,
+        final Function<E, String> enumToString,
+        final Function<String, E> stringToEnum,
+        final Class<E> enumClass,
+        final String label
+    ) {
+        this.identifier   = requireNonNull(identifier);
+        this.getter       = requireNonNull(getter);
+        this.setter       = requireNonNull(setter);
+        this.typeMapper   = requireNonNull(typeMapper);
+        this.referenced   = requireNonNull(referenced);
+        this.enumToString = requireNonNull(enumToString);
+        this.stringToEnum = requireNonNull(stringToEnum);
+        this.enumClass    = requireNonNull(enumClass);
+        this.constants    = EnumSet.allOf(enumClass);
+        this.label        = requireNonNull(label);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //                                Getters                                 //
@@ -170,6 +198,17 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
             this, referenced, identifier, streamSupplier
         );
     }
+
+    @Override
+    public String label() {
+        return label;
+    }
+
+    @Override
+    public EnumForeignKeyField<ENTITY, D, E, FK> as(String label) {
+        return new EnumForeignKeyFieldImpl<>(identifier, getter, setter, typeMapper, referenced, enumToString, stringToEnum, enumClass, label);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //                              Comparators                               //

@@ -53,6 +53,7 @@ implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
     private final ReferenceSetter<ENTITY, V> setter;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
+    private final String label;
 
     public ComparableFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -66,7 +67,26 @@ implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
+        this.label      = identifier.getColumnId();
     }
+
+    private ComparableFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, V> getter,
+        final ReferenceSetter<ENTITY, V> setter,
+        final TypeMapper<D, V> typeMapper,
+        final boolean unique,
+        final String label
+    ) {
+
+        this.identifier = requireNonNull(identifier);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique     = unique;
+        this.label      = requireNonNull(label);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //                                Getters                                 //
@@ -95,6 +115,16 @@ implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
     @Override
     public boolean isUnique() {
         return unique;
+    }
+
+    @Override
+    public String label() {
+        return label;
+    }
+
+    @Override
+    public ComparableField<ENTITY, D, V> as(String label) {
+        return new ComparableFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
     }
 
     ////////////////////////////////////////////////////////////////////////////
