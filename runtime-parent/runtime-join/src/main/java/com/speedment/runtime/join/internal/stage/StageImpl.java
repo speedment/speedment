@@ -24,6 +24,8 @@ import com.speedment.runtime.join.stage.JoinOperator;
 import com.speedment.runtime.join.stage.Stage;
 import java.util.Collections;
 import java.util.List;
+
+import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -41,6 +43,7 @@ public class StageImpl<T> implements Stage<T> {
     private final HasComparableOperators<T, ?> field;
     private final JoinOperator joinOperator;
     private final HasComparableOperators<?, ?> foreignFirstField;
+    private final int referencedStage;
 //    private final HasComparableOperators<?, ?> foreignSecondField;
 //    private final Inclusion foreignInclusion;
 
@@ -50,7 +53,8 @@ public class StageImpl<T> implements Stage<T> {
         final JoinType joinType,
         final HasComparableOperators<T, ?> field,
         final JoinOperator joinOperator,
-        final HasComparableOperators<?, ?> foreignField
+        final HasComparableOperators<?, ?> foreignField,
+        final int referencedStage
 //        final HasComparableOperators<?, ?> foreignSecondField,
 //        final Inclusion foreignInclusion
     ) {
@@ -60,6 +64,7 @@ public class StageImpl<T> implements Stage<T> {
         this.field = field; // Nullable
         this.joinOperator = joinOperator; // Nullable
         this.foreignFirstField = foreignField; // Nullable
+        this.referencedStage = referencedStage;
 //        this.foreignSecondField = foreignSecondField; // Nullable
 //        this.foreignInclusion = foreignInclusion; // Nullable
     }
@@ -94,7 +99,12 @@ public class StageImpl<T> implements Stage<T> {
         return Optional.ofNullable(foreignFirstField);
     }
 
-//    @Override
+    @Override
+    public int referencedStage() {
+        return referencedStage;
+    }
+
+    //    @Override
 //    public Optional<HasComparableOperators<?, ?>> foreignSecondField() {
 //        return Optional.ofNullable(foreignSecondField);
 //    }
@@ -106,9 +116,14 @@ public class StageImpl<T> implements Stage<T> {
 
     @Override
     public String toString() {
-        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", field=" + field + ", joinOperator=" + joinOperator + ", foreignFirstField=" + foreignFirstField + '}';
+        return "StageImpl{" +
+            "identifier=" + identifier +
+            ", predicates=" + predicates +
+            ", joinType=" + joinType +
+            ", field=" + field +
+            ", joinOperator=" + joinOperator +
+            ", foreignFirstField=" + foreignFirstField +
+            ", referencedStage=" + referencedStage +
+            '}';
     }
-
-
-
 }

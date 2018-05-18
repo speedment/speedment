@@ -42,6 +42,7 @@ public final class StageBean<T> {
     private HasComparableOperators<T, ?> field;
     private JoinOperator joinOperator;
     private HasComparableOperators<?, ?> foreignField;
+    private int referencedStage;
 //    private HasComparableOperators<?, ?> foreignSecondField;
 //    private Inclusion foreignInclusion;
 
@@ -96,6 +97,14 @@ public final class StageBean<T> {
         this.foreignField = requireNonNull(foreignFirstField);
     }
 
+    public int getReferencedStage() {
+        return referencedStage;
+    }
+
+    public void setReferencedStage(int referencedStage) {
+        this.referencedStage = referencedStage;
+    }
+
 //    public HasComparableOperators<?, ?> getForeignSecondField() {
 //        return foreignSecondField;
 //    }
@@ -132,7 +141,8 @@ public final class StageBean<T> {
             joinType,
             field,
             joinOperator,
-            foreignField
+            foreignField,
+            referencedStage
 //            foreignSecondField,
 //            foreignInclusion
         );
