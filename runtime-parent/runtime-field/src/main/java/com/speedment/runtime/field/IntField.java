@@ -66,7 +66,7 @@ public interface IntField<ENTITY, D> extends Field<ENTITY>, HasIntValue<ENTITY, 
     }
     
     @Override
-    IntField<ENTITY, D> as(String label);
+    IntField<ENTITY, D> tableAlias(String tableAlias);
     
     @Override
     default int applyAsInt(ENTITY entity) {

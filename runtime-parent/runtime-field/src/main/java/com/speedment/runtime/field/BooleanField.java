@@ -66,7 +66,7 @@ public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<
     }
     
     @Override
-    BooleanField<ENTITY, D> as(String label);
+    BooleanField<ENTITY, D> tableAlias(String tableAlias);
     
     @Override
     default boolean applyAsBoolean(ENTITY entity) {

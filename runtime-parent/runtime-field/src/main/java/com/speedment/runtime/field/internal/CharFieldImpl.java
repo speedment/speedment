@@ -62,7 +62,7 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     private final CharSetter<ENTITY> setter;
     private final TypeMapper<D, Character> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public CharFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -75,7 +75,7 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private CharFieldImpl(
@@ -84,13 +84,13 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
             CharSetter<ENTITY> setter,
             TypeMapper<D, Character> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetCharImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -119,14 +119,14 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
-    public CharField<ENTITY, D> as(String label) {
-        requireNonNull(label);
-        return new CharFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public CharField<ENTITY, D> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new CharFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
     
     @Override

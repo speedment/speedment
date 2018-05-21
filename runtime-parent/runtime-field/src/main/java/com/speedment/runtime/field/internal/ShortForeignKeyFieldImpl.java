@@ -72,7 +72,7 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     private final ShortField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Short> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public ShortForeignKeyFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -87,7 +87,7 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private ShortForeignKeyFieldImpl(
@@ -97,14 +97,14 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
             ShortField<FK_ENTITY, D> referenced,
             TypeMapper<D, Short> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetShortImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -148,8 +148,8 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
@@ -213,8 +213,8 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public ShortForeignKeyField<ENTITY, D, FK_ENTITY> as(String label) {
-        requireNonNull(label);
-        return new ShortForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
+    public ShortForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new ShortForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
     }
 }

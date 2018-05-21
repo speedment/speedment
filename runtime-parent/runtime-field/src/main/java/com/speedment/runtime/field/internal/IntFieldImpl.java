@@ -62,7 +62,7 @@ public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
     private final IntSetter<ENTITY> setter;
     private final TypeMapper<D, Integer> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public IntFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -75,7 +75,7 @@ public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private IntFieldImpl(
@@ -84,13 +84,13 @@ public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
             IntSetter<ENTITY> setter,
             TypeMapper<D, Integer> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetIntImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -119,14 +119,14 @@ public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
-    public IntField<ENTITY, D> as(String label) {
-        requireNonNull(label);
-        return new IntFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public IntField<ENTITY, D> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new IntFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
     
     @Override

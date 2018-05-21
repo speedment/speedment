@@ -132,80 +132,78 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
 
     }
 
-    void assertFieldsAreInJoinTables() throws IllegalStateException {
-        final Set<TableIdentifier<?>> tableIdentifiers = stageBeans.stream()
-            .map(StageBean::getIdentifier)
-            .collect(toSet());
-
-        for (int i = 1; i < stageBeans.size(); i++) {
-            final StageBean<?> sb = stageBeans.get(i);
-            assertFieldIn(tableIdentifiers, sb.getField(), i);
-            assertFieldIn(tableIdentifiers, sb.getForeignField(), i);
-            //assertFieldIn(tableIdentifiers, sb.getForeignSecondField(), i);
-        }
-    }
-
-    private void assertFieldIn(Set<TableIdentifier<?>> tableIdentifiers, HasComparableOperators<?, ?> field, int index) {
-        if (field != null) {
-            if (!tableIdentifiers.contains(field.identifier().asTableIdentifier())) {
-                throw new IllegalStateException(
-                    "The field " + field.identifier().getColumnId()
-                    + " from join stage " + (index + 1)
-                    + " is not associated with any of the tables in the join: "
-                    + tableIdentifiers.stream().map(TableIdentifier::getTableId).collect(joining(", "))
-                );
-            }
-        }
-    }
+//    void assertFieldsAreInJoinTables() throws IllegalStateException {
+//        final Set<TableIdentifier<?>> tableIdentifiers = stageBeans.stream()
+//            .map(StageBean::getIdentifier)
+//            .collect(toSet());
+//
+//        for (int i = 1; i < stageBeans.size(); i++) {
+//            final StageBean<?> sb = stageBeans.get(i);
+//            assertFieldIn(tableIdentifiers, sb.getField(), i);
+//            assertFieldIn(tableIdentifiers, sb.getForeignField(), i);
+//            //assertFieldIn(tableIdentifiers, sb.getForeignSecondField(), i);
+//        }
+//    }
+//
+//    private void assertFieldIn(Set<TableIdentifier<?>> tableIdentifiers, HasComparableOperators<?, ?> field, int index) {
+//        if (field != null) {
+//            if (!tableIdentifiers.contains(field.identifier().asTableIdentifier())) {
+//                throw new IllegalStateException(
+//                    "The field " + field.identifier().getColumnId()
+//                    + " from join stage " + (index + 1)
+//                    + " is not associated with any of the tables in the join: "
+//                    + tableIdentifiers.stream().map(TableIdentifier::getTableId).collect(joining(", "))
+//                );
+//            }
+//        }
+//    }
 
 
     /**
      * Calculates which reference to use taking "as()" columns into account.
      */
     void resolveStages() {
-        for (StageBean<?> stageBean:stageBeans) {
+        for (int i = 0; i < stageBeans.size(); i++) {
+            final StageBean<?> stageBean = stageBeans.get(i);
             final HasComparableOperators<?, ?> foreignField = stageBean.getForeignField();
             if (foreignField == null) {
                 stageBean.setReferencedStage(-1);
             } else {
-                stageBean.setReferencedStage(stageIndexOf(stageBeans, foreignField));
+                stageBean.setReferencedStage(stageIndexOf(stageBeans, foreignField, i));
             }
         }
     }
 
-    private static int stageIndexOf(final List<StageBean<?>> stages, HasComparableOperators<?, ?> foreignField) {
+    private static int stageIndexOf(
+        final List<StageBean<?>> stages,
+        final HasComparableOperators<?, ?> foreignField,
+        final int index
+    ) {
         // First check if there is exactly one that is matching
         final Set<Integer> matches = new LinkedHashSet<>();
-        final String foreignIdentifierString = aliasIdentifierString(foreignField);
+        final String foreignTableIdentifierString = tableIdentifierString(foreignField);
 
         for (int i = 0; i < stages.size(); i++) {
             final StageBean<?> stage = stages.get(i);
-            if (stage.getField() != null) {
-                final String fieldIdentifierString = aliasIdentifierString(stage.getField());
-                if (fieldIdentifierString.equals(foreignIdentifierString)) {
-                    matches.add(i);
-                }
-            } else {
-                final TableIdentifier<?> tableIdentifier = foreignField.identifier().asTableIdentifier();
-                if (tableIdentifier.equals(stage.getIdentifier()) && !hasAlias(foreignField)) {
-                    matches.add(i);
-                }
+            final String fieldTableIdentifierString = tableTdentifierString(stage);
+            if (fieldTableIdentifierString.equals(foreignTableIdentifierString)) {
+                matches.add(i);
             }
-
         }
         if (matches.size() > 1) {
             throw new IllegalStateException(
-                "The identifier " + foreignIdentifierString + " is ambiguous. "
-                    + "There are matching entries for stages " + matches + " "
-                    + references(stages, matches)
+                "The identifier " + foreignTableIdentifierString + " for stage index " + index + " is ambiguous. "
+                    + "There are matching table identifiers for stage indexes " + matches
+                    + ". These table identifiers are available from previous join stages: "
+                    + stages.stream().map(AbstractJoinBuilder::tableTdentifierString).collect(joining(", "))
             );
         } else if (matches.size() == 1) {
             return matches.iterator().next();
         }
         throw new IllegalStateException(
-            "There is no table for " + foreignField.identifier().getTableId()
-                + ". These tables are available from previous join stages:"
-                + stages.stream().map(StageBean::getIdentifier).map(TableIdentifier::getTableId).collect(joining(", "))
+            "There is no table for table identifier \"" + tableIdentifierString(foreignField) + "\" for stage index " + index + " of [0, " + (stages.size() - 1) + "]"
+                + ". These table identifiers are available from previous join stages: "
+                + stages.stream().map(AbstractJoinBuilder::tableTdentifierString).collect(joining(", "))
         );
 
 //        for (int i = 0; i < stages.size(); i++) {
@@ -219,15 +217,31 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
     }
 
     private static boolean hasAlias(HasComparableOperators<?, ?> field) {
-        return !field.label().equals(field.identifier().getColumnId());
+        return !field.tableAlias().equals(field.identifier().getTableId());
     }
 
-    private static <T> String aliasIdentifierString(HasComparableOperators<T, ?> foreignField) {
+    private static <T> String tableTdentifierString(StageBean<?> stage) {
+        if (stage.getField() != null) {
+            return tableIdentifierString(stage.getField());
+        } else {
+            return tableTdentifierString(stage.getIdentifier());
+        }
+    }
+
+    private static <T> String tableTdentifierString(TableIdentifier<T> tableIdentifier) {
+        return tableIdentifier.getDbmsId() + "." +
+            tableIdentifier.getSchemaId() + "." +
+            tableIdentifier.getTableId(); // Take tableAlias into account
+    }
+
+    private static <T> String tableIdentifierString(HasComparableOperators<T, ?> foreignField) {
+        if (hasAlias(foreignField)) {
+            return foreignField.tableAlias(); // The alias replaces both schema and table.
+        }
         final TableIdentifier<T> tableIdentifier = foreignField.identifier().asTableIdentifier();
         return tableIdentifier.getDbmsId() + "." +
             tableIdentifier.getSchemaId() + "." +
-            tableIdentifier.getTableId() + "." +
-            foreignField.label(); // Take "as()" into account
+            tableIdentifier.getTableId();
     }
 
     private static String references(final List<StageBean<?>> stages, Set<Integer> set) {

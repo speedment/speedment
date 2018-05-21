@@ -71,5 +71,5 @@ public interface ShortForeignKeyField<ENTITY, D, FK_ENTITY> extends ShortField<E
     }
     
     @Override
-    ShortForeignKeyField<ENTITY, D, FK_ENTITY> as(String label);
+    ShortForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
 }

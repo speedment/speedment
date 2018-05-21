@@ -68,6 +68,6 @@ extends ReferenceField<ENTITY, D, V>,
     }
 
     @Override
-    ComparableField<ENTITY, D, V>  as(String label);
+    ComparableField<ENTITY, D, V>  tableAlias(String tableAlias);
 
 }

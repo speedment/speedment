@@ -71,5 +71,5 @@ public interface CharForeignKeyField<ENTITY, D, FK_ENTITY> extends CharField<ENT
     }
     
     @Override
-    CharForeignKeyField<ENTITY, D, FK_ENTITY> as(String label);
+    CharForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
 }

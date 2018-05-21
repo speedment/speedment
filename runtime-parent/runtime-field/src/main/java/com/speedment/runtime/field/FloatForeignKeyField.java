@@ -71,5 +71,5 @@ public interface FloatForeignKeyField<ENTITY, D, FK_ENTITY> extends FloatField<E
     }
     
     @Override
-    FloatForeignKeyField<ENTITY, D, FK_ENTITY> as(String label);
+    FloatForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
 }

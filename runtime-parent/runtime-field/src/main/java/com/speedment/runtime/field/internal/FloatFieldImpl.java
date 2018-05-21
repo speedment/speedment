@@ -62,7 +62,7 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     private final FloatSetter<ENTITY> setter;
     private final TypeMapper<D, Float> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public FloatFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -75,7 +75,7 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private FloatFieldImpl(
@@ -84,13 +84,13 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
             FloatSetter<ENTITY> setter,
             TypeMapper<D, Float> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetFloatImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -119,14 +119,14 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
-    public FloatField<ENTITY, D> as(String label) {
-        requireNonNull(label);
-        return new FloatFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public FloatField<ENTITY, D> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new FloatFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
     
     @Override

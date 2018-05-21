@@ -66,7 +66,7 @@ public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY
     }
     
     @Override
-    ByteField<ENTITY, D> as(String label);
+    ByteField<ENTITY, D> tableAlias(String tableAlias);
     
     @Override
     default byte applyAsByte(ENTITY entity) {

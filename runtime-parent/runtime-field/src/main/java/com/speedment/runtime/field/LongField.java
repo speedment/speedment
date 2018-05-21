@@ -66,7 +66,7 @@ public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY
     }
     
     @Override
-    LongField<ENTITY, D> as(String label);
+    LongField<ENTITY, D> tableAlias(String tableAlias);
     
     @Override
     default long applyAsLong(ENTITY entity) {

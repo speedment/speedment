@@ -47,7 +47,7 @@ extends EnumField<ENTITY, D, E>,
         HasNullableFinder<ENTITY, FK> {
 
     @Override
-    EnumForeignKeyField<ENTITY, D, E, FK> as(String label);
+    EnumForeignKeyField<ENTITY, D, E, FK> tableAlias(String tableAlias);
 
     /**
      * A method that takes a {@code String} and converts it into an enum for

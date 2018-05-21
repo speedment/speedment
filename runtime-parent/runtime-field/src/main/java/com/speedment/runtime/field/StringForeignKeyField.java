@@ -74,6 +74,6 @@ extends StringField<ENTITY, D>,
     }
 
     @Override
-    StringForeignKeyField<ENTITY, D, FK_ENTITY> as(String label);
+    StringForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
 
 }

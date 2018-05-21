@@ -72,7 +72,7 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     private final CharField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Character> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public CharForeignKeyFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -87,7 +87,7 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private CharForeignKeyFieldImpl(
@@ -97,14 +97,14 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
             CharField<FK_ENTITY, D> referenced,
             TypeMapper<D, Character> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetCharImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -148,8 +148,8 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
@@ -213,8 +213,8 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public CharForeignKeyField<ENTITY, D, FK_ENTITY> as(String label) {
-        requireNonNull(label);
-        return new CharForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
+    public CharForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new CharForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
     }
 }

@@ -66,7 +66,7 @@ public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY
     }
     
     @Override
-    CharField<ENTITY, D> as(String label);
+    CharField<ENTITY, D> tableAlias(String tableAlias);
     
     @Override
     default char applyAsChar(ENTITY entity) {

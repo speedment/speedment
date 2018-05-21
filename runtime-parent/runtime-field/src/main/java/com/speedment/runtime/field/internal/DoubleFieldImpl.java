@@ -62,7 +62,7 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
     private final DoubleSetter<ENTITY> setter;
     private final TypeMapper<D, Double> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public DoubleFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -75,7 +75,7 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private DoubleFieldImpl(
@@ -84,13 +84,13 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
             DoubleSetter<ENTITY> setter,
             TypeMapper<D, Double> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetDoubleImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -119,14 +119,14 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
-    public DoubleField<ENTITY, D> as(String label) {
-        requireNonNull(label);
-        return new DoubleFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public DoubleField<ENTITY, D> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new DoubleFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
     
     @Override

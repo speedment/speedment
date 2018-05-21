@@ -71,5 +71,5 @@ public interface IntForeignKeyField<ENTITY, D, FK_ENTITY> extends IntField<ENTIT
     }
     
     @Override
-    IntForeignKeyField<ENTITY, D, FK_ENTITY> as(String label);
+    IntForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
 }

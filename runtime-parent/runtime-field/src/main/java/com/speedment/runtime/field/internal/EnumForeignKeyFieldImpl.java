@@ -70,7 +70,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
     private final Function<String, E> stringToEnum;
     private final Class<E> enumClass;
     private final EnumSet<E> constants;
-    private final String label;
+    private final String tableAlias;
 
     public EnumForeignKeyFieldImpl(
         final ColumnIdentifier<ENTITY> identifier,
@@ -91,7 +91,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
         this.stringToEnum = requireNonNull(stringToEnum);
         this.enumClass    = requireNonNull(enumClass);
         this.constants    = EnumSet.allOf(enumClass);
-        this.label        = identifier.getColumnId();
+        this.tableAlias   = identifier.getTableId();
     }
 
     private EnumForeignKeyFieldImpl(
@@ -103,7 +103,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
         final Function<E, String> enumToString,
         final Function<String, E> stringToEnum,
         final Class<E> enumClass,
-        final String label
+        final String tableAlias
     ) {
         this.identifier   = requireNonNull(identifier);
         this.getter       = requireNonNull(getter);
@@ -114,7 +114,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
         this.stringToEnum = requireNonNull(stringToEnum);
         this.enumClass    = requireNonNull(enumClass);
         this.constants    = EnumSet.allOf(enumClass);
-        this.label        = requireNonNull(label);
+        this.tableAlias   = requireNonNull(tableAlias);
     }
 
 
@@ -200,13 +200,13 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
     }
 
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
 
     @Override
-    public EnumForeignKeyField<ENTITY, D, E, FK> as(String label) {
-        return new EnumForeignKeyFieldImpl<>(identifier, getter, setter, typeMapper, referenced, enumToString, stringToEnum, enumClass, label);
+    public EnumForeignKeyField<ENTITY, D, E, FK> tableAlias(String tableAlias) {
+        return new EnumForeignKeyFieldImpl<>(identifier, getter, setter, typeMapper, referenced, enumToString, stringToEnum, enumClass, tableAlias);
     }
 
 

@@ -71,5 +71,5 @@ public interface ByteForeignKeyField<ENTITY, D, FK_ENTITY> extends ByteField<ENT
     }
     
     @Override
-    ByteForeignKeyField<ENTITY, D, FK_ENTITY> as(String label);
+    ByteForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
 }

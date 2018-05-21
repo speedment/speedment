@@ -88,7 +88,7 @@ extends Field<ENTITY>,
     }
 
     @Override
-    ReferenceField<ENTITY, D, V> as(String label);
+    ReferenceField<ENTITY, D, V> tableAlias(String tableAlias);
 
 
     /**

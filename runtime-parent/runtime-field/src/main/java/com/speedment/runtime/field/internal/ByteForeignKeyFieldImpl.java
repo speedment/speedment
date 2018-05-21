@@ -72,7 +72,7 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     private final ByteField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Byte> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public ByteForeignKeyFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -87,7 +87,7 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private ByteForeignKeyFieldImpl(
@@ -97,14 +97,14 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
             ByteField<FK_ENTITY, D> referenced,
             TypeMapper<D, Byte> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetByteImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -148,8 +148,8 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
@@ -213,8 +213,8 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public ByteForeignKeyField<ENTITY, D, FK_ENTITY> as(String label) {
-        requireNonNull(label);
-        return new ByteForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
+    public ByteForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new ByteForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
     }
 }

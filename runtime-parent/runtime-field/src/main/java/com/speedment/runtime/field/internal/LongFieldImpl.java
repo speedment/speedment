@@ -62,7 +62,7 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     private final LongSetter<ENTITY> setter;
     private final TypeMapper<D, Long> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public LongFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -75,7 +75,7 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private LongFieldImpl(
@@ -84,13 +84,13 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
             LongSetter<ENTITY> setter,
             TypeMapper<D, Long> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetLongImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -119,14 +119,14 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
-    public LongField<ENTITY, D> as(String label) {
-        requireNonNull(label);
-        return new LongFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public LongField<ENTITY, D> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new LongFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
     
     @Override

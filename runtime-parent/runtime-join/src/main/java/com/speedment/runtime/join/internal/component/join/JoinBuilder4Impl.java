@@ -78,7 +78,7 @@ final class JoinBuilder4Impl<T0, T1, T2, T3>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(QuadFunction<T0, T1, T2, T3, T> constructor) {
         requireNonNull(constructor);
-        assertFieldsAreInJoinTables();
+//        assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
             stages,

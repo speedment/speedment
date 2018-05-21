@@ -58,7 +58,7 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
     private final Function<String, E> stringToEnum;
     private final Class<E> enumClass;
     private final EnumSet<E> constants;
-    private final String label;
+    private final String tableAlias;
 
     public EnumFieldImpl(
         final ColumnIdentifier<ENTITY> identifier,
@@ -77,7 +77,7 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
         this.stringToEnum = requireNonNull(stringToEnum);
         this.enumClass    = requireNonNull(enumClass);
         this.constants    = EnumSet.allOf(enumClass);
-        this.label        = identifier.getColumnId();
+        this.tableAlias   = identifier.getTableId();
     }
 
     private EnumFieldImpl(
@@ -88,7 +88,7 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
         final Function<E, String> enumToString,
         final Function<String, E> stringToEnum,
         final Class<E> enumClass,
-        final String label
+        final String tableAlias
     ) {
         this.identifier   = requireNonNull(identifier);
         this.getter       = requireNonNull(getter);
@@ -98,7 +98,7 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
         this.stringToEnum = requireNonNull(stringToEnum);
         this.enumClass    = requireNonNull(enumClass);
         this.constants    = EnumSet.allOf(enumClass);
-        this.label        = requireNonNull(label);
+        this.tableAlias   = requireNonNull(tableAlias);
     }
 
 
@@ -152,13 +152,13 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
     }
 
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
 
     @Override
-    public EnumField<ENTITY, D, E> as(String label) {
-        return new EnumFieldImpl<>(identifier, getter, setter, typeMapper, enumToString, stringToEnum, enumClass, label);
+    public EnumField<ENTITY, D, E> tableAlias(String tableAlias) {
+        return new EnumFieldImpl<>(identifier, getter, setter, typeMapper, enumToString, stringToEnum, enumClass, tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////

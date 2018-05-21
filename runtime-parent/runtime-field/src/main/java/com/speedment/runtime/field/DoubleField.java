@@ -66,7 +66,7 @@ public interface DoubleField<ENTITY, D> extends Field<ENTITY>, HasDoubleValue<EN
     }
     
     @Override
-    DoubleField<ENTITY, D> as(String label);
+    DoubleField<ENTITY, D> tableAlias(String tableAlias);
     
     @Override
     default double applyAsDouble(ENTITY entity) {

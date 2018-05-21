@@ -72,7 +72,7 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     private final LongField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Long> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public LongForeignKeyFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -87,7 +87,7 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private LongForeignKeyFieldImpl(
@@ -97,14 +97,14 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
             LongField<FK_ENTITY, D> referenced,
             TypeMapper<D, Long> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetLongImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -148,8 +148,8 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
@@ -213,8 +213,8 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public LongForeignKeyField<ENTITY, D, FK_ENTITY> as(String label) {
-        requireNonNull(label);
-        return new LongForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
+    public LongForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new LongForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
     }
 }

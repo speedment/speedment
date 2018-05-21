@@ -44,7 +44,7 @@ implements ReferenceField<ENTITY, D, V> {
     private final ReferenceSetter<ENTITY, V> setter;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
 
     public ReferenceFieldImpl(
         final ColumnIdentifier<ENTITY> identifier,
@@ -58,7 +58,7 @@ implements ReferenceField<ENTITY, D, V> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
 
     public ReferenceFieldImpl(
@@ -67,14 +67,14 @@ implements ReferenceField<ENTITY, D, V> {
         final ReferenceSetter<ENTITY, V> setter,
         final TypeMapper<D, V> typeMapper,
         final boolean unique,
-        final String label
+        final String tableAlias
     ) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
 
 
@@ -109,13 +109,13 @@ implements ReferenceField<ENTITY, D, V> {
 
 
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
 
     @Override
-    public ReferenceField<ENTITY, D, V> as(String label) {
-        return new ReferenceFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public ReferenceField<ENTITY, D, V> tableAlias(String tableAlias) {
+        return new ReferenceFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////

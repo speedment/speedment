@@ -72,7 +72,7 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     private final IntField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Integer> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public IntForeignKeyFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -87,7 +87,7 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private IntForeignKeyFieldImpl(
@@ -97,14 +97,14 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
             IntField<FK_ENTITY, D> referenced,
             TypeMapper<D, Integer> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetIntImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -148,8 +148,8 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
@@ -213,8 +213,8 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public IntForeignKeyField<ENTITY, D, FK_ENTITY> as(String label) {
-        requireNonNull(label);
-        return new IntForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
+    public IntForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new IntForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
     }
 }

@@ -76,6 +76,6 @@ extends ComparableField<ENTITY, D, V>,
     }
 
     @Override
-    ComparableForeignKeyField<ENTITY, D, V, FK> as(String label);
+    ComparableForeignKeyField<ENTITY, D, V, FK> tableAlias(String tableAlias);
 
 }

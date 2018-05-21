@@ -71,5 +71,5 @@ public interface LongForeignKeyField<ENTITY, D, FK_ENTITY> extends LongField<ENT
     }
     
     @Override
-    LongForeignKeyField<ENTITY, D, FK_ENTITY> as(String label);
+    LongForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
 }

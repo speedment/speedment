@@ -71,5 +71,5 @@ public interface DoubleForeignKeyField<ENTITY, D, FK_ENTITY> extends DoubleField
     }
     
     @Override
-    DoubleForeignKeyField<ENTITY, D, FK_ENTITY> as(String label);
+    DoubleForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
 }

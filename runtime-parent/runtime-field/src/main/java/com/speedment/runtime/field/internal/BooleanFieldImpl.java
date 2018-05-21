@@ -49,7 +49,7 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
     private final BooleanSetter<ENTITY> setter;
     private final TypeMapper<D, Boolean> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public BooleanFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -62,7 +62,7 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private BooleanFieldImpl(
@@ -71,13 +71,13 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
             BooleanSetter<ENTITY> setter,
             TypeMapper<D, Boolean> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetBooleanImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -106,14 +106,14 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
-    public BooleanField<ENTITY, D> as(String label) {
-        requireNonNull(label);
-        return new BooleanFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public BooleanField<ENTITY, D> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new BooleanFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
     
     @Override

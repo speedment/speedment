@@ -72,7 +72,7 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     private final StringField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
 
     public StringForeignKeyFieldImpl(
         final ColumnIdentifier<ENTITY> identifier,
@@ -88,7 +88,7 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique = unique;
-        this.label = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
 
     private StringForeignKeyFieldImpl(
@@ -98,15 +98,15 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
         final StringField<FK_ENTITY, D> referenced,
         final TypeMapper<D, String> typeMapper,
         final boolean unique,
-        final String label
+        final String tableAlias
     ) {
         this.identifier = requireNonNull(identifier);
-        this.getter = requireNonNull(getter);
-        this.setter = requireNonNull(setter);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
-        this.unique = unique;
-        this.label = requireNonNull(label);
+        this.unique     = unique;
+        this.tableAlias = requireNonNull(tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -173,13 +173,13 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     }
 
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
 
     @Override
-    public StringForeignKeyField<ENTITY, D, FK_ENTITY> as(String label) {
-        return new StringForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
+    public StringForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias) {
+        return new StringForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////

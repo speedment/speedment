@@ -66,7 +66,7 @@ public interface ShortField<ENTITY, D> extends Field<ENTITY>, HasShortValue<ENTI
     }
     
     @Override
-    ShortField<ENTITY, D> as(String label);
+    ShortField<ENTITY, D> tableAlias(String tableAlias);
     
     @Override
     default short applyAsShort(ENTITY entity) {

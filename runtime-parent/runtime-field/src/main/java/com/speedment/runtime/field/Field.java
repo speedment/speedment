@@ -46,22 +46,22 @@ public interface Field<ENTITY> extends
     boolean isUnique();
 
     /**
-     * Returns the label for this field. The default label is the column name
-     * for the field. A custom value can be set using the {@link #as(String)} method.
+     * Returns the table alias for this field. The default table alias is the table name
+     * for the field. A custom value can be set using the {@link #tableAlias(String)} method.
      *
-     * @return the label for this field
+     * @return the table alias for this field
      */
-    String label();
+    String tableAlias();
 
     /**
-     * Creates and returns a new Field with the provided {@code label}. The new Field
-     * will retain all other properties from this field except the label.
+     * Creates and returns a new Field with the provided {@code tableAlias}. The new Field
+     * will retain all other properties from this field except the tableAlias.
      *
-     * @return a new Field with the given label
+     * @return a new Field with the provided {@code tableAlias}
      *
-     * @throws NullPointerException if the provided {@code label} is {@code null}
+     * @throws NullPointerException if the provided {@code tableAlias} is {@code null}
      *
      */
-    Field<ENTITY> as(String label);
+    Field<ENTITY> tableAlias(String tableAlias);
 
 }

@@ -66,7 +66,7 @@ public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTI
     }
     
     @Override
-    FloatField<ENTITY, D> as(String label);
+    FloatField<ENTITY, D> tableAlias(String tableAlias);
     
     @Override
     default float applyAsFloat(ENTITY entity) {

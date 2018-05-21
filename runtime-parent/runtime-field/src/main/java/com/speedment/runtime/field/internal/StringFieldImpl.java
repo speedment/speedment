@@ -61,7 +61,7 @@ implements StringField<ENTITY, D>,
     private final ReferenceSetter<ENTITY, String> setter;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
 
     public StringFieldImpl(
         final ColumnIdentifier<ENTITY> identifier,
@@ -75,7 +75,7 @@ implements StringField<ENTITY, D>,
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
 
     public StringFieldImpl(
@@ -84,14 +84,14 @@ implements StringField<ENTITY, D>,
         final ReferenceSetter<ENTITY, String> setter,
         final TypeMapper<D, String> typeMapper,
         final boolean unique,
-        final String label
+        final String tableAlias
     ) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = label;
+        this.tableAlias = requireNonNull(tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -125,13 +125,13 @@ implements StringField<ENTITY, D>,
 
 
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
 
     @Override
-    public StringField<ENTITY, D> as(String label) {
-        return new StringFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public StringField<ENTITY, D> tableAlias(String tableAlias) {
+        return new StringFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////

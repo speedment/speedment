@@ -67,7 +67,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
     private final HasComparableOperators<FK_ENTITY, V> referenced;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
 
     public ComparableForeignKeyFieldImpl(
         final ColumnIdentifier<ENTITY> identifier,
@@ -83,7 +83,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
 
     private ComparableForeignKeyFieldImpl(
@@ -93,7 +93,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
         final HasComparableOperators<FK_ENTITY, V> referenced,
         final TypeMapper<D, V> typeMapper,
         final boolean unique,
-        final String label
+        final String tableAlias
     ) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
@@ -101,7 +101,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
 
 
@@ -169,13 +169,13 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
 
 
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
 
     @Override
-    public ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> as(String label) {
-        return new ComparableForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, label);
+    public ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> tableAlias(String tableAlias) {
+        return new ComparableForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////

@@ -46,7 +46,7 @@ extends ComparableField<ENTITY, D, E>,
 
 
     @Override
-    EnumField<ENTITY, D, E> as(String label);
+    EnumField<ENTITY, D, E> tableAlias(String tableAlias);
 
     /**
      * Returns the enum class of this field.

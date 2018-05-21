@@ -62,7 +62,7 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     private final ByteSetter<ENTITY> setter;
     private final TypeMapper<D, Byte> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
     
     public ByteFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -75,7 +75,7 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias = identifier.getTableId();
     }
     
     private ByteFieldImpl(
@@ -84,13 +84,13 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
             ByteSetter<ENTITY> setter,
             TypeMapper<D, Byte> typeMapper,
             boolean unique,
-            String label) {
+            String tableAlias) {
         this.identifier = requireNonNull(identifier);
         this.getter     = new GetByteImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
     
     @Override
@@ -119,14 +119,14 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
     
     @Override
-    public ByteField<ENTITY, D> as(String label) {
-        requireNonNull(label);
-        return new ByteFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public ByteField<ENTITY, D> tableAlias(String tableAlias) {
+        requireNonNull(tableAlias);
+        return new ByteFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
     
     @Override

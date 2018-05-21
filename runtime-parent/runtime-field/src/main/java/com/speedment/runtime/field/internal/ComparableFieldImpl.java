@@ -53,7 +53,7 @@ implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
     private final ReferenceSetter<ENTITY, V> setter;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
-    private final String label;
+    private final String tableAlias;
 
     public ComparableFieldImpl(
             ColumnIdentifier<ENTITY> identifier,
@@ -67,7 +67,7 @@ implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = identifier.getColumnId();
+        this.tableAlias      = identifier.getTableId();
     }
 
     private ComparableFieldImpl(
@@ -76,7 +76,7 @@ implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
         final ReferenceSetter<ENTITY, V> setter,
         final TypeMapper<D, V> typeMapper,
         final boolean unique,
-        final String label
+        final String tableAlias
     ) {
 
         this.identifier = requireNonNull(identifier);
@@ -84,7 +84,7 @@ implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
-        this.label      = requireNonNull(label);
+        this.tableAlias = requireNonNull(tableAlias);
     }
 
 
@@ -118,13 +118,13 @@ implements ComparableField<ENTITY, D, V>, FieldComparator<ENTITY> {
     }
 
     @Override
-    public String label() {
-        return label;
+    public String tableAlias() {
+        return tableAlias;
     }
 
     @Override
-    public ComparableField<ENTITY, D, V> as(String label) {
-        return new ComparableFieldImpl<>(identifier, getter, setter, typeMapper, unique, label);
+    public ComparableField<ENTITY, D, V> tableAlias(String tableAlias) {
+        return new ComparableFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////
