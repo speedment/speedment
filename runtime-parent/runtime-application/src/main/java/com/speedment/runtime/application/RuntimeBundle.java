@@ -61,7 +61,6 @@ public class RuntimeBundle implements InjectBundle {
             ResultSetMapperComponentImpl.class,
             SqlStreamSupplierComponentImpl.class,
             SqlPersistanceComponentImpl.class,
-            //StandardDbmsTypes.class,
             StatisticsReporterComponentImpl.class,
             StatisticsReporterSchedulerComponentImpl.class,
             SqlStreamOptimizerComponentImpl.class,
