@@ -108,6 +108,31 @@ public interface Tuple4OfNullables<T0, T1, T2, T3> extends TupleOfNullables {
     }
     
     /**
+     * Returns the 0th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 0th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T0 getOrNull0() {
+        return get0().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 0th position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     */
+    static <T0, T1, T2, T3> TupleGetter0<Tuple4OfNullables<T0, T1, T2, T3>, T0> getterOrNull0() {
+        return Tuple4OfNullables::getOrNull0;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 1st element in the {@code
      * Tuple}.
      * 
@@ -119,6 +144,31 @@ public interface Tuple4OfNullables<T0, T1, T2, T3> extends TupleOfNullables {
      */
     static <T0, T1, T2, T3> TupleGetter1<Tuple4OfNullables<T0, T1, T2, T3>, Optional<T1>> getter1() {
         return Tuple4OfNullables::get1;
+    }
+    
+    /**
+     * Returns the 1st element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 1st element from this tuple or null if no such element is
+     *         present.
+     */
+    default T1 getOrNull1() {
+        return get1().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 1st element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 1st position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     */
+    static <T0, T1, T2, T3> TupleGetter1<Tuple4OfNullables<T0, T1, T2, T3>, T1> getterOrNull1() {
+        return Tuple4OfNullables::getOrNull1;
     }
     
     /**
@@ -136,6 +186,31 @@ public interface Tuple4OfNullables<T0, T1, T2, T3> extends TupleOfNullables {
     }
     
     /**
+     * Returns the 2nd element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 2nd element from this tuple or null if no such element is
+     *         present.
+     */
+    default T2 getOrNull2() {
+        return get2().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 2nd element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 2nd position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     */
+    static <T0, T1, T2, T3> TupleGetter2<Tuple4OfNullables<T0, T1, T2, T3>, T2> getterOrNull2() {
+        return Tuple4OfNullables::getOrNull2;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 3rd element in the {@code
      * Tuple}.
      * 
@@ -147,5 +222,30 @@ public interface Tuple4OfNullables<T0, T1, T2, T3> extends TupleOfNullables {
      */
     static <T0, T1, T2, T3> TupleGetter3<Tuple4OfNullables<T0, T1, T2, T3>, Optional<T3>> getter3() {
         return Tuple4OfNullables::get3;
+    }
+    
+    /**
+     * Returns the 3rd element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 3rd element from this tuple or null if no such element is
+     *         present.
+     */
+    default T3 getOrNull3() {
+        return get3().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 3rd element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 3rd position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     */
+    static <T0, T1, T2, T3> TupleGetter3<Tuple4OfNullables<T0, T1, T2, T3>, T3> getterOrNull3() {
+        return Tuple4OfNullables::getOrNull3;
     }
 }

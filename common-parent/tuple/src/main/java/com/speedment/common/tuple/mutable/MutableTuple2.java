@@ -100,6 +100,29 @@ public interface MutableTuple2<T0, T1> extends MutableTuple {
     }
     
     /**
+     * Returns the 0th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 0th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T0 getOrNull0() {
+        return get0().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 0th position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     */
+    static <T0, T1> TupleGetter0<MutableTuple2<T0, T1>, T0> getterOrNull0() {
+        return MutableTuple2::getOrNull0;
+    }
+    
+    /**
      * Returns a setter for the 0th element in the {@code MutableTuple}.
      * 
      * @return     the element at the 0th position
@@ -120,6 +143,29 @@ public interface MutableTuple2<T0, T1> extends MutableTuple {
      */
     static <T0, T1> TupleGetter1<MutableTuple2<T0, T1>, Optional<T1>> getter1() {
         return MutableTuple2::get1;
+    }
+    
+    /**
+     * Returns the 1st element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 1st element from this tuple or null if no such element is
+     *         present.
+     */
+    default T1 getOrNull1() {
+        return get1().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 1st element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 1st position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     */
+    static <T0, T1> TupleGetter1<MutableTuple2<T0, T1>, T1> getterOrNull1() {
+        return MutableTuple2::getOrNull1;
     }
     
     /**

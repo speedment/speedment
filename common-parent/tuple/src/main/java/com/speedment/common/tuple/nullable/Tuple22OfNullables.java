@@ -306,6 +306,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 0th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 0th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T0 getOrNull0() {
+        return get0().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 0th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter0<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T0> getterOrNull0() {
+        return Tuple22OfNullables::getOrNull0;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 1st element in the {@code
      * Tuple}.
      * 
@@ -335,6 +378,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter1<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T1>> getter1() {
         return Tuple22OfNullables::get1;
+    }
+    
+    /**
+     * Returns the 1st element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 1st element from this tuple or null if no such element is
+     *         present.
+     */
+    default T1 getOrNull1() {
+        return get1().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 1st element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 1st position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter1<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T1> getterOrNull1() {
+        return Tuple22OfNullables::getOrNull1;
     }
     
     /**
@@ -370,6 +456,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 2nd element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 2nd element from this tuple or null if no such element is
+     *         present.
+     */
+    default T2 getOrNull2() {
+        return get2().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 2nd element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 2nd position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter2<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T2> getterOrNull2() {
+        return Tuple22OfNullables::getOrNull2;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 3rd element in the {@code
      * Tuple}.
      * 
@@ -399,6 +528,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter3<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T3>> getter3() {
         return Tuple22OfNullables::get3;
+    }
+    
+    /**
+     * Returns the 3rd element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 3rd element from this tuple or null if no such element is
+     *         present.
+     */
+    default T3 getOrNull3() {
+        return get3().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 3rd element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 3rd position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter3<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T3> getterOrNull3() {
+        return Tuple22OfNullables::getOrNull3;
     }
     
     /**
@@ -434,6 +606,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 4th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 4th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T4 getOrNull4() {
+        return get4().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 4th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 4th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter4<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T4> getterOrNull4() {
+        return Tuple22OfNullables::getOrNull4;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 5th element in the {@code
      * Tuple}.
      * 
@@ -463,6 +678,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter5<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T5>> getter5() {
         return Tuple22OfNullables::get5;
+    }
+    
+    /**
+     * Returns the 5th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 5th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T5 getOrNull5() {
+        return get5().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 5th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 5th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter5<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T5> getterOrNull5() {
+        return Tuple22OfNullables::getOrNull5;
     }
     
     /**
@@ -498,6 +756,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 6th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 6th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T6 getOrNull6() {
+        return get6().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 6th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 6th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter6<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T6> getterOrNull6() {
+        return Tuple22OfNullables::getOrNull6;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 7th element in the {@code
      * Tuple}.
      * 
@@ -527,6 +828,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter7<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T7>> getter7() {
         return Tuple22OfNullables::get7;
+    }
+    
+    /**
+     * Returns the 7th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 7th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T7 getOrNull7() {
+        return get7().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 7th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 7th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter7<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T7> getterOrNull7() {
+        return Tuple22OfNullables::getOrNull7;
     }
     
     /**
@@ -562,6 +906,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 8th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 8th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T8 getOrNull8() {
+        return get8().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 8th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 8th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter8<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T8> getterOrNull8() {
+        return Tuple22OfNullables::getOrNull8;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 9th element in the {@code
      * Tuple}.
      * 
@@ -591,6 +978,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter9<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T9>> getter9() {
         return Tuple22OfNullables::get9;
+    }
+    
+    /**
+     * Returns the 9th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 9th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T9 getOrNull9() {
+        return get9().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 9th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 9th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter9<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T9> getterOrNull9() {
+        return Tuple22OfNullables::getOrNull9;
     }
     
     /**
@@ -626,6 +1056,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 10th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 10th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T10 getOrNull10() {
+        return get10().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 10th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 10th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter10<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T10> getterOrNull10() {
+        return Tuple22OfNullables::getOrNull10;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 11st element in the {@code
      * Tuple}.
      * 
@@ -655,6 +1128,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter11<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T11>> getter11() {
         return Tuple22OfNullables::get11;
+    }
+    
+    /**
+     * Returns the 11st element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 11st element from this tuple or null if no such element is
+     *         present.
+     */
+    default T11 getOrNull11() {
+        return get11().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 11st element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 11st position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter11<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T11> getterOrNull11() {
+        return Tuple22OfNullables::getOrNull11;
     }
     
     /**
@@ -690,6 +1206,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 12nd element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 12nd element from this tuple or null if no such element is
+     *         present.
+     */
+    default T12 getOrNull12() {
+        return get12().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 12nd element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 12nd position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter12<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T12> getterOrNull12() {
+        return Tuple22OfNullables::getOrNull12;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 13rd element in the {@code
      * Tuple}.
      * 
@@ -719,6 +1278,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter13<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T13>> getter13() {
         return Tuple22OfNullables::get13;
+    }
+    
+    /**
+     * Returns the 13rd element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 13rd element from this tuple or null if no such element is
+     *         present.
+     */
+    default T13 getOrNull13() {
+        return get13().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 13rd element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 13rd position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter13<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T13> getterOrNull13() {
+        return Tuple22OfNullables::getOrNull13;
     }
     
     /**
@@ -754,6 +1356,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 14th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 14th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T14 getOrNull14() {
+        return get14().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 14th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 14th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter14<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T14> getterOrNull14() {
+        return Tuple22OfNullables::getOrNull14;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 15th element in the {@code
      * Tuple}.
      * 
@@ -783,6 +1428,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter15<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T15>> getter15() {
         return Tuple22OfNullables::get15;
+    }
+    
+    /**
+     * Returns the 15th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 15th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T15 getOrNull15() {
+        return get15().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 15th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 15th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter15<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T15> getterOrNull15() {
+        return Tuple22OfNullables::getOrNull15;
     }
     
     /**
@@ -818,6 +1506,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 16th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 16th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T16 getOrNull16() {
+        return get16().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 16th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 16th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter16<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T16> getterOrNull16() {
+        return Tuple22OfNullables::getOrNull16;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 17th element in the {@code
      * Tuple}.
      * 
@@ -847,6 +1578,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter17<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T17>> getter17() {
         return Tuple22OfNullables::get17;
+    }
+    
+    /**
+     * Returns the 17th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 17th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T17 getOrNull17() {
+        return get17().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 17th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 17th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter17<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T17> getterOrNull17() {
+        return Tuple22OfNullables::getOrNull17;
     }
     
     /**
@@ -882,6 +1656,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 18th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 18th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T18 getOrNull18() {
+        return get18().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 18th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 18th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter18<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T18> getterOrNull18() {
+        return Tuple22OfNullables::getOrNull18;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 19th element in the {@code
      * Tuple}.
      * 
@@ -911,6 +1728,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter19<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T19>> getter19() {
         return Tuple22OfNullables::get19;
+    }
+    
+    /**
+     * Returns the 19th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 19th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T19 getOrNull19() {
+        return get19().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 19th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 19th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter19<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T19> getterOrNull19() {
+        return Tuple22OfNullables::getOrNull19;
     }
     
     /**
@@ -946,6 +1806,49 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
+     * Returns the 20th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 20th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T20 getOrNull20() {
+        return get20().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 20th element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 20th position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter20<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T20> getterOrNull20() {
+        return Tuple22OfNullables::getOrNull20;
+    }
+    
+    /**
      * Returns a {@link TupleGetter getter} for the 21st element in the {@code
      * Tuple}.
      * 
@@ -975,5 +1878,48 @@ public interface Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      */
     static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter21<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, Optional<T21>> getter21() {
         return Tuple22OfNullables::get21;
+    }
+    
+    /**
+     * Returns the 21st element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 21st element from this tuple or null if no such element is
+     *         present.
+     */
+    default T21 getOrNull21() {
+        return get21().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 21st element in the {@code
+     * Tuple}.
+     * 
+     * @return      the element at the 21st position
+     * @param <T0>  the 0th element type
+     * @param <T1>  the 1st element type
+     * @param <T2>  the 2nd element type
+     * @param <T3>  the 3rd element type
+     * @param <T4>  the 4th element type
+     * @param <T5>  the 5th element type
+     * @param <T6>  the 6th element type
+     * @param <T7>  the 7th element type
+     * @param <T8>  the 8th element type
+     * @param <T9>  the 9th element type
+     * @param <T10> the 10th element type
+     * @param <T11> the 11st element type
+     * @param <T12> the 12nd element type
+     * @param <T13> the 13rd element type
+     * @param <T14> the 14th element type
+     * @param <T15> the 15th element type
+     * @param <T16> the 16th element type
+     * @param <T17> the 17th element type
+     * @param <T18> the 18th element type
+     * @param <T19> the 19th element type
+     * @param <T20> the 20th element type
+     * @param <T21> the 21st element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> TupleGetter21<Tuple22OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>, T21> getterOrNull21() {
+        return Tuple22OfNullables::getOrNull21;
     }
 }

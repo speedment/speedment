@@ -73,4 +73,26 @@ public interface Tuple1OfNullables<T0> extends TupleOfNullables {
     static <T0> TupleGetter0<Tuple1OfNullables<T0>, Optional<T0>> getter0() {
         return Tuple1OfNullables::get0;
     }
+    
+    /**
+     * Returns the 0th element from this tuple or null if no such element is
+     * present.
+     * 
+     * @return the 0th element from this tuple or null if no such element is
+     *         present.
+     */
+    default T0 getOrNull0() {
+        return get0().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 0th position
+     * @param <T0> the 0th element type
+     */
+    static <T0> TupleGetter0<Tuple1OfNullables<T0>, T0> getterOrNull0() {
+        return Tuple1OfNullables::getOrNull0;
+    }
 }
