@@ -24,15 +24,17 @@ import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.join.trait.HasWhere;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
-
-import java.util.function.Predicate;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 /**
  *
@@ -70,21 +72,21 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
         return (SELF) this;
     }
 
-    <T> StageBean<T> addStageBeanOf(TableIdentifier<T> table) {
+    <U> StageBean<U> addStageBeanOf(TableIdentifier<U> table) {
         return addStageBeanHelper(new StageBean<>(table));
     }
 
-    <T> StageBean<T> addStageBeanOf(TableIdentifier<T> table, JoinType joinType) {
+    <U> StageBean<U> addStageBeanOf(TableIdentifier<U> table, JoinType joinType) {
         return addStageBeanHelper(new StageBean<>(table, joinType));
     }
 
-    <T> StageBean<T> addStageBeanOf(JoinType joinType, HasComparableOperators<T, ?> field) {
+    <U> StageBean<U> addStageBeanOf(JoinType joinType, HasComparableOperators<U, ?> field) {
         return addStageBeanHelper(new StageBean<>(joinType, field));
     }
 
-    <T> StageBean<T> addStageBeanHelper(final StageBean<T> stageBean) {
+    <U> StageBean<U> addStageBeanHelper(final StageBean<U> stageBean) {
         requireNonNull(stageBean);
-        stageBeans.add((StageBean<?>) stageBean);
+        stageBeans.add(stageBean);
         return stageBean;
     }
 
