@@ -17,78 +17,10 @@
 package com.speedment.common.tuple;
 
 import com.speedment.common.tuple.internal.TupleInfiniteDegreeOfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple0OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple10OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple11OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple12OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple13OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple14OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple15OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple16OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple17OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple18OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple19OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple1OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple20OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple21OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple22OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple23OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple2OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple3OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple4OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple5OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple6OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple7OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple8OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.Tuple9OfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple0OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple10OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple11OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple12OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple13OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple14OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple15OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple16OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple17OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple18OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple19OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple1OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple20OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple21OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple22OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple23OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple2OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple3OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple4OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple5OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple6OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple7OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple8OfNullablesMapperImpl;
-import com.speedment.common.tuple.internal.nullable.mapper.Tuple9OfNullablesMapperImpl;
-import com.speedment.common.tuple.nullable.Tuple0OfNullables;
-import com.speedment.common.tuple.nullable.Tuple10OfNullables;
-import com.speedment.common.tuple.nullable.Tuple11OfNullables;
-import com.speedment.common.tuple.nullable.Tuple12OfNullables;
-import com.speedment.common.tuple.nullable.Tuple13OfNullables;
-import com.speedment.common.tuple.nullable.Tuple14OfNullables;
-import com.speedment.common.tuple.nullable.Tuple15OfNullables;
-import com.speedment.common.tuple.nullable.Tuple16OfNullables;
-import com.speedment.common.tuple.nullable.Tuple17OfNullables;
-import com.speedment.common.tuple.nullable.Tuple18OfNullables;
-import com.speedment.common.tuple.nullable.Tuple19OfNullables;
-import com.speedment.common.tuple.nullable.Tuple1OfNullables;
-import com.speedment.common.tuple.nullable.Tuple20OfNullables;
-import com.speedment.common.tuple.nullable.Tuple21OfNullables;
-import com.speedment.common.tuple.nullable.Tuple22OfNullables;
-import com.speedment.common.tuple.nullable.Tuple23OfNullables;
-import com.speedment.common.tuple.nullable.Tuple2OfNullables;
-import com.speedment.common.tuple.nullable.Tuple3OfNullables;
-import com.speedment.common.tuple.nullable.Tuple4OfNullables;
-import com.speedment.common.tuple.nullable.Tuple5OfNullables;
-import com.speedment.common.tuple.nullable.Tuple6OfNullables;
-import com.speedment.common.tuple.nullable.Tuple7OfNullables;
-import com.speedment.common.tuple.nullable.Tuple8OfNullables;
-import com.speedment.common.tuple.nullable.Tuple9OfNullables;
+import com.speedment.common.tuple.internal.nullable.*;
+import com.speedment.common.tuple.internal.nullable.mapper.*;
+import com.speedment.common.tuple.nullable.*;
+
 import java.util.function.Function;
 
 /**
@@ -2486,12 +2418,38 @@ public final class TuplesOfNullables {
     /**
      * Creates and returns a {@link TupleOfNullables} with the given parameters
      * 
-     * @param elements array of elements to use for the TupleOfNullables
-     * @return         a {@link TupleOfNullables} with the given parameters
+     * @param el array of elements to use for the TupleOfNullables
+     * @return a {@link TupleOfNullables} with the given parameters
      * 
      * @see TupleOfNullables
      */
-    public static TupleOfNullables ofNullablesArray(Object... elements) {
-        return new TupleInfiniteDegreeOfNullablesImpl(elements);
+    public static TupleOfNullables ofNullablesArray(Object... el) {
+        switch (el.length) {
+            case 0: return ofNullables();
+            case 1: return ofNullables(el[0]);
+            case 2: return ofNullables(el[0], el[1]);
+            case 3: return ofNullables(el[0], el[1], el[2]);
+            case 4: return ofNullables(el[0], el[1], el[2], el[3]);
+            case 5: return ofNullables(el[0], el[1], el[2], el[3], el[4]);
+            case 6: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5]);
+            case 7: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6]);
+            case 8: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7]);
+            case 9: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8]);
+            case 10: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9]);
+            case 11: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10]);
+            case 12: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11]);
+            case 13: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12]);
+            case 14: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13]);
+            case 15: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14]);
+            case 16: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15]);
+            case 17: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16]);
+            case 18: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17]);
+            case 19: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18]);
+            case 20: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18], el[19]);
+            case 21: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18], el[19], el[20]);
+            case 22: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18], el[19], el[20], el[21]);
+            case 23: return ofNullables(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18], el[19], el[20], el[21], el[22]);
+            default: return new TupleInfiniteDegreeOfNullablesImpl(el);
+        }
     }
 }
