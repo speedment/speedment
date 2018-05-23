@@ -16,18 +16,34 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
+import com.speedment.common.function.BooleanToDoubleFunction;
+import com.speedment.common.function.BooleanUnaryOperator;
+import com.speedment.common.function.ByteToDoubleFunction;
+import com.speedment.common.function.ByteUnaryOperator;
+import com.speedment.common.function.CharUnaryOperator;
+import com.speedment.common.function.FloatToDoubleFunction;
+import com.speedment.common.function.FloatUnaryOperator;
+import com.speedment.common.function.ShortToDoubleFunction;
+import com.speedment.common.function.ShortUnaryOperator;
 import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.ComposedExpression;
-import com.speedment.runtime.compute.expression.predicate.ComposedPredicate;
 import com.speedment.runtime.compute.expression.Expression;
+import com.speedment.runtime.compute.expression.predicate.ComposedPredicate;
 import com.speedment.runtime.compute.expression.predicate.IsNotNull;
 import com.speedment.runtime.compute.expression.predicate.IsNull;
 import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
+import java.util.function.IntToDoubleFunction;
+import java.util.function.IntUnaryOperator;
+import java.util.function.LongToDoubleFunction;
+import java.util.function.LongUnaryOperator;
 import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
+import java.util.function.UnaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
@@ -65,6 +81,136 @@ public final class ComposedUtil {
         public byte applyAsByte(T object) {
             return second.applyAsByte(first.apply(object));
         }
+
+        @Override
+        public ToDouble<T> mapToDouble(ByteToDoubleFunction operator) {
+            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        }
+
+        @Override
+        public ToByte<T> map(ByteUnaryOperator operator) {
+            return new ComposedToByte<>(first, second.map(operator));
+        }
+
+        @Override
+        public ToByte<T> negate() {
+            return new ComposedToByte<>(first, second.negate());
+        }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToByte<T> abs() {
+            return new ComposedToByte<>(first, second.abs());
+        }
+
+        @Override
+        public ToByte<T> sign() {
+            return new ComposedToByte<>(first, second.sign());
+        }
+
+        @Override
+        public ToDouble<T> sqrt() {
+            return new ComposedToDouble<>(first, second.sqrt());
+        }
+
+        @Override
+        public ToDouble<T> pow(int power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> pow(double power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToShort<T> plus(byte other) {
+            return new ComposedToShort<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToInt<T> plus(int other) {
+            return new ComposedToInt<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToLong<T> plus(long other) {
+            return new ComposedToLong<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(double other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToShort<T> minus(byte other) {
+            return new ComposedToShort<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToInt<T> minus(int other) {
+            return new ComposedToInt<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToLong<T> minus(long other) {
+            return new ComposedToLong<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(double other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToInt<T> multiply(byte other) {
+            return new ComposedToInt<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToInt<T> multiply(int other) {
+            return new ComposedToInt<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToLong<T> multiply(long other) {
+            return new ComposedToLong<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(double other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> divide(int divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(long divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(double divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
     }
 
     /**
@@ -92,6 +238,136 @@ public final class ComposedUtil {
         @Override
         public short applyAsShort(T object) {
             return second.applyAsShort(first.apply(object));
+        }
+
+        @Override
+        public ToDouble<T> mapToDouble(ShortToDoubleFunction operator) {
+            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        }
+
+        @Override
+        public ToShort<T> map(ShortUnaryOperator operator) {
+            return new ComposedToShort<>(first, second.map(operator));
+        }
+
+        @Override
+        public ToShort<T> negate() {
+            return new ComposedToShort<>(first, second.negate());
+        }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToShort<T> abs() {
+            return new ComposedToShort<>(first, second.abs());
+        }
+
+        @Override
+        public ToByte<T> sign() {
+            return new ComposedToByte<>(first, second.sign());
+        }
+
+        @Override
+        public ToDouble<T> sqrt() {
+            return new ComposedToDouble<>(first, second.sqrt());
+        }
+
+        @Override
+        public ToDouble<T> pow(int power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> pow(double power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToInt<T> plus(byte other) {
+            return new ComposedToInt<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToInt<T> plus(int other) {
+            return new ComposedToInt<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToLong<T> plus(long other) {
+            return new ComposedToLong<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(double other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToInt<T> minus(byte other) {
+            return new ComposedToInt<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToInt<T> minus(int other) {
+            return new ComposedToInt<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToLong<T> minus(long other) {
+            return new ComposedToLong<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(double other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToInt<T> multiply(byte other) {
+            return new ComposedToInt<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToInt<T> multiply(int other) {
+            return new ComposedToInt<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToLong<T> multiply(long other) {
+            return new ComposedToLong<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(double other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> divide(int divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(long divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(double divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
         }
     }
 
@@ -121,6 +397,136 @@ public final class ComposedUtil {
         public int applyAsInt(T object) {
             return second.applyAsInt(first.apply(object));
         }
+
+        @Override
+        public ToDouble<T> mapToDouble(IntToDoubleFunction operator) {
+            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        }
+
+        @Override
+        public ToInt<T> map(IntUnaryOperator operator) {
+            return new ComposedToInt<>(first, second.map(operator));
+        }
+
+        @Override
+        public ToInt<T> negate() {
+            return new ComposedToInt<>(first, second.negate());
+        }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToInt<T> abs() {
+            return new ComposedToInt<>(first, second.abs());
+        }
+
+        @Override
+        public ToByte<T> sign() {
+            return new ComposedToByte<>(first, second.sign());
+        }
+
+        @Override
+        public ToDouble<T> sqrt() {
+            return new ComposedToDouble<>(first, second.sqrt());
+        }
+
+        @Override
+        public ToDouble<T> pow(int power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> pow(double power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToInt<T> plus(byte other) {
+            return new ComposedToInt<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToInt<T> plus(int other) {
+            return new ComposedToInt<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToLong<T> plus(long other) {
+            return new ComposedToLong<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(double other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToInt<T> minus(byte other) {
+            return new ComposedToInt<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToInt<T> minus(int other) {
+            return new ComposedToInt<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToLong<T> minus(long other) {
+            return new ComposedToLong<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(double other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToLong<T> multiply(byte other) {
+            return new ComposedToLong<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToLong<T> multiply(int other) {
+            return new ComposedToLong<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToLong<T> multiply(long other) {
+            return new ComposedToLong<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(double other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> divide(int divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(long divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(double divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
     }
 
     /**
@@ -148,6 +554,136 @@ public final class ComposedUtil {
         @Override
         public long applyAsLong(T object) {
             return second.applyAsLong(first.apply(object));
+        }
+
+        @Override
+        public ToDouble<T> mapToDouble(LongToDoubleFunction operator) {
+            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        }
+
+        @Override
+        public ToLong<T> map(LongUnaryOperator operator) {
+            return new ComposedToLong<>(first, second.map(operator));
+        }
+
+        @Override
+        public ToLong<T> negate() {
+            return new ComposedToLong<>(first, second.negate());
+        }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToLong<T> abs() {
+            return new ComposedToLong<>(first, second.abs());
+        }
+
+        @Override
+        public ToByte<T> sign() {
+            return new ComposedToByte<>(first, second.sign());
+        }
+
+        @Override
+        public ToDouble<T> sqrt() {
+            return new ComposedToDouble<>(first, second.sqrt());
+        }
+
+        @Override
+        public ToDouble<T> pow(int power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> pow(double power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToLong<T> plus(byte other) {
+            return new ComposedToLong<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToLong<T> plus(int other) {
+            return new ComposedToLong<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToLong<T> plus(long other) {
+            return new ComposedToLong<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(double other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToLong<T> minus(byte other) {
+            return new ComposedToLong<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToLong<T> minus(int other) {
+            return new ComposedToLong<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToLong<T> minus(long other) {
+            return new ComposedToLong<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(double other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToLong<T> multiply(byte other) {
+            return new ComposedToLong<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToLong<T> multiply(int other) {
+            return new ComposedToLong<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToLong<T> multiply(long other) {
+            return new ComposedToLong<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(double other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> divide(int divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(long divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(double divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
         }
     }
 
@@ -177,6 +713,136 @@ public final class ComposedUtil {
         public float applyAsFloat(T object) {
             return second.applyAsFloat(first.apply(object));
         }
+
+        @Override
+        public ToDouble<T> mapToDouble(FloatToDoubleFunction operator) {
+            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        }
+
+        @Override
+        public ToFloat<T> map(FloatUnaryOperator operator) {
+            return new ComposedToFloat<>(first, second.map(operator));
+        }
+
+        @Override
+        public ToFloat<T> negate() {
+            return new ComposedToFloat<>(first, second.negate());
+        }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToFloat<T> abs() {
+            return new ComposedToFloat<>(first, second.abs());
+        }
+
+        @Override
+        public ToByte<T> sign() {
+            return new ComposedToByte<>(first, second.sign());
+        }
+
+        @Override
+        public ToDouble<T> sqrt() {
+            return new ComposedToDouble<>(first, second.sqrt());
+        }
+
+        @Override
+        public ToDouble<T> pow(int power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> pow(double power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToFloat<T> plus(byte other) {
+            return new ComposedToFloat<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToFloat<T> plus(int other) {
+            return new ComposedToFloat<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(long other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(double other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToFloat<T> minus(byte other) {
+            return new ComposedToFloat<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToFloat<T> minus(int other) {
+            return new ComposedToFloat<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(long other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(double other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToFloat<T> multiply(byte other) {
+            return new ComposedToFloat<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToFloat<T> multiply(int other) {
+            return new ComposedToFloat<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(long other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(double other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> divide(int divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(long divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(double divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
     }
 
     /**
@@ -204,6 +870,131 @@ public final class ComposedUtil {
         @Override
         public double applyAsDouble(T object) {
             return second.applyAsDouble(first.apply(object));
+        }
+
+        @Override
+        public ToDouble<T> map(DoubleUnaryOperator operator) {
+            return new ComposedToDouble<>(first, second.map(operator));
+        }
+
+        @Override
+        public ToDouble<T> negate() {
+            return new ComposedToDouble<>(first, second.negate());
+        }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToDouble<T> abs() {
+            return new ComposedToDouble<>(first, second.abs());
+        }
+
+        @Override
+        public ToByte<T> sign() {
+            return new ComposedToByte<>(first, second.sign());
+        }
+
+        @Override
+        public ToDouble<T> sqrt() {
+            return new ComposedToDouble<>(first, second.sqrt());
+        }
+
+        @Override
+        public ToDouble<T> pow(int power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> pow(double power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> plus(byte other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(int other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(long other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(double other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(byte other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(int other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(long other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(double other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(byte other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(int other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(long other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(double other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> divide(int divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(long divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(double divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
         }
     }
 
@@ -233,6 +1024,36 @@ public final class ComposedUtil {
         public char applyAsChar(T object) {
             return second.applyAsChar(first.apply(object));
         }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToChar<T> map(CharUnaryOperator operator) {
+            return new ComposedToChar<>(first, second.map(operator));
+        }
+
+        @Override
+        public ToChar<T> toUpperCase() {
+            return new ComposedToChar<>(first, second.toUpperCase());
+        }
+
+        @Override
+        public ToChar<T> toLowerCase() {
+            return new ComposedToChar<>(first, second.toLowerCase());
+        }
     }
 
     /**
@@ -260,6 +1081,31 @@ public final class ComposedUtil {
         @Override
         public boolean applyAsBoolean(T object) {
             return second.applyAsBoolean(first.apply(object));
+        }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToBoolean<T> map(BooleanUnaryOperator operator) {
+            return new ComposedToBoolean<>(first, second.map(operator));
+        }
+
+        @Override
+        public ToDouble<T> mapToDouble(BooleanToDoubleFunction operator) {
+            return new ComposedToDouble<>(first, second.mapToDouble(operator));
         }
     }
 
@@ -289,6 +1135,21 @@ public final class ComposedUtil {
         public String apply(T object) {
             return second.apply(first.apply(object));
         }
+
+        @Override
+        public ToString<T> map(UnaryOperator<String> mapper) {
+            return new ComposedToString<>(first, second.map(mapper));
+        }
+
+        @Override
+        public ToString<T> toUpperCase() {
+            return new ComposedToString<>(first, second.toUpperCase());
+        }
+
+        @Override
+        public ToString<T> toLowerCase() {
+            return new ComposedToString<>(first, second.toLowerCase());
+        }
     }
 
     /**
@@ -316,6 +1177,136 @@ public final class ComposedUtil {
         @Override
         public BigDecimal apply(T object) {
             return second.apply(first.apply(object));
+        }
+
+        @Override
+        public ToDouble<T> asDouble() {
+            return new ComposedToDouble<>(first, second.asDouble());
+        }
+
+        @Override
+        public ToInt<T> asInt() {
+            return new ComposedToInt<>(first, second.asInt());
+        }
+
+        @Override
+        public ToLong<T> asLong() {
+            return new ComposedToLong<>(first, second.asLong());
+        }
+
+        @Override
+        public ToBigDecimal<T> abs() {
+            return new ComposedToBigDecimal<>(first, second.abs());
+        }
+
+        @Override
+        public ToByte<T> sign() {
+            return new ComposedToByte<>(first, second.sign());
+        }
+
+        @Override
+        public ToDouble<T> sqrt() {
+            return new ComposedToDouble<>(first, second.sqrt());
+        }
+
+        @Override
+        public ToBigDecimal<T> negate() {
+            return new ComposedToBigDecimal<>(first, second.negate());
+        }
+
+        @Override
+        public ToDouble<T> pow(int power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> pow(double power) {
+            return new ComposedToDouble<>(first, second.pow(power));
+        }
+
+        @Override
+        public ToDouble<T> plus(byte other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(int other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(long other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> plus(double other) {
+            return new ComposedToDouble<>(first, second.plus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(byte other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(int other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(long other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> minus(double other) {
+            return new ComposedToDouble<>(first, second.minus(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(byte other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(int other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(long other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> multiply(double other) {
+            return new ComposedToDouble<>(first, second.multiply(other));
+        }
+
+        @Override
+        public ToDouble<T> divide(int divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(long divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToDouble<T> divide(double divisor) {
+            return new ComposedToDouble<>(first, second.divide(divisor));
+        }
+
+        @Override
+        public ToBigDecimal<T> map(UnaryOperator<BigDecimal> mapper) {
+            return new ComposedToBigDecimal<>(first, second.map(mapper));
+        }
+
+        @Override
+        public ToDouble<T> mapToDouble(ToDoubleFunction<BigDecimal> mapper) {
+            return new ComposedToDouble<>(first, second.mapToDouble(mapper));
         }
     }
 
@@ -350,6 +1341,21 @@ public final class ComposedUtil {
         @Override
         public E apply(T object) {
             return second.apply(first.apply(object));
+        }
+
+        @Override
+        public ToInt<T> asOrdinal() {
+            return new ComposedToInt<>(first, second.asOrdinal());
+        }
+
+        @Override
+        public ToString<T> asName() {
+            return new ComposedToString<>(first, second.asName());
+        }
+
+        @Override
+        public ToEnum<T, E> map(UnaryOperator<E> mapper) {
+            return new ComposedToEnum<>(first, second.map(mapper));
         }
     }
 
