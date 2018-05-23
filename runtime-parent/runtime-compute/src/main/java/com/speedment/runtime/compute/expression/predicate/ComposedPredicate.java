@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.compute.expression;
+package com.speedment.runtime.compute.expression.predicate;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -47,44 +47,8 @@ public interface ComposedPredicate<T, A> extends Predicate<T> {
      */
     Predicate<A> innerPredicate();
 
-    /**
-     * If this predicate represents a simple {@code a == null} or
-     * {@code a != null} predicate on the mapped value, then this method may
-     * choose to return a special value so that the predicate may be
-     * short-circuited. The method may always return {@link SpecialTypes#OTHER},
-     * in which case no such optimization can be done.
-     *
-     * @return  the type of predicate this represents
-     */
-    default SpecialTypes specialType() {
-        return SpecialTypes.OTHER;
-    }
-
     @Override
     default boolean test(T t) {
         return innerPredicate().test(innerMapper().apply(t));
-    }
-
-    /**
-     * Special types of predicates that can easily be recognized and potentially
-     * short-circuited.
-     */
-    enum SpecialTypes {
-
-        /**
-         * Represents a simply {@code a -> a == null} predicate.
-         */
-        IS_NULL,
-
-        /**
-         * Represents a simply {@code a -> a != null} predicate.
-         */
-        IS_NOT_NULL,
-
-        /**
-         * Represents any kind of predicate, including {@link #IS_NULL} or
-         * {@link #IS_NOT_NULL}.
-         */
-        OTHER
     }
 }

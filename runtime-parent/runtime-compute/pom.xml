@@ -48,6 +48,8 @@
                         <Export-Package>
                             com.speedment.runtime.compute,
                             com.speedment.runtime.compute.expression,
+                            com.speedment.runtime.compute.expression.predicate,
+                            com.speedment.runtime.compute.expression.orelse,
                             com.speedment.runtime.compute.trait
                         </Export-Package>
                     </instructions>

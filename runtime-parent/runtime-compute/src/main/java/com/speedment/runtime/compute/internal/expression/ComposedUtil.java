@@ -18,8 +18,10 @@ package com.speedment.runtime.compute.internal.expression;
 
 import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.ComposedExpression;
-import com.speedment.runtime.compute.expression.ComposedPredicate;
+import com.speedment.runtime.compute.expression.predicate.ComposedPredicate;
 import com.speedment.runtime.compute.expression.Expression;
+import com.speedment.runtime.compute.expression.predicate.IsNotNull;
+import com.speedment.runtime.compute.expression.predicate.IsNull;
 import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.math.BigDecimal;
@@ -632,13 +634,13 @@ public final class ComposedUtil {
         }
 
         @Override
-        public final ComposedPredicate<T, A> isNull() {
-            return new IsNull<>(first);
+        public IsNull<T, R, T_EXPR> isNull() {
+            return new ComposedIsNull<>(this, first);
         }
 
         @Override
-        public final ComposedPredicate<T, A> isNotNull() {
-            return new IsNotNull<>(first);
+        public IsNotNull<T, R, T_EXPR> isNotNull() {
+            return new ComposedIsNotNull<>(this, first);
         }
 
         @Override
@@ -684,57 +686,61 @@ public final class ComposedUtil {
         }
     }
 
-    private final static class IsNull<T, A>
-    implements ComposedPredicate<T, A> {
+    private final static class ComposedIsNull<T, A, R, NON_NULLABLE extends Expression<T>>
+    implements ComposedPredicate<T, A>, IsNull<T, R, NON_NULLABLE> {
 
+        private final ToNullable<T, R, NON_NULLABLE> expression;
         private final Function<T, A> innerMapper;
         private final Predicate<A> innerPredicate;
 
-        IsNull(Function<T, A> innerMapper) {
+        ComposedIsNull(ToNullable<T, R, NON_NULLABLE> expression, Function<T, A> innerMapper) {
+            this.expression     = requireNonNull(expression);
             this.innerMapper    = requireNonNull(innerMapper);
             this.innerPredicate = Objects::isNull;
         }
 
         @Override
-        public SpecialTypes specialType() {
-            return SpecialTypes.IS_NULL;
+        public IsNotNull<T, R, NON_NULLABLE> negate() {
+            return new ComposedIsNotNull<>(expression, innerMapper);
+        }
+
+        @Override
+        public Function<T, A> innerMapper() {
+            return innerMapper;
+        }
+
+        @Override
+        public Predicate<A> innerPredicate() {
+            return innerPredicate;
+        }
+
+        @Override
+        public ToNullable<T, R, NON_NULLABLE> expression() {
+            return expression;
         }
 
         @Override
         public boolean test(T t) {
             return innerMapper.apply(t) == null;
         }
-
-        @Override
-        public Function<T, A> innerMapper() {
-            return innerMapper;
-        }
-
-        @Override
-        public Predicate<A> innerPredicate() {
-            return innerPredicate;
-        }
     }
 
-    private final static class IsNotNull<T, A>
-    implements ComposedPredicate<T, A> {
+    private final static class ComposedIsNotNull<T, A, R, NON_NULLABLE extends Expression<T>>
+    implements ComposedPredicate<T, A>, IsNotNull<T, R, NON_NULLABLE> {
 
+        private final ToNullable<T, R, NON_NULLABLE> expression;
         private final Function<T, A> innerMapper;
         private final Predicate<A> innerPredicate;
 
-        IsNotNull(Function<T, A> innerMapper) {
+        ComposedIsNotNull(ToNullable<T, R, NON_NULLABLE> expression, Function<T, A> innerMapper) {
+            this.expression     = requireNonNull(expression);
             this.innerMapper    = requireNonNull(innerMapper);
             this.innerPredicate = Objects::nonNull;
         }
 
         @Override
-        public SpecialTypes specialType() {
-            return SpecialTypes.IS_NOT_NULL;
-        }
-
-        @Override
-        public boolean test(T t) {
-            return innerMapper.apply(t) != null;
+        public IsNull<T, R, NON_NULLABLE> negate() {
+            return new ComposedIsNull<>(expression, innerMapper);
         }
 
         @Override
@@ -745,6 +751,16 @@ public final class ComposedUtil {
         @Override
         public Predicate<A> innerPredicate() {
             return innerPredicate;
+        }
+
+        @Override
+        public ToNullable<T, R, NON_NULLABLE> expression() {
+            return expression;
+        }
+
+        @Override
+        public boolean test(T t) {
+            return innerMapper.apply(t) != null;
         }
     }
 

@@ -17,9 +17,12 @@
 package com.speedment.runtime.compute.trait;
 
 import com.speedment.runtime.compute.expression.Expression;
+import com.speedment.runtime.compute.expression.predicate.IsNotNull;
+import com.speedment.runtime.compute.expression.predicate.IsNull;
+import com.speedment.runtime.compute.internal.predicate.IsNotNullImpl;
+import com.speedment.runtime.compute.internal.predicate.IsNullImpl;
 
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Trait for expressions that result in a nullable value. Those expressions have
@@ -44,8 +47,8 @@ extends Function<T, R>, Expression<T> {
      * @return  a predicate that tests if this expression would return
      *          {@code null}
      */
-    default Predicate<T> isNull() {
-        return this::isNull;
+    default IsNull<T, R, NON_NULLABLE> isNull() {
+        return new IsNullImpl<>(this);
     }
 
     /**
@@ -56,8 +59,8 @@ extends Function<T, R>, Expression<T> {
      * @return  a predicate that tests if this expression would return something
      *          other than {@code null}
      */
-    default Predicate<T> isNotNull() {
-        return this::isNotNull;
+    default IsNotNull<T, R, NON_NULLABLE> isNotNull() {
+        return new IsNotNullImpl<>(this);
     }
 
     /**
