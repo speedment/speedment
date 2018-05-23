@@ -374,6 +374,16 @@ public final class ComposedUtil {
         ComposedToByteNullable(Function<T, A> first, ToByteNullable<A> aToByte) {
             super(first, aToByte);
         }
+
+        @Override
+        public ToByte<T> orThrow() {
+            return new ComposedToByte<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToByte<T> orElse(Byte value) {
+            return new ComposedToByte<>(first, second.orElse(value));
+        }
     }
 
     /**
@@ -396,6 +406,16 @@ public final class ComposedUtil {
     implements ToShortNullable<T> {
         ComposedToShortNullable(Function<T, A> first, ToShortNullable<A> aToShort) {
             super(first, aToShort);
+        }
+
+        @Override
+        public ToShort<T> orThrow() {
+            return new ComposedToShort<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToShort<T> orElse(Short value) {
+            return new ComposedToShort<>(first, second.orElse(value));
         }
     }
 
@@ -420,6 +440,16 @@ public final class ComposedUtil {
         ComposedToIntNullable(Function<T, A> first, ToIntNullable<A> aToInt) {
             super(first, aToInt);
         }
+
+        @Override
+        public ToInt<T> orThrow() {
+            return new ComposedToInt<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToInt<T> orElse(Integer value) {
+            return new ComposedToInt<>(first, second.orElse(value));
+        }
     }
 
     /**
@@ -442,6 +472,16 @@ public final class ComposedUtil {
     implements ToLongNullable<T> {
         ComposedToLongNullable(Function<T, A> first, ToLongNullable<A> aToLong) {
             super(first, aToLong);
+        }
+
+        @Override
+        public ToLong<T> orThrow() {
+            return new ComposedToLong<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToLong<T> orElse(Long value) {
+            return new ComposedToLong<>(first, second.orElse(value));
         }
     }
 
@@ -466,6 +506,16 @@ public final class ComposedUtil {
         ComposedToFloatNullable(Function<T, A> first, ToFloatNullable<A> aToFloat) {
             super(first, aToFloat);
         }
+
+        @Override
+        public ToFloat<T> orThrow() {
+            return new ComposedToFloat<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToFloat<T> orElse(Float value) {
+            return new ComposedToFloat<>(first, second.orElse(value));
+        }
     }
 
     /**
@@ -488,6 +538,16 @@ public final class ComposedUtil {
     implements ToDoubleNullable<T> {
         ComposedToDoubleNullable(Function<T, A> first, ToDoubleNullable<A> aToDouble) {
             super(first, aToDouble);
+        }
+
+        @Override
+        public ToDouble<T> orThrow() {
+            return new ComposedToDouble<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToDouble<T> orElse(Double value) {
+            return new ComposedToDouble<>(first, second.orElse(value));
         }
     }
 
@@ -512,6 +572,16 @@ public final class ComposedUtil {
         ComposedToCharNullable(Function<T, A> first, ToCharNullable<A> aToChar) {
             super(first, aToChar);
         }
+
+        @Override
+        public ToChar<T> orThrow() {
+            return new ComposedToChar<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToChar<T> orElse(Character value) {
+            return new ComposedToChar<>(first, second.orElse(value));
+        }
     }
 
     /**
@@ -534,6 +604,16 @@ public final class ComposedUtil {
     implements ToBooleanNullable<T> {
         ComposedToBooleanNullable(Function<T, A> first, ToBooleanNullable<A> aToBoolean) {
             super(first, aToBoolean);
+        }
+
+        @Override
+        public ToBoolean<T> orThrow() {
+            return new ComposedToBoolean<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToBoolean<T> orElse(Boolean value) {
+            return new ComposedToBoolean<>(first, second.orElse(value));
         }
     }
 
@@ -558,6 +638,16 @@ public final class ComposedUtil {
         ComposedToStringNullable(Function<T, A> first, ToStringNullable<A> aToString) {
             super(first, aToString);
         }
+
+        @Override
+        public ToString<T> orThrow() {
+            return new ComposedToString<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToString<T> orElse(String value) {
+            return new ComposedToString<>(first, second.orElse(value));
+        }
     }
 
     /**
@@ -580,6 +670,16 @@ public final class ComposedUtil {
     implements ToBigDecimalNullable<T> {
         ComposedToBigDecimalNullable(Function<T, A> first, ToBigDecimalNullable<A> aToBigDecimal) {
             super(first, aToBigDecimal);
+        }
+
+        @Override
+        public ToBigDecimal<T> orThrow() {
+            return new ComposedToBigDecimal<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToBigDecimal<T> orElse(BigDecimal value) {
+            return new ComposedToBigDecimal<>(first, second.orElse(value));
         }
     }
 
@@ -610,6 +710,16 @@ public final class ComposedUtil {
         @Override
         public Class<E> enumClass() {
             return second.enumClass();
+        }
+
+        @Override
+        public ToEnum<T, E> orThrow() {
+            return new ComposedToEnum<>(first, second.orThrow());
+        }
+
+        @Override
+        public ToEnum<T, E> orElse(E value) {
+            return new ComposedToEnum<>(first, second.orElse(value));
         }
     }
 
