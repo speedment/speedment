@@ -4,6 +4,6 @@
  * can be analyzed.
  *
  * @author Emil Forslund
- * @since  1.2.1
+ * @since  3.1.2
  */
 package com.speedment.runtime.compute.expression.predicate;

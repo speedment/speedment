@@ -1,6 +1,5 @@
 package com.speedment.runtime.compute.expression.predicate;
 
-import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.util.function.Predicate;
@@ -10,9 +9,9 @@ import java.util.function.Predicate;
  * can be used to optimize the expression.
  *
  * @author Emil Forslund
- * @since  1.2.1
+ * @since  3.1.2
  */
-public interface NullPredicate<T, R, NON_NULLABLE extends Expression<T>>
+public interface NullPredicate<T, R>
 extends Predicate<T> {
 
     /**
@@ -33,6 +32,6 @@ extends Predicate<T> {
      *
      * @return  the expression
      */
-    ToNullable<T, R, NON_NULLABLE> expression();
+    ToNullable<T, R, ?> expression();
 
 }

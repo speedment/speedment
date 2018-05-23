@@ -3,6 +3,6 @@
  * {@code com.speedment.runtime.compute.predicate}.
  *
  * @author Emil Forslund
- * @since  1.2.1
+ * @since  3.1.2
  */
 package com.speedment.runtime.compute.internal.predicate;

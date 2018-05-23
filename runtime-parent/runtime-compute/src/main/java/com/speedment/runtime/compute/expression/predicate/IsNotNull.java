@@ -1,13 +1,11 @@
 package com.speedment.runtime.compute.expression.predicate;
 
-import com.speedment.runtime.compute.expression.Expression;
-
 /**
  * @author Emil Forslund
- * @since  1.2.1
+ * @since  3.1.2
  */
-public interface IsNotNull<T, R, NON_NULLABLE extends Expression<T>>
-extends NullPredicate<T, R, NON_NULLABLE> {
+public interface IsNotNull<T, R>
+extends NullPredicate<T, R> {
 
     @Override
     default NullPredicateType nullPredicateType() {
@@ -21,5 +19,5 @@ extends NullPredicate<T, R, NON_NULLABLE> {
     }
 
     @Override
-    IsNull<T, R, NON_NULLABLE> negate();
+    IsNull<T, R> negate();
 }

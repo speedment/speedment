@@ -634,12 +634,12 @@ public final class ComposedUtil {
         }
 
         @Override
-        public IsNull<T, R, T_EXPR> isNull() {
+        public IsNull<T, R> isNull() {
             return new ComposedIsNull<>(this, first);
         }
 
         @Override
-        public IsNotNull<T, R, T_EXPR> isNotNull() {
+        public IsNotNull<T, R> isNotNull() {
             return new ComposedIsNotNull<>(this, first);
         }
 
@@ -687,7 +687,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedIsNull<T, A, R, NON_NULLABLE extends Expression<T>>
-    implements ComposedPredicate<T, A>, IsNull<T, R, NON_NULLABLE> {
+    implements ComposedPredicate<T, A>, IsNull<T, R> {
 
         private final ToNullable<T, R, NON_NULLABLE> expression;
         private final Function<T, A> innerMapper;
@@ -700,7 +700,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public IsNotNull<T, R, NON_NULLABLE> negate() {
+        public IsNotNull<T, R> negate() {
             return new ComposedIsNotNull<>(expression, innerMapper);
         }
 
@@ -726,7 +726,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedIsNotNull<T, A, R, NON_NULLABLE extends Expression<T>>
-    implements ComposedPredicate<T, A>, IsNotNull<T, R, NON_NULLABLE> {
+    implements ComposedPredicate<T, A>, IsNotNull<T, R> {
 
         private final ToNullable<T, R, NON_NULLABLE> expression;
         private final Function<T, A> innerMapper;
@@ -739,7 +739,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public IsNull<T, R, NON_NULLABLE> negate() {
+        public IsNull<T, R> negate() {
             return new ComposedIsNull<>(expression, innerMapper);
         }
 

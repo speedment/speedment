@@ -47,7 +47,7 @@ extends Function<T, R>, Expression<T> {
      * @return  a predicate that tests if this expression would return
      *          {@code null}
      */
-    default IsNull<T, R, NON_NULLABLE> isNull() {
+    default IsNull<T, R> isNull() {
         return new IsNullImpl<>(this);
     }
 
@@ -59,7 +59,7 @@ extends Function<T, R>, Expression<T> {
      * @return  a predicate that tests if this expression would return something
      *          other than {@code null}
      */
-    default IsNotNull<T, R, NON_NULLABLE> isNotNull() {
+    default IsNotNull<T, R> isNotNull() {
         return new IsNotNullImpl<>(this);
     }
 

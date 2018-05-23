@@ -5,7 +5,7 @@ package com.speedment.runtime.compute.expression.predicate;
  * short-circuited.
  *
  * @author Emil Forslund
- * @since  1.2.1
+ * @since  3.1.2
  */
 public enum NullPredicateType {
 
