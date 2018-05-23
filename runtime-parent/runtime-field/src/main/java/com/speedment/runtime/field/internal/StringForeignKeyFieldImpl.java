@@ -28,19 +28,14 @@ import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromNullableReference;
 import com.speedment.runtime.field.internal.method.FindFromReference;
 import com.speedment.runtime.field.internal.predicate.reference.*;
-import com.speedment.runtime.field.internal.predicate.string.StringContainsIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringContainsPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEndsWithIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEndsWithPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEqualIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringIsEmptyPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringStartsWithIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringStartsWithPredicate;
+import com.speedment.runtime.field.internal.predicate.string.*;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.FindFromNullable;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.predicate.FieldIsNotNullPredicate;
+import com.speedment.runtime.field.predicate.FieldIsNullPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -228,9 +223,15 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     ////////////////////////////////////////////////////////////////////////////
     //                               Operators                                //
     ////////////////////////////////////////////////////////////////////////////
+
     @Override
-    public FieldPredicate<ENTITY> isNull() {
-        return new ReferenceIsNullPredicate<>(this);
+    public FieldIsNullPredicate<ENTITY, String> isNull() {
+        return new StringIsNullPredicate<>(this);
+    }
+
+    @Override
+    public FieldIsNotNullPredicate<ENTITY, String> isNotNull() {
+        return new StringIsNotNullPredicate<>(this);
     }
 
     @Override

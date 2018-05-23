@@ -18,10 +18,11 @@ package com.speedment.runtime.field.internal.expression;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.trait.ToNullable;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldMapper;
-
-import java.util.function.Predicate;
+import com.speedment.runtime.field.predicate.FieldIsNotNullPredicate;
+import com.speedment.runtime.field.predicate.FieldIsNullPredicate;
 
 import static java.util.Objects.requireNonNull;
 
@@ -53,12 +54,78 @@ implements FieldMapper<ENTITY, V, T, NON_NULLABLE, MAPPER> {
     }
 
     @Override
-    public Predicate<ENTITY> isNull() {
-        return field.isNull();
+    public FieldIsNullPredicate<ENTITY, T> isNull() {
+        return new MapperIsNull<>(this, field);
     }
 
     @Override
-    public Predicate<ENTITY> isNotNull() {
-        return field.isNotNull();
+    public FieldIsNotNullPredicate<ENTITY, T> isNotNull() {
+        return new MapperIsNotNull<>(this, field);
+    }
+
+    private final static class MapperIsNull<ENTITY, V, T>
+    implements FieldIsNullPredicate<ENTITY, T> {
+
+        private final ToNullable<ENTITY, T, ?> expression;
+        private final ReferenceField<ENTITY, ?, V> field;
+
+        MapperIsNull(ToNullable<ENTITY, T, ?> expression,
+                     ReferenceField<ENTITY, ?, V> field) {
+            this.expression = requireNonNull(expression);
+            this.field      = requireNonNull(field);
+        }
+
+        @Override
+        public boolean test(ENTITY value) {
+            return field.get(value) == null;
+        }
+
+        @Override
+        public FieldIsNotNullPredicate<ENTITY, T> negate() {
+            return new MapperIsNotNull<>(expression, field);
+        }
+
+        @Override
+        public ToNullable<ENTITY, T, ?> expression() {
+            return expression;
+        }
+
+        @Override
+        public Field<ENTITY> getField() {
+            return field;
+        }
+    }
+
+    private final static class MapperIsNotNull<ENTITY, V, T>
+        implements FieldIsNotNullPredicate<ENTITY, T> {
+
+        private final ToNullable<ENTITY, T, ?> expression;
+        private final ReferenceField<ENTITY, ?, V> field;
+
+        MapperIsNotNull(ToNullable<ENTITY, T, ?> expression,
+                        ReferenceField<ENTITY, ?, V> field) {
+            this.expression = requireNonNull(expression);
+            this.field      = requireNonNull(field);
+        }
+
+        @Override
+        public boolean test(ENTITY value) {
+            return field.get(value) != null;
+        }
+
+        @Override
+        public FieldIsNullPredicate<ENTITY, T> negate() {
+            return new MapperIsNull<>(expression, field);
+        }
+
+        @Override
+        public ToNullable<ENTITY, T, ?> expression() {
+            return expression;
+        }
+
+        @Override
+        public Field<ENTITY> getField() {
+            return field;
+        }
     }
 }

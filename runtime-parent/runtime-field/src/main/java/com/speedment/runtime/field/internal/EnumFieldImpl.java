@@ -23,10 +23,10 @@ import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.predicate.AlwaysFalsePredicate;
+import com.speedment.runtime.field.internal.predicate.enums.EnumIsNotNullPredicate;
+import com.speedment.runtime.field.internal.predicate.enums.EnumIsNullPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceInPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNotNullPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNullPredicate;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -210,13 +210,13 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
     ////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Predicate<ENTITY> isNull() {
-        return new ReferenceIsNullPredicate<>(this);
+    public EnumIsNullPredicate<ENTITY, D, E> isNull() {
+        return new EnumIsNullPredicate<>(this);
     }
 
     @Override
-    public Predicate<ENTITY> isNotNull() {
-        return new ReferenceIsNotNullPredicate<>(this);
+    public EnumIsNotNullPredicate<ENTITY, D, E> isNotNull() {
+        return new EnumIsNotNullPredicate<>(this);
     }
 
     @Override

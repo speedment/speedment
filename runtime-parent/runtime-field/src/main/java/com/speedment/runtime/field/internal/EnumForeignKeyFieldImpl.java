@@ -18,7 +18,6 @@ package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.field.EnumField;
 import com.speedment.runtime.field.EnumForeignKeyField;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
@@ -28,10 +27,10 @@ import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromNullableReference;
 import com.speedment.runtime.field.internal.method.FindFromReference;
 import com.speedment.runtime.field.internal.predicate.AlwaysFalsePredicate;
+import com.speedment.runtime.field.internal.predicate.enums.EnumIsNotNullPredicate;
+import com.speedment.runtime.field.internal.predicate.enums.EnumIsNullPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceInPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNotNullPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNullPredicate;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.FindFromNullable;
@@ -259,13 +258,13 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
     ////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Predicate<ENTITY> isNull() {
-        return new ReferenceIsNullPredicate<>(this);
+    public EnumIsNullPredicate<ENTITY, D, E> isNull() {
+        return new EnumIsNullPredicate<>(this);
     }
 
     @Override
-    public Predicate<ENTITY> isNotNull() {
-        return new ReferenceIsNotNullPredicate<>(this);
+    public EnumIsNotNullPredicate<ENTITY, D, E> isNotNull() {
+        return new EnumIsNotNullPredicate<>(this);
     }
 
     @Override

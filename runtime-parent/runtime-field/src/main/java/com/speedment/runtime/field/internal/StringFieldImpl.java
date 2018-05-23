@@ -17,21 +17,13 @@
 package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.predicate.reference.*;
-import com.speedment.runtime.field.internal.predicate.string.StringContainsIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringContainsPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEndsWithIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEndsWithPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEqualIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringIsEmptyPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringStartsWithIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringStartsWithPredicate;
+import com.speedment.runtime.field.internal.predicate.string.*;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -183,8 +175,13 @@ implements StringField<ENTITY, D>,
     ////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public FieldPredicate<ENTITY> isNull() {
-        return new ReferenceIsNullPredicate<>(this);
+    public StringIsNullPredicate<ENTITY, D> isNull() {
+        return new StringIsNullPredicate<>(this);
+    }
+
+    @Override
+    public StringIsNotNullPredicate<ENTITY, D> isNotNull() {
+        return new StringIsNotNullPredicate<>(this);
     }
 
     @Override
