@@ -27,20 +27,10 @@ import com.speedment.runtime.compute.ToLong;
  * between this value and something else.
  *
  * @param <T>          the input type
- * @param <MINUS_BYTE> the expression type one would get if subtracting a
- *                     {@code byte} value from the result of the current
- *                     expression
- * @param <MINUS_INT>  the expression type one would get if subtracting an
- *                     {@code int} value from the result of the current
- *                     expression
- * @param <MINUS_LONG> the expression type one would get if subtracting a
- *                     {@code long} value from the result of the current
- *                     expression
- *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface HasMinus<T, MINUS_BYTE, MINUS_INT, MINUS_LONG> {
+public interface HasMinus<T> {
 
     /**
      * Creates and returns an expression that returns the difference of the
@@ -55,7 +45,7 @@ public interface HasMinus<T, MINUS_BYTE, MINUS_INT, MINUS_LONG> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
-    MINUS_BYTE minus(byte other);
+    HasMinus<T> minus(byte other);
 
     /**
      * Creates and returns an expression that returns the difference of the
@@ -70,7 +60,7 @@ public interface HasMinus<T, MINUS_BYTE, MINUS_INT, MINUS_LONG> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
-    MINUS_BYTE minus(ToByte<T> other);
+    HasMinus<T> minus(ToByte<T> other);
 
     /**
      * Creates and returns an expression that returns the difference of the
@@ -85,7 +75,7 @@ public interface HasMinus<T, MINUS_BYTE, MINUS_INT, MINUS_LONG> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
-    MINUS_INT minus(int other);
+    HasMinus<T> minus(int other);
 
     /**
      * Creates and returns an expression that returns the difference of the
@@ -100,7 +90,7 @@ public interface HasMinus<T, MINUS_BYTE, MINUS_INT, MINUS_LONG> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
-    MINUS_INT minus(ToInt<T> other);
+    HasMinus<T> minus(ToInt<T> other);
 
     /**
      * Creates and returns an expression that returns the difference of the
@@ -115,7 +105,7 @@ public interface HasMinus<T, MINUS_BYTE, MINUS_INT, MINUS_LONG> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
-    MINUS_LONG minus(long other);
+    HasMinus<T> minus(long other);
 
     /**
      * Creates and returns an expression that returns the difference of the
@@ -130,7 +120,7 @@ public interface HasMinus<T, MINUS_BYTE, MINUS_INT, MINUS_LONG> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
-    MINUS_LONG minus(ToLong<T> other);
+    HasMinus<T> minus(ToLong<T> other);
 
     /**
      * Creates and returns an expression that returns the difference of the

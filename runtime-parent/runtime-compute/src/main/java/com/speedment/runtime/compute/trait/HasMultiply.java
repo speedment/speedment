@@ -27,20 +27,11 @@ import com.speedment.runtime.compute.ToLong;
  * of this value and something else.
  *
  * @param <T>          the input type
- * @param <MULT_BYTE>  the expression type one would get if multiplying a
- *                     {@code byte} value with the result of the current
- *                     expression
- * @param <MULT_INT>   the expression type one would get if multiplying an
- *                     {@code int} value with the result of the current
- *                     expression
- * @param <MULT_LONG>  the expression type one would get if multiplying a
- *                     {@code long} value with the result of the current
- *                     expression
  *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface HasMultiply<T, MULT_BYTE, MULT_INT, MULT_LONG> {
+public interface HasMultiply<T> {
 
     /**
      * Creates and returns an expression that returns the product of the result
@@ -55,7 +46,7 @@ public interface HasMultiply<T, MULT_BYTE, MULT_INT, MULT_LONG> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
-    MULT_BYTE multiply(byte other);
+    HasMultiply<T> multiply(byte other);
 
     /**
      * Creates and returns an expression that returns the product of the result
@@ -70,7 +61,7 @@ public interface HasMultiply<T, MULT_BYTE, MULT_INT, MULT_LONG> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
-    MULT_BYTE multiply(ToByte<T> other);
+    HasMultiply<T> multiply(ToByte<T> other);
 
     /**
      * Creates and returns an expression that returns the product of the result
@@ -85,7 +76,7 @@ public interface HasMultiply<T, MULT_BYTE, MULT_INT, MULT_LONG> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
-    MULT_INT multiply(int other);
+    HasMultiply<T> multiply(int other);
 
     /**
      * Creates and returns an expression that returns the product of the result
@@ -100,7 +91,7 @@ public interface HasMultiply<T, MULT_BYTE, MULT_INT, MULT_LONG> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
-    MULT_INT multiply(ToInt<T> other);
+    HasMultiply<T> multiply(ToInt<T> other);
 
     /**
      * Creates and returns an expression that returns the product of the result
@@ -115,7 +106,7 @@ public interface HasMultiply<T, MULT_BYTE, MULT_INT, MULT_LONG> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
-    MULT_LONG multiply(long other);
+    HasMultiply<T> multiply(long other);
 
     /**
      * Creates and returns an expression that returns the product of the result
@@ -130,7 +121,7 @@ public interface HasMultiply<T, MULT_BYTE, MULT_INT, MULT_LONG> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
-    MULT_LONG multiply(ToLong<T> other);
+    HasMultiply<T> multiply(ToLong<T> other);
 
     /**
      * Creates and returns an expression that returns the product of the result
