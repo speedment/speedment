@@ -16,15 +16,7 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
-import com.speedment.common.function.BooleanToDoubleFunction;
-import com.speedment.common.function.BooleanUnaryOperator;
-import com.speedment.common.function.ByteToDoubleFunction;
-import com.speedment.common.function.ByteUnaryOperator;
-import com.speedment.common.function.CharUnaryOperator;
-import com.speedment.common.function.FloatToDoubleFunction;
-import com.speedment.common.function.FloatUnaryOperator;
-import com.speedment.common.function.ShortToDoubleFunction;
-import com.speedment.common.function.ShortUnaryOperator;
+import com.speedment.common.function.*;
 import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.ComposedExpression;
 import com.speedment.runtime.compute.expression.Expression;
@@ -35,15 +27,7 @@ import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.function.DoubleUnaryOperator;
-import java.util.function.Function;
-import java.util.function.IntToDoubleFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.LongToDoubleFunction;
-import java.util.function.LongUnaryOperator;
-import java.util.function.Predicate;
-import java.util.function.ToDoubleFunction;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 
 import static java.util.Objects.requireNonNull;
 
@@ -494,13 +478,13 @@ public final class ComposedUtil {
         }
 
         @Override
-        public ToLong<T> multiply(byte other) {
-            return new ComposedToLong<>(first, second.multiply(other));
+        public ToInt<T> multiply(byte other) {
+            return new ComposedToInt<>(first, second.multiply(other));
         }
 
         @Override
-        public ToLong<T> multiply(int other) {
-            return new ComposedToLong<>(first, second.multiply(other));
+        public ToInt<T> multiply(int other) {
+            return new ComposedToInt<>(first, second.multiply(other));
         }
 
         @Override
