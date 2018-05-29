@@ -16,7 +16,13 @@
  */
 package com.speedment.runtime.join.internal.component.join;
 
+import com.speedment.common.logger.Level;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.ApplicationBuilder;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
@@ -24,13 +30,10 @@ import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.join.trait.HasWhere;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
+import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.joining;
@@ -41,6 +44,9 @@ import static java.util.stream.Collectors.toList;
  * @author Per Minborg
  */
 abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
+
+    private final static Logger LOGGER_JOIN =
+        LoggerManager.getLogger(ApplicationBuilder.LogType.JOIN.getLoggerName());
 
     private final JoinStreamSupplierComponent streamSupplier;
     private final List<StageBean<?>> stageBeans;
@@ -173,6 +179,34 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
             } else {
                 stageBean.setReferencedStage(stageIndexOf(stageBeans, foreignField, i));
             }
+        }
+        if (LOGGER_JOIN.getLevel().isEqualOrHigherThan(Level.DEBUG)) {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("Resolving join with ").append(stageBeans.size()).append(" stages:");
+            sb.append(
+                format("%n%2s %-32s %-12s %2s %-32s %-16s %-12s %-16s",
+                    "#", "Table Identifier", "Join Type", "R#", "Referenced Table Identifier", "Field", "Operation", "Referenced Field")
+            );
+            for (int i = 0; i < stageBeans.size(); i++) {
+                final StageBean<?> stageBean = stageBeans.get(i);
+                final Optional<StageBean<?>> referencedStageBean = Optional.of(stageBean.getReferencedStage())
+                    .filter(rs -> rs != -1)
+                    .map(stageBeans::get);
+                sb.append(
+                    format(
+                        "%n%2d %-32s %-12s %2d %-32s %-16s %-12s %-16s",
+                        i,
+                        stageBean.getIdentifier(),
+                        stageBean.getJoinType(),
+                        stageBean.getReferencedStage(),
+                        referencedStageBean.map(StageBean::getIdentifier).orElse(null),
+                        Optional.ofNullable(stageBean.getField()).map(Field::identifier).map(ColumnIdentifier::getColumnId).orElse("null"),
+                        stageBean.getJoinOperator(),
+                        Optional.ofNullable(stageBean.getForeignField()).map(Field::identifier).map(ColumnIdentifier::getColumnId).orElse("null")
+                    )
+                );
+            }
+            LOGGER_JOIN.debug(sb.toString());
         }
     }
 

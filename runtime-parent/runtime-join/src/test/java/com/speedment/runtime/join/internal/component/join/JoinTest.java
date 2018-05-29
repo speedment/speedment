@@ -17,7 +17,11 @@
 package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.logger.Level;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.tuple.nullable.Tuple2OfNullables;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinBundle;
@@ -38,12 +42,16 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class JoinTest {
 
+    private final static Logger LOGGER_JOIN =
+        LoggerManager.getLogger(ApplicationBuilder.LogType.JOIN.getLoggerName());
+
     private JoinComponent jc;
     private JoinStreamSupplierComponent jssc;
 
 
     @Before
     public void init() throws InstantiationException {
+        LOGGER_JOIN.setLevel(Level.DEBUG);
 
 //        final Speedment app = new DefaultApplicationBuilder(MockMetadata.class)
 //            .withSkipCheckDatabaseConnectivity()
@@ -85,10 +93,18 @@ public final class JoinTest {
 
 
         final Set<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> set = join.stream().collect(toSet());
-
-        //System.out.println(set.size());
-
     }
+
+    @Test
+    public void innerJoin2() {
+        final Join<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> join = jc
+            .from(JoinTestUtil.E0Manager.IDENTIFIER)
+            .leftJoinOn(JoinTestUtil.E1.ID1).equal(JoinTestUtil.E0.ID0)
+            .build();
+
+        final Set<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> set = join.stream().collect(toSet());
+    }
+
 
 
     //
