@@ -75,28 +75,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- JDBC Connectors for convenience -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgres-jdbc-version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>${mariadb-jdbc-version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-jdbc-version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
         <!-- Maven Plugin Dependencies -->
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
