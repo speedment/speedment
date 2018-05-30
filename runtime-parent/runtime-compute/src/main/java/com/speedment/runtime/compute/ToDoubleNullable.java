@@ -198,6 +198,6 @@ extends Expression<T>,
     default <V> ToDoubleNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.composeNullable(casted, this);
+        return ComposedUtil.composeToDoubleNullable(casted, this);
     }
 }

@@ -319,7 +319,7 @@ extends Expression<T>,
     }
 
     @Override
-    default <V> ToInt<V> compose(Function<? super V, ? extends T> before) {
+    default <V> ToIntNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToInt(casted, this);

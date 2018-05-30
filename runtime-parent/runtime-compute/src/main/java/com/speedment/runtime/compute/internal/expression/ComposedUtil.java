@@ -1,33 +1,19 @@
-/**
- *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.speedment.runtime.compute.internal.expression;
 
-import com.speedment.common.function.*;
+import com.speedment.common.function.ToBooleanFunction;
+import com.speedment.common.function.ToByteFunction;
+import com.speedment.common.function.ToCharFunction;
+import com.speedment.common.function.ToFloatFunction;
+import com.speedment.common.function.ToShortFunction;
 import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.ComposedExpression;
 import com.speedment.runtime.compute.expression.Expression;
-import com.speedment.runtime.compute.expression.predicate.ComposedPredicate;
-import com.speedment.runtime.compute.expression.predicate.IsNotNull;
-import com.speedment.runtime.compute.expression.predicate.IsNull;
-import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.function.*;
+import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 
 import static java.util.Objects.requireNonNull;
 
@@ -43,157 +29,69 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToByte<T>
-    composeToByte(Function<T, A> first, ToByte<A> second) {
-        return new ComposedToByte<>(first, second);
+    public static <T, A> ToByteNullable<T> composeToByte(Function<T, A> before, ToByte<A> after) {
+        return new ComposeToByte<>(before, after);
     }
 
-    private final static class ComposedToByte<T, A>
-    extends AbstractComposedExpression<T, A, ToByte<A>>
-    implements ToByte<T> {
-        ComposedToByte(Function<T, A> first, ToByte<A> aToByte) {
-            super(first, aToByte);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToByteNullable<T> composeToByteNullable(Function<T, A> before, ToByteNullable<A> after) {
+        return new ComposeToByte<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToByte<T, A, AFTER extends ToByteFunction<A> & Expression<A>>
+        implements ComposedExpression<T, A>, ToByteNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToByte(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
         }
 
         @Override
-        public byte applyAsByte(T object) {
-            return second.applyAsByte(first.apply(object));
+        public Function<T, A> firstStep() {
+            return before;
         }
 
         @Override
-        public ToDouble<T> mapToDouble(ByteToDoubleFunction operator) {
-            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
-        public ToByte<T> map(ByteUnaryOperator operator) {
-            return new ComposedToByte<>(first, second.map(operator));
+        public byte applyAsByte(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return after.applyAsByte(intermediate);
         }
 
         @Override
-        public ToByte<T> negate() {
-            return new ComposedToByte<>(first, second.negate());
-        }
-
-        @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
-        }
-
-        @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
-        }
-
-        @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToByte<T> abs() {
-            return new ComposedToByte<>(first, second.abs());
-        }
-
-        @Override
-        public ToByte<T> sign() {
-            return new ComposedToByte<>(first, second.sign());
-        }
-
-        @Override
-        public ToDouble<T> sqrt() {
-            return new ComposedToDouble<>(first, second.sqrt());
-        }
-
-        @Override
-        public ToDouble<T> pow(int power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> pow(double power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToShort<T> plus(byte other) {
-            return new ComposedToShort<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToInt<T> plus(int other) {
-            return new ComposedToInt<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToLong<T> plus(long other) {
-            return new ComposedToLong<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(double other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToShort<T> minus(byte other) {
-            return new ComposedToShort<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToInt<T> minus(int other) {
-            return new ComposedToInt<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToLong<T> minus(long other) {
-            return new ComposedToLong<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(double other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToInt<T> multiply(byte other) {
-            return new ComposedToInt<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToInt<T> multiply(int other) {
-            return new ComposedToInt<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToLong<T> multiply(long other) {
-            return new ComposedToLong<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(double other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> divide(int divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(long divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(double divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
+        public Byte apply(T object) {
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.applyAsByte(intermediate);
         }
     }
 
@@ -201,157 +99,69 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToShort<T>
-    composeToShort(Function<T, A> first, ToShort<A> second) {
-        return new ComposedToShort<>(first, second);
+    public static <T, A> ToShortNullable<T> composeToShort(Function<T, A> before, ToShort<A> after) {
+        return new ComposeToShort<>(before, after);
     }
 
-    private final static class ComposedToShort<T, A>
-    extends AbstractComposedExpression<T, A, ToShort<A>>
-    implements ToShort<T> {
-        ComposedToShort(Function<T, A> first, ToShort<A> aToShort) {
-            super(first, aToShort);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToShortNullable<T> composeToShortNullable(Function<T, A> before, ToShortNullable<A> after) {
+        return new ComposeToShort<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToShort<T, A, AFTER extends ToShortFunction<A> & Expression<A>>
+        implements ComposedExpression<T, A>, ToShortNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToShort(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
         }
 
         @Override
-        public short applyAsShort(T object) {
-            return second.applyAsShort(first.apply(object));
+        public Function<T, A> firstStep() {
+            return before;
         }
 
         @Override
-        public ToDouble<T> mapToDouble(ShortToDoubleFunction operator) {
-            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
-        public ToShort<T> map(ShortUnaryOperator operator) {
-            return new ComposedToShort<>(first, second.map(operator));
+        public short applyAsShort(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return after.applyAsShort(intermediate);
         }
 
         @Override
-        public ToShort<T> negate() {
-            return new ComposedToShort<>(first, second.negate());
-        }
-
-        @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
-        }
-
-        @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
-        }
-
-        @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToShort<T> abs() {
-            return new ComposedToShort<>(first, second.abs());
-        }
-
-        @Override
-        public ToByte<T> sign() {
-            return new ComposedToByte<>(first, second.sign());
-        }
-
-        @Override
-        public ToDouble<T> sqrt() {
-            return new ComposedToDouble<>(first, second.sqrt());
-        }
-
-        @Override
-        public ToDouble<T> pow(int power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> pow(double power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToInt<T> plus(byte other) {
-            return new ComposedToInt<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToInt<T> plus(int other) {
-            return new ComposedToInt<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToLong<T> plus(long other) {
-            return new ComposedToLong<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(double other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToInt<T> minus(byte other) {
-            return new ComposedToInt<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToInt<T> minus(int other) {
-            return new ComposedToInt<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToLong<T> minus(long other) {
-            return new ComposedToLong<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(double other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToInt<T> multiply(byte other) {
-            return new ComposedToInt<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToInt<T> multiply(int other) {
-            return new ComposedToInt<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToLong<T> multiply(long other) {
-            return new ComposedToLong<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(double other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> divide(int divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(long divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(double divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
+        public Short apply(T object) {
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.applyAsShort(intermediate);
         }
     }
 
@@ -359,157 +169,69 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToInt<T>
-    composeToInt(Function<T, A> first, ToInt<A> second) {
-        return new ComposedToInt<>(first, second);
+    public static <T, A> ToIntNullable<T> composeToInt(Function<T, A> before, ToInt<A> after) {
+        return new ComposeToInt<>(before, after);
     }
 
-    private final static class ComposedToInt<T, A>
-    extends AbstractComposedExpression<T, A, ToInt<A>>
-    implements ToInt<T> {
-        ComposedToInt(Function<T, A> first, ToInt<A> aToInt) {
-            super(first, aToInt);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToIntNullable<T> composeToIntNullable(Function<T, A> before, ToIntNullable<A> after) {
+        return new ComposeToInt<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToInt<T, A, AFTER extends ToIntFunction<A> & Expression<A>>
+        implements ComposedExpression<T, A>, ToIntNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToInt(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
         }
 
         @Override
-        public int applyAsInt(T object) {
-            return second.applyAsInt(first.apply(object));
+        public Function<T, A> firstStep() {
+            return before;
         }
 
         @Override
-        public ToDouble<T> mapToDouble(IntToDoubleFunction operator) {
-            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
-        public ToInt<T> map(IntUnaryOperator operator) {
-            return new ComposedToInt<>(first, second.map(operator));
+        public int applyAsInt(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return after.applyAsInt(intermediate);
         }
 
         @Override
-        public ToInt<T> negate() {
-            return new ComposedToInt<>(first, second.negate());
-        }
-
-        @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
-        }
-
-        @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
-        }
-
-        @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToInt<T> abs() {
-            return new ComposedToInt<>(first, second.abs());
-        }
-
-        @Override
-        public ToByte<T> sign() {
-            return new ComposedToByte<>(first, second.sign());
-        }
-
-        @Override
-        public ToDouble<T> sqrt() {
-            return new ComposedToDouble<>(first, second.sqrt());
-        }
-
-        @Override
-        public ToDouble<T> pow(int power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> pow(double power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToInt<T> plus(byte other) {
-            return new ComposedToInt<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToInt<T> plus(int other) {
-            return new ComposedToInt<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToLong<T> plus(long other) {
-            return new ComposedToLong<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(double other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToInt<T> minus(byte other) {
-            return new ComposedToInt<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToInt<T> minus(int other) {
-            return new ComposedToInt<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToLong<T> minus(long other) {
-            return new ComposedToLong<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(double other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToInt<T> multiply(byte other) {
-            return new ComposedToInt<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToInt<T> multiply(int other) {
-            return new ComposedToInt<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToLong<T> multiply(long other) {
-            return new ComposedToLong<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(double other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> divide(int divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(long divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(double divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
+        public Integer apply(T object) {
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.applyAsInt(intermediate);
         }
     }
 
@@ -517,157 +239,69 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToLong<T>
-    composeToLong(Function<T, A> first, ToLong<A> second) {
-        return new ComposedToLong<>(first, second);
+    public static <T, A> ToLongNullable<T> composeToLong(Function<T, A> before, ToLong<A> after) {
+        return new ComposeToLong<>(before, after);
     }
 
-    private final static class ComposedToLong<T, A>
-    extends AbstractComposedExpression<T, A, ToLong<A>>
-    implements ToLong<T> {
-        ComposedToLong(Function<T, A> first, ToLong<A> aToLong) {
-            super(first, aToLong);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToLongNullable<T> composeToLongNullable(Function<T, A> before, ToLongNullable<A> after) {
+        return new ComposeToLong<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToLong<T, A, AFTER extends ToLongFunction<A> & Expression<A>>
+        implements ComposedExpression<T, A>, ToLongNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToLong(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
         }
 
         @Override
-        public long applyAsLong(T object) {
-            return second.applyAsLong(first.apply(object));
+        public Function<T, A> firstStep() {
+            return before;
         }
 
         @Override
-        public ToDouble<T> mapToDouble(LongToDoubleFunction operator) {
-            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
-        public ToLong<T> map(LongUnaryOperator operator) {
-            return new ComposedToLong<>(first, second.map(operator));
+        public long applyAsLong(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return after.applyAsLong(intermediate);
         }
 
         @Override
-        public ToLong<T> negate() {
-            return new ComposedToLong<>(first, second.negate());
-        }
-
-        @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
-        }
-
-        @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
-        }
-
-        @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToLong<T> abs() {
-            return new ComposedToLong<>(first, second.abs());
-        }
-
-        @Override
-        public ToByte<T> sign() {
-            return new ComposedToByte<>(first, second.sign());
-        }
-
-        @Override
-        public ToDouble<T> sqrt() {
-            return new ComposedToDouble<>(first, second.sqrt());
-        }
-
-        @Override
-        public ToDouble<T> pow(int power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> pow(double power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToLong<T> plus(byte other) {
-            return new ComposedToLong<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToLong<T> plus(int other) {
-            return new ComposedToLong<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToLong<T> plus(long other) {
-            return new ComposedToLong<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(double other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToLong<T> minus(byte other) {
-            return new ComposedToLong<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToLong<T> minus(int other) {
-            return new ComposedToLong<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToLong<T> minus(long other) {
-            return new ComposedToLong<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(double other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToLong<T> multiply(byte other) {
-            return new ComposedToLong<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToLong<T> multiply(int other) {
-            return new ComposedToLong<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToLong<T> multiply(long other) {
-            return new ComposedToLong<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(double other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> divide(int divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(long divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(double divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
+        public Long apply(T object) {
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.applyAsLong(intermediate);
         }
     }
 
@@ -675,157 +309,69 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToFloat<T>
-    composeToFloat(Function<T, A> first, ToFloat<A> second) {
-        return new ComposedToFloat<>(first, second);
+    public static <T, A> ToFloatNullable<T> composeToFloat(Function<T, A> before, ToFloat<A> after) {
+        return new ComposeToFloat<>(before, after);
     }
 
-    private final static class ComposedToFloat<T, A>
-    extends AbstractComposedExpression<T, A, ToFloat<A>>
-    implements ToFloat<T> {
-        ComposedToFloat(Function<T, A> first, ToFloat<A> aToFloat) {
-            super(first, aToFloat);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToFloatNullable<T> composeToFloatNullable(Function<T, A> before, ToFloatNullable<A> after) {
+        return new ComposeToFloat<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToFloat<T, A, AFTER extends ToFloatFunction<A> & Expression<A>>
+        implements ComposedExpression<T, A>, ToFloatNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToFloat(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
         }
 
         @Override
-        public float applyAsFloat(T object) {
-            return second.applyAsFloat(first.apply(object));
+        public Function<T, A> firstStep() {
+            return before;
         }
 
         @Override
-        public ToDouble<T> mapToDouble(FloatToDoubleFunction operator) {
-            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
-        public ToFloat<T> map(FloatUnaryOperator operator) {
-            return new ComposedToFloat<>(first, second.map(operator));
+        public float applyAsFloat(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return after.applyAsFloat(intermediate);
         }
 
         @Override
-        public ToFloat<T> negate() {
-            return new ComposedToFloat<>(first, second.negate());
-        }
-
-        @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
-        }
-
-        @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
-        }
-
-        @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToFloat<T> abs() {
-            return new ComposedToFloat<>(first, second.abs());
-        }
-
-        @Override
-        public ToByte<T> sign() {
-            return new ComposedToByte<>(first, second.sign());
-        }
-
-        @Override
-        public ToDouble<T> sqrt() {
-            return new ComposedToDouble<>(first, second.sqrt());
-        }
-
-        @Override
-        public ToDouble<T> pow(int power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> pow(double power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToFloat<T> plus(byte other) {
-            return new ComposedToFloat<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToFloat<T> plus(int other) {
-            return new ComposedToFloat<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(long other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(double other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToFloat<T> minus(byte other) {
-            return new ComposedToFloat<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToFloat<T> minus(int other) {
-            return new ComposedToFloat<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(long other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(double other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToFloat<T> multiply(byte other) {
-            return new ComposedToFloat<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToFloat<T> multiply(int other) {
-            return new ComposedToFloat<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(long other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(double other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> divide(int divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(long divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(double divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
+        public Float apply(T object) {
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.applyAsFloat(intermediate);
         }
     }
 
@@ -833,152 +379,69 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToDouble<T>
-    composeToDouble(Function<T, A> first, ToDouble<A> second) {
-        return new ComposedToDouble<>(first, second);
+    public static <T, A> ToDoubleNullable<T> composeToDouble(Function<T, A> before, ToDouble<A> after) {
+        return new ComposeToDouble<>(before, after);
     }
 
-    private final static class ComposedToDouble<T, A>
-    extends AbstractComposedExpression<T, A, ToDouble<A>>
-    implements ToDouble<T> {
-        ComposedToDouble(Function<T, A> first, ToDouble<A> aToDouble) {
-            super(first, aToDouble);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToDoubleNullable<T> composeToDoubleNullable(Function<T, A> before, ToDoubleNullable<A> after) {
+        return new ComposeToDouble<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToDouble<T, A, AFTER extends ToDoubleFunction<A> & Expression<A>>
+        implements ComposedExpression<T, A>, ToDoubleNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToDouble(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
         }
 
         @Override
-        public double applyAsDouble(T object) {
-            return second.applyAsDouble(first.apply(object));
+        public Function<T, A> firstStep() {
+            return before;
         }
 
         @Override
-        public ToDouble<T> map(DoubleUnaryOperator operator) {
-            return new ComposedToDouble<>(first, second.map(operator));
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
-        public ToDouble<T> negate() {
-            return new ComposedToDouble<>(first, second.negate());
+        public double applyAsDouble(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return after.applyAsDouble(intermediate);
         }
 
         @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
-        }
-
-        @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
-        }
-
-        @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToDouble<T> abs() {
-            return new ComposedToDouble<>(first, second.abs());
-        }
-
-        @Override
-        public ToByte<T> sign() {
-            return new ComposedToByte<>(first, second.sign());
-        }
-
-        @Override
-        public ToDouble<T> sqrt() {
-            return new ComposedToDouble<>(first, second.sqrt());
-        }
-
-        @Override
-        public ToDouble<T> pow(int power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> pow(double power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> plus(byte other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(int other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(long other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(double other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(byte other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(int other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(long other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(double other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(byte other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(int other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(long other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(double other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> divide(int divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(long divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(double divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
+        public Double apply(T object) {
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.applyAsDouble(intermediate);
         }
     }
 
@@ -986,57 +449,69 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToChar<T>
-    composeToChar(Function<T, A> first, ToChar<A> second) {
-        return new ComposedToChar<>(first, second);
+    public static <T, A> ToBooleanNullable<T> composeToBoolean(Function<T, A> before, ToBoolean<A> after) {
+        return new ComposeToBoolean<>(before, after);
     }
 
-    private final static class ComposedToChar<T, A>
-    extends AbstractComposedExpression<T, A, ToChar<A>>
-    implements ToChar<T> {
-        ComposedToChar(Function<T, A> first, ToChar<A> aToChar) {
-            super(first, aToChar);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToBooleanNullable<T> composeToBooleanNullable(Function<T, A> before, ToBooleanNullable<A> after) {
+        return new ComposeToBoolean<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToBoolean<T, A, AFTER extends ToBooleanFunction<A> & Expression<A>>
+        implements ComposedExpression<T, A>, ToBooleanNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToBoolean(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
         }
 
         @Override
-        public char applyAsChar(T object) {
-            return second.applyAsChar(first.apply(object));
+        public Function<T, A> firstStep() {
+            return before;
         }
 
         @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
+        public boolean applyAsBoolean(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return after.applyAsBoolean(intermediate);
         }
 
         @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToChar<T> map(CharUnaryOperator operator) {
-            return new ComposedToChar<>(first, second.map(operator));
-        }
-
-        @Override
-        public ToChar<T> toUpperCase() {
-            return new ComposedToChar<>(first, second.toUpperCase());
-        }
-
-        @Override
-        public ToChar<T> toLowerCase() {
-            return new ComposedToChar<>(first, second.toLowerCase());
+        public Boolean apply(T object) {
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.applyAsBoolean(intermediate);
         }
     }
 
@@ -1044,52 +519,69 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToBoolean<T>
-    composeToBoolean(Function<T, A> first, ToBoolean<A> second) {
-        return new ComposedToBoolean<>(first, second);
+    public static <T, A> ToCharNullable<T> composeToChar(Function<T, A> before, ToChar<A> after) {
+        return new ComposeToChar<>(before, after);
     }
 
-    private final static class ComposedToBoolean<T, A>
-    extends AbstractComposedExpression<T, A, ToBoolean<A>>
-    implements ToBoolean<T> {
-        ComposedToBoolean(Function<T, A> first, ToBoolean<A> aToBoolean) {
-            super(first, aToBoolean);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToCharNullable<T> composeToCharNullable(Function<T, A> before, ToCharNullable<A> after) {
+        return new ComposeToChar<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToChar<T, A, AFTER extends ToCharFunction<A> & Expression<A>>
+    implements ComposedExpression<T, A>, ToCharNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToChar(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
         }
 
         @Override
-        public boolean applyAsBoolean(T object) {
-            return second.applyAsBoolean(first.apply(object));
+        public Function<T, A> firstStep() {
+            return before;
         }
 
         @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
+        public char applyAsChar(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return after.applyAsChar(intermediate);
         }
 
         @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToBoolean<T> map(BooleanUnaryOperator operator) {
-            return new ComposedToBoolean<>(first, second.map(operator));
-        }
-
-        @Override
-        public ToDouble<T> mapToDouble(BooleanToDoubleFunction operator) {
-            return new ComposedToDouble<>(first, second.mapToDouble(operator));
+        public Character apply(T object) {
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.applyAsChar(intermediate);
         }
     }
 
@@ -1097,42 +589,63 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToString<T>
-    composeToString(Function<T, A> first, ToString<A> second) {
-        return new ComposedToString<>(first, second);
+    public static <T, A> ToStringNullable<T> composeToString(Function<T, A> before, ToString<A> after) {
+        return new ComposeToString<>(before, after);
     }
 
-    private final static class ComposedToString<T, A>
-    extends AbstractComposedExpression<T, A, ToString<A>>
-    implements ToString<T> {
-        ComposedToString(Function<T, A> first, ToString<A> aToString) {
-            super(first, aToString);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToStringNullable<T> composeToStringNullable(Function<T, A> before, ToStringNullable<A> after) {
+        return new ComposeToString<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToString<T, A, AFTER extends Function<A, String> & Expression<A>>
+    implements ComposedExpression<T, A>, ToStringNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToString(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
+        }
+
+        @Override
+        public Function<T, A> firstStep() {
+            return before;
+        }
+
+        @Override
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
         public String apply(T object) {
-            return second.apply(first.apply(object));
-        }
-
-        @Override
-        public ToString<T> map(UnaryOperator<String> mapper) {
-            return new ComposedToString<>(first, second.map(mapper));
-        }
-
-        @Override
-        public ToString<T> toUpperCase() {
-            return new ComposedToString<>(first, second.toUpperCase());
-        }
-
-        @Override
-        public ToString<T> toLowerCase() {
-            return new ComposedToString<>(first, second.toLowerCase());
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.apply(intermediate);
         }
     }
 
@@ -1140,157 +653,63 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToBigDecimal<T>
-    composeToBigDecimal(Function<T, A> first, ToBigDecimal<A> second) {
-        return new ComposedToBigDecimal<>(first, second);
+    public static <T, A> ToBigDecimalNullable<T> composeToBigDecimal(Function<T, A> before, ToBigDecimal<A> after) {
+        return new ComposeToBigDecimal<>(before, after);
     }
 
-    private final static class ComposedToBigDecimal<T, A>
-    extends AbstractComposedExpression<T, A, ToBigDecimal<A>>
-    implements ToBigDecimal<T> {
-        ComposedToBigDecimal(Function<T, A> first, ToBigDecimal<A> aToBigDecimal) {
-            super(first, aToBigDecimal);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A> ToBigDecimalNullable<T> composeToBigDecimalNullable(Function<T, A> before, ToBigDecimalNullable<A> after) {
+        return new ComposeToBigDecimal<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToBigDecimal<T, A, AFTER extends Function<A, BigDecimal> & Expression<A>>
+        implements ComposedExpression<T, A>, ToBigDecimalNullable<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToBigDecimal(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
+        }
+
+        @Override
+        public Function<T, A> firstStep() {
+            return before;
+        }
+
+        @Override
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
         public BigDecimal apply(T object) {
-            return second.apply(first.apply(object));
-        }
-
-        @Override
-        public ToDouble<T> asDouble() {
-            return new ComposedToDouble<>(first, second.asDouble());
-        }
-
-        @Override
-        public ToInt<T> asInt() {
-            return new ComposedToInt<>(first, second.asInt());
-        }
-
-        @Override
-        public ToLong<T> asLong() {
-            return new ComposedToLong<>(first, second.asLong());
-        }
-
-        @Override
-        public ToBigDecimal<T> abs() {
-            return new ComposedToBigDecimal<>(first, second.abs());
-        }
-
-        @Override
-        public ToByte<T> sign() {
-            return new ComposedToByte<>(first, second.sign());
-        }
-
-        @Override
-        public ToDouble<T> sqrt() {
-            return new ComposedToDouble<>(first, second.sqrt());
-        }
-
-        @Override
-        public ToBigDecimal<T> negate() {
-            return new ComposedToBigDecimal<>(first, second.negate());
-        }
-
-        @Override
-        public ToDouble<T> pow(int power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> pow(double power) {
-            return new ComposedToDouble<>(first, second.pow(power));
-        }
-
-        @Override
-        public ToDouble<T> plus(byte other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(int other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(long other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> plus(double other) {
-            return new ComposedToDouble<>(first, second.plus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(byte other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(int other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(long other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> minus(double other) {
-            return new ComposedToDouble<>(first, second.minus(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(byte other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(int other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(long other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> multiply(double other) {
-            return new ComposedToDouble<>(first, second.multiply(other));
-        }
-
-        @Override
-        public ToDouble<T> divide(int divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(long divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToDouble<T> divide(double divisor) {
-            return new ComposedToDouble<>(first, second.divide(divisor));
-        }
-
-        @Override
-        public ToBigDecimal<T> map(UnaryOperator<BigDecimal> mapper) {
-            return new ComposedToBigDecimal<>(first, second.map(mapper));
-        }
-
-        @Override
-        public ToDouble<T> mapToDouble(ToDoubleFunction<BigDecimal> mapper) {
-            return new ComposedToDouble<>(first, second.mapToDouble(mapper));
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.apply(intermediate);
         }
     }
 
@@ -1298,569 +717,70 @@ public final class ComposedUtil {
      * Returns a new expression that first applies the {@code first} function
      * and then passes the result to the {@code second} expression.
      *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
      * @param <T>  the type of the initial input
      * @param <A>  the type returned by {@code first}
-     * @param <E>  the type of the enum
      * @return  the composed expression
      */
-    public static <T, A, E extends Enum<E>> ToEnum<T, E>
-    composeToEnum(Function<T, A> first, ToEnum<A, E> second) {
-        return new ComposedToEnum<>(first, second);
+    public static <T, A, E extends Enum<E>> ToEnumNullable<T, E> composeToEnum(Function<T, A> before, ToEnum<A, E> after) {
+        return new ComposeToEnum<>(before, after, after.enumClass());
     }
 
-    private final static class ComposedToEnum<T, A, E extends Enum<E>>
-    extends AbstractComposedExpression<T, A, ToEnum<A, E>>
-    implements ToEnum<T, E> {
-        ComposedToEnum(Function<T, A> first, ToEnum<A, E> aToEnum) {
-            super(first, aToEnum);
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
+    public static <T, A, E extends Enum<E>> ToEnumNullable<T, E> composeToEnumNullable(Function<T, A> before, ToEnumNullable<A, E> after) {
+        return new ComposeToEnum<>(before, after, after.enumClass());
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToEnum<T, A, E extends Enum<E>, AFTER extends Function<A, E> & Expression<A>>
+    implements ComposedExpression<T, A>, ToEnumNullable<T, E> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+        private final Class<E> enumClass;
+
+        ComposeToEnum(Function<T, A> before, AFTER after, Class<E> enumClass) {
+            this.before    = requireNonNull(before);
+            this.after     = requireNonNull(after);
+            this.enumClass = requireNonNull(enumClass);
         }
 
         @Override
         public Class<E> enumClass() {
-            return second.enumClass();
+            return enumClass;
+        }
+
+        @Override
+        public Function<T, A> firstStep() {
+            return before;
+        }
+
+        @Override
+        public AFTER secondStep() {
+            return after;
         }
 
         @Override
         public E apply(T object) {
-            return second.apply(first.apply(object));
-        }
-
-        @Override
-        public ToInt<T> asOrdinal() {
-            return new ComposedToInt<>(first, second.asOrdinal());
-        }
-
-        @Override
-        public ToString<T> asName() {
-            return new ComposedToString<>(first, second.asName());
-        }
-
-        @Override
-        public ToEnum<T, E> map(UnaryOperator<E> mapper) {
-            return new ComposedToEnum<>(first, second.map(mapper));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToByteNullable<T>
-    composeNullable(Function<T, A> first, ToByteNullable<A> second) {
-        return new ComposedToByteNullable<>(first, second);
-    }
-
-    private final static class ComposedToByteNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Byte, ToByte<T>, ToByte<A>, ToByteNullable<A>>
-    implements ToByteNullable<T> {
-        ComposedToByteNullable(Function<T, A> first, ToByteNullable<A> aToByte) {
-            super(first, aToByte);
-        }
-
-        @Override
-        public ToByte<T> orThrow() {
-            return new ComposedToByte<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToByte<T> orElse(Byte value) {
-            return new ComposedToByte<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToShortNullable<T>
-    composeNullable(Function<T, A> first, ToShortNullable<A> second) {
-        return new ComposedToShortNullable<>(first, second);
-    }
-
-    private final static class ComposedToShortNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Short, ToShort<T>, ToShort<A>, ToShortNullable<A>>
-    implements ToShortNullable<T> {
-        ComposedToShortNullable(Function<T, A> first, ToShortNullable<A> aToShort) {
-            super(first, aToShort);
-        }
-
-        @Override
-        public ToShort<T> orThrow() {
-            return new ComposedToShort<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToShort<T> orElse(Short value) {
-            return new ComposedToShort<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToIntNullable<T>
-    composeNullable(Function<T, A> first, ToIntNullable<A> second) {
-        return new ComposedToIntNullable<>(first, second);
-    }
-
-    private final static class ComposedToIntNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Integer, ToInt<T>, ToInt<A>, ToIntNullable<A>>
-    implements ToIntNullable<T> {
-        ComposedToIntNullable(Function<T, A> first, ToIntNullable<A> aToInt) {
-            super(first, aToInt);
-        }
-
-        @Override
-        public ToInt<T> orThrow() {
-            return new ComposedToInt<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToInt<T> orElse(Integer value) {
-            return new ComposedToInt<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToLongNullable<T>
-    composeNullable(Function<T, A> first, ToLongNullable<A> second) {
-        return new ComposedToLongNullable<>(first, second);
-    }
-
-    private final static class ComposedToLongNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Long, ToLong<T>, ToLong<A>, ToLongNullable<A>>
-    implements ToLongNullable<T> {
-        ComposedToLongNullable(Function<T, A> first, ToLongNullable<A> aToLong) {
-            super(first, aToLong);
-        }
-
-        @Override
-        public ToLong<T> orThrow() {
-            return new ComposedToLong<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToLong<T> orElse(Long value) {
-            return new ComposedToLong<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToFloatNullable<T>
-    composeNullable(Function<T, A> first, ToFloatNullable<A> second) {
-        return new ComposedToFloatNullable<>(first, second);
-    }
-
-    private final static class ComposedToFloatNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Float, ToFloat<T>, ToFloat<A>, ToFloatNullable<A>>
-    implements ToFloatNullable<T> {
-        ComposedToFloatNullable(Function<T, A> first, ToFloatNullable<A> aToFloat) {
-            super(first, aToFloat);
-        }
-
-        @Override
-        public ToFloat<T> orThrow() {
-            return new ComposedToFloat<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToFloat<T> orElse(Float value) {
-            return new ComposedToFloat<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToDoubleNullable<T>
-    composeNullable(Function<T, A> first, ToDoubleNullable<A> second) {
-        return new ComposedToDoubleNullable<>(first, second);
-    }
-
-    private final static class ComposedToDoubleNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Double, ToDouble<T>, ToDouble<A>, ToDoubleNullable<A>>
-    implements ToDoubleNullable<T> {
-        ComposedToDoubleNullable(Function<T, A> first, ToDoubleNullable<A> aToDouble) {
-            super(first, aToDouble);
-        }
-
-        @Override
-        public ToDouble<T> orThrow() {
-            return new ComposedToDouble<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToDouble<T> orElse(Double value) {
-            return new ComposedToDouble<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToCharNullable<T>
-    composeNullable(Function<T, A> first, ToCharNullable<A> second) {
-        return new ComposedToCharNullable<>(first, second);
-    }
-
-    private final static class ComposedToCharNullable<T, A>
-        extends AbstractComposedNullableExpression<T, A, Character, ToChar<T>, ToChar<A>, ToCharNullable<A>>
-        implements ToCharNullable<T> {
-        ComposedToCharNullable(Function<T, A> first, ToCharNullable<A> aToChar) {
-            super(first, aToChar);
-        }
-
-        @Override
-        public ToChar<T> orThrow() {
-            return new ComposedToChar<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToChar<T> orElse(Character value) {
-            return new ComposedToChar<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToBooleanNullable<T>
-    composeNullable(Function<T, A> first, ToBooleanNullable<A> second) {
-        return new ComposedToBooleanNullable<>(first, second);
-    }
-
-    private final static class ComposedToBooleanNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Boolean, ToBoolean<T>, ToBoolean<A>, ToBooleanNullable<A>>
-    implements ToBooleanNullable<T> {
-        ComposedToBooleanNullable(Function<T, A> first, ToBooleanNullable<A> aToBoolean) {
-            super(first, aToBoolean);
-        }
-
-        @Override
-        public ToBoolean<T> orThrow() {
-            return new ComposedToBoolean<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToBoolean<T> orElse(Boolean value) {
-            return new ComposedToBoolean<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToStringNullable<T>
-    composeNullable(Function<T, A> first, ToStringNullable<A> second) {
-        return new ComposedToStringNullable<>(first, second);
-    }
-
-    private final static class ComposedToStringNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, String, ToString<T>, ToString<A>, ToStringNullable<A>>
-    implements ToStringNullable<T> {
-        ComposedToStringNullable(Function<T, A> first, ToStringNullable<A> aToString) {
-            super(first, aToString);
-        }
-
-        @Override
-        public ToString<T> orThrow() {
-            return new ComposedToString<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToString<T> orElse(String value) {
-            return new ComposedToString<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @return  the composed expression
-     */
-    public static <T, A> ToBigDecimalNullable<T>
-    composeNullable(Function<T, A> first, ToBigDecimalNullable<A> second) {
-        return new ComposedToBigDecimalNullable<>(first, second);
-    }
-
-    private final static class ComposedToBigDecimalNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, BigDecimal, ToBigDecimal<T>, ToBigDecimal<A>, ToBigDecimalNullable<A>>
-    implements ToBigDecimalNullable<T> {
-        ComposedToBigDecimalNullable(Function<T, A> first, ToBigDecimalNullable<A> aToBigDecimal) {
-            super(first, aToBigDecimal);
-        }
-
-        @Override
-        public ToBigDecimal<T> orThrow() {
-            return new ComposedToBigDecimal<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToBigDecimal<T> orElse(BigDecimal value) {
-            return new ComposedToBigDecimal<>(first, second.orElse(value));
-        }
-    }
-
-    /**
-     * Returns a new expression that first applies the {@code first} function
-     * and then passes the result to the {@code second} expression.
-     *
-     * @param first   the first function to apply
-     * @param second  the expression to apply to the result
-     * @param <T>  the type of the initial input
-     * @param <A>  the type returned by {@code first}
-     * @param <E>  the enum type
-     * @return  the composed expression
-     */
-    public static <T, A, E extends Enum<E>> ToEnumNullable<T, E>
-    composeNullable(Function<T, A> first, ToEnumNullable<A, E> second) {
-        return new ComposedToEnumNullable<>(first, second);
-    }
-
-    private final static class ComposedToEnumNullable<T, A, E extends Enum<E>>
-    extends AbstractComposedNullableExpression<T, A, E,
-        ToEnum<T, E>, ToEnum<A, E>, ToEnumNullable<A, E>>
-    implements ToEnumNullable<T, E> {
-        ComposedToEnumNullable(Function<T, A> first, ToEnumNullable<A, E> aToEnum) {
-            super(first, aToEnum);
-        }
-
-        @Override
-        public Class<E> enumClass() {
-            return second.enumClass();
-        }
-
-        @Override
-        public ToEnum<T, E> orThrow() {
-            return new ComposedToEnum<>(first, second.orThrow());
-        }
-
-        @Override
-        public ToEnum<T, E> orElse(E value) {
-            return new ComposedToEnum<>(first, second.orElse(value));
-        }
-    }
-
-    private abstract static class AbstractComposedNullableExpression
-        <T, A, R,
-            T_EXPR extends Expression<T>,
-            A_EXPR extends Expression<A>,
-            SECOND extends ToNullable<A, R, A_EXPR>>
-    implements ComposedExpression<T, A>, ToNullable<T, R, T_EXPR> {
-
-        protected final Function<T, A> first;
-        protected final SECOND second;
-
-        AbstractComposedNullableExpression(Function<T, A> first, SECOND second) {
-            this.first  = requireNonNull(first);
-            this.second = requireNonNull(second);
-        }
-
-        @Override
-        public final R apply(T t) {
-            return second.apply(first.apply(t));
-        }
-
-        @Override
-        public IsNull<T, R> isNull() {
-            return new ComposedIsNull<>(this, first);
-        }
-
-        @Override
-        public IsNotNull<T, R> isNotNull() {
-            return new ComposedIsNotNull<>(this, first);
-        }
-
-        @Override
-        public final boolean isNull(T object) {
-            return second.isNull(first.apply(object));
-        }
-
-        @Override
-        public final boolean isNotNull(T object) {
-            return second.isNotNull(first.apply(object));
-        }
-
-        @Override
-        public final Function<T, A> firstStep() {
-            return first;
-        }
-
-        @Override
-        public final Expression<A> secondStep() {
-            return second;
-        }
-    }
-
-    private abstract static class AbstractComposedExpression<T, A, SECOND extends Expression<A>>
-    implements ComposedExpression<T, A> {
-
-        protected final Function<T, A> first;
-        protected final SECOND second;
-
-        AbstractComposedExpression(Function<T, A> first, SECOND second) {
-            this.first  = requireNonNull(first);
-            this.second = requireNonNull(second);
-        }
-
-        @Override
-        public final Function<T, A> firstStep() {
-            return first;
-        }
-
-        @Override
-        public final Expression<A> secondStep() {
-            return second;
-        }
-    }
-
-    private final static class ComposedIsNull<T, A, R, NON_NULLABLE extends Expression<T>>
-    implements ComposedPredicate<T, A>, IsNull<T, R> {
-
-        private final ToNullable<T, R, NON_NULLABLE> expression;
-        private final Function<T, A> innerMapper;
-        private final Predicate<A> innerPredicate;
-
-        ComposedIsNull(ToNullable<T, R, NON_NULLABLE> expression, Function<T, A> innerMapper) {
-            this.expression     = requireNonNull(expression);
-            this.innerMapper    = requireNonNull(innerMapper);
-            this.innerPredicate = Objects::isNull;
-        }
-
-        @Override
-        public IsNotNull<T, R> negate() {
-            return new ComposedIsNotNull<>(expression, innerMapper);
-        }
-
-        @Override
-        public Function<T, A> innerMapper() {
-            return innerMapper;
-        }
-
-        @Override
-        public Predicate<A> innerPredicate() {
-            return innerPredicate;
-        }
-
-        @Override
-        public ToNullable<T, R, NON_NULLABLE> expression() {
-            return expression;
-        }
-
-        @Override
-        public boolean test(T t) {
-            return innerMapper.apply(t) == null;
-        }
-    }
-
-    private final static class ComposedIsNotNull<T, A, R, NON_NULLABLE extends Expression<T>>
-    implements ComposedPredicate<T, A>, IsNotNull<T, R> {
-
-        private final ToNullable<T, R, NON_NULLABLE> expression;
-        private final Function<T, A> innerMapper;
-        private final Predicate<A> innerPredicate;
-
-        ComposedIsNotNull(ToNullable<T, R, NON_NULLABLE> expression, Function<T, A> innerMapper) {
-            this.expression     = requireNonNull(expression);
-            this.innerMapper    = requireNonNull(innerMapper);
-            this.innerPredicate = Objects::nonNull;
-        }
-
-        @Override
-        public IsNull<T, R> negate() {
-            return new ComposedIsNull<>(expression, innerMapper);
-        }
-
-        @Override
-        public Function<T, A> innerMapper() {
-            return innerMapper;
-        }
-
-        @Override
-        public Predicate<A> innerPredicate() {
-            return innerPredicate;
-        }
-
-        @Override
-        public ToNullable<T, R, NON_NULLABLE> expression() {
-            return expression;
-        }
-
-        @Override
-        public boolean test(T t) {
-            return innerMapper.apply(t) != null;
+            final A intermediate = before.apply(object);
+            if (intermediate == null) return null;
+            return after.apply(intermediate);
         }
     }
 

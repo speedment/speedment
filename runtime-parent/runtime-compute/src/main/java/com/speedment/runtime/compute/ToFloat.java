@@ -319,7 +319,7 @@ extends Expression<T>,
     }
 
     @Override
-    default <V> ToFloat<V> compose(Function<? super V, ? extends T> before) {
+    default <V> ToFloatNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToFloat(casted, this);

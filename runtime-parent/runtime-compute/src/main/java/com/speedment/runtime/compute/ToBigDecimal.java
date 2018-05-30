@@ -317,7 +317,7 @@ extends Expression<T>,
     }
 
     @Override
-    default <V> ToBigDecimal<V> compose(Function<? super V, ? extends T> before) {
+    default <V> ToBigDecimalNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToBigDecimal(casted, this);
