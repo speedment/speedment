@@ -74,7 +74,7 @@ public final class ToLongTest extends AbstractToTest<ToLong<String>> {
     @Test
     public void testCompose() {
         strings().forEach(s -> {
-            final ToLong<String> composed = instance.compose(str -> str + "A");
+            final ToLongNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals((long) mapper.apply(s + "A"), composed.applyAsLong(s));
         });
     }

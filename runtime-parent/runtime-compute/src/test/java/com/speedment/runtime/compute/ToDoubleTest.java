@@ -74,7 +74,7 @@ public final class ToDoubleTest extends AbstractToTest<ToDouble<String>> {
     @Test
     public void testCompose() {
         strings().forEach(s -> {
-            final ToDouble<String> composed = instance.compose(str -> str + "A");
+            final ToDoubleNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals((long) mapper.apply(s + "A"), composed.applyAsDouble(s), EPSILON);
         });
     }

@@ -74,7 +74,7 @@ public final class ToFloatTest extends AbstractToTest<ToFloat<String>> {
     @Test
     public void testCompose() {
         strings().forEach(s -> {
-            final ToFloat<String> composed = instance.compose(str -> str + "A");
+            final ToFloatNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals((long) mapper.apply(s + "A"), composed.applyAsFloat(s), EPSILON);
         });
     }

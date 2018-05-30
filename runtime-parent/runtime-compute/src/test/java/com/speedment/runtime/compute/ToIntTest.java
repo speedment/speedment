@@ -74,7 +74,7 @@ public final class ToIntTest extends AbstractToTest<ToInt<String>> {
     @Test
     public void testCompose() {
         strings().forEach(s -> {
-            final ToInt<String> composed = instance.compose(str -> str + "A");
+            final ToIntNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals((long) mapper.apply(s + "A"), composed.applyAsInt(s));
         });
     }

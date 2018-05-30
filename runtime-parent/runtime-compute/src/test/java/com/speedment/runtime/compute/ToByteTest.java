@@ -74,7 +74,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     @Test
     public void testCompose() {
         strings().forEach(s -> {
-            final ToByte<String> composed = instance.compose(str -> str + "A");
+            final ToByteNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals((long) mapper.apply(s + "A"), composed.applyAsByte(s));
         });
     }
