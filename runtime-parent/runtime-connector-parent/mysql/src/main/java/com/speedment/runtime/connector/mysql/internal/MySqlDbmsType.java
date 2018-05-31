@@ -24,6 +24,7 @@ import com.speedment.runtime.core.db.*;
 
 import java.sql.Driver;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -175,7 +176,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
         }
     }
 
-    private final static class MySqlConnectionUrlGenerator implements ConnectionUrlGenerator {
+    private final class MySqlConnectionUrlGenerator implements ConnectionUrlGenerator {
 
         @Override
         public String from(Dbms dbms) {
@@ -203,15 +204,16 @@ public final class MySqlDbmsType extends AbstractDbmsType {
         }
     }
 
-    private static int driverVersion() {
-        try {
-            return ((Driver) Class.forName(NEW_DRIVER).newInstance()).getMajorVersion();
-        } catch (ReflectiveOperationException e) {
-            try {
-                return ((Driver) Class.forName(OLD_DRIVER).newInstance()).getMajorVersion();
-            } catch (ReflectiveOperationException e2) {
-                throw new SpeedmentException("Error using reflection to read driver version.", e2);
-            }
-        }
+    private int driverVersion() {
+        return
+            Stream.of(
+                driverClass(NEW_DRIVER),
+                driverClass(OLD_DRIVER)
+            )
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .mapToInt(Driver::getMajorVersion)
+            .findFirst()
+            .orElse(5);  // Fallback. There is no driver so we just make up a version
     }
 }
