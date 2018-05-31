@@ -98,7 +98,7 @@ public abstract class AbstractDbmsType implements DbmsType {
                 // Some JavaEE servers, notably Tomcat, runs the driver on the
                 // standard classloader.  This is the reason we need to check an
                 // extra time.
-                return Optional.of(Class.forame(driverName))
+                return Optional.of(Class.forName(driverName))
                     .filter(Driver.class::isInstance)
                     .map(Driver.class::cast);
             } catch (final ClassNotFoundException ex2) {
