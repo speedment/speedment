@@ -17,10 +17,78 @@
 package com.speedment.common.tuple;
 
 import com.speedment.common.tuple.internal.TupleInfiniteDegreeOfNullablesImpl;
-import com.speedment.common.tuple.internal.nullable.*;
-import com.speedment.common.tuple.internal.nullable.mapper.*;
-import com.speedment.common.tuple.nullable.*;
-
+import com.speedment.common.tuple.internal.nullable.Tuple0OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple10OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple11OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple12OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple13OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple14OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple15OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple16OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple17OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple18OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple19OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple1OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple20OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple21OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple22OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple23OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple2OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple3OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple4OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple5OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple6OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple7OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple8OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.Tuple9OfNullablesImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple0OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple10OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple11OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple12OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple13OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple14OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple15OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple16OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple17OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple18OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple19OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple1OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple20OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple21OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple22OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple23OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple2OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple3OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple4OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple5OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple6OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple7OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple8OfNullablesMapperImpl;
+import com.speedment.common.tuple.internal.nullable.mapper.Tuple9OfNullablesMapperImpl;
+import com.speedment.common.tuple.nullable.Tuple0OfNullables;
+import com.speedment.common.tuple.nullable.Tuple10OfNullables;
+import com.speedment.common.tuple.nullable.Tuple11OfNullables;
+import com.speedment.common.tuple.nullable.Tuple12OfNullables;
+import com.speedment.common.tuple.nullable.Tuple13OfNullables;
+import com.speedment.common.tuple.nullable.Tuple14OfNullables;
+import com.speedment.common.tuple.nullable.Tuple15OfNullables;
+import com.speedment.common.tuple.nullable.Tuple16OfNullables;
+import com.speedment.common.tuple.nullable.Tuple17OfNullables;
+import com.speedment.common.tuple.nullable.Tuple18OfNullables;
+import com.speedment.common.tuple.nullable.Tuple19OfNullables;
+import com.speedment.common.tuple.nullable.Tuple1OfNullables;
+import com.speedment.common.tuple.nullable.Tuple20OfNullables;
+import com.speedment.common.tuple.nullable.Tuple21OfNullables;
+import com.speedment.common.tuple.nullable.Tuple22OfNullables;
+import com.speedment.common.tuple.nullable.Tuple23OfNullables;
+import com.speedment.common.tuple.nullable.Tuple2OfNullables;
+import com.speedment.common.tuple.nullable.Tuple3OfNullables;
+import com.speedment.common.tuple.nullable.Tuple4OfNullables;
+import com.speedment.common.tuple.nullable.Tuple5OfNullables;
+import com.speedment.common.tuple.nullable.Tuple6OfNullables;
+import com.speedment.common.tuple.nullable.Tuple7OfNullables;
+import com.speedment.common.tuple.nullable.Tuple8OfNullables;
+import com.speedment.common.tuple.nullable.Tuple9OfNullables;
 import java.util.function.Function;
 
 /**
@@ -2419,7 +2487,7 @@ public final class TuplesOfNullables {
      * Creates and returns a {@link TupleOfNullables} with the given parameters
      * 
      * @param el array of elements to use for the TupleOfNullables
-     * @return a {@link TupleOfNullables} with the given parameters
+     * @return   a {@link TupleOfNullables} with the given parameters
      * 
      * @see TupleOfNullables
      */

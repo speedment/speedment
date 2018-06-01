@@ -118,11 +118,11 @@ public interface MutableTuple3<T0, T1, T2> extends MutableTuple {
     }
     
     /**
-     * Returns the 0th element from this tuple or null if no such element is
-     * present.
+     * Returns the 0th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 0th element from this tuple or null if no such element is
-     *         present.
+     * @return the 0th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T0 getOrNull0() {
         return get0().orElse(null);
@@ -167,11 +167,11 @@ public interface MutableTuple3<T0, T1, T2> extends MutableTuple {
     }
     
     /**
-     * Returns the 1st element from this tuple or null if no such element is
-     * present.
+     * Returns the 1st element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 1st element from this tuple or null if no such element is
-     *         present.
+     * @return the 1st element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T1 getOrNull1() {
         return get1().orElse(null);
@@ -216,11 +216,11 @@ public interface MutableTuple3<T0, T1, T2> extends MutableTuple {
     }
     
     /**
-     * Returns the 2nd element from this tuple or null if no such element is
-     * present.
+     * Returns the 2nd element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 2nd element from this tuple or null if no such element is
-     *         present.
+     * @return the 2nd element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T2 getOrNull2() {
         return get2().orElse(null);

@@ -2415,7 +2415,7 @@ public final class Tuples {
      * Creates and returns a {@link Tuple} with the given parameters
      * 
      * @param el array of elements to use for the Tuple
-     * @return a {@link Tuple} with the given parameters
+     * @return   a {@link Tuple} with the given parameters
      * 
      * @see Tuple
      */

@@ -207,11 +207,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 0th element from this tuple or null if no such element is
-     * present.
+     * Returns the 0th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 0th element from this tuple or null if no such element is
-     *         present.
+     * @return the 0th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T0 getOrNull0() {
         return get0().orElse(null);
@@ -264,11 +264,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 1st element from this tuple or null if no such element is
-     * present.
+     * Returns the 1st element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 1st element from this tuple or null if no such element is
-     *         present.
+     * @return the 1st element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T1 getOrNull1() {
         return get1().orElse(null);
@@ -321,11 +321,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 2nd element from this tuple or null if no such element is
-     * present.
+     * Returns the 2nd element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 2nd element from this tuple or null if no such element is
-     *         present.
+     * @return the 2nd element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T2 getOrNull2() {
         return get2().orElse(null);
@@ -378,11 +378,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 3rd element from this tuple or null if no such element is
-     * present.
+     * Returns the 3rd element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 3rd element from this tuple or null if no such element is
-     *         present.
+     * @return the 3rd element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T3 getOrNull3() {
         return get3().orElse(null);
@@ -435,11 +435,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 4th element from this tuple or null if no such element is
-     * present.
+     * Returns the 4th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 4th element from this tuple or null if no such element is
-     *         present.
+     * @return the 4th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T4 getOrNull4() {
         return get4().orElse(null);
@@ -492,11 +492,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 5th element from this tuple or null if no such element is
-     * present.
+     * Returns the 5th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 5th element from this tuple or null if no such element is
-     *         present.
+     * @return the 5th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T5 getOrNull5() {
         return get5().orElse(null);
@@ -549,11 +549,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 6th element from this tuple or null if no such element is
-     * present.
+     * Returns the 6th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 6th element from this tuple or null if no such element is
-     *         present.
+     * @return the 6th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T6 getOrNull6() {
         return get6().orElse(null);
@@ -606,11 +606,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 7th element from this tuple or null if no such element is
-     * present.
+     * Returns the 7th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 7th element from this tuple or null if no such element is
-     *         present.
+     * @return the 7th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T7 getOrNull7() {
         return get7().orElse(null);
@@ -663,11 +663,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 8th element from this tuple or null if no such element is
-     * present.
+     * Returns the 8th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 8th element from this tuple or null if no such element is
-     *         present.
+     * @return the 8th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T8 getOrNull8() {
         return get8().orElse(null);
@@ -720,11 +720,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 9th element from this tuple or null if no such element is
-     * present.
+     * Returns the 9th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 9th element from this tuple or null if no such element is
-     *         present.
+     * @return the 9th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T9 getOrNull9() {
         return get9().orElse(null);
@@ -777,11 +777,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 10th element from this tuple or null if no such element is
-     * present.
+     * Returns the 10th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 10th element from this tuple or null if no such element is
-     *         present.
+     * @return the 10th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T10 getOrNull10() {
         return get10().orElse(null);
@@ -834,11 +834,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 11st element from this tuple or null if no such element is
-     * present.
+     * Returns the 11st element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 11st element from this tuple or null if no such element is
-     *         present.
+     * @return the 11st element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T11 getOrNull11() {
         return get11().orElse(null);
@@ -891,11 +891,11 @@ public interface Tuple13OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     }
     
     /**
-     * Returns the 12nd element from this tuple or null if no such element is
-     * present.
+     * Returns the 12nd element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 12nd element from this tuple or null if no such element is
-     *         present.
+     * @return the 12nd element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T12 getOrNull12() {
         return get12().orElse(null);

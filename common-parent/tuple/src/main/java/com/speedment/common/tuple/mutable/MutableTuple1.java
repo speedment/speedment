@@ -82,11 +82,11 @@ public interface MutableTuple1<T0> extends MutableTuple {
     }
     
     /**
-     * Returns the 0th element from this tuple or null if no such element is
-     * present.
+     * Returns the 0th element from this tuple or {@code null} if no such
+     * element is present.
      * 
-     * @return the 0th element from this tuple or null if no such element is
-     *         present.
+     * @return the 0th element from this tuple or {@code null} if no such
+     *         element is present.
      */
     default T0 getOrNull0() {
         return get0().orElse(null);
