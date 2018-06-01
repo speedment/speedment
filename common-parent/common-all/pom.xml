@@ -107,7 +107,7 @@
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>mapbuilder</artifactId>
-                <version>${mapstream.version}</version>
+                <version>${mapbuilder.version}</version>
             </dependency>
 
             <dependency>
