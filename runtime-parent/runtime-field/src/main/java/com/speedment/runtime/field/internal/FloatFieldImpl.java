@@ -37,9 +37,9 @@ import com.speedment.runtime.field.method.FloatSetter;
 import com.speedment.runtime.field.method.GetFloat;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Collection;
-import java.util.function.Predicate;
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -165,27 +165,27 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     }
     
     @Override
-    public Predicate<ENTITY> notEqual(Float value) {
+    public SpeedmentPredicate<ENTITY> notEqual(Float value) {
         return new FloatNotEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessOrEqual(Float value) {
+    public SpeedmentPredicate<ENTITY> lessOrEqual(Float value) {
         return new FloatLessOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessThan(Float value) {
+    public SpeedmentPredicate<ENTITY> lessThan(Float value) {
         return new FloatLessThanPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> notBetween(Float start, Float end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(Float start, Float end, Inclusion inclusion) {
         return new FloatNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Collection<Float> values) {
+    public SpeedmentPredicate<ENTITY> notIn(Collection<Float> values) {
         return new FloatNotInPredicate<>(this, collectionToSet(values));
     }
 }

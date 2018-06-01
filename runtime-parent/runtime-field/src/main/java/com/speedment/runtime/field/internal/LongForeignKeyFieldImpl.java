@@ -43,9 +43,9 @@ import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Collection;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
@@ -188,27 +188,27 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public Predicate<ENTITY> notEqual(Long value) {
+    public SpeedmentPredicate<ENTITY> notEqual(Long value) {
         return new LongNotEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessOrEqual(Long value) {
+    public SpeedmentPredicate<ENTITY> lessOrEqual(Long value) {
         return new LongLessOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessThan(Long value) {
+    public SpeedmentPredicate<ENTITY> lessThan(Long value) {
         return new LongLessThanPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> notBetween(Long start, Long end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(Long start, Long end, Inclusion inclusion) {
         return new LongNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Collection<Long> values) {
+    public SpeedmentPredicate<ENTITY> notIn(Collection<Long> values) {
         return new LongNotInPredicate<>(this, collectionToSet(values));
     }
     

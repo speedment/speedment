@@ -43,9 +43,9 @@ import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Collection;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
@@ -188,27 +188,27 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public Predicate<ENTITY> notEqual(Short value) {
+    public SpeedmentPredicate<ENTITY> notEqual(Short value) {
         return new ShortNotEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessOrEqual(Short value) {
+    public SpeedmentPredicate<ENTITY> lessOrEqual(Short value) {
         return new ShortLessOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessThan(Short value) {
+    public SpeedmentPredicate<ENTITY> lessThan(Short value) {
         return new ShortLessThanPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> notBetween(Short start, Short end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(Short start, Short end, Inclusion inclusion) {
         return new ShortNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Collection<Short> values) {
+    public SpeedmentPredicate<ENTITY> notIn(Collection<Short> values) {
         return new ShortNotInPredicate<>(this, collectionToSet(values));
     }
     

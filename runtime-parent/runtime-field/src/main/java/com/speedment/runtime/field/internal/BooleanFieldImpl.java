@@ -26,8 +26,8 @@ import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
 import com.speedment.runtime.field.method.GetBoolean;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.function.Predicate;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -122,7 +122,7 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
     }
     
     @Override
-    public Predicate<ENTITY> notEqual(boolean value) {
+    public SpeedmentPredicate<ENTITY> notEqual(boolean value) {
         return new BooleanNotEqualPredicate<>(this, value);
     }
 }

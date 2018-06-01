@@ -37,9 +37,9 @@ import com.speedment.runtime.field.method.DoubleSetter;
 import com.speedment.runtime.field.method.GetDouble;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Collection;
-import java.util.function.Predicate;
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -165,27 +165,27 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
     }
     
     @Override
-    public Predicate<ENTITY> notEqual(Double value) {
+    public SpeedmentPredicate<ENTITY> notEqual(Double value) {
         return new DoubleNotEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessOrEqual(Double value) {
+    public SpeedmentPredicate<ENTITY> lessOrEqual(Double value) {
         return new DoubleLessOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessThan(Double value) {
+    public SpeedmentPredicate<ENTITY> lessThan(Double value) {
         return new DoubleLessThanPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> notBetween(Double start, Double end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(Double start, Double end, Inclusion inclusion) {
         return new DoubleNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Collection<Double> values) {
+    public SpeedmentPredicate<ENTITY> notIn(Collection<Double> values) {
         return new DoubleNotInPredicate<>(this, collectionToSet(values));
     }
 }

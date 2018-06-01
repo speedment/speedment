@@ -43,9 +43,9 @@ import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.GetChar;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Collection;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
@@ -188,27 +188,27 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public Predicate<ENTITY> notEqual(Character value) {
+    public SpeedmentPredicate<ENTITY> notEqual(Character value) {
         return new CharNotEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessOrEqual(Character value) {
+    public SpeedmentPredicate<ENTITY> lessOrEqual(Character value) {
         return new CharLessOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessThan(Character value) {
+    public SpeedmentPredicate<ENTITY> lessThan(Character value) {
         return new CharLessThanPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> notBetween(Character start, Character end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(Character start, Character end, Inclusion inclusion) {
         return new CharNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Collection<Character> values) {
+    public SpeedmentPredicate<ENTITY> notIn(Collection<Character> values) {
         return new CharNotInPredicate<>(this, collectionToSet(values));
     }
     

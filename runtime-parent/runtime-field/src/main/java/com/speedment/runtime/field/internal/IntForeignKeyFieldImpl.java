@@ -43,9 +43,9 @@ import com.speedment.runtime.field.method.IntGetter;
 import com.speedment.runtime.field.method.IntSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Collection;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
@@ -188,27 +188,27 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public Predicate<ENTITY> notEqual(Integer value) {
+    public SpeedmentPredicate<ENTITY> notEqual(Integer value) {
         return new IntNotEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessOrEqual(Integer value) {
+    public SpeedmentPredicate<ENTITY> lessOrEqual(Integer value) {
         return new IntLessOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> lessThan(Integer value) {
+    public SpeedmentPredicate<ENTITY> lessThan(Integer value) {
         return new IntLessThanPredicate<>(this, value);
     }
     
     @Override
-    public Predicate<ENTITY> notBetween(Integer start, Integer end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(Integer start, Integer end, Inclusion inclusion) {
         return new IntNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Collection<Integer> values) {
+    public SpeedmentPredicate<ENTITY> notIn(Collection<Integer> values) {
         return new IntNotInPredicate<>(this, collectionToSet(values));
     }
     
