@@ -93,7 +93,7 @@ implements CombinedPredicate<ENTITY> {
         }
 
         @Override
-        public boolean test(ENTITY entity) {
+        public boolean applyAsBoolean(ENTITY entity) {
             requireNonNull(entity);
             return stream().allMatch(p -> p.test(entity));
         }
@@ -139,7 +139,7 @@ implements CombinedPredicate<ENTITY> {
         }
 
         @Override
-        public boolean test(ENTITY entity) {
+        public boolean applyAsBoolean(ENTITY entity) {
             requireNonNull(entity);
             return stream().anyMatch(p -> p.test(entity));
         }

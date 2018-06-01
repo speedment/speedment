@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.internal.predicate;
 
 import com.speedment.runtime.field.predicate.CombinedPredicate;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 
 import java.util.function.Predicate;
 
@@ -31,18 +32,18 @@ import static java.util.Objects.requireNonNull;
  * @author  Per Minborg
  * @since   2.1.0
  */
-abstract class AbstractPredicate<T> implements Predicate<T> {
+abstract class AbstractPredicate<T> implements SpeedmentPredicate<T> {
 
     AbstractPredicate() {}
 
     @Override
-    public Predicate<T> and(Predicate<? super T> other) {
+    public SpeedmentPredicate<T> and(Predicate<? super T> other) {
         requireNonNull(other);
         return CombinedPredicate.and(this, other);
     }
 
     @Override
-    public Predicate<T> or(Predicate<? super T> other) {
+    public SpeedmentPredicate<T> or(Predicate<? super T> other) {
         requireNonNull(other);
         return CombinedPredicate.or(this, other);
     }
