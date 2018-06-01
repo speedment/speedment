@@ -29,6 +29,8 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsColumnHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
+
+import java.sql.Driver;
 import java.util.Collections;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -79,25 +81,30 @@ public abstract class AbstractDbmsType implements DbmsType {
     }
 
     protected boolean isSupported(String driverName) {
+        return driverClass(driverName).isPresent();
+    }
+
+    protected Optional<Driver> driverClass(String driverName) {
         requireNonNull(driverName);
         try {
-            Class.forName(
+            return Optional.of(Class.forName(
                 driverName,
                 true,
                 injector.classLoader()
-            );
-            return true;
+            )).filter(Driver.class::isInstance)
+                .map(Driver.class::cast);
         } catch (final ClassNotFoundException ex) {
             try {
-                // Some JavaEE servers, noteabley Tomcat, runs the driver on the
+                // Some JavaEE servers, notably Tomcat, runs the driver on the
                 // standard classloader.  This is the reason we need to check an
                 // extra time.
-                Class.forName(driverName);
-                return true;
+                return Optional.of(Class.forName(driverName))
+                    .filter(Driver.class::isInstance)
+                    .map(Driver.class::cast);
             } catch (final ClassNotFoundException ex2) {
             }
         }
-        return false;
+        return Optional.empty();
     }
 
     @Override
