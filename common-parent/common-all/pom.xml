@@ -51,6 +51,7 @@
         <rest.version>1.0.4</rest.version>
         <lazy.version>1.0.3</lazy.version>
         <mapstream.version>2.3.5</mapstream.version>
+        <mapbuilder.version>1.0.0-SNAPSHOT</mapbuilder.version>
         <mutablestream.version>1.0.0</mutablestream.version>
         <singletonstream.version>1.0.1</singletonstream.version>
         <annotation.version>1.0.0</annotation.version>
@@ -100,6 +101,12 @@
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>mapstream</artifactId>
+                <version>${mapstream.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>mapbuilder</artifactId>
                 <version>${mapstream.version}</version>
             </dependency>
 

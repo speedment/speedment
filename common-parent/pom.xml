@@ -52,6 +52,7 @@
         <module>rest</module>
         <module>lazy</module>
         <module>mapstream</module>
+        <module>mapbuilder</module>
         <module>mutablestream</module>
         <module>singletonstream</module>
         <module>common-all</module>
