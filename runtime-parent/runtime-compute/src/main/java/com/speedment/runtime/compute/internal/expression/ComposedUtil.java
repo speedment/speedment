@@ -455,7 +455,7 @@ public final class ComposedUtil {
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
-    public static <T, A> ToBooleanNullable<T> composeToBoolean(Function<T, A> before, ToBoolean<A> after) {
+    public static <T, A> ToBoolean<T> composeToBoolean(Function<T, A> before, ToBoolean<A> after) {
         return new ComposeToBoolean<>(before, after);
     }
 
@@ -469,8 +469,61 @@ public final class ComposedUtil {
      * @param <A>  the type returned by {@code first}
      * @return  the composed expression
      */
+    public static <T, A> ToBooleanNullable<T> composeToBooleanAsNullable(Function<T, A> before, ToBoolean<A> after) {
+        return new ComposeToBooleanNullable<>(before, after);
+    }
+
+    /**
+     * Returns a new expression that first applies the {@code first} function
+     * and then passes the result to the {@code second} expression.
+     *
+     * @param before the first function to apply
+     * @param after  the expression to apply to the result
+     * @param <T>  the type of the initial input
+     * @param <A>  the type returned by {@code first}
+     * @return  the composed expression
+     */
     public static <T, A> ToBooleanNullable<T> composeToBooleanNullable(Function<T, A> before, ToBooleanNullable<A> after) {
-        return new ComposeToBoolean<>(before, after);
+        return new ComposeToBooleanNullable<>(before, after);
+    }
+
+    /**
+     * Internal implementation of the {@link ComposedExpression}. Booleans are
+     * handled a bit differently when it comes to {@code null}-values. If the
+     * {@code before}-function returns {@code null}, then the expression will
+     * always evaluate to {@code false}. This is to stay compatible with how
+     * Speedment handles predicates in streams.
+     *
+     * @param <T>      the outer input type
+     * @param <A>      the inner input type
+     * @param <AFTER>  the expression type of the {@code after} operation
+     */
+    private final static class ComposeToBoolean<T, A, AFTER extends ToBooleanFunction<A> & Expression<A>>
+        implements ComposedExpression<T, A>, ToBoolean<T> {
+
+        private final Function<T, A> before;
+        private final AFTER after;
+
+        ComposeToBoolean(Function<T, A> before, AFTER after) {
+            this.before = requireNonNull(before);
+            this.after  = requireNonNull(after);
+        }
+
+        @Override
+        public Function<T, A> firstStep() {
+            return before;
+        }
+
+        @Override
+        public AFTER secondStep() {
+            return after;
+        }
+
+        @Override
+        public boolean applyAsBoolean(T object) throws NullPointerException {
+            final A intermediate = before.apply(object);
+            return intermediate != null && after.applyAsBoolean(intermediate);
+        }
     }
 
     /**
@@ -480,13 +533,13 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToBoolean<T, A, AFTER extends ToBooleanFunction<A> & Expression<A>>
+    private final static class ComposeToBooleanNullable<T, A, AFTER extends ToBooleanFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToBooleanNullable<T> {
 
         private final Function<T, A> before;
         private final AFTER after;
 
-        ComposeToBoolean(Function<T, A> before, AFTER after) {
+        ComposeToBooleanNullable(Function<T, A> before, AFTER after) {
             this.before = requireNonNull(before);
             this.after  = requireNonNull(after);
         }
