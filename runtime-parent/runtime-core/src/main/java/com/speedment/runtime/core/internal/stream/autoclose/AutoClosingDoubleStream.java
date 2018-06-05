@@ -29,11 +29,15 @@ public class AutoClosingDoubleStream extends AbstractAutoClosingStream implement
     private final DoubleStream stream;
 
     public AutoClosingDoubleStream(DoubleStream stream) {
-        this(stream, newSet());
+        this(stream, newSet(), false);
     }
 
-    AutoClosingDoubleStream(DoubleStream stream, Set<BaseStream<?, ?>> streamSet) {
-        super(streamSet);
+    AutoClosingDoubleStream(
+        final DoubleStream stream,
+        final Set<BaseStream<?, ?>> streamSet,
+        final boolean allowStreamIteratorAndSpliterator
+    ) {
+        super(streamSet, allowStreamIteratorAndSpliterator);
         this.stream = stream;
     }
 
@@ -118,7 +122,7 @@ public class AutoClosingDoubleStream extends AbstractAutoClosingStream implement
 
     @Override
     public double reduce(double identity, DoubleBinaryOperator op) {
-        return stream.reduce(identity, op);
+        return finallyClose(() -> stream.reduce(identity, op));
     }
 
     @Override
@@ -133,32 +137,32 @@ public class AutoClosingDoubleStream extends AbstractAutoClosingStream implement
 
     @Override
     public double sum() {
-        return finallyClose(() -> stream.sum());
+        return finallyClose(stream::sum);
     }
 
     @Override
     public OptionalDouble min() {
-        return finallyClose(() -> stream.min());
+        return finallyClose(stream::min);
     }
 
     @Override
     public OptionalDouble max() {
-        return finallyClose(() -> stream.max());
+        return finallyClose(stream::max);
     }
 
     @Override
     public long count() {
-        return finallyClose(() -> stream.count());
+        return finallyClose(stream::count);
     }
 
     @Override
     public OptionalDouble average() {
-        return finallyClose(() -> stream.average());
+        return finallyClose(stream::average);
     }
 
     @Override
     public DoubleSummaryStatistics summaryStatistics() {
-        return finallyClose(() -> stream.summaryStatistics());
+        return finallyClose(stream::summaryStatistics);
     }
 
     @Override
@@ -178,27 +182,27 @@ public class AutoClosingDoubleStream extends AbstractAutoClosingStream implement
 
     @Override
     public OptionalDouble findFirst() {
-        return finallyClose(() -> stream.findFirst());
+        return finallyClose(stream::findFirst);
     }
 
     @Override
     public OptionalDouble findAny() {
-        return finallyClose(() -> stream.findAny());
+        return finallyClose(stream::findAny);
     }
 
     @Override
     public Stream<Double> boxed() {
-        return finallyClose(() -> stream.boxed());
+        return wrap(stream.boxed());
     }
 
     @Override
     public DoubleStream sequential() {
-        return finallyClose(() -> stream.sequential());
+        return wrap(stream.sequential());
     }
 
     @Override
     public DoubleStream parallel() {
-        return finallyClose(() -> stream.parallel());
+        return wrap(stream.parallel());
     }
 
     @Override

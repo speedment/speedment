@@ -36,24 +36,25 @@ import java.util.stream.*;
 public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream implements Stream<T> {
 
     private final Stream<T> stream;
-    private final boolean allowStreamIteratorAndSpliterator;
 
     public AutoClosingReferenceStream(Stream<T> stream) {
         this(stream, false);
     }
 
-    public AutoClosingReferenceStream(Stream<T> stream, final boolean allowStreamIteratorAndSpliterator) {
+    public AutoClosingReferenceStream(
+        final Stream<T> stream,
+        final boolean allowStreamIteratorAndSpliterator
+    ) {
         this(stream, newSet(), allowStreamIteratorAndSpliterator);
     }
 
-    AutoClosingReferenceStream(Stream<T> stream, Set<BaseStream<?, ?>> streamSet) {
-        this(stream, streamSet, false);
-    }
-
-    AutoClosingReferenceStream(Stream<T> stream, Set<BaseStream<?, ?>> streamSet, final boolean allowStreamIteratorAndSpliterator) {
-        super(streamSet);
+    AutoClosingReferenceStream(
+        final Stream<T> stream,
+        final Set<BaseStream<?, ?>> streamSet,
+        final boolean allowStreamIteratorAndSpliterator
+    ) {
+        super(streamSet, allowStreamIteratorAndSpliterator);
         this.stream = stream;
-        this.allowStreamIteratorAndSpliterator = allowStreamIteratorAndSpliterator;
         streamSet.add(this);
     }
 
@@ -149,7 +150,7 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
 
     @Override
     public Object[] toArray() {
-        return finallyClose(() -> stream.toArray());
+        return finallyClose((Supplier<Object[]>) stream::toArray);
     }
 
     @Override
@@ -194,7 +195,7 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
 
     @Override
     public long count() {
-        return finallyClose(() -> stream.count());
+        return finallyClose(stream::count);
     }
 
     @Override
@@ -214,17 +215,17 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
 
     @Override
     public Optional<T> findFirst() {
-        return finallyClose(() -> stream.findFirst());
+        return finallyClose(stream::findFirst);
     }
 
     @Override
     public Optional<T> findAny() {
-        return finallyClose(() -> stream.findAny());
+        return finallyClose(stream::findAny);
     }
 
     @Override
     public Iterator<T> iterator() {
-        if (allowStreamIteratorAndSpliterator) {
+        if (isAllowStreamIteratorAndSpliterator()) {
             return stream.iterator();
         }
         throw newUnsupportedException("iterator");
@@ -232,7 +233,7 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
 
     @Override
     public Spliterator<T> spliterator() {
-        if (allowStreamIteratorAndSpliterator) {
+        if (isAllowStreamIteratorAndSpliterator()) {
             return stream.spliterator();
         }
         throw newUnsupportedException("spliterator");
