@@ -18,6 +18,7 @@ package com.speedment.runtime.join.internal.component.stream;
 
 import com.speedment.common.function.*;
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.TableIdentifier;
@@ -61,6 +62,9 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
     private HasCreateJoin9 join9Creator;
     private HasCreateJoin10 join10Creator;
 
+    @Config(name = "allowStreamIteratorAndSpliterator", value = "false")
+    private boolean allowStreamIteratorAndSpliterator;
+
     @Execute
     void init(
         final Injector injector,
@@ -77,15 +81,15 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
                 )
             );
 
-        join2Creator = new SqlHasCreateJoin2(dbmsHandlerComponent, project, this::sqlAdapterMapper);
-        join3Creator = new SqlHasCreateJoin3(dbmsHandlerComponent, project, this::sqlAdapterMapper);
-        join4Creator = new SqlHasCreateJoin4(dbmsHandlerComponent, project, this::sqlAdapterMapper);
-        join5Creator = new SqlHasCreateJoin5(dbmsHandlerComponent, project, this::sqlAdapterMapper);
-        join6Creator = new SqlHasCreateJoin6(dbmsHandlerComponent, project, this::sqlAdapterMapper);
-        join7Creator = new SqlHasCreateJoin7(dbmsHandlerComponent, project, this::sqlAdapterMapper);
-        join8Creator = new SqlHasCreateJoin8(dbmsHandlerComponent, project, this::sqlAdapterMapper);
-        join9Creator = new SqlHasCreateJoin9(dbmsHandlerComponent, project, this::sqlAdapterMapper);
-        join10Creator = new SqlHasCreateJoin10(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join2Creator = new SqlHasCreateJoin2(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
+        join3Creator = new SqlHasCreateJoin3(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
+        join4Creator = new SqlHasCreateJoin4(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
+        join5Creator = new SqlHasCreateJoin5(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
+        join6Creator = new SqlHasCreateJoin6(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
+        join7Creator = new SqlHasCreateJoin7(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
+        join8Creator = new SqlHasCreateJoin8(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
+        join9Creator = new SqlHasCreateJoin9(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
+        join10Creator = new SqlHasCreateJoin10(dbmsHandlerComponent, project, this::sqlAdapterMapper, allowStreamIteratorAndSpliterator);
     }
 
     @Override

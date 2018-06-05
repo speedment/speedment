@@ -38,15 +38,18 @@ abstract class AbstractSqlHasCreateJoin {
     private final DbmsHandlerComponent dbmsHandlerComponent;
     private final Project project;
     private final SqlAdapterMapper sqlAdapterMapper;
+    private final boolean allowStreamIteratorAndSpliterator;
 
     AbstractSqlHasCreateJoin(
         final DbmsHandlerComponent dbmsHandlerComponent,
         final Project project,
-        final SqlAdapterMapper sqlAdapterMapper
+        final SqlAdapterMapper sqlAdapterMapper,
+        final boolean allowStreamIteratorAndSpliterator
     ) {
         this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
         this.project = requireNonNull(project);
         this.sqlAdapterMapper = requireNonNull(sqlAdapterMapper);
+        this.allowStreamIteratorAndSpliterator = allowStreamIteratorAndSpliterator;
     }
 
     <T> SqlFunction<ResultSet, T> rsMapper(
@@ -61,7 +64,7 @@ abstract class AbstractSqlHasCreateJoin {
         requireNonNull(stages);
         requireNonNull(rsMapper);
         return new JoinImpl<>(
-            () -> JoinSqlUtil.stream(dbmsHandlerComponent, project, stages, rsMapper)
+            () -> JoinSqlUtil.stream(dbmsHandlerComponent, project, stages, rsMapper, allowStreamIteratorAndSpliterator)
         );
     }
 

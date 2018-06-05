@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
+import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -34,14 +36,24 @@ import java.util.stream.*;
 public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream implements Stream<T> {
 
     private final Stream<T> stream;
+    private final boolean allowStreamIteratorAndSpliterator;
 
     public AutoClosingReferenceStream(Stream<T> stream) {
-        this(stream, newSet());
+        this(stream, false);
+    }
+
+    public AutoClosingReferenceStream(Stream<T> stream, final boolean allowStreamIteratorAndSpliterator) {
+        this(stream, newSet(), allowStreamIteratorAndSpliterator);
     }
 
     AutoClosingReferenceStream(Stream<T> stream, Set<BaseStream<?, ?>> streamSet) {
+        this(stream, streamSet, false);
+    }
+
+    AutoClosingReferenceStream(Stream<T> stream, Set<BaseStream<?, ?>> streamSet, final boolean allowStreamIteratorAndSpliterator) {
         super(streamSet);
         this.stream = stream;
+        this.allowStreamIteratorAndSpliterator = allowStreamIteratorAndSpliterator;
         streamSet.add(this);
     }
 
@@ -212,14 +224,18 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
 
     @Override
     public Iterator<T> iterator() {
+        if (allowStreamIteratorAndSpliterator) {
+            return stream.iterator();
+        }
         throw newUnsupportedException("iterator");
-        //return stream.iterator();
     }
 
     @Override
     public Spliterator<T> spliterator() {
+        if (allowStreamIteratorAndSpliterator) {
+            return stream.spliterator();
+        }
         throw newUnsupportedException("spliterator");
-        //return stream.spliterator();
     }
 
     @Override

@@ -218,7 +218,8 @@ public final class JoinSqlUtil {
         final DbmsHandlerComponent dbmsHandlerComponent,
         final Project project,
         final List<Stage<?>> stages,
-        final SqlFunction<ResultSet, T> rsMapper
+        final SqlFunction<ResultSet, T> rsMapper,
+        final boolean allowStreamIteratorAndSpliterator
     ) {
         requireNonNull(project);
         requireNonNull(dbmsHandlerComponent);
@@ -268,7 +269,7 @@ public final class JoinSqlUtil {
                 rsMapper,
                 ParallelStrategy.computeIntensityDefault()
             );
-        return new AutoClosingReferenceStream<>(asynchronousQueryResult.stream())
+        return new AutoClosingReferenceStream<>(asynchronousQueryResult.stream(), allowStreamIteratorAndSpliterator)
             .onClose(asynchronousQueryResult::close);
     }
 
