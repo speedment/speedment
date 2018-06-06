@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.EnumForeignKeyField;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNullPredicate;
 import com.speedment.runtime.field.method.ReferenceGetter;
@@ -43,20 +44,39 @@ implements ReferenceField<ENTITY, D, V> {
     private final ReferenceSetter<ENTITY, V> setter;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
+    private final String tableAlias;
 
     public ReferenceFieldImpl(
-            ColumnIdentifier<ENTITY> identifier,
-            ReferenceGetter<ENTITY, V> getter,
-            ReferenceSetter<ENTITY, V> setter,
-            TypeMapper<D, V> typeMapper,
-            boolean unique) {
-        
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, V> getter,
+        final ReferenceSetter<ENTITY, V> setter,
+        final TypeMapper<D, V> typeMapper,
+        final boolean unique
+    ) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
+        this.tableAlias = identifier.getTableId();
     }
+
+    public ReferenceFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, V> getter,
+        final ReferenceSetter<ENTITY, V> setter,
+        final TypeMapper<D, V> typeMapper,
+        final boolean unique,
+        final String tableAlias
+    ) {
+        this.identifier = requireNonNull(identifier);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique     = unique;
+        this.tableAlias = requireNonNull(tableAlias);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //                                Getters                                 //
@@ -85,6 +105,17 @@ implements ReferenceField<ENTITY, D, V> {
     @Override
     public boolean isUnique() {
         return unique;
+    }
+
+
+    @Override
+    public String tableAlias() {
+        return tableAlias;
+    }
+
+    @Override
+    public ReferenceField<ENTITY, D, V> tableAlias(String tableAlias) {
+        return new ReferenceFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.trait;
 
-import java.util.function.Predicate;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 
 /**
  * A representation of an Entity field that is a {@code String} type. String
@@ -44,7 +44,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#compareToIgnoreCase(java.lang.String)
      */
-    Predicate<ENTITY> equalIgnoreCase(String value);
+    SpeedmentPredicate<ENTITY> equalIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -58,7 +58,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#compareToIgnoreCase(java.lang.String)
      */
-    default Predicate<ENTITY> notEqualIgnoreCase(String value) {
+    default SpeedmentPredicate<ENTITY> notEqualIgnoreCase(String value) {
         return equalIgnoreCase(value).negate();
     }
 
@@ -73,7 +73,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    Predicate<ENTITY> startsWith(String value);
+    SpeedmentPredicate<ENTITY> startsWith(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -86,7 +86,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    default Predicate<ENTITY> notStartsWith(String value) {
+    default SpeedmentPredicate<ENTITY> notStartsWith(String value) {
         return startsWith(value).negate();
     }
 
@@ -101,7 +101,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    Predicate<ENTITY> endsWith(String value);
+    SpeedmentPredicate<ENTITY> endsWith(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -114,7 +114,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    default Predicate<ENTITY> notEndsWith(String value) {
+    default SpeedmentPredicate<ENTITY> notEndsWith(String value) {
         return endsWith(value).negate();
     }
 
@@ -129,7 +129,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#contains(java.lang.CharSequence)
      */
-    Predicate<ENTITY> contains(String value);
+    SpeedmentPredicate<ENTITY> contains(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -142,7 +142,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#contains(java.lang.CharSequence)
      */
-    default Predicate<ENTITY> notContains(String value) {
+    default SpeedmentPredicate<ENTITY> notContains(String value) {
         return contains(value).negate();
     }
 
@@ -156,7 +156,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#isEmpty()
      */
-    Predicate<ENTITY> isEmpty();
+    SpeedmentPredicate<ENTITY> isEmpty();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -168,7 +168,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#isEmpty()
      */
-    default Predicate<ENTITY> isNotEmpty() {
+    default SpeedmentPredicate<ENTITY> isNotEmpty() {
         return isEmpty().negate();
     }
 
@@ -184,7 +184,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    Predicate<ENTITY> startsWithIgnoreCase(String value);
+    SpeedmentPredicate<ENTITY> startsWithIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -198,7 +198,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    default Predicate<ENTITY> notStartsWithIgnoreCase(String value) {
+    default SpeedmentPredicate<ENTITY> notStartsWithIgnoreCase(String value) {
         return startsWithIgnoreCase(value).negate();
     }
 
@@ -214,7 +214,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    Predicate<ENTITY> endsWithIgnoreCase(String value);
+    SpeedmentPredicate<ENTITY> endsWithIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -228,7 +228,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    default Predicate<ENTITY> notEndsWithIgnoreCase(String value) {
+    default SpeedmentPredicate<ENTITY> notEndsWithIgnoreCase(String value) {
         return endsWithIgnoreCase(value).negate();
     }
 
@@ -244,7 +244,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#contains(java.lang.CharSequence)
      */
-    Predicate<ENTITY> containsIgnoreCase(String value);
+    SpeedmentPredicate<ENTITY> containsIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -258,7 +258,7 @@ public interface HasStringOperators<ENTITY, D> {
      *
      * @see String#contains(java.lang.CharSequence)
      */
-    default Predicate<ENTITY> notContainsIgnoreCase(String value) {
+    default SpeedmentPredicate<ENTITY> notContainsIgnoreCase(String value) {
         return containsIgnoreCase(value).negate();
     }
 

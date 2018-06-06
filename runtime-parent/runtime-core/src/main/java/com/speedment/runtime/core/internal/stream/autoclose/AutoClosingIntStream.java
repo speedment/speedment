@@ -29,11 +29,15 @@ public class AutoClosingIntStream extends AbstractAutoClosingStream implements I
     private final IntStream stream;
 
     public AutoClosingIntStream(IntStream stream) {
-        this(stream, newSet());
+        this(stream, newSet(), false);
     }
 
-    AutoClosingIntStream(IntStream stream, Set<BaseStream<?, ?>> streamSet) {
-        super(streamSet);
+    AutoClosingIntStream(
+        final IntStream stream,
+        final Set<BaseStream<?, ?>> streamSet,
+        final boolean allowStreamIteratorAndSpliterator
+    ) {
+        super(streamSet, allowStreamIteratorAndSpliterator);
         this.stream = stream;
     }
 
@@ -133,32 +137,32 @@ public class AutoClosingIntStream extends AbstractAutoClosingStream implements I
 
     @Override
     public int sum() {
-        return finallyClose(() -> stream.sum());
+        return finallyClose(stream::sum);
     }
 
     @Override
     public OptionalInt min() {
-        return finallyClose(() -> stream.min());
+        return finallyClose(stream::min);
     }
 
     @Override
     public OptionalInt max() {
-        return finallyClose(() -> stream.max());
+        return finallyClose(stream::max);
     }
 
     @Override
     public long count() {
-        return finallyClose(() -> stream.count());
+        return finallyClose(stream::count);
     }
 
     @Override
     public OptionalDouble average() {
-        return finallyClose(() -> stream.average());
+        return finallyClose(stream::average);
     }
 
     @Override
     public IntSummaryStatistics summaryStatistics() {
-        return finallyClose(() -> stream.summaryStatistics());
+        return finallyClose(stream::summaryStatistics);
     }
 
     @Override
@@ -178,22 +182,22 @@ public class AutoClosingIntStream extends AbstractAutoClosingStream implements I
 
     @Override
     public OptionalInt findFirst() {
-        return finallyClose(() -> stream.findFirst());
+        return finallyClose(stream::findFirst);
     }
 
     @Override
     public OptionalInt findAny() {
-        return finallyClose(() -> stream.findAny());
+        return finallyClose(stream::findAny);
     }
 
     @Override
     public LongStream asLongStream() {
-        return finallyClose(() -> stream.asLongStream());
+        return wrap(stream.asLongStream());
     }
 
     @Override
     public DoubleStream asDoubleStream() {
-        return finallyClose(() -> stream.asDoubleStream());
+        return wrap(stream.asDoubleStream());
     }
 
     @Override

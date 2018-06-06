@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
-import java.util.function.Predicate;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 
 /**
  * A representation of an Entity field that is of boolean type
@@ -38,7 +38,7 @@ public interface HasBooleanOperators<ENTITY> extends Field<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>equal</em> to the given value
      */
-    Predicate<ENTITY> equal(boolean value);
+    SpeedmentPredicate<ENTITY> equal(boolean value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -49,7 +49,7 @@ public interface HasBooleanOperators<ENTITY> extends Field<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not equal</em> to the given value
      */
-    Predicate<ENTITY> notEqual(boolean value);
+    SpeedmentPredicate<ENTITY> notEqual(boolean value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -58,7 +58,7 @@ public interface HasBooleanOperators<ENTITY> extends Field<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>true</em>.
      */
-    default Predicate<ENTITY> isTrue() {
+    default SpeedmentPredicate<ENTITY> isTrue() {
         return equal(true);
     }
 
@@ -69,7 +69,7 @@ public interface HasBooleanOperators<ENTITY> extends Field<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>false</em>.
      */
-    default Predicate<ENTITY> isFalse() {
+    default SpeedmentPredicate<ENTITY> isFalse() {
         return equal(false);
     }
 

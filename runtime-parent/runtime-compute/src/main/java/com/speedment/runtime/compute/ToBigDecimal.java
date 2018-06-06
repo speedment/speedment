@@ -54,9 +54,9 @@ extends Expression<T>,
         HasSqrt<ToDouble<T>>,
         HasNegate<ToBigDecimal<T>>,
         HasPow<T>,
-        HasPlus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-        HasMinus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-        HasMultiply<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+        HasPlus<T>,
+        HasMinus<T>,
+        HasMultiply<T>,
         HasDivide<T>,
         HasMap<T, UnaryOperator<BigDecimal>, ToBigDecimal<T>>,
         HasMapToDouble<T, ToDoubleFunction<BigDecimal>>,
@@ -317,7 +317,7 @@ extends Expression<T>,
     }
 
     @Override
-    default <V> ToBigDecimal<V> compose(Function<? super V, ? extends T> before) {
+    default <V> ToBigDecimalNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToBigDecimal(casted, this);

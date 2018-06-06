@@ -113,6 +113,6 @@ extends Expression<T>,
     default <V> ToBigDecimalNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.composeNullable(casted, this);
+        return ComposedUtil.composeToBigDecimalNullable(casted, this);
     }
 }

@@ -30,7 +30,7 @@
     </parent>
     
     <artifactId>tuple</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Tuple</name>

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
+import com.speedment.common.function.TriFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.util.Collection;
@@ -25,6 +26,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -33,9 +35,14 @@ import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 public abstract class AbstractAutoClosingStream implements AutoCloseable {
 
     private final Set<BaseStream<?, ?>> streamSet;
+    private final boolean allowStreamIteratorAndSpliterator;
 
-    AbstractAutoClosingStream(Set<BaseStream<?, ?>> streamSet) {
-        this.streamSet = streamSet;
+    AbstractAutoClosingStream(
+        final Set<BaseStream<?, ?>> streamSet,
+        final boolean allowStreamIteratorAndSpliterator
+    ) {
+        this.streamSet = requireNonNull(streamSet);
+        this.allowStreamIteratorAndSpliterator = allowStreamIteratorAndSpliterator;
     }
 
     protected Set<BaseStream<?, ?>> getStreamSet() {
@@ -57,7 +64,11 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         }
     }
 
-    protected <T> boolean finallyClose(BooleanSupplier bs) {
+    boolean isAllowStreamIteratorAndSpliterator() {
+        return allowStreamIteratorAndSpliterator;
+    }
+
+    <T> boolean finallyClose(BooleanSupplier bs) {
         try {
             return bs.getAsBoolean();
         } finally {
@@ -65,7 +76,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         }
     }
 
-    protected <T> long finallyClose(LongSupplier lp) {
+    <T> long finallyClose(LongSupplier lp) {
         try {
             return lp.getAsLong();
         } finally {
@@ -73,7 +84,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         }
     }
 
-    protected <T> int finallyClose(IntSupplier is) {
+    <T> int finallyClose(IntSupplier is) {
         try {
             return is.getAsInt();
         } finally {
@@ -81,7 +92,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         }
     }
 
-    protected <T> double finallyClose(DoubleSupplier ds) {
+    <T> double finallyClose(DoubleSupplier ds) {
         try {
             return ds.getAsDouble();
         } finally {
@@ -89,7 +100,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         }
     }
 
-    protected <T> void finallyClose(Runnable r) {
+    <T> void finallyClose(Runnable r) {
         try {
             r.run();
         } finally {
@@ -97,7 +108,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         }
     }
 
-    protected <T> T finallyClose(Supplier<T> s) {
+    <T> T finallyClose(Supplier<T> s) {
         try {
             return s.get();
         } finally {
@@ -121,18 +132,18 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         return wrap(stream, getStreamSet(), AutoClosingDoubleStream::new);
     }
 
-    private <T> T wrap(T stream, Set<BaseStream<?, ?>> streamSet, BiFunction<T, Set<BaseStream<?, ?>>, T> wrapper) {
+    private <T> T wrap(T stream, Set<BaseStream<?, ?>> streamSet, TriFunction<T, Set<BaseStream<?, ?>>, Boolean, T> wrapper) {
         if (stream instanceof AbstractAutoClosingStream) {
-            return stream; // If we allready are wrapped, then do not wrap again
+            return stream; // If we already are wrapped, then do not wrap again
         }
-        return wrapper.apply(stream, streamSet);
+        return wrapper.apply(stream, streamSet, allowStreamIteratorAndSpliterator);
     }
 
-    public static UnsupportedOperationException newUnsupportedException(String methodName) {
+     static UnsupportedOperationException newUnsupportedException(String methodName) {
         return new UnsupportedOperationException("The " + methodName + "() method is unsupported because otherwise the AutoClose property cannot be guaranteed");
     }
 
-    protected static Set<BaseStream<?, ?>> newSet() {
+     static Set<BaseStream<?, ?>> newSet() {
         return new HashSet<>();
     }
 
@@ -195,16 +206,12 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
 
         private final Runnable r;
 
-        public CloseImpl(Runnable r) {
-            this.r = r;
+        private CloseImpl(Runnable r) {
+            this.r = requireNonNull(r);
         }
 
         @Override
-        public void close() {
-
-                r.run();
-
-        }
+        public void close() { r.run(); }
 
     }
 

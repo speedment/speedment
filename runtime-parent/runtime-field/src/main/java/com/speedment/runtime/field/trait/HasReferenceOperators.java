@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.trait;
 
-import java.util.function.Predicate;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 
 /**
  *
@@ -34,7 +34,7 @@ public interface HasReferenceOperators<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is {@code null}
      */
-    Predicate<ENTITY> isNull();
+    SpeedmentPredicate<ENTITY> isNull();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -43,7 +43,7 @@ public interface HasReferenceOperators<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not</em> {@code null}
      */
-    default Predicate<ENTITY> isNotNull() {
+    default SpeedmentPredicate<ENTITY> isNotNull() {
         return isNull().negate();
     }
 }

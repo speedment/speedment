@@ -2414,12 +2414,38 @@ public final class Tuples {
     /**
      * Creates and returns a {@link Tuple} with the given parameters
      * 
-     * @param elements array of elements to use for the Tuple
-     * @return         a {@link Tuple} with the given parameters
+     * @param el array of elements to use for the Tuple
+     * @return   a {@link Tuple} with the given parameters
      * 
      * @see Tuple
      */
-    public static Tuple ofArray(Object... elements) {
-        return new TupleInfiniteDegreeImpl(elements);
+    public static Tuple ofArray(Object... el) {
+        switch (el.length) {
+            case 0: return of();
+            case 1: return of(el[0]);
+            case 2: return of(el[0], el[1]);
+            case 3: return of(el[0], el[1], el[2]);
+            case 4: return of(el[0], el[1], el[2], el[3]);
+            case 5: return of(el[0], el[1], el[2], el[3], el[4]);
+            case 6: return of(el[0], el[1], el[2], el[3], el[4], el[5]);
+            case 7: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6]);
+            case 8: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7]);
+            case 9: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8]);
+            case 10: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9]);
+            case 11: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10]);
+            case 12: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11]);
+            case 13: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12]);
+            case 14: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13]);
+            case 15: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14]);
+            case 16: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15]);
+            case 17: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16]);
+            case 18: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17]);
+            case 19: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18]);
+            case 20: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18], el[19]);
+            case 21: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18], el[19], el[20]);
+            case 22: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18], el[19], el[20], el[21]);
+            case 23: return of(el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8], el[9], el[10], el[11], el[12], el[13], el[14], el[15], el[16], el[17], el[18], el[19], el[20], el[21], el[22]);
+            default: return new TupleInfiniteDegreeImpl(el);
+        }
     }
 }

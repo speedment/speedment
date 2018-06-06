@@ -53,9 +53,9 @@ extends Expression<T>,
         HasSqrt<ToDouble<T>>,
         HasNegate<ToFloat<T>>,
         HasPow<T>,
-        HasPlus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
-        HasMinus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
-        HasMultiply<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
+        HasPlus<T>,
+        HasMinus<T>,
+        HasMultiply<T>,
         HasDivide<T>,
         HasMap<T, FloatUnaryOperator, ToFloat<T>>,
         HasMapToDouble<T, FloatToDoubleFunction>,
@@ -319,7 +319,7 @@ extends Expression<T>,
     }
 
     @Override
-    default <V> ToFloat<V> compose(Function<? super V, ? extends T> before) {
+    default <V> ToFloatNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToFloat(casted, this);

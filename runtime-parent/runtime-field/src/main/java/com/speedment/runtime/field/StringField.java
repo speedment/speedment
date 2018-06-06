@@ -22,10 +22,10 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.StringFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.predicate.FieldIsNotNullPredicate;
+import com.speedment.runtime.field.predicate.FieldIsNullPredicate;
 import com.speedment.runtime.field.trait.HasStringOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
-
-import java.util.function.Predicate;
 
 /**
  * A field that represents a string column.
@@ -71,10 +71,13 @@ public interface StringField<ENTITY, D> extends
     }
 
     @Override
-    Predicate<ENTITY> isNull();
+    StringField<ENTITY, D> tableAlias(String tableAlias);
 
     @Override
-    default Predicate<ENTITY> isNotNull() {
+    FieldIsNullPredicate<ENTITY, String> isNull();
+
+    @Override
+    default FieldIsNotNullPredicate<ENTITY, String> isNotNull() {
         return isNull().negate();
     }
 

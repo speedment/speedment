@@ -53,9 +53,9 @@ extends Expression<T>,
         HasSqrt<ToDouble<T>>,
         HasNegate<ToDouble<T>>,
         HasPow<T>,
-        HasPlus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-        HasMinus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-        HasMultiply<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+        HasPlus<T>,
+        HasMinus<T>,
+        HasMultiply<T>,
         HasDivide<T>,
         HasMap<T, DoubleUnaryOperator, ToDouble<T>>,
         HasHash<T>,
@@ -325,7 +325,7 @@ extends Expression<T>,
     }
 
     @Override
-    default <V> ToDouble<V> compose(Function<? super V, ? extends T> before) {
+    default <V> ToDoubleNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToDouble(casted, this);

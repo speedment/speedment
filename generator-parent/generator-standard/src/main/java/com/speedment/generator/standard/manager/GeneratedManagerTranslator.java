@@ -17,26 +17,32 @@
 package com.speedment.generator.standard.manager;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.manager.Manager;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultType.classOf;
 import static com.speedment.common.codegen.constant.DefaultType.list;
 import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.nl;
-import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.config.trait.HasAlias;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.joining;
-import java.util.stream.Stream;
 
 /**
  *
@@ -54,6 +60,7 @@ public final class GeneratedManagerTranslator
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getSupport().generatedManagerName())
             .forEveryTable((intf, table) -> {
+
                 file.add(Import.of(getSupport().entityType()));
                 file.add(Import.of(Collections.class).setStaticMember("unmodifiableList").static_());
                 file.add(Import.of(Arrays.class).setStaticMember("asList").static_());
@@ -64,17 +71,14 @@ public final class GeneratedManagerTranslator
                         Field.of(
                             "IDENTIFIER",
                             SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())
-                        ).set(Value.ofReference("TableIdentifier.of(" + nl()
-                            + indent(
-                                Stream.<HasAlias>of(
-                                    table.getParentOrThrow().getParentOrThrow(),
-                                    table.getParentOrThrow(),
-                                    table
-                                )
-                                    .map((HasAlias hasAlias) -> hasAlias.getJavaName())
-                                    .map(s -> "\"" + s + "\"")
-                                    .collect(joining("," + nl()))
-                            ) + nl() + ")" + nl()
+                        ).set(Value.ofInvocation(TableIdentifier.class, "of",
+                            Stream.<HasAlias>of(
+                                table.getParentOrThrow().getParentOrThrow(),
+                                table.getParentOrThrow(),
+                                table
+                            ).map(HasName::getName)
+                                .map(Value::ofText)
+                                .toArray(Value[]::new)
                         ))
                     )
                     .add(Field.of("FIELDS", list(SimpleParameterizedType.create(

@@ -16,11 +16,14 @@
  */
 package com.speedment.runtime.join;
 
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.common.tuple.nullable.Tuple2OfNullables;
 import com.speedment.common.tuple.nullable.Tuple3OfNullables;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.IntField;
@@ -30,7 +33,13 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
+
+import com.speedment.runtime.field.trait.HasComparableOperators;
+import com.speedment.runtime.join.internal.component.join.JoinComponentImpl;
+import com.speedment.runtime.join.internal.component.join.test_support.MockEmptyJoinStreamSupplierComponent;
+import com.speedment.runtime.typemapper.TypeMapper;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -39,11 +48,93 @@ import org.junit.Before;
 public class JoinSketchTest {
 
     JoinComponent jc = null;
-
     Manager<User> users = null;
     Manager<Picture> pictures = null;
     Manager<FrameType> frameTypes = null;
-    
+
+    /*
+    SELECT
+        m.title AS title,
+    	e0.address AS from_email,
+	    e1.address AS to_email
+    FROM Message AS m
+    LEFT JOIN User AS u0 ON m.from = u0.id
+    LEFT JOIN Email AS e0 ON u0.email = e0.id
+    LEFT JOIN User AS u1 ON m.to   = u1.id
+    LEFT JOIN Email AS e1 ON u1.email = e1.id;
+    */
+
+    @Before
+    public void init() {
+        try {
+            Injector injector = Injector.builder()
+                .withComponent(JoinComponentImpl.class)
+                .withComponent(MockEmptyJoinStreamSupplierComponent.class)
+                .build();
+            jc = injector.getOrThrow(JoinComponent.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Test
+    public void simpleProblemTest() {
+        jc.from(PictureManager.IDENTIFIER)
+            .innerJoinOn(User.USER_ID).equal(Picture.USER_ID)
+            .build(Tuples::of);
+    }
+
+
+    private void problemTree() {
+
+        final Join<Tuple3OfNullables<User, User, User>> join = jc
+            .from(UserManager.IDENTIFIER)
+            .innerJoinOn(User.NAME).equal(User.NAME) // Referes to the first name (ok!)
+            .innerJoinOn(User.NAME).equal(User.NAME) // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
+            .build();
+
+
+        HasComparableOperators<User, ?> secondUserName = User.NAME.tableAlias("Olle");
+
+        final Join<Tuple3OfNullables<User, User, User>> join2 = jc
+            .from(UserManager.IDENTIFIER)
+            .innerJoinOn(secondUserName).equal(User.NAME) // Referes to the first name (ok!)
+            .innerJoinOn(User.NAME).equal(secondUserName) // Referes to the second
+            .build();
+
+        final Join<Tuple3OfNullables<User, User, User>> join3 = jc
+            .from(UserManager.IDENTIFIER)
+            .innerJoinOn(User.NAME.tableAlias("Olle")).equal(User.NAME) // Referes to the first name (ok!)
+            .innerJoinOn(User.NAME).equal(User.NAME.tableAlias("Olle")) // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
+            .build();
+
+
+//        final Join<Tuple3OfNullables<User, User, User>> join4 = jc
+//                .from(UserManager.IDENTIFIER)
+//                .innerJoinOn(User.NAME).as("Olle").equal(User.NAME) // Referes to the first name (ok!)
+//                .innerJoinOn(User.NAME).equal(User.NAME).from("Olle") // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
+//                .build();
+//
+//
+//
+//        final Join<Tuple3OfNullables<User, User, User>> join3 = jc
+//                .from(UserManager.IDENTIFIER)
+//                .innerJoinOn(User.NAME).equal(User.NAME) // Referes to the first name (ok!)
+//                .innerJoinOn(User.NAME).equal(User.NAME.compose(Tuple3OfNullables.getter1()) // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
+//                .build();
+
+
+        // SELECT * from USER AS A
+        //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
+        //  INNER JOIN USER AS C on A.NAME = C.NAME
+    }
+
+    private static <ENTITY, V extends Comparable<? super V>> HasComparableOperators<User, V> as(HasComparableOperators<User, V> initial) {
+        return initial;
+    }
+
+
     private void test2Cartesian() {
         final Join<Tuple2<User, Picture>> join = jc
             .from(UserManager.IDENTIFIER)
@@ -108,15 +199,15 @@ public class JoinSketchTest {
             .crossJoin(PictureManager.IDENTIFIER)
             .crossJoin(FrameTypeManager.IDENTIFIER)
             .build();
-        
+
         // SELECT * from USER, PICTURE, FRAME_TYPE
-        
+
         join.stream()
             .forEachOrdered(e -> {
                 e.get0().isPresent();
             });
-            
-        
+
+
     }
 
     private void test3Inner() {
@@ -132,7 +223,7 @@ public class JoinSketchTest {
         //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
     }
 
-    
+
     private void problem() {
 
         final Join<Tuple3OfNullables<User, Picture, FrameType>> join = jc
@@ -145,8 +236,8 @@ public class JoinSketchTest {
         //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
         //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
     }
-    
-        private void problem2() {
+
+    private void problem2() {
 
         final Join<Tuple3OfNullables<User, User, User>> join = jc
             .from(UserManager.IDENTIFIER)
@@ -158,8 +249,8 @@ public class JoinSketchTest {
         //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
         //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
     }
-    
-    
+
+
     interface UserManager {
 
         TableIdentifier<User> IDENTIFIER = TableIdentifier.of(
@@ -191,41 +282,54 @@ public class JoinSketchTest {
     }
 
     interface User {
-
-        IntField<User, Integer> USER_ID = null;
+        IntField<User, Integer> USER_ID = IntField.create(ColumnIdentifier.of("sakila", "sakila","user","user_id"),User::getUserId, User::setUserId,TypeMapper.primitive(),true);
         StringField<User, String> NAME = null;
         StringField<User, String> PASSWORD = null;
-    };
+
+        int getUserId();
+        void setUserId(int userId);
+
+    }
+
 
     interface Picture {
 
         IntField<Picture, Integer> PICTURE_ID = null;
         StringField<Picture, String> NAME = null;
-        IntField<Picture, Integer> USER_ID = null;
+        IntField<Picture, Integer> USER_ID = IntField.create(ColumnIdentifier.of("sakila", "sakila","picture","user_id"),Picture::getUserId, Picture::setUserId,TypeMapper.primitive(),false);;
         IntField<Picture, Integer> FRAME_ID = null;
         IntField<Picture, Integer> SIZE = null;
-    };
+
+        int getUserId();
+        void setUserId(int userId);
+
+    }
 
     interface FrameType {
 
         IntField<FrameType, Integer> FRAME_ID = null;
         StringField<FrameType, String> NAME = null;
-    };
+    }
 
-    Join<Tuple3OfNullables<User, Picture, FrameType>> join3 = jc.from(UserManager.IDENTIFIER)
-        .leftJoinOn(Picture.USER_ID).equal(User.USER_ID)
-        .leftJoinOn(FrameType.FRAME_ID).equal(Picture.FRAME_ID)
-        .build();
 
-    // Using Utility methods to map entity operations into Tuple3 operations
-    List<Tuple2<String, String>> result = join3.stream()
-        .filter(Joins.Tuple3OfNullablesUtil.testing0((User.NAME.between("A", "C"))))
-        .sorted(Joins.Tuple3OfNullablesUtil.comparing0(User.NAME.comparator()))
-        .map(Tuples.toTuple(
-            Joins.Tuple3OfNullablesUtil.applying0(User.NAME.getter()),
-            Joins.Tuple3OfNullablesUtil.applying2(FrameType.NAME.getter()))
-        )
-        .collect(toList());
+
+    private void arne() {
+        Join<Tuple3OfNullables<User, Picture, FrameType>> join3 = jc.from(UserManager.IDENTIFIER)
+            .leftJoinOn(Picture.USER_ID).equal(User.USER_ID)
+            .leftJoinOn(FrameType.FRAME_ID).equal(Picture.FRAME_ID)
+            .build();
+
+        // Using Utility methods to map entity operations into Tuple3 operations
+        List<Tuple2<String, String>> result = join3.stream()
+            .filter(Joins.Tuple3OfNullablesUtil.testing0((User.NAME.between("A", "C"))))
+            .sorted(Joins.Tuple3OfNullablesUtil.comparing0(User.NAME.comparator()))
+            .map(Tuples.toTuple(
+                Joins.Tuple3OfNullablesUtil.applying0(User.NAME.getter()),
+                Joins.Tuple3OfNullablesUtil.applying2(FrameType.NAME.getter()))
+            )
+            .collect(toList());
+
+    }
 
     // Alt 1: Use utility class 
     public static final class Joins {

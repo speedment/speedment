@@ -17,9 +17,11 @@
 package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
+import com.speedment.runtime.join.JoinSketchTest;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E0;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E0Manager;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E1;

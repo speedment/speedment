@@ -76,7 +76,7 @@ public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>>
     @Test
     public void testCompose() {
         strings().forEach(s -> {
-            final ToBigDecimal<String> composed = instance.compose(str -> str + "A");
+            final ToBigDecimalNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals(BigDecimal.valueOf(mapper.apply(s + "A")), composed.apply(s));
         });
     }

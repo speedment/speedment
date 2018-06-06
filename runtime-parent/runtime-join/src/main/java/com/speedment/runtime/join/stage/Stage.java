@@ -81,6 +81,17 @@ public interface Stage<ENTITY> {
      */
     Optional<HasComparableOperators<?, ?>> foreignField();
 
+    /**
+     * Returns which stage index this stage references or -1. More formally, the
+     * method returns the index to a stage where this stage {@link #foreignField()}
+     * reference a stage's {@link #field()} or if no field() exists, where this stage
+     * (if not aliased) references a stage's {@link #identifier()}. If no such stage
+     * exist (e.g. for stage 0 or cross joined tables) then the method returns -1.
+     *
+     * @return which stage index this stage references or -1
+     */
+    int referencedStage();
+
 //    /**
 //     * Returns a Field that belongs to the table of this Stage, or
 //     * {@code empty()} if no Field is defined (i.e. for a CROSS JOIN or for all
@@ -118,9 +129,10 @@ public interface Stage<ENTITY> {
         final JoinType joinType,
         final HasComparableOperators<T, ?> field,
         final JoinOperator joinOperator,
-        final HasComparableOperators<?, ?> foreignField
+        final HasComparableOperators<?, ?> foreignField,
+        final int referencedStage
     ) {
-        return new StageImpl<>(identifier, predicates, joinType, field, joinOperator, foreignField);
+        return new StageImpl<>(identifier, predicates, joinType, field, joinOperator, foreignField, referencedStage);
     }
 
 }

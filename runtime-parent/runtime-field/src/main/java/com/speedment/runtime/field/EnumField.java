@@ -22,6 +22,8 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.EnumFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.predicate.FieldIsNotNullPredicate;
+import com.speedment.runtime.field.predicate.FieldIsNullPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasStringOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -43,6 +45,10 @@ public interface EnumField<ENTITY, D, E extends Enum<E>>
 extends ComparableField<ENTITY, D, E>,
         HasStringOperators<ENTITY, D>,
         ToEnumNullable<ENTITY, E> {
+
+
+    @Override
+    EnumField<ENTITY, D, E> tableAlias(String tableAlias);
 
     /**
      * Returns the enum class of this field.
@@ -204,10 +210,10 @@ extends ComparableField<ENTITY, D, E>,
     Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion);
 
     @Override
-    Predicate<ENTITY> isNull();
+    FieldIsNullPredicate<ENTITY, E> isNull();
 
     @Override
-    default Predicate<ENTITY> isNotNull() {
+    default FieldIsNotNullPredicate<ENTITY, E> isNotNull() {
         return isNull().negate();
     }
 

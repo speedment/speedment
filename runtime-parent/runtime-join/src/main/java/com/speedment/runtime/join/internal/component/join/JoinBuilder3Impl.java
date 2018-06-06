@@ -77,7 +77,7 @@ final class JoinBuilder3Impl<T0, T1, T2>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(TriFunction<T0, T1, T2, T> constructor) {
         requireNonNull(constructor);
-        assertFieldsAreInJoinTables();
+//        assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
             stages,

@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.field.predicate;
 
-import com.speedment.runtime.compute.ToBoolean;
 import com.speedment.runtime.field.predicate.trait.HasField;
 import com.speedment.runtime.field.predicate.trait.HasPredicateType;
 
@@ -32,7 +31,7 @@ import java.util.function.Predicate;
  * @since   2.1.0
  */
 public interface FieldPredicate<ENTITY>
-extends ToBoolean<ENTITY>,
+extends SpeedmentPredicate<ENTITY>,
         HasField<ENTITY>,
         HasPredicateType {
 

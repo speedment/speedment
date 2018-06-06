@@ -44,4 +44,24 @@ public interface Field<ENTITY> extends
      * @return  {@code true} if unique
      */
     boolean isUnique();
+
+    /**
+     * Returns the table alias for this field. The default table alias is the table name
+     * for the field. A custom value can be set using the {@link #tableAlias(String)} method.
+     *
+     * @return the table alias for this field
+     */
+    String tableAlias();
+
+    /**
+     * Creates and returns a new Field with the provided {@code tableAlias}. The new Field
+     * will retain all other properties from this field except the tableAlias.
+     *
+     * @return a new Field with the provided {@code tableAlias}
+     *
+     * @throws NullPointerException if the provided {@code tableAlias} is {@code null}
+     *
+     */
+    Field<ENTITY> tableAlias(String tableAlias);
+
 }

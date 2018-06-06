@@ -34,11 +34,11 @@ import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.Collection;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -67,22 +67,43 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
     private final HasComparableOperators<FK_ENTITY, V> referenced;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
+    private final String tableAlias;
 
     public ComparableForeignKeyFieldImpl(
-            ColumnIdentifier<ENTITY> identifier,
-            ReferenceGetter<ENTITY, V> getter,
-            ReferenceSetter<ENTITY, V> setter,
-            HasComparableOperators<FK_ENTITY, V> referenced,
-            TypeMapper<D, V> typeMapper,
-            boolean unique) {
-        
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, V> getter,
+        final ReferenceSetter<ENTITY, V> setter,
+        final HasComparableOperators<FK_ENTITY, V> referenced,
+        final TypeMapper<D, V> typeMapper,
+        final boolean unique
+    ) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
+        this.tableAlias = identifier.getTableId();
     }
+
+    private ComparableForeignKeyFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, V> getter,
+        final ReferenceSetter<ENTITY, V> setter,
+        final HasComparableOperators<FK_ENTITY, V> referenced,
+        final TypeMapper<D, V> typeMapper,
+        final boolean unique,
+        final String tableAlias
+    ) {
+        this.identifier = requireNonNull(identifier);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique     = unique;
+        this.tableAlias = requireNonNull(tableAlias);
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     //                                Getters                                 //
@@ -146,6 +167,17 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
         return unique;
     }
 
+
+    @Override
+    public String tableAlias() {
+        return tableAlias;
+    }
+
+    @Override
+    public ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> tableAlias(String tableAlias) {
+        return new ComparableForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     //                              Comparators                               //
     ////////////////////////////////////////////////////////////////////////////
@@ -205,47 +237,47 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY>,
     }
 
     @Override
-    public Predicate<ENTITY> greaterThan(V value) {
+    public SpeedmentPredicate<ENTITY> greaterThan(V value) {
         return new ReferenceGreaterThanPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> greaterOrEqual(V value) {
+    public SpeedmentPredicate<ENTITY> greaterOrEqual(V value) {
         return new ReferenceGreaterOrEqualPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> between(V start, V end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> between(V start, V end, Inclusion inclusion) {
         return new ReferenceBetweenPredicate<>(this, start, end, inclusion);
     }
 
     @Override
-    public Predicate<ENTITY> in(Collection<V> values) {
+    public SpeedmentPredicate<ENTITY> in(Collection<V> values) {
         return new ReferenceInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
-    public Predicate<ENTITY> notEqual(V value) {
+    public SpeedmentPredicate<ENTITY> notEqual(V value) {
         return new ReferenceNotEqualPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> lessThan(V value) {
+    public SpeedmentPredicate<ENTITY> lessThan(V value) {
         return new ReferenceLessThanPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> lessOrEqual(V value) {
+    public SpeedmentPredicate<ENTITY> lessOrEqual(V value) {
         return new ReferenceLessOrEqualPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> notBetween(V start, V end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(V start, V end, Inclusion inclusion) {
         return new ReferenceNotBetweenPredicate<>(this, start, end, inclusion);
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Collection<V> values) {
+    public SpeedmentPredicate<ENTITY> notIn(Collection<V> values) {
         return new ReferenceNotInPredicate<>(this, collectionToSet(values));
     }
 }

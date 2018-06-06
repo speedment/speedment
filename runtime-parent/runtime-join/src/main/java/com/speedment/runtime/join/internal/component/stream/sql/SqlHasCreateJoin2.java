@@ -39,9 +39,10 @@ public final class SqlHasCreateJoin2
     public SqlHasCreateJoin2(
         final DbmsHandlerComponent dbmsHandlerComponent,
         final Project project,
-        final SqlAdapterMapper sqlAdapterMapper
+        final SqlAdapterMapper sqlAdapterMapper,
+        final boolean allowStreamIteratorAndSpliterator
     ) {
-        super(dbmsHandlerComponent, project, sqlAdapterMapper);
+        super(dbmsHandlerComponent, project, sqlAdapterMapper, allowStreamIteratorAndSpliterator);
     }
 
     @Override

@@ -647,7 +647,7 @@ public interface ApplicationBuilder<
          */
         REMOVE,
         /**
-         * Logging related to configurating the application platform, dependency
+         * Logging related to configuring the application platform, dependency
          * injection, component configuration etc.
          */
         APPLICATION_BUILDER,
@@ -662,7 +662,11 @@ public interface ApplicationBuilder<
         /**
          * Logging related to transaction handling.
          */
-        TRANSACTION;
+        TRANSACTION,
+        /**
+         *  Logging related to JOINs.
+         */
+        JOIN;
 
         private final String loggerName;
 

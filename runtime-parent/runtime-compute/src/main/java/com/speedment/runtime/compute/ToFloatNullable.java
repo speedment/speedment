@@ -232,6 +232,6 @@ extends Expression<T>,
     default <V> ToFloatNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.composeNullable(casted, this);
+        return ComposedUtil.composeToFloatNullable(casted, this);
     }
 }

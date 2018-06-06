@@ -27,17 +27,10 @@ import com.speedment.runtime.compute.ToLong;
  * value and something else.
  *
  * @param <T>         the input type
- * @param <PLUS_BYTE> the expression type one would get if adding a {@code byte}
- *                    value to the result of the current expression
- * @param <PLUS_INT>  the expression type one would get if adding an {@code int}
- *                    value to the result of the current expression
- * @param <PLUS_LONG> the expression type one would get if adding a {@code long}
- *                    value to the result of the current expression
- *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface HasPlus<T, PLUS_BYTE, PLUS_INT, PLUS_LONG> {
+public interface HasPlus<T> {
 
     /**
      * Creates and returns an expression that returns the sum of the result from
@@ -52,7 +45,7 @@ public interface HasPlus<T, PLUS_BYTE, PLUS_INT, PLUS_LONG> {
      * @param other the other term used for the addition
      * @return the new expression
      */
-    PLUS_BYTE plus(byte other);
+    HasPlus<T> plus(byte other);
 
     /**
      * Creates and returns an expression that returns the sum of the result from
@@ -67,7 +60,7 @@ public interface HasPlus<T, PLUS_BYTE, PLUS_INT, PLUS_LONG> {
      * @param other the other term used for the addition
      * @return the new expression
      */
-    PLUS_BYTE plus(ToByte<T> other);
+    HasPlus<T> plus(ToByte<T> other);
 
     /**
      * Creates and returns an expression that returns the sum of the result from
@@ -82,7 +75,7 @@ public interface HasPlus<T, PLUS_BYTE, PLUS_INT, PLUS_LONG> {
      * @param other the other term used for the addition
      * @return the new expression
      */
-    PLUS_INT plus(int other);
+    HasPlus<T> plus(int other);
 
     /**
      * Creates and returns an expression that returns the sum of the result from
@@ -97,7 +90,7 @@ public interface HasPlus<T, PLUS_BYTE, PLUS_INT, PLUS_LONG> {
      * @param other the other term used for the addition
      * @return the new expression
      */
-    PLUS_INT plus(ToInt<T> other);
+    HasPlus<T> plus(ToInt<T> other);
 
     /**
      * Creates and returns an expression that returns the sum of the result from
@@ -112,7 +105,7 @@ public interface HasPlus<T, PLUS_BYTE, PLUS_INT, PLUS_LONG> {
      * @param other the other term used for the addition
      * @return the new expression
      */
-    PLUS_LONG plus(long other);
+    HasPlus<T> plus(long other);
 
     /**
      * Creates and returns an expression that returns the sum of the result from
@@ -127,7 +120,7 @@ public interface HasPlus<T, PLUS_BYTE, PLUS_INT, PLUS_LONG> {
      * @param other the other term used for the addition
      * @return the new expression
      */
-    PLUS_LONG plus(ToLong<T> other);
+    HasPlus<T> plus(ToLong<T> other);
 
     /**
      * Creates and returns an expression that returns the sum of the result from

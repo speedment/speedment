@@ -125,10 +125,42 @@ extends Expression<T>,
         return Boolean.compare(f, s);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * {@code ToBoolean} is a bit special when it comes to the
+     * {@code compose()}-method. If the {@code before} method returns
+     * {@code null}, the composed expression will return {@code false}. This is
+     * to remain compatible with how Speedment handles predicates in streams.
+     * To get a {@code ToBooleanNullable} that acts as you might expect, instead
+     * use {@link #compose}
+     *
+     * @param before the function to apply before this function is applied
+     * @param <V>  the input type of the {@code before} function
+     * @return  the composed expression
+     */
     @Override
     default <V> ToBoolean<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToBoolean(casted, this);
+    }
+
+    /**
+     * Returns a composed expression that first applies the {@code before}
+     * function to its input, and then applies this function to the result.
+     * If evaluation of either function throws an exception, it is relayed to
+     * the caller of the composed function.
+     *
+     * @param before the function to apply before this function is applied
+     * @param <V>  the input type of the {@code before} function
+     * @return  the composed expression
+     *
+     * @since 3.1.2
+     */
+    default <V> ToBooleanNullable<V> composeNullable(Function<? super V, ? extends T> before) {
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.composeToBooleanAsNullable(casted, this);
     }
 }

@@ -227,6 +227,6 @@ extends Expression<T>,
     default <V> ToShortNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.composeNullable(casted, this);
+        return ComposedUtil.composeToShortNullable(casted, this);
     }
 }

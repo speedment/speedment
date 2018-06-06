@@ -245,6 +245,6 @@ extends Expression<T>,
     default <V> ToEnumNullable<V, E> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.composeNullable(casted, this);
+        return ComposedUtil.composeToEnumNullable(casted, this);
     }
 }

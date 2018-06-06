@@ -190,6 +190,34 @@ public interface MutableTuple7<T0, T1, T2, T3, T4, T5, T6> extends MutableTuple 
     }
     
     /**
+     * Returns the 0th element from this tuple or {@code null} if no such
+     * element is present.
+     * 
+     * @return the 0th element from this tuple or {@code null} if no such
+     *         element is present.
+     */
+    default T0 getOrNull0() {
+        return get0().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 0th position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     * @param <T4> the 4th element type
+     * @param <T5> the 5th element type
+     * @param <T6> the 6th element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6> TupleGetter0<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, T0> getterOrNull0() {
+        return MutableTuple7::getOrNull0;
+    }
+    
+    /**
      * Returns a setter for the 0th element in the {@code MutableTuple}.
      * 
      * @return     the element at the 0th position
@@ -220,6 +248,34 @@ public interface MutableTuple7<T0, T1, T2, T3, T4, T5, T6> extends MutableTuple 
      */
     static <T0, T1, T2, T3, T4, T5, T6> TupleGetter1<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, Optional<T1>> getter1() {
         return MutableTuple7::get1;
+    }
+    
+    /**
+     * Returns the 1st element from this tuple or {@code null} if no such
+     * element is present.
+     * 
+     * @return the 1st element from this tuple or {@code null} if no such
+     *         element is present.
+     */
+    default T1 getOrNull1() {
+        return get1().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 1st element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 1st position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     * @param <T4> the 4th element type
+     * @param <T5> the 5th element type
+     * @param <T6> the 6th element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6> TupleGetter1<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, T1> getterOrNull1() {
+        return MutableTuple7::getOrNull1;
     }
     
     /**
@@ -256,6 +312,34 @@ public interface MutableTuple7<T0, T1, T2, T3, T4, T5, T6> extends MutableTuple 
     }
     
     /**
+     * Returns the 2nd element from this tuple or {@code null} if no such
+     * element is present.
+     * 
+     * @return the 2nd element from this tuple or {@code null} if no such
+     *         element is present.
+     */
+    default T2 getOrNull2() {
+        return get2().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 2nd element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 2nd position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     * @param <T4> the 4th element type
+     * @param <T5> the 5th element type
+     * @param <T6> the 6th element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6> TupleGetter2<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, T2> getterOrNull2() {
+        return MutableTuple7::getOrNull2;
+    }
+    
+    /**
      * Returns a setter for the 2nd element in the {@code MutableTuple}.
      * 
      * @return     the element at the 2nd position
@@ -286,6 +370,34 @@ public interface MutableTuple7<T0, T1, T2, T3, T4, T5, T6> extends MutableTuple 
      */
     static <T0, T1, T2, T3, T4, T5, T6> TupleGetter3<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, Optional<T3>> getter3() {
         return MutableTuple7::get3;
+    }
+    
+    /**
+     * Returns the 3rd element from this tuple or {@code null} if no such
+     * element is present.
+     * 
+     * @return the 3rd element from this tuple or {@code null} if no such
+     *         element is present.
+     */
+    default T3 getOrNull3() {
+        return get3().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 3rd element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 3rd position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     * @param <T4> the 4th element type
+     * @param <T5> the 5th element type
+     * @param <T6> the 6th element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6> TupleGetter3<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, T3> getterOrNull3() {
+        return MutableTuple7::getOrNull3;
     }
     
     /**
@@ -322,6 +434,34 @@ public interface MutableTuple7<T0, T1, T2, T3, T4, T5, T6> extends MutableTuple 
     }
     
     /**
+     * Returns the 4th element from this tuple or {@code null} if no such
+     * element is present.
+     * 
+     * @return the 4th element from this tuple or {@code null} if no such
+     *         element is present.
+     */
+    default T4 getOrNull4() {
+        return get4().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 4th element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 4th position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     * @param <T4> the 4th element type
+     * @param <T5> the 5th element type
+     * @param <T6> the 6th element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6> TupleGetter4<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, T4> getterOrNull4() {
+        return MutableTuple7::getOrNull4;
+    }
+    
+    /**
      * Returns a setter for the 4th element in the {@code MutableTuple}.
      * 
      * @return     the element at the 4th position
@@ -355,6 +495,34 @@ public interface MutableTuple7<T0, T1, T2, T3, T4, T5, T6> extends MutableTuple 
     }
     
     /**
+     * Returns the 5th element from this tuple or {@code null} if no such
+     * element is present.
+     * 
+     * @return the 5th element from this tuple or {@code null} if no such
+     *         element is present.
+     */
+    default T5 getOrNull5() {
+        return get5().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 5th element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 5th position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     * @param <T4> the 4th element type
+     * @param <T5> the 5th element type
+     * @param <T6> the 6th element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6> TupleGetter5<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, T5> getterOrNull5() {
+        return MutableTuple7::getOrNull5;
+    }
+    
+    /**
      * Returns a setter for the 5th element in the {@code MutableTuple}.
      * 
      * @return     the element at the 5th position
@@ -385,6 +553,34 @@ public interface MutableTuple7<T0, T1, T2, T3, T4, T5, T6> extends MutableTuple 
      */
     static <T0, T1, T2, T3, T4, T5, T6> TupleGetter6<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, Optional<T6>> getter6() {
         return MutableTuple7::get6;
+    }
+    
+    /**
+     * Returns the 6th element from this tuple or {@code null} if no such
+     * element is present.
+     * 
+     * @return the 6th element from this tuple or {@code null} if no such
+     *         element is present.
+     */
+    default T6 getOrNull6() {
+        return get6().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 6th element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 6th position
+     * @param <T0> the 0th element type
+     * @param <T1> the 1st element type
+     * @param <T2> the 2nd element type
+     * @param <T3> the 3rd element type
+     * @param <T4> the 4th element type
+     * @param <T5> the 5th element type
+     * @param <T6> the 6th element type
+     */
+    static <T0, T1, T2, T3, T4, T5, T6> TupleGetter6<MutableTuple7<T0, T1, T2, T3, T4, T5, T6>, T6> getterOrNull6() {
+        return MutableTuple7::getOrNull6;
     }
     
     /**

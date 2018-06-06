@@ -53,9 +53,9 @@ extends Expression<T>,
         HasSqrt<ToDouble<T>>,
         HasNegate<ToInt<T>>,
         HasPow<T>,
-        HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-        HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-        HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+        HasPlus<T>,
+        HasMinus<T>,
+        HasMultiply<T>,
         HasDivide<T>,
         HasMap<T, IntUnaryOperator, ToInt<T>>,
         HasMapToDouble<T, IntToDoubleFunction>,
@@ -231,23 +231,23 @@ extends Expression<T>,
     }
 
     @Override
-    default ToLong<T> multiply(byte other) {
-        return Expressions.multiply(this.asLong(), other);
+    default ToInt<T> multiply(byte other) {
+        return Expressions.multiply(this, other);
     }
 
     @Override
-    default ToLong<T> multiply(ToByte<T> other) {
-        return Expressions.multiply(this.asLong(), other.asLong());
+    default ToInt<T> multiply(ToByte<T> other) {
+        return Expressions.multiply(this, other.asInt());
     }
 
     @Override
-    default ToLong<T> multiply(int other) {
-        return Expressions.multiply(this.asLong(), other);
+    default ToInt<T> multiply(int other) {
+        return Expressions.multiply(this, other);
     }
 
     @Override
-    default ToLong<T> multiply(ToInt<T> other) {
-        return Expressions.multiply(this.asLong(), other);
+    default ToInt<T> multiply(ToInt<T> other) {
+        return Expressions.multiply(this, other);
     }
 
     @Override
@@ -319,7 +319,7 @@ extends Expression<T>,
     }
 
     @Override
-    default <V> ToInt<V> compose(Function<? super V, ? extends T> before) {
+    default <V> ToIntNullable<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToInt(casted, this);

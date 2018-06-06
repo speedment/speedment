@@ -120,7 +120,7 @@ extends Expression<T>,
     }
 
     @Override
-    default <V> ToEnum<V, E> compose(Function<? super V, ? extends T> before) {
+    default <V> ToEnumNullable<V, E> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToEnum(casted, this);

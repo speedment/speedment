@@ -87,6 +87,10 @@ extends Field<ENTITY>,
         );
     }
 
+    @Override
+    ReferenceField<ENTITY, D, V> tableAlias(String tableAlias);
+
+
     /**
      * Returns an {@link ToByteNullable} expression that has the value returned
      * by the specified mapper function if the value for this field is not

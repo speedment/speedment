@@ -82,6 +82,28 @@ public interface MutableTuple1<T0> extends MutableTuple {
     }
     
     /**
+     * Returns the 0th element from this tuple or {@code null} if no such
+     * element is present.
+     * 
+     * @return the 0th element from this tuple or {@code null} if no such
+     *         element is present.
+     */
+    default T0 getOrNull0() {
+        return get0().orElse(null);
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     * 
+     * @return     the element at the 0th position
+     * @param <T0> the 0th element type
+     */
+    static <T0> TupleGetter0<MutableTuple1<T0>, T0> getterOrNull0() {
+        return MutableTuple1::getOrNull0;
+    }
+    
+    /**
      * Returns a setter for the 0th element in the {@code MutableTuple}.
      * 
      * @return     the element at the 0th position

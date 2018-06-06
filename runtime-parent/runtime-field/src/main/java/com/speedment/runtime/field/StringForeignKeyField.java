@@ -72,4 +72,8 @@ extends StringField<ENTITY, D>,
             identifier, getter, setter, referenced, typeMapper, unique
         );
     }
+
+    @Override
+    StringForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias);
+
 }

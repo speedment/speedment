@@ -28,25 +28,20 @@ import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromNullableReference;
 import com.speedment.runtime.field.internal.method.FindFromReference;
 import com.speedment.runtime.field.internal.predicate.reference.*;
-import com.speedment.runtime.field.internal.predicate.string.StringContainsIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringContainsPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEndsWithIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEndsWithPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringEqualIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringIsEmptyPredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringStartsWithIgnoreCasePredicate;
-import com.speedment.runtime.field.internal.predicate.string.StringStartsWithPredicate;
+import com.speedment.runtime.field.internal.predicate.string.*;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.FindFromNullable;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.predicate.FieldIsNotNullPredicate;
+import com.speedment.runtime.field.predicate.FieldIsNullPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.Collection;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -72,21 +67,41 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     private final StringField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
+    private final String tableAlias;
 
     public StringForeignKeyFieldImpl(
-            ColumnIdentifier<ENTITY> identifier,
-            ReferenceGetter<ENTITY, String> getter,
-            ReferenceSetter<ENTITY, String> setter,
-            StringField<FK_ENTITY, D> referenced,
-            TypeMapper<D, String> typeMapper,
-            boolean unique) {
-
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, String> getter,
+        final ReferenceSetter<ENTITY, String> setter,
+        final StringField<FK_ENTITY, D> referenced,
+        final TypeMapper<D, String> typeMapper,
+        final boolean unique
+    ) {
         this.identifier = requireNonNull(identifier);
         this.getter = requireNonNull(getter);
         this.setter = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique = unique;
+        this.tableAlias = identifier.getTableId();
+    }
+
+    private StringForeignKeyFieldImpl(
+        final ColumnIdentifier<ENTITY> identifier,
+        final ReferenceGetter<ENTITY, String> getter,
+        final ReferenceSetter<ENTITY, String> setter,
+        final StringField<FK_ENTITY, D> referenced,
+        final TypeMapper<D, String> typeMapper,
+        final boolean unique,
+        final String tableAlias
+    ) {
+        this.identifier = requireNonNull(identifier);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique     = unique;
+        this.tableAlias = requireNonNull(tableAlias);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -152,6 +167,16 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
         return unique;
     }
 
+    @Override
+    public String tableAlias() {
+        return tableAlias;
+    }
+
+    @Override
+    public StringForeignKeyField<ENTITY, D, FK_ENTITY> tableAlias(String tableAlias) {
+        return new StringForeignKeyFieldImpl<>(identifier, getter, setter, referenced, typeMapper, unique, tableAlias);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     //                              Comparators                               //
     ////////////////////////////////////////////////////////////////////////////
@@ -198,9 +223,15 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     ////////////////////////////////////////////////////////////////////////////
     //                               Operators                                //
     ////////////////////////////////////////////////////////////////////////////
+
     @Override
-    public FieldPredicate<ENTITY> isNull() {
-        return new ReferenceIsNullPredicate<>(this);
+    public FieldIsNullPredicate<ENTITY, String> isNull() {
+        return new StringIsNullPredicate<>(this);
+    }
+
+    @Override
+    public FieldIsNotNullPredicate<ENTITY, String> isNotNull() {
+        return new StringIsNotNullPredicate<>(this);
     }
 
     @Override
@@ -210,19 +241,19 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     }
 
     @Override
-    public Predicate<ENTITY> greaterThan(String value) {
+    public SpeedmentPredicate<ENTITY> greaterThan(String value) {
         requireNonNull(value);
         return new ReferenceGreaterThanPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> greaterOrEqual(String value) {
+    public SpeedmentPredicate<ENTITY> greaterOrEqual(String value) {
         requireNonNull(value);
         return new ReferenceGreaterOrEqualPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> between(String start, String end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> between(String start, String end, Inclusion inclusion) {
         requireNonNull(start);
         requireNonNull(end);
         requireNonNull(inclusion);
@@ -230,31 +261,31 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     }
 
     @Override
-    public Predicate<ENTITY> in(Collection<String> values) {
+    public SpeedmentPredicate<ENTITY> in(Collection<String> values) {
         requireNonNull(values);
         return new ReferenceInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
-    public Predicate<ENTITY> notEqual(String value) {
+    public SpeedmentPredicate<ENTITY> notEqual(String value) {
         requireNonNull(value);
         return new ReferenceNotEqualPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> lessThan(String value) {
+    public SpeedmentPredicate<ENTITY> lessThan(String value) {
         requireNonNull(value);
         return new ReferenceLessThanPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> lessOrEqual(String value) {
+    public SpeedmentPredicate<ENTITY> lessOrEqual(String value) {
         requireNonNull(value);
         return new ReferenceLessOrEqualPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(String start, String end, Inclusion inclusion) {
         requireNonNull(start);
         requireNonNull(end);
         requireNonNull(inclusion);
@@ -262,54 +293,54 @@ implements StringForeignKeyField<ENTITY, D, FK_ENTITY>,
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Collection<String> values) {
+    public SpeedmentPredicate<ENTITY> notIn(Collection<String> values) {
         requireNonNull(values);
         return new ReferenceNotInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
-    public Predicate<ENTITY> equalIgnoreCase(String value) {
+    public SpeedmentPredicate<ENTITY> equalIgnoreCase(String value) {
         requireNonNull(value);
         return new StringEqualIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
-    public Predicate<ENTITY> startsWith(String value) {
+    public SpeedmentPredicate<ENTITY> startsWith(String value) {
         requireNonNull(value);
         return new StringStartsWithPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> endsWith(String value) {
+    public SpeedmentPredicate<ENTITY> endsWith(String value) {
         requireNonNull(value);
         return new StringEndsWithPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> contains(String value) {
+    public SpeedmentPredicate<ENTITY> contains(String value) {
         requireNonNull(value);
         return new StringContainsPredicate<>(this, value);
     }
 
     @Override
-    public Predicate<ENTITY> isEmpty() {
+    public SpeedmentPredicate<ENTITY> isEmpty() {
         return new StringIsEmptyPredicate<>(this);
     }
 
     @Override
-    public Predicate<ENTITY> startsWithIgnoreCase(String value) {
+    public SpeedmentPredicate<ENTITY> startsWithIgnoreCase(String value) {
         requireNonNull(value);
         return new StringStartsWithIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
-    public Predicate<ENTITY> endsWithIgnoreCase(String value) {
+    public SpeedmentPredicate<ENTITY> endsWithIgnoreCase(String value) {
         requireNonNull(value);
         return new StringEndsWithIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
-    public Predicate<ENTITY> containsIgnoreCase(String value) {
+    public SpeedmentPredicate<ENTITY> containsIgnoreCase(String value) {
         requireNonNull(value);
         return new StringContainsIgnoreCasePredicate<>(this, value.toLowerCase());
     }

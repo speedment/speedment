@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
+import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -36,11 +38,22 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
     private final Stream<T> stream;
 
     public AutoClosingReferenceStream(Stream<T> stream) {
-        this(stream, newSet());
+        this(stream, false);
     }
 
-    AutoClosingReferenceStream(Stream<T> stream, Set<BaseStream<?, ?>> streamSet) {
-        super(streamSet);
+    public AutoClosingReferenceStream(
+        final Stream<T> stream,
+        final boolean allowStreamIteratorAndSpliterator
+    ) {
+        this(stream, newSet(), allowStreamIteratorAndSpliterator);
+    }
+
+    AutoClosingReferenceStream(
+        final Stream<T> stream,
+        final Set<BaseStream<?, ?>> streamSet,
+        final boolean allowStreamIteratorAndSpliterator
+    ) {
+        super(streamSet, allowStreamIteratorAndSpliterator);
         this.stream = stream;
         streamSet.add(this);
     }
@@ -137,7 +150,7 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
 
     @Override
     public Object[] toArray() {
-        return finallyClose(() -> stream.toArray());
+        return finallyClose((Supplier<Object[]>) stream::toArray);
     }
 
     @Override
@@ -182,7 +195,7 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
 
     @Override
     public long count() {
-        return finallyClose(() -> stream.count());
+        return finallyClose(stream::count);
     }
 
     @Override
@@ -202,24 +215,28 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
 
     @Override
     public Optional<T> findFirst() {
-        return finallyClose(() -> stream.findFirst());
+        return finallyClose(stream::findFirst);
     }
 
     @Override
     public Optional<T> findAny() {
-        return finallyClose(() -> stream.findAny());
+        return finallyClose(stream::findAny);
     }
 
     @Override
     public Iterator<T> iterator() {
+        if (isAllowStreamIteratorAndSpliterator()) {
+            return stream.iterator();
+        }
         throw newUnsupportedException("iterator");
-        //return stream.iterator();
     }
 
     @Override
     public Spliterator<T> spliterator() {
+        if (isAllowStreamIteratorAndSpliterator()) {
+            return stream.spliterator();
+        }
         throw newUnsupportedException("spliterator");
-        //return stream.spliterator();
     }
 
     @Override

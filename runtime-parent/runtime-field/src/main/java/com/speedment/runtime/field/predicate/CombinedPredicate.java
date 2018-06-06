@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * @author Per Minborg
  * @author Emil Forslund
  */
-public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
+public interface CombinedPredicate<ENTITY> extends SpeedmentPredicate<ENTITY> {
 
     /**
      * This enum list all the different types of combinations

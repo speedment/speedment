@@ -38,13 +38,15 @@ import com.speedment.runtime.join.internal.component.stream.SqlAdapterMapper;
 import com.speedment.runtime.join.stage.JoinOperator;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
+
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.util.*;
 
 import static com.speedment.runtime.join.JoinComponent.MAX_DEGREE;
 import static java.util.Collections.emptyList;
-import java.util.List;
+import static java.util.Collections.fill;
 import static java.util.Objects.requireNonNull;
+
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -216,7 +218,8 @@ public final class JoinSqlUtil {
         final DbmsHandlerComponent dbmsHandlerComponent,
         final Project project,
         final List<Stage<?>> stages,
-        final SqlFunction<ResultSet, T> rsMapper
+        final SqlFunction<ResultSet, T> rsMapper,
+        final boolean allowStreamIteratorAndSpliterator
     ) {
         requireNonNull(project);
         requireNonNull(dbmsHandlerComponent);
@@ -266,7 +269,7 @@ public final class JoinSqlUtil {
                 rsMapper,
                 ParallelStrategy.computeIntensityDefault()
             );
-        return new AutoClosingReferenceStream<>(asynchronousQueryResult.stream())
+        return new AutoClosingReferenceStream<>(asynchronousQueryResult.stream(), allowStreamIteratorAndSpliterator)
             .onClose(asynchronousQueryResult::close);
     }
 
@@ -361,8 +364,7 @@ public final class JoinSqlUtil {
                 sb.append(sqlStage.sqlTableReference()).append(" ");
                 stage.field().ifPresent(field -> {
                     final HasComparableOperators<?, ?> foreignFirstField = stage.foreignField().get();
-                    final int foreignStageIndex = stageIndexOf(stages, foreignFirstField);
-                    final Stage<?> foreignStage = stages.get(foreignStageIndex);
+                    final int foreignStageIndex = stage.referencedStage(); //stageIndexOf(stages, foreignFirstField);
                     sb.append("ON (");
                     final JoinOperator joinOperator = stage.joinOperator().get();
                      renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
@@ -441,19 +443,62 @@ public final class JoinSqlUtil {
             .append(naming.encloseField(foreignField.identifier().getColumnId()));
     }
 
-    private static int stageIndexOf(final List<Stage<?>> stages, HasComparableOperators<?, ?> foreignField) {
-        for (int i = 0; i < stages.size(); i++) {
-            final Stage<?> stage = stages.get(i);
-            final TableIdentifier<?> tableIdentifier = foreignField.identifier().asTableIdentifier();
-            if (tableIdentifier.equals(stage.identifier())) {
-                return i;
-            }
-        }
-        throw new IllegalStateException(
-            "There is not table for " + foreignField.identifier().getTableId()
-            + ". These tables are available from prevous join stages:"
-            + stages.stream().map(Stage::identifier).map(TableIdentifier::getTableId).collect(joining(", "))
-        );
-    }
+//    private static int stageIndexOf(final List<Stage<?>> stages, HasComparableOperators<?, ?> foreignField) {
+//        // First check if there is exactly one that is matching
+//        final Set<Integer> matches = new LinkedHashSet<>();
+//        final String foreignIdentifierString = aliasIdentifierString(foreignField);
+//
+//        for (int i = 0; i < stages.size(); i++) {
+//            final Stage<?> stage = stages.get(i);
+//            if (stage.field().isPresent()) {
+//                final String fieldIdentifierString = aliasIdentifierString(stage.field().get());
+//                if (fieldIdentifierString.equals(foreignIdentifierString)) {
+//                    matches.add(i);
+//                }
+//            } else {
+//                final TableIdentifier<?> tableIdentifier = foreignField.identifier().asTableIdentifier();
+//                if (tableIdentifier.equals(stage.identifier()) && !hasAlias(foreignField)) {
+//                    matches.add(i);
+//                }
+//            }
+//
+//        }
+//        if (matches.size() > 1) {
+//            throw new IllegalStateException(
+//                "The identifier " + foreignIdentifierString + " is ambiguous. "
+//                    + "There are matching entries for stages " + matches + " "
+//                + references(stages, matches)
+//            );
+//        } else if (matches.size() == 1) {
+//            return matches.iterator().next();
+//        }
+//        throw new IllegalStateException(
+//            "There is no table for " + foreignField.identifier().getTableId()
+//                + ". These tables are available from previous join stages:"
+//                + stages.stream().map(Stage::identifier).map(TableIdentifier::getTableId).collect(joining(", "))
+//        );
+//
+//    }
+
+//    private static boolean hasAlias(HasComparableOperators<?, ?> field) {
+//        return !field.label().equals(field.identifier().getColumnId());
+//    }
+//
+//    private static <T> String aliasIdentifierString(HasComparableOperators<T, ?> foreignField) {
+//        final TableIdentifier<T> tableIdentifier = foreignField.identifier().asTableIdentifier();
+//        return tableIdentifier.getDbmsId() + "." +
+//            tableIdentifier.getSchemaId() + "." +
+//            tableIdentifier.getTableId() + "." +
+//            foreignField.label(); // Take "as()" into account
+//    }
+//
+//    private static String references(final List<Stage<?>> stages, Set<Integer> set) {
+//        return set.stream()
+//            .map(stages::get)
+//            .map(Object::toString)
+//            .collect(joining(", ", "[", "]"));
+//    }
+
+
 
 }

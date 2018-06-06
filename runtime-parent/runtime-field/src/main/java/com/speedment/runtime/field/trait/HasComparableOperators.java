@@ -20,11 +20,11 @@ import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
@@ -73,7 +73,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>equal</em> to the given value
      */
-    Predicate<ENTITY> equal(V value);
+    SpeedmentPredicate<ENTITY> equal(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -84,7 +84,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not equal</em> to the given value
      */
-    Predicate<ENTITY> notEqual(V value);
+    SpeedmentPredicate<ENTITY> notEqual(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -98,7 +98,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>less than</em> the given value
      */
-    Predicate<ENTITY> lessThan(V value);
+    SpeedmentPredicate<ENTITY> lessThan(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -112,7 +112,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>less than or equal</em> to the given value
      */
-    Predicate<ENTITY> lessOrEqual(V value);
+    SpeedmentPredicate<ENTITY> lessOrEqual(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -124,7 +124,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>greater than</em> the given value
      */
-    Predicate<ENTITY> greaterThan(V value);
+    SpeedmentPredicate<ENTITY> greaterThan(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -138,7 +138,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>greater than or equal</em> to the given value
      */
-    Predicate<ENTITY> greaterOrEqual(V value);
+    SpeedmentPredicate<ENTITY> greaterOrEqual(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -154,7 +154,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * this Field is <em>between</em> the given values (inclusive the start
      * value but exclusive the end value)
      */
-    default Predicate<ENTITY> between(V start, V end) {
+    default SpeedmentPredicate<ENTITY> between(V start, V end) {
         return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
     }
 
@@ -177,7 +177,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * parameter into account when determining if either of the end points shall
      * be included in the Field range or not
      */
-    Predicate<ENTITY> between(V start, V end, Inclusion inclusion);
+    SpeedmentPredicate<ENTITY> between(V start, V end, Inclusion inclusion);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -193,7 +193,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * this Field is <em>not between</em> the given values (inclusive the start
      * value but exclusive the end value)
      */
-    default Predicate<ENTITY> notBetween(V start, V end) {
+    default SpeedmentPredicate<ENTITY> notBetween(V start, V end) {
         return notBetween(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
     }
 
@@ -216,7 +216,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * Inclusion parameter into account when determining if either of the end
      * points shall be included in the Field range or not
      */
-    Predicate<ENTITY> notBetween(V start, V end, Inclusion inclusion);
+    SpeedmentPredicate<ENTITY> notBetween(V start, V end, Inclusion inclusion);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -231,7 +231,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * this Field is <em>in</em> the set of given values
      */
     @SuppressWarnings("unchecked")
-    default Predicate<ENTITY> in(V... values) {
+    default SpeedmentPredicate<ENTITY> in(V... values) {
         return in(Stream.of(values).collect(toSet()));
     }
 
@@ -248,7 +248,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>in</em> the given Set
      */
-    Predicate<ENTITY> in(Collection<V> values);
+    SpeedmentPredicate<ENTITY> in(Collection<V> values);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -263,7 +263,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * this Field is <em>not in</em> the set of given values
      */
     @SuppressWarnings("unchecked")
-    default Predicate<ENTITY> notIn(V... values) {
+    default SpeedmentPredicate<ENTITY> notIn(V... values) {
         return notIn(Stream.of(values).collect(toSet()));
     }
 
@@ -280,7 +280,7 @@ extends Field<ENTITY>, HasCompare<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not in</em> the given Set
      */
-    Predicate<ENTITY> notIn(Collection<V> values);
+    SpeedmentPredicate<ENTITY> notIn(Collection<V> values);
 
     @Override
     default Comparator<ENTITY> reversed() {

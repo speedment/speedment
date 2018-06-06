@@ -78,7 +78,7 @@ final class JoinBuilder5Impl<T0, T1, T2, T3, T4>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(Function5<T0, T1, T2, T3, T4, T> constructor) {
         requireNonNull(constructor);
-        assertFieldsAreInJoinTables();
+//        assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
             stages,
