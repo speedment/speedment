@@ -43,7 +43,7 @@ public final class InfoComponentImpl implements InfoComponent {
 
     @Override
     public String getImplementationVersion() {
-        return "3.1.2";
+        return "3.1.3-SNAPSHOT";
     }
 
     @Override
