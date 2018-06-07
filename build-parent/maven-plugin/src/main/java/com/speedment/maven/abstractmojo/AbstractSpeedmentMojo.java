@@ -18,8 +18,6 @@ package com.speedment.maven.abstractmojo;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
@@ -27,17 +25,21 @@ import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.maven.component.MavenPathComponent;
-import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
-import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
-import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -49,14 +51,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.project.MavenProject;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
+import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
+import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
 
 /**
  * The abstract base implementation for all the Speedment Mojos.
@@ -70,6 +74,8 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     private final Consumer<ApplicationBuilder<?, ?>> configurer;
 
+    private @Parameter(defaultValue = "${dbms.connectionUrl}") String dbmsConnectionUrl;
+
     AbstractSpeedmentMojo() {this(NOTHING);}
 
     AbstractSpeedmentMojo(Consumer<ApplicationBuilder<?, ?>> configurer) {
@@ -82,6 +88,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     protected abstract int dbmsPort();
     protected abstract String dbmsUsername();
     protected abstract String dbmsPassword();
+
+    protected String dbmsConnectionUrl() {
+        return ofNullable(dbmsConnectionUrl)
+            .filter(s -> !s.isEmpty())
+            .orElse(null);
+    }
+
     protected abstract String[] components();
     protected abstract Mapping[] typeMappers();
     protected abstract ConfigParam[] parameters();
@@ -236,6 +249,11 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         if (dbmsPassword() != null) {
             result.withPassword(dbmsPassword());
             getLog().info("Custom database password '********'.");
+        }
+
+        if (dbmsConnectionUrl() != null) {
+            result.withConnectionUrl(dbmsConnectionUrl());
+            getLog().info("Custom connection URL '" + dbmsConnectionUrl() + "'.");
         }
 
         // Add mandatory components that are not included in 'runtime'
