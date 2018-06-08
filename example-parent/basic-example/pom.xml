@@ -50,6 +50,12 @@
                 <version>${speedment.version}</version>
                 <dependencies>
                     <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.46</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
                         <groupId>com.speedment.example</groupId>
                         <artifactId>custom-typemapper</artifactId>
                         <version>${speedment.version}</version>
