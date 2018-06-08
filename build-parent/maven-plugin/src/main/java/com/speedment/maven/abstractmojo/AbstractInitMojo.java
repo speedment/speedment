@@ -157,6 +157,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addStringToMap(Project.NAME, appName, mavenProject.getArtifactId(), projectData);
         addStringToMap(Project.APP_ID, UUID.randomUUID().toString(), null, projectData);
         addStringToMap(Project.PACKAGE_NAME, packageName, (mavenProject.getGroupId() + "." + mavenProject.getArtifactId() + ".db").toLowerCase(), projectData);
+        addStringToMap(Project.PACKAGE_LOCATION, packageLocation, null, projectData);
         addStringToMap(Project.ID, appName, mavenProject.getArtifactId(), projectData);
         addBooleanToMap(Project.ENABLED, Boolean.TRUE, projectData);
         addListToMap(Project.DBMSES, createDbmses(), projectData);
@@ -187,6 +188,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addStringToMap(Dbms.ID, appName, mavenProject.getArtifactId(), dbmsData);
         addIntegerToMap(Dbms.PORT, dbmsPort, Integer.valueOf(3306), dbmsData);
         addStringToMap(Dbms.IP_ADDRESS, dbmsHost, null, dbmsData);
+        addStringToMap(Dbms.CONNECTION_URL, dbmsConnectionUrl(), null, dbmsData);
         addStringToMap(Dbms.USERNAME, dbmsUsername, mavenProject.getArtifactId(), dbmsData);
         addBooleanToMap(Dbms.ENABLED, Boolean.TRUE, dbmsData);
         addListToMap(Dbms.SCHEMAS, createSchemas(), dbmsData);

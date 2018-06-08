@@ -20,7 +20,8 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.db.*;
-
+import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
+import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 
 import java.sql.Driver;
 import java.util.Collections;
@@ -28,11 +29,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
-import com.speedment.runtime.core.internal.db.AbstractDbmsType;
-import com.sun.corba.se.spi.orb.ORBVersion;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
@@ -207,8 +203,8 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     private int driverVersion() {
         return
             Stream.of(
-                driverClass(NEW_DRIVER),
-                driverClass(OLD_DRIVER)
+                driver(NEW_DRIVER),
+                driver(OLD_DRIVER)
             )
             .filter(Optional::isPresent)
             .map(Optional::get)
