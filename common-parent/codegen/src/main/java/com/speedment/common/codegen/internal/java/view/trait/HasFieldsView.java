@@ -18,7 +18,12 @@ package com.speedment.common.codegen.internal.java.view.trait;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.codegen.model.InterfaceMethod;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.modifier.Modifier;
 import com.speedment.common.codegen.model.trait.HasFields;
 
 import java.util.LinkedList;
@@ -27,6 +32,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static java.util.Collections.singleton;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -38,7 +44,7 @@ import static java.util.stream.Collectors.toList;
  * @see        Transform
  */
 public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, String> {
-    
+
     /**
      * Render the fields-part of the model using the 
      * {@link #fieldSeparator(HasFields)} method to separate the fields and 
@@ -49,8 +55,23 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
      * @param model  the model
      * @return       the generated code
      */
+    @SuppressWarnings("unchecked")
     default String renderFields(Generator gen, M model) {
         final List<String> rendered;
+
+        if (model instanceof Constructor
+        ||  model instanceof Method
+        ||  model instanceof InterfaceMethod) {
+            model.getFields().forEach(field -> {
+                field.getModifiers().retainAll(singleton(Modifier.FINAL));
+            });
+        }
+
+        if (model instanceof Interface) {
+            model.getFields().forEach(field -> {
+                field.getModifiers().clear();
+            });
+        }
 
         if (useTripleDot() && !model.getFields().isEmpty()) {
             final String last = gen.on(wrapField(new LinkedList<>(model.getFields()).getLast())).get();
