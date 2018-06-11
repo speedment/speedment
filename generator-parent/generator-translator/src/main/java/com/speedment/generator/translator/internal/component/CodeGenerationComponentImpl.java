@@ -65,6 +65,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
 
     @Override
     public CodeGenerationComponent newClass(GenerateClass<Project> creator) {
+        injector.inject(creator);
         put(Project.class,
             com.speedment.common.codegen.model.Class.class,
             creator.getClass().getName(),
@@ -74,6 +75,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
 
     @Override
     public CodeGenerationComponent newEnum(GenerateEnum<Project> creator) {
+        injector.inject(creator);
         put(Project.class,
             Enum.class,
             creator.getClass().getName(),
@@ -83,6 +85,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
 
     @Override
     public CodeGenerationComponent newInterface(GenerateInterface<Project> creator) {
+        injector.inject(creator);
         put(Project.class,
             Interface.class,
             creator.getClass().getName(),
@@ -315,6 +318,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
 
         @Override
         public CodeGenerationComponent newClass(GenerateClass<DOC> creator) {
+            injector.inject(creator);
             put(docClass,
                 com.speedment.common.codegen.model.Class.class,
                 creator.getClass().getName(),
@@ -324,6 +328,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
 
         @Override
         public CodeGenerationComponent newEnum(GenerateEnum<DOC> creator) {
+            injector.inject(creator);
             put(docClass,
                 Enum.class,
                 creator.getClass().getName(),
@@ -333,6 +338,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
 
         @Override
         public CodeGenerationComponent newInterface(GenerateInterface<DOC> creator) {
+            injector.inject(creator);
             put(docClass,
                 Interface.class,
                 creator.getClass().getName(),
