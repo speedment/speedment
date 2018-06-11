@@ -296,11 +296,9 @@ public final class Formatting {
      */
     public static Optional<String> packageName(String longName) {
 		if (longName.contains(".")) {
-			return Optional.of(replaceIfIllegalJavaIdentifierCharacter(
-                replaceIfJavaUsedWord(
-                    longName.substring(0,
-                        longName.lastIndexOf(".")
-                    ).replace(" ", ""))).toLowerCase());
+			return Optional.of(longName.substring(0,
+                    longName.lastIndexOf(".")
+                ).replace(" ", ""));
 
 		} else {
 			return Optional.empty();
