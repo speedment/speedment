@@ -18,13 +18,18 @@ package com.speedment.common.codegen.constant;
 
 
 import java.lang.reflect.Type;
-import java.util.*;
-import static java.util.Objects.requireNonNull;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
+import java.util.function.*;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Constant implementations of the {@link Type} interface that can be used to
@@ -139,6 +144,125 @@ public final class DefaultType {
     public static Type function(Type innerTypeA, Type innerTypeB) {
         return SimpleParameterizedType.create(Function.class, innerTypeA, innerTypeB);
     }
+
+    /**
+     * Generates a {@link Type} to represent a java standard {@link BiFunction}
+     * with generic type variables.
+     *
+     * @param innerTypeA  the first type variable
+     * @param innerTypeB  the second type variable
+     * @param innerTypeC  the third type variable
+     * @return            the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type bifunction(Type innerTypeA, Type innerTypeB, Type innerTypeC) {
+        return SimpleParameterizedType.create(BiFunction.class, innerTypeA, innerTypeB, innerTypeC);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard {@link IntFunction}
+     * with generic type variables.
+     *
+     * @param innerType  the inner type
+     * @return           the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type intFunction(Type innerType) {
+        return SimpleParameterizedType.create(IntFunction.class, innerType);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard
+     * {@link LongFunction} with generic type variables.
+     *
+     * @param innerType  the inner type
+     * @return           the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type longFunction(Type innerType) {
+        return SimpleParameterizedType.create(LongFunction.class, innerType);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard
+     * {@link DoubleFunction} with generic type variables.
+     *
+     * @param innerType  the inner type
+     * @return           the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type doubleFunction(Type innerType) {
+        return SimpleParameterizedType.create(DoubleFunction.class, innerType);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard
+     * {@link ToIntFunction} with generic type variables.
+     *
+     * @param innerType  the inner type
+     * @return           the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type toIntFunction(Type innerType) {
+        return SimpleParameterizedType.create(ToIntFunction.class, innerType);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard
+     * {@link ToLongFunction} with generic type variables.
+     *
+     * @param innerType  the inner type
+     * @return           the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type toLongFunction(Type innerType) {
+        return SimpleParameterizedType.create(ToLongFunction.class, innerType);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard
+     * {@link ToDoubleFunction} with generic type variables.
+     *
+     * @param innerType  the inner type
+     * @return           the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type toDoubleFunction(Type innerType) {
+        return SimpleParameterizedType.create(ToDoubleFunction.class, innerType);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard
+     * {@link UnaryOperator} with generic type variables.
+     *
+     * @param innerType  the inner type
+     * @return           the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type unaryOperator(Type innerType) {
+        return SimpleParameterizedType.create(UnaryOperator.class, innerType);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard
+     * {@link BinaryOperator} with generic type variables.
+     *
+     * @param innerType  the inner type
+     * @return           the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type binaryOperator(Type innerType) {
+        return SimpleParameterizedType.create(BinaryOperator.class, innerType);
+    }
     
     /**
      * Generates a {@link Type} to represent a java standard {@link Predicate} 
@@ -150,6 +274,20 @@ public final class DefaultType {
     public static Type predicate(Type innerType) {
         return SimpleParameterizedType.create(Predicate.class, innerType);
     }
+
+    /**
+     * Generates a {@link Type} to represent a java standard {@link BiPredicate}
+     * with a generic type variable.
+     *
+     * @param innerTypeA  the first type variable
+     * @param innerTypeB  the second type variable
+     * @return            the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type bipredicate(Type innerTypeA, Type innerTypeB) {
+        return SimpleParameterizedType.create(BiPredicate.class, innerTypeA, innerTypeB);
+    }
     
     /**
      * Generates a {@link Type} to represent a java standard {@link Consumer} 
@@ -160,6 +298,20 @@ public final class DefaultType {
      */
     public static Type consumer(Type innerType) {
         return SimpleParameterizedType.create(Consumer.class, innerType);
+    }
+
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Consumer}
+     * with a generic type variable.
+     *
+     * @param innerTypeA  the first type variable
+     * @param innerTypeB  the second type variable
+     * @return            the resulting type
+     *
+     * @since 2.5
+     */
+    public static Type biconsumer(Type innerTypeA, Type innerTypeB) {
+        return SimpleParameterizedType.create(BiConsumer.class, innerTypeA, innerTypeB);
     }
     
     /**
@@ -193,6 +345,21 @@ public final class DefaultType {
      */
     public static boolean isPrimitive(Type type) {
         return WRAPPERS.keySet().contains(type.getTypeName());
+    }
+
+    /**
+     * Returns {@code true} if the specified type is a wrapper type, else
+     * {@code false}.
+     *
+     * @param type  the type to check
+     * @return      {@code true} if it is a wrapper, else {@code false}
+     *
+     * @since 2.5
+     */
+    public static boolean isWrapper(Type type) {
+        return WRAPPERS.values().stream()
+            .map(Class::getTypeName)
+            .anyMatch(type.getTypeName()::equals);
     }
     
     /**
