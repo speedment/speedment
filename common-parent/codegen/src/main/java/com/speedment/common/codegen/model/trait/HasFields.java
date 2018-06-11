@@ -16,6 +16,7 @@
  */
 package com.speedment.common.codegen.model.trait;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.model.Class;
@@ -47,6 +48,22 @@ public interface HasFields<T extends HasFields<T>> {
     default T add(final Field field) {
         getFields().add(field.setParent(this));
         return (T) this;
+    }
+
+    /**
+     * Creates a {@link Field} and adds it to this model. The field will be
+     * given the default modifiers for this type, for an example, a
+     * {@link Class} will be {@code public final}. The type will be constructed
+     * using the default implementation.
+     *
+     * @param name  the name of the field
+     * @param type  the type of the field
+     * @return      a reference to this
+     *
+     * @since 2.5
+     */
+    default T field(final String name, String type) {
+        return field(name, SimpleType.create(type));
     }
 
     /**
