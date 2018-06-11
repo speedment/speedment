@@ -58,6 +58,21 @@ public final class DefaultType {
     }
 
     /**
+     * Returns a new {@link SimpleParameterizedType} with the specified type
+     * parameters.
+     *
+     * @param type            the base type
+     * @param typeParameters  all its type parameters
+     * @return                the new generic type
+     *
+     * @since 2.5
+     */
+    public static Type genericType(Type type, String... typeParameters) {
+        return SimpleParameterizedType.create(type,
+            Stream.of(typeParameters).map(SimpleType::create).toArray(Type[]::new));
+    }
+
+    /**
      * Generates a {@link Type} to represent a java standard {@link Class} with
      * a generic type variable.
      * 
