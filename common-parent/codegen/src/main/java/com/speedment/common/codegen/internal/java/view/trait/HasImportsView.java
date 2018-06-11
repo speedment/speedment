@@ -72,9 +72,9 @@ public interface HasImportsView<M extends HasImports<M>> extends
 
         final StringJoiner result = new StringJoiner(nl());
         customImports.forEach(result::add);
-        if (!customImports.isEmpty()) result.add("");
+        if (!customImports.isEmpty() && !standardImports.isEmpty()) result.add("");
         standardImports.forEach(result::add);
-        if (!standardImports.isEmpty()) result.add("");
+        if (!standardImports.isEmpty() && (staticImports.size() + staticStandardImports.size()) > 0) result.add("");
         staticImports.forEach(result::add);
         staticStandardImports.forEach(result::add);
         if (result.length() > 0) result.add(nl());

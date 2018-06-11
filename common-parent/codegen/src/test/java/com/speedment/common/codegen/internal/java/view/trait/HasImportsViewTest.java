@@ -27,6 +27,7 @@ import org.junit.Test;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.speedment.common.codegen.internal.util.ModelTreeUtil.importsOf;
 import static com.speedment.common.codegen.util.Formatting.nl;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -60,7 +61,7 @@ public class HasImportsViewTest {
             Import.of(Objects.class).static_().setStaticMember("equals")
         };
         
-        final Import[] actual = file.getImports().stream().toArray(Import[]::new);
+        final Import[] actual = importsOf(file).toArray(new Import[0]);
         
         assertArrayEquals(expected, actual);
     }
