@@ -17,15 +17,22 @@
 package com.speedment.generator.translator.component;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
+import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorConstructor;
 import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.generator.translator.TranslatorKey;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -37,6 +44,78 @@ import java.util.stream.Stream;
  */
 @InjectKey(CodeGenerationComponent.class)
 public interface CodeGenerationComponent {
+
+    /**
+     * Creates a new dynamic code translator and adds it to this component. The
+     * created translator will not listen to any decorators.
+     *
+     * @param creator  the CodeGen model creator
+     * @return         this component
+     * @since  3.1.4
+     */
+    CodeGenerationComponent newClass(Function<Project, com.speedment.common.codegen.model.Class> creator);
+
+    /**
+     * Creates a new dynamic code translator and adds it to this component. The
+     * created translator will not listen to any decorators.
+     *
+     * @param creator  the CodeGen model creator
+     * @return         this component
+     * @since  3.1.4
+     */
+    CodeGenerationComponent newEnum(Function<Project, Enum> creator);
+
+    /**
+     * Creates a new dynamic code translator and adds it to this component. The
+     * created translator will not listen to any decorators.
+     *
+     * @param creator  the CodeGen model creator
+     * @return         this component
+     * @since  3.1.4
+     */
+    CodeGenerationComponent newInterface(Function<Project, Interface> creator);
+
+    /**
+     * Creates a new dynamic code translator by first creating a
+     * {@link TranslatorAppender} and taking in the additional information from
+     * it.
+     *
+     * @return  the appender
+     * @since   3.1.4
+     */
+    TranslatorAppender<Table> forEveryTable();
+
+    /**
+     * Creates a new dynamic code translator by first creating a
+     * {@link TranslatorAppender} and taking in the additional information from
+     * it.
+     *
+     * @return  the appender
+     * @since   3.1.4
+     */
+    TranslatorAppender<Schema> forEverySchema();
+
+    /**
+     * Creates a new dynamic code translator by first creating a
+     * {@link TranslatorAppender} and taking in the additional information from
+     * it.
+     *
+     * @return  the appender
+     * @since   3.1.4
+     */
+    TranslatorAppender<Dbms> forEveryDbms();
+
+    /**
+     * Decorates one of the translators in this component. The object returned
+     * by this method holds additional configuration.
+     *
+     * @param key    key identifying the translator to decorate
+     * @param <DOC>  the document type (Project, Table, etc)
+     * @param <T>    the generated type (Class, Interface, Enum, etc)
+     * @return       the decorator builder
+     */
+    <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
+    DecoratorBuilder<T> decorate(TranslatorKey<DOC, T> key);
 
     /**
      * Puts a new {@code TranslatorConstructor} for the given class/key pair. If
