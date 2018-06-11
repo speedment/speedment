@@ -16,6 +16,7 @@
  */
 package com.speedment.generator.translator.internal.namer;
 
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 
 import java.math.BigDecimal;
@@ -23,11 +24,8 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.util.Formatting.ucfirst;
-import static com.speedment.runtime.core.internal.util.sql.SqlUtil.unQuote;
 import static com.speedment.runtime.core.util.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.runtime.core.util.CollectorUtil.unmodifiableSetOf;
 import static java.util.Objects.requireNonNull;
@@ -41,9 +39,9 @@ public class JavaLanguageNamerImpl implements JavaLanguageNamer {
     // From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
     //
     // Literals
-    final static Set<String> JAVA_LITERAL_WORDS = unmodifiableSetOf(
+    final static Set<String> JAVA_LITERAL_WORDS = Stream.of(
         "true", "false", "null"
-    );
+    ).collect(toUnmodifiableSet());
 
     // Java reserved keywords
     final static Set<String> JAVA_RESERVED_WORDS = unmodifiableSetOf(
@@ -158,7 +156,7 @@ public class JavaLanguageNamerImpl implements JavaLanguageNamer {
     @Override
     public String javaStaticFieldName(final String externalName) {
         requireNonNull(externalName);
-        return toUnderscoreSeparated(javaNameFromExternal(externalName)).toUpperCase();
+        return Formatting.staticField(externalName);
     }
 
     @Override
@@ -194,69 +192,25 @@ public class JavaLanguageNamerImpl implements JavaLanguageNamer {
     @Override
     public String nameFromExternal(final String externalName) {
         requireNonNull(externalName);
-        String result = unQuote(externalName.trim()); // Trim if there are initial spaces or trailing spaces...
-        // CamelCase
-        // http://stackoverflow.com/questions/4050381/regular-expression-for-checking-if-capital-letters-are-found-consecutively-in-a
-        // [A-Z] -> \p{Lu}
-        // [^A-Za-z0-9] -> [^\pL0-90-9]
-        result = Stream.of(result.replaceAll("([\\p{Lu}]+)", "_$1").split("[^\\pL0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
-        return result;
+        return Formatting.nameFromExternal(externalName);
     }
 
     @Override
     public String javaNameFromExternal(final String externalName) {
         requireNonNull(externalName);
-        return replaceIfIllegalJavaIdentifierCharacter(replaceIfJavaUsedWord(nameFromExternal(externalName)));
+        return Formatting.javaNameFromExternal(externalName);
     }
 
     @Override
     public String replaceIfJavaUsedWord(final String word) {
         requireNonNull(word);
-        // We need to replace regardless of case because we do not know how the retuned string is to be used
-        if (JAVA_USED_WORDS_LOWER_CASE.contains(word.toLowerCase())) {
-            // If it is a java reseved/literal/class, add a "_" at the end to avoid naming conflics
-            return word + "_";
-        }
-        return word;
+        return Formatting.replaceIfJavaUsedWord(word);
     }
 
     @Override
     public String replaceIfIllegalJavaIdentifierCharacter(final String word) {
         requireNonNull(word);
-        if (word.isEmpty()) {
-            return REPLACEMENT_CHARACTER.toString(); // No name is translated to REPLACEMENT_CHARACTER only
-        }
-        final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < word.length(); i++) {
-            Character c = word.charAt(i);
-            if (i == 0) {
-                if (Character.isJavaIdentifierStart(c)) {
-                    // Fine! Just add the first character
-                    sb.append(c);
-                } else if (Character.isJavaIdentifierPart(c)) {
-                    // Not ok as the first, but ok otherwise. Add the replacement before it
-                    sb.append(REPLACEMENT_CHARACTER).append(c);
-                } else {
-                    // Cannot be used as a java identifier. Replace it
-                    sb.append(REPLACEMENT_CHARACTER);
-                }
-            } else if (Character.isJavaIdentifierPart(c)) {
-                // Fine! Just add it
-                sb.append(c);
-            } else {
-                // Cannot be used as a java identifier. Replace it
-                sb.append(REPLACEMENT_CHARACTER);
-            }
-
-        }
-        return sb.toString();
-
-        // We need to replace regardless of case because we do not know how the retuned string is to be used
-        //if (JAVA_USED_WORDS_LOWER_CASE.contains(word.toLowerCase())) {
-        // If it is a java reseved/literal/class, add a "_" at the end to avoid naming conflics
-        //    return word + "_";
-        //}
-        //return word;
+        return Formatting.replaceIfIllegalJavaIdentifierCharacter(word);
     }
 
     @Override
@@ -291,19 +245,6 @@ public class JavaLanguageNamerImpl implements JavaLanguageNamer {
     @Override
     public String toUnderscoreSeparated(final String javaName) {
         requireNonNull(javaName);
-        final StringBuilder result = new StringBuilder();
-        final String input = unQuote(javaName.trim());
-        for (int i = 0; i < input.length(); i++) {
-            final char c = input.charAt(i);
-            if (result.length() == 0) {
-                result.append(Character.toLowerCase(c));
-            } else if (Character.isUpperCase(c)) {
-                result.append("_").append(Character.toLowerCase(c));
-            } else {
-                result.append(c);
-            }
-        }
-        return result.toString();
+        return Formatting.toUnderscoreSeparated(javaName);
     }
-
 }
