@@ -1,6 +1,8 @@
 package com.speedment.generator.translator.internal;
 
 import com.speedment.common.codegen.Generator;
+import com.speedment.common.codegen.controller.AlignTabs;
+import com.speedment.common.codegen.controller.AutoImports;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.Injector;
@@ -56,6 +58,8 @@ implements JavaClassTranslator<DOC, T> {
         );
 
         file.add(generated);
+        file.call(new AutoImports(getCodeGenerator().getDependencyMgr()));
+        file.call(new AlignTabs<>());
         return file;
     }
 
