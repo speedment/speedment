@@ -7,6 +7,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorSupport;
+import com.speedment.generator.translator.component.function.GeneratorFunction;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
@@ -30,14 +31,14 @@ public final class SimpleTranslator
 implements JavaClassTranslator<DOC, T> {
 
     private final Injector injector;
-    private final Function<DOC, T> creator;
+    private final GeneratorFunction<DOC, T> creator;
     private final DOC document;
     private final boolean generated;
 
     public SimpleTranslator(
             Injector injector,
             DOC document,
-            Function<DOC, T> creator,
+            GeneratorFunction<DOC, T> creator,
             boolean generated) {
 
         this.creator   = requireNonNull(creator);
@@ -48,7 +49,7 @@ implements JavaClassTranslator<DOC, T> {
 
     @Override
     public File get() {
-        final T generated = creator.apply(document);
+        final T generated = creator.generate(document);
         final File file = File.of(getSupport().baseDirectoryName() + "/"
             + (isInGeneratedPackage() ? "generated/" : "")
             + generated.getName() + ".java"

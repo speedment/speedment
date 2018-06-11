@@ -17,13 +17,14 @@
 package com.speedment.generator.translator.component;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.codegen.model.Enum;
-import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorConstructor;
 import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.generator.translator.TranslatorKey;
+import com.speedment.generator.translator.component.function.GenerateClass;
+import com.speedment.generator.translator.component.function.GenerateEnum;
+import com.speedment.generator.translator.component.function.GenerateInterface;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
@@ -32,7 +33,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -53,7 +53,7 @@ public interface CodeGenerationComponent {
      * @return         this component
      * @since  3.1.4
      */
-    CodeGenerationComponent newClass(Function<Project, com.speedment.common.codegen.model.Class> creator);
+    CodeGenerationComponent newClass(GenerateClass<Project> creator);
 
     /**
      * Creates a new dynamic code translator and adds it to this component. The
@@ -63,7 +63,7 @@ public interface CodeGenerationComponent {
      * @return         this component
      * @since  3.1.4
      */
-    CodeGenerationComponent newEnum(Function<Project, Enum> creator);
+    CodeGenerationComponent newEnum(GenerateEnum<Project> creator);
 
     /**
      * Creates a new dynamic code translator and adds it to this component. The
@@ -73,7 +73,7 @@ public interface CodeGenerationComponent {
      * @return         this component
      * @since  3.1.4
      */
-    CodeGenerationComponent newInterface(Function<Project, Interface> creator);
+    CodeGenerationComponent newInterface(GenerateInterface<Project> creator);
 
     /**
      * Creates a new dynamic code translator by first creating a

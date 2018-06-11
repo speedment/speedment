@@ -30,6 +30,9 @@ import com.speedment.generator.translator.TranslatorKey;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.generator.translator.component.DecoratorBuilder;
 import com.speedment.generator.translator.component.TranslatorAppender;
+import com.speedment.generator.translator.component.function.GenerateClass;
+import com.speedment.generator.translator.component.function.GenerateEnum;
+import com.speedment.generator.translator.component.function.GenerateInterface;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.generator.translator.internal.SimpleTranslator;
 import com.speedment.runtime.config.Dbms;
@@ -44,7 +47,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -62,7 +64,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
     }
 
     @Override
-    public CodeGenerationComponent newClass(Function<Project, com.speedment.common.codegen.model.Class> creator) {
+    public CodeGenerationComponent newClass(GenerateClass<Project> creator) {
         put(Project.class,
             com.speedment.common.codegen.model.Class.class,
             creator.getClass().getName(),
@@ -71,7 +73,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
     }
 
     @Override
-    public CodeGenerationComponent newEnum(Function<Project, Enum> creator) {
+    public CodeGenerationComponent newEnum(GenerateEnum<Project> creator) {
         put(Project.class,
             Enum.class,
             creator.getClass().getName(),
@@ -80,7 +82,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
     }
 
     @Override
-    public CodeGenerationComponent newInterface(Function<Project, Interface> creator) {
+    public CodeGenerationComponent newInterface(GenerateInterface<Project> creator) {
         put(Project.class,
             Interface.class,
             creator.getClass().getName(),
@@ -312,7 +314,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         }
 
         @Override
-        public CodeGenerationComponent newClass(Function<DOC, com.speedment.common.codegen.model.Class> creator) {
+        public CodeGenerationComponent newClass(GenerateClass<DOC> creator) {
             put(docClass,
                 com.speedment.common.codegen.model.Class.class,
                 creator.getClass().getName(),
@@ -321,7 +323,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         }
 
         @Override
-        public CodeGenerationComponent newEnum(Function<DOC, Enum> creator) {
+        public CodeGenerationComponent newEnum(GenerateEnum<DOC> creator) {
             put(docClass,
                 Enum.class,
                 creator.getClass().getName(),
@@ -330,7 +332,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         }
 
         @Override
-        public CodeGenerationComponent newInterface(Function<DOC, Interface> creator) {
+        public CodeGenerationComponent newInterface(GenerateInterface<DOC> creator) {
             put(docClass,
                 Interface.class,
                 creator.getClass().getName(),
