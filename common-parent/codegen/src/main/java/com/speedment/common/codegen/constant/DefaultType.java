@@ -42,7 +42,21 @@ import static java.util.Objects.requireNonNull;
 public final class DefaultType {
     
     public static final Type WILDCARD = SimpleType.create("?");
-        
+
+    /**
+     * Returns a new {@link SimpleParameterizedType} with the specified type
+     * parameters.
+     *
+     * @param type            the base type
+     * @param typeParameters  all its type parameters
+     * @return                the new generic type
+     *
+     * @since 2.5
+     */
+    public static Type genericType(Type type, Type... typeParameters) {
+        return SimpleParameterizedType.create(type, typeParameters);
+    }
+
     /**
      * Generates a {@link Type} to represent a java standard {@link Class} with
      * a generic type variable.
