@@ -24,7 +24,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 
@@ -35,7 +37,7 @@ import static java.util.stream.Collectors.toSet;
  */
 public class DefaultTransformFactory implements TransformFactory {
 
-    private final Map<Class<?>, Set<Map.Entry<Class<?>, Class<? extends Transform<?, ?>>>>> transforms;
+    private final Map<Class<?>, Set<Map.Entry<Class<?>, Supplier<? extends Transform<?, ?>>>>> transforms;
     private final String name;
 
     /**
@@ -54,10 +56,8 @@ public class DefaultTransformFactory implements TransformFactory {
     }
 
     @Override
-    public <A, B, T extends Transform<A, B>> TransformFactory install(Class<A> from, Class<B> to, Class<T> transform) {
-        requireNonNull(from);
-        requireNonNull(to);
-        requireNonNull(transform);
+    public <A, B, T extends Transform<A, B>> TransformFactory install(Class<A> from, Class<B> to, Supplier<T> transform) {
+        requireNonNulls(from, to, transform);
 
         transforms.computeIfAbsent(from, f -> new HashSet<>())
             .add(new AbstractMap.SimpleEntry<>(to, transform));
@@ -69,13 +69,11 @@ public class DefaultTransformFactory implements TransformFactory {
     @SuppressWarnings("unchecked")
     public <A, T extends Transform<A, ?>> Set<Map.Entry<Class<?>, T>> allFrom(Class<A> model) {
         requireNonNull(model);
-
         return transforms.entrySet().stream()
             .filter(e -> e.getKey().isAssignableFrom(model))
             .flatMap(e -> e.getValue().stream())
-            .map(e -> toEntry(e.getKey(), (T) TransformFactory.create(e.getValue())))
+            .map(e -> toEntry(e.getKey(), (T) e.getValue().get()))
             .collect(toSet());
-
     }
 
     private static <A, T extends Transform<A, ?>> Map.Entry<Class<?>, T> toEntry(Class<?> key, T value) {
