@@ -29,7 +29,9 @@ import java.lang.reflect.Type;
  * @author Emil Forslund
  * @since  2.0
  */
-public interface Field extends 
+public interface Field
+extends HasParent<HasFields<?>, Field>,
+        HasImports<Field>,
         HasCopy<Field>, 
         HasCall<Field>, 
         HasName<Field>,

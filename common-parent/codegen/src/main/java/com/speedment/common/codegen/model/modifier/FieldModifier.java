@@ -16,12 +16,24 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.*;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.modifier.Keyword.Final;
+import com.speedment.common.codegen.model.modifier.Keyword.Private;
+import com.speedment.common.codegen.model.modifier.Keyword.Protected;
+import com.speedment.common.codegen.model.modifier.Keyword.Public;
+import com.speedment.common.codegen.model.modifier.Keyword.Static;
+import com.speedment.common.codegen.model.modifier.Keyword.Synchronized;
+import com.speedment.common.codegen.model.modifier.Keyword.Transient;
+import com.speedment.common.codegen.model.modifier.Keyword.Volatile;
+import com.speedment.common.codegen.model.trait.HasModifiers;
 
 /**
+ * Composed trait of all the {@link HasModifiers modifiers} that can be added to
+ * a {@link Field}.
+ *
+ * @param <T>  the extending type
  *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface FieldModifier<T extends FieldModifier<T>> 

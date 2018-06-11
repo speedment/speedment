@@ -21,9 +21,10 @@ import java.util.Optional;
 
 /**
  * A trait for models that has a super type.
- * 
+ *
+ * @param <T>  the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasSupertype<T extends HasSupertype<T>> {
@@ -35,6 +36,19 @@ public interface HasSupertype<T extends HasSupertype<T>> {
      * @return      a reference to this
      */
 	T setSupertype(Type type);
+
+    /**
+     * Sets the super type of this model. This is a synonym for
+     * {@link #setSupertype(Type)}.
+     *
+     * @param type  the super type
+     * @return      a reference to this
+     *
+     * @since 2.5
+     */
+	default T extend(Type type) {
+	    return setSupertype(type);
+    }
     
     /**
      * Returns the super type if such exists, else <code>empty</code>.

@@ -21,8 +21,10 @@ import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import com.speedment.common.codegen.model.trait.HasConstructors;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -33,14 +35,16 @@ import static java.util.Objects.requireNonNull;
  * This is the default implementation of the {@link Constructor} interface. This
  * class should not be instantiated directly. Instead you should call the
  * {@link Constructor#of()} method to get an instance. In that way, you can
- * layer change the implementing class without modifying the using code.
+ * later change the implementing class without modifying the using code.
  *
  * @author Emil Forslund
  * @see Constructor
  */
 public final class ConstructorImpl implements Constructor {
 
+    private HasConstructors<?> parent;
     private Javadoc javadoc;
+    private final List<Import> imports;
     private final List<AnnotationUsage> annotations;
     private final List<Generic> generics;
     private final List<Field> params;
@@ -56,6 +60,7 @@ public final class ConstructorImpl implements Constructor {
      */
     public ConstructorImpl() {
         javadoc     = null;
+        imports     = new ArrayList<>();
         annotations = new ArrayList<>();
         generics    = new ArrayList<>();
         params      = new ArrayList<>();
@@ -71,12 +76,29 @@ public final class ConstructorImpl implements Constructor {
      */
     private ConstructorImpl(final Constructor prototype) {
         javadoc     = requireNonNull(prototype).getJavadoc().map(Copier::copy).orElse(null);
+        imports     = Copier.copy(prototype.getImports());
         annotations = Copier.copy(prototype.getAnnotations());
         generics    = Copier.copy(prototype.getGenerics());
         params      = Copier.copy(prototype.getFields());
         code        = Copier.copy(prototype.getCode(), c -> c);
         modifiers   = Copier.copy(prototype.getModifiers(), Modifier::copy, EnumSet.noneOf(Modifier.class));
         exceptions  = new LinkedHashSet<>(prototype.getExceptions());
+    }
+
+    @Override
+    public Constructor setParent(HasConstructors<?> parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<HasConstructors<?>> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return imports;
     }
 
     @Override
@@ -96,7 +118,7 @@ public final class ConstructorImpl implements Constructor {
 
     @Override
     public Constructor set(Javadoc doc) {
-        javadoc = doc;
+        javadoc = doc.setParent(this);
         return this;
     }
 

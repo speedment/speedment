@@ -17,17 +17,23 @@
 package com.speedment.common.codegen.model.trait;
 
 /**
- * Trait for code generator models that can be deep-copied.
- * 
+ * Trait for code generator models that can be deep-copied. If the model
+ * implementing this trait also implements {@link HasParent}, then the parent
+ * property <em>will not</em> be copied.
+ *
+ * @param <T>  the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasCopy<T extends HasCopy<T>> {
     
     /**
-     * Create a deep copy of this model.
-     * 
+     * Create a deep copy of this model if it is mutable. If this class is not
+     * mutable, then this method may return itself. If the model implements
+     * {@link HasParent}, then the parent property <em>will not</em> be copied.
+     * Instead it will be set to {@code null}.
+     *
      * @return  the copy
      */
     T copy();

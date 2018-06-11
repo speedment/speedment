@@ -22,9 +22,10 @@ import java.util.Optional;
 
 /**
  * A trait for models that contain {@link Javadoc} components.
- * 
+ *
+ * @param <T> the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasJavadoc<T extends HasJavadoc<T>> {
@@ -36,6 +37,19 @@ public interface HasJavadoc<T extends HasJavadoc<T>> {
      * @return     a reference to this
      */
     T set(final Javadoc doc);
+
+    /**
+     * Sets the {@link Javadoc} of this model. This method is a synonym for
+     * {@link #set(Javadoc)}.
+     *
+     * @param doc  the javadoc
+     * @return     a reference to this
+     *
+     * @since 2.5
+     */
+    default T javadoc(final Javadoc doc) {
+        return set(doc);
+    }
     
     /**
      * Returns the documentation of this model if such exists, else 

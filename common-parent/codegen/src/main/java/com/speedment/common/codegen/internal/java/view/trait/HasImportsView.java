@@ -20,8 +20,11 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasImports;
 
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.util.Formatting.dnl;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
+
+import static com.speedment.common.codegen.internal.util.ModelTreeUtil.importsOf;
 import static com.speedment.common.codegen.util.Formatting.nl;
 
 /**
@@ -44,8 +47,38 @@ public interface HasImportsView<M extends HasImports<M>> extends
      * @return       the generated code
      */
     default String renderImports(Generator gen, M model) {
-        return gen.onEach(model.getImports())
+        final List<String> customImports         = new ArrayList<>();
+        final List<String> standardImports       = new ArrayList<>();
+        final List<String> staticImports         = new ArrayList<>();
+        final List<String> staticStandardImports = new ArrayList<>();
+
+        gen.onEach(importsOf(model))
             .distinct().sorted()
-            .collect(joinIfNotEmpty(nl(), "", dnl()));
+            .forEachOrdered(line -> {
+                if (line.startsWith("import static")) {
+                    if (line.startsWith("import static java")) {
+                        staticStandardImports.add(line);
+                    } else {
+                        staticImports.add(line);
+                    }
+                } else {
+                    if (line.startsWith("import java")) {
+                        standardImports.add(line);
+                    } else {
+                        customImports.add(line);
+                    }
+                }
+            });
+
+        final StringJoiner result = new StringJoiner(nl());
+        customImports.forEach(result::add);
+        if (!customImports.isEmpty()) result.add("");
+        standardImports.forEach(result::add);
+        if (!standardImports.isEmpty()) result.add("");
+        staticImports.forEach(result::add);
+        staticStandardImports.forEach(result::add);
+        if (result.length() > 0) result.add(nl());
+
+        return result.toString();
     }
 }

@@ -16,12 +16,17 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
+import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.modifier.Keyword.*;
+import com.speedment.common.codegen.model.trait.HasModifiers;
 
 /**
+ * Composed trait of all the {@link HasModifiers modifiers} that can be added to
+ * a {@link Method}.
+ *
+ * @param <T>  the extending type
  *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface MethodModifier<T extends MethodModifier<T>> extends Public<T>, 

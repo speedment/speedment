@@ -19,17 +19,20 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import com.speedment.common.codegen.model.trait.HasImports;
+
 import java.lang.reflect.Type;
 import java.util.EnumSet;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This is the default implementation of the {@link Import} interface. This
  * class should not be instantiated directly. Instead you should call the
- * {@link Import#of(Type)} method to get an instance. In that way, you can layer
+ * {@link Import#of(Type)} method to get an instance. In that way, you can later
  * change the implementing class without modifying the using code.
  *
  * @author Emil Forslund
@@ -37,6 +40,7 @@ import java.util.Set;
  */
 public final class ImportImpl implements Import {
 
+    private HasImports<?> parent;
     private Type type;
     private String staticMember;
     private final Set<Modifier> modifiers;
@@ -63,6 +67,17 @@ public final class ImportImpl implements Import {
     protected ImportImpl(Import prototype) {
         type      = prototype.getType();
         modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+    }
+
+    @Override
+    public Import setParent(HasImports<?> parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<HasImports<?>> getParent() {
+        return Optional.ofNullable(parent);
     }
 
     @Override

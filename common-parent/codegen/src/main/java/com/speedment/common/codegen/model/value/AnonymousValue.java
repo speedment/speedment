@@ -19,6 +19,7 @@ package com.speedment.common.codegen.model.value;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.model.trait.HasClasses;
 import com.speedment.common.codegen.model.trait.HasFields;
+import com.speedment.common.codegen.model.trait.HasImports;
 import com.speedment.common.codegen.model.trait.HasInitializers;
 import com.speedment.common.codegen.model.trait.HasMethods;
 import com.speedment.common.codegen.model.trait.HasValues;
@@ -35,6 +36,7 @@ import java.util.List;
  */
 public interface AnonymousValue
 extends Value<Type>,
+        HasImports<AnonymousValue>,
         HasValues<AnonymousValue>,
         HasMethods<AnonymousValue>,
         HasFields<AnonymousValue>,

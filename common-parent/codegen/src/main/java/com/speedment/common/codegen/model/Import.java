@@ -19,6 +19,8 @@ package com.speedment.common.codegen.model;
 import com.speedment.common.codegen.internal.model.ImportImpl;
 import com.speedment.common.codegen.model.modifier.ImportModifier;
 import com.speedment.common.codegen.model.trait.HasCopy;
+import com.speedment.common.codegen.model.trait.HasImports;
+import com.speedment.common.codegen.model.trait.HasParent;
 import com.speedment.common.codegen.model.trait.HasType;
 
 import java.lang.reflect.Type;
@@ -30,8 +32,11 @@ import java.util.Optional;
  * @author Emil Forslund
  * @since  2.0
  */
-public interface Import extends HasCopy<Import>, HasType<Import>,
-    ImportModifier<Import> {
+public interface Import
+extends HasParent<HasImports<?>, Import>,
+        HasCopy<Import>,
+        HasType<Import>,
+        ImportModifier<Import> {
 
     /**
      * Returns any static member referenced in this import. For non-static

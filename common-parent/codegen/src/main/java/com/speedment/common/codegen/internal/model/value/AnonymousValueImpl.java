@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.model.value;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Initializer;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Value;
@@ -39,6 +40,7 @@ public final class AnonymousValueImpl
 implements AnonymousValue {
 
     private final List<Value<?>> args;
+    private final List<Import> imports;
     private final List<Type> typeParams;
     private final List<Field> fields;
     private final List<Method> methods;
@@ -48,6 +50,7 @@ implements AnonymousValue {
 
     public AnonymousValueImpl() {
         this.args         = new ArrayList<>();
+        this.imports      = new ArrayList<>();
         this.typeParams   = new ArrayList<>();
         this.fields       = new ArrayList<>();
         this.methods      = new ArrayList<>();
@@ -57,6 +60,7 @@ implements AnonymousValue {
 
     private AnonymousValueImpl(AnonymousValue prototype) {
         this.args             = Copier.copy(prototype.getValues(), HasCopy::copy);
+        this.imports          = Copier.copy(prototype.getImports());
         this.typeParams       = new ArrayList<>(prototype.getTypeParameters());
         this.fields           = Copier.copy(prototype.getFields());
         this.methods          = Copier.copy(prototype.getMethods());
@@ -73,6 +77,11 @@ implements AnonymousValue {
     @Override
     public List<Value<?>> getValues() {
         return args;
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return imports;
     }
 
     @Override

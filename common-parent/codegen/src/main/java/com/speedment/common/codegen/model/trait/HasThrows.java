@@ -21,16 +21,17 @@ import java.util.Set;
 
 /**
  * A trait for models that can throw exceptions.
- * 
+ *
+ * @param <T> the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasThrows<T extends HasThrows<T>> {
     
     /**
-     * Adds the specified exception reference to the <code>throws</code>-clause 
-     * of this model.
+     * Adds the specified exception reference to the {@code throws}-clause of
+     * this model.
      * 
      * @param exception  the new exception
      * @return           a reference to this
@@ -40,10 +41,21 @@ public interface HasThrows<T extends HasThrows<T>> {
         getExceptions().add(exception);
         return (T) this;
     }
+
+    /**
+     * Adds the specified exception reference to the {@code throws}-clause
+     * of this model. This is a synonym of {@link #add(Type)}.
+     *
+     * @param exception  the new exception
+     * @return           a reference to this
+     */
+    default T throwing(final Type exception) {
+        return add(exception);
+    }
     
     /**
-     * Returns a <code>Set</code> with all the exceptions that can be throwed by
-     * this model.
+     * Returns a {@code Set} with all the exceptions that can be thrown by this
+     * model.
      * <p>
      * The set returned must be mutable for changes!
      * 

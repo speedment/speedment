@@ -30,7 +30,7 @@
     </parent>
     
     <artifactId>codegen</artifactId>
-    <version>2.4.10</version>
+    <version>2.5-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - CodeGen</name>

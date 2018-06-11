@@ -33,7 +33,8 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class InterfaceFieldImpl implements InterfaceField {
-    
+
+    private Interface parent;
 	private final Field f;
 	
     /**
@@ -44,6 +45,17 @@ public final class InterfaceFieldImpl implements InterfaceField {
 	public InterfaceFieldImpl(Field wrapped) {
 		f = requireNonNull(wrapped);
 	}
+
+    @Override
+    public InterfaceField setParent(Interface parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<Interface> getParent() {
+        return Optional.ofNullable(parent);
+    }
 
     @Override
 	public String getName() {
@@ -76,6 +88,11 @@ public final class InterfaceFieldImpl implements InterfaceField {
 	}
 
     @Override
+    public List<Import> getImports() {
+        return f.getImports();
+    }
+
+    @Override
     public InterfaceField setName(String name) {
         f.setName(name);
         return this;
@@ -90,6 +107,7 @@ public final class InterfaceFieldImpl implements InterfaceField {
     @Override
     public InterfaceField set(Javadoc doc) {
         f.set(doc);
+        doc.setParent(this);
         return this;
     }
 

@@ -29,7 +29,9 @@ import java.util.List;
  * @since  2.0
  */
 public interface EnumConstant 
-extends HasCopy<EnumConstant>, 
+extends HasParent<Enum, EnumConstant>,
+        HasImports<EnumConstant>,
+        HasCopy<EnumConstant>,
         HasName<EnumConstant>, 
         HasJavadoc<EnumConstant>,
         HasClasses<EnumConstant>,

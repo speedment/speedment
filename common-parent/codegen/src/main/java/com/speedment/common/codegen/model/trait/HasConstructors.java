@@ -22,9 +22,10 @@ import java.util.List;
 
 /**
  * A trait for models that contain {@link Constructor} components.
- * 
+ *
+ * @param <T> the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasConstructors<T extends HasConstructors<T>> {
@@ -37,7 +38,7 @@ public interface HasConstructors<T extends HasConstructors<T>> {
      */
     @SuppressWarnings("unchecked")
     default T add(final Constructor constr) {
-        getConstructors().add(constr);
+        getConstructors().add(constr.setParent(this));
         return (T) this;
     }
     

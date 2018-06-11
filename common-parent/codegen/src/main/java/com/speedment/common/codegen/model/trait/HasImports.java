@@ -18,13 +18,15 @@ package com.speedment.common.codegen.model.trait;
 
 import com.speedment.common.codegen.model.Import;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
  * A trait for models that contain {@link Import} components.
- * 
+ *
+ * @param <T>  the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasImports<T extends HasImports<T>> {
@@ -37,10 +39,49 @@ public interface HasImports<T extends HasImports<T>> {
      */
     @SuppressWarnings("unchecked")
     default T add(final Import dep) {
-        getImports().add(dep);
+        getImports().add(dep.setParent(this));
         return (T) this;
     }
-    
+
+    /**
+     * Adds the specified {@link Import} to this model. This is a synonym for
+     * {@link #add(Import)}.
+     *
+     * @param dep  the dependency to add
+     * @return     a reference to this
+     *
+     * @since 2.5
+     */
+    default T imports(final Import dep) {
+        return add(dep);
+    }
+
+    /**
+     * Creates an {@link Import} using the default implementation and adds it to
+     * this model.
+     *
+     * @param type  the dependency to add
+     * @return      a reference to this
+     *
+     * @since 2.5
+     */
+    default T imports(final Type type) {
+        return add(Import.of(type));
+    }
+
+    /**
+     * Creates a static {@link Import} using the default implementation and adds
+     * it to this model.
+     *
+     * @param type  the dependency to add
+     * @return      a reference to this
+     *
+     * @since 2.5
+     */
+    default T imports(final Type type, String method) {
+        return add(Import.of(type).static_().setStaticMember(method));
+    }
+
     /**
      * Returns a list of all imports in this model.
      * <p>

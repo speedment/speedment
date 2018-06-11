@@ -18,7 +18,10 @@ package com.speedment.common.codegen.model.trait;
 
 import com.speedment.common.codegen.model.AnnotationUsage;
 
+import java.lang.reflect.Type;
 import java.util.List;
+
+import static com.speedment.common.codegen.model.Value.ofText;
 
 /**
  * A trait for models that contains {@link AnnotationUsage} components.
@@ -38,6 +41,46 @@ public interface HasAnnotationUsage<T extends HasAnnotationUsage<T>> {
     default T add(final AnnotationUsage annotation) {
         getAnnotations().add(annotation);
         return (T) this;
+    }
+
+    /**
+     * Adds the specified {@link AnnotationUsage} to this model. This is a
+     * synonym for {@link #add(AnnotationUsage)}.
+     *
+     * @param annotation  the new annotation usage
+     * @return            a reference to this
+     *
+     * @since 2.5
+     */
+    default T annotate(final AnnotationUsage annotation) {
+        return add(annotation);
+    }
+
+    /**
+     * Creates an {@link AnnotationUsage} with the specified {@code Type} and
+     * adds it to this model.
+     *
+     * @param annotation  the new annotation usage
+     * @return            a reference to this
+     *
+     * @since 2.5
+     */
+    default T annotate(final Type annotation) {
+        return annotate(AnnotationUsage.of(annotation));
+    }
+
+    /**
+     * Creates an {@link AnnotationUsage} with the specified {@code Type} and
+     * adds it to this model. This method will also set the {@code value()}
+     * of the annotation to {@code textValue}.
+     *
+     * @param annotation  the new annotation usage
+     * @return            a reference to this
+     *
+     * @since 2.5
+     */
+    default T annotate(final Type annotation, String textValue) {
+        return annotate(AnnotationUsage.of(annotation).set(ofText(textValue)));
     }
     
     /**

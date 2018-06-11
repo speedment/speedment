@@ -19,6 +19,7 @@ package com.speedment.common.codegen.model;
 import com.speedment.common.codegen.internal.model.JavadocTagImpl;
 import com.speedment.common.codegen.model.trait.HasCall;
 import com.speedment.common.codegen.model.trait.HasCopy;
+import com.speedment.common.codegen.model.trait.HasImports;
 import com.speedment.common.codegen.model.trait.HasName;
 
 import java.util.Optional;
@@ -26,12 +27,16 @@ import java.util.Optional;
 /**
  * A model that represents a specific tag in a {@link Javadoc} block.
  *
- * @author Emil Forslund
  * @see Javadoc
+ *
+ * @author Emil Forslund
  * @since  2.0
  */
-public interface JavadocTag extends HasCopy<JavadocTag>, HasName<JavadocTag>,
-    HasCall<JavadocTag> {
+public interface JavadocTag
+extends HasCopy<JavadocTag>,
+        HasName<JavadocTag>,
+        HasImports<JavadocTag>,
+        HasCall<JavadocTag> {
 
     /**
      * Sets the value of this javadoc tag. In the following examples, the value

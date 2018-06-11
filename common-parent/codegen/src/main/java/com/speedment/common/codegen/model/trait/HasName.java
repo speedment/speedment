@@ -18,9 +18,10 @@ package com.speedment.common.codegen.model.trait;
 
 /**
  * A trait for models that have a name.
- * 
+ *
+ * @param <T>  the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasName<T extends HasName<T>> {
@@ -28,17 +29,15 @@ public interface HasName<T extends HasName<T>> {
     /**
      * Sets the name of this model.
      * <p>
-     * This must not be null!
+     * This must not be {@code null}!
      * 
-     * @param name  the new name
+     * @param name  the new name (not {@code null}!)
      * @return      a reference to this
      */
     T setName(final String name);
     
     /**
-     * Returns the name of this model. 
-     * <p>
-     * This should never be null!
+     * Returns the name of this model.
      * 
      * @return  the name
      */

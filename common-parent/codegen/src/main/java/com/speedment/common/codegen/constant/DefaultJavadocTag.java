@@ -16,8 +16,11 @@
  */
 package com.speedment.common.codegen.constant;
 
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.JavadocTag;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -108,6 +111,11 @@ public enum DefaultJavadocTag implements JavadocTag {
     @Override
     public Optional<String> getText() {
         return Optional.empty();
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return Collections.emptyList();
     }
 
     @Override

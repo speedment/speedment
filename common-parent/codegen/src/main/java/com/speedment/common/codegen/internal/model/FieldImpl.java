@@ -19,12 +19,19 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import com.speedment.common.codegen.model.trait.HasFields;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
@@ -32,17 +39,19 @@ import static java.util.Objects.requireNonNull;
  * This is the default implementation of the {@link Field} interface.
  * This class should not be instantiated directly. Instead you should call the
  * {@link Field#of(String, Type)} method to get an instance. In that way, you 
- * can layer change the implementing class without modifying the using code.
+ * can later change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
  * @see    Field
  */
 public final class FieldImpl implements Field {
-	
+
+	private HasFields<?> parent;
 	private String name;
 	private Type type;
 	private Value<?> value;
 	private Javadoc javadoc;
+	private final List<Import> imports;
 	private final List<AnnotationUsage> annotations;
 	private final Set<Modifier> modifiers;
 	
@@ -60,6 +69,7 @@ public final class FieldImpl implements Field {
 		this.type			= requireNonNull(type);
 		this.value			= null;
 		this.javadoc		= null;
+		this.imports    	= new ArrayList<>();
 		this.annotations	= new ArrayList<>();
 		this.modifiers		= EnumSet.noneOf(Modifier.class);
 	}
@@ -70,15 +80,32 @@ public final class FieldImpl implements Field {
      * @param prototype  the prototype
      */
 	protected FieldImpl(Field prototype) {
-		name		= requireNonNull(prototype).getName();
+	    name		= requireNonNull(prototype).getName();
 		type		= prototype.getType();
+		imports		= Copier.copy(prototype.getImports());
 		value		= prototype.getValue().map(Copier::copy).orElse(null);
 		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);
 		annotations	= Copier.copy(prototype.getAnnotations());
 		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
 	}
 
-	@Override
+    @Override
+    public Field setParent(HasFields<?> parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<HasFields<?>> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return imports;
+    }
+
+    @Override
 	public String getName() {
 		return name;
 	}
@@ -107,7 +134,7 @@ public final class FieldImpl implements Field {
 
 	@Override
 	public Field set(Javadoc doc) {
-		javadoc = doc;
+		javadoc = doc.setParent(this);
 		return this;
 	}
 

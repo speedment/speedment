@@ -21,12 +21,24 @@ import com.speedment.common.codegen.model.trait.*;
 /**
  * An abstract base class to share functionality between the models 
  * {@link Class}, {@link Enum} and {@link Interface}.
- * 
+ *
+ * @param <T>  the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
-public interface ClassOrInterface<T extends ClassOrInterface<T>> extends 
-    HasCopy<T>, HasCall<T>, HasName<T>, HasJavadoc<T>, HasGenerics<T>,
-    HasImplements<T>, HasClasses<T>, HasMethods<T>, HasFields<T>, 
-    HasAnnotationUsage<T>, HasModifiers<T>, HasInitializers<T> {}
+public interface ClassOrInterface<T extends ClassOrInterface<T>>
+extends HasParent<HasClasses<?>, T>,
+        HasImports<T>,
+        HasCopy<T>,
+        HasCall<T>,
+        HasName<T>,
+        HasJavadoc<T>,
+        HasGenerics<T>,
+        HasImplements<T>,
+        HasClasses<T>,
+        HasMethods<T>,
+        HasFields<T>,
+        HasAnnotationUsage<T>,
+        HasModifiers<T>,
+        HasInitializers<T> {}

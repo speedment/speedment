@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import com.speedment.common.codegen.model.trait.HasClasses;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -33,10 +34,12 @@ import static java.util.Objects.requireNonNull;
  * @param <T> The extending type
  */
 public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>> 
-    implements ClassOrInterface<T> {
-	
+implements ClassOrInterface<T> {
+
+	private HasClasses<?> parent;
 	private String name;
 	private Javadoc javadoc;
+	private final List<Import> imports;
 	private final List<AnnotationUsage> annotations;
 	private final List<Generic> generics;
 	private final List<Type> interfaces;
@@ -54,6 +57,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
     ClassOrInterfaceImpl(String name) {
 		this.name		 = requireNonNull(name);
 		this.javadoc	 = null;
+		this.imports     = new ArrayList<>();
 		this.annotations = new ArrayList<>();
 		this.generics	 = new ArrayList<>();
 		this.interfaces	 = new ArrayList<>();
@@ -72,6 +76,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
     ClassOrInterfaceImpl(ClassOrInterface<T> prototype) {
 		name		= requireNonNull(prototype).getName();
 		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);
+		imports     = Copier.copy(prototype.getImports());
 		annotations	= Copier.copy(prototype.getAnnotations());
 		generics	= Copier.copy(prototype.getGenerics());
 		interfaces	= new ArrayList<>(prototype.getInterfaces());
@@ -82,7 +87,19 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
 	}
 
-	@Override
+    @Override
+    @SuppressWarnings("unchecked")
+    public T setParent(HasClasses<?> parent) {
+        this.parent = parent;
+        return (T) this;
+    }
+
+    @Override
+    public Optional<HasClasses<?>> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
 	public T setName(String name) {
 		this.name = requireNonNull(name);
@@ -97,7 +114,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 	@Override
     @SuppressWarnings("unchecked")
 	public T set(Javadoc doc) {
-		javadoc = doc;
+		javadoc = doc.setParent(this);
 		return (T) this;
 	}
 
@@ -106,7 +123,12 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 		return Optional.ofNullable(javadoc);
 	}
 
-	@Override
+    @Override
+    public List<Import> getImports() {
+        return imports;
+    }
+
+    @Override
 	public List<Method> getMethods() {
 		return methods;
 	}

@@ -29,7 +29,7 @@ import java.util.Objects;
  * This is the default implementation of the {@link Enum} interface.
  * This class should not be instantiated directly. Instead you should call the
  * {@link Enum#of(java.lang.String)} method to get an instance. In that way, 
- * you can layer change the implementing class without modifying the using code.
+ * you can later change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
  * @see    Enum

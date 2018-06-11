@@ -16,12 +16,17 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
+import com.speedment.common.codegen.model.Annotation;
 import com.speedment.common.codegen.model.modifier.Keyword.Public;
+import com.speedment.common.codegen.model.trait.HasModifiers;
 
 /**
+ * Composed trait of all the {@link HasModifiers modifiers} that can be added to
+ * a {@link Annotation}.
+ *
+ * @param <T>  the extending type
  *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface AnnotationModifier<T extends AnnotationModifier<T>> 

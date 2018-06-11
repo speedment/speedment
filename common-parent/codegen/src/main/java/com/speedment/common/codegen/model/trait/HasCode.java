@@ -24,9 +24,10 @@ import static com.speedment.common.codegen.util.Formatting.nl;
 
 /**
  * A trait for models that contains code.
- * 
+ *
+ * @param <T> the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasCode<T extends HasCode<T>> {

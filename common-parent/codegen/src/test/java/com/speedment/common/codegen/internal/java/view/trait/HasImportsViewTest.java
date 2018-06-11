@@ -21,13 +21,15 @@ import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.util.Formatting;
-import static com.speedment.common.codegen.util.Formatting.nl;
-import java.util.Objects;
-import java.util.Optional;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -67,6 +69,7 @@ public class HasImportsViewTest {
     public void testRenderImports() {
         final String expected = Formatting.separate(nl(), 
             "import java.util.Objects;",
+            "",
             "import static java.util.Objects.equals;", // <-- Order alphabetically.
             "import static java.util.Objects.requireNonNull;",
             "", // <-- Finish with an empty line.

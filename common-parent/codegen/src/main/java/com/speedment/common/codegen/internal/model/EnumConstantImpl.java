@@ -18,6 +18,7 @@ package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Enum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +30,17 @@ import static java.util.Objects.requireNonNull;
  * This is the default implementation of the {@link EnumConstant} interface.
  * This class should not be instantiated directly. Instead you should call the
  * {@link EnumConstant#of(java.lang.String)} method to get an instance. In that way, 
- * you can layer change the implementing class without modifying the using code.
+ * you can later change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
  * @see    EnumConstant
  */
 public final class EnumConstantImpl implements EnumConstant {
-	
+
+    private Enum parent;
 	private String name;
     private Javadoc javadoc;
+    private final List<Import> imports;
     private final List<ClassOrInterface<?>> classes;
     private final List<Initializer> initializers;
     private final List<Method> methods;
@@ -55,6 +58,7 @@ public final class EnumConstantImpl implements EnumConstant {
      */
 	public EnumConstantImpl(String name) {
 		this.name	      = requireNonNull(name);
+		this.imports      = new ArrayList<>();
 		this.classes      = new ArrayList<>();
 		this.initializers = new ArrayList<>();
 		this.methods      = new ArrayList<>();
@@ -69,8 +73,9 @@ public final class EnumConstantImpl implements EnumConstant {
      * @param prototype  the prototype 
      */
 	protected EnumConstantImpl(EnumConstant prototype) {
-		name	     = requireNonNull(prototype).getName();
+	    name	     = requireNonNull(prototype).getName();
         javadoc      = prototype.getJavadoc().orElse(null);
+		imports	     = Copier.copy(prototype.getImports());
 		classes	     = Copier.copy(prototype.getClasses(), c -> c.copy());
 		initializers = Copier.copy(prototype.getInitializers(), c -> c.copy());
 		methods	     = Copier.copy(prototype.getMethods(), c -> c.copy());
@@ -79,7 +84,23 @@ public final class EnumConstantImpl implements EnumConstant {
         annotations  = Copier.copy(prototype.getAnnotations(), c -> c.copy());
 	}
 
-	@Override
+    @Override
+    public EnumConstant setParent(Enum parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<Enum> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return imports;
+    }
+
+    @Override
 	public EnumConstant setName(String name) {
 		this.name = requireNonNull(name);
 		return this;
@@ -97,7 +118,7 @@ public final class EnumConstantImpl implements EnumConstant {
     
     @Override
     public EnumConstant set(Javadoc doc) {
-        this.javadoc = doc;
+        this.javadoc = doc.setParent(this);
         return this;
     }
 
