@@ -19,15 +19,8 @@ package com.speedment.generator.translator.internal.namer;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.util.CollectorUtil.toUnmodifiableSet;
-import static com.speedment.runtime.core.util.CollectorUtil.unmodifiableSetOf;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -35,111 +28,6 @@ import static java.util.Objects.requireNonNull;
  * @author Per Minborg
  */
 public class JavaLanguageNamerImpl implements JavaLanguageNamer {
-
-    // From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
-    //
-    // Literals
-    final static Set<String> JAVA_LITERAL_WORDS = Stream.of(
-        "true", "false", "null"
-    ).collect(toUnmodifiableSet());
-
-    // Java reserved keywords
-    final static Set<String> JAVA_RESERVED_WORDS = unmodifiableSetOf(
-        // Unused
-        "const", "goto",
-        // The real ones...
-        "abstract",
-        "continue",
-        "for",
-        "new",
-        "switch",
-        "assert",
-        "default",
-        "goto",
-        "package",
-        "synchronized",
-        "boolean",
-        "do",
-        "if",
-        "private",
-        "this",
-        "break",
-        "double",
-        "implements",
-        "protected",
-        "throw",
-        "byte",
-        "else",
-        "import",
-        "public",
-        "throws",
-        "case",
-        "enum",
-        "instanceof",
-        "return",
-        "transient",
-        "catch",
-        "extends",
-        "int",
-        "short",
-        "try",
-        "char",
-        "final",
-        "interface",
-        "static",
-        "void",
-        "class",
-        "finally",
-        "long",
-        "strictfp",
-        "volatile",
-        "const",
-        "float",
-        "native",
-        "super",
-        "while"
-    );
-
-    final static Set<Class<?>> JAVA_BUILT_IN_CLASSES = unmodifiableSetOf(
-        Boolean.class,
-        Byte.class,
-        Character.class,
-        Double.class,
-        Float.class,
-        Integer.class,
-        Long.class,
-        Object.class,
-        Short.class,
-        String.class,
-        BigDecimal.class,
-        BigInteger.class,
-        boolean.class,
-        byte.class,
-        char.class,
-        double.class,
-        float.class,
-        int.class,
-        long.class,
-        short.class
-    );
-
-    final static Set<String> JAVA_DEFAULT_IMPORTS = unmodifiableSetOf("java.lang");
-
-    final static Set<String> JAVA_BUILT_IN_CLASS_WORDS = JAVA_BUILT_IN_CLASSES.stream().map(Class::getSimpleName).collect(toUnmodifiableSet());
-
-    final static Set<String> JAVA_USED_WORDS = Stream.of(
-        JAVA_LITERAL_WORDS,
-        JAVA_RESERVED_WORDS,
-        JAVA_BUILT_IN_CLASS_WORDS
-    )
-        .flatMap(Collection::stream)
-        .collect(toUnmodifiableSet());
-
-    static final Set<String> JAVA_USED_WORDS_LOWER_CASE = JAVA_USED_WORDS.stream()
-        .map(String::toLowerCase)
-        .collect(toUnmodifiableSet());
-
-    static final Character REPLACEMENT_CHARACTER = '_';
 
     @Override
     public String javaTypeName(final String externalName) {
