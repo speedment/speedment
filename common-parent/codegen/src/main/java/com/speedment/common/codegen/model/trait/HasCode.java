@@ -18,6 +18,7 @@ package com.speedment.common.codegen.model.trait;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.util.Formatting.nl;
@@ -59,6 +60,21 @@ public interface HasCode<T extends HasCode<T>> {
         for (final String row : rows) {
             Collections.addAll(getCode(), row.split(nl()));
         }
+        return (T) this;
+    }
+
+    /**
+     * Adds all the specified rows to this model. If any of the specified rows
+     * contains a new-line character it will be broken apart on that character
+     * so that every row is in fact added as a separate string.
+     *
+     * @param rows  the rows
+     * @return      a reference to this
+     */
+    @SuppressWarnings("unchecked")
+    default T add(Stream<String> rows) {
+        rows.flatMap(row -> Stream.of(row.split(nl())))
+            .forEachOrdered(this::add);
         return (T) this;
     }
     
