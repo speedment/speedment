@@ -19,6 +19,9 @@ package com.speedment.runtime.field.internal;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.BooleanField;
+import com.speedment.runtime.field.comparator.BooleanFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.internal.comparator.BooleanFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.GetBooleanImpl;
 import com.speedment.runtime.field.internal.predicate.booleans.BooleanEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.booleans.BooleanNotEqualPredicate;
@@ -108,6 +111,26 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
     @Override
     public String tableAlias() {
         return tableAlias;
+    }
+    
+    @Override
+    public BooleanFieldComparator<ENTITY, D> reversed() {
+        return new BooleanFieldComparatorImpl<>(this).reversed();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
+    }
+    
+    @Override
+    public BooleanField<ENTITY, D> getField() {
+        return this;
     }
     
     @Override

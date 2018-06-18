@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.ByteField;
+import com.speedment.runtime.field.trait.HasByteValue;
 
 /**
  * A {@link FieldComparator} that compares values of a {@link ByteField}.
@@ -37,7 +37,7 @@ public interface ByteFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> 
      * @return the compared field
      */
     @Override
-    ByteField<ENTITY, D> getField();
+    HasByteValue<ENTITY, D> getField();
     
     @Override
     ByteFieldComparator<ENTITY, D> reversed();

@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.ShortField;
+import com.speedment.runtime.field.trait.HasShortValue;
 
 /**
  * A {@link FieldComparator} that compares values of a {@link ShortField}.
@@ -37,7 +37,7 @@ public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY>
      * @return the compared field
      */
     @Override
-    ShortField<ENTITY, D> getField();
+    HasShortValue<ENTITY, D> getField();
     
     @Override
     ShortFieldComparator<ENTITY, D> reversed();

@@ -71,4 +71,12 @@ public interface ShortField<ENTITY, D> extends Field<ENTITY>, HasShortValue<ENTI
     default short applyAsShort(ENTITY entity) {
         return getAsShort(entity);
     }
+    
+    @Override
+    ShortFieldComparator<ENTITY, D> comparator();
+    
+    @Override
+    default ShortFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
 }

@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.IntField;
+import com.speedment.runtime.field.trait.HasIntValue;
 
 /**
  * A {@link FieldComparator} that compares values of a {@link IntField}.
@@ -37,7 +37,7 @@ public interface IntFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
      * @return the compared field
      */
     @Override
-    IntField<ENTITY, D> getField();
+    HasIntValue<ENTITY, D> getField();
     
     @Override
     IntFieldComparator<ENTITY, D> reversed();

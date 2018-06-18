@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.DoubleField;
+import com.speedment.runtime.field.trait.HasDoubleValue;
 
 /**
  * A {@link FieldComparator} that compares values of a {@link DoubleField}.
@@ -37,7 +37,7 @@ public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY
      * @return the compared field
      */
     @Override
-    DoubleField<ENTITY, D> getField();
+    HasDoubleValue<ENTITY, D> getField();
     
     @Override
     DoubleFieldComparator<ENTITY, D> reversed();

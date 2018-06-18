@@ -17,9 +17,10 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.comparator.DoubleFieldComparator;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.trait.HasDoubleValue;
 
 import java.util.Objects;
 
@@ -38,20 +39,20 @@ public final class DoubleFieldComparatorImpl<ENTITY, D>
 extends AbstractFieldComparator<ENTITY> 
 implements DoubleFieldComparator<ENTITY, D> {
     
-    private final DoubleField<ENTITY, D> field;
+    private final HasDoubleValue<ENTITY, D> field;
     private final boolean reversed;
     
-    public DoubleFieldComparatorImpl(DoubleField<ENTITY, D> field) {
+    public DoubleFieldComparatorImpl(HasDoubleValue<ENTITY, D> field) {
         this(field, false);
     }
     
-    DoubleFieldComparatorImpl(DoubleField<ENTITY, D> field, boolean reversed) {
+    DoubleFieldComparatorImpl(HasDoubleValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public DoubleField<ENTITY, D> getField() {
+    public HasDoubleValue<ENTITY, D> getField() {
         return field;
     }
     

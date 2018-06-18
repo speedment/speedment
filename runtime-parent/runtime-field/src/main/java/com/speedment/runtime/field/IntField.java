@@ -71,4 +71,12 @@ public interface IntField<ENTITY, D> extends Field<ENTITY>, HasIntValue<ENTITY, 
     default int applyAsInt(ENTITY entity) {
         return getAsInt(entity);
     }
+    
+    @Override
+    IntFieldComparator<ENTITY, D> comparator();
+    
+    @Override
+    default IntFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
 }

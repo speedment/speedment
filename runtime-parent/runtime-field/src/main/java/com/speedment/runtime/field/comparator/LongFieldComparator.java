@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.LongField;
+import com.speedment.runtime.field.trait.HasLongValue;
 
 /**
  * A {@link FieldComparator} that compares values of a {@link LongField}.
@@ -37,7 +37,7 @@ public interface LongFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> 
      * @return the compared field
      */
     @Override
-    LongField<ENTITY, D> getField();
+    HasLongValue<ENTITY, D> getField();
     
     @Override
     LongFieldComparator<ENTITY, D> reversed();

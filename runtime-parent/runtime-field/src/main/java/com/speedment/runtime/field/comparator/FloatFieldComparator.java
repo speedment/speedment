@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.FloatField;
+import com.speedment.runtime.field.trait.HasFloatValue;
 
 /**
  * A {@link FieldComparator} that compares values of a {@link FloatField}.
@@ -37,7 +37,7 @@ public interface FloatFieldComparator<ENTITY, D> extends FieldComparator<ENTITY>
      * @return the compared field
      */
     @Override
-    FloatField<ENTITY, D> getField();
+    HasFloatValue<ENTITY, D> getField();
     
     @Override
     FloatFieldComparator<ENTITY, D> reversed();

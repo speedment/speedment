@@ -17,9 +17,10 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.comparator.ByteFieldComparator;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.trait.HasByteValue;
 
 import java.util.Objects;
 
@@ -38,20 +39,20 @@ public final class ByteFieldComparatorImpl<ENTITY, D>
 extends AbstractFieldComparator<ENTITY> 
 implements ByteFieldComparator<ENTITY, D> {
     
-    private final ByteField<ENTITY, D> field;
+    private final HasByteValue<ENTITY, D> field;
     private final boolean reversed;
     
-    public ByteFieldComparatorImpl(ByteField<ENTITY, D> field) {
+    public ByteFieldComparatorImpl(HasByteValue<ENTITY, D> field) {
         this(field, false);
     }
     
-    ByteFieldComparatorImpl(ByteField<ENTITY, D> field, boolean reversed) {
+    ByteFieldComparatorImpl(HasByteValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public ByteField<ENTITY, D> getField() {
+    public HasByteValue<ENTITY, D> getField() {
         return field;
     }
     

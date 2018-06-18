@@ -71,4 +71,12 @@ public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY
     default byte applyAsByte(ENTITY entity) {
         return getAsByte(entity);
     }
+    
+    @Override
+    ByteFieldComparator<ENTITY, D> comparator();
+    
+    @Override
+    default ByteFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
 }

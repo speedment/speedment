@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.CharField;
+import com.speedment.runtime.field.trait.HasCharValue;
 
 /**
  * A {@link FieldComparator} that compares values of a {@link CharField}.
@@ -37,7 +37,7 @@ public interface CharFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> 
      * @return the compared field
      */
     @Override
-    CharField<ENTITY, D> getField();
+    HasCharValue<ENTITY, D> getField();
     
     @Override
     CharFieldComparator<ENTITY, D> reversed();
