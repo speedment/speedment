@@ -19,6 +19,8 @@ package com.speedment.common.codegen.model.trait;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static com.speedment.common.codegen.constant.DefaultType.genericType;
+
 /**
  * A trait for models that have interfaces as supertypes.
  *
@@ -49,9 +51,43 @@ public interface HasImplements<T extends HasImplements<T>> {
      *
      * @param interf  the implemented interface
      * @return        a reference to this
+     *
+     * @since 2.5
      */
     default T implement(final Type interf) {
         return add(interf);
+    }
+
+    /**
+     * Adds the specified interface to the list of implemented interfaces of
+     * this model. This method will construct a parameterized type with all the
+     * specified type parameters as generic arguments. The type should represent
+     * an interface.
+     *
+     * @param interf  the implemented interface
+     * @param params  the generic types of that interface
+     * @return        a reference to this
+     *
+     * @since 2.5
+     */
+    default T implement(final Type interf, final Type... params) {
+        return add(genericType(interf, params));
+    }
+
+    /**
+     * Adds the specified interface to the list of implemented interfaces of
+     * this model. This method will construct a parameterized type with all the
+     * specified type parameters as generic arguments. The type should represent
+     * an interface.
+     *
+     * @param interf  the implemented interface
+     * @param params  the generic types of that interface
+     * @return        a reference to this
+     *
+     * @since 2.5
+     */
+    default T implement(final Type interf, final String... params) {
+        return add(genericType(interf, params));
     }
     
     /**

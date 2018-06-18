@@ -19,6 +19,8 @@ package com.speedment.common.codegen.model.trait;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
+import static com.speedment.common.codegen.constant.DefaultType.genericType;
+
 /**
  * A trait for models that has a super type.
  *
@@ -41,13 +43,41 @@ public interface HasSupertype<T extends HasSupertype<T>> {
      * Sets the super type of this model. This is a synonym for
      * {@link #setSupertype(Type)}.
      *
-     * @param type  the super type
-     * @return      a reference to this
+     * @param supertype  the super type
+     * @return           a reference to this
      *
      * @since 2.5
      */
-	default T extend(Type type) {
-	    return setSupertype(type);
+	default T extend(Type supertype) {
+	    return setSupertype(supertype);
+    }
+
+    /**
+     * Sets the super type of this model to a parameterized type created with
+     * the specified base type and generic parameters.
+     *
+     * @param supertype  the supertype
+     * @param params     the generic types of that supertype
+     * @return           a reference to this
+     *
+     * @since 2.5
+     */
+    default T extend(Type supertype, Type... params) {
+        return setSupertype(genericType(supertype, params));
+    }
+
+    /**
+     * Sets the super type of this model to a parameterized type created with
+     * the specified base type and generic parameters.
+     *
+     * @param supertype  the supertype
+     * @param params     the generic types of that supertype
+     * @return           a reference to this
+     *
+     * @since 2.5
+     */
+    default T extend(Type supertype, String... params) {
+        return setSupertype(genericType(supertype, params));
     }
     
     /**
