@@ -79,4 +79,9 @@ public interface DoubleField<ENTITY, D> extends Field<ENTITY>, HasDoubleValue<EN
     default DoubleFieldComparator<ENTITY, D> reversed() {
         return comparator().reversed();
     }
+    
+    @Override
+    default DoubleField getField() {
+        return this;
+    }
 }

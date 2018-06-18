@@ -79,4 +79,9 @@ public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTI
     default FloatFieldComparator<ENTITY, D> reversed() {
         return comparator().reversed();
     }
+    
+    @Override
+    default FloatField getField() {
+        return this;
+    }
 }

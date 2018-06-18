@@ -156,11 +156,6 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public ShortField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public ShortFieldComparator<ENTITY, D> comparator() {
         return new ShortFieldComparatorImpl<>(this);
     }

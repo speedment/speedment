@@ -127,11 +127,6 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     }
     
     @Override
-    public LongField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public LongField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new LongFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);

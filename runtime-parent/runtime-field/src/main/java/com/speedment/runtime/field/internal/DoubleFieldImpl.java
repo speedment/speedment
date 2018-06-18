@@ -127,11 +127,6 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
     }
     
     @Override
-    public DoubleField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public DoubleField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new DoubleFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);

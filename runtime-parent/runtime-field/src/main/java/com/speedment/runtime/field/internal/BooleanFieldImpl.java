@@ -129,11 +129,6 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
     }
     
     @Override
-    public BooleanField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public BooleanField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new BooleanFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);

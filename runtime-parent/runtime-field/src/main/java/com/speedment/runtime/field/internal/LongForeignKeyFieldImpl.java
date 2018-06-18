@@ -156,11 +156,6 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public LongField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public LongFieldComparator<ENTITY, D> comparator() {
         return new LongFieldComparatorImpl<>(this);
     }

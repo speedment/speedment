@@ -127,11 +127,6 @@ public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
     }
     
     @Override
-    public IntField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public IntField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new IntFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);

@@ -127,11 +127,6 @@ public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     }
     
     @Override
-    public ShortField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public ShortField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new ShortFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);

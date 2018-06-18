@@ -127,11 +127,6 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
-    public ByteField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public ByteField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new ByteFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);

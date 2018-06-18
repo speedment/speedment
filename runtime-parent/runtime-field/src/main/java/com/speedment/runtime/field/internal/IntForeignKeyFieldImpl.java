@@ -156,11 +156,6 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public IntField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public IntFieldComparator<ENTITY, D> comparator() {
         return new IntFieldComparatorImpl<>(this);
     }

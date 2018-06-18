@@ -79,4 +79,9 @@ public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY
     default CharFieldComparator<ENTITY, D> reversed() {
         return comparator().reversed();
     }
+    
+    @Override
+    default CharField getField() {
+        return this;
+    }
 }

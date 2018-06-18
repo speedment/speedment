@@ -156,11 +156,6 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public ByteField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public ByteFieldComparator<ENTITY, D> comparator() {
         return new ByteFieldComparatorImpl<>(this);
     }

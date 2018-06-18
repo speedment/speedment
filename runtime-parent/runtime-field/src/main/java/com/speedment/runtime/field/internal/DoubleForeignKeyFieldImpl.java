@@ -156,11 +156,6 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     }
     
     @Override
-    public DoubleField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public DoubleFieldComparator<ENTITY, D> comparator() {
         return new DoubleFieldComparatorImpl<>(this);
     }

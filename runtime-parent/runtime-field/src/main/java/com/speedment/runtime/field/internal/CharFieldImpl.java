@@ -127,11 +127,6 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     }
     
     @Override
-    public CharField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public CharField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new CharFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);

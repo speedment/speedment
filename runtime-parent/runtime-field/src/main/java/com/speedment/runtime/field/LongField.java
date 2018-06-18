@@ -79,4 +79,9 @@ public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY
     default LongFieldComparator<ENTITY, D> reversed() {
         return comparator().reversed();
     }
+    
+    @Override
+    default LongField getField() {
+        return this;
+    }
 }

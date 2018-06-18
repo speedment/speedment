@@ -156,11 +156,6 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Flo
     }
     
     @Override
-    public FloatField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public FloatFieldComparator<ENTITY, D> comparator() {
         return new FloatFieldComparatorImpl<>(this);
     }

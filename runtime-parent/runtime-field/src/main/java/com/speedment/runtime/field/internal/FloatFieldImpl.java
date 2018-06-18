@@ -127,11 +127,6 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     }
     
     @Override
-    public FloatField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public FloatField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new FloatFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);

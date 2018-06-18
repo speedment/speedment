@@ -156,11 +156,6 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public CharField<ENTITY, D> getField() {
-        return this;
-    }
-    
-    @Override
     public CharFieldComparator<ENTITY, D> comparator() {
         return new CharFieldComparatorImpl<>(this);
     }
