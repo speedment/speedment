@@ -14,14 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.field.internal.comparator;
+package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.trait.HasCharValue;
+import com.speedment.runtime.field.IntField;
 
 /**
- * A predicate that evaluates if a value is between two chars.
+ * A {@link FieldComparator} that compares values of a {@link IntField}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -30,7 +29,7 @@ import com.speedment.runtime.field.trait.HasCharValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface CharFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
+public interface IntFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.
@@ -38,5 +37,8 @@ public interface CharFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> 
      * @return the compared field
      */
     @Override
-    HasCharValue<ENTITY, D> getField();
+    IntField<ENTITY, D> getField();
+    
+    @Override
+    IntFieldComparator<ENTITY, D> reversed();
 }

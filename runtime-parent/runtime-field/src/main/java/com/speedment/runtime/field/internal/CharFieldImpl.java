@@ -19,7 +19,8 @@ package com.speedment.runtime.field.internal;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.CharField;
-import com.speedment.runtime.field.internal.comparator.CharFieldComparator;
+import com.speedment.runtime.field.comparator.CharFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.CharFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.GetCharImpl;
 import com.speedment.runtime.field.internal.predicate.chars.CharBetweenPredicate;
@@ -39,7 +40,9 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -124,6 +127,11 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     }
     
     @Override
+    public CharField<ENTITY, D> getField() {
+        return this;
+    }
+    
+    @Override
     public CharField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new CharFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
@@ -135,8 +143,23 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     }
     
     @Override
+    public CharFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public CharFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -155,7 +178,10 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Character start, Character end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Character start,
+            Character end,
+            Inclusion inclusion) {
         return new CharBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -180,7 +206,10 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Character start, Character end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Character start,
+            Character end,
+            Inclusion inclusion) {
         return new CharNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

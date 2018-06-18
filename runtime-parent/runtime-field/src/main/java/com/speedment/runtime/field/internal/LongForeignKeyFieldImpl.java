@@ -21,7 +21,8 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.LongField;
 import com.speedment.runtime.field.LongForeignKeyField;
-import com.speedment.runtime.field.internal.comparator.LongFieldComparator;
+import com.speedment.runtime.field.comparator.LongFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.LongFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromLong;
@@ -45,9 +46,11 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -153,13 +156,33 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
+    public LongField<ENTITY, D> getField() {
+        return this;
+    }
+    
+    @Override
     public LongFieldComparator<ENTITY, D> comparator() {
         return new LongFieldComparatorImpl<>(this);
     }
     
     @Override
+    public LongFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public LongFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -178,7 +201,10 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Long start, Long end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Long start,
+            Long end,
+            Inclusion inclusion) {
         return new LongBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -203,7 +229,10 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Long start, Long end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Long start,
+            Long end,
+            Inclusion inclusion) {
         return new LongNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

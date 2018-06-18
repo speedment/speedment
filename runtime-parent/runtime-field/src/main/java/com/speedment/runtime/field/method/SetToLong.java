@@ -18,6 +18,7 @@ package com.speedment.runtime.field.method;
 
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.trait.HasLongValue;
+
 import java.util.function.UnaryOperator;
 
 /**

@@ -21,7 +21,8 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.IntForeignKeyField;
-import com.speedment.runtime.field.internal.comparator.IntFieldComparator;
+import com.speedment.runtime.field.comparator.IntFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.IntFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromInt;
@@ -45,9 +46,11 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -153,13 +156,33 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
+    public IntField<ENTITY, D> getField() {
+        return this;
+    }
+    
+    @Override
     public IntFieldComparator<ENTITY, D> comparator() {
         return new IntFieldComparatorImpl<>(this);
     }
     
     @Override
+    public IntFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public IntFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -178,7 +201,10 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Integer start, Integer end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Integer start,
+            Integer end,
+            Inclusion inclusion) {
         return new IntBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -203,7 +229,10 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Integer start, Integer end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Integer start,
+            Integer end,
+            Inclusion inclusion) {
         return new IntNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

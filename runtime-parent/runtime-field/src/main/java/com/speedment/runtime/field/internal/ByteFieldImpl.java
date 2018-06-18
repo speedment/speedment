@@ -19,7 +19,8 @@ package com.speedment.runtime.field.internal;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.ByteField;
-import com.speedment.runtime.field.internal.comparator.ByteFieldComparator;
+import com.speedment.runtime.field.comparator.ByteFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ByteFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.GetByteImpl;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteBetweenPredicate;
@@ -39,7 +40,9 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -124,6 +127,11 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
+    public ByteField<ENTITY, D> getField() {
+        return this;
+    }
+    
+    @Override
     public ByteField<ENTITY, D> tableAlias(String tableAlias) {
         requireNonNull(tableAlias);
         return new ByteFieldImpl<>(identifier, getter, setter, typeMapper, unique, tableAlias);
@@ -135,8 +143,23 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
+    public ByteFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public ByteFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -155,7 +178,10 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Byte start, Byte end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Byte start,
+            Byte end,
+            Inclusion inclusion) {
         return new ByteBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -180,7 +206,10 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Byte start, Byte end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Byte start,
+            Byte end,
+            Inclusion inclusion) {
         return new ByteNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

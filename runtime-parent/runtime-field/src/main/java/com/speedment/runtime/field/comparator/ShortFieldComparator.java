@@ -14,14 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.field.internal.comparator;
+package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.trait.HasShortValue;
+import com.speedment.runtime.field.ShortField;
 
 /**
- * A predicate that evaluates if a value is between two shorts.
+ * A {@link FieldComparator} that compares values of a {@link ShortField}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -38,5 +37,8 @@ public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY>
      * @return the compared field
      */
     @Override
-    HasShortValue<ENTITY, D> getField();
+    ShortField<ENTITY, D> getField();
+    
+    @Override
+    ShortFieldComparator<ENTITY, D> reversed();
 }

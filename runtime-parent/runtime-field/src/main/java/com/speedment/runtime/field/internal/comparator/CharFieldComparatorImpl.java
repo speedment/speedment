@@ -17,10 +17,13 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.field.CharField;
+import com.speedment.runtime.field.comparator.CharFieldComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
-import com.speedment.runtime.field.trait.HasCharValue;
+
 import java.util.Objects;
+
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -36,20 +39,20 @@ public final class CharFieldComparatorImpl<ENTITY, D>
 extends AbstractFieldComparator<ENTITY> 
 implements CharFieldComparator<ENTITY, D> {
     
-    private final HasCharValue<ENTITY, D> field;
+    private final CharField<ENTITY, D> field;
     private final boolean reversed;
     
-    public CharFieldComparatorImpl(HasCharValue<ENTITY, D> field) {
+    public CharFieldComparatorImpl(CharField<ENTITY, D> field) {
         this(field, false);
     }
     
-    CharFieldComparatorImpl(HasCharValue<ENTITY, D> field, boolean reversed) {
+    CharFieldComparatorImpl(CharField<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public HasCharValue<ENTITY, D> getField() {
+    public CharField<ENTITY, D> getField() {
         return field;
     }
     
@@ -64,7 +67,7 @@ implements CharFieldComparator<ENTITY, D> {
     }
     
     @Override
-    public FieldComparator<ENTITY> reversed() {
+    public CharFieldComparatorImpl<ENTITY, D> reversed() {
         return new CharFieldComparatorImpl<>(field, !reversed);
     }
     

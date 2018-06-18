@@ -18,6 +18,7 @@ package com.speedment.runtime.field.method;
 
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.function.ToBooleanFunction;
+
 import java.util.function.Function;
 
 /**

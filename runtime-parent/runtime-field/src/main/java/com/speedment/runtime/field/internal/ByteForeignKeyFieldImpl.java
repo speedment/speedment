@@ -21,7 +21,8 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.ByteForeignKeyField;
-import com.speedment.runtime.field.internal.comparator.ByteFieldComparator;
+import com.speedment.runtime.field.comparator.ByteFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ByteFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromByte;
@@ -45,9 +46,11 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -153,13 +156,33 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
+    public ByteField<ENTITY, D> getField() {
+        return this;
+    }
+    
+    @Override
     public ByteFieldComparator<ENTITY, D> comparator() {
         return new ByteFieldComparatorImpl<>(this);
     }
     
     @Override
+    public ByteFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public ByteFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -178,7 +201,10 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Byte start, Byte end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Byte start,
+            Byte end,
+            Inclusion inclusion) {
         return new ByteBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -203,7 +229,10 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Byte start, Byte end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Byte start,
+            Byte end,
+            Inclusion inclusion) {
         return new ByteNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

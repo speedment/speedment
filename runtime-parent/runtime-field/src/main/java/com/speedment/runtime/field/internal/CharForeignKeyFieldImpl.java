@@ -21,7 +21,8 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.CharField;
 import com.speedment.runtime.field.CharForeignKeyField;
-import com.speedment.runtime.field.internal.comparator.CharFieldComparator;
+import com.speedment.runtime.field.comparator.CharFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.CharFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromChar;
@@ -45,9 +46,11 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -153,13 +156,33 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
+    public CharField<ENTITY, D> getField() {
+        return this;
+    }
+    
+    @Override
     public CharFieldComparator<ENTITY, D> comparator() {
         return new CharFieldComparatorImpl<>(this);
     }
     
     @Override
+    public CharFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public CharFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -178,7 +201,10 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Character start, Character end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Character start,
+            Character end,
+            Inclusion inclusion) {
         return new CharBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -203,7 +229,10 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Character start, Character end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Character start,
+            Character end,
+            Inclusion inclusion) {
         return new CharNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
