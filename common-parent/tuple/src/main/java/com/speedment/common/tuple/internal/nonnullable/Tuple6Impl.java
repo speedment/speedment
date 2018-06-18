@@ -21,6 +21,7 @@ import com.speedment.common.tuple.Tuple6;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.internal.AbstractTuple;
+
 import java.util.Optional;
 
 /**

@@ -19,6 +19,7 @@ package com.speedment.common.tuple.internal.nonnullable.mapper;
 import com.speedment.common.tuple.Tuple0;
 import com.speedment.common.tuple.TupleMapper;
 import com.speedment.common.tuple.Tuples;
+
 import java.util.function.Function;
 
 /**
@@ -38,9 +39,7 @@ public final class Tuple0MapperImpl<T> implements TupleMapper<T, Tuple0> {
     /**
      * Constructs a {@link TupleMapper } that can create {@link Tuple0 }.
      */
-    private Tuple0MapperImpl() {
-        
-    }
+    private Tuple0MapperImpl() {}
     
     @Override
     public Tuple0 apply(T t) {

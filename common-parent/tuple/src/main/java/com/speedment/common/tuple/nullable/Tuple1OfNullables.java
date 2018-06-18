@@ -21,6 +21,7 @@ import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.getter.TupleGetter0;
 import com.speedment.common.tuple.getter.TupleGetter;
+
 import java.util.Optional;
 
 /**

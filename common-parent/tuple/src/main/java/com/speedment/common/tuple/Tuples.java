@@ -65,6 +65,7 @@ import com.speedment.common.tuple.internal.nonnullable.mapper.Tuple6MapperImpl;
 import com.speedment.common.tuple.internal.nonnullable.mapper.Tuple7MapperImpl;
 import com.speedment.common.tuple.internal.nonnullable.mapper.Tuple8MapperImpl;
 import com.speedment.common.tuple.internal.nonnullable.mapper.Tuple9MapperImpl;
+
 import java.util.function.Function;
 
 /**
@@ -192,7 +193,10 @@ public final class Tuples {
      * @see Tuple3
      * @see Tuple
      */
-    public static <T0, T1, T2> Tuple3<T0, T1, T2> of(T0 e0, T1 e1, T2 e2) {
+    public static <T0, T1, T2> Tuple3<T0, T1, T2> of(
+            T0 e0,
+            T1 e1,
+            T2 e2) {
         return  new Tuple3Impl<>(e0, e1, e2);
     }
     
@@ -214,7 +218,10 @@ public final class Tuples {
      * @see Tuple3
      * @see Tuple
      */
-    public static <T, T0, T1, T2> Function<T, Tuple3<T0, T1, T2>> toTuple(Function<T, T0> m0, Function<T, T1> m1, Function<T, T2> m2) {
+    public static <T, T0, T1, T2> Function<T, Tuple3<T0, T1, T2>> toTuple(
+            Function<T, T0> m0,
+            Function<T, T1> m1,
+            Function<T, T2> m2) {
         return new Tuple3MapperImpl<>(m0, m1, m2);
     }
     

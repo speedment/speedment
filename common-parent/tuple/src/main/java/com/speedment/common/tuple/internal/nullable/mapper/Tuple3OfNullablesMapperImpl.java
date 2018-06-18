@@ -20,7 +20,9 @@ import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.TupleMapper;
 import com.speedment.common.tuple.TuplesOfNullables;
 import com.speedment.common.tuple.nullable.Tuple3OfNullables;
+
 import java.util.function.Function;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -49,7 +51,10 @@ public final class Tuple3OfNullablesMapperImpl<T, T0, T1, T2> implements TupleMa
      * @param m1 mapper to apply for element 1
      * @param m2 mapper to apply for element 2
      */
-    public Tuple3OfNullablesMapperImpl(Function<T, T0> m0, Function<T, T1> m1, Function<T, T2> m2) {
+    public Tuple3OfNullablesMapperImpl(
+            Function<T, T0> m0,
+            Function<T, T1> m1,
+            Function<T, T2> m2) {
         this.m0	=	requireNonNull(m0);
         this.m1	=	requireNonNull(m1);
         this.m2	=	requireNonNull(m2);

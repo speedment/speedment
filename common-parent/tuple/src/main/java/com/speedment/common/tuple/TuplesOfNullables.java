@@ -89,6 +89,7 @@ import com.speedment.common.tuple.nullable.Tuple6OfNullables;
 import com.speedment.common.tuple.nullable.Tuple7OfNullables;
 import com.speedment.common.tuple.nullable.Tuple8OfNullables;
 import com.speedment.common.tuple.nullable.Tuple9OfNullables;
+
 import java.util.function.Function;
 
 /**
@@ -223,7 +224,10 @@ public final class TuplesOfNullables {
      * @see Tuple3
      * @see Tuple
      */
-    public static <T0, T1, T2> Tuple3OfNullables<T0, T1, T2> ofNullables(T0 e0, T1 e1, T2 e2) {
+    public static <T0, T1, T2> Tuple3OfNullables<T0, T1, T2> ofNullables(
+            T0 e0,
+            T1 e1,
+            T2 e2) {
         return  new Tuple3OfNullablesImpl<>(e0, e1, e2);
     }
     
@@ -246,7 +250,10 @@ public final class TuplesOfNullables {
      * @see Tuple3
      * @see Tuple
      */
-    public static <T, T0, T1, T2> Function<T, Tuple3OfNullables<T0, T1, T2>> toTupleOfNullables(Function<T, T0> m0, Function<T, T1> m1, Function<T, T2> m2) {
+    public static <T, T0, T1, T2> Function<T, Tuple3OfNullables<T0, T1, T2>> toTupleOfNullables(
+            Function<T, T0> m0,
+            Function<T, T1> m1,
+            Function<T, T2> m2) {
         return new Tuple3OfNullablesMapperImpl<>(m0, m1, m2);
     }
     
