@@ -10,7 +10,7 @@ addons:
     packages:
       - oracle-java8-installer
       - oracle-java9-installer
-      - oracle-java10-installer
+      #- oracle-java10-installer
       
 dist: trusty
 sudo: false
