@@ -481,7 +481,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator, progressListener);
         
-        if (table.primaryKeyColumns().noneMatch(pk -> true)) {
+        if (!table.isView() && table.primaryKeyColumns().noneMatch(pk -> true)) {
             LOGGER.warn("Table '" + table.getId() + "' does not have any primary key.");
         }
     }
