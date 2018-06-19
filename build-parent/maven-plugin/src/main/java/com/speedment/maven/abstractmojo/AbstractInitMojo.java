@@ -174,10 +174,10 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addStringToMap(Dbms.NAME, appName, mavenProject.getArtifactId(), dbmsData);
         addStringToMap(Dbms.TYPE_NAME, dbmsType, "MySQL", dbmsData);
         addStringToMap(Dbms.ID, appName, mavenProject.getArtifactId(), dbmsData);
-        addIntegerToMap(Dbms.PORT, dbmsPort, Integer.valueOf(3306), dbmsData);
+        addIntegerToMap(Dbms.PORT, dbmsPort, null, dbmsData);
         addStringToMap(Dbms.IP_ADDRESS, dbmsHost, null, dbmsData);
         addStringToMap(Dbms.CONNECTION_URL, dbmsConnectionUrl(), null, dbmsData);
-        addStringToMap(Dbms.USERNAME, dbmsUsername, mavenProject.getArtifactId(), dbmsData);
+        addStringToMap(Dbms.USERNAME, dbmsUsername, null, dbmsData);
         addBooleanToMap(Dbms.ENABLED, Boolean.TRUE, dbmsData);
         addListToMap(Dbms.SCHEMAS, createSchemas(), dbmsData);
         return dbmsData;
