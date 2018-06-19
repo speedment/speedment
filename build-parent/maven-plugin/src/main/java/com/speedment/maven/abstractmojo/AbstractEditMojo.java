@@ -115,23 +115,22 @@ public abstract class AbstractEditMojo extends AbstractMojo {
         if (StringUtils.isNotBlank(what)) {
             final Class<? extends Document> docClass;
             switch (what.toLowerCase()) {
-                case "p": case "project": return Stream.of(project);
-                case "d": case "dbms": docClass = Dbms.class; break;
-                case "s": case "schema": docClass = Schema.class; break;
-                case "t": case "table": docClass = Table.class; break;
-                case "c": case "column": docClass = Column.class; break;
-                case "pk": case "primarykey":
-                case "pkc": case "primarykeycolumn": docClass = PrimaryKeyColumn.class; break;
-                case "i": case "index": docClass = Index.class; break;
-                case "ic": case "indexcolumn": docClass = IndexColumn.class; break;
-                case "fk": case "foreignkey": docClass = ForeignKey.class; break;
-                case "fkc": case "foreignkeycolumn": docClass = ForeignKeyColumn.class; break;
+                case "p": case "project": case "projects": return Stream.of(project);
+                case "d": case "dbms": case "dbmses": docClass = Dbms.class; break;
+                case "s": case "schema": case "schemas": docClass = Schema.class; break;
+                case "t": case "table": case "tables": docClass = Table.class; break;
+                case "c": case "column": case "columns": docClass = Column.class; break;
+                case "pk": case "primarykey": case "primarykeys":
+                case "pkc": case "primarykeycolumn": case "primarykeycolumns": docClass = PrimaryKeyColumn.class; break;
+                case "i": case "index": case "indexes": docClass = Index.class; break;
+                case "ic": case "indexcolumn": case "indexcolumns": docClass = IndexColumn.class; break;
+                case "fk": case "foreignkey": case "foreignkeys": docClass = ForeignKey.class; break;
+                case "fkc": case "foreignkeycolumn": case "foreignkeycolumns": docClass = ForeignKeyColumn.class; break;
                 default: throw whatNotValid();
             }
 
             return DocumentDbUtil.traverseOver(project, docClass).filter(this::matches);
-        }
-        throw whatNotValid();
+        } else return DocumentDbUtil.traverseOver(project, Document.class).filter(this::matches);
     }
 
     private boolean matches(Document document) {
@@ -162,7 +161,7 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             value = "^" + lastWhere + "$";
         } else {
             key = lastWhere.substring(0, index);
-            value = lastWhere.substring(0, index + SET_OPERATOR.length());
+            value = lastWhere.substring(index + SET_OPERATOR.length());
         }
 
         return checkIf(document, key, value);
