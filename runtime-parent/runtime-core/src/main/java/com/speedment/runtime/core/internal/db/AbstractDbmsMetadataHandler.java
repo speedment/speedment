@@ -42,7 +42,9 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -72,8 +74,12 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     @Inject private DbmsHandlerComponent dbmsHandlerComponent;
     @Inject private ProjectComponent projectComponent;
     @Inject private JavaTypeMap javaTypeMap;
-    
-    protected AbstractDbmsMetadataHandler() {}
+
+    private Map<Class<? extends Document>, AtomicLong> timers;
+
+    protected AbstractDbmsMetadataHandler() {
+        timers = new ConcurrentHashMap<>();
+    }
     
     @ExecuteBefore(INITIALIZED)
     final void createJavaTypeMap() {
@@ -134,6 +140,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             } else {
                 progress.setCurrentAction("Done!");
             }
+            LOGGER.info("Aggregate duration of metadata retrieval [ms]: " +
+                timers.entrySet().stream()
+                    .map(e -> String.format("%s=%,d", e.getKey().getSimpleName(), e.getValue().get()))
+                .collect(joining(", "))
+            );
         });
     }
     
@@ -309,6 +320,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         LOGGER.info(action);
         progressListener.setCurrentAction(action);
 
+        final long begin = System.currentTimeMillis();
         try (final Connection connection = getConnection(dbms)) {
             try (final ResultSet rsTable = connection.getMetaData().getTables(
                     jdbcCatalogLookupName(schema),
@@ -343,6 +355,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
+        final long duration = System.currentTimeMillis() - begin;
+        timers.computeIfAbsent(Table.class, $ -> new AtomicLong()).addAndGet(duration);
 
         final AtomicInteger cnt = new AtomicInteger();
         final double noTables = schema.tables().count();
@@ -458,7 +472,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         };
 
-        tableChilds(table.mutator()::addNewColumn, supplier, mutator, progressListener);
+        tableChilds(Column.class, table.mutator()::addNewColumn, supplier, mutator, progressListener);
     }
 
     protected void primaryKeyColumns(Connection connection, Table table, ProgressMeasure progressListener) {
@@ -479,7 +493,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
         };
 
-        tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator, progressListener);
+        tableChilds(PrimaryKeyColumn.class, table.mutator()::addNewPrimaryKeyColumn, supplier, mutator, progressListener);
         
         if (!table.isView() && table.primaryKeyColumns().noneMatch(pk -> true)) {
             LOGGER.warn("Table '" + table.getId() + "' does not have any primary key.");
@@ -537,7 +551,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             return nonNull(indexName);
         };
 
-        tableChilds(table.mutator()::addNewIndex, supplier, mutator, filter, progressListener);
+        tableChilds(Index.class, table.mutator()::addNewIndex, supplier, mutator, filter, progressListener);
     }
 
     protected void foreignKeys(Connection connection, Table table, ProgressMeasure progressListener) {
@@ -576,19 +590,21 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             );
         };
 
-        tableChilds(table.mutator()::addNewForeignKey, supplier, mutator, progressListener);
+        tableChilds(ForeignKey.class, table.mutator()::addNewForeignKey, supplier, mutator, progressListener);
     }
 
-    protected <T> void tableChilds(
+    protected <T extends Document> void tableChilds(
+        final Class<T> type,
         final Supplier<T> childSupplier,
         final SqlSupplier<ResultSet> resultSetSupplier,
         final AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
         final ProgressMeasure progressListener
     ) {
-        tableChilds(childSupplier, resultSetSupplier, resultSetMutator, rs -> true, progressListener);
+        tableChilds(type, childSupplier, resultSetSupplier, resultSetMutator, rs -> true, progressListener);
     }
 
-    protected <T> void tableChilds(
+    protected <T extends Document> void tableChilds(
+        final Class<T> type,
         final Supplier<T> childSupplier,
         final SqlSupplier<ResultSet> resultSetSupplier,
         final AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
@@ -597,6 +613,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     ) {
         requireNonNulls(childSupplier, resultSetSupplier, resultSetMutator);
 
+        final long begin = System.currentTimeMillis();
         try (final ResultSet rsChild = resultSetSupplier.get()) {
 
             if (SHOW_METADATA) {
@@ -627,6 +644,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             LOGGER.error(sqle, "Unable to read table child.");
             throw new SpeedmentException(sqle);
         }
+        final long duration = System.currentTimeMillis() - begin;
+        timers.computeIfAbsent(type, $ -> new AtomicLong()).addAndGet(duration);
     }
 
     /**
