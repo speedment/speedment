@@ -30,7 +30,6 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingReferenceStream;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasComparableOperators;
@@ -44,7 +43,6 @@ import java.util.*;
 
 import static com.speedment.runtime.join.JoinComponent.MAX_DEGREE;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.fill;
 import static java.util.Objects.requireNonNull;
 
 import java.util.function.Predicate;
@@ -269,8 +267,8 @@ public final class JoinSqlUtil {
                 rsMapper,
                 ParallelStrategy.computeIntensityDefault()
             );
-        return new AutoClosingReferenceStream<>(asynchronousQueryResult.stream(), allowStreamIteratorAndSpliterator)
-            .onClose(asynchronousQueryResult::close);
+
+        return new InitialJoinStream<>(asynchronousQueryResult, sqlInfo, allowStreamIteratorAndSpliterator);
     }
 
     private static final String[] ALIASES = IntStream.range(0, MAX_DEGREE)
