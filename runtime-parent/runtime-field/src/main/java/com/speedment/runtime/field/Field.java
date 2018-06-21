@@ -31,7 +31,6 @@ import com.speedment.runtime.field.trait.HasTypeMapper;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-
 public interface Field<ENTITY> extends 
         HasIdentifier<ENTITY>, 
         HasGetter<ENTITY>, 
@@ -50,6 +49,7 @@ public interface Field<ENTITY> extends
      * for the field. A custom value can be set using the {@link #tableAlias(String)} method.
      *
      * @return the table alias for this field
+     * @since  3.1.3
      */
     String tableAlias();
 
@@ -57,10 +57,11 @@ public interface Field<ENTITY> extends
      * Creates and returns a new Field with the provided {@code tableAlias}. The new Field
      * will retain all other properties from this field except the tableAlias.
      *
+     * @param tableAlias  the table alias to use in the new field
      * @return a new Field with the provided {@code tableAlias}
      *
      * @throws NullPointerException if the provided {@code tableAlias} is {@code null}
-     *
+     * @since  3.1.3
      */
     Field<ENTITY> tableAlias(String tableAlias);
 

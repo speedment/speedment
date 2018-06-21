@@ -16,11 +16,12 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.common.function.*;
+import com.speedment.common.function.ToBooleanFunction;
+import com.speedment.common.function.ToByteFunction;
+import com.speedment.common.function.ToCharFunction;
+import com.speedment.common.function.ToFloatFunction;
+import com.speedment.common.function.ToShortFunction;
 import com.speedment.runtime.compute.*;
-import com.speedment.runtime.compute.trait.HasAsDouble;
-import com.speedment.runtime.compute.trait.HasAsInt;
-import com.speedment.runtime.compute.trait.HasAsLong;
 import com.speedment.runtime.compute.trait.HasMapToDoubleIfPresent;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.exception.SpeedmentFieldException;
@@ -73,7 +74,7 @@ extends Field<ENTITY>,
      * @param typeMapper  the type mapper that is applied
      * @param unique      represented column only contains unique values
      * 
-     * @return            the created field
+     * @return the created field
      */
     static <ENTITY, D, V> ReferenceField<ENTITY, D, V> create(
             ColumnIdentifier<ENTITY> identifier,
@@ -89,7 +90,6 @@ extends Field<ENTITY>,
 
     @Override
     ReferenceField<ENTITY, D, V> tableAlias(String tableAlias);
-
 
     /**
      * Returns an {@link ToByteNullable} expression that has the value returned
@@ -453,7 +453,10 @@ extends Field<ENTITY>,
      * returned by the specified mapper function if the value for this field is
      * not {@code null}, and otherwise {@code null}.
      *
-     * @param mapper  the mapper operation
+     * @param <E>        the enum type
+     * @param mapper     the mapper operation
+     * @param enumClass  class of the enum to map to
+     *
      * @return  expression for this value after mapper has been applied
      *
      * @since 3.1.0
@@ -467,7 +470,10 @@ extends Field<ENTITY>,
      * Returns an {@link ToBooleanNullable} expression that has the value of
      * this field, casted to a particular {@code enum} class.
      *
-     * @return  expression for this value after mapper has been applied
+     * @param <E>        the enum type
+     * @param enumClass  class of the enum to map to
+     *
+     * @return    expression for this value after mapper has been applied
      *
      * @since 3.1.0
      */
