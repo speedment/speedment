@@ -2,7 +2,8 @@ package com.speedment.runtime.join.internal.component.stream.sql;
 
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingReferenceStream;
+import com.speedment.runtime.core.stream.AutoClosingStream;
+import com.speedment.runtime.core.stream.ComposeRunnableUtil;
 
 import java.util.*;
 import java.util.function.*;
@@ -291,11 +292,12 @@ final class InitialJoinStream<T> implements Stream<T>/*, Java9StreamAdditions<T>
 
     @Override
     public void close() {
-        asynchronousQueryResult.close();
-        for (Runnable closeHandler : closeHandlers) {
-            closeHandler.run();
-        }
         consumed = true;
+        try {
+            ComposeRunnableUtil.composedRunnable(closeHandlers);
+        } finally {
+            asynchronousQueryResult.close();
+        }
     }
 
 
@@ -312,7 +314,7 @@ final class InitialJoinStream<T> implements Stream<T>/*, Java9StreamAdditions<T>
             asynchronousQueryResult.setSql(newSql);
         }
 
-        Stream<T> result = new AutoClosingReferenceStream<>(asynchronousQueryResult.stream(), allowStreamIteratorAndSpliterator)
+        Stream<T> result = AutoClosingStream.of(asynchronousQueryResult.stream(), allowStreamIteratorAndSpliterator)
             .onClose(this::close);
 
         if (parallel) {

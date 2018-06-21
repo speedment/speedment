@@ -24,13 +24,15 @@ import java.util.stream.*;
  *
  * @author pemi
  */
-public class AutoClosingLongStream extends AbstractAutoClosingStream implements LongStream {
+final class AutoClosingLongStream
+    extends AbstractAutoClosingStream
+    implements LongStream {
 
     private final LongStream stream;
 
-    public AutoClosingLongStream(LongStream stream) {
+/*    AutoClosingLongStream(LongStream stream) {
         this(stream, newSet(), false);
-    }
+    }*/
 
     AutoClosingLongStream(
         final LongStream stream,
@@ -212,14 +214,18 @@ public class AutoClosingLongStream extends AbstractAutoClosingStream implements 
 
     @Override
     public PrimitiveIterator.OfLong iterator() {
+        if (isAllowStreamIteratorAndSpliterator()) {
+            return stream.iterator();
+        }
         throw newUnsupportedException("iterator");
-//            return stream.iterator();
     }
 
     @Override
     public Spliterator.OfLong spliterator() {
+        if (isAllowStreamIteratorAndSpliterator()) {
+            return stream.spliterator();
+        }
         throw newUnsupportedException("spliterator");
-//            return stream.spliterator();
     }
 
     @Override

@@ -28,12 +28,15 @@ import java.util.stream.*;
  * <p>
  * N.B. The {@link #iterator()} {@link #spliterator()} methods will throw
  * an {@link UnsupportedOperationException} because otherwise the AutoClose
- * property cannot be guaranteed.
+ * property cannot be guaranteed. This can be unlocked by setting the
+ * allowStreamIteratorAndSpliterator flag
  *
  * @param <T>  Stream type
  * @author     Per Minborg
  */
-public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream implements Stream<T> {
+public final class AutoClosingReferenceStream<T>
+    extends AbstractAutoClosingStream
+    implements Stream<T> {
 
     private final Stream<T> stream;
 

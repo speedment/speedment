@@ -24,13 +24,15 @@ import java.util.stream.*;
  *
  * @author pemi
  */
-public class AutoClosingDoubleStream extends AbstractAutoClosingStream implements DoubleStream {
+final class AutoClosingDoubleStream
+    extends AbstractAutoClosingStream
+    implements DoubleStream {
 
     private final DoubleStream stream;
 
-    public AutoClosingDoubleStream(DoubleStream stream) {
+/*    AutoClosingDoubleStream(DoubleStream stream) {
         this(stream, newSet(), false);
-    }
+    }*/
 
     AutoClosingDoubleStream(
         final DoubleStream stream,
@@ -207,14 +209,18 @@ public class AutoClosingDoubleStream extends AbstractAutoClosingStream implement
 
     @Override
     public PrimitiveIterator.OfDouble iterator() {
+        if (isAllowStreamIteratorAndSpliterator()) {
+            return stream.iterator();
+        }
         throw newUnsupportedException("iterator");
-//            return stream.iterator();
     }
 
     @Override
     public Spliterator.OfDouble spliterator() {
+        if (isAllowStreamIteratorAndSpliterator()) {
+            return stream.spliterator();
+        }
         throw newUnsupportedException("spliterator");
-//            return stream.spliterator();
     }
 
     @Override

@@ -18,6 +18,7 @@ package com.speedment.runtime.core.internal.stream.autoclose;
 
 import com.speedment.common.function.TriFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.stream.ComposeRunnableUtil;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-public abstract class AbstractAutoClosingStream implements AutoCloseable {
+abstract class AbstractAutoClosingStream implements AutoCloseable {
 
     private final Set<BaseStream<?, ?>> streamSet;
     private final boolean allowStreamIteratorAndSpliterator;
@@ -56,7 +57,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         final Set<BaseStream<?, ?>> streamsToClose = new HashSet<>(streamSet); // Copy the set
         streamSet.clear(); // Clear the shared streamSet so that other streams will not close again
         try {
-            composedClose(streamsToClose.toArray(new BaseStream<?, ?>[0]));
+            ComposeRunnableUtil.composedClose(streamsToClose.toArray(new BaseStream<?, ?>[0]));
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -116,19 +117,19 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         }
     }
 
-    public <T> Stream<T> wrap(Stream<T> stream) {
+    <T> Stream<T> wrap(Stream<T> stream) {
         return wrap(stream, getStreamSet(), AutoClosingReferenceStream::new);
     }
 
-    public IntStream wrap(IntStream stream) {
+    IntStream wrap(IntStream stream) {
         return wrap(stream, getStreamSet(), AutoClosingIntStream::new);
     }
 
-    public LongStream wrap(LongStream stream) {
+    LongStream wrap(LongStream stream) {
         return wrap(stream, getStreamSet(), AutoClosingLongStream::new);
     }
 
-    public DoubleStream wrap(DoubleStream stream) {
+    DoubleStream wrap(DoubleStream stream) {
         return wrap(stream, getStreamSet(), AutoClosingDoubleStream::new);
     }
 
@@ -139,80 +140,12 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
         return wrapper.apply(stream, streamSet, allowStreamIteratorAndSpliterator);
     }
 
-     static UnsupportedOperationException newUnsupportedException(String methodName) {
+    static UnsupportedOperationException newUnsupportedException(String methodName) {
         return new UnsupportedOperationException("The " + methodName + "() method is unsupported because otherwise the AutoClose property cannot be guaranteed");
     }
 
-     static Set<BaseStream<?, ?>> newSet() {
+    static Set<BaseStream<?, ?>> newSet() {
         return new HashSet<>();
-    }
-
-    /**
-     * Given a number of streams, closes the streams in sequence, even if one or
-     * several throws an Exception. If several throw exceptions, the exceptions
-     * will be added to the first exception.
-     *
-     * @param <T> Stream type
-     * @param closeables to close
-     * @throws SpeedmentException if at least one of the close() operations
-     * throws an exception
-     */
-    @SafeVarargs // Creating a Stream of an array is safe.
-    @SuppressWarnings({"unchecked", "varargs"})
-    public static <T extends AutoCloseable> void composedClose(T... closeables) {
-        requireNonNullElements(closeables);
-        Exception exception = null;
-
-        for (final T closable : closeables) {
-            try {
-                closable.close();
-            } catch (Exception e) {
-                if (exception == null) {
-                    exception = e;
-                } else {
-                    try {
-                        exception.addSuppressed(e);
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-        }
-
-        if (exception != null) {
-            throw new SpeedmentException(exception);
-        }
-    }
-
-    /**
-     * Given a number of Runnables, runs the run() method in sequence, even if
-     * one or several throws an Exception. If several throw exceptions, the
-     * exceptions will be added to the first exception.
-     *
-     * @param runnables to close
-     * @throws SpeedmentException if at least one of the run() operations throws
-     * an exception
-     */
-    public static void composedRunnable(Collection<Runnable> runnables) {
-        requireNonNullElements(runnables);
-        final AutoCloseable[] closables = new AutoCloseable[runnables.size()];
-        int i = 0;
-        for (final Runnable r : runnables) {
-            closables[i++] = new CloseImpl(r);
-        }
-        composedClose(closables);
-    }
-
-    private static class CloseImpl implements AutoCloseable {
-
-        private final Runnable r;
-
-        private CloseImpl(Runnable r) {
-            this.r = requireNonNull(r);
-        }
-
-        @Override
-        public void close() { r.run(); }
-
     }
 
 }
