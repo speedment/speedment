@@ -46,6 +46,7 @@
                     <instructions>
                         <Export-Package>
                             com.speedment.runtime.join,
+                            com.speedment.runtime.join.builder,
                             com.speedment.runtime.join.trait,
                             com.speedment.runtime.join.stage
                         </Export-Package>
