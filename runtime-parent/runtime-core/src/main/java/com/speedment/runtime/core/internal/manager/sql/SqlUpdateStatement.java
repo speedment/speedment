@@ -20,9 +20,9 @@ import java.util.List;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
-public final class SqlUpdateStatement extends SqlStatement {
+public final class SqlUpdateStatement extends AbstractSqlStatement {
 
     public SqlUpdateStatement(final String sql, final List<?> values) {
         super(sql, values);

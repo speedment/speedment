@@ -16,33 +16,34 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
+import com.speedment.runtime.core.manager.sql.SqlStatement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
+ * Abstract base implementation of {@link SqlStatement}.
  *
- * @author pemi
+ * @author Per Minborg
  */
-public abstract class SqlStatement {
+abstract class AbstractSqlStatement implements SqlStatement {
 
     private final String sql;
     private final List<?> values;
 
-    public enum Type {
-        INSERT, UPDATE, DELETE
-    }
-
-    public SqlStatement(final String sql, final List<?> values) {
-        this.sql = Objects.requireNonNull(sql);
+    AbstractSqlStatement(final String sql, final List<?> values) {
+        this.sql    = Objects.requireNonNull(sql);
         this.values = new ArrayList<>(Objects.requireNonNull(values));
     }
 
-    public String getSql() {
+    @Override
+    public final String getSql() {
         return sql;
     }
 
-    public List<?> getValues() {
+    @Override
+    public final List<?> getValues() {
         return values;
     }
 
@@ -50,7 +51,4 @@ public abstract class SqlStatement {
     public String toString() {
         return getSql() + ", " + values.toString();
     }
-
-    public abstract Type getType();
-
 }

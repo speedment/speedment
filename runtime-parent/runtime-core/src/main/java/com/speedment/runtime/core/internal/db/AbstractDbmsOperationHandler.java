@@ -23,14 +23,15 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
-import com.speedment.runtime.core.internal.manager.sql.SqlStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlUpdateStatement;
+import com.speedment.runtime.core.manager.sql.SqlStatement;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
@@ -38,17 +39,17 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
+ * Abstract base class for {@link DbmsOperationHandler}-implementations.
  *
  * @author Per Minborg
  * @author Emil Forslund
@@ -62,15 +63,11 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
-    @Inject
-    private ConnectionPoolComponent connectionPoolComponent;
-    @Inject
-    private DbmsHandlerComponent dbmsHandlerComponent;
-    @Inject
-    private TransactionComponent transactionComponent;
+    private @Inject ConnectionPoolComponent connectionPoolComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject TransactionComponent transactionComponent;
 
-    protected AbstractDbmsOperationHandler() {
-    }
+    protected AbstractDbmsOperationHandler() {}
 
     @Override
     public <T> Stream<T> executeQuery(Dbms dbms, String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper) {
@@ -127,7 +124,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     @Override
     public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         logOperation(LOGGER_PERSIST, sql, values);
-        final SqlInsertStatement<ENTITY> sqlUpdateStatement = new SqlInsertStatement<>(sql, values, generatedKeyFields, generatedKeyConsumer);
+        final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));
     }
 
@@ -188,7 +185,6 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                 if ("08S01".equals(sqlState) || "40001".equals(sqlState)) {
                     retryCount--;
                 } else {
-                    retryCount = 0;
                     throw sqlEx; // Finally will be executed...
                 }
             } finally {
@@ -249,7 +245,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             lastSqlStatement.set(sqlStatement);
             switch (sqlStatement.getType()) {
                 case INSERT: {
-                    final SqlInsertStatement<?> s = (SqlInsertStatement<?>) sqlStatement;
+                    final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
                     handleSqlStatement(dbms, conn, s);
                     break;
                 }
@@ -268,7 +264,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         }
     }
 
-    protected <ENTITY> void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException {
+    protected void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement sqlStatement) throws SQLException {
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -281,7 +277,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     @Override
-    public <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException {
+    public void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement sqlStatement) throws SQLException {
         try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
             while (generatedKeys.next()) {
                 sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
@@ -311,7 +307,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         sqlStatementList.stream()
             .filter(SqlInsertStatement.class::isInstance)
             .map(SqlInsertStatement.class::cast)
-            .forEach(SqlInsertStatement<?>::acceptGeneratedKeys);
+            .forEach(SqlInsertStatement::notifyGeneratedKeyListener);
     }
 
     @FunctionalInterface
