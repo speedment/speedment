@@ -45,7 +45,8 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.runtime.bulk                            
+                            com.speedment.runtime.bulk,
+                            com.speedment.runtime.bulk.trait
                         </Export-Package>
                     </instructions>
                 </configuration>
