@@ -81,7 +81,7 @@ public interface DoubleField<ENTITY, D> extends Field<ENTITY>, HasDoubleValue<EN
     }
     
     @Override
-    default DoubleField getField() {
+    default DoubleField<ENTITY, D> getField() {
         return this;
     }
 }

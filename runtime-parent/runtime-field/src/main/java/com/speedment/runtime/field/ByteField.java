@@ -81,7 +81,7 @@ public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY
     }
     
     @Override
-    default ByteField getField() {
+    default ByteField<ENTITY, D> getField() {
         return this;
     }
 }

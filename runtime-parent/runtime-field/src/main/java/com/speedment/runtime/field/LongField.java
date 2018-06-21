@@ -81,7 +81,7 @@ public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY
     }
     
     @Override
-    default LongField getField() {
+    default LongField<ENTITY, D> getField() {
         return this;
     }
 }

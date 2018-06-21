@@ -81,7 +81,7 @@ public interface IntField<ENTITY, D> extends Field<ENTITY>, HasIntValue<ENTITY, 
     }
     
     @Override
-    default IntField getField() {
+    default IntField<ENTITY, D> getField() {
         return this;
     }
 }

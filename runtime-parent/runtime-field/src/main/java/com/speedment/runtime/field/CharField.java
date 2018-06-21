@@ -81,7 +81,7 @@ public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY
     }
     
     @Override
-    default CharField getField() {
+    default CharField<ENTITY, D> getField() {
         return this;
     }
 }

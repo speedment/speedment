@@ -73,7 +73,7 @@ public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<
     }
     
     @Override
-    default BooleanField getField() {
+    default BooleanField<ENTITY, D> getField() {
         return this;
     }
 }

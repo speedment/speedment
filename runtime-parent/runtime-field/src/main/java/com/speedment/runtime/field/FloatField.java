@@ -81,7 +81,7 @@ public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTI
     }
     
     @Override
-    default FloatField getField() {
+    default FloatField<ENTITY, D> getField() {
         return this;
     }
 }

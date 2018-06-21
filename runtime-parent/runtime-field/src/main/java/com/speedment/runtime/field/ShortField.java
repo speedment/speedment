@@ -81,7 +81,7 @@ public interface ShortField<ENTITY, D> extends Field<ENTITY>, HasShortValue<ENTI
     }
     
     @Override
-    default ShortField getField() {
+    default ShortField<ENTITY, D> getField() {
         return this;
     }
 }
