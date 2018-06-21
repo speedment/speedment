@@ -4,8 +4,6 @@ import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingReference
 
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
-
 public interface AutoClosingStream<T> extends Stream<T> {
 
     /**
@@ -23,7 +21,7 @@ public interface AutoClosingStream<T> extends Stream<T> {
      * @throws NullPointerException if the provided {@code stream} is {@code null}
      */
     static <T> Stream<T> of(Stream<T> stream) {
-        return new AutoClosingReferenceStream<>(requireNonNull(stream));
+        return new AutoClosingReferenceStream<>(stream);
     }
 
     /**
@@ -46,7 +44,7 @@ public interface AutoClosingStream<T> extends Stream<T> {
         final Stream<T> stream,
         final boolean allowStreamIteratorAndSpliterator
     ) {
-        return new AutoClosingReferenceStream<>(requireNonNull(stream), allowStreamIteratorAndSpliterator);
+        return new AutoClosingReferenceStream<>(stream, allowStreamIteratorAndSpliterator);
     }
 
 }

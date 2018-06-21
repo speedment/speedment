@@ -22,6 +22,8 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * A Stream that will call its {@link #close()} method automatically after
  * a terminating operation has been called.
@@ -57,7 +59,7 @@ public final class AutoClosingReferenceStream<T>
         final boolean allowStreamIteratorAndSpliterator
     ) {
         super(streamSet, allowStreamIteratorAndSpliterator);
-        this.stream = stream;
+        this.stream = requireNonNull(stream);
         streamSet.add(this);
     }
 
