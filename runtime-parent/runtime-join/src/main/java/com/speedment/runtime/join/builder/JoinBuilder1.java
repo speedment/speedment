@@ -16,8 +16,8 @@ import com.speedment.runtime.join.trait.HasWhere;
  * @since  3.1.1
  */
 public interface JoinBuilder1<T0>
-extends HasJoins<JoinBuilder1.AfterJoin<T0, ?>, JoinBuilder2<T0, ?>>,
-        HasWhere<T0, JoinBuilder1<T0>> {
+    extends HasJoins<JoinBuilder1.AfterJoin<T0, ?>, JoinBuilder2<T0, ?>>,
+            HasWhere<T0, JoinBuilder1<T0>> {
 
     @Override
     <T1> AfterJoin<T0, T1> innerJoinOn(HasComparableOperators<T1, ?> joinedField);

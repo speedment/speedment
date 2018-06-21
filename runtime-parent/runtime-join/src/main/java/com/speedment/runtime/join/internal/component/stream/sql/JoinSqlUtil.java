@@ -56,12 +56,14 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
-public final class JoinSqlUtil {
+final class JoinSqlUtil {
 
-    private JoinSqlUtil() {
-    }
+    private JoinSqlUtil() {}
 
-    public static Dbms requireSameDbms(Project project, List<Stage<?>> stages) {
+    static Dbms requireSameDbms(
+        final Project project,
+        final List<Stage<?>> stages
+    ) {
         requireNonNull(project);
         requireNonNull(stages);
         final Dbms dbms = DocumentDbUtil.referencedDbms(project, stages.get(0).identifier());
@@ -82,7 +84,7 @@ public final class JoinSqlUtil {
         return dbms;
     }
 
-    public static <T> SqlFunction<ResultSet, T> resultSetMapper(
+    static <T> SqlFunction<ResultSet, T> resultSetMapper(
         final Project project,
         final TableIdentifier<T> identifier,
         final List<Stage<?>> stages,
@@ -212,7 +214,7 @@ public final class JoinSqlUtil {
 
     }
 
-    public static <T> Stream<T> stream(
+    static <T> Stream<T> stream(
         final DbmsHandlerComponent dbmsHandlerComponent,
         final Project project,
         final List<Stage<?>> stages,
@@ -275,8 +277,7 @@ public final class JoinSqlUtil {
             .mapToObj(i -> Character.toString((char) ('A' + i)))
             .toArray(String[]::new);
 
-    public static String tableAlias(int index) {
-        requireNonNegative(index);
+    static String tableAlias(int index) {
         return ALIASES[index];
     }
 
@@ -299,7 +300,7 @@ public final class JoinSqlUtil {
                 for (int j = 0; j < stage.predicates().size(); j++) {
                     final Predicate<?> predicate = stage.predicates().get(j);
                     if (!(predicate instanceof FieldPredicate)) {
-                        throw new IllegalStateException(predicate + " is not implementing " + FieldPredicate.class.getName());
+                        throw new IllegalStateException(predicate + " is not implementing " + FieldPredicate.class.getName()+". Anonymous lambdas are not supported: "+predicate.getClass().getName());
                     }
                     final FieldPredicate<?> fieldPredicate = (FieldPredicate<?>) predicate;
 

@@ -30,9 +30,9 @@ import com.speedment.runtime.join.trait.HasWhere;
  * @since  3.1.1
  */
 public interface JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8>
-extends HasJoins<JoinBuilder9.AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, ?>, JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, ?>>,
-        HasWhere<T8, JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8>>,
-        HasDefaultBuild<Tuple9OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8>> {
+    extends HasJoins<JoinBuilder9.AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, ?>, JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, ?>>,
+            HasWhere<T8, JoinBuilder9<T0, T1, T2, T3, T4, T5, T6, T7, T8>>,
+            HasDefaultBuild<Tuple9OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8>> {
 
     @Override
     <T9> AfterJoin<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> innerJoinOn(HasComparableOperators<T9, ?> joinedField);

@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.joining;
  *
  * @author Per Minborg
  */
-public final class SqlStage {
+final class SqlStage {
 
     private final Stage<?> stage;
     private final int stageIndex;
@@ -37,7 +37,7 @@ public final class SqlStage {
     private final String sqlColumnList;
     private final String sqlTableReference;
 
-    public SqlStage(
+    SqlStage(
         final SqlInfo info,
         final Stage<?> stage,
         final int stageIndex
@@ -59,23 +59,23 @@ public final class SqlStage {
             + tableAlias;
     }
 
-    public Stage<?> stage() {
+    Stage<?> stage() {
         return stage;
     }
 
-    public int stageIndex() {
+    int stageIndex() {
         return stageIndex;
     }
 
-    public Table table() {
+    Table table() {
         return table;
     }
 
-    public String sqlColumnList() {
+    String sqlColumnList() {
         return sqlColumnList;
     }
 
-    public String sqlTableReference() {
+    String sqlTableReference() {
         return sqlTableReference;
     }
 

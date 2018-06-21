@@ -33,7 +33,7 @@ public enum JoinType {
     private final boolean nullableSelf;
     private final boolean nullableOther;
 
-    private JoinType(String sql, boolean nullableSelf, boolean nullableOther) {
+    JoinType(String sql, boolean nullableSelf, boolean nullableOther) {
         this.sql = requireNonNull(sql);
         this.nullableSelf = nullableSelf;
         this.nullableOther = nullableOther;

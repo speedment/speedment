@@ -49,7 +49,8 @@ import static java.util.stream.Collectors.toMap;
  *
  * @author Per Minborg
  */
-public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierComponent {
+public class SqlJoinStreamSupplierComponent
+    implements JoinStreamSupplierComponent {
 
     private Map<TableIdentifier<?>, SqlAdapter<?>> sqlAdapterMap;
     private HasCreateJoin2 join2Creator;
@@ -221,7 +222,6 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
     ) {
         return join10Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
     }
-
 
 
     private <ENTITY> SqlAdapter<ENTITY> sqlAdapterMapper(TableIdentifier<ENTITY> identifier) {
