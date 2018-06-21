@@ -36,6 +36,7 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -124,7 +125,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     @Override
     public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         logOperation(LOGGER_PERSIST, sql, values);
-        final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyConsumer);
+        final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, new ArrayList<>(generatedKeyFields), generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));
     }
 

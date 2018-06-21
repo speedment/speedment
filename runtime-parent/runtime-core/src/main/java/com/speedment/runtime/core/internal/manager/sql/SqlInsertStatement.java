@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.internal.manager.sql;
 
 import com.speedment.runtime.core.manager.sql.HasGeneratedKeys;
+import com.speedment.runtime.field.Field;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +34,24 @@ extends AbstractSqlStatement
 implements HasGeneratedKeys {
 
     private final List<Long> generatedKeys;
+    private final List<Field<?>> generatedFields;
     private final Consumer<List<Long>> generatedKeysConsumer;
 
     public SqlInsertStatement(
             String sql,
             List<?> values,
+            List<Field<?>> generatedFields,
             Consumer<List<Long>> generatedKeyListeners) {
         
         super(sql, values);
         this.generatedKeys         = new ArrayList<>();
+        this.generatedFields       = requireNonNull(generatedFields);
         this.generatedKeysConsumer = requireNonNull(generatedKeyListeners);
+    }
+
+    @Override
+    public List<Field<?>> getGeneratedColumnFields() {
+        return generatedFields;
     }
 
     @Override
