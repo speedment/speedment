@@ -46,7 +46,7 @@ public final class PostgresDbmsOperationHandler extends AbstractDbmsOperationHan
     );
 
     @Override
-    public <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException {
+    public void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement sqlStatement) throws SQLException {
         /*
          * There does not seem to be any way to find the generated keys from a Postgres JDBC driver
          * since getGeneratedKeys() returns the whole set of columns. This causes
