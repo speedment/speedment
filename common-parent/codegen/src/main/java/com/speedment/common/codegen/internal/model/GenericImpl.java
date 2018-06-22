@@ -32,7 +32,7 @@ import static java.util.Arrays.asList;
  * This is the default implementation of the {@link Generic} interface.
  * This class should not be instantiated directly. Instead you should call the
  * {@link Generic#of()} method to get an instance. In that way, 
- * you can layer change the implementing class without modifying the using code.
+ * you can later change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
  * @see    Generic
@@ -134,6 +134,20 @@ public final class GenericImpl implements Generic {
 
     @Override
 	public Type asType() {
+	    if (lowerBound == null || "?".equals(lowerBound)) {
+	        if (upperBounds.isEmpty()) {
+	            throw new UnsupportedOperationException(
+	                "This generic has neighter lower or upper bound, so it " +
+                    "can't be parsed into a Type.");
+            } else if (upperBounds.size() > 1) {
+                throw new UnsupportedOperationException(
+                    "Since no lowerBound is specified, this Generic needs " +
+                    "exactly one upper bound for a Type to be parsed. " +
+                    "Instead, it has " + upperBounds);
+            } else {
+                return upperBounds.get(0);
+            }
+        }
 		return SimpleType.create(lowerBound);
 	}
 

@@ -16,18 +16,23 @@
  */
 package com.speedment.common.codegen.model.trait;
 
+import com.speedment.common.codegen.constant.DefaultJavadocTag;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.JavadocTag;
+import com.speedment.common.codegen.util.Formatting;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
  * A trait for models that contain {@link JavadocTag} components.
- * 
+ *
+ * @param <T>  the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
-public interface HasJavadocTags<T extends HasJavadocTags<T>> {
+public interface HasJavadocTags<T extends HasJavadocTags<T>> extends HasImports<T> {
     
     /**
      * Adds the specified {@link JavadocTag} to this model.
@@ -39,6 +44,63 @@ public interface HasJavadocTags<T extends HasJavadocTags<T>> {
     default T add(final JavadocTag tag) {
         getTags().add(tag);
         return (T) this;
+    }
+
+    /**
+     * Adds an {@link DefaultJavadocTag#AUTHOR}-tag with the specified value to
+     * this javadoc.
+     *
+     * @param name  the name of the author
+     * @return      a reference to this
+     */
+    default T author(final String name) {
+        return add(DefaultJavadocTag.AUTHOR.setValue(name));
+    }
+
+    /**
+     * Adds an {@link DefaultJavadocTag#RETURN}-tag with the specified value to
+     * this javadoc.
+     *
+     * @param description  description for the {@code return} tag
+     * @return             a reference to this
+     */
+    default T returns(final String description) {
+        return add(DefaultJavadocTag.RETURN.setValue(description));
+    }
+
+    /**
+     * Adds an {@link DefaultJavadocTag#SINCE}-tag with the specified value to
+     * this javadoc.
+     *
+     * @param version  version for the {@code since} tag
+     * @return         a reference to this
+     */
+    default T since(final String version) {
+        return add(DefaultJavadocTag.SINCE.setValue(version));
+    }
+
+    /**
+     * Adds an {@link DefaultJavadocTag#SEE}-tag that references the specified
+     * Java type.
+     *
+     * @param type  the type to reference in the {@code see}-tag
+     * @return      a reference to this
+     */
+    default T see(final Type type) {
+        return add(DefaultJavadocTag.SEE.setValue("{@link " +
+                Formatting.shortName(type.getTypeName()) + "}"))
+            .add(Import.of(type));
+    }
+
+    /**
+     * Adds an {@link DefaultJavadocTag#PARAM}-tag with the specified value to
+     * this javadoc.
+     *
+     * @param name  the name of the param
+     * @return      a reference to this
+     */
+    default T param(final String name, String description) {
+        return add(DefaultJavadocTag.PARAM.setValue(name).setText(description));
     }
     
     /**

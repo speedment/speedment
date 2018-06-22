@@ -24,13 +24,15 @@ import java.util.stream.*;
  *
  * @author pemi
  */
-public class AutoClosingIntStream extends AbstractAutoClosingStream implements IntStream {
+final class AutoClosingIntStream
+    extends AbstractAutoClosingStream
+    implements IntStream {
 
     private final IntStream stream;
 
-    public AutoClosingIntStream(IntStream stream) {
+    /*AutoClosingIntStream(IntStream stream) {
         this(stream, newSet(), false);
-    }
+    }*/
 
     AutoClosingIntStream(
         final IntStream stream,
@@ -217,14 +219,18 @@ public class AutoClosingIntStream extends AbstractAutoClosingStream implements I
 
     @Override
     public PrimitiveIterator.OfInt iterator() {
+        if (isAllowStreamIteratorAndSpliterator()) {
+            return stream.iterator();
+        }
         throw newUnsupportedException("iterator");
-        //return stream.iterator();
     }
 
     @Override
     public Spliterator.OfInt spliterator() {
+        if (isAllowStreamIteratorAndSpliterator()) {
+            return stream.spliterator();
+        }
         throw newUnsupportedException("spliterator");
-        //return stream.spliterator();
     }
 
     @Override

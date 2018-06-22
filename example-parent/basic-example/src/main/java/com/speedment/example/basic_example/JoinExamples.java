@@ -283,7 +283,7 @@ public class JoinExamples {
 
         Join<Tuple2<Actor, Actor>> join = joinComponent
             .from(ActorManager.IDENTIFIER)
-            .innerJoinOn(Actor.FIRST_NAME).equal(Actor.FIRST_NAME)
+            .innerJoinOn(Actor.FIRST_NAME.tableAlias("B")).equal(Actor.FIRST_NAME)
             .build(Tuples::of);
 
         join.stream()

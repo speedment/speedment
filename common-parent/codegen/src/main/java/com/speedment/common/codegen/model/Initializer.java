@@ -21,6 +21,9 @@ import com.speedment.common.codegen.model.modifier.InitalizerModifier;
 import com.speedment.common.codegen.model.trait.HasCall;
 import com.speedment.common.codegen.model.trait.HasCode;
 import com.speedment.common.codegen.model.trait.HasCopy;
+import com.speedment.common.codegen.model.trait.HasImports;
+import com.speedment.common.codegen.model.trait.HasInitializers;
+import com.speedment.common.codegen.model.trait.HasParent;
 
 /**
  * A model that represents an initializer in code.
@@ -28,8 +31,13 @@ import com.speedment.common.codegen.model.trait.HasCopy;
  * @author Emil Forslund
  * @since  2.1
  */
-public interface Initializer extends HasCopy<Initializer>, HasCall<Initializer>, 
-    HasCode<Initializer>, InitalizerModifier<Initializer> {
+public interface Initializer
+extends HasParent<HasInitializers<?>, Initializer>,
+        HasImports<Initializer>,
+        HasCopy<Initializer>,
+        HasCall<Initializer>,
+        HasCode<Initializer>,
+        InitalizerModifier<Initializer> {
 
     /**
      * Creates a new instance implementing this interface by using the default

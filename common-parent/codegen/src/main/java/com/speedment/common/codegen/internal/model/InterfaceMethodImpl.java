@@ -32,7 +32,8 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class InterfaceMethodImpl implements InterfaceMethod {
-	
+
+    private Interface parent;
     private final Method m;
 	
     /**
@@ -43,6 +44,17 @@ public final class InterfaceMethodImpl implements InterfaceMethod {
 	public InterfaceMethodImpl(Method wrapped) {
 		this.m = requireNonNull(wrapped);
 	}
+
+    @Override
+    public InterfaceMethod setParent(Interface parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<Interface> getParent() {
+        return Optional.ofNullable(parent);
+    }
 
     @Override
 	public String getName() {
@@ -80,6 +92,11 @@ public final class InterfaceMethodImpl implements InterfaceMethod {
 	}
 
     @Override
+    public List<Import> getImports() {
+        return m.getImports();
+    }
+
+    @Override
     public InterfaceMethod setName(String name) {
         m.setName(name);
         return this;
@@ -99,6 +116,7 @@ public final class InterfaceMethodImpl implements InterfaceMethod {
     @Override
     public InterfaceMethod set(Javadoc doc) {
         m.set(doc);
+        doc.setParent(this);
         return this;
     }
 

@@ -22,18 +22,23 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * A Stream that will call its {@link #close()} method automatically after
  * a terminating operation has been called.
  * <p>
  * N.B. The {@link #iterator()} {@link #spliterator()} methods will throw
  * an {@link UnsupportedOperationException} because otherwise the AutoClose
- * property cannot be guaranteed.
+ * property cannot be guaranteed. This can be unlocked by setting the
+ * allowStreamIteratorAndSpliterator flag
  *
  * @param <T>  Stream type
  * @author     Per Minborg
  */
-public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream implements Stream<T> {
+public final class AutoClosingReferenceStream<T>
+    extends AbstractAutoClosingStream
+    implements Stream<T> {
 
     private final Stream<T> stream;
 
@@ -54,7 +59,7 @@ public class AutoClosingReferenceStream<T> extends AbstractAutoClosingStream imp
         final boolean allowStreamIteratorAndSpliterator
     ) {
         super(streamSet, allowStreamIteratorAndSpliterator);
-        this.stream = stream;
+        this.stream = requireNonNull(stream);
         streamSet.add(this);
     }
 

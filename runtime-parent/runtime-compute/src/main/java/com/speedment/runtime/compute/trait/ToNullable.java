@@ -103,6 +103,8 @@ extends Function<T, R>, Expression<T> {
      * the {@code getter} expression if given an argument that would cause this
      * expression to return {@code null}.
      *
+     * @param getter to apply if null
+     *
      * @return the expression if present, otherwise return {@code getter}
      */
     NON_NULLABLE orElseGet(NON_NULLABLE getter);
@@ -111,6 +113,8 @@ extends Function<T, R>, Expression<T> {
      * Returns an equivalent expression as this, except that it will return
      * the {@code value} if given an argument that would cause this
      * expression to return {@code null}.
+     *
+     * @param value value to use if null
      *
      * @return the expression if present, otherwise return {@code value}
      */

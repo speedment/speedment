@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * This is the default implementation of the {@link File} interface. This class
  * should not be instantiated directly. Instead you should call the
  * {@link File#of(java.lang.String)} method to get an instance. In that way, you
- * can layer change the implementing class without modifying the using code.
+ * can later change the implementing class without modifying the using code.
  *
  * @author Emil Forslund
  * @see File
@@ -85,7 +85,7 @@ public final class FileImpl implements File {
 
     @Override
     public File set(Javadoc doc) {
-        this.doc = doc;
+        this.doc = doc.setParent(this);
         return this;
     }
 

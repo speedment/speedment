@@ -19,7 +19,9 @@ package com.speedment.common.tuple.internal.nonnullable.mapper;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.TupleMapper;
 import com.speedment.common.tuple.Tuples;
+
 import java.util.function.Function;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -48,7 +50,10 @@ public final class Tuple3MapperImpl<T, T0, T1, T2> implements TupleMapper<T, Tup
      * @param m1 mapper to apply for element 1
      * @param m2 mapper to apply for element 2
      */
-    public Tuple3MapperImpl(Function<T, T0> m0, Function<T, T1> m1, Function<T, T2> m2) {
+    public Tuple3MapperImpl(
+            Function<T, T0> m0,
+            Function<T, T1> m1,
+            Function<T, T2> m2) {
         this.m0	=	requireNonNull(m0);
         this.m1	=	requireNonNull(m1);
         this.m2	=	requireNonNull(m2);

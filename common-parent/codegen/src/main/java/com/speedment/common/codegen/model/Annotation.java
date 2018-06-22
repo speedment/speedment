@@ -23,13 +23,19 @@ import com.speedment.common.codegen.model.trait.*;
 /**
  * A model that represents an annotation in code.
  *
- * @author Emil Forslund
  * @see AnnotationUsage
- * @since   2.0
+ *
+ * @author Emil Forslund
+ * @since  2.0
  */
-public interface Annotation extends HasCopy<Annotation>, HasName<Annotation>,
-    HasJavadoc<Annotation>, HasFields<Annotation>, HasImports<Annotation>,
-    AnnotationModifier<Annotation>, HasAnnotationUsage<Annotation> {
+public interface Annotation
+extends HasCopy<Annotation>,
+        HasName<Annotation>,
+        HasJavadoc<Annotation>,
+        HasFields<Annotation>,
+        HasImports<Annotation>,
+        AnnotationModifier<Annotation>,
+        HasAnnotationUsage<Annotation> {
 
     /**
      * Creates a new instance implementing this interface using the default

@@ -22,6 +22,7 @@ import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.internal.AbstractMutableTuple;
 import com.speedment.common.tuple.mutable.MutableTuple11;
+
 import java.util.Optional;
 
 /**

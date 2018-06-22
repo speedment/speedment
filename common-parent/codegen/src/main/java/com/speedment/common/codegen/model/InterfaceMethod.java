@@ -27,12 +27,19 @@ import com.speedment.common.codegen.model.trait.*;
  * @see     Interface
  * @since  2.0
  */
-public interface InterfaceMethod extends HasName<InterfaceMethod>, 
-    HasThrows<InterfaceMethod>,
-    HasType<InterfaceMethod>, HasGenerics<InterfaceMethod>, 
-    HasFields<InterfaceMethod>, HasJavadoc<InterfaceMethod>, 
-    HasAnnotationUsage<InterfaceMethod>, HasCode<InterfaceMethod>, 
-    InterfaceMethodModifier<InterfaceMethod>, HasCopy<InterfaceMethod> {
+public interface InterfaceMethod
+extends HasParent<Interface, InterfaceMethod>,
+        HasImports<InterfaceMethod>,
+        HasName<InterfaceMethod>,
+        HasThrows<InterfaceMethod>,
+        HasType<InterfaceMethod>,
+        HasGenerics<InterfaceMethod>,
+        HasFields<InterfaceMethod>,
+        HasJavadoc<InterfaceMethod>,
+        HasAnnotationUsage<InterfaceMethod>,
+        HasCode<InterfaceMethod>,
+        InterfaceMethodModifier<InterfaceMethod>,
+        HasCopy<InterfaceMethod> {
 
     /**
      * Creates a new instance implementing this interface by wrapping an existing

@@ -126,8 +126,10 @@ public class TypeViewTest {
             "package com.example;\n" +
             "\n" +
             "import com.example.entity.Entity;\n" +
+            "\n" +
             "import java.util.ArrayList;\n" +
             "import java.util.List;\n" +
+            "\n" +
             "import static java.util.Objects.requireNonNull;\n" +
             "\n" +
             "public final class EntityList<E extends Entity> {\n" +

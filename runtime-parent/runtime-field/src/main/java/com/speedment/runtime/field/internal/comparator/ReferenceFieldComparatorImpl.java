@@ -19,6 +19,7 @@ package com.speedment.runtime.field.internal.comparator;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.comparator.ReferenceFieldComparator;
 
 import java.util.Objects;
 

@@ -34,7 +34,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-public final class SqlInfo {
+final class SqlInfo {
 
     private final Project project;
     private final Dbms dbms;
@@ -43,7 +43,7 @@ public final class SqlInfo {
     private final FieldPredicateView fieldPredicateView;
     private final List<Stage<?>> stages;
 
-    public SqlInfo(
+    SqlInfo(
         final DbmsHandlerComponent dbmsHandlerComponent,
         final Project project,
         final List<Stage<?>> stages
@@ -58,27 +58,27 @@ public final class SqlInfo {
         this.fieldPredicateView = dbmsType.getFieldPredicateView();
     }
 
-    public Project project() {
+    Project project() {
         return project;
     }
 
-    public Dbms dbms() {
+    Dbms dbms() {
         return dbms;
     }
 
-    public DbmsType dbmsType() {
+    DbmsType dbmsType() {
         return dbmsType;
     }
 
-    public DatabaseNamingConvention namingConvention() {
+    DatabaseNamingConvention namingConvention() {
         return naming;
     }
 
-    public FieldPredicateView fieldPredicateView() {
+    FieldPredicateView fieldPredicateView() {
         return fieldPredicateView;
     }
 
-    public List<SqlStage> sqlStages() {
+    List<SqlStage> sqlStages() {
         final List<SqlStage> sqlStages = new ArrayList<>();
         for (int i = 0; i < stages.size(); i++) {
             sqlStages.add(new SqlStage(this, stages.get(i), i));

@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.3</version>
+        <version>3.1.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>runtime-core</artifactId>
@@ -58,6 +58,7 @@
                             com.speedment.runtime.core.db.metadata,
                             com.speedment.runtime.core.exception,
                             com.speedment.runtime.core.manager,
+                            com.speedment.runtime.core.manager.sql,
                             com.speedment.runtime.core.stream,
                             com.speedment.runtime.core.stream.action,
                             com.speedment.runtime.core.stream.parallel,

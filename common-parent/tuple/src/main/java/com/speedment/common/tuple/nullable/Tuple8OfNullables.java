@@ -28,6 +28,7 @@ import com.speedment.common.tuple.getter.TupleGetter5;
 import com.speedment.common.tuple.getter.TupleGetter6;
 import com.speedment.common.tuple.getter.TupleGetter7;
 import com.speedment.common.tuple.getter.TupleGetter;
+
 import java.util.Optional;
 
 /**

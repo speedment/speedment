@@ -19,26 +19,75 @@ package com.speedment.common.codegen.model.trait;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static com.speedment.common.codegen.constant.DefaultType.genericType;
+
 /**
  * A trait for models that have interfaces as supertypes.
- * 
+ *
+ * @param <T> the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface HasImplements<T extends HasImplements<T>> {
     
     /**
-     * Adds the specified supertype to this model. The type should represent
-     * an interface.
+     * Adds the specified interface to the list of implemented interfaces of
+     * this model. The type should represent an interface.
      * 
-     * @param interf  the new child
+     * @param interf  the implemented interface
      * @return        a reference to this
      */
     @SuppressWarnings("unchecked")
     default T add(final Type interf) {
         getInterfaces().add(interf);
         return (T) this;
+    }
+
+    /**
+     * Adds the specified interface to the list of implemented interfaces of
+     * this model. The type should represent an interface. This method is a
+     * synonym for {@link #add(Type)}.
+     *
+     * @param interf  the implemented interface
+     * @return        a reference to this
+     *
+     * @since 2.5
+     */
+    default T implement(final Type interf) {
+        return add(interf);
+    }
+
+    /**
+     * Adds the specified interface to the list of implemented interfaces of
+     * this model. This method will construct a parameterized type with all the
+     * specified type parameters as generic arguments. The type should represent
+     * an interface.
+     *
+     * @param interf  the implemented interface
+     * @param params  the generic types of that interface
+     * @return        a reference to this
+     *
+     * @since 2.5
+     */
+    default T implement(final Type interf, final Type... params) {
+        return add(genericType(interf, params));
+    }
+
+    /**
+     * Adds the specified interface to the list of implemented interfaces of
+     * this model. This method will construct a parameterized type with all the
+     * specified type parameters as generic arguments. The type should represent
+     * an interface.
+     *
+     * @param interf  the implemented interface
+     * @param params  the generic types of that interface
+     * @return        a reference to this
+     *
+     * @since 2.5
+     */
+    default T implement(final Type interf, final String... params) {
+        return add(genericType(interf, params));
     }
     
     /**

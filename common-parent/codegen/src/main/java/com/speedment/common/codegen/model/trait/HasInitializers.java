@@ -37,7 +37,7 @@ public interface HasInitializers<T extends HasInitializers<T>> {
      */
     @SuppressWarnings("unchecked")
     default T add(final Initializer init) {
-        getInitializers().add(init);
+        getInitializers().add(init.setParent(this));
         return (T) this;
     }
     

@@ -17,10 +17,13 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.field.comparator.CharFieldComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.trait.HasCharValue;
+
 import java.util.Objects;
+
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -64,7 +67,7 @@ implements CharFieldComparator<ENTITY, D> {
     }
     
     @Override
-    public FieldComparator<ENTITY> reversed() {
+    public CharFieldComparatorImpl<ENTITY, D> reversed() {
         return new CharFieldComparatorImpl<>(field, !reversed);
     }
     

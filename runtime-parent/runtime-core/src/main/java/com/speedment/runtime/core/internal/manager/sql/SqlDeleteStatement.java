@@ -20,9 +20,9 @@ import java.util.List;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
-public final class SqlDeleteStatement extends SqlStatement {
+public final class SqlDeleteStatement extends AbstractSqlStatement {
 
     public SqlDeleteStatement(final String sql, final List<?> values) {
         super(sql, values);

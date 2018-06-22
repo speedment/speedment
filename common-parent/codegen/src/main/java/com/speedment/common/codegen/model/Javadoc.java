@@ -19,17 +19,24 @@ package com.speedment.common.codegen.model;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.trait.HasCall;
 import com.speedment.common.codegen.model.trait.HasCopy;
+import com.speedment.common.codegen.model.trait.HasImports;
+import com.speedment.common.codegen.model.trait.HasJavadoc;
 import com.speedment.common.codegen.model.trait.HasJavadocTags;
+import com.speedment.common.codegen.model.trait.HasParent;
 
 /**
  * A model that represents a block of documentation in code. 
  * 
  * @author  Emil Forslund
  * @see     JavadocTag
- * @since  2.0
+ * @since   2.0
  */
-public interface Javadoc extends HasCopy<Javadoc>, HasCall<Javadoc>, 
-    HasJavadocTags<Javadoc> {
+public interface Javadoc
+extends HasParent<HasJavadoc<?>, Javadoc>,
+        HasImports<Javadoc>,
+        HasCopy<Javadoc>,
+        HasCall<Javadoc>,
+        HasJavadocTags<Javadoc> {
     
     /**
      * Sets the body text shown in the javadoc.

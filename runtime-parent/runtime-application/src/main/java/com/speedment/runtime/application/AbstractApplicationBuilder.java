@@ -20,9 +20,6 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.exception.CyclicReferenceException;
-import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
-import static com.speedment.common.injector.execution.ExecutionBuilder.started;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.jvm_version.JvmVersion;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
@@ -35,10 +32,8 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
-import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
-import com.speedment.runtime.application.RuntimeBundle;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.InfoComponent;
@@ -50,12 +45,18 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.InfoComponentImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
-import static java.lang.Boolean.TRUE;
+
 import java.sql.SQLException;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
+import static com.speedment.common.injector.execution.ExecutionBuilder.started;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static java.lang.Boolean.TRUE;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This abstract class is implemented by classes that can build a
@@ -519,6 +520,11 @@ public abstract class AbstractApplicationBuilder<
         } catch (final Exception ex) {
             LOGGER.info("Unknown Java version.");
         }
+        LOGGER.info(
+            "Available processors: %d, Max Memory: %,d bytes",
+            Runtime.getRuntime().availableProcessors(),
+            Runtime.getRuntime().maxMemory()
+        );
 
     }
 

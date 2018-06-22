@@ -18,8 +18,7 @@ package com.speedment.common.codegen;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.function.Supplier;
 
 /**
  * Different {@link Transform} implementations can be <i>installed</i> in the
@@ -49,8 +48,9 @@ public interface TransformFactory {
 	 * @param transformer  the view
      * @return             a reference to this
 	 */
-    default <A, T extends Transform<A, String>> TransformFactory install(
-        Class<A> from, Class<T> transformer) {
+    default <A, T extends Transform<A, String>>
+	TransformFactory install(
+        	Class<A> from, Supplier<T> transformer) {
         
         return install(from, String.class, transformer);
     }
@@ -67,7 +67,7 @@ public interface TransformFactory {
      * @return             a reference to this
 	 */
 	<A, B, T extends Transform<A, B>> TransformFactory install(
-        Class<A> from, Class<B> to, Class<T> transformer);
+        Class<A> from, Class<B> to, Supplier<T> transformer);
 
 	/**
 	 * Builds a stream of all transforms that match the specified model.
@@ -78,25 +78,4 @@ public interface TransformFactory {
 	 * @return      a stream of all matching transforms
 	 */
 	<A, T extends Transform<A, ?>> Set<Map.Entry<Class<?>, T>> allFrom(Class<A> from);
-	
-	/**
-	 * Instantiates the specified class and returns it.
-     * 
-	 * @param <T>    the return type
-	 * @param clazz  a class of the intended return type
-	 * @return       the instance
-	 */
-	static <T> T create(Class<T> clazz) {
-		try {
-			return clazz.newInstance();
-		} catch (InstantiationException | IllegalAccessException ex) {
-			Logger.getLogger(TransformFactory.class.getName()).log(Level.SEVERE, 
-				"The class '" + clazz.getName() + 
-				"' could not be instantiated using the default constructor. " +
-				"Make sure it is the correct class and that the default " +
-				"constructor has been properly defined without no parameters.", ex);
-		}
-		
-		return null;
-	}
 }

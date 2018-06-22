@@ -184,6 +184,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testPlus_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((byte) 1)).asDouble().applyAsDouble(s);
@@ -192,6 +193,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testPlus_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToByte<String>) u -> (byte) 1)).asDouble().applyAsDouble(s);
@@ -200,6 +202,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testPlus_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus(1)).asDouble().applyAsDouble(s);
@@ -208,6 +211,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testPlus_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToInt<String>) u -> 1)).asDouble().applyAsDouble(s);
@@ -216,6 +220,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testPlus_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus(1L)).asDouble().applyAsDouble(s);
@@ -224,6 +229,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testPlus_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToLong<String>) u -> 1)).asDouble().applyAsDouble(s);
@@ -248,6 +254,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMinus_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((byte) 1)).asDouble().applyAsDouble(s);
@@ -256,6 +263,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMinus_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToByte<String>) u -> (byte) 1)).asDouble().applyAsDouble(s);
@@ -264,6 +272,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMinus_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus(1)).asDouble().applyAsDouble(s);
@@ -272,6 +281,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMinus_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToInt<String>) u -> 1)).asDouble().applyAsDouble(s);
@@ -280,6 +290,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMinus_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus(1L)).asDouble().applyAsDouble(s);
@@ -288,6 +299,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMinus_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToLong<String>) u -> 1)).asDouble().applyAsDouble(s);
@@ -312,6 +324,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMultiply_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((byte) 2)).asDouble().applyAsDouble(s);
@@ -320,6 +333,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMultiply_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToByte<String>) u -> (byte) 2)).asDouble().applyAsDouble(s);
@@ -328,6 +342,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMultiply_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply(2)).asDouble().applyAsDouble(s);
@@ -336,6 +351,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMultiply_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToInt<String>) u -> 2)).asDouble().applyAsDouble(s);
@@ -344,6 +360,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMultiply_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply(2L)).asDouble().applyAsDouble(s);
@@ -352,6 +369,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMultiply_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToLong<String>) u -> 2)).asDouble().applyAsDouble(s);
@@ -452,7 +470,7 @@ abstract class AbstractToTest<T extends
 
         strings().forEach(s -> {
             final int cmp = instance.compare(s, s);
-            assertTrue(cmp == 0);
+            assertEquals(0, cmp);
         });
     }
 

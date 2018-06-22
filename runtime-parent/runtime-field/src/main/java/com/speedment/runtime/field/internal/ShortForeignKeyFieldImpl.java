@@ -21,7 +21,8 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.ShortForeignKeyField;
-import com.speedment.runtime.field.internal.comparator.ShortFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.comparator.ShortFieldComparator;
 import com.speedment.runtime.field.internal.comparator.ShortFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromShort;
@@ -45,9 +46,11 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -158,8 +161,23 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
+    public ShortFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public ShortFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -178,7 +196,10 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Short start, Short end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Short start,
+            Short end,
+            Inclusion inclusion) {
         return new ShortBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -203,7 +224,10 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Short start, Short end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Short start,
+            Short end,
+            Inclusion inclusion) {
         return new ShortNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

@@ -14,14 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.field.internal.comparator;
+package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.trait.HasDoubleValue;
+import com.speedment.runtime.field.trait.HasShortValue;
 
 /**
- * A predicate that evaluates if a value is between two doubles.
+ * A {@link FieldComparator} that compares values of a {@link HasShortValue}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -30,7 +29,7 @@ import com.speedment.runtime.field.trait.HasDoubleValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
+public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.
@@ -38,5 +37,8 @@ public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY
      * @return the compared field
      */
     @Override
-    HasDoubleValue<ENTITY, D> getField();
+    HasShortValue<ENTITY, D> getField();
+    
+    @Override
+    ShortFieldComparator<ENTITY, D> reversed();
 }

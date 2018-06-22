@@ -21,7 +21,8 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.FloatForeignKeyField;
-import com.speedment.runtime.field.internal.comparator.FloatFieldComparator;
+import com.speedment.runtime.field.comparator.FloatFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.FloatFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromFloat;
@@ -45,9 +46,11 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -158,8 +161,23 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Flo
     }
     
     @Override
+    public FloatFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public FloatFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -178,7 +196,10 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Flo
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Float start, Float end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Float start,
+            Float end,
+            Inclusion inclusion) {
         return new FloatBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -203,7 +224,10 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Flo
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Float start, Float end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Float start,
+            Float end,
+            Inclusion inclusion) {
         return new FloatNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

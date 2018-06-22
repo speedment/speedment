@@ -37,7 +37,7 @@ public interface HasMethods<T extends HasMethods<T>> {
      */
     @SuppressWarnings("unchecked")
     default T add(final Method meth) {
-        getMethods().add(meth);
+        getMethods().add(meth.setParent(this));
         return (T) this;
     }
     

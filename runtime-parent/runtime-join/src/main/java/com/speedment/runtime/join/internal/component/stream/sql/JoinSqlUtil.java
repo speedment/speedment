@@ -30,7 +30,6 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingReferenceStream;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasComparableOperators;
@@ -44,7 +43,6 @@ import java.util.*;
 
 import static com.speedment.runtime.join.JoinComponent.MAX_DEGREE;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.fill;
 import static java.util.Objects.requireNonNull;
 
 import java.util.function.Predicate;
@@ -58,12 +56,14 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
-public final class JoinSqlUtil {
+final class JoinSqlUtil {
 
-    private JoinSqlUtil() {
-    }
+    private JoinSqlUtil() {}
 
-    public static Dbms requireSameDbms(Project project, List<Stage<?>> stages) {
+    static Dbms requireSameDbms(
+        final Project project,
+        final List<Stage<?>> stages
+    ) {
         requireNonNull(project);
         requireNonNull(stages);
         final Dbms dbms = DocumentDbUtil.referencedDbms(project, stages.get(0).identifier());
@@ -84,7 +84,7 @@ public final class JoinSqlUtil {
         return dbms;
     }
 
-    public static <T> SqlFunction<ResultSet, T> resultSetMapper(
+    static <T> SqlFunction<ResultSet, T> resultSetMapper(
         final Project project,
         final TableIdentifier<T> identifier,
         final List<Stage<?>> stages,
@@ -214,7 +214,7 @@ public final class JoinSqlUtil {
 
     }
 
-    public static <T> Stream<T> stream(
+    static <T> Stream<T> stream(
         final DbmsHandlerComponent dbmsHandlerComponent,
         final Project project,
         final List<Stage<?>> stages,
@@ -269,16 +269,15 @@ public final class JoinSqlUtil {
                 rsMapper,
                 ParallelStrategy.computeIntensityDefault()
             );
-        return new AutoClosingReferenceStream<>(asynchronousQueryResult.stream(), allowStreamIteratorAndSpliterator)
-            .onClose(asynchronousQueryResult::close);
+
+        return new InitialJoinStream<>(asynchronousQueryResult, sqlInfo, allowStreamIteratorAndSpliterator);
     }
 
     private static final String[] ALIASES = IntStream.range(0, MAX_DEGREE)
             .mapToObj(i -> Character.toString((char) ('A' + i)))
             .toArray(String[]::new);
 
-    public static String tableAlias(int index) {
-        requireNonNegative(index);
+    static String tableAlias(int index) {
         return ALIASES[index];
     }
 
@@ -301,7 +300,7 @@ public final class JoinSqlUtil {
                 for (int j = 0; j < stage.predicates().size(); j++) {
                     final Predicate<?> predicate = stage.predicates().get(j);
                     if (!(predicate instanceof FieldPredicate)) {
-                        throw new IllegalStateException(predicate + " is not implementing " + FieldPredicate.class.getName());
+                        throw new IllegalStateException(predicate + " is not implementing " + FieldPredicate.class.getName()+". Anonymous lambdas are not supported: "+predicate.getClass().getName());
                     }
                     final FieldPredicate<?> fieldPredicate = (FieldPredicate<?>) predicate;
 

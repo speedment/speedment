@@ -24,6 +24,7 @@ import com.speedment.common.tuple.getter.TupleGetter1;
 import com.speedment.common.tuple.getter.TupleGetter2;
 import com.speedment.common.tuple.getter.TupleGetter3;
 import com.speedment.common.tuple.getter.TupleGetter;
+
 import java.util.Optional;
 import java.util.function.BiConsumer;
 

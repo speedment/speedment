@@ -16,12 +16,23 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.*;
+import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.modifier.Keyword.Abstract;
+import com.speedment.common.codegen.model.modifier.Keyword.Final;
+import com.speedment.common.codegen.model.modifier.Keyword.Private;
+import com.speedment.common.codegen.model.modifier.Keyword.Protected;
+import com.speedment.common.codegen.model.modifier.Keyword.Public;
+import com.speedment.common.codegen.model.modifier.Keyword.Static;
+import com.speedment.common.codegen.model.modifier.Keyword.Strictfp;
+import com.speedment.common.codegen.model.trait.HasModifiers;
 
 /**
+ * Composed trait of all the {@link HasModifiers modifiers} that can be added to
+ * a {@link Class}.
+ *
+ * @param <T>  the extending type
  *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface ClassModifier<T extends ClassModifier<T>> extends Public<T>, 

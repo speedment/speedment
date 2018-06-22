@@ -16,12 +16,17 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
+import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.modifier.Keyword.Public;
+import com.speedment.common.codegen.model.trait.HasModifiers;
 
 /**
+ * Composed trait of all the {@link HasModifiers modifiers} that can be added to
+ * an {@link Interface}.
+ *
+ * @param <T>  the extending type
  *
  * @author Emil Forslund
- * @param <T> The extending type
  * @since  2.0
  */
 public interface InterfaceModifier<T extends InterfaceModifier<T>> extends Public<T> {}

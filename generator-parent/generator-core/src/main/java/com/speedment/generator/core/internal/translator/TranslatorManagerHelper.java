@@ -19,9 +19,9 @@ package com.speedment.generator.core.internal.translator;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.util.Formatting;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -37,12 +37,11 @@ import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
-import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.util.Statistics;
-import static com.speedment.runtime.core.internal.util.Statistics.Event.GENERATE;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
@@ -51,15 +50,19 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
+import static com.speedment.runtime.core.internal.util.Statistics.Event.GENERATE;
+import static java.util.Objects.requireNonNull;
+
 /**
  *
  * @author Emil Forslund
- * @since 3.0.2
+ * @since  3.0.2
  */
 public final class TranslatorManagerHelper {
 
@@ -70,17 +73,14 @@ public final class TranslatorManagerHelper {
     private static final String HASH_SUFFIX = ".md5";
 
     private final AtomicInteger fileCounter = new AtomicInteger(0);
-    
-    @Inject
-    private InfoComponent info;
-    @Inject
-    private PathComponent paths;
-    @Inject
-    private EventComponent events;
-    @Inject
-    private ProjectComponent projects;
-    @Inject
-    private CodeGenerationComponent codeGenerationComponent;
+
+    private @Inject InfoComponent info;
+    private @Inject PathComponent paths;
+    private @Inject EventComponent events;
+    private @Inject ProjectComponent projects;
+    private @Inject CodeGenerationComponent codeGenerationComponent;
+
+    private @Config(name="skipClear", value="false") boolean skipClear;
 
     public void accept(TranslatorManager delegator, Project project) {
         requireNonNull(project);
@@ -118,11 +118,14 @@ public final class TranslatorManagerHelper {
                     }
                 });
             }
-            );
-        System.out.println();
-        System.out.println("Clearing existing files");
-        // Erase any previous unmodified files.
-        delegator.clearExistingFiles(project);
+        );
+
+        if (!skipClear) {
+            System.out.println();
+            System.out.println("Clearing existing files");
+            // Erase any previous unmodified files.
+            delegator.clearExistingFiles(project);
+        }
 
         System.out.println("Checking write-once classes:");
         // Write generated code to file.
@@ -131,7 +134,6 @@ public final class TranslatorManagerHelper {
             .collect(Collectors.toList())
         ).forEach(meta -> {
             printAndFlush(".");
-
             delegator.writeToFile(project, meta, false);
         });
 
@@ -142,11 +144,10 @@ public final class TranslatorManagerHelper {
             .collect(Collectors.toList())
         ).forEach(meta -> {
             printAndFlush(".");
-
             delegator.writeToFile(project, meta, true);
         });
+
         System.out.println();
-        
         LOGGER.info("Wrote %d files in %s", getFilesCreated(), paths.packageLocation());
 
         events.notify(new AfterGenerate(project, gen, delegator));

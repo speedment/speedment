@@ -17,9 +17,11 @@
 package com.speedment.generator.translator.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasTypeMapper;
 import com.speedment.runtime.typemapper.TypeMapper;
 
+import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -32,6 +34,26 @@ import java.util.stream.Stream;
  */
 @InjectKey(TypeMapperComponent.class)
 public interface TypeMapperComponent {
+
+    /**
+     * Returns the database type of the specified column.
+     *
+     * @param column  the column
+     * @return        the database type
+     */
+    default Type typeOf(Column column) {
+        return get(column).getJavaType(column);
+    }
+
+    /**
+     * Returns the database type of the specified column.
+     *
+     * @param column  the column
+     * @return        the database type
+     */
+    default TypeMapper.Category categoryOf(Column column) {
+        return get(column).getJavaTypeCategory(column);
+    }
     
     /**
      * Installs the specified type mapper in this component.

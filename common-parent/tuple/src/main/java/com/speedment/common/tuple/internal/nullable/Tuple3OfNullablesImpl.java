@@ -22,6 +22,7 @@ import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.internal.AbstractTupleOfNullables;
 import com.speedment.common.tuple.nullable.Tuple3OfNullables;
+
 import java.util.Optional;
 
 /**
@@ -46,7 +47,10 @@ implements Tuple3OfNullables<T0, T1, T2> {
      * @param e1 element 1
      * @param e2 element 2
      */
-    public Tuple3OfNullablesImpl(T0 e0, T1 e1, T2 e2) {
+    public Tuple3OfNullablesImpl(
+            T0 e0,
+            T1 e1,
+            T2 e2) {
         super(Tuple3OfNullablesImpl.class, e0, e1, e2);
     }
     

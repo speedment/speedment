@@ -17,10 +17,13 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.field.comparator.DoubleFieldComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.trait.HasDoubleValue;
+
 import java.util.Objects;
+
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -64,7 +67,7 @@ implements DoubleFieldComparator<ENTITY, D> {
     }
     
     @Override
-    public FieldComparator<ENTITY> reversed() {
+    public DoubleFieldComparatorImpl<ENTITY, D> reversed() {
         return new DoubleFieldComparatorImpl<>(field, !reversed);
     }
     

@@ -25,8 +25,8 @@ import com.speedment.common.codegen.model.trait.*;
  * @author Emil Forslund
  * @since  2.0
  */
-public interface File extends 
-        HasCopy<File>, 
+public interface File
+extends HasCopy<File>,
         HasName<File>,
         HasJavadoc<File>, 
         HasImports<File>, 

@@ -33,11 +33,11 @@ public enum JoinOperator {
 //    NOT_BETWEEN("NOT BETWEEN", false);
 
     private final String operator;
-    private final boolean symetric;
+    private final boolean symmetric;
 
-    private JoinOperator(String operator, boolean symetric) {
+    JoinOperator(String operator, boolean symmetric) {
         this.operator = requireNonNull(operator);
-        this.symetric = symetric;
+        this.symmetric = symmetric;
     }
 
     public String sqlOperator() {
@@ -45,14 +45,14 @@ public enum JoinOperator {
     }
 
     /**
-     * Returns if this operation is symetric with respect to its parameters.
+     * Returns if this operation is symmetric with respect to its parameters.
      * More formally returns true if: A oper B is true if and only if B oper A is
      * true.
      *
-     * @return if this operation is symetric with respect to its parameters
+     * @return if this operation is symmetric with respect to its parameters
      */
-    public boolean isSymetric() {
-        return symetric;
+    public boolean isSymmetric() {
+        return symmetric;
     }
 
     /**

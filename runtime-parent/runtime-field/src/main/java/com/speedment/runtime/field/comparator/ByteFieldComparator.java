@@ -14,14 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.field.internal.comparator;
+package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.trait.HasLongValue;
+import com.speedment.runtime.field.trait.HasByteValue;
 
 /**
- * A predicate that evaluates if a value is between two longs.
+ * A {@link FieldComparator} that compares values of a {@link HasByteValue}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -30,7 +29,7 @@ import com.speedment.runtime.field.trait.HasLongValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface LongFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
+public interface ByteFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.
@@ -38,5 +37,8 @@ public interface LongFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> 
      * @return the compared field
      */
     @Override
-    HasLongValue<ENTITY, D> getField();
+    HasByteValue<ENTITY, D> getField();
+    
+    @Override
+    ByteFieldComparator<ENTITY, D> reversed();
 }

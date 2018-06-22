@@ -16,16 +16,14 @@
  */
 package com.speedment.runtime.core.util;
 
-import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingDoubleStream;
-import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingIntStream;
-import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingLongStream;
-import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingReferenceStream;
+import com.speedment.runtime.core.stream.AutoClosingStream;
 
 import java.util.function.Function;
 import java.util.stream.*;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
-import static com.speedment.runtime.core.internal.stream.autoclose.AbstractAutoClosingStream.composedClose;
+import static com.speedment.runtime.core.stream.ComposeRunnableUtil.composedClose;
+
 
 /**
  * Utility methods for making sure composed streams are closed properly.
@@ -72,10 +70,10 @@ public class StreamComposition {
     @SafeVarargs // Creating a Stream of an array is safe.
     public static <T> Stream<T> concatAndAutoClose(Stream<T>... streams) {
         requireNonNullElements(streams);
-        return configureAutoCloseStream(new AutoClosingReferenceStream<>(Stream.of(streams).flatMap(Function.identity())), streams);
+        return configureAutoCloseStream(AutoClosingStream.of(Stream.of(streams).flatMap(Function.identity())), streams);
     }
 
-    @SuppressWarnings("varargs")
+/*    @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.
     public static IntStream concatAndAutoClose(IntStream... streams) {
         requireNonNullElements(streams);
@@ -94,7 +92,7 @@ public class StreamComposition {
     public static DoubleStream concatAndAutoClose(DoubleStream... streams) {
         requireNonNullElements(streams);
         return configureAutoCloseStream(new AutoClosingDoubleStream(Stream.of(streams).flatMapToDouble(Function.identity())), streams);
-    }
+    }*/
 
     @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.

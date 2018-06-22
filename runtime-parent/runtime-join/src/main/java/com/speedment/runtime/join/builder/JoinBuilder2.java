@@ -24,9 +24,9 @@ import java.util.function.BiFunction;
  * @since  3.1.1
  */
 public interface JoinBuilder2<T0, T1>
-extends HasJoins<JoinBuilder2.AfterJoin<T0, T1, ?>, JoinBuilder3<T0, T1, ?>>,
-        HasWhere<T1, JoinBuilder2<T0, T1>>,
-        HasDefaultBuild<Tuple2OfNullables<T0, T1>> {
+    extends HasJoins<JoinBuilder2.AfterJoin<T0, T1, ?>, JoinBuilder3<T0, T1, ?>>,
+            HasWhere<T1, JoinBuilder2<T0, T1>>,
+            HasDefaultBuild<Tuple2OfNullables<T0, T1>> {
 
     @Override
     <T2> AfterJoin<T0, T1, T2> innerJoinOn(HasComparableOperators<T2, ?> joinedField);

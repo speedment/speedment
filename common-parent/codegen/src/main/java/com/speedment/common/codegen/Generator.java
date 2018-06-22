@@ -16,6 +16,8 @@
  */
 package com.speedment.common.codegen;
 
+import com.speedment.common.codegen.internal.java.JavaGenerator;
+
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -28,6 +30,16 @@ import java.util.stream.Stream;
  * @since   2.0
  */
 public interface Generator {
+
+    /**
+     * Returns an implementation of this interface that uses the default
+     * implementation used to generate Java code.
+     *
+     * @return  the default generator for Java
+     */
+    static Generator forJava() {
+        return new JavaGenerator();
+    }
 
     /**
      * Returns the {@link DependencyManager} currently being used.

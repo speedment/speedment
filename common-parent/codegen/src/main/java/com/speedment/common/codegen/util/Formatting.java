@@ -16,16 +16,24 @@
  */
 package com.speedment.common.codegen.util;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
-import java.util.Arrays;
-import java.util.List;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Common formatting methods used when generating code.
@@ -289,8 +297,9 @@ public final class Formatting {
     public static Optional<String> packageName(String longName) {
 		if (longName.contains(".")) {
 			return Optional.of(longName.substring(0,
-				longName.lastIndexOf(".")
-			));
+                    longName.lastIndexOf(".")
+                ).replace(" ", ""));
+
 		} else {
 			return Optional.empty();
 		}
@@ -401,10 +410,227 @@ public final class Formatting {
         }
     }
 
+    /**
+     * Returns the string but with any leading and trailing quotation marks
+     * trimmed.
+     *
+     * @param s  the string to unquote
+     * @return   the string without surrounding quotation marks
+     */
+    public static String unQuote(final String s) {
+        requireNonNull(s);
+        if (s.startsWith("\"") && s.endsWith("\"")) {
+            // Un-quote the name
+            return s.substring(1, s.length() - 1);
+        }
+        return s;
+    }
+
+    /**
+     * Returns a static field name representation of the specified camel-cased
+     * string.
+     *
+     * @param externalName  the string
+     * @return              the static field name representation
+     */
+    public static String staticField(final String externalName) {
+        requireNonNull(externalName);
+        return toUnderscoreSeparated(javaNameFromExternal(externalName)).toUpperCase();
+    }
+
+    /**
+     * Turns the specified string into an underscore-separated string.
+     *
+     * @param javaName  the string to parse
+     * @return          as underscore separated
+     */
+    public static String toUnderscoreSeparated(final String javaName) {
+        requireNonNull(javaName);
+        final StringBuilder result = new StringBuilder();
+        final String input = unQuote(javaName.trim());
+        for (int i = 0; i < input.length(); i++) {
+            final char c = input.charAt(i);
+            if (result.length() == 0) {
+                result.append(Character.toLowerCase(c));
+            } else if (Character.isUpperCase(c)) {
+                result.append("_").append(Character.toLowerCase(c));
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+
+    public static String javaNameFromExternal(final String externalName) {
+        requireNonNull(externalName);
+        return replaceIfIllegalJavaIdentifierCharacter(replaceIfJavaUsedWord(nameFromExternal(externalName)));
+    }
+
+    public static String nameFromExternal(final String externalName) {
+        requireNonNull(externalName);
+        String result = unQuote(externalName.trim()); // Trim if there are initial spaces or trailing spaces...
+        // CamelCase
+        // http://stackoverflow.com/questions/4050381/regular-expression-for-checking-if-capital-letters-are-found-consecutively-in-a
+        // [A-Z] -> \p{Lu}
+        // [^A-Za-z0-9] -> [^\pL0-90-9]
+        result = Stream.of(result.replaceAll("([\\p{Lu}]+)", "_$1").split("[^\\pL0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
+        return result;
+    }
+
+    public static String replaceIfJavaUsedWord(final String word) {
+        requireNonNull(word);
+        // We need to replace regardless of case because we do not know how the retuned string is to be used
+        if (JAVA_USED_WORDS_LOWER_CASE.contains(word.toLowerCase())) {
+            // If it is a java reseved/literal/class, add a "_" at the end to avoid naming conflics
+            return word + "_";
+        }
+        return word;
+    }
+
+    public static String replaceIfIllegalJavaIdentifierCharacter(final String word) {
+        requireNonNull(word);
+        if (word.isEmpty()) {
+            return REPLACEMENT_CHARACTER.toString(); // No name is translated to REPLACEMENT_CHARACTER only
+        }
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < word.length(); i++) {
+            Character c = word.charAt(i);
+            if (i == 0) {
+                if (Character.isJavaIdentifierStart(c)) {
+                    // Fine! Just add the first character
+                    sb.append(c);
+                } else if (Character.isJavaIdentifierPart(c)) {
+                    // Not ok as the first, but ok otherwise. Add the replacement before it
+                    sb.append(REPLACEMENT_CHARACTER).append(c);
+                } else {
+                    // Cannot be used as a java identifier. Replace it
+                    sb.append(REPLACEMENT_CHARACTER);
+                }
+            } else if (Character.isJavaIdentifierPart(c)) {
+                // Fine! Just add it
+                sb.append(c);
+            } else {
+                // Cannot be used as a java identifier. Replace it
+                sb.append(REPLACEMENT_CHARACTER);
+            }
+
+        }
+        return sb.toString();
+
+        // We need to replace regardless of case because we do not know how the retuned string is to be used
+        //if (JAVA_USED_WORDS_LOWER_CASE.contains(word.toLowerCase())) {
+        // If it is a java reseved/literal/class, add a "_" at the end to avoid naming conflics
+        //    return word + "_";
+        //}
+        //return word;
+    }
+
     private static String 
         nl     = "\n",
         dnl    = "\n\n",
         indent = "    ";
+
+    private final static Character REPLACEMENT_CHARACTER = '_';
+
+    // From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
+    //
+    // Literals
+    final static Set<String> JAVA_LITERAL_WORDS = unmodifiableSet(Stream.of(
+        "true", "false", "null"
+    ).collect(toSet()));
+
+    // Java reserved keywords
+    final static Set<String> JAVA_RESERVED_WORDS = unmodifiableSet(Stream.of(
+        // Unused
+        "const", "goto",
+        // The real ones...
+        "abstract",
+        "continue",
+        "for",
+        "new",
+        "switch",
+        "assert",
+        "default",
+        "goto",
+        "package",
+        "synchronized",
+        "boolean",
+        "do",
+        "if",
+        "private",
+        "this",
+        "break",
+        "double",
+        "implements",
+        "protected",
+        "throw",
+        "byte",
+        "else",
+        "import",
+        "public",
+        "throws",
+        "case",
+        "enum",
+        "instanceof",
+        "return",
+        "transient",
+        "catch",
+        "extends",
+        "int",
+        "short",
+        "try",
+        "char",
+        "final",
+        "interface",
+        "static",
+        "void",
+        "class",
+        "finally",
+        "long",
+        "strictfp",
+        "volatile",
+        "const",
+        "float",
+        "native",
+        "super",
+        "while"
+    ).collect(toSet()));
+
+    final static Set<Class<?>> JAVA_BUILT_IN_CLASSES = unmodifiableSet(Stream.of(
+        Boolean.class,
+        Byte.class,
+        Character.class,
+        Double.class,
+        Float.class,
+        Integer.class,
+        Long.class,
+        Object.class,
+        Short.class,
+        String.class,
+        BigDecimal.class,
+        BigInteger.class,
+        boolean.class,
+        byte.class,
+        char.class,
+        double.class,
+        float.class,
+        int.class,
+        long.class,
+        short.class
+    ).collect(toSet()));
+
+    private final static Set<String> JAVA_BUILT_IN_CLASS_WORDS = unmodifiableSet(JAVA_BUILT_IN_CLASSES.stream().map(Class::getSimpleName).collect(toSet()));
+
+    private final static Set<String> JAVA_USED_WORDS = unmodifiableSet(Stream.of(
+        JAVA_LITERAL_WORDS,
+        JAVA_RESERVED_WORDS,
+        JAVA_BUILT_IN_CLASS_WORDS
+    ).flatMap(Collection::stream)
+        .collect(toSet()));
+
+    private final static Set<String> JAVA_USED_WORDS_LOWER_CASE = unmodifiableSet(JAVA_USED_WORDS.stream()
+        .map(String::toLowerCase)
+        .collect(toSet()));
 
     /**
      * Utility classes should not be instantiated.

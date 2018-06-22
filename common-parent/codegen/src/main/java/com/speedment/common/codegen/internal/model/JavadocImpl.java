@@ -17,19 +17,22 @@
 package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.internal.util.Copier;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
+import com.speedment.common.codegen.model.trait.HasJavadoc;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
 /**
  * This is the default implementation of the {@link Javadoc} interface.
  * This class should not be instantiated directly. Instead you should call the
- * {@link Javadoc#of()} method to get an instance. In that way, you can layer 
+ * {@link Javadoc#of()} method to get an instance. In that way, you can later
  * change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
@@ -37,7 +40,9 @@ import static java.util.Objects.requireNonNull;
  */
 public final class JavadocImpl implements Javadoc {
 
+    private HasJavadoc<?> parent;
     private String text;
+    private final List<Import> imports;
     private final List<JavadocTag> tags;
 
     /**
@@ -47,8 +52,9 @@ public final class JavadocImpl implements Javadoc {
      * the {@link Javadoc#of()} method!
      */
     public JavadocImpl() {
-        text = "";
-        tags = new ArrayList<>();
+        text    = "";
+        tags    = new ArrayList<>();
+        imports = new ArrayList<>();
     }
 
     /**
@@ -61,8 +67,9 @@ public final class JavadocImpl implements Javadoc {
      * @param text  the text
      */
     public JavadocImpl(final String text) {
-        this.text = requireNonNull(text);
-        this.tags = new ArrayList<>();
+        this.text    = requireNonNull(text);
+        this.tags    = new ArrayList<>();
+        this.imports = new ArrayList<>();
     }
 
     /**
@@ -71,8 +78,25 @@ public final class JavadocImpl implements Javadoc {
      * @param prototype the prototype
      */
     protected JavadocImpl(final Javadoc prototype) {
-        text = requireNonNull(prototype).getText();
-        tags = Copier.copy(prototype.getTags());
+        text    = requireNonNull(prototype).getText();
+        tags    = Copier.copy(prototype.getTags());
+        imports = Copier.copy(prototype.getImports());
+    }
+
+    @Override
+    public Javadoc setParent(HasJavadoc<?> parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<HasJavadoc<?>> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return imports;
     }
 
     @Override

@@ -17,6 +17,7 @@
 package com.speedment.common.function.collector;
 
 import com.speedment.common.function.ObjBooleanConsumer;
+
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Supplier;

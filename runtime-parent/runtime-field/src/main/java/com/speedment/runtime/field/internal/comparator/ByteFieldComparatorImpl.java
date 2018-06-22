@@ -17,10 +17,13 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.field.comparator.ByteFieldComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.trait.HasByteValue;
+
 import java.util.Objects;
+
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -64,7 +67,7 @@ implements ByteFieldComparator<ENTITY, D> {
     }
     
     @Override
-    public FieldComparator<ENTITY> reversed() {
+    public ByteFieldComparatorImpl<ENTITY, D> reversed() {
         return new ByteFieldComparatorImpl<>(field, !reversed);
     }
     

@@ -27,12 +27,12 @@ import com.speedment.runtime.join.trait.*;
  */
 @InjectKey(JoinStreamSupplierComponent.class)
 public interface JoinStreamSupplierComponent
-extends HasCreateJoin2,
-        HasCreateJoin3,
-        HasCreateJoin4,
-        HasCreateJoin5,
-        HasCreateJoin6,
-        HasCreateJoin7,
-        HasCreateJoin8,
-        HasCreateJoin9,
-        HasCreateJoin10 {}
+    extends HasCreateJoin2,
+            HasCreateJoin3,
+            HasCreateJoin4,
+            HasCreateJoin5,
+            HasCreateJoin6,
+            HasCreateJoin7,
+            HasCreateJoin8,
+            HasCreateJoin9,
+            HasCreateJoin10 {}

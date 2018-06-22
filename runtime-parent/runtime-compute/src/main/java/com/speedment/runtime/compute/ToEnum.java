@@ -57,6 +57,7 @@ extends Expression<T>,
      * @param <T> type to extract from
      * @param <E> enum type
      * @param lambda to convert
+     * @param enumClass class of the enum
      * @return a typed {@code ToEnum<T>} using the provided
      *         {@code lambda}
      *

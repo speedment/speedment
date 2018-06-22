@@ -271,7 +271,7 @@ public final class StreamTerminatorUtil {
             sql.append("(").append(internalSql).append(")");
             values.addAll(internalValues);
         } else {
-            throw new IllegalArgumentException("A predicate that is not instanceof FieldPredicate was given:" + predicate.toString());
+            throw new IllegalArgumentException("A predicate that is nether an instanceof FieldPredicate nor CombinedPredicate was given:" + predicate.toString());
         }
     }
 

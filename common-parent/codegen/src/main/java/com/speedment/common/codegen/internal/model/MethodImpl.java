@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import com.speedment.common.codegen.model.trait.HasMethods;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -29,17 +30,19 @@ import static java.util.Objects.requireNonNull;
  * This is the default implementation of the {@link Method} interface. This
  * class should not be instantiated directly. Instead you should call the
  * {@link Method#of(String, Type)} method to get an instance. In that way, you
- * can layer change the implementing class without modifying the using code.
+ * can later change the implementing class without modifying the using code.
  *
  * @author Emil Forslund
  * @see Method
  */
 public final class MethodImpl implements Method {
 
+    private HasMethods<?> parent;
     private String name;
     private Type type;
     private Javadoc javadoc;
     private final List<AnnotationUsage> annotations;
+    private final List<Import> imports;
     private final List<Generic> generics;
     private final List<Field> params;
     private final List<String> code;
@@ -60,6 +63,7 @@ public final class MethodImpl implements Method {
         this.type        = requireNonNull(type);
         this.javadoc     = null;
         this.annotations = new ArrayList<>();
+        this.imports     = new ArrayList<>();
         this.generics    = new ArrayList<>();
         this.params      = new ArrayList<>();
         this.code        = new ArrayList<>();
@@ -73,15 +77,28 @@ public final class MethodImpl implements Method {
      * @param prototype the prototype
      */
     protected MethodImpl(final Method prototype) {
+        parent      = prototype.getParent().orElse(null);
         name        = requireNonNull(prototype).getName();
         type        = requireNonNull(prototype.getType());
         javadoc     = prototype.getJavadoc().map(Copier::copy).orElse(null);
         annotations = Copier.copy(prototype.getAnnotations());
+        imports     = Copier.copy(prototype.getImports());
         generics    = Copier.copy(prototype.getGenerics());
         params      = Copier.copy(prototype.getFields());
         code        = Copier.copy(prototype.getCode(), s -> s);
         modifiers   = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
         exceptions  = new HashSet<>(prototype.getExceptions());
+    }
+
+    @Override
+    public Method setParent(HasMethods<?> parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<HasMethods<?>> getParent() {
+        return Optional.ofNullable(parent);
     }
 
     @Override
@@ -93,6 +110,11 @@ public final class MethodImpl implements Method {
     public Method setName(String name) {
         this.name = requireNonNull(name);
         return this;
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return imports;
     }
 
     @Override
@@ -123,7 +145,7 @@ public final class MethodImpl implements Method {
 
     @Override
     public Method set(Javadoc doc) {
-        javadoc = doc;
+        javadoc = doc.setParent(this);
         return this;
     }
 

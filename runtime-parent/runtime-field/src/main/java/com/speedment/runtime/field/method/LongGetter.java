@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.common.annotation.GeneratedCode;
+
 import java.util.function.Function;
 import java.util.function.ToLongFunction;
 

@@ -17,10 +17,17 @@
 package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.internal.util.Copier;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Initializer;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import com.speedment.common.codegen.model.trait.HasInitializers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
@@ -28,13 +35,15 @@ import static java.util.Objects.requireNonNull;
  * This is the default implementation of the {@link Initializer} interface.
  * This class should not be instantiated directly. Instead you should call the
  * {@link Initializer#of()} method to get an instance. In that way, 
- * you can layer change the implementing class without modifying the using code.
+ * you can later change the implementing class without modifying the using code.
  * 
  * @author Emil Forslund
  * @see    Initializer
  */
 public final class InitializerImpl implements Initializer {
 
+    private HasInitializers<?> parent;
+    private final List<Import> imports;
     private final List<String> code;
     private final Set<Modifier> modifiers;
     
@@ -46,6 +55,7 @@ public final class InitializerImpl implements Initializer {
      */
     public InitializerImpl() {
         code      = new ArrayList<>();
+        imports   = new ArrayList<>();
         modifiers = EnumSet.noneOf(Modifier.class);
     }
     
@@ -57,7 +67,24 @@ public final class InitializerImpl implements Initializer {
     protected InitializerImpl(Initializer prototype) {
         requireNonNull(prototype);
         code      = Copier.copy(prototype.getCode(), c -> c);
+        imports   = Copier.copy(prototype.getImports());
         modifiers = Copier.copy(prototype.getModifiers(), c -> c);
+    }
+
+    @Override
+    public Initializer setParent(HasInitializers<?> parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    @Override
+    public Optional<HasInitializers<?>> getParent() {
+        return Optional.ofNullable(parent);
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return imports;
     }
 
     @Override

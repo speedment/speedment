@@ -19,7 +19,8 @@ package com.speedment.runtime.field.internal;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.ShortField;
-import com.speedment.runtime.field.internal.comparator.ShortFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.comparator.ShortFieldComparator;
 import com.speedment.runtime.field.internal.comparator.ShortFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.GetShortImpl;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortBetweenPredicate;
@@ -39,7 +40,9 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -135,8 +138,23 @@ public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     }
     
     @Override
+    public ShortFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public ShortFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -155,7 +173,10 @@ public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Short start, Short end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Short start,
+            Short end,
+            Inclusion inclusion) {
         return new ShortBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -180,7 +201,10 @@ public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Short start, Short end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Short start,
+            Short end,
+            Inclusion inclusion) {
         return new ShortNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.3</version>
+        <version>3.1.4-SNAPSHOT</version>
     </parent>
     
     <artifactId>runtime-join</artifactId>
@@ -46,6 +46,7 @@
                     <instructions>
                         <Export-Package>
                             com.speedment.runtime.join,
+                            com.speedment.runtime.join.builder,
                             com.speedment.runtime.join.trait,
                             com.speedment.runtime.join.stage
                         </Export-Package>

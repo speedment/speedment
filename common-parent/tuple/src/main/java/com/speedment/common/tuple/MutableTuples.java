@@ -64,6 +64,7 @@ import com.speedment.common.tuple.mutable.MutableTuple6;
 import com.speedment.common.tuple.mutable.MutableTuple7;
 import com.speedment.common.tuple.mutable.MutableTuple8;
 import com.speedment.common.tuple.mutable.MutableTuple9;
+
 import java.util.function.Supplier;
 
 /**
@@ -183,7 +184,10 @@ public final class MutableTuples {
      * @see Tuple3
      * @see Tuple
      */
-    public static <T0, T1, T2> Supplier<MutableTuple3<T0, T1, T2>> constructor(Class<T0> e0, Class<T1> e1, Class<T2> e2) {
+    public static <T0, T1, T2> Supplier<MutableTuple3<T0, T1, T2>> constructor(
+            Class<T0> e0,
+            Class<T1> e1,
+            Class<T2> e2) {
         return () ->  new MutableTuple3Impl<>();
     }
     

@@ -21,6 +21,7 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.DoubleForeignKeyField;
 import com.speedment.runtime.field.exception.SpeedmentFieldException;
+
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 

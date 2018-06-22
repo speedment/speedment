@@ -47,35 +47,23 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;
 
-    private @Parameter(defaultValue = "${debug}")
-    Boolean debug;
-    private @Parameter(defaultValue = "${companyName}")
-    String companyName;
-    private @Parameter(defaultValue = "${appName}")
-    String appName;
-    private @Parameter(defaultValue = "${package.location}")
-    String packageLocation;
-    private @Parameter(defaultValue = "${package.name}")
-    String packageName;
-    private @Parameter(defaultValue = "${dbms.type}")
-    String dbmsType;
-    private @Parameter(defaultValue = "${dbms.host}")
-    String dbmsHost;
-    private @Parameter(defaultValue = "${dbms.port}")
-    Integer dbmsPort;
-    private @Parameter(defaultValue = "${dbms.schemas}")
-    String dbmsSchemas;
-    private @Parameter(defaultValue = "${dbms.username}")
-    String dbmsUsername;
-    private @Parameter(defaultValue = "${dbms.password}")
-    String dbmsPassword;
-    private @Parameter
-    ConfigParam[] parameters;
-    private @Parameter(defaultValue = "${configFile}")
-    String configFile;
+    private @Parameter(defaultValue = "${debug}") Boolean debug;
+    private @Parameter(defaultValue = "${companyName}") String companyName;
+    private @Parameter(defaultValue = "${appName}") String appName;
+    private @Parameter(defaultValue = "${package.location}") String packageLocation;
+    private @Parameter(defaultValue = "${package.name}") String packageName;
+    private @Parameter(defaultValue = "${dbms.type}") String dbmsType;
+    private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
+    private @Parameter(defaultValue = "${dbms.port}") Integer dbmsPort;
+    private @Parameter(defaultValue = "${dbms.schemas}") String dbmsSchemas;
+    private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
+    private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
+    private @Parameter(defaultValue = "${parameters}") ConfigParam[] parameters;
+    private @Parameter(defaultValue = "${components}") String[] components;
+    private @Parameter(defaultValue = "${typeMappers}") Mapping[] typeMappers;
+    private @Parameter(defaultValue = "${configFile}") String configFile;
 
-    protected AbstractInitMojo() {
-    }
+    protected AbstractInitMojo() {}
 
     protected AbstractInitMojo(Consumer<ApplicationBuilder<?, ?>> configurer) {
         super(configurer);
@@ -116,12 +104,12 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
 
     @Override
     protected String[] components() {
-        return null;
+        return components;
     }
 
     @Override
     protected Mapping[] typeMappers() {
-        return null;
+        return typeMappers;
     }
 
     @Override
@@ -186,10 +174,10 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addStringToMap(Dbms.NAME, appName, mavenProject.getArtifactId(), dbmsData);
         addStringToMap(Dbms.TYPE_NAME, dbmsType, "MySQL", dbmsData);
         addStringToMap(Dbms.ID, appName, mavenProject.getArtifactId(), dbmsData);
-        addIntegerToMap(Dbms.PORT, dbmsPort, Integer.valueOf(3306), dbmsData);
+        addIntegerToMap(Dbms.PORT, dbmsPort, null, dbmsData);
         addStringToMap(Dbms.IP_ADDRESS, dbmsHost, null, dbmsData);
         addStringToMap(Dbms.CONNECTION_URL, dbmsConnectionUrl(), null, dbmsData);
-        addStringToMap(Dbms.USERNAME, dbmsUsername, mavenProject.getArtifactId(), dbmsData);
+        addStringToMap(Dbms.USERNAME, dbmsUsername, null, dbmsData);
         addBooleanToMap(Dbms.ENABLED, Boolean.TRUE, dbmsData);
         addListToMap(Dbms.SCHEMAS, createSchemas(), dbmsData);
         return dbmsData;

@@ -20,6 +20,7 @@ import com.speedment.common.tuple.Tuple0;
 import com.speedment.common.tuple.TupleMapper;
 import com.speedment.common.tuple.TuplesOfNullables;
 import com.speedment.common.tuple.nullable.Tuple0OfNullables;
+
 import java.util.function.Function;
 
 /**
@@ -39,9 +40,7 @@ public final class Tuple0OfNullablesMapperImpl<T> implements TupleMapper<T, Tupl
     /**
      * Constructs a {@link TupleMapper } that can create {@link Tuple0 }.
      */
-    private Tuple0OfNullablesMapperImpl() {
-        
-    }
+    private Tuple0OfNullablesMapperImpl() {}
     
     @Override
     public Tuple0OfNullables apply(T t) {

@@ -303,6 +303,6 @@ public interface DbmsOperationHandler {
         // Do nothing by default
     }
        
-    <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException;
+    <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement sqlStatement) throws SQLException;
 
 }

@@ -18,9 +18,12 @@ package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.comparator.IntFieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.trait.HasIntValue;
+
 import java.util.Objects;
+
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -64,7 +67,7 @@ implements IntFieldComparator<ENTITY, D> {
     }
     
     @Override
-    public FieldComparator<ENTITY> reversed() {
+    public IntFieldComparatorImpl<ENTITY, D> reversed() {
         return new IntFieldComparatorImpl<>(field, !reversed);
     }
     

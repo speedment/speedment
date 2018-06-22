@@ -16,8 +16,12 @@
  */
 package com.speedment.common.codegen.internal.model;
 
+import com.speedment.common.codegen.internal.util.Copier;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.JavadocTag;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * This is the default implementation of the {@link JavadocTag} interface. This
  * class should not be instantiated directly. Instead you should call the
  * {@link JavadocTag#of(java.lang.String)} method to get an instance. In that
- * way, you can layer change the implementing class without modifying the using
+ * way, you can later change the implementing class without modifying the using
  * code.
  *
  * @author Emil Forslund
@@ -100,6 +104,11 @@ public final class JavadocTagImpl extends JavadocTagBase {
         }
 
         @Override
+        public JavadocTag add(Import dep) {
+            return copy().add(dep);
+        }
+
+        @Override
         public JavadocTag setValue(String value) {
             return copy().setValue(value);
         }
@@ -126,30 +135,35 @@ abstract class JavadocTagBase implements JavadocTag {
     private String name;
     private String value;
     private String text;
+    private final List<Import> imports;
 
     JavadocTagBase(String name) {
-        this.name = requireNonNull(name);
-        this.value = null;
-        this.text = null;
+        this.name    = requireNonNull(name);
+        this.value   = null;
+        this.text    = null;
+        this.imports = new ArrayList<>();
     }
 
     JavadocTagBase(String name, String text) {
-        this.name = requireNonNull(name);
-        this.value = null;
-        this.text = text;
+        this.name    = requireNonNull(name);
+        this.value   = null;
+        this.text    = text;
+        this.imports = new ArrayList<>();
     }
 
     JavadocTagBase(String name, String value, String text) {
-        this.name = requireNonNull(name);
-        this.value = value;
-        this.text = text;
+        this.name    = requireNonNull(name);
+        this.value   = value;
+        this.text    = text;
+        this.imports = new ArrayList<>();
     }
 
     JavadocTagBase(JavadocTag prototype) {
         requireNonNull(prototype);
-        this.name = prototype.getName();
-        this.value = prototype.getValue().orElse(null);
-        this.text = prototype.getText().orElse(null);
+        this.name    = prototype.getName();
+        this.value   = prototype.getValue().orElse(null);
+        this.text    = prototype.getText().orElse(null);
+        this.imports = Copier.copy(prototype.getImports());
     }
 
     @Override
@@ -161,6 +175,11 @@ abstract class JavadocTagBase implements JavadocTag {
     public JavadocTag setValue(String value) {
         this.value = value;
         return this;
+    }
+
+    @Override
+    public List<Import> getImports() {
+        return imports;
     }
 
     @Override

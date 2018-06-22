@@ -16,11 +16,10 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
+import com.speedment.runtime.core.manager.sql.HasGeneratedKeys;
 import com.speedment.runtime.field.Field;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -30,37 +29,38 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-public final class SqlInsertStatement<ENTITY> extends SqlStatement {
+public final class SqlInsertStatement
+extends AbstractSqlStatement
+implements HasGeneratedKeys {
 
-    private final Collection<Field<ENTITY>> generatedColumnFields;
     private final List<Long> generatedKeys;
+    private final List<Field<?>> generatedFields;
     private final Consumer<List<Long>> generatedKeysConsumer;
 
     public SqlInsertStatement(
             String sql,
             List<?> values,
-            Collection<Field<ENTITY>> generatedColumnFields,
-            Consumer<List<Long>> generatedKeysConsumer) {
+            List<Field<?>> generatedFields,
+            Consumer<List<Long>> generatedKeyListeners) {
         
         super(sql, values);
-        this.generatedKeys = new ArrayList<>();
-        this.generatedKeysConsumer = requireNonNull(generatedKeysConsumer);
-        this.generatedColumnFields = requireNonNull(generatedColumnFields);
+        this.generatedKeys         = new ArrayList<>();
+        this.generatedFields       = requireNonNull(generatedFields);
+        this.generatedKeysConsumer = requireNonNull(generatedKeyListeners);
     }
 
-    public Collection<Field<ENTITY>> getGeneratedColumnFields() {
-        return generatedColumnFields;
+    @Override
+    public List<Field<?>> getGeneratedColumnFields() {
+        return generatedFields;
     }
 
-    public List<Long> getGeneratedKeys() {
-        return Collections.unmodifiableList(generatedKeys);
-    }
-
+    @Override
     public void addGeneratedKey(Long generatedKey) {
         generatedKeys.add(generatedKey);
     }
 
-    public void acceptGeneratedKeys() {
+    @Override
+    public void notifyGeneratedKeyListener() {
         generatedKeysConsumer.accept(generatedKeys);
     }
 

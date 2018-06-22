@@ -39,6 +39,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -60,7 +61,6 @@ import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
 import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import static java.util.Objects.requireNonNull;
-import static java.util.Optional.ofNullable;
 
 /**
  * The abstract base implementation for all the Speedment Mojos.
@@ -90,9 +90,9 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     protected abstract String dbmsPassword();
 
     protected String dbmsConnectionUrl() {
-        return ofNullable(dbmsConnectionUrl)
-            .filter(s -> !s.isEmpty())
-            .orElse(null);
+        if (StringUtils.isNotBlank(dbmsConnectionUrl)) {
+            return dbmsConnectionUrl;
+        } else return null;
     }
 
     protected abstract String[] components();
@@ -105,7 +105,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     
     protected Path configLocation() {
-        final String top = getConfigFile() == null 
+        final String top = StringUtils.isBlank(getConfigFile())
             ? DEFAULT_CONFIG_LOCATION 
             : getConfigFile();
         
@@ -231,7 +231,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         result.withSkipCheckDatabaseConnectivity();
 
         // Configure manual database settings
-        if (dbmsHost() != null) {
+        if (StringUtils.isNotBlank(dbmsHost())) {
             result.withIpAddress(dbmsHost());
             getLog().info("Custom database host '" + dbmsHost() + "'.");
         }
@@ -241,17 +241,17 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             getLog().info("Custom database port '" + dbmsPort() + "'.");
         }
 
-        if (dbmsUsername() != null) {
+        if (StringUtils.isNotBlank(dbmsUsername())) {
             result.withUsername(dbmsUsername());
             getLog().info("Custom database username '" + dbmsUsername() + "'.");
         }
 
-        if (dbmsPassword() != null) {
+        if (StringUtils.isNotBlank(dbmsPassword())) {
             result.withPassword(dbmsPassword());
             getLog().info("Custom database password '********'.");
         }
 
-        if (dbmsConnectionUrl() != null) {
+        if (StringUtils.isNotBlank(dbmsConnectionUrl())) {
             result.withConnectionUrl(dbmsConnectionUrl());
             getLog().info("Custom connection URL '" + dbmsConnectionUrl() + "'.");
         }

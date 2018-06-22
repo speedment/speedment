@@ -16,6 +16,7 @@
  */
 package com.speedment.common.codegen.model;
 
+import com.speedment.common.codegen.constant.DefaultAnnotationUsage;
 import com.speedment.common.codegen.internal.model.MethodImpl;
 import com.speedment.common.codegen.model.modifier.MethodModifier;
 import com.speedment.common.codegen.model.trait.*;
@@ -28,9 +29,20 @@ import java.lang.reflect.Type;
  * @author Emil Forslund
  * @since  2.0
  */
-public interface Method extends HasName<Method>, HasType<Method>, HasThrows<Method>,
-    HasGenerics<Method>, HasFields<Method>, HasJavadoc<Method>, HasAnnotationUsage<Method>,
-    HasCode<Method>, HasCall<Method>, MethodModifier<Method>, HasCopy<Method> {
+public interface Method
+extends HasParent<HasMethods<?>, Method>,
+        HasImports<Method>,
+        HasName<Method>,
+        HasType<Method>,
+        HasThrows<Method>,
+        HasGenerics<Method>,
+        HasFields<Method>,
+        HasJavadoc<Method>,
+        HasAnnotationUsage<Method>,
+        HasCode<Method>,
+        HasCall<Method>,
+        MethodModifier<Method>,
+        HasCopy<Method> {
 
     /**
      * Creates a new instance implementing this interface by using the default
@@ -42,5 +54,14 @@ public interface Method extends HasName<Method>, HasType<Method>, HasThrows<Meth
      */
     static Method of(String name, Type type) {
         return new MethodImpl(name, type);
+    }
+
+    /**
+     * Adds an {@link Override}-annotation to this model.
+     *
+     * @return  this instance
+     */
+    default Method override() {
+        return add(DefaultAnnotationUsage.OVERRIDE);
     }
 }

@@ -27,8 +27,8 @@ import com.speedment.runtime.join.trait.HasWhere;
  * @since  3.1.1
  */
 public interface JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
-extends HasWhere<T9, JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>,
-        HasDefaultBuild<Tuple10OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>> {
+    extends HasWhere<T9, JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>,
+            HasDefaultBuild<Tuple10OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>> {
 
     @Override
     default Join<Tuple10OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>> build() {

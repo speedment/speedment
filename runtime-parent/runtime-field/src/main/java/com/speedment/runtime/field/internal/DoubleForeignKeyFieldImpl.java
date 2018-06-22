@@ -21,7 +21,8 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.DoubleForeignKeyField;
-import com.speedment.runtime.field.internal.comparator.DoubleFieldComparator;
+import com.speedment.runtime.field.comparator.DoubleFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.DoubleFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromDouble;
@@ -45,9 +46,11 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
 import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
@@ -158,8 +161,23 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     }
     
     @Override
+    public DoubleFieldComparator<ENTITY, D> reversed() {
+        return comparator().reversed();
+    }
+    
+    @Override
     public DoubleFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
         return comparator();
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.LAST;
+    }
+    
+    @Override
+    public boolean isReversed() {
+        return false;
     }
     
     @Override
@@ -178,7 +196,10 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Double start, Double end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(
+            Double start,
+            Double end,
+            Inclusion inclusion) {
         return new DoubleBetweenPredicate<>(this, start, end, inclusion);
     }
     
@@ -203,7 +224,10 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     }
     
     @Override
-    public SpeedmentPredicate<ENTITY> notBetween(Double start, Double end, Inclusion inclusion) {
+    public SpeedmentPredicate<ENTITY> notBetween(
+            Double start,
+            Double end,
+            Inclusion inclusion) {
         return new DoubleNotBetweenPredicate<>(this, start, end, inclusion);
     }
     

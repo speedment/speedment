@@ -27,10 +27,16 @@ import com.speedment.common.codegen.model.trait.*;
  * @see     Interface
  * @since  2.0
  */
-public interface InterfaceField extends HasName<InterfaceField>, 
-    HasType<InterfaceField>, InterfaceFieldModifier<InterfaceField>, 
-    HasJavadoc<InterfaceField>, HasValue<InterfaceField>, 
-    HasAnnotationUsage<InterfaceField>, HasCopy<InterfaceField> {
+public interface InterfaceField
+extends HasParent<Interface, InterfaceField>,
+        HasImports<InterfaceField>,
+        HasName<InterfaceField>,
+        HasType<InterfaceField>,
+        InterfaceFieldModifier<InterfaceField>,
+        HasJavadoc<InterfaceField>,
+        HasValue<InterfaceField>,
+        HasAnnotationUsage<InterfaceField>,
+        HasCopy<InterfaceField> {
 
     /**
      * Creates a new instance implementing this interface by wrapping an existing

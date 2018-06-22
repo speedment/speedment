@@ -19,9 +19,9 @@ package com.speedment.runtime.core.internal.stream.builder;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.stream.autoclose.AbstractAutoClosingStream;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
+import com.speedment.runtime.core.stream.ComposeRunnableUtil;
 import com.speedment.runtime.core.stream.action.Action;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -96,13 +96,13 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
             closed = true;
             try {
                 if (!closeHandlers.isEmpty()) {
-                    AbstractAutoClosingStream.composedRunnable(closeHandlers); // Run this stream's close handlers
+                    ComposeRunnableUtil.composedRunnable(closeHandlers); // Run this stream's close handlers
                 }
             } catch (Exception e) {
                 throw new SpeedmentException(e);
             } finally {
                 try {
-                    AbstractAutoClosingStream.composedClose(streamSet.toArray(new AutoCloseable[0])); // Close the other streams
+                    ComposeRunnableUtil.composedClose(streamSet.toArray(new AutoCloseable[0])); // Close the other streams
                 } catch (Exception e) {
                     throw new SpeedmentException(e);
                 }

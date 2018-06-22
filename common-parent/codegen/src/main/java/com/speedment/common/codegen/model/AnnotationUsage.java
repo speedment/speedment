@@ -20,6 +20,8 @@ import com.speedment.common.codegen.internal.model.AnnotationUsageImpl;
 import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.trait.HasType;
 import com.speedment.common.codegen.model.trait.HasValue;
+import com.speedment.common.codegen.model.value.NumberValue;
+import com.speedment.common.codegen.model.value.TextValue;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -28,9 +30,10 @@ import java.util.Map;
 /**
  * A model that represents the usage of a particular annotation in code.
  *
- * @author Emil Forslund
  * @see Annotation
- * @since   2.0
+ *
+ * @author Emil Forslund
+ * @since  2.0
  */
 public interface AnnotationUsage extends HasCopy<AnnotationUsage>,
     HasType<AnnotationUsage>, HasValue<AnnotationUsage> {
@@ -38,13 +41,49 @@ public interface AnnotationUsage extends HasCopy<AnnotationUsage>,
     /**
      * Use the specified key-value pair when referencing the annotation. If you
      * only want to show a single value without any key, consider using the
-     * {@link #put(String, Value)} method.
+     * {@link #set(Value)} method.
      *
      * @param key the key
      * @param val the value
      * @return a reference to this model
      */
     AnnotationUsage put(String key, Value<?> val);
+
+    /**
+     * Use the specified key-value pair when referencing the annotation. If you
+     * only want to show a single value without any key, consider using the
+     * {@link #set(Value)} method.
+     * <p>
+     * This method works like {@link #put(String, Value)} except that the type
+     * of the value is automatically determined as a {@link TextValue}.
+     *
+     * @param key       the key
+     * @param textValue the value
+     * @return          a reference to this model
+     *
+     * @since 2.5
+     */
+    default AnnotationUsage put(String key, String textValue) {
+        return put(key, Value.ofText(textValue));
+    }
+
+    /**
+     * Use the specified key-value pair when referencing the annotation. If you
+     * only want to show a single value without any key, consider using the
+     * {@link #set(Value)} method.
+     * <p>
+     * This method works like {@link #put(String, Value)} except that the type
+     * of the value is automatically determined as a {@link NumberValue}.
+     *
+     * @param key         the key
+     * @param numberValue the value
+     * @return            a reference to this model
+     *
+     * @since 2.5
+     */
+    default AnnotationUsage put(String key, Number numberValue) {
+        return put(key, Value.ofNumber(numberValue));
+    }
 
     /**
      * Returns a list of all the key-value pairs in this model.
@@ -58,7 +97,7 @@ public interface AnnotationUsage extends HasCopy<AnnotationUsage>,
      * implementation.
      *
      * @param type the type
-     * @return the new instance
+     * @return     the new instance
      */
     static AnnotationUsage of(Type type) {
         return new AnnotationUsageImpl(type);
