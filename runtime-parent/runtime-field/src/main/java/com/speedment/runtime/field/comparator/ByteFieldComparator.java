@@ -20,7 +20,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.trait.HasByteValue;
 
 /**
- * A {@link FieldComparator} that compares values of a {@link ByteField}.
+ * A {@link FieldComparator} that compares values of a {@link HasByteValue}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type

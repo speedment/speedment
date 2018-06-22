@@ -65,6 +65,7 @@ extends Expression<T>,
      * @param <T> type to extract from
      * @param <E> enum type
      * @param lambda to convert
+     * @param enumClass class for the enum
      * @return a typed {@code ToEnumNullable<T>} using the provided
      *         {@code lambda}
      *

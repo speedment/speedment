@@ -20,7 +20,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.trait.HasIntValue;
 
 /**
- * A {@link FieldComparator} that compares values of a {@link IntField}.
+ * A {@link FieldComparator} that compares values of a {@link HasIntValue}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type

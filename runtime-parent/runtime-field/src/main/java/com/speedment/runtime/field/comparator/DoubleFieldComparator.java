@@ -20,7 +20,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.trait.HasDoubleValue;
 
 /**
- * A {@link FieldComparator} that compares values of a {@link DoubleField}.
+ * A {@link FieldComparator} that compares values of a {@link HasDoubleValue}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type

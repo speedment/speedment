@@ -20,7 +20,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.trait.HasLongValue;
 
 /**
- * A {@link FieldComparator} that compares values of a {@link LongField}.
+ * A {@link FieldComparator} that compares values of a {@link HasLongValue}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
