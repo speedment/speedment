@@ -24,7 +24,7 @@ public interface HasGeneratedKeys extends SqlStatement {
     /**
      * Adds the specified key to the list of keys that has been generated.
      *
-     * @param generatedKey
+     * @param generatedKey to be added
      */
     void addGeneratedKey(Long generatedKey);
 
