@@ -13,6 +13,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.LongAdder;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Emil Forslund
@@ -37,23 +39,65 @@ public abstract class AbstractEditMojo extends AbstractMojo {
     private @Parameter(defaultValue = "${what}") String what;
     private @Parameter(defaultValue = "${where}") String where;
     private @Parameter(defaultValue = "${set}") String set;
+    private @Parameter(defaultValue = "${delete}") boolean delete;
 
     @Override
+    @SuppressWarnings("unchecked")
     public final void execute() throws MojoExecutionException, MojoFailureException {
         if (hasConfigFile(configLocation())) {
 
-            if (StringUtils.isBlank(set) || !set.contains(SET_OPERATOR)) throw setNotValid();
-            final int equalPos = set.indexOf(SET_OPERATOR);
-            if (equalPos <= 0) throw setNotValid();
-            final String param = set.substring(0, equalPos);
-            final String value = set.substring(equalPos + SET_OPERATOR.length());
+            if (!delete) {
+                if (StringUtils.isBlank(set)
+                || !set.contains(SET_OPERATOR)
+                || set.indexOf(SET_OPERATOR) <= 0)
+                    throw setNotValid();
+            }
 
             final Project loaded = DocumentTranscoder.load(configLocation(), AbstractEditMojo::decodeJson);
             final LongAdder edits = new LongAdder();
-            locate(loaded).forEachOrdered(doc -> {
-                final Object newValue = parse(doc, param, value);
-                doc.getData().put(param, newValue);
-                edits.increment();
+            locate(loaded).collect(toList()).forEach(doc -> {
+                if (delete) {
+                    doc.getParent().ifPresent(parent -> {
+                        final Collection<? extends Map<String, Object>> coll;
+                        if (doc instanceof Dbms) {
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Project.DBMSES);
+                        } else if (doc instanceof Schema) {
+                            coll =(Collection<? extends Map<String, Object>>) parent.getData().get(Dbms.SCHEMAS);
+                        } else if (doc instanceof Table) {
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Schema.TABLES);
+                        } else if (doc instanceof Column) {
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Table.COLUMNS);
+                        } else if (doc instanceof PrimaryKeyColumn) {
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Table.PRIMARY_KEY_COLUMNS);
+                        } else if (doc instanceof IndexColumn) {
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Index.INDEX_COLUMNS);
+                        } else if (doc instanceof ForeignKeyColumn) {
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKey.FOREIGN_KEY_COLUMNS);
+                        } else if (doc instanceof ForeignKey) {
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKey.FOREIGN_KEY_COLUMNS);
+                        } else if (doc instanceof Index) {
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Table.INDEXES);
+                        } else {
+                            getLog().error("Doc was of type " + doc.getClass());
+                            return;
+                        }
+
+                        final String id = doc.getAsString("id").orElseGet(() -> doc.getAsString("name").orElseThrow(() -> new RuntimeException("No id in document.")));
+                        if (coll.removeIf(d -> d.get("id").equals(id))) {
+                            edits.increment();
+                        } else {
+                            getLog().error("Could not remove doc " + doc);
+                        }
+                    });
+                } else {
+                    final int equalPos = set.indexOf(SET_OPERATOR);
+                    final String param = set.substring(0, equalPos);
+                    final String value = set.substring(equalPos + SET_OPERATOR.length());
+
+                    final Object newValue = parse(doc, param, value);
+                    doc.getData().put(param, newValue);
+                    edits.increment();
+                }
             });
 
             DocumentTranscoder.save(loaded, configLocation(), Json::toJson);
