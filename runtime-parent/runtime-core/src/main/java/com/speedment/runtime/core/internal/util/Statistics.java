@@ -71,7 +71,7 @@ public final class Statistics {
     }
 
     private final static Logger LOGGER   = LoggerManager.getLogger(Statistics.class);
-    private final static String PING_URL = "https://report.speedment.com:9020/stats";
+    private final static String PING_URL = "https://service.speedment.com/stats";
 
     public static void report(final InfoComponent info,
                               final ProjectComponent projects,
