@@ -18,8 +18,8 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.resource.SpeedmentIcon;
+import com.speedment.tool.core.util.InjectionLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;

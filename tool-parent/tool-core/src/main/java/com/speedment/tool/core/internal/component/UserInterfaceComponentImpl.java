@@ -43,12 +43,13 @@ import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.internal.brand.SpeedmentBrand;
 import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
-import com.speedment.tool.core.internal.util.InjectionLoader;
+import com.speedment.tool.core.internal.util.InjectionLoaderImpl;
 import com.speedment.tool.core.internal.util.Throttler;
 import com.speedment.tool.core.notification.Notification;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.Icon;
 import com.speedment.tool.core.util.BrandUtil;
+import com.speedment.tool.core.util.InjectionLoader;
 import com.speedment.tool.core.util.OutputUtil;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
@@ -134,7 +135,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         return InjectBundle.of(
             DocumentPropertyComponentImpl.class,
             SpeedmentBrand.class,
-            InjectionLoader.class,
+            InjectionLoaderImpl.class,
             ConfigFileHelper.class,
             PropertyEditorComponentImpl.class,
             RuleComponentImpl.class,

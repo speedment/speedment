@@ -21,14 +21,14 @@ import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.core.GeneratorBundle;
-import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.application.internal.DefaultApplicationMetadata;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.util.EmailUtil;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
-import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.resource.FontAwesome;
+import com.speedment.tool.core.util.InjectionLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

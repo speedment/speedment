@@ -22,7 +22,7 @@ import com.speedment.tool.core.internal.component.RuleComponentImpl;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.core.internal.component.VersionComponentImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
-import com.speedment.tool.core.internal.util.InjectionLoader;
+import com.speedment.tool.core.internal.util.InjectionLoaderImpl;
 
 import java.util.stream.Stream;
 
@@ -40,7 +40,7 @@ public class ToolBundle implements InjectBundle {
             .withComponent(VersionComponentImpl.class)
             .withComponent(RuleComponentImpl.class)
             .withComponent(ConfigFileHelper.class)
-            .withComponent(InjectionLoader.class)
+            .withComponent(InjectionLoaderImpl.class)
             .injectables();
     }
     
