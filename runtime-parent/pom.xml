@@ -49,6 +49,7 @@
         <module>runtime-connector-parent</module>
         <module>runtime-application</module>
         <module>runtime-all</module>
+        <module>runtime-welcome</module>
     </modules>
     
     <dependencyManagement>

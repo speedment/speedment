@@ -107,7 +107,13 @@
             <artifactId>connector-postgres</artifactId>
             <version>${speedment.version}</version>
         </dependency>
-                                                                
+
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-welcome</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
+
         <!--Test Dependencies-->
         <dependency>
             <groupId>junit</groupId>
