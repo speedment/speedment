@@ -33,7 +33,7 @@ public final class DefaultToolbarItems {
                 "save the configuration before generation."
         ));
 
-        toolbar.install("progress", new GenerationProgressToolbarItem());
         toolbar.install("brand", new BrandToolbarItem());
+        toolbar.install("progress", new GenerationProgressToolbarItem());
     }
 }
