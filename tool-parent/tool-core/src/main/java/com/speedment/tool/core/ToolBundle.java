@@ -21,6 +21,8 @@ import com.speedment.tool.actions.ToolActionsBundle;
 import com.speedment.tool.core.internal.component.RuleComponentImpl;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.core.internal.component.VersionComponentImpl;
+import com.speedment.tool.core.internal.toolbar.DefaultToolbarItems;
+import com.speedment.tool.core.internal.toolbar.ToolbarComponentImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoaderImpl;
 
@@ -41,6 +43,8 @@ public class ToolBundle implements InjectBundle {
             .withComponent(RuleComponentImpl.class)
             .withComponent(ConfigFileHelper.class)
             .withComponent(InjectionLoaderImpl.class)
+            .withComponent(ToolbarComponentImpl.class)
+            .withComponent(DefaultToolbarItems.class)
             .injectables();
     }
     
