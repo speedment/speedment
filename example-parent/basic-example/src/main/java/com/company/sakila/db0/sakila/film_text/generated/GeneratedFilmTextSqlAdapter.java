@@ -6,8 +6,10 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static com.speedment.common.injector.State.RESOLVED;
 
 /**
@@ -29,15 +31,13 @@ public abstract class GeneratedFilmTextSqlAdapter implements SqlAdapter<FilmText
     }
     
     protected FilmText apply(ResultSet resultSet, int offset) throws SQLException {
-        return createEntity()
-            .setFilmId(      resultSet.getShort(1 + offset))
-            .setTitle(       resultSet.getString(2 + offset))
-            .setDescription( resultSet.getString(3 + offset))
-            ;
-    }
-    
-    protected FilmTextImpl createEntity() {
-        return new FilmTextImpl();
+        GeneratedFilmTextImpl entity = new FilmTextImpl();
+        entity.disableModificationTracking();
+        entity.setFilmId(     resultSet.getShort(1 + offset));
+        entity.setTitle(      resultSet.getString(2 + offset));
+        entity.setDescription(resultSet.getString(3 + offset));
+        entity.resetModificationTracking();
+        return entity;
     }
     
     @Override

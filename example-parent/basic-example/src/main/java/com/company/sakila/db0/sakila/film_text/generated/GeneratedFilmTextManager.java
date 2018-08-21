@@ -5,7 +5,9 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.Field;
+
 import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -21,12 +23,7 @@ import static java.util.Collections.unmodifiableList;
 @GeneratedCode("Speedment")
 public interface GeneratedFilmTextManager extends Manager<FilmText> {
     
-    TableIdentifier<FilmText> IDENTIFIER = TableIdentifier.of(
-        "db0",
-        "sakila",
-        "film_text"
-    )
-    ;
+    TableIdentifier<FilmText> IDENTIFIER = TableIdentifier.of("db0", "sakila", "film_text");
     List<Field<FilmText>> FIELDS = unmodifiableList(asList(
         FilmText.FILM_ID,
         FilmText.TITLE,

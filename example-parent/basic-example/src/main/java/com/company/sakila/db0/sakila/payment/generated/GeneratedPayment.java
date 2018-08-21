@@ -15,6 +15,7 @@ import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.IntForeignKeyField;
 import com.speedment.runtime.field.ShortForeignKeyField;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Optional;

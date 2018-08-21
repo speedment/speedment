@@ -5,7 +5,9 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.Field;
+
 import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -21,12 +23,7 @@ import static java.util.Collections.unmodifiableList;
 @GeneratedCode("Speedment")
 public interface GeneratedAddressManager extends Manager<Address> {
     
-    TableIdentifier<Address> IDENTIFIER = TableIdentifier.of(
-        "db0",
-        "sakila",
-        "address"
-    )
-    ;
+    TableIdentifier<Address> IDENTIFIER = TableIdentifier.of("db0", "sakila", "address");
     List<Field<Address>> FIELDS = unmodifiableList(asList(
         Address.ADDRESS_ID,
         Address.ADDRESS,

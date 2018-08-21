@@ -6,8 +6,10 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static com.speedment.common.injector.State.RESOLVED;
 
 /**
@@ -29,21 +31,19 @@ public abstract class GeneratedCustomerSqlAdapter implements SqlAdapter<Customer
     }
     
     protected Customer apply(ResultSet resultSet, int offset) throws SQLException {
-        return createEntity()
-            .setCustomerId( resultSet.getInt(1 + offset))
-            .setStoreId(    resultSet.getShort(2 + offset))
-            .setFirstName(  resultSet.getString(3 + offset))
-            .setLastName(   resultSet.getString(4 + offset))
-            .setEmail(      resultSet.getString(5 + offset))
-            .setAddressId(  resultSet.getInt(6 + offset))
-            .setActive(     resultSet.getInt(7 + offset))
-            .setCreateDate( resultSet.getTimestamp(8 + offset))
-            .setLastUpdate( resultSet.getTimestamp(9 + offset))
-            ;
-    }
-    
-    protected CustomerImpl createEntity() {
-        return new CustomerImpl();
+        GeneratedCustomerImpl entity = new CustomerImpl();
+        entity.disableModificationTracking();
+        entity.setCustomerId(resultSet.getInt(1 + offset));
+        entity.setStoreId(   resultSet.getShort(2 + offset));
+        entity.setFirstName( resultSet.getString(3 + offset));
+        entity.setLastName(  resultSet.getString(4 + offset));
+        entity.setEmail(     resultSet.getString(5 + offset));
+        entity.setAddressId( resultSet.getInt(6 + offset));
+        entity.setActive(    resultSet.getInt(7 + offset));
+        entity.setCreateDate(resultSet.getTimestamp(8 + offset));
+        entity.setLastUpdate(resultSet.getTimestamp(9 + offset));
+        entity.resetModificationTracking();
+        return entity;
     }
     
     @Override

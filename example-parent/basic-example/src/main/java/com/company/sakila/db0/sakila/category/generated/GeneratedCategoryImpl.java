@@ -2,9 +2,16 @@ package com.company.sakila.db0.sakila.category.generated;
 
 import com.company.sakila.db0.sakila.category.Category;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -16,11 +23,13 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCategoryImpl implements Category {
+public abstract class GeneratedCategoryImpl implements HasUpdatedColumns<Category>, Category {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private short categoryId;
     private String name;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedCategoryImpl() {}
     
@@ -41,28 +50,65 @@ public abstract class GeneratedCategoryImpl implements Category {
     
     @Override
     public Category setCategoryId(short categoryId) {
+        columnUpdated(Identifier.CATEGORY_ID);
         this.categoryId = categoryId;
         return this;
     }
     
     @Override
     public Category setName(String name) {
+        columnUpdated(Identifier.NAME);
         this.name = name;
         return this;
     }
     
     @Override
     public Category setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
+    }
+    
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Category>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("categoryId = " + Objects.toString(getCategoryId()));
-        sj.add("name = "       + Objects.toString(getName()));
-        sj.add("lastUpdate = " + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.CATEGORY_ID) + "categoryId = " +  Objects.toString(getCategoryId()));
+        sj.add(starForModified(Identifier.NAME) + "name = " +               Objects.toString(getName()));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "CategoryImpl " + sj.toString();
     }
     
@@ -71,9 +117,9 @@ public abstract class GeneratedCategoryImpl implements Category {
         if (this == that) { return true; }
         if (!(that instanceof Category)) { return false; }
         final Category thatCategory = (Category)that;
-        if (this.getCategoryId() != thatCategory.getCategoryId()) {return false; }
-        if (!Objects.equals(this.getName(), thatCategory.getName())) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatCategory.getLastUpdate())) {return false; }
+        if (this.getCategoryId() != thatCategory.getCategoryId()) { return false; }
+        if (!Objects.equals(this.getName(), thatCategory.getName())) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatCategory.getLastUpdate())) { return false; }
         return true;
     }
     

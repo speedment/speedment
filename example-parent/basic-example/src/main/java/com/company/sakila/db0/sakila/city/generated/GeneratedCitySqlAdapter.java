@@ -6,8 +6,10 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static com.speedment.common.injector.State.RESOLVED;
 
 /**
@@ -29,16 +31,14 @@ public abstract class GeneratedCitySqlAdapter implements SqlAdapter<City> {
     }
     
     protected City apply(ResultSet resultSet, int offset) throws SQLException {
-        return createEntity()
-            .setCityId(     resultSet.getInt(1 + offset))
-            .setCity(       resultSet.getString(2 + offset))
-            .setCountryId(  resultSet.getInt(3 + offset))
-            .setLastUpdate( resultSet.getTimestamp(4 + offset))
-            ;
-    }
-    
-    protected CityImpl createEntity() {
-        return new CityImpl();
+        GeneratedCityImpl entity = new CityImpl();
+        entity.disableModificationTracking();
+        entity.setCityId(    resultSet.getInt(1 + offset));
+        entity.setCity(      resultSet.getString(2 + offset));
+        entity.setCountryId( resultSet.getInt(3 + offset));
+        entity.setLastUpdate(resultSet.getTimestamp(4 + offset));
+        entity.resetModificationTracking();
+        return entity;
     }
     
     @Override

@@ -5,7 +5,9 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.Field;
+
 import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -21,12 +23,7 @@ import static java.util.Collections.unmodifiableList;
 @GeneratedCode("Speedment")
 public interface GeneratedFilmCategoryManager extends Manager<FilmCategory> {
     
-    TableIdentifier<FilmCategory> IDENTIFIER = TableIdentifier.of(
-        "db0",
-        "sakila",
-        "film_category"
-    )
-    ;
+    TableIdentifier<FilmCategory> IDENTIFIER = TableIdentifier.of("db0", "sakila", "film_category");
     List<Field<FilmCategory>> FIELDS = unmodifiableList(asList(
         FilmCategory.FILM_ID,
         FilmCategory.CATEGORY_ID,

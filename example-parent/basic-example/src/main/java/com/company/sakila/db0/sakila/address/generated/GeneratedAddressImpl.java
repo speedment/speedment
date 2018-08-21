@@ -3,13 +3,20 @@ package com.company.sakila.db0.sakila.address.generated;
 import com.company.sakila.db0.sakila.address.Address;
 import com.company.sakila.db0.sakila.city.City;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.sql.Blob;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -21,8 +28,9 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedAddressImpl implements Address {
+public abstract class GeneratedAddressImpl implements HasUpdatedColumns<Address>, Address {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int addressId;
     private String address;
     private String address2;
@@ -32,6 +40,7 @@ public abstract class GeneratedAddressImpl implements Address {
     private String phone;
     private Blob location;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedAddressImpl() {}
     
@@ -82,54 +91,63 @@ public abstract class GeneratedAddressImpl implements Address {
     
     @Override
     public Address setAddressId(int addressId) {
+        columnUpdated(Identifier.ADDRESS_ID);
         this.addressId = addressId;
         return this;
     }
     
     @Override
     public Address setAddress(String address) {
+        columnUpdated(Identifier.ADDRESS);
         this.address = address;
         return this;
     }
     
     @Override
     public Address setAddress2(String address2) {
+        columnUpdated(Identifier.ADDRESS2);
         this.address2 = address2;
         return this;
     }
     
     @Override
     public Address setDistrict(String district) {
+        columnUpdated(Identifier.DISTRICT);
         this.district = district;
         return this;
     }
     
     @Override
     public Address setCityId(int cityId) {
+        columnUpdated(Identifier.CITY_ID);
         this.cityId = cityId;
         return this;
     }
     
     @Override
     public Address setPostalCode(String postalCode) {
+        columnUpdated(Identifier.POSTAL_CODE);
         this.postalCode = postalCode;
         return this;
     }
     
     @Override
     public Address setPhone(String phone) {
+        columnUpdated(Identifier.PHONE);
         this.phone = phone;
         return this;
     }
     
     @Override
     public Address setLocation(Blob location) {
+        columnUpdated(Identifier.LOCATION);
         this.location = location;
         return this;
     }
     
     @Override
     public Address setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -139,18 +157,52 @@ public abstract class GeneratedAddressImpl implements Address {
         return foreignManager.stream().filter(City.CITY_ID.equal(getCityId())).findAny().orElse(null);
     }
     
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Address>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    }
+    
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("addressId = "  + Objects.toString(getAddressId()));
-        sj.add("address = "    + Objects.toString(getAddress()));
-        sj.add("address2 = "   + Objects.toString(OptionalUtil.unwrap(getAddress2())));
-        sj.add("district = "   + Objects.toString(getDistrict()));
-        sj.add("cityId = "     + Objects.toString(getCityId()));
-        sj.add("postalCode = " + Objects.toString(OptionalUtil.unwrap(getPostalCode())));
-        sj.add("phone = "      + Objects.toString(getPhone()));
-        sj.add("location = "   + Objects.toString(getLocation()));
-        sj.add("lastUpdate = " + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
+        sj.add(starForModified(Identifier.ADDRESS) + "address = " +         Objects.toString(getAddress()));
+        sj.add(starForModified(Identifier.ADDRESS2) + "address2 = " +       Objects.toString(OptionalUtil.unwrap(getAddress2())));
+        sj.add(starForModified(Identifier.DISTRICT) + "district = " +       Objects.toString(getDistrict()));
+        sj.add(starForModified(Identifier.CITY_ID) + "cityId = " +          Objects.toString(getCityId()));
+        sj.add(starForModified(Identifier.POSTAL_CODE) + "postalCode = " +  Objects.toString(OptionalUtil.unwrap(getPostalCode())));
+        sj.add(starForModified(Identifier.PHONE) + "phone = " +             Objects.toString(getPhone()));
+        sj.add(starForModified(Identifier.LOCATION) + "location = " +       Objects.toString(getLocation()));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "AddressImpl " + sj.toString();
     }
     
@@ -159,15 +211,15 @@ public abstract class GeneratedAddressImpl implements Address {
         if (this == that) { return true; }
         if (!(that instanceof Address)) { return false; }
         final Address thatAddress = (Address)that;
-        if (this.getAddressId() != thatAddress.getAddressId()) {return false; }
-        if (!Objects.equals(this.getAddress(), thatAddress.getAddress())) {return false; }
-        if (!Objects.equals(this.getAddress2(), thatAddress.getAddress2())) {return false; }
-        if (!Objects.equals(this.getDistrict(), thatAddress.getDistrict())) {return false; }
-        if (this.getCityId() != thatAddress.getCityId()) {return false; }
-        if (!Objects.equals(this.getPostalCode(), thatAddress.getPostalCode())) {return false; }
-        if (!Objects.equals(this.getPhone(), thatAddress.getPhone())) {return false; }
-        if (!Objects.equals(this.getLocation(), thatAddress.getLocation())) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatAddress.getLastUpdate())) {return false; }
+        if (this.getAddressId() != thatAddress.getAddressId()) { return false; }
+        if (!Objects.equals(this.getAddress(), thatAddress.getAddress())) { return false; }
+        if (!Objects.equals(this.getAddress2(), thatAddress.getAddress2())) { return false; }
+        if (!Objects.equals(this.getDistrict(), thatAddress.getDistrict())) { return false; }
+        if (this.getCityId() != thatAddress.getCityId()) { return false; }
+        if (!Objects.equals(this.getPostalCode(), thatAddress.getPostalCode())) { return false; }
+        if (!Objects.equals(this.getPhone(), thatAddress.getPhone())) { return false; }
+        if (!Objects.equals(this.getLocation(), thatAddress.getLocation())) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatAddress.getLastUpdate())) { return false; }
         return true;
     }
     
@@ -176,10 +228,10 @@ public abstract class GeneratedAddressImpl implements Address {
         int hash = 7;
         hash = 31 * hash + Integer.hashCode(getAddressId());
         hash = 31 * hash + Objects.hashCode(getAddress());
-        hash = 31 * hash + Objects.hashCode(getAddress2());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getAddress2()));
         hash = 31 * hash + Objects.hashCode(getDistrict());
         hash = 31 * hash + Integer.hashCode(getCityId());
-        hash = 31 * hash + Objects.hashCode(getPostalCode());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getPostalCode()));
         hash = 31 * hash + Objects.hashCode(getPhone());
         hash = 31 * hash + Objects.hashCode(getLocation());
         hash = 31 * hash + Objects.hashCode(getLastUpdate());

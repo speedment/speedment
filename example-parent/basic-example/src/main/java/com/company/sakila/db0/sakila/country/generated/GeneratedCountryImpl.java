@@ -2,9 +2,16 @@ package com.company.sakila.db0.sakila.country.generated;
 
 import com.company.sakila.db0.sakila.country.Country;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -16,11 +23,13 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCountryImpl implements Country {
+public abstract class GeneratedCountryImpl implements HasUpdatedColumns<Country>, Country {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int countryId;
     private String country;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedCountryImpl() {}
     
@@ -41,28 +50,65 @@ public abstract class GeneratedCountryImpl implements Country {
     
     @Override
     public Country setCountryId(int countryId) {
+        columnUpdated(Identifier.COUNTRY_ID);
         this.countryId = countryId;
         return this;
     }
     
     @Override
     public Country setCountry(String country) {
+        columnUpdated(Identifier.COUNTRY);
         this.country = country;
         return this;
     }
     
     @Override
     public Country setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
+    }
+    
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Country>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("countryId = "  + Objects.toString(getCountryId()));
-        sj.add("country = "    + Objects.toString(getCountry()));
-        sj.add("lastUpdate = " + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.COUNTRY_ID) + "countryId = " +    Objects.toString(getCountryId()));
+        sj.add(starForModified(Identifier.COUNTRY) + "country = " +         Objects.toString(getCountry()));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "CountryImpl " + sj.toString();
     }
     
@@ -71,9 +117,9 @@ public abstract class GeneratedCountryImpl implements Country {
         if (this == that) { return true; }
         if (!(that instanceof Country)) { return false; }
         final Country thatCountry = (Country)that;
-        if (this.getCountryId() != thatCountry.getCountryId()) {return false; }
-        if (!Objects.equals(this.getCountry(), thatCountry.getCountry())) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatCountry.getLastUpdate())) {return false; }
+        if (this.getCountryId() != thatCountry.getCountryId()) { return false; }
+        if (!Objects.equals(this.getCountry(), thatCountry.getCountry())) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatCountry.getLastUpdate())) { return false; }
         return true;
     }
     

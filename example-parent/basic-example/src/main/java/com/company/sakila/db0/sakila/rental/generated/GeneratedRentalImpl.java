@@ -5,12 +5,19 @@ import com.company.sakila.db0.sakila.inventory.Inventory;
 import com.company.sakila.db0.sakila.rental.Rental;
 import com.company.sakila.db0.sakila.staff.Staff;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -22,8 +29,9 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedRentalImpl implements Rental {
+public abstract class GeneratedRentalImpl implements HasUpdatedColumns<Rental>, Rental {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int rentalId;
     private Timestamp rentalDate;
     private int inventoryId;
@@ -31,6 +39,7 @@ public abstract class GeneratedRentalImpl implements Rental {
     private Timestamp returnDate;
     private short staffId;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedRentalImpl() {}
     
@@ -71,42 +80,49 @@ public abstract class GeneratedRentalImpl implements Rental {
     
     @Override
     public Rental setRentalId(int rentalId) {
+        columnUpdated(Identifier.RENTAL_ID);
         this.rentalId = rentalId;
         return this;
     }
     
     @Override
     public Rental setRentalDate(Timestamp rentalDate) {
+        columnUpdated(Identifier.RENTAL_DATE);
         this.rentalDate = rentalDate;
         return this;
     }
     
     @Override
     public Rental setInventoryId(int inventoryId) {
+        columnUpdated(Identifier.INVENTORY_ID);
         this.inventoryId = inventoryId;
         return this;
     }
     
     @Override
     public Rental setCustomerId(int customerId) {
+        columnUpdated(Identifier.CUSTOMER_ID);
         this.customerId = customerId;
         return this;
     }
     
     @Override
     public Rental setReturnDate(Timestamp returnDate) {
+        columnUpdated(Identifier.RETURN_DATE);
         this.returnDate = returnDate;
         return this;
     }
     
     @Override
     public Rental setStaffId(short staffId) {
+        columnUpdated(Identifier.STAFF_ID);
         this.staffId = staffId;
         return this;
     }
     
     @Override
     public Rental setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -126,16 +142,50 @@ public abstract class GeneratedRentalImpl implements Rental {
         return foreignManager.stream().filter(Staff.STAFF_ID.equal(getStaffId())).findAny().orElse(null);
     }
     
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Rental>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    }
+    
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("rentalId = "    + Objects.toString(getRentalId()));
-        sj.add("rentalDate = "  + Objects.toString(getRentalDate()));
-        sj.add("inventoryId = " + Objects.toString(getInventoryId()));
-        sj.add("customerId = "  + Objects.toString(getCustomerId()));
-        sj.add("returnDate = "  + Objects.toString(OptionalUtil.unwrap(getReturnDate())));
-        sj.add("staffId = "     + Objects.toString(getStaffId()));
-        sj.add("lastUpdate = "  + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.RENTAL_ID) + "rentalId = " +        Objects.toString(getRentalId()));
+        sj.add(starForModified(Identifier.RENTAL_DATE) + "rentalDate = " +    Objects.toString(getRentalDate()));
+        sj.add(starForModified(Identifier.INVENTORY_ID) + "inventoryId = " +  Objects.toString(getInventoryId()));
+        sj.add(starForModified(Identifier.CUSTOMER_ID) + "customerId = " +    Objects.toString(getCustomerId()));
+        sj.add(starForModified(Identifier.RETURN_DATE) + "returnDate = " +    Objects.toString(OptionalUtil.unwrap(getReturnDate())));
+        sj.add(starForModified(Identifier.STAFF_ID) + "staffId = " +          Objects.toString(getStaffId()));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +    Objects.toString(getLastUpdate()));
         return "RentalImpl " + sj.toString();
     }
     
@@ -144,13 +194,13 @@ public abstract class GeneratedRentalImpl implements Rental {
         if (this == that) { return true; }
         if (!(that instanceof Rental)) { return false; }
         final Rental thatRental = (Rental)that;
-        if (this.getRentalId() != thatRental.getRentalId()) {return false; }
-        if (!Objects.equals(this.getRentalDate(), thatRental.getRentalDate())) {return false; }
-        if (this.getInventoryId() != thatRental.getInventoryId()) {return false; }
-        if (this.getCustomerId() != thatRental.getCustomerId()) {return false; }
-        if (!Objects.equals(this.getReturnDate(), thatRental.getReturnDate())) {return false; }
-        if (this.getStaffId() != thatRental.getStaffId()) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatRental.getLastUpdate())) {return false; }
+        if (this.getRentalId() != thatRental.getRentalId()) { return false; }
+        if (!Objects.equals(this.getRentalDate(), thatRental.getRentalDate())) { return false; }
+        if (this.getInventoryId() != thatRental.getInventoryId()) { return false; }
+        if (this.getCustomerId() != thatRental.getCustomerId()) { return false; }
+        if (!Objects.equals(this.getReturnDate(), thatRental.getReturnDate())) { return false; }
+        if (this.getStaffId() != thatRental.getStaffId()) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatRental.getLastUpdate())) { return false; }
         return true;
     }
     
@@ -161,7 +211,7 @@ public abstract class GeneratedRentalImpl implements Rental {
         hash = 31 * hash + Objects.hashCode(getRentalDate());
         hash = 31 * hash + Integer.hashCode(getInventoryId());
         hash = 31 * hash + Integer.hashCode(getCustomerId());
-        hash = 31 * hash + Objects.hashCode(getReturnDate());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getReturnDate()));
         hash = 31 * hash + Short.hashCode(getStaffId());
         hash = 31 * hash + Objects.hashCode(getLastUpdate());
         return hash;

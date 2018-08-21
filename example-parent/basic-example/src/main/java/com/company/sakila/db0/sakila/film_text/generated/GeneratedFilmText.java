@@ -8,6 +8,7 @@ import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.util.Optional;
 
 /**

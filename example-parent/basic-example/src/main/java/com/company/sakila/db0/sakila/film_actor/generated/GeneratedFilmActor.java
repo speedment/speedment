@@ -10,6 +10,7 @@ import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.IntForeignKeyField;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.sql.Timestamp;
 
 /**

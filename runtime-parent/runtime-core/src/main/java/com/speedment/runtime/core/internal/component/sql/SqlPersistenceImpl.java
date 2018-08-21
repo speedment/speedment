@@ -18,6 +18,7 @@ package com.speedment.runtime.core.internal.component.sql;
 
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
@@ -34,11 +35,13 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -78,8 +81,6 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
     private final DbmsColumnHandler columnHandler;
     private final Class<ENTITY> entityClass;
     
-    private final String insertStatement;
-    private final String updateStatement;
     private final String deleteStatement;
     
     private final List<GeneratedFieldSupport<ENTITY, ?>> generatedFieldSupports;
@@ -124,15 +125,6 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         this.sqlTableReference = naming.fullNameOf(table);
         this.hasPrimaryKeyColumns = manager.primaryKeyFields().anyMatch(m -> true);
 
-        final Predicate<Column> includedInInsert = columnHandler.excludedInInsertStatement().negate();
-        this.insertStatement = "INSERT INTO " + sqlTableReference + " (" +
-            sqlColumnList(includedInInsert, identity()) + ") VALUES (" +
-            sqlColumnList(includedInInsert, c -> "?") + ")";
-
-        final Predicate<Column> includedInUpdate = columnHandler.excludedInUpdateStatement().negate();
-        this.updateStatement = "UPDATE " + sqlTableReference + " SET " +
-            sqlColumnList(includedInUpdate, n -> n + " = ?") + " WHERE " +
-            sqlPrimaryKeyColumnList(pk -> pk + " = ?");
         this.deleteStatement = "DELETE FROM " + sqlTableReference + " WHERE " +
             sqlPrimaryKeyColumnList(pk -> pk + " = ?");
 
@@ -149,16 +141,45 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         this.generatedFields = generatedFieldSupports.stream()
             .map(GeneratedFieldSupport::getField).collect(toList());
     }
-    
+
+    private String createInsertStatement(Predicate<Column> filter) {
+        return "INSERT INTO " + sqlTableReference + " (" +
+            sqlColumnList(filter, identity()) + ") VALUES (" +
+            sqlColumnList(filter, c -> "?") + ")";
+    }
+
+    private String createUpdateStatement(Predicate<Column> filter) {
+        return "UPDATE " + sqlTableReference + " SET " +
+            sqlColumnList(filter, n -> n + " = ?") + " WHERE " +
+            sqlPrimaryKeyColumnList(pk -> pk + " = ?");
+    }
+
     @Override
     public ENTITY persist(ENTITY entity) throws SpeedmentException {
+
+        // All entities are generated to implement HasUpdatedColumns, but we prefer to design it as a trait
+        // instead of a behavior of a common super class.
+        final HasUpdatedColumns<ENTITY> hasUpdatedColumns =
+            (entity instanceof HasUpdatedColumns) ? (HasUpdatedColumns) entity : null;
+
+        final Predicate<Column> columnFilter;
+        if (hasUpdatedColumns != null) {
+            Set<String> modifiedColumnIds = hasUpdatedColumns.updatedColumns().map(ColumnIdentifier::getColumnId).collect(Collectors.toSet());
+            columnFilter = columnHandler.excludedInInsertStatement().negate().and(c -> modifiedColumnIds.contains(c.getId()));
+        } else {
+            columnFilter = columnHandler.excludedInInsertStatement().negate();
+        }
+
         final List<Object> values = fields.get()
-            .filter(f -> !columnHandler.excludedInInsertStatement().test(columnsByFields.get(f)))
+            .filter(f -> columnFilter.test(columnsByFields.get(f)))
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
         try {
-            operationHandler.executeInsert(dbms, insertStatement, values, generatedFields, newGeneratedKeyConsumer(entity));
+            operationHandler.executeInsert(dbms, createInsertStatement(columnFilter), values, generatedFields, newGeneratedKeyConsumer(entity));
+            if (hasUpdatedColumns != null) {
+                hasUpdatedColumns.clearUpdatedColumns();
+            }
             return entity;
         } catch (final SQLException ex) {
             throw new SpeedmentException(ex);
@@ -169,15 +190,31 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
     public ENTITY update(ENTITY entity) throws SpeedmentException {
         assertHasPrimaryKeyColumns();
 
+        // All entities are generated to implement HasUpdatedColumns, but we prefer to design it as a trait
+        // instead of a behavior of a common super class.
+        final HasUpdatedColumns<ENTITY> hasUpdatedColumns =
+            (entity instanceof HasUpdatedColumns) ? (HasUpdatedColumns) entity : null;
+
+        final Predicate<Column> columnFilter;
+        if (hasUpdatedColumns != null) {
+            Set<String> modifiedColumnIds = hasUpdatedColumns.updatedColumns().map(ColumnIdentifier::getColumnId).collect(Collectors.toSet());
+            columnFilter = columnHandler.excludedInUpdateStatement().negate().and(c -> modifiedColumnIds.contains(c.getId()));
+        } else {
+            columnFilter = columnHandler.excludedInUpdateStatement().negate();
+        }
+
         final List<Object> values = Stream.concat(
-            fields.get().filter(f -> !columnHandler.excludedInUpdateStatement().test(columnsByFields.get(f))), 
+            fields.get().filter(f -> columnFilter.test(columnsByFields.get(f))),
             primaryKeyFields.get()
         )
             .map(f -> toDatabaseType(f, entity))
             .collect(Collectors.toList());
 
         try {
-            operationHandler.executeUpdate(dbms, updateStatement, values);
+            operationHandler.executeUpdate(dbms, createUpdateStatement(columnFilter), values);
+            if (hasUpdatedColumns != null) {
+                hasUpdatedColumns.clearUpdatedColumns();
+            }
             return entity;
         } catch (final SQLException ex) {
             throw new SpeedmentException(ex);

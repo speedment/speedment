@@ -3,15 +3,22 @@ package com.company.sakila.db0.sakila.film.generated;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.language.Language;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -23,8 +30,9 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedFilmImpl implements Film {
+public abstract class GeneratedFilmImpl implements HasUpdatedColumns<Film>, Film {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int filmId;
     private String title;
     private String description;
@@ -38,6 +46,7 @@ public abstract class GeneratedFilmImpl implements Film {
     private String rating;
     private String specialFeatures;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedFilmImpl() {}
     
@@ -108,78 +117,91 @@ public abstract class GeneratedFilmImpl implements Film {
     
     @Override
     public Film setFilmId(int filmId) {
+        columnUpdated(Identifier.FILM_ID);
         this.filmId = filmId;
         return this;
     }
     
     @Override
     public Film setTitle(String title) {
+        columnUpdated(Identifier.TITLE);
         this.title = title;
         return this;
     }
     
     @Override
     public Film setDescription(String description) {
+        columnUpdated(Identifier.DESCRIPTION);
         this.description = description;
         return this;
     }
     
     @Override
     public Film setReleaseYear(Date releaseYear) {
+        columnUpdated(Identifier.RELEASE_YEAR);
         this.releaseYear = releaseYear;
         return this;
     }
     
     @Override
     public Film setLanguageId(short languageId) {
+        columnUpdated(Identifier.LANGUAGE_ID);
         this.languageId = languageId;
         return this;
     }
     
     @Override
     public Film setOriginalLanguageId(Short originalLanguageId) {
+        columnUpdated(Identifier.ORIGINAL_LANGUAGE_ID);
         this.originalLanguageId = originalLanguageId;
         return this;
     }
     
     @Override
     public Film setRentalDuration(short rentalDuration) {
+        columnUpdated(Identifier.RENTAL_DURATION);
         this.rentalDuration = rentalDuration;
         return this;
     }
     
     @Override
     public Film setRentalRate(BigDecimal rentalRate) {
+        columnUpdated(Identifier.RENTAL_RATE);
         this.rentalRate = rentalRate;
         return this;
     }
     
     @Override
     public Film setLength(Integer length) {
+        columnUpdated(Identifier.LENGTH);
         this.length = length;
         return this;
     }
     
     @Override
     public Film setReplacementCost(BigDecimal replacementCost) {
+        columnUpdated(Identifier.REPLACEMENT_COST);
         this.replacementCost = replacementCost;
         return this;
     }
     
     @Override
     public Film setRating(String rating) {
+        columnUpdated(Identifier.RATING);
         this.rating = rating;
         return this;
     }
     
     @Override
     public Film setSpecialFeatures(String specialFeatures) {
+        columnUpdated(Identifier.SPECIAL_FEATURES);
         this.specialFeatures = specialFeatures;
         return this;
     }
     
     @Override
     public Film setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -198,22 +220,56 @@ public abstract class GeneratedFilmImpl implements Film {
         }
     }
     
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Film>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    }
+    
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("filmId = "             + Objects.toString(getFilmId()));
-        sj.add("title = "              + Objects.toString(getTitle()));
-        sj.add("description = "        + Objects.toString(OptionalUtil.unwrap(getDescription())));
-        sj.add("releaseYear = "        + Objects.toString(OptionalUtil.unwrap(getReleaseYear())));
-        sj.add("languageId = "         + Objects.toString(getLanguageId()));
-        sj.add("originalLanguageId = " + Objects.toString(OptionalUtil.unwrap(getOriginalLanguageId())));
-        sj.add("rentalDuration = "     + Objects.toString(getRentalDuration()));
-        sj.add("rentalRate = "         + Objects.toString(getRentalRate()));
-        sj.add("length = "             + Objects.toString(OptionalUtil.unwrap(getLength())));
-        sj.add("replacementCost = "    + Objects.toString(getReplacementCost()));
-        sj.add("rating = "             + Objects.toString(OptionalUtil.unwrap(getRating())));
-        sj.add("specialFeatures = "    + Objects.toString(OptionalUtil.unwrap(getSpecialFeatures())));
-        sj.add("lastUpdate = "         + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.FILM_ID) + "filmId = " +                           Objects.toString(getFilmId()));
+        sj.add(starForModified(Identifier.TITLE) + "title = " +                              Objects.toString(getTitle()));
+        sj.add(starForModified(Identifier.DESCRIPTION) + "description = " +                  Objects.toString(OptionalUtil.unwrap(getDescription())));
+        sj.add(starForModified(Identifier.RELEASE_YEAR) + "releaseYear = " +                 Objects.toString(OptionalUtil.unwrap(getReleaseYear())));
+        sj.add(starForModified(Identifier.LANGUAGE_ID) + "languageId = " +                   Objects.toString(getLanguageId()));
+        sj.add(starForModified(Identifier.ORIGINAL_LANGUAGE_ID) + "originalLanguageId = " +  Objects.toString(OptionalUtil.unwrap(getOriginalLanguageId())));
+        sj.add(starForModified(Identifier.RENTAL_DURATION) + "rentalDuration = " +           Objects.toString(getRentalDuration()));
+        sj.add(starForModified(Identifier.RENTAL_RATE) + "rentalRate = " +                   Objects.toString(getRentalRate()));
+        sj.add(starForModified(Identifier.LENGTH) + "length = " +                            Objects.toString(OptionalUtil.unwrap(getLength())));
+        sj.add(starForModified(Identifier.REPLACEMENT_COST) + "replacementCost = " +         Objects.toString(getReplacementCost()));
+        sj.add(starForModified(Identifier.RATING) + "rating = " +                            Objects.toString(OptionalUtil.unwrap(getRating())));
+        sj.add(starForModified(Identifier.SPECIAL_FEATURES) + "specialFeatures = " +         Objects.toString(OptionalUtil.unwrap(getSpecialFeatures())));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +                   Objects.toString(getLastUpdate()));
         return "FilmImpl " + sj.toString();
     }
     
@@ -222,19 +278,19 @@ public abstract class GeneratedFilmImpl implements Film {
         if (this == that) { return true; }
         if (!(that instanceof Film)) { return false; }
         final Film thatFilm = (Film)that;
-        if (this.getFilmId() != thatFilm.getFilmId()) {return false; }
-        if (!Objects.equals(this.getTitle(), thatFilm.getTitle())) {return false; }
-        if (!Objects.equals(this.getDescription(), thatFilm.getDescription())) {return false; }
-        if (!Objects.equals(this.getReleaseYear(), thatFilm.getReleaseYear())) {return false; }
-        if (this.getLanguageId() != thatFilm.getLanguageId()) {return false; }
-        if (!Objects.equals(this.getOriginalLanguageId(), thatFilm.getOriginalLanguageId())) {return false; }
-        if (this.getRentalDuration() != thatFilm.getRentalDuration()) {return false; }
-        if (!Objects.equals(this.getRentalRate(), thatFilm.getRentalRate())) {return false; }
-        if (!Objects.equals(this.getLength(), thatFilm.getLength())) {return false; }
-        if (!Objects.equals(this.getReplacementCost(), thatFilm.getReplacementCost())) {return false; }
-        if (!Objects.equals(this.getRating(), thatFilm.getRating())) {return false; }
-        if (!Objects.equals(this.getSpecialFeatures(), thatFilm.getSpecialFeatures())) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatFilm.getLastUpdate())) {return false; }
+        if (this.getFilmId() != thatFilm.getFilmId()) { return false; }
+        if (!Objects.equals(this.getTitle(), thatFilm.getTitle())) { return false; }
+        if (!Objects.equals(this.getDescription(), thatFilm.getDescription())) { return false; }
+        if (!Objects.equals(this.getReleaseYear(), thatFilm.getReleaseYear())) { return false; }
+        if (this.getLanguageId() != thatFilm.getLanguageId()) { return false; }
+        if (!Objects.equals(this.getOriginalLanguageId(), thatFilm.getOriginalLanguageId())) { return false; }
+        if (this.getRentalDuration() != thatFilm.getRentalDuration()) { return false; }
+        if (!Objects.equals(this.getRentalRate(), thatFilm.getRentalRate())) { return false; }
+        if (!Objects.equals(this.getLength(), thatFilm.getLength())) { return false; }
+        if (!Objects.equals(this.getReplacementCost(), thatFilm.getReplacementCost())) { return false; }
+        if (!Objects.equals(this.getRating(), thatFilm.getRating())) { return false; }
+        if (!Objects.equals(this.getSpecialFeatures(), thatFilm.getSpecialFeatures())) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatFilm.getLastUpdate())) { return false; }
         return true;
     }
     
@@ -243,16 +299,16 @@ public abstract class GeneratedFilmImpl implements Film {
         int hash = 7;
         hash = 31 * hash + Integer.hashCode(getFilmId());
         hash = 31 * hash + Objects.hashCode(getTitle());
-        hash = 31 * hash + Objects.hashCode(getDescription());
-        hash = 31 * hash + Objects.hashCode(getReleaseYear());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getDescription()));
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getReleaseYear()));
         hash = 31 * hash + Short.hashCode(getLanguageId());
-        hash = 31 * hash + Objects.hashCode(getOriginalLanguageId());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getOriginalLanguageId()));
         hash = 31 * hash + Short.hashCode(getRentalDuration());
         hash = 31 * hash + Objects.hashCode(getRentalRate());
-        hash = 31 * hash + Objects.hashCode(getLength());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getLength()));
         hash = 31 * hash + Objects.hashCode(getReplacementCost());
-        hash = 31 * hash + Objects.hashCode(getRating());
-        hash = 31 * hash + Objects.hashCode(getSpecialFeatures());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getRating()));
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getSpecialFeatures()));
         hash = 31 * hash + Objects.hashCode(getLastUpdate());
         return hash;
     }

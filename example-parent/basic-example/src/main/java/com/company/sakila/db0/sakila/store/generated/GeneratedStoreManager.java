@@ -5,7 +5,9 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.Field;
+
 import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
@@ -21,12 +23,7 @@ import static java.util.Collections.unmodifiableList;
 @GeneratedCode("Speedment")
 public interface GeneratedStoreManager extends Manager<Store> {
     
-    TableIdentifier<Store> IDENTIFIER = TableIdentifier.of(
-        "db0",
-        "sakila",
-        "store"
-    )
-    ;
+    TableIdentifier<Store> IDENTIFIER = TableIdentifier.of("db0", "sakila", "store");
     List<Field<Store>> FIELDS = unmodifiableList(asList(
         Store.STORE_ID,
         Store.MANAGER_STAFF_ID,

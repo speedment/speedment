@@ -6,8 +6,10 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static com.speedment.common.injector.State.RESOLVED;
 
 /**
@@ -29,15 +31,13 @@ public abstract class GeneratedCountrySqlAdapter implements SqlAdapter<Country> 
     }
     
     protected Country apply(ResultSet resultSet, int offset) throws SQLException {
-        return createEntity()
-            .setCountryId(  resultSet.getInt(1 + offset))
-            .setCountry(    resultSet.getString(2 + offset))
-            .setLastUpdate( resultSet.getTimestamp(3 + offset))
-            ;
-    }
-    
-    protected CountryImpl createEntity() {
-        return new CountryImpl();
+        GeneratedCountryImpl entity = new CountryImpl();
+        entity.disableModificationTracking();
+        entity.setCountryId( resultSet.getInt(1 + offset));
+        entity.setCountry(   resultSet.getString(2 + offset));
+        entity.setLastUpdate(resultSet.getTimestamp(3 + offset));
+        entity.resetModificationTracking();
+        return entity;
     }
     
     @Override

@@ -20,15 +20,17 @@ import com.speedment.common.codegen.constant.DefaultAnnotationUsage;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.constant.SimpleType;
+import com.speedment.common.codegen.model.*;
+
 import static com.speedment.common.codegen.util.Formatting.block;
+
+import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+
+import static com.speedment.generator.standard.entity.GeneratedEntityTranslator.IDENTIFIER_NAME;
 import static com.speedment.generator.standard.entity.GeneratedEntityTranslator.getterReturnType;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.optionalGetterName;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
@@ -39,15 +41,17 @@ import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasNullable;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.lang.reflect.Type;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.StringJoiner;
 
 /**
  *
@@ -56,9 +60,16 @@ import java.util.StringJoiner;
  */
 public final class GeneratedEntityImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
+    static final String UPDATED_COLUMNS_NAME = "updatedColumns_";
+    private static final String SET_UPDATED_COLUMN_NAME = "columnUpdated";
+    private static final String DISABLED_MODIFICATION_TRACKING_NAME = "DISABLED_MODIFICATION_TRACKING";
+    public static final String RESET_MODIFICATION_TRACKING_NAME = "resetModificationTracking";
+    public static final String DISABLE_MODIFICATION_TRACKING_NAME = "disableModificationTracking";
+    private static final String TO_STRING_HELPER_NAME = "starForModified";
+
     @Inject private TypeMapperComponent typeMappers;
     @Inject private Injector injector;
-    
+
     public GeneratedEntityImplTranslator(Table table) {
         super(table, Class::of);
     }
@@ -67,18 +78,85 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
 
+        /*Constructor parameterizedConstructor = Constructor.of().javadoc(
+            Javadoc.of("Constructor that allows setting values without marking any fields as modified.")
+        );
+
+        columns().forEachOrdered(col -> {
+            final String varName = getSupport().variableName(col);
+            parameterizedConstructor
+                .add(Field.of(varName, fieldFor(col).getType()))
+                .add("this." + varName + " = " + varName + ";");
+        }); */
+
         return newBuilder(file, getSupport().generatedEntityImplName())
-            
+
             /**
              * Class details
              */
-            .forEveryTable((clazz, table) -> 
+            .forEveryTable((clazz, table) ->
                 clazz.public_()
                     .abstract_()
+                    .implement(SimpleParameterizedType.create(HasUpdatedColumns.class, getSupport().entityType()))
                     .add(getSupport().entityType())
                     .add(Constructor.of().protected_())
             )
-            
+
+            /*
+             * Modification tracking
+             */
+            .forEveryTable((clazz, table) -> clazz
+                .add(Field.of(
+                    DISABLED_MODIFICATION_TRACKING_NAME,
+                    SimpleParameterizedType.create(Set.class, SimpleType.create("Identifier"))).static_().final_().private_()
+                    .set(Value.ofInvocation(Collections.class, "emptySet")))
+            )
+            .forEveryTable(Phase.POST_MAKE, (clazz, table) -> clazz
+                .add(Method.of(RESET_MODIFICATION_TRACKING_NAME, void.class)
+                    .add(UPDATED_COLUMNS_NAME + " = null;")
+                )
+                .add(Method.of(DISABLE_MODIFICATION_TRACKING_NAME, void.class)
+                    .add(UPDATED_COLUMNS_NAME + " = " + DISABLED_MODIFICATION_TRACKING_NAME + ";")
+                )
+                .add(Method.of("clearUpdatedColumns", void.class)
+                    .public_()
+                    .override()
+                    .add("if (" + UPDATED_COLUMNS_NAME + " != " + DISABLED_MODIFICATION_TRACKING_NAME + ") "
+                        + Formatting.block(UPDATED_COLUMNS_NAME + " = null;"))
+                )
+            )
+
+            /*
+             * Updated Columns
+             */
+            .forEveryTable(Phase.POST_MAKE, (clazz, table) ->
+                {
+                    clazz.add(Field.of(UPDATED_COLUMNS_NAME,
+                        SimpleParameterizedType.create(Set.class, SimpleType.create(IDENTIFIER_NAME)))
+                        .private_());
+
+                    clazz.add(Method.of(SET_UPDATED_COLUMN_NAME, void.class)
+                        .private_()
+                        .add(Field.of("column", SimpleType.create(IDENTIFIER_NAME)))
+                        .add("if (" + UPDATED_COLUMNS_NAME + " != " + DISABLED_MODIFICATION_TRACKING_NAME + ") "
+                            + Formatting.block(
+                            "if (" + UPDATED_COLUMNS_NAME + " == null) "
+                                + Formatting.block(UPDATED_COLUMNS_NAME + " = EnumSet.of(column);")
+                                + " else "
+                                + Formatting.block(UPDATED_COLUMNS_NAME + ".add(column);"))));
+
+                    clazz.add(Import.of(EnumSet.class));
+
+                    clazz.add(Method.of(UPDATED_COLUMNS_NAME.replace("_", ""),
+                        SimpleParameterizedType.create(Stream.class,
+                            SimpleParameterizedType.create(ColumnIdentifier.class,
+                                getSupport().entityType())))
+                        .public_()
+                        .override()
+                        .add("return " + UPDATED_COLUMNS_NAME + " != null ? " + UPDATED_COLUMNS_NAME + ".stream().map(i -> i) : Stream.empty();"));
+                }
+            )
+
             /**
              * Getters
              */
@@ -102,16 +180,17 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                         .public_().add(OVERRIDE)
                         .add("return " + getter + ";"));
             })
-            
+
             /**
              * Setters
              */
-            .forEveryColumn((clazz, col) -> 
+            .forEveryColumn((clazz, col) ->
                 clazz
                     .add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
                         .public_()
                         .add(OVERRIDE)
                         .add(fieldFor(col))
+                        .add(SET_UPDATED_COLUMN_NAME + "(" + IDENTIFIER_NAME + "." + getSupport().namer().javaStaticFieldName(col.getJavaName()) + ");")
                         .add("this." + getSupport().variableName(col) + " = " + getSupport().variableName(col) + ";")
                         .add("return this;"))
             )
@@ -125,15 +204,15 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                 ).ifPresent(fkc -> {
                     final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
                     final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
-                    
+
                     file.add(Import.of(fuSupport.entityType()));
 
                     final String isPresentName = usesOptional(col) ? ".isPresent()" : " != null";
                     final String getterName = optionalGetterName(typeMappers, col).orElse("");
-                    
-                    clazz.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col), 
-                        col.isNullable() 
-                            ? DefaultType.optional(fuSupport.entityType()) 
+
+                    clazz.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col),
+                        col.isNullable()
+                            ? DefaultType.optional(fuSupport.entityType())
                             : fuSupport.entityType())
                         .public_()
                         .add(DefaultAnnotationUsage.OVERRIDE)
@@ -143,26 +222,27 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                         .add(
                             col.isNullable() ?
                                 "if (" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + "()" + isPresentName + ") " + block(
-                                    "return foreignManager.stream().filter(" + fuSupport.entityName() + 
-                                    "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
-                                    ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
-                                    "()" + getterName + ")).findAny();"
+                                    "return foreignManager.stream().filter(" + fuSupport.entityName() +
+                                        "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) +
+                                        ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) +
+                                        "()" + getterName + ")).findAny();"
                                 ) + " else " + block(
                                     "return Optional.empty();"
                                 )
                                 :
-                                "return foreignManager.stream().filter(" + fuSupport.entityName() + 
-                                    "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
-                                    ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
+                                "return foreignManager.stream().filter(" + fuSupport.entityName() +
+                                    "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) +
+                                    ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) +
                                     "()" + getterName + ")).findAny().orElse(null);"
                         )
                     );
                 });
             })
-            
+
             // We need to make it POST_MAKE because other plugins might add fields
-            .forEveryTable(Phase.POST_MAKE, (clazz, table) -> 
+            .forEveryTable(Phase.POST_MAKE, (clazz, table) ->
                 clazz
+                    .add(toStringHelper(file))
                     .add(toStringMethod(file))
                     .add(equalsMethod())
                     .add(hashCodeMethod(file))
@@ -171,10 +251,17 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
 
     }
 
+    private Method toStringHelper(File file) {
+        return Method.of(TO_STRING_HELPER_NAME, String.class)
+            .private_()
+            .add(Field.of("id", SimpleType.create("Identifier")))
+            .add("return " + UPDATED_COLUMNS_NAME + " != null && " + UPDATED_COLUMNS_NAME + ".contains(id) ? \"*\" : \"\";");
+    }
+
     protected Method toStringMethod(File file) {
         file.add(Import.of(StringJoiner.class));
         file.add(Import.of(Objects.class));
-        
+
         final Method m = Method.of("toString", String.class)
             .public_()
             .add(OVERRIDE)
@@ -188,7 +275,9 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             } else {
                 getter = "get" + getSupport().typeName(col) + "()";
             }
-            m.add("sj.add(\"" + getSupport().variableName(col) + " = \" \t+ Objects.toString(" + getter + "));");
+            m.add("sj.add(" + TO_STRING_HELPER_NAME + "(" + IDENTIFIER_NAME + "." + getSupport().namer().javaStaticFieldName(col.getJavaName())
+                + ") + \"" +  getSupport().variableName(col) + " = \" + "
+                + "\t Objects.toString(" + getter + "));");
         });
 
         m.add("return \"" + getSupport().entityImplName() + " \" + sj.toString();");
@@ -240,7 +329,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             } else {
                 str.append("Objects");
             }
-            
+
             str.append(".hashCode(");
 
             if (usesOptional(c)) {
@@ -262,7 +351,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
 
     @Override
     protected String getJavadocRepresentText() {
-        return "The generated base implementation of the {@link " + 
+        return "The generated base implementation of the {@link " +
             getSupport().entityType().getTypeName() + "}-interface.";
     }
 

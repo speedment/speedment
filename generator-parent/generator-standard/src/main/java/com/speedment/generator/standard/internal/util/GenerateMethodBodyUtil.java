@@ -35,6 +35,8 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.util.Formatting.*;
+import static com.speedment.generator.standard.entity.GeneratedEntityImplTranslator.DISABLE_MODIFICATION_TRACKING_NAME;
+import static com.speedment.generator.standard.entity.GeneratedEntityImplTranslator.RESET_MODIFICATION_TRACKING_NAME;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -104,22 +106,21 @@ public final class GenerateMethodBodyUtil {
         file.add(Import.of(SQLException.class));
 
         final List<String> rows = new LinkedList<>();
-        rows.add("return createEntity()");
-
-        final Stream.Builder<String> streamBuilder = Stream.builder();
+        rows.add(support.generatedEntityImplName() + " entity = new "
+            + support.entityImplName() + "();");
+        rows.add("entity." + DISABLE_MODIFICATION_TRACKING_NAME + "();");
+        file.add(Import.of(support.entityImplType()));
 
         final AtomicInteger position = new AtomicInteger(1);
         columnsSupplier.get()
             .filter(HasEnabled::isEnabled)
-            .forEachOrdered(c
-                -> streamBuilder.add(indent(".set"
-                + support.namer().javaTypeName(c.getJavaName()) + "(\t "
-                + readFromResultSet.readFromResultSet(file, c, position)
-                + ")"))
-            );
-        streamBuilder.add(indent(";"));
-        streamBuilder.build().forEachOrdered(rows::add);
-        return rows.toArray(new String[rows.size()]);
+            .map(c ->
+                "entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(\t"
+                    + readFromResultSet.readFromResultSet(file, c, position) + ");")
+            .forEachOrdered(rows::add);
+        rows.add("entity." + RESET_MODIFICATION_TRACKING_NAME + "();");
+        rows.add("return entity;");
+        return rows.toArray(new String[0]);
     }
 
     private GenerateMethodBodyUtil() {

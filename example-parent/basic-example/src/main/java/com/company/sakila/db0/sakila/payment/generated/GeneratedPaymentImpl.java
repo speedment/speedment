@@ -5,14 +5,21 @@ import com.company.sakila.db0.sakila.payment.Payment;
 import com.company.sakila.db0.sakila.rental.Rental;
 import com.company.sakila.db0.sakila.staff.Staff;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -24,8 +31,9 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedPaymentImpl implements Payment {
+public abstract class GeneratedPaymentImpl implements HasUpdatedColumns<Payment>, Payment {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int paymentId;
     private int customerId;
     private short staffId;
@@ -33,6 +41,7 @@ public abstract class GeneratedPaymentImpl implements Payment {
     private BigDecimal amount;
     private Timestamp paymentDate;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedPaymentImpl() {}
     
@@ -73,42 +82,49 @@ public abstract class GeneratedPaymentImpl implements Payment {
     
     @Override
     public Payment setPaymentId(int paymentId) {
+        columnUpdated(Identifier.PAYMENT_ID);
         this.paymentId = paymentId;
         return this;
     }
     
     @Override
     public Payment setCustomerId(int customerId) {
+        columnUpdated(Identifier.CUSTOMER_ID);
         this.customerId = customerId;
         return this;
     }
     
     @Override
     public Payment setStaffId(short staffId) {
+        columnUpdated(Identifier.STAFF_ID);
         this.staffId = staffId;
         return this;
     }
     
     @Override
     public Payment setRentalId(Integer rentalId) {
+        columnUpdated(Identifier.RENTAL_ID);
         this.rentalId = rentalId;
         return this;
     }
     
     @Override
     public Payment setAmount(BigDecimal amount) {
+        columnUpdated(Identifier.AMOUNT);
         this.amount = amount;
         return this;
     }
     
     @Override
     public Payment setPaymentDate(Timestamp paymentDate) {
+        columnUpdated(Identifier.PAYMENT_DATE);
         this.paymentDate = paymentDate;
         return this;
     }
     
     @Override
     public Payment setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -132,16 +148,50 @@ public abstract class GeneratedPaymentImpl implements Payment {
         }
     }
     
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Payment>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    }
+    
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("paymentId = "   + Objects.toString(getPaymentId()));
-        sj.add("customerId = "  + Objects.toString(getCustomerId()));
-        sj.add("staffId = "     + Objects.toString(getStaffId()));
-        sj.add("rentalId = "    + Objects.toString(OptionalUtil.unwrap(getRentalId())));
-        sj.add("amount = "      + Objects.toString(getAmount()));
-        sj.add("paymentDate = " + Objects.toString(getPaymentDate()));
-        sj.add("lastUpdate = "  + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.PAYMENT_ID) + "paymentId = " +      Objects.toString(getPaymentId()));
+        sj.add(starForModified(Identifier.CUSTOMER_ID) + "customerId = " +    Objects.toString(getCustomerId()));
+        sj.add(starForModified(Identifier.STAFF_ID) + "staffId = " +          Objects.toString(getStaffId()));
+        sj.add(starForModified(Identifier.RENTAL_ID) + "rentalId = " +        Objects.toString(OptionalUtil.unwrap(getRentalId())));
+        sj.add(starForModified(Identifier.AMOUNT) + "amount = " +             Objects.toString(getAmount()));
+        sj.add(starForModified(Identifier.PAYMENT_DATE) + "paymentDate = " +  Objects.toString(getPaymentDate()));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +    Objects.toString(getLastUpdate()));
         return "PaymentImpl " + sj.toString();
     }
     
@@ -150,13 +200,13 @@ public abstract class GeneratedPaymentImpl implements Payment {
         if (this == that) { return true; }
         if (!(that instanceof Payment)) { return false; }
         final Payment thatPayment = (Payment)that;
-        if (this.getPaymentId() != thatPayment.getPaymentId()) {return false; }
-        if (this.getCustomerId() != thatPayment.getCustomerId()) {return false; }
-        if (this.getStaffId() != thatPayment.getStaffId()) {return false; }
-        if (!Objects.equals(this.getRentalId(), thatPayment.getRentalId())) {return false; }
-        if (!Objects.equals(this.getAmount(), thatPayment.getAmount())) {return false; }
-        if (!Objects.equals(this.getPaymentDate(), thatPayment.getPaymentDate())) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatPayment.getLastUpdate())) {return false; }
+        if (this.getPaymentId() != thatPayment.getPaymentId()) { return false; }
+        if (this.getCustomerId() != thatPayment.getCustomerId()) { return false; }
+        if (this.getStaffId() != thatPayment.getStaffId()) { return false; }
+        if (!Objects.equals(this.getRentalId(), thatPayment.getRentalId())) { return false; }
+        if (!Objects.equals(this.getAmount(), thatPayment.getAmount())) { return false; }
+        if (!Objects.equals(this.getPaymentDate(), thatPayment.getPaymentDate())) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatPayment.getLastUpdate())) { return false; }
         return true;
     }
     
@@ -166,7 +216,7 @@ public abstract class GeneratedPaymentImpl implements Payment {
         hash = 31 * hash + Integer.hashCode(getPaymentId());
         hash = 31 * hash + Integer.hashCode(getCustomerId());
         hash = 31 * hash + Short.hashCode(getStaffId());
-        hash = 31 * hash + Objects.hashCode(getRentalId());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getRentalId()));
         hash = 31 * hash + Objects.hashCode(getAmount());
         hash = 31 * hash + Objects.hashCode(getPaymentDate());
         hash = 31 * hash + Objects.hashCode(getLastUpdate());

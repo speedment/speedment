@@ -13,6 +13,7 @@ import com.speedment.runtime.field.IntForeignKeyField;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.sql.Blob;
 import java.sql.Timestamp;
 import java.util.Optional;

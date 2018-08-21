@@ -4,10 +4,17 @@ import com.company.sakila.db0.sakila.address.Address;
 import com.company.sakila.db0.sakila.staff.Staff;
 import com.company.sakila.db0.sakila.store.Store;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -19,12 +26,14 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedStoreImpl implements Store {
+public abstract class GeneratedStoreImpl implements HasUpdatedColumns<Store>, Store {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private short storeId;
     private short managerStaffId;
     private int addressId;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedStoreImpl() {}
     
@@ -50,24 +59,28 @@ public abstract class GeneratedStoreImpl implements Store {
     
     @Override
     public Store setStoreId(short storeId) {
+        columnUpdated(Identifier.STORE_ID);
         this.storeId = storeId;
         return this;
     }
     
     @Override
     public Store setManagerStaffId(short managerStaffId) {
+        columnUpdated(Identifier.MANAGER_STAFF_ID);
         this.managerStaffId = managerStaffId;
         return this;
     }
     
     @Override
     public Store setAddressId(int addressId) {
+        columnUpdated(Identifier.ADDRESS_ID);
         this.addressId = addressId;
         return this;
     }
     
     @Override
     public Store setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -82,13 +95,47 @@ public abstract class GeneratedStoreImpl implements Store {
         return foreignManager.stream().filter(Address.ADDRESS_ID.equal(getAddressId())).findAny().orElse(null);
     }
     
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Store>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    }
+    
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("storeId = "        + Objects.toString(getStoreId()));
-        sj.add("managerStaffId = " + Objects.toString(getManagerStaffId()));
-        sj.add("addressId = "      + Objects.toString(getAddressId()));
-        sj.add("lastUpdate = "     + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.STORE_ID) + "storeId = " +                 Objects.toString(getStoreId()));
+        sj.add(starForModified(Identifier.MANAGER_STAFF_ID) + "managerStaffId = " +  Objects.toString(getManagerStaffId()));
+        sj.add(starForModified(Identifier.ADDRESS_ID) + "addressId = " +             Objects.toString(getAddressId()));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +           Objects.toString(getLastUpdate()));
         return "StoreImpl " + sj.toString();
     }
     
@@ -97,10 +144,10 @@ public abstract class GeneratedStoreImpl implements Store {
         if (this == that) { return true; }
         if (!(that instanceof Store)) { return false; }
         final Store thatStore = (Store)that;
-        if (this.getStoreId() != thatStore.getStoreId()) {return false; }
-        if (this.getManagerStaffId() != thatStore.getManagerStaffId()) {return false; }
-        if (this.getAddressId() != thatStore.getAddressId()) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatStore.getLastUpdate())) {return false; }
+        if (this.getStoreId() != thatStore.getStoreId()) { return false; }
+        if (this.getManagerStaffId() != thatStore.getManagerStaffId()) { return false; }
+        if (this.getAddressId() != thatStore.getAddressId()) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatStore.getLastUpdate())) { return false; }
         return true;
     }
     

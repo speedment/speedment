@@ -2,10 +2,17 @@ package com.company.sakila.db0.sakila.film_text.generated;
 
 import com.company.sakila.db0.sakila.film_text.FilmText;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -17,11 +24,13 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedFilmTextImpl implements FilmText {
+public abstract class GeneratedFilmTextImpl implements HasUpdatedColumns<FilmText>, FilmText {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private short filmId;
     private String title;
     private String description;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedFilmTextImpl() {}
     
@@ -42,28 +51,65 @@ public abstract class GeneratedFilmTextImpl implements FilmText {
     
     @Override
     public FilmText setFilmId(short filmId) {
+        columnUpdated(Identifier.FILM_ID);
         this.filmId = filmId;
         return this;
     }
     
     @Override
     public FilmText setTitle(String title) {
+        columnUpdated(Identifier.TITLE);
         this.title = title;
         return this;
     }
     
     @Override
     public FilmText setDescription(String description) {
+        columnUpdated(Identifier.DESCRIPTION);
         this.description = description;
         return this;
+    }
+    
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<FilmText>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("filmId = "      + Objects.toString(getFilmId()));
-        sj.add("title = "       + Objects.toString(getTitle()));
-        sj.add("description = " + Objects.toString(OptionalUtil.unwrap(getDescription())));
+        sj.add(starForModified(Identifier.FILM_ID) + "filmId = " +           Objects.toString(getFilmId()));
+        sj.add(starForModified(Identifier.TITLE) + "title = " +              Objects.toString(getTitle()));
+        sj.add(starForModified(Identifier.DESCRIPTION) + "description = " +  Objects.toString(OptionalUtil.unwrap(getDescription())));
         return "FilmTextImpl " + sj.toString();
     }
     
@@ -72,9 +118,9 @@ public abstract class GeneratedFilmTextImpl implements FilmText {
         if (this == that) { return true; }
         if (!(that instanceof FilmText)) { return false; }
         final FilmText thatFilmText = (FilmText)that;
-        if (this.getFilmId() != thatFilmText.getFilmId()) {return false; }
-        if (!Objects.equals(this.getTitle(), thatFilmText.getTitle())) {return false; }
-        if (!Objects.equals(this.getDescription(), thatFilmText.getDescription())) {return false; }
+        if (this.getFilmId() != thatFilmText.getFilmId()) { return false; }
+        if (!Objects.equals(this.getTitle(), thatFilmText.getTitle())) { return false; }
+        if (!Objects.equals(this.getDescription(), thatFilmText.getDescription())) { return false; }
         return true;
     }
     
@@ -83,7 +129,7 @@ public abstract class GeneratedFilmTextImpl implements FilmText {
         int hash = 7;
         hash = 31 * hash + Short.hashCode(getFilmId());
         hash = 31 * hash + Objects.hashCode(getTitle());
-        hash = 31 * hash + Objects.hashCode(getDescription());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getDescription()));
         return hash;
     }
 }

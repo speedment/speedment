@@ -4,10 +4,17 @@ import com.company.sakila.db0.sakila.actor.Actor;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film_actor.FilmActor;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -19,11 +26,13 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedFilmActorImpl implements FilmActor {
+public abstract class GeneratedFilmActorImpl implements HasUpdatedColumns<FilmActor>, FilmActor {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int actorId;
     private int filmId;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedFilmActorImpl() {}
     
@@ -44,18 +53,21 @@ public abstract class GeneratedFilmActorImpl implements FilmActor {
     
     @Override
     public FilmActor setActorId(int actorId) {
+        columnUpdated(Identifier.ACTOR_ID);
         this.actorId = actorId;
         return this;
     }
     
     @Override
     public FilmActor setFilmId(int filmId) {
+        columnUpdated(Identifier.FILM_ID);
         this.filmId = filmId;
         return this;
     }
     
     @Override
     public FilmActor setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -70,12 +82,46 @@ public abstract class GeneratedFilmActorImpl implements FilmActor {
         return foreignManager.stream().filter(Film.FILM_ID.equal(getFilmId())).findAny().orElse(null);
     }
     
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<FilmActor>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    }
+    
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("actorId = "    + Objects.toString(getActorId()));
-        sj.add("filmId = "     + Objects.toString(getFilmId()));
-        sj.add("lastUpdate = " + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.ACTOR_ID) + "actorId = " +        Objects.toString(getActorId()));
+        sj.add(starForModified(Identifier.FILM_ID) + "filmId = " +          Objects.toString(getFilmId()));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "FilmActorImpl " + sj.toString();
     }
     
@@ -84,9 +130,9 @@ public abstract class GeneratedFilmActorImpl implements FilmActor {
         if (this == that) { return true; }
         if (!(that instanceof FilmActor)) { return false; }
         final FilmActor thatFilmActor = (FilmActor)that;
-        if (this.getActorId() != thatFilmActor.getActorId()) {return false; }
-        if (this.getFilmId() != thatFilmActor.getFilmId()) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatFilmActor.getLastUpdate())) {return false; }
+        if (this.getActorId() != thatFilmActor.getActorId()) { return false; }
+        if (this.getFilmId() != thatFilmActor.getFilmId()) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatFilmActor.getLastUpdate())) { return false; }
         return true;
     }
     

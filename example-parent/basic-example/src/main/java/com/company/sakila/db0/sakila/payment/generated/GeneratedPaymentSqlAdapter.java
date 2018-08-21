@@ -6,8 +6,10 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.runtime.core.internal.util.sql.ResultSetUtil.*;
 
@@ -30,19 +32,17 @@ public abstract class GeneratedPaymentSqlAdapter implements SqlAdapter<Payment> 
     }
     
     protected Payment apply(ResultSet resultSet, int offset) throws SQLException {
-        return createEntity()
-            .setPaymentId(   resultSet.getInt(1 + offset))
-            .setCustomerId(  resultSet.getInt(2 + offset))
-            .setStaffId(     resultSet.getShort(3 + offset))
-            .setRentalId(    getInt(resultSet, 4 + offset))
-            .setAmount(      resultSet.getBigDecimal(5 + offset))
-            .setPaymentDate( resultSet.getTimestamp(6 + offset))
-            .setLastUpdate(  resultSet.getTimestamp(7 + offset))
-            ;
-    }
-    
-    protected PaymentImpl createEntity() {
-        return new PaymentImpl();
+        GeneratedPaymentImpl entity = new PaymentImpl();
+        entity.disableModificationTracking();
+        entity.setPaymentId(  resultSet.getInt(1 + offset));
+        entity.setCustomerId( resultSet.getInt(2 + offset));
+        entity.setStaffId(    resultSet.getShort(3 + offset));
+        entity.setRentalId(   getInt(resultSet, 4 + offset));
+        entity.setAmount(     resultSet.getBigDecimal(5 + offset));
+        entity.setPaymentDate(resultSet.getTimestamp(6 + offset));
+        entity.setLastUpdate( resultSet.getTimestamp(7 + offset));
+        entity.resetModificationTracking();
+        return entity;
     }
     
     @Override

@@ -4,12 +4,19 @@ import com.company.sakila.db0.sakila.address.Address;
 import com.company.sakila.db0.sakila.customer.Customer;
 import com.company.sakila.db0.sakila.store.Store;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -21,8 +28,9 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCustomerImpl implements Customer {
+public abstract class GeneratedCustomerImpl implements HasUpdatedColumns<Customer>, Customer {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int customerId;
     private short storeId;
     private String firstName;
@@ -32,6 +40,7 @@ public abstract class GeneratedCustomerImpl implements Customer {
     private int active;
     private Timestamp createDate;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedCustomerImpl() {}
     
@@ -82,54 +91,63 @@ public abstract class GeneratedCustomerImpl implements Customer {
     
     @Override
     public Customer setCustomerId(int customerId) {
+        columnUpdated(Identifier.CUSTOMER_ID);
         this.customerId = customerId;
         return this;
     }
     
     @Override
     public Customer setStoreId(short storeId) {
+        columnUpdated(Identifier.STORE_ID);
         this.storeId = storeId;
         return this;
     }
     
     @Override
     public Customer setFirstName(String firstName) {
+        columnUpdated(Identifier.FIRST_NAME);
         this.firstName = firstName;
         return this;
     }
     
     @Override
     public Customer setLastName(String lastName) {
+        columnUpdated(Identifier.LAST_NAME);
         this.lastName = lastName;
         return this;
     }
     
     @Override
     public Customer setEmail(String email) {
+        columnUpdated(Identifier.EMAIL);
         this.email = email;
         return this;
     }
     
     @Override
     public Customer setAddressId(int addressId) {
+        columnUpdated(Identifier.ADDRESS_ID);
         this.addressId = addressId;
         return this;
     }
     
     @Override
     public Customer setActive(int active) {
+        columnUpdated(Identifier.ACTIVE);
         this.active = active;
         return this;
     }
     
     @Override
     public Customer setCreateDate(Timestamp createDate) {
+        columnUpdated(Identifier.CREATE_DATE);
         this.createDate = createDate;
         return this;
     }
     
     @Override
     public Customer setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -144,18 +162,52 @@ public abstract class GeneratedCustomerImpl implements Customer {
         return foreignManager.stream().filter(Address.ADDRESS_ID.equal(getAddressId())).findAny().orElse(null);
     }
     
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Customer>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    }
+    
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("customerId = " + Objects.toString(getCustomerId()));
-        sj.add("storeId = "    + Objects.toString(getStoreId()));
-        sj.add("firstName = "  + Objects.toString(getFirstName()));
-        sj.add("lastName = "   + Objects.toString(getLastName()));
-        sj.add("email = "      + Objects.toString(OptionalUtil.unwrap(getEmail())));
-        sj.add("addressId = "  + Objects.toString(getAddressId()));
-        sj.add("active = "     + Objects.toString(getActive()));
-        sj.add("createDate = " + Objects.toString(getCreateDate()));
-        sj.add("lastUpdate = " + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.CUSTOMER_ID) + "customerId = " +  Objects.toString(getCustomerId()));
+        sj.add(starForModified(Identifier.STORE_ID) + "storeId = " +        Objects.toString(getStoreId()));
+        sj.add(starForModified(Identifier.FIRST_NAME) + "firstName = " +    Objects.toString(getFirstName()));
+        sj.add(starForModified(Identifier.LAST_NAME) + "lastName = " +      Objects.toString(getLastName()));
+        sj.add(starForModified(Identifier.EMAIL) + "email = " +             Objects.toString(OptionalUtil.unwrap(getEmail())));
+        sj.add(starForModified(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
+        sj.add(starForModified(Identifier.ACTIVE) + "active = " +           Objects.toString(getActive()));
+        sj.add(starForModified(Identifier.CREATE_DATE) + "createDate = " +  Objects.toString(getCreateDate()));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "CustomerImpl " + sj.toString();
     }
     
@@ -164,15 +216,15 @@ public abstract class GeneratedCustomerImpl implements Customer {
         if (this == that) { return true; }
         if (!(that instanceof Customer)) { return false; }
         final Customer thatCustomer = (Customer)that;
-        if (this.getCustomerId() != thatCustomer.getCustomerId()) {return false; }
-        if (this.getStoreId() != thatCustomer.getStoreId()) {return false; }
-        if (!Objects.equals(this.getFirstName(), thatCustomer.getFirstName())) {return false; }
-        if (!Objects.equals(this.getLastName(), thatCustomer.getLastName())) {return false; }
-        if (!Objects.equals(this.getEmail(), thatCustomer.getEmail())) {return false; }
-        if (this.getAddressId() != thatCustomer.getAddressId()) {return false; }
-        if (this.getActive() != thatCustomer.getActive()) {return false; }
-        if (!Objects.equals(this.getCreateDate(), thatCustomer.getCreateDate())) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatCustomer.getLastUpdate())) {return false; }
+        if (this.getCustomerId() != thatCustomer.getCustomerId()) { return false; }
+        if (this.getStoreId() != thatCustomer.getStoreId()) { return false; }
+        if (!Objects.equals(this.getFirstName(), thatCustomer.getFirstName())) { return false; }
+        if (!Objects.equals(this.getLastName(), thatCustomer.getLastName())) { return false; }
+        if (!Objects.equals(this.getEmail(), thatCustomer.getEmail())) { return false; }
+        if (this.getAddressId() != thatCustomer.getAddressId()) { return false; }
+        if (this.getActive() != thatCustomer.getActive()) { return false; }
+        if (!Objects.equals(this.getCreateDate(), thatCustomer.getCreateDate())) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatCustomer.getLastUpdate())) { return false; }
         return true;
     }
     
@@ -183,7 +235,7 @@ public abstract class GeneratedCustomerImpl implements Customer {
         hash = 31 * hash + Short.hashCode(getStoreId());
         hash = 31 * hash + Objects.hashCode(getFirstName());
         hash = 31 * hash + Objects.hashCode(getLastName());
-        hash = 31 * hash + Objects.hashCode(getEmail());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getEmail()));
         hash = 31 * hash + Integer.hashCode(getAddressId());
         hash = 31 * hash + Integer.hashCode(getActive());
         hash = 31 * hash + Objects.hashCode(getCreateDate());

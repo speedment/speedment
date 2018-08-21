@@ -4,13 +4,20 @@ import com.company.sakila.db0.sakila.address.Address;
 import com.company.sakila.db0.sakila.staff.Staff;
 import com.company.sakila.db0.sakila.store.Store;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.trait.HasUpdatedColumns;
+
 import java.sql.Blob;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 /**
  * The generated base implementation of the {@link
@@ -22,8 +29,9 @@ import java.util.StringJoiner;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedStaffImpl implements Staff {
+public abstract class GeneratedStaffImpl implements HasUpdatedColumns<Staff>, Staff {
     
+    private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private short staffId;
     private String firstName;
     private String lastName;
@@ -35,6 +43,7 @@ public abstract class GeneratedStaffImpl implements Staff {
     private String username;
     private String password;
     private Timestamp lastUpdate;
+    private Set<Identifier> updatedColumns_;
     
     protected GeneratedStaffImpl() {}
     
@@ -95,66 +104,77 @@ public abstract class GeneratedStaffImpl implements Staff {
     
     @Override
     public Staff setStaffId(short staffId) {
+        columnUpdated(Identifier.STAFF_ID);
         this.staffId = staffId;
         return this;
     }
     
     @Override
     public Staff setFirstName(String firstName) {
+        columnUpdated(Identifier.FIRST_NAME);
         this.firstName = firstName;
         return this;
     }
     
     @Override
     public Staff setLastName(String lastName) {
+        columnUpdated(Identifier.LAST_NAME);
         this.lastName = lastName;
         return this;
     }
     
     @Override
     public Staff setAddressId(int addressId) {
+        columnUpdated(Identifier.ADDRESS_ID);
         this.addressId = addressId;
         return this;
     }
     
     @Override
     public Staff setPicture(Blob picture) {
+        columnUpdated(Identifier.PICTURE);
         this.picture = picture;
         return this;
     }
     
     @Override
     public Staff setEmail(String email) {
+        columnUpdated(Identifier.EMAIL);
         this.email = email;
         return this;
     }
     
     @Override
     public Staff setStoreId(short storeId) {
+        columnUpdated(Identifier.STORE_ID);
         this.storeId = storeId;
         return this;
     }
     
     @Override
     public Staff setActive(String active) {
+        columnUpdated(Identifier.ACTIVE);
         this.active = active;
         return this;
     }
     
     @Override
     public Staff setUsername(String username) {
+        columnUpdated(Identifier.USERNAME);
         this.username = username;
         return this;
     }
     
     @Override
     public Staff setPassword(String password) {
+        columnUpdated(Identifier.PASSWORD);
         this.password = password;
         return this;
     }
     
     @Override
     public Staff setLastUpdate(Timestamp lastUpdate) {
+        columnUpdated(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -169,20 +189,54 @@ public abstract class GeneratedStaffImpl implements Staff {
         return foreignManager.stream().filter(Store.STORE_ID.equal(getStoreId())).findAny().orElse(null);
     }
     
+    void resetModificationTracking() {
+        updatedColumns_ = null;
+    }
+    
+    void disableModificationTracking() {
+        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+    }
+    
+    @Override
+    public void clearUpdatedColumns() {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            updatedColumns_ = null;
+        }
+    }
+    
+    private void columnUpdated(Identifier column) {
+        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (updatedColumns_ == null) {
+                updatedColumns_ = EnumSet.of(column);
+            } else {
+                updatedColumns_.add(column);
+            }
+        }
+    }
+    
+    @Override
+    public Stream<ColumnIdentifier<Staff>> updatedColumns() {
+        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForModified(Identifier id) {
+        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    }
+    
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add("staffId = "    + Objects.toString(getStaffId()));
-        sj.add("firstName = "  + Objects.toString(getFirstName()));
-        sj.add("lastName = "   + Objects.toString(getLastName()));
-        sj.add("addressId = "  + Objects.toString(getAddressId()));
-        sj.add("picture = "    + Objects.toString(OptionalUtil.unwrap(getPicture())));
-        sj.add("email = "      + Objects.toString(OptionalUtil.unwrap(getEmail())));
-        sj.add("storeId = "    + Objects.toString(getStoreId()));
-        sj.add("active = "     + Objects.toString(getActive()));
-        sj.add("username = "   + Objects.toString(getUsername()));
-        sj.add("password = "   + Objects.toString(OptionalUtil.unwrap(getPassword())));
-        sj.add("lastUpdate = " + Objects.toString(getLastUpdate()));
+        sj.add(starForModified(Identifier.STAFF_ID) + "staffId = " +        Objects.toString(getStaffId()));
+        sj.add(starForModified(Identifier.FIRST_NAME) + "firstName = " +    Objects.toString(getFirstName()));
+        sj.add(starForModified(Identifier.LAST_NAME) + "lastName = " +      Objects.toString(getLastName()));
+        sj.add(starForModified(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
+        sj.add(starForModified(Identifier.PICTURE) + "picture = " +         Objects.toString(OptionalUtil.unwrap(getPicture())));
+        sj.add(starForModified(Identifier.EMAIL) + "email = " +             Objects.toString(OptionalUtil.unwrap(getEmail())));
+        sj.add(starForModified(Identifier.STORE_ID) + "storeId = " +        Objects.toString(getStoreId()));
+        sj.add(starForModified(Identifier.ACTIVE) + "active = " +           Objects.toString(getActive()));
+        sj.add(starForModified(Identifier.USERNAME) + "username = " +       Objects.toString(getUsername()));
+        sj.add(starForModified(Identifier.PASSWORD) + "password = " +       Objects.toString(OptionalUtil.unwrap(getPassword())));
+        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "StaffImpl " + sj.toString();
     }
     
@@ -191,17 +245,17 @@ public abstract class GeneratedStaffImpl implements Staff {
         if (this == that) { return true; }
         if (!(that instanceof Staff)) { return false; }
         final Staff thatStaff = (Staff)that;
-        if (this.getStaffId() != thatStaff.getStaffId()) {return false; }
-        if (!Objects.equals(this.getFirstName(), thatStaff.getFirstName())) {return false; }
-        if (!Objects.equals(this.getLastName(), thatStaff.getLastName())) {return false; }
-        if (this.getAddressId() != thatStaff.getAddressId()) {return false; }
-        if (!Objects.equals(this.getPicture(), thatStaff.getPicture())) {return false; }
-        if (!Objects.equals(this.getEmail(), thatStaff.getEmail())) {return false; }
-        if (this.getStoreId() != thatStaff.getStoreId()) {return false; }
-        if (!Objects.equals(this.getActive(), thatStaff.getActive())) {return false; }
-        if (!Objects.equals(this.getUsername(), thatStaff.getUsername())) {return false; }
-        if (!Objects.equals(this.getPassword(), thatStaff.getPassword())) {return false; }
-        if (!Objects.equals(this.getLastUpdate(), thatStaff.getLastUpdate())) {return false; }
+        if (this.getStaffId() != thatStaff.getStaffId()) { return false; }
+        if (!Objects.equals(this.getFirstName(), thatStaff.getFirstName())) { return false; }
+        if (!Objects.equals(this.getLastName(), thatStaff.getLastName())) { return false; }
+        if (this.getAddressId() != thatStaff.getAddressId()) { return false; }
+        if (!Objects.equals(this.getPicture(), thatStaff.getPicture())) { return false; }
+        if (!Objects.equals(this.getEmail(), thatStaff.getEmail())) { return false; }
+        if (this.getStoreId() != thatStaff.getStoreId()) { return false; }
+        if (!Objects.equals(this.getActive(), thatStaff.getActive())) { return false; }
+        if (!Objects.equals(this.getUsername(), thatStaff.getUsername())) { return false; }
+        if (!Objects.equals(this.getPassword(), thatStaff.getPassword())) { return false; }
+        if (!Objects.equals(this.getLastUpdate(), thatStaff.getLastUpdate())) { return false; }
         return true;
     }
     
@@ -212,12 +266,12 @@ public abstract class GeneratedStaffImpl implements Staff {
         hash = 31 * hash + Objects.hashCode(getFirstName());
         hash = 31 * hash + Objects.hashCode(getLastName());
         hash = 31 * hash + Integer.hashCode(getAddressId());
-        hash = 31 * hash + Objects.hashCode(getPicture());
-        hash = 31 * hash + Objects.hashCode(getEmail());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getPicture()));
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getEmail()));
         hash = 31 * hash + Short.hashCode(getStoreId());
         hash = 31 * hash + Objects.hashCode(getActive());
         hash = 31 * hash + Objects.hashCode(getUsername());
-        hash = 31 * hash + Objects.hashCode(getPassword());
+        hash = 31 * hash + Objects.hashCode(OptionalUtil.unwrap(getPassword()));
         hash = 31 * hash + Objects.hashCode(getLastUpdate());
         return hash;
     }

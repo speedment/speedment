@@ -6,8 +6,10 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static com.speedment.common.injector.State.RESOLVED;
 
 /**
@@ -29,16 +31,14 @@ public abstract class GeneratedInventorySqlAdapter implements SqlAdapter<Invento
     }
     
     protected Inventory apply(ResultSet resultSet, int offset) throws SQLException {
-        return createEntity()
-            .setInventoryId( resultSet.getInt(1 + offset))
-            .setFilmId(      resultSet.getInt(2 + offset))
-            .setStoreId(     resultSet.getShort(3 + offset))
-            .setLastUpdate(  resultSet.getTimestamp(4 + offset))
-            ;
-    }
-    
-    protected InventoryImpl createEntity() {
-        return new InventoryImpl();
+        GeneratedInventoryImpl entity = new InventoryImpl();
+        entity.disableModificationTracking();
+        entity.setInventoryId(resultSet.getInt(1 + offset));
+        entity.setFilmId(     resultSet.getInt(2 + offset));
+        entity.setStoreId(    resultSet.getShort(3 + offset));
+        entity.setLastUpdate( resultSet.getTimestamp(4 + offset));
+        entity.resetModificationTracking();
+        return entity;
     }
     
     @Override

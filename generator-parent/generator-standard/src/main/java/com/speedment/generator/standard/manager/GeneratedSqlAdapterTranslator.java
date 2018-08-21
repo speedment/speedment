@@ -57,6 +57,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultType.isPrimitive;
 import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
+import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
@@ -136,7 +137,8 @@ public final class GeneratedSqlAdapterTranslator
                     //                        .add("persistenceComponent.install(tableIdentifier);")
                     //                    )
                     .add(generateApplyResultSet(getSupport(), file, table::columns))
-                    .add(generateCreateEntity(file))
+                    //.add(generateCreateEntity(file))
+                    //.add(generateParameterizedCreateEntity(file, table::columns))
                     .add(
                         Method.of("identifier", tableIdentifierType)
                             .public_()
@@ -211,10 +213,28 @@ public final class GeneratedSqlAdapterTranslator
     }
 
     private Method generateCreateEntity(File file) {
-        final Type entityImplType = getSupport().entityImplType();
+        final Type entityType = getSupport().entityType();
+        file.add(Import.of(entityType));
+        return Method.of("createEntity", entityType).protected_()
+            .add("return new " + getSupport().entityName() + "();");
+    }
+
+    private Method generateParameterizedCreateEntity(File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        final Type entityImplType = getSupport().generatedEntityImplType();
         file.add(Import.of(entityImplType));
-        return Method.of("createEntity", entityImplType).protected_()
-            .add("return new " + getSupport().entityImplName() + "();");
+        final Method method = Method.of("createEntity", entityImplType).private_();
+
+        columnsSupplier.get()
+            .filter(HasEnabled::isEnabled)
+            .forEachOrdered(c -> method.add(Field.of(getSupport().namer().javaVariableName((c.getJavaName())), fieldFor(c).getType())));
+
+        method.add("return new " + getSupport().generatedEntityImplName() + "(");
+        method.add(columnsSupplier.get()
+            .filter(HasEnabled::isEnabled)
+            .map(c -> indent(getSupport().namer().javaVariableName((c.getJavaName()))))
+            .collect(joining(",\n")));
+
+        return method.add(");");
     }
 
     @Override
