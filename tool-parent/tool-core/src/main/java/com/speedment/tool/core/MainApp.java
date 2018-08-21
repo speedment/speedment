@@ -71,6 +71,17 @@ public final class MainApp extends Application {
         final ProjectComponent projects     = INJECTOR.getOrThrow(ProjectComponent.class);
         final EventComponent events         = INJECTOR.getOrThrow(EventComponent.class);
         final InjectionLoader loader        = INJECTOR.getOrThrow(InjectionLoader.class);
+
+        events.on(UIEvent.class, ev -> {
+            if (ev == UIEvent.OPEN_MAIN_WINDOW) {
+                ui.showNotification(
+                    "You are running Speedment Open Source. Click here to " +
+                    "upgrade to Speedment Enterprise.",
+                    FontAwesome.PLUS, Palette.SUCCESS,
+                    () -> ui.browse("https://speedment.com/pricing")
+                );
+            }
+        });
         
         ui.start(this, stage);
 
