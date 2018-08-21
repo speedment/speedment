@@ -130,7 +130,9 @@ public final class InjectionLoaderImpl implements InjectionLoader {
         BrandUtil.applyBrand(injector, stage, scene);
         stage.setScene(scene);
         WindowSettingUtil.applySaveOnCloseMethod(stage, name);
-        WindowSettingUtil.applyStoredDisplaySettings(stage, name);
+        if ("Scene".equals(name)) {
+            WindowSettingUtil.applyStoredDisplaySettings(stage, name);
+        }
         stage.show();
         
         return parent;
