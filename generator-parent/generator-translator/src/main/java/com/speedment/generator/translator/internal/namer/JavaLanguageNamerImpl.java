@@ -17,6 +17,7 @@
 package com.speedment.generator.translator.internal.namer;
 
 import com.speedment.common.codegen.util.Formatting;
+import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 
 import java.util.function.Function;
@@ -58,7 +59,7 @@ public class JavaLanguageNamerImpl implements JavaLanguageNamer {
     }
 
     @Override
-    public String javaName(final String externalName, Function<Character, Character> mutator) {
+    public String javaName(final String externalName, CharUnaryOperator mutator) {
 
         final StringBuilder sb = new StringBuilder(javaNameFromExternal(externalName));
 
@@ -72,7 +73,7 @@ public class JavaLanguageNamerImpl implements JavaLanguageNamer {
         }
 
         if (sb.length() > startIndex) {
-            sb.replace(startIndex, startIndex + 1, String.valueOf(mutator.apply(sb.charAt(startIndex))));
+            sb.replace(startIndex, startIndex + 1, String.valueOf(mutator.applyAsChar(sb.charAt(startIndex))));
         }
         return sb.toString();
     }

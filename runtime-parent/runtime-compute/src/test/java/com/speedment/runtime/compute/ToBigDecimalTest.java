@@ -47,7 +47,7 @@ public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>>
     @Test
     public void testApplyAsInt() {
         strings().forEach(s -> {
-            final long actual = mapper.apply(s);
+            final long actual = mapper.applyAsLong(s);
             final long expected = instance.apply(s).longValue();
             assertEquals(expected, actual);
         });
@@ -66,7 +66,7 @@ public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>>
     @Test
     public void testMap() {
         strings().forEach(s -> {
-            final double expected = mapper.apply(s).doubleValue() + 1.0;
+            final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToBigDecimal<String> to = instance.map(l -> l.add(BigDecimal.ONE));
             final double actual = to.apply(s).doubleValue();
             assertEquals(expected, actual, EPSILON);
@@ -77,7 +77,7 @@ public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>>
     public void testCompose() {
         strings().forEach(s -> {
             final ToBigDecimalNullable<String> composed = instance.compose(str -> str + "A");
-            assertEquals(BigDecimal.valueOf(mapper.apply(s + "A")), composed.apply(s));
+            assertEquals(BigDecimal.valueOf(mapper.applyAsLong(s + "A")), composed.apply(s));
         });
     }
     
