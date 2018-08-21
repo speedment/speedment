@@ -16,12 +16,15 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -41,6 +44,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -175,6 +179,12 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
+        if (values.isEmpty()) {
+            LoggerManager.getLogger(ApplicationBuilder.LogType.PERSIST.getLoggerName())
+                .debug("No need to create SQL persist for " + Objects.toString(entity));
+            return entity;
+        }
+
         try {
             operationHandler.executeInsert(dbms, createInsertStatement(columnFilter), values, generatedFields, newGeneratedKeyConsumer(entity));
             if (hasDirtyColumns != null) {
@@ -209,6 +219,12 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         )
             .map(f -> toDatabaseType(f, entity))
             .collect(Collectors.toList());
+
+        if (values.isEmpty()) {
+            LoggerManager.getLogger(ApplicationBuilder.LogType.UPDATE.getLoggerName())
+                .debug("No need to create SQL update for " + Objects.toString(entity));
+            return entity;
+        }
 
         try {
             operationHandler.executeUpdate(dbms, createUpdateStatement(columnFilter), values);
