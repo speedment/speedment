@@ -7,7 +7,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.sql.Blob;
 import java.sql.Timestamp;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedStaffImpl implements HasUpdatedColumns<Staff>, Staff {
+public abstract class GeneratedStaffImpl implements HasDirtyColumns<Staff>, Staff {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private short staffId;
@@ -43,7 +43,7 @@ public abstract class GeneratedStaffImpl implements HasUpdatedColumns<Staff>, St
     private String username;
     private String password;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedStaffImpl() {}
     
@@ -104,77 +104,77 @@ public abstract class GeneratedStaffImpl implements HasUpdatedColumns<Staff>, St
     
     @Override
     public Staff setStaffId(short staffId) {
-        columnUpdated(Identifier.STAFF_ID);
+        allColumnsDirty();
         this.staffId = staffId;
         return this;
     }
     
     @Override
     public Staff setFirstName(String firstName) {
-        columnUpdated(Identifier.FIRST_NAME);
+        columnDirty(Identifier.FIRST_NAME);
         this.firstName = firstName;
         return this;
     }
     
     @Override
     public Staff setLastName(String lastName) {
-        columnUpdated(Identifier.LAST_NAME);
+        columnDirty(Identifier.LAST_NAME);
         this.lastName = lastName;
         return this;
     }
     
     @Override
     public Staff setAddressId(int addressId) {
-        columnUpdated(Identifier.ADDRESS_ID);
+        columnDirty(Identifier.ADDRESS_ID);
         this.addressId = addressId;
         return this;
     }
     
     @Override
     public Staff setPicture(Blob picture) {
-        columnUpdated(Identifier.PICTURE);
+        columnDirty(Identifier.PICTURE);
         this.picture = picture;
         return this;
     }
     
     @Override
     public Staff setEmail(String email) {
-        columnUpdated(Identifier.EMAIL);
+        columnDirty(Identifier.EMAIL);
         this.email = email;
         return this;
     }
     
     @Override
     public Staff setStoreId(short storeId) {
-        columnUpdated(Identifier.STORE_ID);
+        columnDirty(Identifier.STORE_ID);
         this.storeId = storeId;
         return this;
     }
     
     @Override
     public Staff setActive(String active) {
-        columnUpdated(Identifier.ACTIVE);
+        columnDirty(Identifier.ACTIVE);
         this.active = active;
         return this;
     }
     
     @Override
     public Staff setUsername(String username) {
-        columnUpdated(Identifier.USERNAME);
+        columnDirty(Identifier.USERNAME);
         this.username = username;
         return this;
     }
     
     @Override
     public Staff setPassword(String password) {
-        columnUpdated(Identifier.PASSWORD);
+        columnDirty(Identifier.PASSWORD);
         this.password = password;
         return this;
     }
     
     @Override
     public Staff setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -190,53 +190,59 @@ public abstract class GeneratedStaffImpl implements HasUpdatedColumns<Staff>, St
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<Staff>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<Staff>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.STAFF_ID) + "staffId = " +        Objects.toString(getStaffId()));
-        sj.add(starForModified(Identifier.FIRST_NAME) + "firstName = " +    Objects.toString(getFirstName()));
-        sj.add(starForModified(Identifier.LAST_NAME) + "lastName = " +      Objects.toString(getLastName()));
-        sj.add(starForModified(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
-        sj.add(starForModified(Identifier.PICTURE) + "picture = " +         Objects.toString(OptionalUtil.unwrap(getPicture())));
-        sj.add(starForModified(Identifier.EMAIL) + "email = " +             Objects.toString(OptionalUtil.unwrap(getEmail())));
-        sj.add(starForModified(Identifier.STORE_ID) + "storeId = " +        Objects.toString(getStoreId()));
-        sj.add(starForModified(Identifier.ACTIVE) + "active = " +           Objects.toString(getActive()));
-        sj.add(starForModified(Identifier.USERNAME) + "username = " +       Objects.toString(getUsername()));
-        sj.add(starForModified(Identifier.PASSWORD) + "password = " +       Objects.toString(OptionalUtil.unwrap(getPassword())));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.STAFF_ID) + "staffId = " +        Objects.toString(getStaffId()));
+        sj.add(starForDirty(Identifier.FIRST_NAME) + "firstName = " +    Objects.toString(getFirstName()));
+        sj.add(starForDirty(Identifier.LAST_NAME) + "lastName = " +      Objects.toString(getLastName()));
+        sj.add(starForDirty(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
+        sj.add(starForDirty(Identifier.PICTURE) + "picture = " +         Objects.toString(OptionalUtil.unwrap(getPicture())));
+        sj.add(starForDirty(Identifier.EMAIL) + "email = " +             Objects.toString(OptionalUtil.unwrap(getEmail())));
+        sj.add(starForDirty(Identifier.STORE_ID) + "storeId = " +        Objects.toString(getStoreId()));
+        sj.add(starForDirty(Identifier.ACTIVE) + "active = " +           Objects.toString(getActive()));
+        sj.add(starForDirty(Identifier.USERNAME) + "username = " +       Objects.toString(getUsername()));
+        sj.add(starForDirty(Identifier.PASSWORD) + "password = " +       Objects.toString(OptionalUtil.unwrap(getPassword())));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "StaffImpl " + sj.toString();
     }
     

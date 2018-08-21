@@ -8,7 +8,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedRentalImpl implements HasUpdatedColumns<Rental>, Rental {
+public abstract class GeneratedRentalImpl implements HasDirtyColumns<Rental>, Rental {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int rentalId;
@@ -39,7 +39,7 @@ public abstract class GeneratedRentalImpl implements HasUpdatedColumns<Rental>, 
     private Timestamp returnDate;
     private short staffId;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedRentalImpl() {}
     
@@ -80,49 +80,49 @@ public abstract class GeneratedRentalImpl implements HasUpdatedColumns<Rental>, 
     
     @Override
     public Rental setRentalId(int rentalId) {
-        columnUpdated(Identifier.RENTAL_ID);
+        allColumnsDirty();
         this.rentalId = rentalId;
         return this;
     }
     
     @Override
     public Rental setRentalDate(Timestamp rentalDate) {
-        columnUpdated(Identifier.RENTAL_DATE);
+        columnDirty(Identifier.RENTAL_DATE);
         this.rentalDate = rentalDate;
         return this;
     }
     
     @Override
     public Rental setInventoryId(int inventoryId) {
-        columnUpdated(Identifier.INVENTORY_ID);
+        columnDirty(Identifier.INVENTORY_ID);
         this.inventoryId = inventoryId;
         return this;
     }
     
     @Override
     public Rental setCustomerId(int customerId) {
-        columnUpdated(Identifier.CUSTOMER_ID);
+        columnDirty(Identifier.CUSTOMER_ID);
         this.customerId = customerId;
         return this;
     }
     
     @Override
     public Rental setReturnDate(Timestamp returnDate) {
-        columnUpdated(Identifier.RETURN_DATE);
+        columnDirty(Identifier.RETURN_DATE);
         this.returnDate = returnDate;
         return this;
     }
     
     @Override
     public Rental setStaffId(short staffId) {
-        columnUpdated(Identifier.STAFF_ID);
+        columnDirty(Identifier.STAFF_ID);
         this.staffId = staffId;
         return this;
     }
     
     @Override
     public Rental setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -143,49 +143,55 @@ public abstract class GeneratedRentalImpl implements HasUpdatedColumns<Rental>, 
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<Rental>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<Rental>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.RENTAL_ID) + "rentalId = " +        Objects.toString(getRentalId()));
-        sj.add(starForModified(Identifier.RENTAL_DATE) + "rentalDate = " +    Objects.toString(getRentalDate()));
-        sj.add(starForModified(Identifier.INVENTORY_ID) + "inventoryId = " +  Objects.toString(getInventoryId()));
-        sj.add(starForModified(Identifier.CUSTOMER_ID) + "customerId = " +    Objects.toString(getCustomerId()));
-        sj.add(starForModified(Identifier.RETURN_DATE) + "returnDate = " +    Objects.toString(OptionalUtil.unwrap(getReturnDate())));
-        sj.add(starForModified(Identifier.STAFF_ID) + "staffId = " +          Objects.toString(getStaffId()));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +    Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.RENTAL_ID) + "rentalId = " +        Objects.toString(getRentalId()));
+        sj.add(starForDirty(Identifier.RENTAL_DATE) + "rentalDate = " +    Objects.toString(getRentalDate()));
+        sj.add(starForDirty(Identifier.INVENTORY_ID) + "inventoryId = " +  Objects.toString(getInventoryId()));
+        sj.add(starForDirty(Identifier.CUSTOMER_ID) + "customerId = " +    Objects.toString(getCustomerId()));
+        sj.add(starForDirty(Identifier.RETURN_DATE) + "returnDate = " +    Objects.toString(OptionalUtil.unwrap(getReturnDate())));
+        sj.add(starForDirty(Identifier.STAFF_ID) + "staffId = " +          Objects.toString(getStaffId()));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +    Objects.toString(getLastUpdate()));
         return "RentalImpl " + sj.toString();
     }
     

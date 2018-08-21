@@ -3,7 +3,7 @@ package com.company.sakila.db0.sakila.language.generated;
 import com.company.sakila.db0.sakila.language.Language;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -23,13 +23,13 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedLanguageImpl implements HasUpdatedColumns<Language>, Language {
+public abstract class GeneratedLanguageImpl implements HasDirtyColumns<Language>, Language {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private short languageId;
     private String name;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedLanguageImpl() {}
     
@@ -50,65 +50,71 @@ public abstract class GeneratedLanguageImpl implements HasUpdatedColumns<Languag
     
     @Override
     public Language setLanguageId(short languageId) {
-        columnUpdated(Identifier.LANGUAGE_ID);
+        allColumnsDirty();
         this.languageId = languageId;
         return this;
     }
     
     @Override
     public Language setName(String name) {
-        columnUpdated(Identifier.NAME);
+        columnDirty(Identifier.NAME);
         this.name = name;
         return this;
     }
     
     @Override
     public Language setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<Language>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<Language>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.LANGUAGE_ID) + "languageId = " +  Objects.toString(getLanguageId()));
-        sj.add(starForModified(Identifier.NAME) + "name = " +               Objects.toString(getName()));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.LANGUAGE_ID) + "languageId = " +  Objects.toString(getLanguageId()));
+        sj.add(starForDirty(Identifier.NAME) + "name = " +               Objects.toString(getName()));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "LanguageImpl " + sj.toString();
     }
     

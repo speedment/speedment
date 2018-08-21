@@ -3,7 +3,7 @@ package com.company.sakila.db0.sakila.actor.generated;
 import com.company.sakila.db0.sakila.actor.Actor;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -23,14 +23,14 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedActorImpl implements HasUpdatedColumns<Actor>, Actor {
+public abstract class GeneratedActorImpl implements HasDirtyColumns<Actor>, Actor {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int actorId;
     private String firstName;
     private String lastName;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedActorImpl() {}
     
@@ -56,73 +56,79 @@ public abstract class GeneratedActorImpl implements HasUpdatedColumns<Actor>, Ac
     
     @Override
     public Actor setActorId(int actorId) {
-        columnUpdated(Identifier.ACTOR_ID);
+        allColumnsDirty();
         this.actorId = actorId;
         return this;
     }
     
     @Override
     public Actor setFirstName(String firstName) {
-        columnUpdated(Identifier.FIRST_NAME);
+        columnDirty(Identifier.FIRST_NAME);
         this.firstName = firstName;
         return this;
     }
     
     @Override
     public Actor setLastName(String lastName) {
-        columnUpdated(Identifier.LAST_NAME);
+        columnDirty(Identifier.LAST_NAME);
         this.lastName = lastName;
         return this;
     }
     
     @Override
     public Actor setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<Actor>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<Actor>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.ACTOR_ID) + "actorId = " +        Objects.toString(getActorId()));
-        sj.add(starForModified(Identifier.FIRST_NAME) + "firstName = " +    Objects.toString(getFirstName()));
-        sj.add(starForModified(Identifier.LAST_NAME) + "lastName = " +      Objects.toString(getLastName()));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.ACTOR_ID) + "actorId = " +        Objects.toString(getActorId()));
+        sj.add(starForDirty(Identifier.FIRST_NAME) + "firstName = " +    Objects.toString(getFirstName()));
+        sj.add(starForDirty(Identifier.LAST_NAME) + "lastName = " +      Objects.toString(getLastName()));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "ActorImpl " + sj.toString();
     }
     

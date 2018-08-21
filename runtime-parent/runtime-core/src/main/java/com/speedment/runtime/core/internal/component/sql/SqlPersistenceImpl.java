@@ -35,7 +35,7 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.SQLException;
@@ -159,12 +159,12 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
 
         // All entities are generated to implement HasUpdatedColumns, but we prefer to design it as a trait
         // instead of a behavior of a common super class.
-        final HasUpdatedColumns<ENTITY> hasUpdatedColumns =
-            (entity instanceof HasUpdatedColumns) ? (HasUpdatedColumns) entity : null;
+        final HasDirtyColumns<ENTITY> hasDirtyColumns =
+            (entity instanceof HasDirtyColumns) ? (HasDirtyColumns) entity : null;
 
         final Predicate<Column> columnFilter;
-        if (hasUpdatedColumns != null) {
-            Set<String> modifiedColumnIds = hasUpdatedColumns.updatedColumns().map(ColumnIdentifier::getColumnId).collect(Collectors.toSet());
+        if (hasDirtyColumns != null) {
+            Set<String> modifiedColumnIds = hasDirtyColumns.dirtyColumns().map(ColumnIdentifier::getColumnId).collect(Collectors.toSet());
             columnFilter = columnHandler.excludedInInsertStatement().negate().and(c -> modifiedColumnIds.contains(c.getId()));
         } else {
             columnFilter = columnHandler.excludedInInsertStatement().negate();
@@ -177,8 +177,8 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
 
         try {
             operationHandler.executeInsert(dbms, createInsertStatement(columnFilter), values, generatedFields, newGeneratedKeyConsumer(entity));
-            if (hasUpdatedColumns != null) {
-                hasUpdatedColumns.clearUpdatedColumns();
+            if (hasDirtyColumns != null) {
+                hasDirtyColumns.clearUpdatedColumns();
             }
             return entity;
         } catch (final SQLException ex) {
@@ -192,12 +192,12 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
 
         // All entities are generated to implement HasUpdatedColumns, but we prefer to design it as a trait
         // instead of a behavior of a common super class.
-        final HasUpdatedColumns<ENTITY> hasUpdatedColumns =
-            (entity instanceof HasUpdatedColumns) ? (HasUpdatedColumns) entity : null;
+        final HasDirtyColumns<ENTITY> hasDirtyColumns =
+            (entity instanceof HasDirtyColumns) ? (HasDirtyColumns) entity : null;
 
         final Predicate<Column> columnFilter;
-        if (hasUpdatedColumns != null) {
-            Set<String> modifiedColumnIds = hasUpdatedColumns.updatedColumns().map(ColumnIdentifier::getColumnId).collect(Collectors.toSet());
+        if (hasDirtyColumns != null) {
+            Set<String> modifiedColumnIds = hasDirtyColumns.dirtyColumns().map(ColumnIdentifier::getColumnId).collect(Collectors.toSet());
             columnFilter = columnHandler.excludedInUpdateStatement().negate().and(c -> modifiedColumnIds.contains(c.getId()));
         } else {
             columnFilter = columnHandler.excludedInUpdateStatement().negate();
@@ -212,8 +212,8 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
 
         try {
             operationHandler.executeUpdate(dbms, createUpdateStatement(columnFilter), values);
-            if (hasUpdatedColumns != null) {
-                hasUpdatedColumns.clearUpdatedColumns();
+            if (hasDirtyColumns != null) {
+                hasDirtyColumns.clearUpdatedColumns();
             }
             return entity;
         } catch (final SQLException ex) {

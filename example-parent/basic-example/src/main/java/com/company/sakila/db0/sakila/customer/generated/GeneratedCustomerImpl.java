@@ -7,7 +7,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCustomerImpl implements HasUpdatedColumns<Customer>, Customer {
+public abstract class GeneratedCustomerImpl implements HasDirtyColumns<Customer>, Customer {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int customerId;
@@ -40,7 +40,7 @@ public abstract class GeneratedCustomerImpl implements HasUpdatedColumns<Custome
     private int active;
     private Timestamp createDate;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedCustomerImpl() {}
     
@@ -91,63 +91,63 @@ public abstract class GeneratedCustomerImpl implements HasUpdatedColumns<Custome
     
     @Override
     public Customer setCustomerId(int customerId) {
-        columnUpdated(Identifier.CUSTOMER_ID);
+        allColumnsDirty();
         this.customerId = customerId;
         return this;
     }
     
     @Override
     public Customer setStoreId(short storeId) {
-        columnUpdated(Identifier.STORE_ID);
+        columnDirty(Identifier.STORE_ID);
         this.storeId = storeId;
         return this;
     }
     
     @Override
     public Customer setFirstName(String firstName) {
-        columnUpdated(Identifier.FIRST_NAME);
+        columnDirty(Identifier.FIRST_NAME);
         this.firstName = firstName;
         return this;
     }
     
     @Override
     public Customer setLastName(String lastName) {
-        columnUpdated(Identifier.LAST_NAME);
+        columnDirty(Identifier.LAST_NAME);
         this.lastName = lastName;
         return this;
     }
     
     @Override
     public Customer setEmail(String email) {
-        columnUpdated(Identifier.EMAIL);
+        columnDirty(Identifier.EMAIL);
         this.email = email;
         return this;
     }
     
     @Override
     public Customer setAddressId(int addressId) {
-        columnUpdated(Identifier.ADDRESS_ID);
+        columnDirty(Identifier.ADDRESS_ID);
         this.addressId = addressId;
         return this;
     }
     
     @Override
     public Customer setActive(int active) {
-        columnUpdated(Identifier.ACTIVE);
+        columnDirty(Identifier.ACTIVE);
         this.active = active;
         return this;
     }
     
     @Override
     public Customer setCreateDate(Timestamp createDate) {
-        columnUpdated(Identifier.CREATE_DATE);
+        columnDirty(Identifier.CREATE_DATE);
         this.createDate = createDate;
         return this;
     }
     
     @Override
     public Customer setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -163,51 +163,57 @@ public abstract class GeneratedCustomerImpl implements HasUpdatedColumns<Custome
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<Customer>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<Customer>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.CUSTOMER_ID) + "customerId = " +  Objects.toString(getCustomerId()));
-        sj.add(starForModified(Identifier.STORE_ID) + "storeId = " +        Objects.toString(getStoreId()));
-        sj.add(starForModified(Identifier.FIRST_NAME) + "firstName = " +    Objects.toString(getFirstName()));
-        sj.add(starForModified(Identifier.LAST_NAME) + "lastName = " +      Objects.toString(getLastName()));
-        sj.add(starForModified(Identifier.EMAIL) + "email = " +             Objects.toString(OptionalUtil.unwrap(getEmail())));
-        sj.add(starForModified(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
-        sj.add(starForModified(Identifier.ACTIVE) + "active = " +           Objects.toString(getActive()));
-        sj.add(starForModified(Identifier.CREATE_DATE) + "createDate = " +  Objects.toString(getCreateDate()));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.CUSTOMER_ID) + "customerId = " +  Objects.toString(getCustomerId()));
+        sj.add(starForDirty(Identifier.STORE_ID) + "storeId = " +        Objects.toString(getStoreId()));
+        sj.add(starForDirty(Identifier.FIRST_NAME) + "firstName = " +    Objects.toString(getFirstName()));
+        sj.add(starForDirty(Identifier.LAST_NAME) + "lastName = " +      Objects.toString(getLastName()));
+        sj.add(starForDirty(Identifier.EMAIL) + "email = " +             Objects.toString(OptionalUtil.unwrap(getEmail())));
+        sj.add(starForDirty(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
+        sj.add(starForDirty(Identifier.ACTIVE) + "active = " +           Objects.toString(getActive()));
+        sj.add(starForDirty(Identifier.CREATE_DATE) + "createDate = " +  Objects.toString(getCreateDate()));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "CustomerImpl " + sj.toString();
     }
     

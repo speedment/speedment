@@ -6,7 +6,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedFilmImpl implements HasUpdatedColumns<Film>, Film {
+public abstract class GeneratedFilmImpl implements HasDirtyColumns<Film>, Film {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int filmId;
@@ -46,7 +46,7 @@ public abstract class GeneratedFilmImpl implements HasUpdatedColumns<Film>, Film
     private String rating;
     private String specialFeatures;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedFilmImpl() {}
     
@@ -117,91 +117,91 @@ public abstract class GeneratedFilmImpl implements HasUpdatedColumns<Film>, Film
     
     @Override
     public Film setFilmId(int filmId) {
-        columnUpdated(Identifier.FILM_ID);
+        allColumnsDirty();
         this.filmId = filmId;
         return this;
     }
     
     @Override
     public Film setTitle(String title) {
-        columnUpdated(Identifier.TITLE);
+        columnDirty(Identifier.TITLE);
         this.title = title;
         return this;
     }
     
     @Override
     public Film setDescription(String description) {
-        columnUpdated(Identifier.DESCRIPTION);
+        columnDirty(Identifier.DESCRIPTION);
         this.description = description;
         return this;
     }
     
     @Override
     public Film setReleaseYear(Date releaseYear) {
-        columnUpdated(Identifier.RELEASE_YEAR);
+        columnDirty(Identifier.RELEASE_YEAR);
         this.releaseYear = releaseYear;
         return this;
     }
     
     @Override
     public Film setLanguageId(short languageId) {
-        columnUpdated(Identifier.LANGUAGE_ID);
+        columnDirty(Identifier.LANGUAGE_ID);
         this.languageId = languageId;
         return this;
     }
     
     @Override
     public Film setOriginalLanguageId(Short originalLanguageId) {
-        columnUpdated(Identifier.ORIGINAL_LANGUAGE_ID);
+        columnDirty(Identifier.ORIGINAL_LANGUAGE_ID);
         this.originalLanguageId = originalLanguageId;
         return this;
     }
     
     @Override
     public Film setRentalDuration(short rentalDuration) {
-        columnUpdated(Identifier.RENTAL_DURATION);
+        columnDirty(Identifier.RENTAL_DURATION);
         this.rentalDuration = rentalDuration;
         return this;
     }
     
     @Override
     public Film setRentalRate(BigDecimal rentalRate) {
-        columnUpdated(Identifier.RENTAL_RATE);
+        columnDirty(Identifier.RENTAL_RATE);
         this.rentalRate = rentalRate;
         return this;
     }
     
     @Override
     public Film setLength(Integer length) {
-        columnUpdated(Identifier.LENGTH);
+        columnDirty(Identifier.LENGTH);
         this.length = length;
         return this;
     }
     
     @Override
     public Film setReplacementCost(BigDecimal replacementCost) {
-        columnUpdated(Identifier.REPLACEMENT_COST);
+        columnDirty(Identifier.REPLACEMENT_COST);
         this.replacementCost = replacementCost;
         return this;
     }
     
     @Override
     public Film setRating(String rating) {
-        columnUpdated(Identifier.RATING);
+        columnDirty(Identifier.RATING);
         this.rating = rating;
         return this;
     }
     
     @Override
     public Film setSpecialFeatures(String specialFeatures) {
-        columnUpdated(Identifier.SPECIAL_FEATURES);
+        columnDirty(Identifier.SPECIAL_FEATURES);
         this.specialFeatures = specialFeatures;
         return this;
     }
     
     @Override
     public Film setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -221,55 +221,61 @@ public abstract class GeneratedFilmImpl implements HasUpdatedColumns<Film>, Film
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<Film>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<Film>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.FILM_ID) + "filmId = " +                           Objects.toString(getFilmId()));
-        sj.add(starForModified(Identifier.TITLE) + "title = " +                              Objects.toString(getTitle()));
-        sj.add(starForModified(Identifier.DESCRIPTION) + "description = " +                  Objects.toString(OptionalUtil.unwrap(getDescription())));
-        sj.add(starForModified(Identifier.RELEASE_YEAR) + "releaseYear = " +                 Objects.toString(OptionalUtil.unwrap(getReleaseYear())));
-        sj.add(starForModified(Identifier.LANGUAGE_ID) + "languageId = " +                   Objects.toString(getLanguageId()));
-        sj.add(starForModified(Identifier.ORIGINAL_LANGUAGE_ID) + "originalLanguageId = " +  Objects.toString(OptionalUtil.unwrap(getOriginalLanguageId())));
-        sj.add(starForModified(Identifier.RENTAL_DURATION) + "rentalDuration = " +           Objects.toString(getRentalDuration()));
-        sj.add(starForModified(Identifier.RENTAL_RATE) + "rentalRate = " +                   Objects.toString(getRentalRate()));
-        sj.add(starForModified(Identifier.LENGTH) + "length = " +                            Objects.toString(OptionalUtil.unwrap(getLength())));
-        sj.add(starForModified(Identifier.REPLACEMENT_COST) + "replacementCost = " +         Objects.toString(getReplacementCost()));
-        sj.add(starForModified(Identifier.RATING) + "rating = " +                            Objects.toString(OptionalUtil.unwrap(getRating())));
-        sj.add(starForModified(Identifier.SPECIAL_FEATURES) + "specialFeatures = " +         Objects.toString(OptionalUtil.unwrap(getSpecialFeatures())));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +                   Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.FILM_ID) + "filmId = " +                           Objects.toString(getFilmId()));
+        sj.add(starForDirty(Identifier.TITLE) + "title = " +                              Objects.toString(getTitle()));
+        sj.add(starForDirty(Identifier.DESCRIPTION) + "description = " +                  Objects.toString(OptionalUtil.unwrap(getDescription())));
+        sj.add(starForDirty(Identifier.RELEASE_YEAR) + "releaseYear = " +                 Objects.toString(OptionalUtil.unwrap(getReleaseYear())));
+        sj.add(starForDirty(Identifier.LANGUAGE_ID) + "languageId = " +                   Objects.toString(getLanguageId()));
+        sj.add(starForDirty(Identifier.ORIGINAL_LANGUAGE_ID) + "originalLanguageId = " +  Objects.toString(OptionalUtil.unwrap(getOriginalLanguageId())));
+        sj.add(starForDirty(Identifier.RENTAL_DURATION) + "rentalDuration = " +           Objects.toString(getRentalDuration()));
+        sj.add(starForDirty(Identifier.RENTAL_RATE) + "rentalRate = " +                   Objects.toString(getRentalRate()));
+        sj.add(starForDirty(Identifier.LENGTH) + "length = " +                            Objects.toString(OptionalUtil.unwrap(getLength())));
+        sj.add(starForDirty(Identifier.REPLACEMENT_COST) + "replacementCost = " +         Objects.toString(getReplacementCost()));
+        sj.add(starForDirty(Identifier.RATING) + "rating = " +                            Objects.toString(OptionalUtil.unwrap(getRating())));
+        sj.add(starForDirty(Identifier.SPECIAL_FEATURES) + "specialFeatures = " +         Objects.toString(OptionalUtil.unwrap(getSpecialFeatures())));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +                   Objects.toString(getLastUpdate()));
         return "FilmImpl " + sj.toString();
     }
     

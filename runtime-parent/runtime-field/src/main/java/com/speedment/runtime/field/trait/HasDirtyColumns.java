@@ -2,8 +2,6 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 
-import java.util.Collections;
-import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -13,7 +11,7 @@ import java.util.stream.Stream;
  *
  * @param <ENTITY>
  */
-public interface HasUpdatedColumns<ENTITY> {
+public interface HasDirtyColumns<ENTITY> {
 
     /**
      * Returns identifiers for all columns that contain updated values. Used to allow for selective INSERT and UPDATE
@@ -22,11 +20,11 @@ public interface HasUpdatedColumns<ENTITY> {
      * @see #clearUpdatedColumns()
      * @return identifiers for all columns that contain updated values
      */
-    Stream<ColumnIdentifier<ENTITY>> updatedColumns();
+    Stream<ColumnIdentifier<ENTITY>> dirtyColumns();
 
     /**
      * Resets the set of updated columns. Immediately after a call to this method,
-     * the {@link #updatedColumns} method will
+     * the {@link #dirtyColumns} method will
      * return an empty stream.
      */
     void clearUpdatedColumns();

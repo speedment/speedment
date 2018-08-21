@@ -6,7 +6,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.sql.Blob;
 import java.sql.Timestamp;
@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedAddressImpl implements HasUpdatedColumns<Address>, Address {
+public abstract class GeneratedAddressImpl implements HasDirtyColumns<Address>, Address {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int addressId;
@@ -40,7 +40,7 @@ public abstract class GeneratedAddressImpl implements HasUpdatedColumns<Address>
     private String phone;
     private Blob location;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedAddressImpl() {}
     
@@ -91,63 +91,63 @@ public abstract class GeneratedAddressImpl implements HasUpdatedColumns<Address>
     
     @Override
     public Address setAddressId(int addressId) {
-        columnUpdated(Identifier.ADDRESS_ID);
+        allColumnsDirty();
         this.addressId = addressId;
         return this;
     }
     
     @Override
     public Address setAddress(String address) {
-        columnUpdated(Identifier.ADDRESS);
+        columnDirty(Identifier.ADDRESS);
         this.address = address;
         return this;
     }
     
     @Override
     public Address setAddress2(String address2) {
-        columnUpdated(Identifier.ADDRESS2);
+        columnDirty(Identifier.ADDRESS2);
         this.address2 = address2;
         return this;
     }
     
     @Override
     public Address setDistrict(String district) {
-        columnUpdated(Identifier.DISTRICT);
+        columnDirty(Identifier.DISTRICT);
         this.district = district;
         return this;
     }
     
     @Override
     public Address setCityId(int cityId) {
-        columnUpdated(Identifier.CITY_ID);
+        columnDirty(Identifier.CITY_ID);
         this.cityId = cityId;
         return this;
     }
     
     @Override
     public Address setPostalCode(String postalCode) {
-        columnUpdated(Identifier.POSTAL_CODE);
+        columnDirty(Identifier.POSTAL_CODE);
         this.postalCode = postalCode;
         return this;
     }
     
     @Override
     public Address setPhone(String phone) {
-        columnUpdated(Identifier.PHONE);
+        columnDirty(Identifier.PHONE);
         this.phone = phone;
         return this;
     }
     
     @Override
     public Address setLocation(Blob location) {
-        columnUpdated(Identifier.LOCATION);
+        columnDirty(Identifier.LOCATION);
         this.location = location;
         return this;
     }
     
     @Override
     public Address setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -158,51 +158,57 @@ public abstract class GeneratedAddressImpl implements HasUpdatedColumns<Address>
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<Address>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<Address>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
-        sj.add(starForModified(Identifier.ADDRESS) + "address = " +         Objects.toString(getAddress()));
-        sj.add(starForModified(Identifier.ADDRESS2) + "address2 = " +       Objects.toString(OptionalUtil.unwrap(getAddress2())));
-        sj.add(starForModified(Identifier.DISTRICT) + "district = " +       Objects.toString(getDistrict()));
-        sj.add(starForModified(Identifier.CITY_ID) + "cityId = " +          Objects.toString(getCityId()));
-        sj.add(starForModified(Identifier.POSTAL_CODE) + "postalCode = " +  Objects.toString(OptionalUtil.unwrap(getPostalCode())));
-        sj.add(starForModified(Identifier.PHONE) + "phone = " +             Objects.toString(getPhone()));
-        sj.add(starForModified(Identifier.LOCATION) + "location = " +       Objects.toString(getLocation()));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.ADDRESS_ID) + "addressId = " +    Objects.toString(getAddressId()));
+        sj.add(starForDirty(Identifier.ADDRESS) + "address = " +         Objects.toString(getAddress()));
+        sj.add(starForDirty(Identifier.ADDRESS2) + "address2 = " +       Objects.toString(OptionalUtil.unwrap(getAddress2())));
+        sj.add(starForDirty(Identifier.DISTRICT) + "district = " +       Objects.toString(getDistrict()));
+        sj.add(starForDirty(Identifier.CITY_ID) + "cityId = " +          Objects.toString(getCityId()));
+        sj.add(starForDirty(Identifier.POSTAL_CODE) + "postalCode = " +  Objects.toString(OptionalUtil.unwrap(getPostalCode())));
+        sj.add(starForDirty(Identifier.PHONE) + "phone = " +             Objects.toString(getPhone()));
+        sj.add(starForDirty(Identifier.LOCATION) + "location = " +       Objects.toString(getLocation()));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "AddressImpl " + sj.toString();
     }
     

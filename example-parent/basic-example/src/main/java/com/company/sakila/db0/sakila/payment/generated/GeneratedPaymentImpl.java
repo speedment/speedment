@@ -8,7 +8,7 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedPaymentImpl implements HasUpdatedColumns<Payment>, Payment {
+public abstract class GeneratedPaymentImpl implements HasDirtyColumns<Payment>, Payment {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int paymentId;
@@ -41,7 +41,7 @@ public abstract class GeneratedPaymentImpl implements HasUpdatedColumns<Payment>
     private BigDecimal amount;
     private Timestamp paymentDate;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedPaymentImpl() {}
     
@@ -82,49 +82,49 @@ public abstract class GeneratedPaymentImpl implements HasUpdatedColumns<Payment>
     
     @Override
     public Payment setPaymentId(int paymentId) {
-        columnUpdated(Identifier.PAYMENT_ID);
+        allColumnsDirty();
         this.paymentId = paymentId;
         return this;
     }
     
     @Override
     public Payment setCustomerId(int customerId) {
-        columnUpdated(Identifier.CUSTOMER_ID);
+        columnDirty(Identifier.CUSTOMER_ID);
         this.customerId = customerId;
         return this;
     }
     
     @Override
     public Payment setStaffId(short staffId) {
-        columnUpdated(Identifier.STAFF_ID);
+        columnDirty(Identifier.STAFF_ID);
         this.staffId = staffId;
         return this;
     }
     
     @Override
     public Payment setRentalId(Integer rentalId) {
-        columnUpdated(Identifier.RENTAL_ID);
+        columnDirty(Identifier.RENTAL_ID);
         this.rentalId = rentalId;
         return this;
     }
     
     @Override
     public Payment setAmount(BigDecimal amount) {
-        columnUpdated(Identifier.AMOUNT);
+        columnDirty(Identifier.AMOUNT);
         this.amount = amount;
         return this;
     }
     
     @Override
     public Payment setPaymentDate(Timestamp paymentDate) {
-        columnUpdated(Identifier.PAYMENT_DATE);
+        columnDirty(Identifier.PAYMENT_DATE);
         this.paymentDate = paymentDate;
         return this;
     }
     
     @Override
     public Payment setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -149,49 +149,55 @@ public abstract class GeneratedPaymentImpl implements HasUpdatedColumns<Payment>
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<Payment>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<Payment>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.PAYMENT_ID) + "paymentId = " +      Objects.toString(getPaymentId()));
-        sj.add(starForModified(Identifier.CUSTOMER_ID) + "customerId = " +    Objects.toString(getCustomerId()));
-        sj.add(starForModified(Identifier.STAFF_ID) + "staffId = " +          Objects.toString(getStaffId()));
-        sj.add(starForModified(Identifier.RENTAL_ID) + "rentalId = " +        Objects.toString(OptionalUtil.unwrap(getRentalId())));
-        sj.add(starForModified(Identifier.AMOUNT) + "amount = " +             Objects.toString(getAmount()));
-        sj.add(starForModified(Identifier.PAYMENT_DATE) + "paymentDate = " +  Objects.toString(getPaymentDate()));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +    Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.PAYMENT_ID) + "paymentId = " +      Objects.toString(getPaymentId()));
+        sj.add(starForDirty(Identifier.CUSTOMER_ID) + "customerId = " +    Objects.toString(getCustomerId()));
+        sj.add(starForDirty(Identifier.STAFF_ID) + "staffId = " +          Objects.toString(getStaffId()));
+        sj.add(starForDirty(Identifier.RENTAL_ID) + "rentalId = " +        Objects.toString(OptionalUtil.unwrap(getRentalId())));
+        sj.add(starForDirty(Identifier.AMOUNT) + "amount = " +             Objects.toString(getAmount()));
+        sj.add(starForDirty(Identifier.PAYMENT_DATE) + "paymentDate = " +  Objects.toString(getPaymentDate()));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +    Objects.toString(getLastUpdate()));
         return "PaymentImpl " + sj.toString();
     }
     

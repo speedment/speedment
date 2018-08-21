@@ -6,7 +6,7 @@ import com.company.sakila.db0.sakila.film_category.FilmCategory;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -26,13 +26,13 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedFilmCategoryImpl implements HasUpdatedColumns<FilmCategory>, FilmCategory {
+public abstract class GeneratedFilmCategoryImpl implements HasDirtyColumns<FilmCategory>, FilmCategory {
     
     private final static Set<Identifier> DISABLED_MODIFICATION_TRACKING = Collections.emptySet();
     private int filmId;
     private short categoryId;
     private Timestamp lastUpdate;
-    private Set<Identifier> updatedColumns_;
+    private Set<Identifier> dirtyColumns_;
     
     protected GeneratedFilmCategoryImpl() {}
     
@@ -53,21 +53,21 @@ public abstract class GeneratedFilmCategoryImpl implements HasUpdatedColumns<Fil
     
     @Override
     public FilmCategory setFilmId(int filmId) {
-        columnUpdated(Identifier.FILM_ID);
+        allColumnsDirty();
         this.filmId = filmId;
         return this;
     }
     
     @Override
     public FilmCategory setCategoryId(short categoryId) {
-        columnUpdated(Identifier.CATEGORY_ID);
+        allColumnsDirty();
         this.categoryId = categoryId;
         return this;
     }
     
     @Override
     public FilmCategory setLastUpdate(Timestamp lastUpdate) {
-        columnUpdated(Identifier.LAST_UPDATE);
+        columnDirty(Identifier.LAST_UPDATE);
         this.lastUpdate = lastUpdate;
         return this;
     }
@@ -83,45 +83,51 @@ public abstract class GeneratedFilmCategoryImpl implements HasUpdatedColumns<Fil
     }
     
     void resetModificationTracking() {
-        updatedColumns_ = null;
+        dirtyColumns_ = null;
     }
     
     void disableModificationTracking() {
-        updatedColumns_ = DISABLED_MODIFICATION_TRACKING;
+        dirtyColumns_ = DISABLED_MODIFICATION_TRACKING;
     }
     
     @Override
     public void clearUpdatedColumns() {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            updatedColumns_ = null;
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = null;
         }
     }
     
-    private void columnUpdated(Identifier column) {
-        if (updatedColumns_ != DISABLED_MODIFICATION_TRACKING) {
-            if (updatedColumns_ == null) {
-                updatedColumns_ = EnumSet.of(column);
+    private void columnDirty(Identifier column) {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            if (dirtyColumns_ == null) {
+                dirtyColumns_ = EnumSet.of(column);
             } else {
-                updatedColumns_.add(column);
+                dirtyColumns_.add(column);
             }
         }
     }
     
-    @Override
-    public Stream<ColumnIdentifier<FilmCategory>> updatedColumns() {
-        return updatedColumns_ != null ? updatedColumns_.stream().map(i -> i) : Stream.empty();
+    private void allColumnsDirty() {
+        if (dirtyColumns_ != DISABLED_MODIFICATION_TRACKING) {
+            dirtyColumns_ = EnumSet.allOf(Identifier.class);
+        }
     }
     
-    private String starForModified(Identifier id) {
-        return updatedColumns_ != null && updatedColumns_.contains(id) ? "*" : "";
+    @Override
+    public Stream<ColumnIdentifier<FilmCategory>> dirtyColumns() {
+        return dirtyColumns_ != null ? dirtyColumns_.stream().map(i -> i) : Stream.empty();
+    }
+    
+    private String starForDirty(Identifier id) {
+        return dirtyColumns_ != null && dirtyColumns_.contains(id) ? "*" : "";
     }
     
     @Override
     public String toString() {
         final StringJoiner sj = new StringJoiner(", ", "{ ", " }");
-        sj.add(starForModified(Identifier.FILM_ID) + "filmId = " +          Objects.toString(getFilmId()));
-        sj.add(starForModified(Identifier.CATEGORY_ID) + "categoryId = " +  Objects.toString(getCategoryId()));
-        sj.add(starForModified(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
+        sj.add(starForDirty(Identifier.FILM_ID) + "filmId = " +          Objects.toString(getFilmId()));
+        sj.add(starForDirty(Identifier.CATEGORY_ID) + "categoryId = " +  Objects.toString(getCategoryId()));
+        sj.add(starForDirty(Identifier.LAST_UPDATE) + "lastUpdate = " +  Objects.toString(getLastUpdate()));
         return "FilmCategoryImpl " + sj.toString();
     }
     

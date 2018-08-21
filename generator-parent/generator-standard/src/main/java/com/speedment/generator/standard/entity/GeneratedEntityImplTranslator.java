@@ -39,16 +39,14 @@ import com.speedment.generator.standard.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.component.TypeMapperComponent;
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.trait.HasUpdatedColumns;
+import com.speedment.runtime.field.trait.HasDirtyColumns;
 
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -60,12 +58,13 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedEntityImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    static final String UPDATED_COLUMNS_NAME = "updatedColumns_";
-    private static final String SET_UPDATED_COLUMN_NAME = "columnUpdated";
+    private static final String DIRTY_COLUMNS_NAME = "dirtyColumns_";
+    private static final String SET_COLUMN_DIRTY_NAME = "columnDirty";
+    private static final String SET_ALL_COLUMNS_DIRTY_NAME = "allColumnsDirty";
     private static final String DISABLED_MODIFICATION_TRACKING_NAME = "DISABLED_MODIFICATION_TRACKING";
     public static final String RESET_MODIFICATION_TRACKING_NAME = "resetModificationTracking";
     public static final String DISABLE_MODIFICATION_TRACKING_NAME = "disableModificationTracking";
-    private static final String TO_STRING_HELPER_NAME = "starForModified";
+    private static final String TO_STRING_HELPER_NAME = "starForDirty";
 
     @Inject private TypeMapperComponent typeMappers;
     @Inject private Injector injector;
@@ -97,7 +96,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             .forEveryTable((clazz, table) ->
                 clazz.public_()
                     .abstract_()
-                    .implement(SimpleParameterizedType.create(HasUpdatedColumns.class, getSupport().entityType()))
+                    .implement(SimpleParameterizedType.create(HasDirtyColumns.class, getSupport().entityType()))
                     .add(getSupport().entityType())
                     .add(Constructor.of().protected_())
             )
@@ -113,16 +112,16 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             )
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> clazz
                 .add(Method.of(RESET_MODIFICATION_TRACKING_NAME, void.class)
-                    .add(UPDATED_COLUMNS_NAME + " = null;")
+                    .add(DIRTY_COLUMNS_NAME + " = null;")
                 )
                 .add(Method.of(DISABLE_MODIFICATION_TRACKING_NAME, void.class)
-                    .add(UPDATED_COLUMNS_NAME + " = " + DISABLED_MODIFICATION_TRACKING_NAME + ";")
+                    .add(DIRTY_COLUMNS_NAME + " = " + DISABLED_MODIFICATION_TRACKING_NAME + ";")
                 )
                 .add(Method.of("clearUpdatedColumns", void.class)
                     .public_()
                     .override()
-                    .add("if (" + UPDATED_COLUMNS_NAME + " != " + DISABLED_MODIFICATION_TRACKING_NAME + ") "
-                        + Formatting.block(UPDATED_COLUMNS_NAME + " = null;"))
+                    .add("if (" + DIRTY_COLUMNS_NAME + " != " + DISABLED_MODIFICATION_TRACKING_NAME + ") "
+                        + Formatting.block(DIRTY_COLUMNS_NAME + " = null;"))
                 )
             )
 
@@ -131,29 +130,33 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
              */
             .forEveryTable(Phase.POST_MAKE, (clazz, table) ->
                 {
-                    clazz.add(Field.of(UPDATED_COLUMNS_NAME,
+                    clazz.add(Field.of(DIRTY_COLUMNS_NAME,
                         SimpleParameterizedType.create(Set.class, SimpleType.create(IDENTIFIER_NAME)))
                         .private_());
 
-                    clazz.add(Method.of(SET_UPDATED_COLUMN_NAME, void.class)
+                    clazz.add(Method.of(SET_COLUMN_DIRTY_NAME, void.class)
                         .private_()
                         .add(Field.of("column", SimpleType.create(IDENTIFIER_NAME)))
-                        .add("if (" + UPDATED_COLUMNS_NAME + " != " + DISABLED_MODIFICATION_TRACKING_NAME + ") "
+                        .add("if (" + DIRTY_COLUMNS_NAME + " != " + DISABLED_MODIFICATION_TRACKING_NAME + ") "
                             + Formatting.block(
-                            "if (" + UPDATED_COLUMNS_NAME + " == null) "
-                                + Formatting.block(UPDATED_COLUMNS_NAME + " = EnumSet.of(column);")
+                            "if (" + DIRTY_COLUMNS_NAME + " == null) "
+                                + Formatting.block(DIRTY_COLUMNS_NAME + " = EnumSet.of(column);")
                                 + " else "
-                                + Formatting.block(UPDATED_COLUMNS_NAME + ".add(column);"))));
+                                + Formatting.block(DIRTY_COLUMNS_NAME + ".add(column);"))));
+                    clazz.add(Method.of(SET_ALL_COLUMNS_DIRTY_NAME, void.class)
+                        .private_()
+                        .add("if (" + DIRTY_COLUMNS_NAME + " != " + DISABLED_MODIFICATION_TRACKING_NAME + ") "
+                            + Formatting.block(DIRTY_COLUMNS_NAME + " = EnumSet.allOf(Identifier.class);")));
 
                     clazz.add(Import.of(EnumSet.class));
 
-                    clazz.add(Method.of(UPDATED_COLUMNS_NAME.replace("_", ""),
+                    clazz.add(Method.of(DIRTY_COLUMNS_NAME.replace("_", ""),
                         SimpleParameterizedType.create(Stream.class,
                             SimpleParameterizedType.create(ColumnIdentifier.class,
                                 getSupport().entityType())))
                         .public_()
                         .override()
-                        .add("return " + UPDATED_COLUMNS_NAME + " != null ? " + UPDATED_COLUMNS_NAME + ".stream().map(i -> i) : Stream.empty();"));
+                        .add("return " + DIRTY_COLUMNS_NAME + " != null ? " + DIRTY_COLUMNS_NAME + ".stream().map(i -> i) : Stream.empty();"));
                 }
             )
 
@@ -185,14 +188,21 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
              * Setters
              */
             .forEveryColumn((clazz, col) ->
-                clazz
-                    .add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
+                {
+                    final Method m = Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
                         .public_()
                         .add(OVERRIDE)
-                        .add(fieldFor(col))
-                        .add(SET_UPDATED_COLUMN_NAME + "(" + IDENTIFIER_NAME + "." + getSupport().namer().javaStaticFieldName(col.getJavaName()) + ");")
+                        .add(fieldFor(col));
+                    if (getSupport().tableOrThrow().primaryKeyColumns().anyMatch(pkColumn -> pkColumn.getId().equals(col.getId()))) {
+                        m.add(SET_ALL_COLUMNS_DIRTY_NAME + "();");
+                    } else {
+                        m.add(SET_COLUMN_DIRTY_NAME + "(" + IDENTIFIER_NAME + "." + getSupport().namer().javaStaticFieldName(col.getJavaName()) + ");");
+                    }
+                    clazz.add(m
                         .add("this." + getSupport().variableName(col) + " = " + getSupport().variableName(col) + ";")
-                        .add("return this;"))
+                        .add("return this;")
+                    );
+                }
             )
             
             /**
@@ -255,7 +265,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
         return Method.of(TO_STRING_HELPER_NAME, String.class)
             .private_()
             .add(Field.of("id", SimpleType.create("Identifier")))
-            .add("return " + UPDATED_COLUMNS_NAME + " != null && " + UPDATED_COLUMNS_NAME + ".contains(id) ? \"*\" : \"\";");
+            .add("return " + DIRTY_COLUMNS_NAME + " != null && " + DIRTY_COLUMNS_NAME + ".contains(id) ? \"*\" : \"\";");
     }
 
     protected Method toStringMethod(File file) {
