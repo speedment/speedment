@@ -66,6 +66,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -453,6 +454,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.setGraphic(FontAwesome.EXCLAMATION_TRIANGLE.view());
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
         if (ex == null) {
             alert.setTitle("Error");
