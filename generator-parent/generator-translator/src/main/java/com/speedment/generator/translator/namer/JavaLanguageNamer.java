@@ -17,6 +17,8 @@
 package com.speedment.generator.translator.namer;
 
 import static com.speedment.common.codegen.util.Formatting.ucfirst;
+
+import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.common.injector.annotation.InjectKey;
 import static com.speedment.runtime.core.internal.util.sql.SqlUtil.unQuote;
 import static java.util.Objects.requireNonNull;
@@ -77,7 +79,7 @@ public interface JavaLanguageNamer {
      * {@link #javaNameFromExternal(java.lang.String) } method and then applying
      * the given mutator on the first character (if any)
      */
-    String javaName(final String externalName, Function<Character, Character> mutator);
+    String javaName(final String externalName, CharUnaryOperator mutator);
 
     /**
      * Returns the java name (e.g. "someName") by applying the 

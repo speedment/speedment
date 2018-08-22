@@ -45,7 +45,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     @Test
     public void testApplyAsInt() {
         strings().forEach(s -> {
-            final long actual = mapper.apply(s);
+            final long actual = mapper.applyAsLong(s);
             final long expected = instance.applyAsByte(s);
             assertEquals(expected, actual);
         });
@@ -54,7 +54,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     @Test
     public void testMapToDouble() {
         strings().forEach(s -> {
-            final double expected = mapper.apply(s).doubleValue() + 1.0;
+            final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToDouble<String> toDouble = instance.mapToDouble(l -> l + 1);
             final double actual = toDouble.applyAsDouble(s);
             assertEquals(expected, actual, EPSILON);
@@ -64,7 +64,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     @Test
     public void testMap() {
         strings().forEach(s -> {
-            final double expected = mapper.apply(s).doubleValue() + 1.0;
+            final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToByte<String> to = instance.map(l -> (byte) (l + 1));
             final double actual = to.applyAsByte(s);
             assertEquals(expected, actual, EPSILON);
@@ -75,7 +75,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     public void testCompose() {
         strings().forEach(s -> {
             final ToByteNullable<String> composed = instance.compose(str -> str + "A");
-            assertEquals((long) mapper.apply(s + "A"), composed.applyAsByte(s));
+            assertEquals( mapper.applyAsLong(s + "A"), composed.applyAsByte(s));
         });
     }
     

@@ -45,7 +45,7 @@ public final class ToShortTest extends AbstractToTest<ToShort<String>> {
     @Test
     public void testApplyAsInt() {
         strings().forEach(s -> {
-            final long actual = mapper.apply(s);
+            final long actual = mapper.applyAsLong(s);
             final long expected = instance.applyAsShort(s);
             assertEquals(expected, actual);
         });
@@ -54,7 +54,7 @@ public final class ToShortTest extends AbstractToTest<ToShort<String>> {
     @Test
     public void testMapToDouble() {
         strings().forEach(s -> {
-            final double expected = mapper.apply(s).doubleValue() + 1.0;
+            final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToDouble<String> toDouble = instance.mapToDouble(l -> l + 1);
             final double actual = toDouble.applyAsDouble(s);
             assertEquals(expected, actual, EPSILON);
@@ -64,7 +64,7 @@ public final class ToShortTest extends AbstractToTest<ToShort<String>> {
     @Test
     public void testMap() {
         strings().forEach(s -> {
-            final double expected = mapper.apply(s).doubleValue() + 1.0;
+            final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToShort<String> to = instance.map(l -> (short) (l + 1));
             final double actual = to.applyAsShort(s);
             assertEquals(expected, actual, EPSILON);
@@ -75,7 +75,7 @@ public final class ToShortTest extends AbstractToTest<ToShort<String>> {
     public void testCompose() {
         strings().forEach(s -> {
             final ToShortNullable<String> composed = instance.compose(str -> str + "A");
-            assertEquals((long) mapper.apply(s + "A"), composed.applyAsShort(s));
+            assertEquals((long) mapper.applyAsLong(s + "A"), composed.applyAsShort(s));
         });
     }
 

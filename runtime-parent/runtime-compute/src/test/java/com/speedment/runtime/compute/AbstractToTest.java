@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.function.Function;
+import java.util.function.ToLongFunction;
 
 import static com.speedment.runtime.compute.TestUtil.strings;
 import static java.util.Objects.requireNonNull;
@@ -61,7 +62,7 @@ abstract class AbstractToTest<T extends
     static final double EPSILON = 10e-10;
 
     final ExpressionType expressionType;
-    final Function<String, Long> mapper = s -> (long) s.length();
+    final ToLongFunction<String> mapper = s -> (long) s.length();
 
     T instance;
 
@@ -84,7 +85,7 @@ abstract class AbstractToTest<T extends
     @Test
     public void testAsDouble() {
         strings().forEach(s -> {
-            final double expected = mapper.apply(s);
+            final double expected = mapper.applyAsLong(s);
             final ToDouble<String> asDouble = instance.asDouble();
             final double actual = asDouble.applyAsDouble(s);
             assertEquals(expected, actual, EPSILON);
@@ -95,7 +96,7 @@ abstract class AbstractToTest<T extends
     @Test
     public void testAsInt() {
         strings().forEach(s -> {
-            final int expected = mapper.apply(s).intValue();
+            final int expected = (int) mapper.applyAsLong(s);
             final ToInt<String> asInt = instance.asInt();
             final int actual = asInt.applyAsInt(s);
             assertEquals(expected, actual);
@@ -106,7 +107,7 @@ abstract class AbstractToTest<T extends
     @Test
     public void testAsLong() {
         strings().forEach(s -> {
-            final long expected = mapper.apply(s);
+            final long expected = mapper.applyAsLong(s);
             final ToLong<String> asLong = instance.asLong();
             final long actual = asLong.applyAsLong(s);
             assertEquals(expected, actual);
@@ -117,7 +118,7 @@ abstract class AbstractToTest<T extends
     @Test
     public void testAbs() {
         strings().forEach(s -> {
-            final long expected = mapper.apply(s);
+            final long expected = mapper.applyAsLong(s);
             final T negatedAbs = instance.negate().abs();
             final long actual = negatedAbs.asLong().applyAsLong(s);
             assertEquals(expected, actual);
@@ -146,7 +147,7 @@ abstract class AbstractToTest<T extends
     public void testSqrt() {
         strings().forEach(s -> {
             final double actual = instance.sqrt().asDouble().applyAsDouble(s);
-            assertEquals(Math.sqrt(mapper.apply(s)), actual, EPSILON);
+            assertEquals(Math.sqrt(mapper.applyAsLong(s)), actual, EPSILON);
         });
 
     }
@@ -155,7 +156,7 @@ abstract class AbstractToTest<T extends
     public void testPow_int() {
         strings().forEach(s -> {
             final double actual = instance.pow(2).applyAsDouble(s);
-            assertEquals(Math.pow(mapper.apply(s), 2), actual, EPSILON);
+            assertEquals(Math.pow(mapper.applyAsLong(s), 2), actual, EPSILON);
         });
     }
 
@@ -163,7 +164,7 @@ abstract class AbstractToTest<T extends
     public void testPow_double() {
         strings().forEach(s -> {
             final double actual = instance.pow(2.0).applyAsDouble(s);
-            assertEquals(Math.pow(mapper.apply(s), 2), actual, EPSILON);
+            assertEquals(Math.pow(mapper.applyAsLong(s), 2), actual, EPSILON);
         });
     }
 
@@ -171,7 +172,7 @@ abstract class AbstractToTest<T extends
     public void testPow_ToInt() {
         strings().forEach(s -> {
             final double actual = instance.pow((ToInt<String>) u -> 2).applyAsDouble(s);
-            assertEquals(Math.pow(mapper.apply(s), 2), actual, EPSILON);
+            assertEquals(Math.pow(mapper.applyAsLong(s), 2), actual, EPSILON);
         });
     }
 
@@ -179,7 +180,7 @@ abstract class AbstractToTest<T extends
     public void testPow_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.pow((ToInt<String>) u -> 2).applyAsDouble(s);
-            assertEquals(Math.pow(mapper.apply(s), 2), actual, EPSILON);
+            assertEquals(Math.pow(mapper.applyAsLong(s), 2), actual, EPSILON);
         });
     }
 
@@ -188,7 +189,7 @@ abstract class AbstractToTest<T extends
     public void testPlus_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((byte) 1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) + 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
         });
     }
 
@@ -197,7 +198,7 @@ abstract class AbstractToTest<T extends
     public void testPlus_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToByte<String>) u -> (byte) 1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) + 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
         });
     }
 
@@ -206,7 +207,7 @@ abstract class AbstractToTest<T extends
     public void testPlus_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus(1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) + 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
         });
     }
 
@@ -215,7 +216,7 @@ abstract class AbstractToTest<T extends
     public void testPlus_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToInt<String>) u -> 1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) + 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
         });
     }
 
@@ -224,7 +225,7 @@ abstract class AbstractToTest<T extends
     public void testPlus_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus(1L)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) + 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
         });
     }
 
@@ -233,7 +234,7 @@ abstract class AbstractToTest<T extends
     public void testPlus_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToLong<String>) u -> 1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) + 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
         });
     }
 
@@ -241,7 +242,7 @@ abstract class AbstractToTest<T extends
     public void testPlus_double() {
         strings().forEach(s -> {
             final double actual = instance.plus(1.0).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) + 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
         });
     }
 
@@ -249,7 +250,7 @@ abstract class AbstractToTest<T extends
     public void testPlus_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.plus((ToDouble<String>) u -> 1.0).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) + 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
         });
     }
 
@@ -258,7 +259,7 @@ abstract class AbstractToTest<T extends
     public void testMinus_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((byte) 1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) - 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
         });
     }
 
@@ -267,7 +268,7 @@ abstract class AbstractToTest<T extends
     public void testMinus_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToByte<String>) u -> (byte) 1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) - 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
         });
     }
 
@@ -276,7 +277,7 @@ abstract class AbstractToTest<T extends
     public void testMinus_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus(1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) - 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
         });
     }
 
@@ -285,7 +286,7 @@ abstract class AbstractToTest<T extends
     public void testMinus_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToInt<String>) u -> 1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) - 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
         });
     }
 
@@ -294,7 +295,7 @@ abstract class AbstractToTest<T extends
     public void testMinus_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus(1L)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) - 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
         });
     }
 
@@ -303,7 +304,7 @@ abstract class AbstractToTest<T extends
     public void testMinus_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToLong<String>) u -> 1)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) - 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
         });
     }
 
@@ -311,7 +312,7 @@ abstract class AbstractToTest<T extends
     public void testMinus_double() {
         strings().forEach(s -> {
             final double actual = instance.minus(1.0).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) - 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
         });
     }
 
@@ -319,7 +320,7 @@ abstract class AbstractToTest<T extends
     public void testMinus_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.minus((ToDouble<String>) u -> 1.0).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) - 1.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
         });
     }
 
@@ -328,7 +329,7 @@ abstract class AbstractToTest<T extends
     public void testMultiply_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((byte) 2)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) * 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
         });
     }
 
@@ -337,7 +338,7 @@ abstract class AbstractToTest<T extends
     public void testMultiply_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToByte<String>) u -> (byte) 2)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) * 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
         });
     }
 
@@ -346,7 +347,7 @@ abstract class AbstractToTest<T extends
     public void testMultiply_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply(2)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) * 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
         });
     }
 
@@ -355,7 +356,7 @@ abstract class AbstractToTest<T extends
     public void testMultiply_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToInt<String>) u -> 2)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) * 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
         });
     }
 
@@ -364,7 +365,7 @@ abstract class AbstractToTest<T extends
     public void testMultiply_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply(2L)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) * 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
         });
     }
 
@@ -373,7 +374,7 @@ abstract class AbstractToTest<T extends
     public void testMultiply_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToLong<String>) u -> 2)).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) * 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
         });
     }
 
@@ -381,7 +382,7 @@ abstract class AbstractToTest<T extends
     public void testMultiply_double() {
         strings().forEach(s -> {
             final double actual = instance.multiply(2.0).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) * 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
         });
     }
 
@@ -389,7 +390,7 @@ abstract class AbstractToTest<T extends
     public void testMultiply_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.multiply((ToDouble<String>) u -> 2).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) * 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
         });
     }
 
@@ -397,7 +398,7 @@ abstract class AbstractToTest<T extends
     public void testDivide_int() {
         strings().forEach(s -> {
             final double actual = instance.divide(2).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) / 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
         });
     }
 
@@ -405,7 +406,7 @@ abstract class AbstractToTest<T extends
     public void testDivide_ToInt() {
         strings().forEach(s -> {
             final double actual = instance.divide((ToInt<String>) u -> 2).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) / 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
         });
     }
 
@@ -413,7 +414,7 @@ abstract class AbstractToTest<T extends
     public void testDivide_long() {
         strings().forEach(s -> {
             final double actual = instance.divide(2L).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) / 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
         });
     }
 
@@ -421,7 +422,7 @@ abstract class AbstractToTest<T extends
     public void testDivide_ToLong() {
         strings().forEach(s -> {
             final double actual = instance.divide((ToLong<String>) u -> 2).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) / 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
         });
     }
 
@@ -429,7 +430,7 @@ abstract class AbstractToTest<T extends
     public void testDivide_double() {
         strings().forEach(s -> {
             final double actual = instance.divide(2.0).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) / 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
         });
     }
 
@@ -437,7 +438,7 @@ abstract class AbstractToTest<T extends
     public void testDivide_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.divide((ToDouble<String>) u -> 2).asDouble().applyAsDouble(s);
-            assertEquals(mapper.apply(s) / 2.0, actual, EPSILON);
+            assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
         });
     }
 
@@ -446,7 +447,7 @@ abstract class AbstractToTest<T extends
         strings().forEach(s -> {
 
             final double actual = instance.negate().asDouble().applyAsDouble(s);
-            assertEquals(-mapper.apply(s), actual, EPSILON);
+            assertEquals(-mapper.applyAsLong(s), actual, EPSILON);
         });
     }
 
