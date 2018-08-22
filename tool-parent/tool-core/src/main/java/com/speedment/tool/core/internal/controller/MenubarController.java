@@ -17,13 +17,10 @@
 package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.tool.core.component.UserInterfaceComponent;
-import com.speedment.tool.core.internal.util.InjectionLoader;
-import com.speedment.tool.core.resource.SpeedmentIcon;
+import com.speedment.tool.core.menubar.MenuBarComponent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.MenuBar;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -34,58 +31,11 @@ import java.util.ResourceBundle;
  */
 public final class MenubarController implements Initializable {
 
-    private @Inject UserInterfaceComponent ui;
-    private @Inject InjectionLoader loader;
-
-    private @FXML MenuItem mbNew;
-    private @FXML MenuItem mbOpen;
-    private @FXML MenuItem mbSave;
-    private @FXML MenuItem mbSaveAs;
-    private @FXML MenuItem mbQuit;
-    private @FXML MenuItem mbGenerate;
-    private @FXML CheckMenuItem mbProjectTree;
-    private @FXML CheckMenuItem mbWorkspace;
-    private @FXML CheckMenuItem mbOutput;
-    private @FXML MenuItem mbGitter;
-    private @FXML MenuItem mbGitHub;
-    private @FXML MenuItem mbComponents;
-    private @FXML MenuItem mbAbout;
+    private @Inject MenuBarComponent menuBarComponent;
+    public @FXML MenuBar menuBar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        mbNew.setGraphic(SpeedmentIcon.NEW_PROJECT.view());
-        mbOpen.setGraphic(SpeedmentIcon.OPEN_PROJECT.view());
-        mbSave.setGraphic(SpeedmentIcon.DISK.view());
-        mbSaveAs.setGraphic(SpeedmentIcon.DISK_MULTIPLE.view());
-        mbQuit.setGraphic(SpeedmentIcon.DOOR_IN.view());
-
-        mbGenerate.setGraphic(SpeedmentIcon.RUN_PROJECT.view());
-
-        mbProjectTree.setGraphic(SpeedmentIcon.APPLICATION_SIDE_TREE.view());
-        mbWorkspace.setGraphic(SpeedmentIcon.APPLICATION_FORM.view());
-        mbOutput.setGraphic(SpeedmentIcon.APPLICATION_XP_TERMINAL.view());
-
-        mbGitter.setGraphic(SpeedmentIcon.USER_COMMENT.view());
-        mbGitHub.setGraphic(SpeedmentIcon.USER_COMMENT.view());
-        mbComponents.setGraphic(SpeedmentIcon.BRICKS.view());
-        mbAbout.setGraphic(SpeedmentIcon.INFORMATION.view());
-
-        mbNew.setOnAction(ev -> ui.newProject());
-        mbOpen.setOnAction(ev -> ui.openProject());
-        mbSave.setOnAction(ev -> ui.saveProject());
-        mbSaveAs.setOnAction(ev -> ui.saveProjectAs());
-        mbQuit.setOnAction(ev -> ui.quit());
-
-        mbGenerate.setOnAction(ev -> ui.generate());
-
-        mbProjectTree.selectedProperty().bindBidirectional(ui.projectTreeVisibleProperty());
-        mbWorkspace.selectedProperty().bindBidirectional(ui.workspaceVisibleProperty());
-        mbOutput.selectedProperty().bindBidirectional(ui.outputVisibleProperty());
-
-        mbGitter.setOnAction(ev -> ui.showGitter());
-        mbGitHub.setOnAction(ev -> ui.showGithub());
-        mbComponents.setOnAction(ev -> loader.loadAsModal("Components"));
-        mbAbout.setOnAction(ev -> loader.loadAsModal("About"));
+        menuBarComponent.populate(menuBar);
     }
 }

@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.1.5-SNAPSHOT</version>
     </parent>
         
     <groupId>com.speedment.runtime</groupId>
@@ -49,6 +49,7 @@
         <module>runtime-connector-parent</module>
         <module>runtime-application</module>
         <module>runtime-all</module>
+        <module>runtime-welcome</module>
     </modules>
     
     <dependencyManagement>

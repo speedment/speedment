@@ -43,12 +43,13 @@ import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.internal.brand.SpeedmentBrand;
 import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
-import com.speedment.tool.core.internal.util.InjectionLoader;
+import com.speedment.tool.core.internal.util.InjectionLoaderImpl;
 import com.speedment.tool.core.internal.util.Throttler;
 import com.speedment.tool.core.notification.Notification;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.Icon;
 import com.speedment.tool.core.util.BrandUtil;
+import com.speedment.tool.core.util.InjectionLoader;
 import com.speedment.tool.core.util.OutputUtil;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
@@ -65,6 +66,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -134,7 +136,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         return InjectBundle.of(
             DocumentPropertyComponentImpl.class,
             SpeedmentBrand.class,
-            InjectionLoader.class,
+            InjectionLoaderImpl.class,
             ConfigFileHelper.class,
             PropertyEditorComponentImpl.class,
             RuleComponentImpl.class,
@@ -452,6 +454,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.setGraphic(FontAwesome.EXCLAMATION_TRIANGLE.view());
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
         if (ex == null) {
             alert.setTitle("Error");

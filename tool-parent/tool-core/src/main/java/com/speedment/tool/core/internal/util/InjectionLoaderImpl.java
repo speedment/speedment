@@ -19,7 +19,6 @@ package com.speedment.tool.core.internal.util;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.tool.core.brand.Brand;
@@ -27,6 +26,7 @@ import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.internal.controller.*;
 import com.speedment.tool.core.util.BrandUtil;
+import com.speedment.tool.core.util.InjectionLoader;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -50,8 +50,7 @@ import static javafx.stage.Modality.APPLICATION_MODAL;
  * @author  Emil Forslund
  * @since   1.0.0
  */
-@InjectKey(InjectionLoader.class)
-public final class InjectionLoader {
+public final class InjectionLoaderImpl implements InjectionLoader {
     
     private final static String 
         FXML_PREFIX = "/fxml/",
@@ -63,7 +62,7 @@ public final class InjectionLoader {
     private @Inject Injector injector;
     private @Inject Brand brand;
     
-    private InjectionLoader() {
+    private InjectionLoaderImpl() {
         constructors = new ConcurrentHashMap<>();
     }
     
@@ -86,25 +85,31 @@ public final class InjectionLoader {
     public FXMLLoader fxmlLoader() {
         final FXMLLoader loader = new FXMLLoader(StandardCharsets.UTF_8);
         
-        loader.setControllerFactory(clazz -> {
-            return MapStream.of(constructors)
-                .filterKey(clazz::isAssignableFrom)
-                .values()
-                .findFirst()
-                .map(Supplier::get)
-                .map(injector::inject)
-                .orElseThrow(() -> new SpeedmentToolException(
-                    "Could not find any controller class matching '" + clazz + "'."
-                ));
-        });
+        loader.setControllerFactory(clazz -> MapStream.of(constructors)
+            .filterKey(clazz::isAssignableFrom)
+            .values()
+            .findFirst()
+            .map(Supplier::get)
+            .map(injector::inject)
+            .orElseThrow(() -> new SpeedmentToolException(
+                "FXML Controller '" + clazz.getName() +
+                "' have not been installed in " +
+                getClass().getSimpleName() + "."
+            )));
         
         return loader;
     }
-    
+
+    @Override
+    public <T extends Initializable> void install(Class<T> controllerClass, Supplier<T> newController) {
+        constructors.put(controllerClass, newController);
+    }
+
+    @Override
     public Node load(String name) {
         final FXMLLoader loader = fxmlLoader();
         final String filename = FXML_PREFIX + name + FXML_SUFFIX;
-        loader.setLocation(InjectionLoader.class.getResource(filename));
+        loader.setLocation(InjectionLoaderImpl.class.getResource(filename));
         
         try {
             return loader.load();
@@ -114,7 +119,8 @@ public final class InjectionLoader {
             );
         }
     }
-    
+
+    @Override
     public Parent loadAndShow(String name) {
         final Parent parent = (Parent) load(name);
         final Stage stage = requireNonNull(userInterfaceComponent.getStage());
@@ -124,12 +130,15 @@ public final class InjectionLoader {
         BrandUtil.applyBrand(injector, stage, scene);
         stage.setScene(scene);
         WindowSettingUtil.applySaveOnCloseMethod(stage, name);
-        WindowSettingUtil.applyStoredDisplaySettings(stage, name);
+        if ("Scene".equals(name)) {
+            WindowSettingUtil.applyStoredDisplaySettings(stage, name);
+        }
         stage.show();
         
         return parent;
     }
-    
+
+    @Override
     public Parent loadAsModal(String name) {
         final Stage mainStage = requireNonNull(userInterfaceComponent.getStage());
         final Stage dialog    = new Stage();

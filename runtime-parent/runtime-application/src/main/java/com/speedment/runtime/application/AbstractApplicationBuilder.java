@@ -45,6 +45,7 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.InfoComponentImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
+import com.speedment.runtime.welcome.HasOnWelcome;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -526,6 +527,12 @@ public abstract class AbstractApplicationBuilder<
             Runtime.getRuntime().maxMemory()
         );
 
+        // Invoke any HasOnWelcome methods
+        injector.injectables()
+            .flatMap(injector::stream)
+            .filter(HasOnWelcome.class::isInstance)
+            .map(HasOnWelcome.class::cast)
+            .forEach(HasOnWelcome::onWelcome);
     }
 
     private BUILDER self() {

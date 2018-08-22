@@ -87,6 +87,7 @@ public class JoinExamples {
         linked();
 
         selfJoin();
+        selfJoin2();
 
     }
 
@@ -290,6 +291,22 @@ public class JoinExamples {
             .forEach(System.out::println);
 
     }
+
+
+    private void selfJoin2() {
+        ExampleUtil.log("selfJoin2");
+
+        Join<Tuple3<Actor, Actor, Actor>> join = joinComponent
+            .from(ActorManager.IDENTIFIER)
+            .innerJoinOn(Actor.FIRST_NAME.tableAlias("B")).equal(Actor.FIRST_NAME)
+            .innerJoinOn(Actor.LAST_NAME.tableAlias("C")).equal(Actor.LAST_NAME.tableAlias("B"))
+            .build(Tuples::of);
+
+        join.stream()
+            .forEach(System.out::println);
+
+    }
+
 
     private void linked() {
         ExampleUtil.log("linked");

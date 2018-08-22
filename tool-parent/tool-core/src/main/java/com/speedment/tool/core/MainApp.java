@@ -21,14 +21,16 @@ import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.core.GeneratorBundle;
-import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.generator.core.component.EventComponent;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.application.internal.DefaultApplicationMetadata;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.util.EmailUtil;
 import com.speedment.tool.core.brand.Palette;
+import com.speedment.tool.core.event.UIEvent;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
-import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.resource.FontAwesome;
+import com.speedment.tool.core.util.InjectionLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -67,7 +69,19 @@ public final class MainApp extends Application {
         
         final UserInterfaceComponentImpl ui = INJECTOR.getOrThrow(UserInterfaceComponentImpl.class);
         final ProjectComponent projects     = INJECTOR.getOrThrow(ProjectComponent.class);
+        final EventComponent events         = INJECTOR.getOrThrow(EventComponent.class);
         final InjectionLoader loader        = INJECTOR.getOrThrow(InjectionLoader.class);
+
+        events.on(UIEvent.class, ev -> {
+            if (ev == UIEvent.OPEN_MAIN_WINDOW) {
+                ui.showNotification(
+                    "You are running Speedment Open Source. Click here to " +
+                    "upgrade to Speedment Enterprise.",
+                    FontAwesome.PLUS, Palette.SUCCESS,
+                    () -> ui.browse("https://speedment.com/pricing")
+                );
+            }
+        });
         
         ui.start(this, stage);
 
@@ -76,6 +90,7 @@ public final class MainApp extends Application {
                 loader.loadAndShow("Connect");
             } else {
                 loader.loadAndShow("Scene");
+                events.notify(UIEvent.OPEN_MAIN_WINDOW);
                 ui.showNotification(
                     "Metadata has been loaded from an offline file. Click " +
                     "here to reload from database.",

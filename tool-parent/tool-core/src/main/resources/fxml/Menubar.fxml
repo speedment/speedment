@@ -23,39 +23,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <MenuBar BorderPane.alignment="TOP_CENTER"
          xmlns:fx="http://javafx.com/fxml"
+         fx:id="menuBar"
          fx:controller="com.speedment.tool.core.internal.controller.MenubarController">
-    <menus>
-        <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
-            <items>
-                <MenuItem fx:id="mbNew" mnemonicParsing="false" text="New project..." />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem fx:id="mbOpen" mnemonicParsing="false" text="Open..." />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem fx:id="mbSave" mnemonicParsing="false" text="Save" />
-                <MenuItem fx:id="mbSaveAs" mnemonicParsing="false" text="Save as..." />
-                <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem fx:id="mbQuit" mnemonicParsing="false" text="Quit" />
-            </items>
-        </Menu>
-        <Menu fx:id="menuEdit" mnemonicParsing="false" text="Edit">
-            <items>
-                <MenuItem fx:id="mbGenerate" mnemonicParsing="false" text="Generate" />
-            </items>
-        </Menu>
-        <Menu fx:id="menuWindow" mnemonicParsing="false" text="Window">
-            <items>
-                <CheckMenuItem fx:id="mbProjectTree" mnemonicParsing="false" text="Project Tree" />
-                <CheckMenuItem fx:id="mbWorkspace" mnemonicParsing="false" text="Workspace" />
-                <CheckMenuItem fx:id="mbOutput" mnemonicParsing="false" text="Output" />
-            </items>
-        </Menu>
-        <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
-            <items>
-                <MenuItem fx:id="mbGitHub" mnemonicParsing="false" text="Open GitHub-page" />
-                <MenuItem fx:id="mbGitter" mnemonicParsing="false" text="Open Gitter-page" />
-                <MenuItem fx:id="mbComponents" mnemonicParsing="false" text="Components..." />
-                <MenuItem fx:id="mbAbout" mnemonicParsing="false" text="About..." />
-            </items>
-        </Menu>
-    </menus>
 </MenuBar>
