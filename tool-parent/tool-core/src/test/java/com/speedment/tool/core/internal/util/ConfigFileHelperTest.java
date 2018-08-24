@@ -82,7 +82,7 @@ public class ConfigFileHelperTest {
     }
 
     private void verifyOutputFile(String fileName) {
-        Project project = DocumentTranscoder.load(new File(fileName).toPath(), this::fromJson);
+        Project project = DocumentTranscoder.load(new File(fileName).toPath());
         project.dbmses().forEach(dbms -> {
             dbms.schemas().forEach(schema -> {
                 assertNull(schema.getData().get("tables"));
