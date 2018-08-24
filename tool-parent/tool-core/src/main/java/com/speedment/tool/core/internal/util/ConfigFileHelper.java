@@ -298,7 +298,7 @@ public final class ConfigFileHelper {
                         break;
 
                     case USE_EXISTING_STAGE:
-                        final Project p = DocumentTranscoder.load(file.toPath(), this::fromJson);
+                        final Project p = DocumentTranscoder.load(file.toPath());
                         userInterfaceComponent.projectProperty().merge(documentPropertyComponent, p);
                         break;
 
@@ -393,7 +393,7 @@ public final class ConfigFileHelper {
             project.stringPropertyOf(Project.SPEEDMENT_VERSION, () -> null)
                 .setValue(infoComponent.getEditionAndVersionString());
 
-            DocumentTranscoder.save(project, path, Json::toJson);
+            DocumentTranscoder.save(project, path);
 
             if (isGraphical) {
                 final String absolute = file.getAbsolutePath();
@@ -457,8 +457,7 @@ public final class ConfigFileHelper {
     public void clearTablesAndSaveToFile() {
         final ProjectMutator<? extends Project> projectMutator =
             Project.deepCopy(DocumentTranscoder.load(
-                currentlyOpenFile.toPath(),
-                this::fromJson
+                currentlyOpenFile.toPath()
             )
         ).mutator();
 
@@ -484,7 +483,7 @@ public final class ConfigFileHelper {
             if (currentlyOpenFile.exists()) {
                 currentlyOpenFile.delete();
             }
-            DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
+            DocumentTranscoder.save(project, currentlyOpenFile.toPath());
         } else {
             throw new SpeedmentToolException(currentlyOpenFile.toPath() + " is not a file");
         }
