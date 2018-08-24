@@ -16,10 +16,8 @@
  */
 package com.speedment.runtime.core.testsupport;
 
-import com.speedment.common.json.Json;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.internal.ProjectImpl;
-import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationMetadata;
 
@@ -35,7 +33,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * This is a temporary support class that has been replaced in runtime-application.
  * Once the module system is reworked, this class should go away.
- * 
  */
 @Deprecated
 public abstract class AbstractTestApplicationMetadata implements ApplicationMetadata {
@@ -53,19 +50,12 @@ public abstract class AbstractTestApplicationMetadata implements ApplicationMeta
     
     @Override
     public Project makeProject() {
-        return getMetadata()
-            .map(json -> DocumentTranscoder.load(json, this::fromJson)).orElseGet(() -> {
+        return getMetadata().map(DocumentTranscoder::load).orElseGet(() -> {
             final Map<String, Object> data = new ConcurrentHashMap<>();
-            data.put(HasName.NAME, "Project");
+            data.put(Project.EXTENDS, "/com/speedment/runtime/config/Project.json");
+            data.put(Project.NAME, "Project");
             data.put(Project.APP_ID, UUID.randomUUID().toString());
             return new ProjectImpl(data);
         });
-    }
-    
-    private Map<String, Object> fromJson(String json) {
-        @SuppressWarnings("unchecked")
-        final Map<String, Object> parsed =
-            (Map<String, Object>) Json.fromJson(json);
-        return parsed;
     }
 }
