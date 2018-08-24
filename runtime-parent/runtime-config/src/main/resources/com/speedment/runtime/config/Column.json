@@ -1,0 +1,14 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "ordinalPosition": null,
+  "name": null,
+  "alias": null,
+  "nullable": true,
+  "nullableImplementation": "OPTIONAL",
+  "autoIncrement": false,
+  "databaseType": null,
+  "typeMapper": null,
+  "decimalDigits": null,
+  "columnSize": null,
+  "enumConstants": null
+}

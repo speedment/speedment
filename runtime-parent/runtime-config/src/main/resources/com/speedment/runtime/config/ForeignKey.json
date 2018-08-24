@@ -1,0 +1,8 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "name": null,
+  "foreignKeyColumns": {
+    "prototype": "/com/speedment/runtime/config/ForeignKeyColumn.json",
+    "items": []
+  }
+}

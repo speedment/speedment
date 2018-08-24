@@ -1,0 +1,23 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "name": null,
+  "alias": null,
+  "packageName": null,
+  "isView": false,
+  "columns": {
+    "prototype": "/com/speedment/runtime/config/Column.json",
+    "items": []
+  },
+  "primaryKeyColumns": {
+    "prototype": "/com/speedment/runtime/config/PrimaryKeyColumn.json",
+    "items": []
+  },
+  "foreignKeys": {
+    "prototype": "/com/speedment/runtime/config/ForeignKey.json",
+    "items": []
+  },
+  "indexes": {
+    "prototype": "/com/speedment/runtime/config/Index.json",
+    "items": []
+  }
+}

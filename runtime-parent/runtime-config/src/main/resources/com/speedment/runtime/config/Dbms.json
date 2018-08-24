@@ -1,0 +1,14 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "name": null,
+  "alias": null,
+  "typeName": null,
+  "ipAddress": null,
+  "port": null,
+  "username": null,
+  "connectionUrl": null,
+  "schemas": {
+    "prototype": "/com/speedment/runtime/config/Schema.json",
+    "items": []
+  }
+}

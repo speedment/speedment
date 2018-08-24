@@ -37,7 +37,7 @@
         An object-oriented model of a relational database that can be used to 
         store metadata about the structure.
     </description>
-    <url>https://www.github.com/speedment/speedment/wiki/DBModel/</url>
+    <url>https://github.com/speedment/speedment/tree/master/runtime-parent/runtime-config</url>
     
     <build>
         <plugins>
@@ -54,6 +54,7 @@
                             com.speedment.runtime.config.mutator,
                             com.speedment.runtime.config.mutator.trait,
                             com.speedment.runtime.config.parameter,
+                            com.speedment.runtime.config.resolver,
                             com.speedment.runtime.config.trait,
                             com.speedment.runtime.config.util
                         </Export-Package>
@@ -88,6 +89,12 @@
             <groupId>com.speedment.common</groupId>
             <artifactId>mapstream</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>mapbuilder</artifactId>
+            <scope>test</scope>
+        </dependency>
         
         <dependency>
             <groupId>com.speedment.common</groupId>
@@ -102,6 +109,11 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>invariant</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
         </dependency>
         
         <!-- Test Dependencies -->

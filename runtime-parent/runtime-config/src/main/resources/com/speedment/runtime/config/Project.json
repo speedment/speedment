@@ -1,0 +1,14 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "name": null,
+  "appId": null,
+  "companyName": null,
+  "packageName": null,
+  "packageLocation": null,
+  "speedmentVersion": null,
+  "configPath": null,
+  "dbmses": {
+    "prototype": "/com/speedment/runtime/config/Dbms.json",
+    "items": []
+  }
+}

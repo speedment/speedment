@@ -1,0 +1,9 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "name": null,
+  "unique": false,
+  "indexColumns": {
+    "prototype": "/com/speedment/runtime/config/IndexColumn.json",
+    "items": []
+  }
+}

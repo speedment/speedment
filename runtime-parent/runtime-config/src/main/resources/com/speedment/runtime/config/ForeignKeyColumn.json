@@ -1,0 +1,9 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "ordinalPosition": null,
+  "name": null,
+  "foreignDatabaseName": null,
+  "foreignSchemaName": null,
+  "foreignTableName": null,
+  "foreignColumnName": null
+}

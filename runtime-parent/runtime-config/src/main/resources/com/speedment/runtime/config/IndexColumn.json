@@ -1,0 +1,6 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "ordinalPosition": null,
+  "name": null,
+  "orderType": "ASC"
+}

@@ -1,0 +1,10 @@
+{
+  "extends": "/com/speedment/runtime/config/Document.json",
+  "name": null,
+  "alias": null,
+  "defaultSchema": true,
+  "tables": {
+    "prototype": "/com/speedment/runtime/config/Table.json",
+    "items": []
+  }
+}
