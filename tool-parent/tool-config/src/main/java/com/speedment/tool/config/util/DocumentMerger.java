@@ -36,10 +36,13 @@ import static java.util.stream.Collectors.toList;
 /**
  * A utility class for merging two documents to preserve maximum amount of
  * information.
- * 
+ *
+ * @deprecated 3.1.6  the new JSON-syntax should be used instead
+ *
  * @author  Emil Forslund
  * @since   2.3.0
  */
+@Deprecated
 public final class DocumentMerger {
     
     /**
