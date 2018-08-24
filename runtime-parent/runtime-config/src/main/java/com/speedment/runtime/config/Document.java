@@ -17,6 +17,7 @@
 package com.speedment.runtime.config;
 
 import com.speedment.common.function.OptionalBoolean;
+import com.speedment.runtime.config.resolver.DocumentResolver;
 import com.speedment.runtime.config.util.DocumentUtil;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,8 +55,12 @@ import java.util.stream.Stream;
  * @author  Emil Forsund
  * @since   2.3.0
  */
-
 public interface Document {
+
+    /**
+     * The value mapped to this key will be used as the base for the document.
+     */
+    String EXTENDS = DocumentResolver.EXTENDS;
 
     /**
      * Returns the parent of this Document or {@link Optional#empty()} if the

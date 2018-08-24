@@ -18,7 +18,9 @@ package com.speedment.runtime.config.util;
 
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.util.Trees;
+import com.speedment.runtime.config.resolver.DocumentResolver;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
@@ -93,26 +95,32 @@ public final class DocumentUtil {
      * Returns a stream of child documents to a specified document by using the
      * supplied constructor.
      *
-     * @param <E>               the expected child type
-     * @param document          the parent document
-     * @param childConstructor  child constructor
-     * @return                  stream of children
+     * @param <E>          the expected child type
+     * @param document     the parent document
+     * @param childConstr  child constructor
+     * @return             stream of children
      */
     @SuppressWarnings("unchecked")
     public static <E extends Document> Stream<E> childrenOf(
-        final Document document,
-        final BiFunction<Document, Map<String, Object>, E> childConstructor) {
+            final Document document,
+            final BiFunction<Document, Map<String, Object>, E> childConstr) {
         
         requireNonNull(document);
-        requireNonNull(childConstructor);
-        
-        return document.getData().values().stream()
-            .filter(obj -> obj instanceof List<?>)
+        requireNonNull(childConstr);
+
+        return Stream.concat(
+            document.getData().values().stream()
+                .filter(obj -> obj instanceof Map<?, ?>)
+                .map(obj -> (Map<String, Object>) obj)
+                .filter(obj -> obj.containsKey(DocumentResolver.ITEMS))
+                .map(obj -> obj.get(DocumentResolver.ITEMS)),
+            document.getData().values().stream()
+        ).filter(obj -> obj instanceof List<?>)
             .map(list -> (List<Object>) list)
-            .flatMap(list -> list.stream())
+            .flatMap(Collection::stream)
             .filter(obj -> obj instanceof Map<?, ?>)
             .map(map -> (Map<String, Object>) map)
-            .map(map -> childConstructor.apply(document, map));
+            .map(map -> childConstr.apply(document, map));
     }
 
     /**
@@ -360,9 +368,24 @@ public final class DocumentUtil {
      * @return     the typed list
      */
     public static List<Map<String, Object>> castToDocumentList(Object obj) {
-        @SuppressWarnings("unchecked")
-        final List<Map<String, Object>> list = (List<Map<String, Object>>) obj;
-        return list;
+        if (obj == null) return new CopyOnWriteArrayList<>();
+        else if (obj instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> map = (Map<String, Object>) obj;
+            final Object itemsObj = map.get(DocumentResolver.ITEMS);
+            if (itemsObj == null) return new CopyOnWriteArrayList<>();
+            else if (itemsObj instanceof List) {
+                @SuppressWarnings("unchecked")
+                final List<Map<String, Object>> list = (List<Map<String, Object>>) itemsObj;
+                return list;
+            }
+        } else if (obj instanceof List) {
+            @SuppressWarnings("unchecked")
+            final List<Map<String, Object>> list = (List<Map<String, Object>>) obj;
+            return list;
+        }
+
+        throw new SpeedmentConfigException("Error casting 'items'-list.");
     }
 
     private static <K, V> Map<K, V> deepCopyMap(Map<K, V> original) {

@@ -16,17 +16,22 @@
  */
 package com.speedment.runtime.config.util;
 
+import com.speedment.common.json.Json;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.ProjectImpl;
+import com.speedment.runtime.config.resolver.DocumentResolver;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.speedment.runtime.config.util.DocumentLoaders.jsonLoader;
+import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -38,65 +43,36 @@ import static java.util.Objects.requireNonNull;
 public final class DocumentTranscoder {
 
     /**
-     * The element name of the root node in the JSON configuration file. Every 
-     * setting should be located in this element.
+     * The element name of the root node in the JSON configuration file. Before
+     * version {@code 3.1.6}, the project node was a value to this attribute in
+     * the root object. In {@code 3.1.6}, this was changed so that the project
+     * is the root. This attribute is still scanned however for backward
+     * compatibility reasons.
      */
-    public static final String ROOT = "config";
-    
-    /**
-     * A functional interface describing a method that encodes a map of 
-     * key-value pairs into a JSON String.
-     */
-    @FunctionalInterface
-    public interface Encoder {
-        
-        /**
-         * Encodes the specified map into a JSON string.
-         * 
-         * @param map  the map to encode
-         * @return     the resulting JSON string
-         */
-        String encode(Map<String, Object> map);
-    }
-    
-    /**
-     * A functional interface describing a method that decodes a JSON String
-     * into a map of key-value pairs.
-     */
-    @FunctionalInterface
-    public interface Decoder {
-        
-        /**
-         * Decodes the specified JSON string into a map.
-         * 
-         * @param text  the JSON string to decode
-         * @return      the resulting java map
-         */
-        Map<String, Object> decode(String text);
-    }
+    private static final String ROOT = "config";
 
     /**
-     * Returns a JSON representation of the specified project node.
+     * Returns a JSON representation of the specified project node normalized by
+     * the default project model.
      * 
      * @param project  the project
-     * @param encoder  the encoder to use
      * @return         the JSON representation
      * 
      * @throws SpeedmentConfigException  if the inputed object is not valid
      */
-    public static String save(Project project, Encoder encoder) 
+    public static String save(Project project)
             throws SpeedmentConfigException {
-        
+
         if (project == null) {
             return "null";
-        } else {
-            try {
-                final Map<String, Object> root = new LinkedHashMap<>();
-                root.put(ROOT, project.getData());
-                return encoder.encode(root);
-            } catch (final IllegalArgumentException ex) {
-                throw new SpeedmentConfigException(ex);
-            }
+        }
+
+        final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
+        try {
+            final Map<String, Object> normalized = resolver.normalize(project.getData());
+            return Json.toJson(normalized);
+        } catch (final IllegalArgumentException ex) {
+            throw new SpeedmentConfigException(ex);
         }
     }
 
@@ -104,21 +80,21 @@ public final class DocumentTranscoder {
      * Saves the project in a UTF-8 encoded file.
      *
      * @param project   to save
-     * @param encoder   the encoder to use
      * @param location  for the UTF-8 encoded file
      * 
      * @throws SpeedmentConfigException if the file could not be saved
      */
-    public static void save(Project project, Path location, Encoder encoder) 
+    public static void save(Project project, Path location)
             throws SpeedmentConfigException {
-        
-        try {
-            Files.write(location, save(project, encoder)
-                .getBytes(StandardCharsets.UTF_8));
-            
+
+        final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
+        final Map<String, Object> normalized = resolver.normalize(project.getData());
+
+        try (final OutputStream out = Files.newOutputStream(location)) {
+            Json.toJson(normalized, out);
         } catch (final IOException ex) {
             throw new SpeedmentConfigException(
-                "Could not save json-file to path '" + location + "'.", ex
+                format("Could not save json-file to path '%s'.", location), ex
             );
         }
     }
@@ -126,29 +102,35 @@ public final class DocumentTranscoder {
     /**
      * Loads a new {@link Project} from the specified JSON string.
      * 
-     * @param json      the input json
-     * @param decoder   the decoder to use
-     * @return          the parsed project
+     * @param json  the input json
+     * @return      the parsed project
      * 
      * @throws SpeedmentConfigException  if the file couldn't be loaded
      */
-    public static Project load(String json, Decoder decoder) 
-            throws SpeedmentConfigException {
+    public static Project load(String json) throws SpeedmentConfigException {
         
         requireNonNull(json, "No json value specified.");
+        final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
         
         try {
-            final Map<String, Object> root = decoder.decode(json);
-            
             @SuppressWarnings("unchecked")
-            final Map<String, Object> data = 
-                (Map<String, Object>) root.get(ROOT);
+            final Map<String, Object> root = (Map<String, Object>) Json.fromJson(json);
 
-            if (!data.containsKey(Project.APP_ID)) {
-                data.put(Project.APP_ID, UUID.randomUUID().toString());
+            // Unwrap 'root' if it exists (<3.1.6 compatibility)
+            final Map<String, Object> project;
+            if (root.containsKey(ROOT)) {
+                @SuppressWarnings("unchecked")
+                final Map<String, Object> data = (Map<String, Object>) root.get(ROOT);
+                project = data;
+            } else {
+                project = root;
             }
-            
-            return new ProjectImpl(data);
+
+            if (!project.containsKey(Project.APP_ID)) {
+                project.put(Project.APP_ID, UUID.randomUUID().toString());
+            }
+
+            return new ProjectImpl(resolver.resolve(project));
         } catch (final Exception ex) {
             throw new SpeedmentConfigException(ex);
         }
@@ -158,22 +140,35 @@ public final class DocumentTranscoder {
      * Loads a project from a UTF-8 encoded file.
      *
      * @param location  for the UTF-8 encoded file
-     * @param decoder   the decoder to use
      * @return          that was loaded
      * 
      * @throws SpeedmentConfigException if the file could not be loaded
      */
-    public static Project load(Path location, Decoder decoder) 
-            throws SpeedmentConfigException {
-        
-        try {
-            final byte[] content = Files.readAllBytes(location);
-            return load(new String(content, StandardCharsets.UTF_8), decoder);
-            
-        } catch (final IOException ex) {
-            throw new SpeedmentConfigException(
-                "Could not load json-file from path '" + location + "'.", ex
-            );
+    public static Project load(Path location) throws SpeedmentConfigException {
+        requireNonNull(location, "No path specified.");
+        final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
+
+        try (final InputStream in = Files.newInputStream(location)) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> root = (Map<String, Object>) Json.fromJson(in);
+
+            // Unwrap 'root' if it exists (<3.1.6 compatibility)
+            final Map<String, Object> project;
+            if (root.containsKey(ROOT)) {
+                @SuppressWarnings("unchecked")
+                final Map<String, Object> data = (Map<String, Object>) root.get(ROOT);
+                project = data;
+            } else {
+                project = root;
+            }
+
+            if (!project.containsKey(Project.APP_ID)) {
+                project.put(Project.APP_ID, UUID.randomUUID().toString());
+            }
+
+            return new ProjectImpl(resolver.resolve(project));
+        } catch (final Exception ex) {
+            throw new SpeedmentConfigException(ex);
         }
     }
 
