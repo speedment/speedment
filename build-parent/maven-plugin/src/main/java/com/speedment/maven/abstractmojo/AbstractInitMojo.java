@@ -22,19 +22,25 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.internal.ProjectImpl;
+import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.tool.config.ProjectProperty;
-import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
-import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-import java.util.*;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
+
+import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 
 /**
  * A maven goal (re)creates the configuration file with just the provided initialisation parameters.
@@ -71,20 +77,8 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
 
     @Override
     protected void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
-        getLog().info("Saving default configuration from database to '" + configLocation().toAbsolutePath() + "'.");
-
-        // TODO: Use DocumentResolver instead.
-        final ConfigFileHelper helper = speedment.getOrThrow(ConfigFileHelper.class);
-        ProjectProperty project = createProject();
-        helper.saveProjectToCurrentlyOpenFile(project);
-
-        try {
-            helper.setCurrentlyOpenFile(configLocation().toFile());
-        } catch (final Exception ex) {
-            final String err = "An error occured while reloading.";
-            getLog().error(err);
-            throw new MojoExecutionException(err, ex);
-        }
+        getLog().info("Initializing empty Speedment project at '" + configLocation().toAbsolutePath() + "'.");
+        DocumentTranscoder.save(createProject(), configLocation());
     }
 
     @Override
@@ -136,10 +130,9 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         return dbmsPassword;
     }
 
-    private ProjectProperty createProject() {
-        ProjectProperty projectProperty = new ProjectProperty();
+    private Project createProject() {
+        final Map<String, Object> projectData = new HashMap<>();
 
-        Map<String, Object> projectData = new HashMap<>();
         projectData.put(Project.EXTENDS, Project.PROJECT_JSON);
         addStringToMap(Project.COMPANY_NAME, companyName, getCompanyNameFromMavenProject(), projectData);
         addStringToMap(Project.NAME, appName, mavenProject.getArtifactId(), projectData);
@@ -150,9 +143,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addBooleanToMap(Project.ENABLED, Boolean.TRUE, projectData);
         addListToMap(Project.DBMSES, createDbmses(), projectData);
 
-        projectProperty.merge(new DocumentPropertyComponentImpl(), new ProjectImpl(projectData));
-
-        return projectProperty;
+        return new ProjectImpl(projectData);
     }
 
     private String getCompanyNameFromMavenProject() {
@@ -236,5 +227,20 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         if (value != null) {
             map.put(key, value);
         }
+    }
+
+    protected final Path configLocation() {
+        final String top = org.codehaus.plexus.util.StringUtils.isBlank(configFile())
+            ? DEFAULT_CONFIG_LOCATION
+            : configFile();
+
+        return project()
+            .getBasedir()
+            .toPath()
+            .resolve(top);
+    }
+
+    protected final String configFile() {
+        return configFile;
     }
 }

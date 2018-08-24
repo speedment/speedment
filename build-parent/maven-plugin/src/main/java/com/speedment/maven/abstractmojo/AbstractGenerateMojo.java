@@ -25,12 +25,12 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
-
-import java.util.function.Consumer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+
+import java.util.function.Consumer;
 
 /**
  *
@@ -69,7 +69,6 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
 
                 // after generating the speedment code, the package location needs to be added as a source folder
                 if (!mavenProject.getCompileSourceRoots().contains(mavenProject.getBasedir().getAbsolutePath() + "/" + project.getPackageLocation())) {
-                    System.out.println("adding new source location");
                     mavenProject.addCompileSourceRoot(mavenProject.getBasedir().getAbsolutePath() + "/" + project.getPackageLocation());
                 }
             } catch (final Exception ex) {
@@ -137,5 +136,4 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
     public void setTypeMappers(Mapping[] typeMappers) {
         this.typeMappers = typeMappers;
     }
-
 }

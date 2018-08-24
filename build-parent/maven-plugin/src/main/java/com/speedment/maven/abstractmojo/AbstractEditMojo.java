@@ -122,8 +122,6 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             ? DEFAULT_CONFIG_LOCATION
             : configFile();
 
-        System.out.println(project());
-
         return project()
             .getBasedir()
             .toPath()
