@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.internal.component.sql;
 
 import com.speedment.common.injector.Injector;
+import static com.speedment.common.injector.State.STARTED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.identifier.TableIdentifier;
@@ -32,10 +33,9 @@ import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
 
 import java.util.Map;
-import java.util.function.Function;
 
-import static com.speedment.common.injector.State.STARTED;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -59,7 +59,7 @@ public final class SqlPersistanceComponentImpl implements SqlPersistenceComponen
     @ExecuteBefore(STARTED)
     void startStreamSuppliers(final Injector injector) {
         supportMap = injector.stream(SqlAdapter.class)
-            .map(SqlAdapter::identifier)
+            .map(SqlAdapter<?>::identifier)
             .collect(
                 toMap(
                     Function.identity(),
