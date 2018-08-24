@@ -556,7 +556,8 @@ public final class DocumentResolverImpl implements DocumentResolver {
         }
     }
 
-    private Map<String, Object> merge(Map<String, Object> prototype, Map<String, Object> other) {
+    @Override
+    public Map<String, Object> merge(Map<String, Object> prototype, Map<String, Object> other) {
         final Map<String, Object> copy = new LinkedHashMap<>();
         prototype.forEach((key, value) -> copy.put(key, copyAny(value)));
         other.forEach((key, value) -> {
@@ -674,7 +675,8 @@ public final class DocumentResolverImpl implements DocumentResolver {
         }
     }
 
-    private Map<String, Object> copy(Map<String, Object> original) {
+    @Override
+    public Map<String, Object> copy(Map<String, Object> original) {
         if (original == null) return null;
         final Map<String, Object> copy = new LinkedHashMap<>();
         original.forEach((key, value) -> copy.put(key, copyAny(value)));

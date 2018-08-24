@@ -49,6 +49,26 @@ public interface DocumentResolver {
     }
 
     /**
+     * Returns a deep copy of the specified document.
+     *
+     * @param document  the document to copy
+     * @return  the copy
+     */
+    Map<String, Object> copy(Map<String, Object> document);
+
+    /**
+     * Returns a merged document where the second map will always have
+     * precedence over the first one. This operation will use the {@link #ID}
+     * value to determine if two objects are the same and will not do any
+     * modifications to either map. The returned map is safe to edit.
+     *
+     * @param first   the first document
+     * @param second  the second document
+     * @return  the merged document
+     */
+    Map<String, Object> merge(Map<String, Object> first, Map<String, Object> second);
+
+    /**
      * Loads the specifying resource, resolving any links before returning the
      * flat document.
      *

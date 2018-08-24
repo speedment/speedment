@@ -393,6 +393,7 @@ public final class DocumentUtil {
 
         MapStream.of(original)
             .mapValue(DocumentUtil::deepCopyObject)
+            .filterValue(Objects::nonNull)
             .forEachOrdered(copy::put);
 
         return copy;
@@ -403,13 +404,15 @@ public final class DocumentUtil {
 
         original.stream()
             .map(DocumentUtil::deepCopyObject)
+            .filter(Objects::nonNull)
             .forEachOrdered(copy::add);
 
         return copy;
     }
 
     private static <V> V deepCopyObject(V original) {
-        if (String.class.isAssignableFrom(original.getClass())
+        if (original == null) return null;
+        else if (String.class.isAssignableFrom(original.getClass())
             || Number.class.isAssignableFrom(original.getClass())
             || Boolean.class.isAssignableFrom(original.getClass())
             || Enum.class.isAssignableFrom(original.getClass())) {
