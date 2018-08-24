@@ -90,6 +90,16 @@ public final class DocumentTranscoder {
         final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
         final Map<String, Object> normalized = resolver.normalize(resolver.resolve(project.getData()));
 
+        if (!Files.exists(location)) {
+            try {
+                Files.createDirectories(location.getParent());
+            } catch (final IOException ex) {
+                throw new SpeedmentConfigException(
+                    format("Could not create directories to path '%s'.", location), ex
+                );
+            }
+        }
+
         try (final OutputStream out = Files.newOutputStream(location)) {
             Json.toJson(normalized, out);
         } catch (final IOException ex) {
