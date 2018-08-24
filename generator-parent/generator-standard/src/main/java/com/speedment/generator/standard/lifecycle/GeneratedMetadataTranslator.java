@@ -19,10 +19,15 @@ package com.speedment.generator.standard.lifecycle;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.json.Json;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
+import com.speedment.runtime.application.AbstractApplicationMetadata;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;
@@ -36,7 +41,6 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.util.Formatting.indent;
-import com.speedment.runtime.application.AbstractApplicationMetadata;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -80,7 +84,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
         project.setSpeedmentVersion(infoComponent.getEditionAndVersionString());
 
         final List<String> lines = Stream.of(
-            DocumentTranscoder.save(project.document(), Json::toJson)
+            DocumentTranscoder.save(project.document())
                 .split("\\R")).collect(toList());
 
         final List<List<String>> segments = new ArrayList<>();
@@ -116,7 +120,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
         file.add(Import.of(StringBuilder.class));
         file.add(Import.of(Stream.class));
         initializer.add("final StringBuilder " + STRING_BUILDER_NAME + " = new StringBuilder();");
-        subInitializers.stream().forEachOrdered(si -> {
+        subInitializers.forEach(si -> {
             initializer.add(si.getName() + "(" + STRING_BUILDER_NAME + ");");
         });
         initializer.add("return " + STRING_BUILDER_NAME + ".toString();");
