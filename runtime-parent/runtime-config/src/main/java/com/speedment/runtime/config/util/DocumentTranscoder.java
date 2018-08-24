@@ -69,7 +69,7 @@ public final class DocumentTranscoder {
 
         final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
         try {
-            final Map<String, Object> normalized = resolver.normalize(project.getData());
+            final Map<String, Object> normalized = resolver.normalize(resolver.resolve(project.getData()));
             return Json.toJson(normalized);
         } catch (final IllegalArgumentException ex) {
             throw new SpeedmentConfigException(ex);
@@ -88,7 +88,7 @@ public final class DocumentTranscoder {
             throws SpeedmentConfigException {
 
         final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
-        final Map<String, Object> normalized = resolver.normalize(project.getData());
+        final Map<String, Object> normalized = resolver.normalize(resolver.resolve(project.getData()));
 
         try (final OutputStream out = Files.newOutputStream(location)) {
             Json.toJson(normalized, out);

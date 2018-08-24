@@ -157,4 +157,97 @@ public class ResolveTest {
         final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
         assertEquals(expected, actual);
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testResolveNullOrder() {
+
+        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+
+        final String original = "{\"c\":\"carl\",\"b\":\"bert\",\"a\":\"adam\",\"extends\":{\"a\":null,\"b\":null}}";
+        final String expected = "{\"extends\":{\"a\":null,\"b\":null},\"a\":\"adam\",\"b\":\"bert\",\"c\":\"carl\"}";
+        final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testResolveMultipleLevels() {
+        final Map<String, Map<String, Object>> files =
+            mapBuilder("/base.json", (Map<String, Object>) Json.fromJson("{\"base\":true,\"a\":\"adam\"}"))
+                .entry("/level1.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\",\"base\":false,\"a\":\"bert\",\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{}]}}"))
+                .entry("/level2.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\",\"base\":false,\"a\":\"carl\",\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{}]}}"))
+                .entry("/level3.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\",\"base\":false,\"a\":\"dave\"}"))
+                .build();
+
+        final DocumentResolver resolver = new DocumentResolverImpl(res -> {
+            System.out.println("Loading " + res);
+            return files.get(res);
+        });
+
+        final String original = "{\"extends\":\"/base.json\",\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{}]}}";
+        final String expected = "{\"extends\":\"/base.json\",\"base\":true,\"a\":\"adam\",\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{\"extends\":\"/base.json\",\"base\":false,\"a\":\"bert\",\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{\"extends\":\"/base.json\",\"base\":false,\"a\":\"carl\",\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{\"extends\":\"/base.json\",\"base\":false,\"a\":\"dave\"}]}}]}}]}}";
+        final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testResolveMultipleEmptyLevels() {
+        final Map<String, Map<String, Object>> files =
+            mapBuilder("/base.json", (Map<String, Object>) Json.fromJson("{}"))
+                .entry("/level1.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\",\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{}]}}"))
+                .entry("/level2.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\",\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{}]}}"))
+                .entry("/level3.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\"}"))
+                .build();
+
+        final DocumentResolver resolver = new DocumentResolverImpl(res -> {
+            System.out.println("Loading " + res);
+            return files.get(res);
+        });
+
+        final String original = "{\"extends\":\"/base.json\",\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{}]}}";
+        final String expected = "{\"extends\":\"/base.json\",\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{\"extends\":\"/base.json\",\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{\"extends\":\"/base.json\",\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{\"extends\":\"/base.json\"}]}}]}}]}}";
+        final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testResolveMultipleEmptyLevelsWithoutBase() {
+        final Map<String, Map<String, Object>> files =
+            mapBuilder("/level1.json", (Map<String, Object>) Json.fromJson("{\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{}]}}"))
+                .entry("/level2.json", (Map<String, Object>) Json.fromJson("{\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{}]}}"))
+                .entry("/level3.json", (Map<String, Object>) Json.fromJson("{}"))
+                .build();
+
+        final DocumentResolver resolver = new DocumentResolverImpl(res -> {
+            System.out.println("Loading " + res);
+            return files.get(res);
+        });
+
+        final String original = "{\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{}]}}";
+        final String expected = "{\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{}]}}]}}]}}";
+        final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testResolveTwoEmptyLevelsWithoutBase() {
+        final Map<String, Map<String, Object>> files =
+            mapBuilder("/level1.json", (Map<String, Object>) Json.fromJson("{\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{}]}}"))
+                .entry("/level2.json", (Map<String, Object>) Json.fromJson("{}"))
+                .build();
+
+        final DocumentResolver resolver = new DocumentResolverImpl(res -> {
+            System.out.println("Loading " + res);
+            return files.get(res);
+        });
+
+        final String original = "{\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{}]}}";
+        final String expected = "{\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{}]}}]}}";
+        final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
 }

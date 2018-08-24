@@ -32,14 +32,22 @@ public final class DocumentResolverImpl implements DocumentResolver {
 
     @Override
     public Map<String, Object> loadAndResolve(String resourceName) {
-        return resolve(loader.apply(resourceName));
+        return resolve(requireNonNull(
+            loader.apply(resourceName),
+            () -> format(
+                "Error loading non-existing resource '%s'.",
+                resourceName
+            )
+        ));
     }
 
     @Override
     public Map<String, Object> resolve(Map<String, Object> document) {
-        document = resolveExtends(document);
-        document = expandPrototypes(document);
-        return expandPrototypes(resolveExtends(document));
+        final Map<String, Object> result = new LinkedHashMap<>();
+        resolveExtends(document).forEach((key, value) -> {
+            result.put(key, expandPrototypesAny(value));
+        });
+        return result;
     }
 
     @Override
@@ -381,7 +389,7 @@ public final class DocumentResolverImpl implements DocumentResolver {
         return newList;
     }
 
-    private Map<String, Object> resolveExtends(Map<String, Object> document) {
+    Map<String, Object> resolveExtends(Map<String, Object> document) {
         final Object extendsObj = document.get(EXTENDS);
         final Map<String, Object> result = new LinkedHashMap<>();
 
@@ -390,7 +398,7 @@ public final class DocumentResolverImpl implements DocumentResolver {
 
             if (extendsObj instanceof String) {
                 final String resourceName = (String) extendsObj;
-                prototype = resolveExtends(loader.apply(resourceName));
+                prototype = loadAndResolve(resourceName);
 
             } else if (extendsObj instanceof Map) {
 
@@ -502,7 +510,8 @@ public final class DocumentResolverImpl implements DocumentResolver {
 
             final List<Object> itemsCopy = new ArrayList<>();
             for (final Object item : items) {
-                itemsCopy.add(expandPrototypes(mergeAny(prototype, item)));
+                //itemsCopy.add(expandPrototypes(mergeAny(prototype, item)));
+                itemsCopy.add(mergeAny(prototype, expandPrototypesAny(item)));
             }
 
             document.forEach((key, value) -> {
@@ -683,12 +692,12 @@ public final class DocumentResolverImpl implements DocumentResolver {
         return copy;
     }
 
-    private Map<String, Object> resolvePrototype(Object prototypeObj) {
+    Map<String, Object> resolvePrototype(Object prototypeObj) {
         if (prototypeObj == null) return new LinkedHashMap<>();
 
         if (prototypeObj instanceof String) {
             final String resourceName = (String) prototypeObj;
-            return expandPrototypes(resolveExtends(loader.apply(resourceName)));
+            return loadAndResolve(resourceName);
 
         } else if (prototypeObj instanceof Map) {
             @SuppressWarnings("unchecked")
