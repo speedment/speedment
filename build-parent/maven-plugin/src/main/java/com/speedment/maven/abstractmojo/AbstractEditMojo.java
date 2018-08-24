@@ -53,7 +53,7 @@ public abstract class AbstractEditMojo extends AbstractMojo {
                     throw setNotValid();
             }
 
-            final Project loaded = DocumentTranscoder.load(configLocation(), AbstractEditMojo::decodeJson);
+            final Project loaded = DocumentTranscoder.load(configLocation());
             final LongAdder edits = new LongAdder();
             locate(loaded).collect(toList()).forEach(doc -> {
                 if (delete) {
@@ -100,7 +100,7 @@ public abstract class AbstractEditMojo extends AbstractMojo {
                 }
             });
 
-            DocumentTranscoder.save(loaded, configLocation(), Json::toJson);
+            DocumentTranscoder.save(loaded, configLocation());
             getLog().info(format("Done! %d entries modified.", edits.longValue()));
         } else {
             throw new MojoExecutionException(format(

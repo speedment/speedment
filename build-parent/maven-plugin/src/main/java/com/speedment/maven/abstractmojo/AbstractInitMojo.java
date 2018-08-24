@@ -73,10 +73,9 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
     protected void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
         getLog().info("Saving default configuration from database to '" + configLocation().toAbsolutePath() + "'.");
 
+        // TODO: Use DocumentResolver instead.
         final ConfigFileHelper helper = speedment.getOrThrow(ConfigFileHelper.class);
-
         ProjectProperty project = createProject();
-
         helper.saveProjectToCurrentlyOpenFile(project);
 
         try {
@@ -141,6 +140,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         ProjectProperty projectProperty = new ProjectProperty();
 
         Map<String, Object> projectData = new HashMap<>();
+        projectData.put(Project.EXTENDS, Project.PROJECT_JSON);
         addStringToMap(Project.COMPANY_NAME, companyName, getCompanyNameFromMavenProject(), projectData);
         addStringToMap(Project.NAME, appName, mavenProject.getArtifactId(), projectData);
         addStringToMap(Project.APP_ID, UUID.randomUUID().toString(), null, projectData);
