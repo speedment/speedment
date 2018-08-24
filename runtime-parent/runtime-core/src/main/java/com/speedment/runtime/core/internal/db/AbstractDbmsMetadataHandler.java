@@ -24,23 +24,38 @@ import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.parameter.OrderType;
+import com.speedment.runtime.config.resolver.DocumentResolver;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
-import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.core.db.*;
+import com.speedment.runtime.core.db.DatabaseNamingConvention;
+import com.speedment.runtime.core.db.DbmsMetadataHandler;
+import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.runtime.core.db.JavaTypeMap;
+import com.speedment.runtime.core.db.SqlPredicate;
+import com.speedment.runtime.core.db.SqlSupplier;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.typemapper.TypeMapper;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -51,6 +66,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.config.util.DocumentLoaders.jsonLoader;
 import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
@@ -99,9 +115,12 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         requireNonNulls(filterCriteria, progress);
 
         // Create a deep copy of the project document.
-        final Project projectCopy = DocumentUtil.deepCopy(
-            projectComponent.getProject(), ProjectImpl::new
-        );
+//        final Project projectCopy = DocumentUtil.deepCopy(
+//            projectComponent.getProject(), ProjectImpl::new
+//        );
+
+        final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
+        final Project projectCopy = new ProjectImpl(resolver.copy(projectComponent.getProject().getData()));
 
         // Make sure there are not multiple dbmses with the same id
         final Set<String> ids = new HashSet<>();
