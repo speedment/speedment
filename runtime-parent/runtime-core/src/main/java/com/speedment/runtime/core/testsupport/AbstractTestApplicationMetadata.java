@@ -52,7 +52,7 @@ public abstract class AbstractTestApplicationMetadata implements ApplicationMeta
     public Project makeProject() {
         return getMetadata().map(DocumentTranscoder::load).orElseGet(() -> {
             final Map<String, Object> data = new ConcurrentHashMap<>();
-            data.put(Project.EXTENDS, "/com/speedment/runtime/config/Project.json");
+            data.put(Project.EXTENDS, Project.PROJECT_JSON);
             data.put(Project.NAME, "Project");
             data.put(Project.APP_ID, UUID.randomUUID().toString());
             return new ProjectImpl(data);

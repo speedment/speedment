@@ -53,6 +53,8 @@ extends Document,
         HasMainInterface,
         HasMutator<ProjectMutator<? extends Project>> {
 
+    String PROJECT_JSON = "/com/speedment/runtime/config/Project.json";
+
     String  COMPANY_NAME      = "companyName",
             PACKAGE_LOCATION  = "packageLocation",
             SPEEDMENT_VERSION = "speedmentVersion",
