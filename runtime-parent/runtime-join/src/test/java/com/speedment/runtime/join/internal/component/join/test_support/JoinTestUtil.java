@@ -18,17 +18,16 @@ package com.speedment.runtime.join.internal.component.join.test_support;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.PersistenceComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
-import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.typemapper.TypeMapper;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -358,7 +357,7 @@ public final class JoinTestUtil {
         }
 
         @Override
-        public <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException {
+        public <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) throws SpeedmentException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -368,7 +367,7 @@ public final class JoinTestUtil {
         }
 
         @Override
-        public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException {
+        public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) throws SpeedmentException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

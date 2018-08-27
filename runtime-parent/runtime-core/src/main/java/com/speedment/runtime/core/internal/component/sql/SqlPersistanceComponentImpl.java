@@ -20,6 +20,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -30,9 +31,7 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
-import com.speedment.runtime.field.Field;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -82,7 +81,7 @@ public final class SqlPersistanceComponentImpl implements SqlPersistenceComponen
     }
 
     @Override
-    public <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException {
+    public <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) throws SpeedmentException {
         return entity -> getPersistence(tableIdentifier, fields).persist(entity);
     }
 
@@ -92,7 +91,7 @@ public final class SqlPersistanceComponentImpl implements SqlPersistenceComponen
     }
 
     @Override
-    public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException {
+    public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) throws SpeedmentException {
         return entity -> getPersistence(tableIdentifier, fields).update(entity);
     }
 
@@ -110,7 +109,7 @@ public final class SqlPersistanceComponentImpl implements SqlPersistenceComponen
         );
     }
 
-    private <ENTITY> SqlPersistence<ENTITY> getPersistence(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) {
+    private <ENTITY> SqlPersistence<ENTITY> getPersistence(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) {
         @SuppressWarnings("unchecked")
         final SqlPersistenceImpl<ENTITY> sqlPersistence = (SqlPersistenceImpl<ENTITY>) supportMap.get(tableIdentifier);
         return sqlPersistence.withLimitedFields(fields);

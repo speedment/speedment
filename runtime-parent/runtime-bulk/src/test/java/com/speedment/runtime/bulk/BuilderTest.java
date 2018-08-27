@@ -18,6 +18,7 @@ package com.speedment.runtime.bulk;
 
 import com.speedment.runtime.bulk.Operation.Type;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
@@ -26,7 +27,6 @@ import com.speedment.runtime.field.Field;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 /**
@@ -265,7 +265,7 @@ public class BuilderTest {
         }
 
         @Override
-        public Persister<Point> persister(Collection<Field<Point>> fields) {
+        public Persister<Point> persister(HasLabelSet<Point> fields) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -275,7 +275,7 @@ public class BuilderTest {
         }
 
         @Override
-        public Updater<Point> updater(Collection<Field<Point>> columns) {
+        public Updater<Point> updater(HasLabelSet<Point> fields) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

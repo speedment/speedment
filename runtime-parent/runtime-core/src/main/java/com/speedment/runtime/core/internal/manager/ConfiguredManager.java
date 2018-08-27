@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.internal.manager;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.Persister;
@@ -25,7 +26,6 @@ import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -88,8 +88,8 @@ public final class ConfiguredManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public Persister<ENTITY> persister(Collection<Field<ENTITY>> columns) {
-        return manager.persister(columns);
+    public Persister<ENTITY> persister(HasLabelSet<ENTITY> fields) {
+        return manager.persister(fields);
     }
 
     @Override
@@ -98,8 +98,8 @@ public final class ConfiguredManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public Updater<ENTITY> updater(Collection<Field<ENTITY>> columns) {
-        return manager.updater(columns);
+    public Updater<ENTITY> updater(HasLabelSet<ENTITY> fields) {
+        return manager.updater(fields);
     }
 
     @Override

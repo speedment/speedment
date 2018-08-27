@@ -36,6 +36,7 @@ import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.core.ApplicationMetadata;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.*;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.SqlFunction;
@@ -555,7 +556,7 @@ extends AbstractLabelTooltipItem {
         }
 
         @Override
-        public Persister<String> persister(Collection<Field<String>> columns) {
+        public Persister<String> persister(HasLabelSet<String> fields) {
             throw new UnsupportedOperationException("This manager is read-only.");
         }
 
@@ -570,7 +571,7 @@ extends AbstractLabelTooltipItem {
         }
 
         @Override
-        public Updater<String> updater(Collection<Field<String>> columns) {
+        public Updater<String> updater(HasLabelSet<String> fields) {
             throw new UnsupportedOperationException("This manager is read-only.");
         }
 

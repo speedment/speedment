@@ -18,13 +18,11 @@ package com.speedment.runtime.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
-import com.speedment.runtime.field.Field;
-
-import java.util.Collection;
 
 /**
  * The {@code PersistanceComponent} handles persisting, updating and deleting 
@@ -51,7 +49,7 @@ public interface PersistenceComponent {
      */
     <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
 
-    <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException;
+    <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) throws SpeedmentException;
 
     /**
      * Creates and returns an {@link Updater} that describes how entities are 
@@ -66,7 +64,7 @@ public interface PersistenceComponent {
      */
     <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
 
-    <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException;
+    <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) throws SpeedmentException;
 
 
     /**

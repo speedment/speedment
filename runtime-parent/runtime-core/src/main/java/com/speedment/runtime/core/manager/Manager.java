@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.manager;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.BackwardFinder;
@@ -24,7 +25,6 @@ import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.field.trait.HasNullableFinder;
 
-import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -220,7 +220,7 @@ public interface Manager<ENTITY> {
      */
     Persister<ENTITY> persister();
 
-    Persister<ENTITY> persister(Collection<Field<ENTITY>> fields);
+    Persister<ENTITY> persister(HasLabelSet<ENTITY> fields);
 
     /**
      * Updates the provided entity in the underlying database and returns a
@@ -258,7 +258,7 @@ public interface Manager<ENTITY> {
      */
     Updater<ENTITY> updater();
 
-    Updater<ENTITY> updater(Collection<Field<ENTITY>> fields);
+    Updater<ENTITY> updater(HasLabelSet<ENTITY> fields);
 
     /**
      * Removes the provided entity from the underlying database and returns the

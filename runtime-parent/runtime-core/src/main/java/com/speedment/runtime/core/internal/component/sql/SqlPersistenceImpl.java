@@ -21,6 +21,7 @@ import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -37,10 +38,8 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -54,7 +53,8 @@ import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Default implementation of the {@link SqlPersistence}-interface.
@@ -161,7 +161,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
             sqlColumnList(includedInInsert, c -> "?") + ")";
     }
 
-    private SqlPersistenceImpl(SqlPersistenceImpl<ENTITY> template, Set<String> columnIds) {
+    private SqlPersistenceImpl(SqlPersistenceImpl<ENTITY> template, HasLabelSet<ENTITY> includedFields) {
         primaryKeyFields = template.primaryKeyFields;
         fields = template.fields;
         dbms = template.dbms;
@@ -174,10 +174,10 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         columnHandler = template.columnHandler;
         entityClass = template.entityClass;
 
-        this.insertColumnFilter = columnHandler.excludedInInsertStatement().negate().and(c -> columnIds.contains(c.getId()));
+        this.insertColumnFilter = columnHandler.excludedInInsertStatement().negate().and(c -> includedFields.contains(c.getId()));
         this.insertStatement = getInsertStatement(insertColumnFilter);
 
-        this.updateColumnFilter = columnHandler.excludedInUpdateStatement().negate().and(c -> columnIds.contains(c.getId()));
+        this.updateColumnFilter = columnHandler.excludedInUpdateStatement().negate().and(c -> includedFields.contains(c.getId()));
         this.updateStatement = getUpdateStatement(updateColumnFilter);
 
         deleteStatement = template.deleteStatement;
@@ -188,9 +188,8 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
     }
 
 
-    SqlPersistenceImpl<ENTITY> withLimitedFields(Collection<Field<ENTITY>> fields) {
-        Set<String> columnIds = fields.stream().map(f -> f.identifier().getColumnId()).collect(toSet());
-        return new SqlPersistenceImpl<>(this, columnIds);
+    SqlPersistenceImpl<ENTITY>  withLimitedFields(HasLabelSet<ENTITY> fields) {
+        return new SqlPersistenceImpl<>(this, fields);
     }
 
     @Override

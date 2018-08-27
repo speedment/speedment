@@ -21,14 +21,13 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PersistenceComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
-import com.speedment.runtime.field.Field;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
@@ -119,7 +118,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public Persister<ENTITY> persister(Collection<Field<ENTITY>> fields) {
+    public Persister<ENTITY> persister(HasLabelSet<ENTITY> fields) {
         return persistenceComponent.persister(tableId, fields);
     }
 
@@ -129,7 +128,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public Updater<ENTITY> updater(Collection<Field<ENTITY>> fields) {
+    public Updater<ENTITY> updater(HasLabelSet<ENTITY> fields) {
         return persistenceComponent.updater(tableId, fields);
     }
 
