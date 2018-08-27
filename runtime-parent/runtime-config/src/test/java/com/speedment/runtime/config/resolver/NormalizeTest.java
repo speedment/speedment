@@ -183,4 +183,44 @@ public class NormalizeTest {
         final String actual = Json.toJson(resolver.normalize((Map<String, Object>) Json.fromJson(original)));
         assertEquals(expected, actual);
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testNormalizeMultipleEmptyLevels() {
+        final Map<String, Map<String, Object>> files =
+            mapBuilder("/base.json", (Map<String, Object>) Json.fromJson("{}"))
+                .entry("/level1.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\",\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{}]}}"))
+                .entry("/level2.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\",\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{}]}}"))
+                .entry("/level3.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\"}"))
+                .build();
+
+        final DocumentResolver resolver = new DocumentResolverImpl(res -> {
+            System.out.println("Loading " + res);
+            return files.get(res);
+        });
+
+        final String original = "{\"extends\":\"/base.json\",\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{\"extends\":\"/base.json\",\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{\"extends\":\"/base.json\",\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{\"extends\":\"/base.json\"}]}}]}}]}}";
+        final String expected = "{\"extends\":\"/base.json\",\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{}]}}";
+        final String actual = Json.toJson(resolver.normalize((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testNormalizeMultipleEmptyLevelsWithoutBase() {
+        final Map<String, Map<String, Object>> files =
+            mapBuilder("/level1.json", (Map<String, Object>) Json.fromJson("{\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{}]}}"))
+                .entry("/level2.json", (Map<String, Object>) Json.fromJson("{\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{}]}}"))
+                .entry("/level3.json", (Map<String, Object>) Json.fromJson("{}"))
+                .build();
+
+        final DocumentResolver resolver = new DocumentResolverImpl(res -> {
+            System.out.println("Loading " + res);
+            return files.get(res);
+        });
+        final String original = "{\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{\"level2s\":{\"prototype\":\"/level2.json\",\"items\":[{\"level3s\":{\"prototype\":\"/level3.json\",\"items\":[{}]}}]}}]}}";
+        final String expected = "{\"level1s\":{\"prototype\":\"/level1.json\",\"items\":[{}]}}";
+        final String actual = Json.toJson(resolver.normalize((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
 }
