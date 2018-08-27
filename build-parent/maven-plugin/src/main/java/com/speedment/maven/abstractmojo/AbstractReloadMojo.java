@@ -16,6 +16,7 @@
  */
 package com.speedment.maven.abstractmojo;
 
+import com.speedment.common.json.Json;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.Project;
@@ -36,6 +37,9 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -112,11 +116,11 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
                             // Make sure any old data is cleared before merging in
                             // the new state from the database.
                             projectData.updateAndGet(old -> {
-                                DocumentTranscoder.save(new ProjectImpl(old), nextPath("old"));
+                                saveRaw(old, nextPath("old"));
                                 final Map<String, Object> newMap = resolver.resolve(p.getData());
-                                DocumentTranscoder.save(new ProjectImpl(newMap), nextPath("new"));
+                                saveRaw(newMap, nextPath("new"));
                                 final Map<String, Object> merged = resolver.merge(old, newMap);
-                                DocumentTranscoder.save(new ProjectImpl(merged), nextPath("merged"));
+                                saveRaw(merged, nextPath("merged"));
                                 return merged;
                             });
 
@@ -169,6 +173,22 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
 //            getLog().error(err);
 //            throw new MojoExecutionException(err, ex);
 //        }
+    }
+
+    private void saveRaw(Map<String, Object> map, Path path) {
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectories(path.getParent());
+            } catch (final IOException ex) {
+                throw new RuntimeException("Error creating dirs " + path, ex);
+            }
+        }
+
+        try (final OutputStream out = Files.newOutputStream(path)) {
+            Json.toJson(map, out);
+        } catch (final IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     final Map<String, LongAdder> counters = new ConcurrentHashMap<>();
