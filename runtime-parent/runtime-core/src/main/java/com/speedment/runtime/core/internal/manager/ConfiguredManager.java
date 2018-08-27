@@ -17,12 +17,8 @@
 package com.speedment.runtime.core.internal.manager;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
-import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.core.manager.Persister;
-import com.speedment.runtime.core.manager.Remover;
-import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 

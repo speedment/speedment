@@ -21,7 +21,6 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PersistenceComponent;
 import com.speedment.runtime.core.component.ProjectComponent;

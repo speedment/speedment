@@ -18,9 +18,9 @@ package com.speedment.runtime.join.internal.component.join.test_support;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.component.PersistenceComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.manager.HasLabelSet;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;

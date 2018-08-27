@@ -18,8 +18,8 @@ package com.speedment.runtime.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.HasLabelSet;
 import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.manager.HasLabelSet;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
