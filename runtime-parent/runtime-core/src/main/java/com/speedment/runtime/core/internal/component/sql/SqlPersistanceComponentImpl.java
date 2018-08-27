@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.component.sql;
 
 import com.speedment.common.injector.Injector;
-import static com.speedment.common.injector.State.STARTED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.identifier.TableIdentifier;
@@ -31,11 +30,14 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.field.Field;
 
+import java.util.Collection;
 import java.util.Map;
-
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
+
+import static com.speedment.common.injector.State.STARTED;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -45,7 +47,7 @@ import static java.util.stream.Collectors.toMap;
  */
 public final class SqlPersistanceComponentImpl implements SqlPersistenceComponent {
 
-    private Map<TableIdentifier<?>, SqlPersistence<?>> supportMap;
+    private Map<TableIdentifier<?>, SqlPersistenceImpl<?>> supportMap;
 
     @Inject
     private ProjectComponent projectComponent;
@@ -80,8 +82,18 @@ public final class SqlPersistanceComponentImpl implements SqlPersistenceComponen
     }
 
     @Override
+    public <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException {
+        return entity -> getPersistence(tableIdentifier, fields).persist(entity);
+    }
+
+    @Override
     public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException {
         return entity -> getPersistence(tableIdentifier).update(entity);
+    }
+
+    @Override
+    public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException {
+        return entity -> getPersistence(tableIdentifier, fields).update(entity);
     }
 
     @Override
@@ -96,5 +108,11 @@ public final class SqlPersistanceComponentImpl implements SqlPersistenceComponen
             "No Persistence installed for table identifier "
             + tableIdentifier
         );
+    }
+
+    private <ENTITY> SqlPersistence<ENTITY> getPersistence(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) {
+        @SuppressWarnings("unchecked")
+        final SqlPersistenceImpl<ENTITY> sqlPersistence = (SqlPersistenceImpl<ENTITY>) supportMap.get(tableIdentifier);
+        return sqlPersistence.withLimitedFields(fields);
     }
 }

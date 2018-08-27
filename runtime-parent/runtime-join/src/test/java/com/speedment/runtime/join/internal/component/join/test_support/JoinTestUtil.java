@@ -23,14 +23,18 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.typemapper.TypeMapper;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
 import static org.junit.Assert.fail;
 
 /**
@@ -354,7 +358,17 @@ public final class JoinTestUtil {
         }
 
         @Override
+        public <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
         public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

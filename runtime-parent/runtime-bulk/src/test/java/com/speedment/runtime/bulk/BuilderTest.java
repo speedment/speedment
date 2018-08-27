@@ -26,6 +26,7 @@ import com.speedment.runtime.field.Field;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 /**
@@ -264,7 +265,17 @@ public class BuilderTest {
         }
 
         @Override
+        public Persister<Point> persister(Collection<Field<Point>> fields) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
         public Updater<Point> updater() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Updater<Point> updater(Collection<Field<Point>> columns) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

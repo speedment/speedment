@@ -24,7 +24,9 @@ import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+import com.speedment.runtime.field.Field;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
@@ -81,7 +83,17 @@ public abstract class AbstractViewManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
+    public Persister<ENTITY> persister(Collection<Field<ENTITY>> columns) {
+        throw readonlyException();
+    }
+
+    @Override
     public Updater<ENTITY> updater() {
+        throw readonlyException();
+    }
+
+    @Override
+    public Updater<ENTITY> updater(Collection<Field<ENTITY>> fields) {
         throw readonlyException();
     }
 

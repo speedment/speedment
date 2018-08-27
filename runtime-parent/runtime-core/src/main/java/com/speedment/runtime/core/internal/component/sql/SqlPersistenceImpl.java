@@ -37,8 +37,10 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -52,8 +54,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * Default implementation of the {@link SqlPersistence}-interface.
@@ -85,6 +86,8 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
     private final List<GeneratedFieldSupport<ENTITY, ?>> generatedFieldSupports;
     private final List<Field<ENTITY>> generatedFields;
     private final Map<Field<ENTITY>, Column> columnsByFields;
+    private final Predicate<Column> insertColumnFilter;
+    private final Predicate<Column> updateColumnFilter;
 
 
     public SqlPersistenceImpl(
@@ -124,15 +127,11 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         this.sqlTableReference = naming.fullNameOf(table);
         this.hasPrimaryKeyColumns = manager.primaryKeyFields().anyMatch(m -> true);
 
-        final Predicate<Column> includedInInsert = columnHandler.excludedInInsertStatement().negate();
-        this.insertStatement = "INSERT INTO " + sqlTableReference + " (" +
-            sqlColumnList(includedInInsert, identity()) + ") VALUES (" +
-            sqlColumnList(includedInInsert, c -> "?") + ")";
+        this.insertColumnFilter = columnHandler.excludedInInsertStatement().negate();
+        this.insertStatement = getInsertStatement(insertColumnFilter);
 
-        final Predicate<Column> includedInUpdate = columnHandler.excludedInUpdateStatement().negate();
-        this.updateStatement = "UPDATE " + sqlTableReference + " SET " +
-            sqlColumnList(includedInUpdate, n -> n + " = ?") + " WHERE " +
-            sqlPrimaryKeyColumnList(pk -> pk + " = ?");
+        this.updateColumnFilter = columnHandler.excludedInUpdateStatement().negate();
+        this.updateStatement = getUpdateStatement(updateColumnFilter);
         this.deleteStatement = "DELETE FROM " + sqlTableReference + " WHERE " +
             sqlPrimaryKeyColumnList(pk -> pk + " = ?");
 
@@ -149,11 +148,55 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         this.generatedFields = generatedFieldSupports.stream()
             .map(GeneratedFieldSupport::getField).collect(toList());
     }
-    
+
+    private String getUpdateStatement(Predicate<Column> includedInUpdate) {
+        return "UPDATE " + sqlTableReference + " SET " +
+            sqlColumnList(includedInUpdate, n -> n + " = ?") + " WHERE " +
+            sqlPrimaryKeyColumnList(pk -> pk + " = ?");
+    }
+
+    private String getInsertStatement(Predicate<Column> includedInInsert) {
+        return "INSERT INTO " + sqlTableReference + " (" +
+            sqlColumnList(includedInInsert, identity()) + ") VALUES (" +
+            sqlColumnList(includedInInsert, c -> "?") + ")";
+    }
+
+    private SqlPersistenceImpl(SqlPersistenceImpl<ENTITY> template, Set<String> columnIds) {
+        primaryKeyFields = template.primaryKeyFields;
+        fields = template.fields;
+        dbms = template.dbms;
+        table = template.table;
+        dbmsType = template.dbmsType;
+        sqlTableReference = template.sqlTableReference;
+        hasPrimaryKeyColumns = template.hasPrimaryKeyColumns;
+        naming = template.naming;
+        operationHandler = template.operationHandler;
+        columnHandler = template.columnHandler;
+        entityClass = template.entityClass;
+
+        this.insertColumnFilter = columnHandler.excludedInInsertStatement().negate().and(c -> columnIds.contains(c.getId()));
+        this.insertStatement = getInsertStatement(insertColumnFilter);
+
+        this.updateColumnFilter = columnHandler.excludedInUpdateStatement().negate().and(c -> columnIds.contains(c.getId()));
+        this.updateStatement = getUpdateStatement(updateColumnFilter);
+
+        deleteStatement = template.deleteStatement;
+
+        generatedFieldSupports = template.generatedFieldSupports;
+        generatedFields = template.generatedFields;
+        columnsByFields = template.columnsByFields;
+    }
+
+
+    SqlPersistenceImpl<ENTITY> withLimitedFields(Collection<Field<ENTITY>> fields) {
+        Set<String> columnIds = fields.stream().map(f -> f.identifier().getColumnId()).collect(toSet());
+        return new SqlPersistenceImpl<>(this, columnIds);
+    }
+
     @Override
     public ENTITY persist(ENTITY entity) throws SpeedmentException {
         final List<Object> values = fields.get()
-            .filter(f -> !columnHandler.excludedInInsertStatement().test(columnsByFields.get(f)))
+            .filter(f -> insertColumnFilter.test(columnsByFields.get(f)))
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
@@ -170,7 +213,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         assertHasPrimaryKeyColumns();
 
         final List<Object> values = Stream.concat(
-            fields.get().filter(f -> !columnHandler.excludedInUpdateStatement().test(columnsByFields.get(f))), 
+            fields.get().filter(f -> updateColumnFilter.test(columnsByFields.get(f))),
             primaryKeyFields.get()
         )
             .map(f -> toDatabaseType(f, entity))
@@ -271,7 +314,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
             );
         }
     }
-    
+
     private final static class GeneratedFieldSupport<ENTITY, T> {
 
         private final Field<ENTITY> field;

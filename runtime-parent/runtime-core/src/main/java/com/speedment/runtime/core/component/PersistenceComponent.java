@@ -22,6 +22,9 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.field.Field;
+
+import java.util.Collection;
 
 /**
  * The {@code PersistanceComponent} handles persisting, updating and deleting 
@@ -47,7 +50,9 @@ public interface PersistenceComponent {
      * @throws SpeedmentException  if it could not be created
      */
     <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
-    
+
+    <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException;
+
     /**
      * Creates and returns an {@link Updater} that describes how entities are 
      * updated in the specified table. The returned {@code Updater} can then be 
@@ -60,7 +65,10 @@ public interface PersistenceComponent {
      * @throws SpeedmentException  if it could not be created
      */
     <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
-    
+
+    <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, Collection<Field<ENTITY>> fields) throws SpeedmentException;
+
+
     /**
      * Creates and returns a {@link Remover} that describes how entities are 
      * removed from the specified table. The returned {@code Remover} can then 

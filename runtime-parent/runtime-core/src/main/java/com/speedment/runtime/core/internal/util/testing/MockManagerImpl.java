@@ -24,6 +24,7 @@ import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.field.Field;
 
+import java.util.Collection;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -112,6 +113,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
+    public Persister<ENTITY> persister(Collection<Field<ENTITY>> columns) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public ENTITY remove(ENTITY entity) throws SpeedmentException {
         return remover.apply(entity);
     }
@@ -155,4 +161,10 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Updater<ENTITY> updater() {
         return updater;
     }
+
+    @Override
+    public Updater<ENTITY> updater(Collection<Field<ENTITY>> columns) {
+        throw new UnsupportedOperationException();
+    }
+
 }

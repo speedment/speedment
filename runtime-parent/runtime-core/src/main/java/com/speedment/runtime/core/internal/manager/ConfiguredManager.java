@@ -25,6 +25,7 @@ import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -87,8 +88,18 @@ public final class ConfiguredManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
+    public Persister<ENTITY> persister(Collection<Field<ENTITY>> columns) {
+        return manager.persister(columns);
+    }
+
+    @Override
     public Updater<ENTITY> updater() {
         return manager.updater();
+    }
+
+    @Override
+    public Updater<ENTITY> updater(Collection<Field<ENTITY>> columns) {
+        return manager.updater(columns);
     }
 
     @Override

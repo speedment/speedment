@@ -24,6 +24,8 @@ import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.field.trait.HasNullableFinder;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -219,6 +221,13 @@ public interface Manager<ENTITY> {
      */
     Persister<ENTITY> persister();
 
+    Persister<ENTITY> persister(Collection<Field<ENTITY>> columns);
+
+    @SafeVarargs
+    static <ENTITY> Persister<ENTITY> persister(Manager<ENTITY> manager, Field<ENTITY>... values) {
+        return manager.persister(Arrays.asList(values));
+    }
+
     /**
      * Updates the provided entity in the underlying database and returns a
      * potentially updated entity. If the update fails for any reason, an
@@ -254,6 +263,13 @@ public interface Manager<ENTITY> {
      * @return an Updater
      */
     Updater<ENTITY> updater();
+
+    Updater<ENTITY> updater(Collection<Field<ENTITY>> fields);
+
+    @SafeVarargs
+    static <ENTITY> Updater<ENTITY> updater(Manager<ENTITY> manager, Field<ENTITY>... fields) {
+        return manager.updater(Arrays.asList(fields));
+    }
 
     /**
      * Removes the provided entity from the underlying database and returns the
