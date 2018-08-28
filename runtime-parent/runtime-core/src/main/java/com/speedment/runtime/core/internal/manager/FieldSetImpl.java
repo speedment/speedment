@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
+public final class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
     public static final FieldSetImpl ALL = new FieldSetImpl<>($ -> true);
     public static final FieldSetImpl NONE = new FieldSetImpl<>($ -> false);
 
@@ -34,7 +34,7 @@ public class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
     }
 
     @Override
-    public boolean contains(String id) {
+    public boolean test(String id) {
         return includedId.test(id);
     }
 
@@ -45,12 +45,12 @@ public class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
     @Override
     public FieldSet<ENTITY> except(Field<ENTITY> field) {
         String id = field.identifier().getColumnId();
-        return new FieldSetImpl<>(s -> !id.equals(s) && contains(s));
+        return new FieldSetImpl<>(s -> !id.equals(s) && test(s));
     }
 
     @Override
     public FieldSet<ENTITY> and(Field<ENTITY> field) {
         String id = field.identifier().getColumnId();
-        return new FieldSetImpl<>(s -> id.equals(s) && contains(s));
+        return new FieldSetImpl<>(s -> id.equals(s) && test(s));
     }
 }

@@ -5,7 +5,6 @@ import com.speedment.runtime.field.Field;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.function.Predicate;
 
 public interface FieldSet<ENTITY> extends HasLabelSet<ENTITY> {
 
@@ -73,24 +72,13 @@ public interface FieldSet<ENTITY> extends HasLabelSet<ENTITY> {
     }
 
     /**
-     * Creates a new FieldSet that represents the fields with column IDs for which the given predicate holds true
-     *
-     * @param columnIds A predicate that holds true for the column IDs of the fields of the set
-     * @param <ENTITY> the type of entity
-     * @return a new FieldSet that represents the fields with column IDs for which the given predicate holds true
-     */
-    static <ENTITY> FieldSet<ENTITY> of(Predicate<String> columnIds) {
-        return new FieldSetImpl<>(columnIds);
-    }
-
-    /**
      * Returns a FieldSet that represents all the fields of the given entity
      * @param classToken manager class token used to determine entity type
      * @param <ENTITY> the type of entity
      * @return a FieldSet that represents all the fields of the given entity
      */
     @SuppressWarnings("unchecked")
-    static <ENTITY> FieldSet<ENTITY> allOf(Manager<ENTITY> classToken) {
+    static <ENTITY> FieldSet<ENTITY> allOf(Class<ENTITY> classToken) {
         return (FieldSet<ENTITY>) FieldSetImpl.ALL;
     }
 
@@ -101,7 +89,7 @@ public interface FieldSet<ENTITY> extends HasLabelSet<ENTITY> {
      * @return a FieldSet that represents the empty set of fields of the given entity
      */
     @SuppressWarnings("unchecked")
-    static <ENTITY> FieldSet<ENTITY> noneOf(Manager<ENTITY> classToken) {
+    static <ENTITY> FieldSet<ENTITY> noneOf(Class<ENTITY> classToken) {
         return (FieldSet<ENTITY>) FieldSetImpl.NONE;
     }
 

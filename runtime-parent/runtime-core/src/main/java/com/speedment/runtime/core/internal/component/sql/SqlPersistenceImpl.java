@@ -174,10 +174,10 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         columnHandler = template.columnHandler;
         entityClass = template.entityClass;
 
-        this.insertColumnFilter = columnHandler.excludedInInsertStatement().negate().and(c -> includedFields.contains(c.getId()));
+        this.insertColumnFilter = columnHandler.excludedInInsertStatement().negate().and(c -> includedFields.test(c.getId()));
         this.insertStatement = getInsertStatement(insertColumnFilter);
 
-        this.updateColumnFilter = columnHandler.excludedInUpdateStatement().negate().and(c -> includedFields.contains(c.getId()));
+        this.updateColumnFilter = columnHandler.excludedInUpdateStatement().negate().and(c -> includedFields.test(c.getId()));
         this.updateStatement = getUpdateStatement(updateColumnFilter);
 
         deleteStatement = template.deleteStatement;
