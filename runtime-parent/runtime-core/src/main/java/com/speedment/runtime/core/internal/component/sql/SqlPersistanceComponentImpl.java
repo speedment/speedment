@@ -60,7 +60,7 @@ public final class SqlPersistanceComponentImpl implements SqlPersistenceComponen
     @ExecuteBefore(STARTED)
     void startStreamSuppliers(final Injector injector) {
         supportMap = injector.stream(SqlAdapter.class)
-            .map(SqlAdapter<?>::identifier)
+            .map(SqlAdapter::identifier)
             .collect(
                 toMap(
                     Function.identity(),
