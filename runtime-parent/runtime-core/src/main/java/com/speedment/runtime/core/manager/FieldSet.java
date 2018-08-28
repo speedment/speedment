@@ -73,7 +73,7 @@ public interface FieldSet<ENTITY> extends HasLabelSet<ENTITY> {
 
     /**
      * Returns a FieldSet that represents all the fields of the given entity
-     * @param classToken manager class token used to determine entity type
+     * @param classToken class token used to determine entity type
      * @param <ENTITY> the type of entity
      * @return a FieldSet that represents all the fields of the given entity
      */
@@ -84,7 +84,7 @@ public interface FieldSet<ENTITY> extends HasLabelSet<ENTITY> {
 
     /**
      * Returns a FieldSet that represents the empty set of fields of the given entity
-     * @param classToken manager class token used to determine entity type
+     * @param classToken class token used to determine entity type
      * @param <ENTITY> the type of entity
      * @return a FieldSet that represents the empty set of fields of the given entity
      */
