@@ -149,8 +149,10 @@ public final class StreamTerminatorUtil {
         requireNonNull(info);
         requireNonNull(query);
 
+        final List<FieldPredicate<ENTITY>> optimizedPredicateBuilders = optimize(predicateBuilders);
+
         final FieldPredicateView spv = info.getDbmsType().getFieldPredicateView();
-        final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
+        final List<SqlPredicateFragment> fragments = optimizedPredicateBuilders.stream()
             .map(sp -> spv.transform(info.getSqlColumnNamer(), info.getSqlDatabaseTypeFunction(), sp))
             .collect(toList());
 
@@ -159,10 +161,10 @@ public final class StreamTerminatorUtil {
                 .map(SqlPredicateFragment::getSql)
                 .collect(joining(" AND "));
 
-        final List<Object> values = new ArrayList<>();
+        final List<Object> values = new ArrayList<>(fragments.size());
         for (int i = 0; i < fragments.size(); i++) {
 
-            final FieldPredicate<ENTITY> p = predicateBuilders.get(i);
+            final FieldPredicate<ENTITY> p = optimizedPredicateBuilders.get(i);
             final Field<ENTITY> referenceFieldTrait = p.getField();
 
             @SuppressWarnings("unchecked")
@@ -176,6 +178,14 @@ public final class StreamTerminatorUtil {
         query.setSql(sql);
         query.setValues(values);
     }
+
+
+    private static <ENTITY> List<FieldPredicate<ENTITY>> optimize(List<FieldPredicate<ENTITY>> list) {
+        return list.stream()
+            .filter(sp -> sp.getPredicateType() != PredicateType.ALWAYS_TRUE) // Fix #495
+            .collect(toList());
+    }
+
 
     public interface RenderResult {
 
@@ -222,7 +232,17 @@ public final class StreamTerminatorUtil {
         final StringBuilder sql = new StringBuilder();
         final List<Object> values = new ArrayList<>();
         final AtomicInteger cnt = new AtomicInteger();
-        predicates.forEach(predicate -> {
+        predicates
+            .stream()
+            // Optimize away ALWAYS_TRUE. Fix #495
+            .filter(p -> {
+                if (p instanceof FieldPredicate) {
+                    return ((FieldPredicate)p).getPredicateType() != PredicateType.ALWAYS_TRUE;
+                } else {
+                    return true;
+                }
+            })
+            .forEach(predicate -> {
             if (cnt.getAndIncrement() != 0) {
                 sql.append(" AND ");
             }
