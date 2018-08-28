@@ -33,19 +33,35 @@
 
 /*** Constants ***/
 * {
-    -fx-speedment-gray:        #CBCAC9;
-    -fx-speedment-darkgray:    #919190;
-    
-    -fx-speedment-blue:        #155d89;
-    -fx-speedment-green:       #3a9b79;
-    -fx-speedment-orange:      #ffcf38;
-    -fx-speedment-red:         #bf4545;
-    
-    -fx-speedment-lightgray:   #d5d5d5;
-    -fx-speedment-lightblue:   #93c0e4;
-    -fx-speedment-lightgreen:  #5abf95;
-    -fx-speedment-lightred:    #f2b3b3;
-    -fx-speedment-lightorange: #fff2c8;
+    /*Gray*/
+    -fx-speedment-darkgray:      #2D3639;
+    -fx-speedment-gray:          #4B595F;
+    -fx-speedment-mediumgray:    #808F95;
+    -fx-speedment-lightgray:     #CDD5DC;
+
+    /*Blue*/
+    -fx-speedment-darkblue:      #155d89;
+    -fx-speedment-blue:          #2171ad;
+    -fx-speedment-mediumblue:    #5a98c8;
+    -fx-speedment-lightblue:     #cce7ff;
+
+    /*Green*/
+    -fx-speedment-darkgreen:     #3a9b79;
+    -fx-speedment-green:         #5abf95;
+    -fx-speedment-mediumgreen:   #33b88a;
+    -fx-speedment-lightgreen:    #9be9ce;
+
+    /*Yellow*/
+    -fx-speedment-darkyellow:    #ffcf38;
+    -fx-speedment-yellow:        #ffda64;
+    -fx-speedment-mediumyellow:  #fce390;
+    -fx-speedment-lightyellow:   #fff2c8;
+
+    /*Red*/
+    -fx-speedment-darkred:       #bf4545;
+    -fx-speedment-red:           #d66969;
+    -fx-speedment-mediumred:     #f27f7c;
+    -fx-speedment-lightred:      #f2b3b3;
 
     -fx-focus-color: -fx-speedment-blue;
     -fx-accent:      -fx-speedment-blue;
