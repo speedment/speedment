@@ -33,12 +33,14 @@ public interface FieldSet<ENTITY> extends HasLabelSet<ENTITY> {
         return new FieldSetImpl<>(columnIds);
     }
 
+    @SuppressWarnings("unchecked")
     static <ENTITY> FieldSet<ENTITY> allOf(Manager<ENTITY> classToken) {
-        return new FieldSetImpl<>($ -> true);
+        return (FieldSet<ENTITY>) FieldSetImpl.ALL;
     }
 
+    @SuppressWarnings("unchecked")
     static <ENTITY> FieldSet<ENTITY> noneOf(Manager<ENTITY> classToken) {
-        return new FieldSetImpl<>($ -> false);
+        return (FieldSet<ENTITY>) FieldSetImpl.NONE;
     }
 
 }
