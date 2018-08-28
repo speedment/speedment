@@ -61,14 +61,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.speedment.plugins</groupId>
-            <artifactId>spring-generator</artifactId>
-            <version>${speedment.version}</version>
-            <optional>true</optional>
-            <scope>runtime</scope>
-        </dependency>
-
         <!-- Maven Plugin Dependencies -->
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
