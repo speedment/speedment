@@ -42,7 +42,6 @@
     
     <modules>
         <module>json-stream</module>
-        <module>spring-generator</module>
         <module>enum-generator</module>
     </modules>
 
