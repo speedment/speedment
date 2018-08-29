@@ -219,6 +219,8 @@ public interface Manager<ENTITY> {
      */
     Persister<ENTITY> persister();
 
+    Persister<ENTITY> persister(HasLabelSet<ENTITY> fields);
+
     /**
      * Updates the provided entity in the underlying database and returns a
      * potentially updated entity. If the update fails for any reason, an
@@ -254,6 +256,8 @@ public interface Manager<ENTITY> {
      * @return an Updater
      */
     Updater<ENTITY> updater();
+
+    Updater<ENTITY> updater(HasLabelSet<ENTITY> fields);
 
     /**
      * Removes the provided entity from the underlying database and returns the

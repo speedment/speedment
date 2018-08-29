@@ -52,6 +52,8 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     private @Inject StreamSupplierComponent streamSupplierComponent;
+    private PersistenceComponent persistenceComponent;
+    private TableIdentifier<ENTITY> tableId;
 
     private Persister<ENTITY> persister;
     private Updater<ENTITY> updater;
@@ -73,8 +75,9 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     final void createSupport(
             @WithState(INITIALIZED) PersistenceComponent persistenceComponent) {
         
-        final TableIdentifier<ENTITY> tableId = getTableIdentifier();
+        tableId = getTableIdentifier();
 
+        this.persistenceComponent = persistenceComponent; // TODO - figure out if @Inject on the field will do the same (i.e. enrure initialized
         this.persister = persistenceComponent.persister(tableId);
         this.updater   = persistenceComponent.updater(tableId);
         this.remover   = persistenceComponent.remover(tableId);
@@ -114,8 +117,18 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
+    public Persister<ENTITY> persister(HasLabelSet<ENTITY> fields) {
+        return persistenceComponent.persister(tableId, fields);
+    }
+
+    @Override
     public Updater<ENTITY> updater() {
         return updater;
+    }
+
+    @Override
+    public Updater<ENTITY> updater(HasLabelSet<ENTITY> fields) {
+        return persistenceComponent.updater(tableId, fields);
     }
 
     @Override
