@@ -51,6 +51,6 @@ public final class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
     @Override
     public FieldSet<ENTITY> and(Field<ENTITY> field) {
         String id = field.identifier().getColumnId();
-        return new FieldSetImpl<>(s -> id.equals(s) && test(s));
+        return new FieldSetImpl<>(s -> id.equals(s) || test(s));
     }
 }
