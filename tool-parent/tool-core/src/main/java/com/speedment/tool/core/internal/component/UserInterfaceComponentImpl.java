@@ -65,6 +65,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -573,14 +575,21 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final Label message = new Label();
         final Button cancel = new Button("Cancel", FontAwesome.TIMES.view());
 
-        box.getChildren().addAll(bar, message, cancel);
+        final Pane filler = new Pane();
+        final HBox fillerContainer = new HBox(filler, cancel);
+        HBox.setHgrow(filler, Priority.ALWAYS);
+        HBox.setHgrow(cancel, Priority.SOMETIMES);
+        filler.setMaxWidth(Double.MAX_VALUE);
+        fillerContainer.setMaxWidth(Double.MAX_VALUE);
+
+        box.getChildren().addAll(bar, message, fillerContainer);
         box.setMaxWidth(Double.MAX_VALUE);
         bar.setMaxWidth(Double.MAX_VALUE);
         message.setMaxWidth(Double.MAX_VALUE);
         cancel.setMaxWidth(128);
         VBox.setVgrow(message, Priority.ALWAYS);
 
-        box.setFillWidth(false);
+        box.setFillWidth(true);
         box.setSpacing(8);
 
         progress.addListener(measure -> {
