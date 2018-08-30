@@ -78,11 +78,33 @@ public class NewResolveTest {
 
     @Test
     @SuppressWarnings("unchecked")
+    public void testResolveOnlyEmptyList() {
+        final DocumentResolver resolver = new NewDocumentResolverImpl(res -> null);
+
+        final String original = "{\"list\":[]}";
+        final String expected = "{\"list\":[]}";
+        final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testResolveOnlyListWithEmptyObject() {
+        final DocumentResolver resolver = new NewDocumentResolverImpl(res -> null);
+
+        final String original = "{\"list\":[{}]}";
+        final String expected = "{\"list\":[{}]}";
+        final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     public void testResolveEmptyList() {
         final DocumentResolver resolver = new NewDocumentResolverImpl(res -> null);
 
         final String original = "{\"a\":\"adam\",\"list\":[]}";
-        final String expected = "{\"a\":\"adam\",\"list\":{\"items\":[]}}";
+        final String expected = "{\"a\":\"adam\",\"list\":[]}";
         final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
         assertEquals(expected, actual);
     }
@@ -93,7 +115,7 @@ public class NewResolveTest {
         final DocumentResolver resolver = new NewDocumentResolverImpl(res -> null);
 
         final String original = "{\"a\":\"adam\",\"list\":[{}]}";
-        final String expected = "{\"a\":\"adam\",\"list\":{\"items\":[{}]}}";
+        final String expected = "{\"a\":\"adam\",\"list\":[{}]}";
         final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
         assertEquals(expected, actual);
     }
@@ -104,7 +126,7 @@ public class NewResolveTest {
         final DocumentResolver resolver = new NewDocumentResolverImpl(res -> null);
 
         final String original = "{\"a\":\"adam\",\"list\":[{\"inner\":[]}]}";
-        final String expected = "{\"a\":\"adam\",\"list\":{\"items\":[{\"inner\":{\"items\":[]}}]}}";
+        final String expected = "{\"a\":\"adam\",\"list\":[{\"inner\":[]}]}";
         final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
         assertEquals(expected, actual);
     }
@@ -115,7 +137,7 @@ public class NewResolveTest {
         final DocumentResolver resolver = new NewDocumentResolverImpl(res -> null);
 
         final String original = "{\"a\":\"adam\",\"list\":[[],[],[]]}";
-        final String expected = "{\"a\":\"adam\",\"list\":{\"items\":[{\"items\":[]},{\"items\":[]},{\"items\":[]}]}}";
+        final String expected = "{\"a\":\"adam\",\"list\":[[],[],[]]}";
         final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
         assertEquals(expected, actual);
     }
@@ -153,7 +175,7 @@ public class NewResolveTest {
         final DocumentResolver resolver = new NewDocumentResolverImpl(files::get);
 
         final String original = "{\"a\":\"adam\",\"list\":{\"items\":[{}],\"extends\":\"/foo.json\"}}";
-        final String expected = "{\"a\":\"adam\",\"list\":{\"extends\":\"/foo.json\",\"prototype\":{\"extends\":\"/bar.json\",\"a\":\"curt\",\"b\":\"bert\",\"c\":\"carl\"},\"items\":[{\"extends\":\"/bar.json\",\"a\":\"curt\",\"b\":\"bert\",\"c\":\"carl\"}]}}";
+        final String expected = "{\"a\":\"adam\",\"list\":{\"extends\":\"/foo.json\",\"prototype\":{\"extends\":\"/bar.json\",\"b\":\"bert\",\"c\":\"carl\",\"a\":\"curt\"},\"items\":[{\"extends\":\"/bar.json\",\"b\":\"bert\",\"c\":\"carl\",\"a\":\"curt\"}]}}";
         final String actual = Json.toJson(resolver.resolve((Map<String, Object>) Json.fromJson(original)));
         assertEquals(expected, actual);
     }

@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiConsumer;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -26,9 +26,11 @@ import static java.util.stream.Collectors.toList;
 public class NewDocumentResolverImpl implements DocumentResolver {
 
     private final Function<String, Map<String, Object>> loader;
+    private final Map<String, Map<String, Object>> cache;
 
     public NewDocumentResolverImpl(Function<String, Map<String, Object>> loader) {
         this.loader = requireNonNull(loader);
+        this.cache  = new ConcurrentHashMap<>();
     }
 
     private Object copyAny(Object any) {
@@ -201,25 +203,11 @@ public class NewDocumentResolverImpl implements DocumentResolver {
 
     @Override
     public Map<String, Object> loadAndResolve(String resourceName) {
-        return resolve(loader.apply(resourceName));
+        return resolve(load(resourceName));
     }
 
-    private Object resolveAny(Object object) {
-        if (object == null) return null;
-        else if (isBasic(object)) return object;
-        else if (object instanceof Map) {
-            @SuppressWarnings("unchecked")
-            final Map<String, Object> map = (Map<String, Object>) object;
-            return resolve(map);
-        } else if (object instanceof List) {
-            @SuppressWarnings("unchecked")
-            final List<Object> list = (List<Object>) object;
-            return list.stream().map(this::resolveAny).collect(toList());
-        } else {
-            throw new ResolverException(format(
-                "Unsupported value type '%s'.", object.getClass().getName()
-            ));
-        }
+    private Map<String, Object> load(String resourceName) {
+        return cache.computeIfAbsent(resourceName, loader);
     }
 
     @Override
@@ -227,76 +215,487 @@ public class NewDocumentResolverImpl implements DocumentResolver {
         return resolve(document, null);
     }
 
+    private Object resolveAny(Object object, Map<String, Object> prototype) {
+        if (object == null) return null;
+        else if (isBasic(object)) return object;
+        else if (object instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> map = (Map<String, Object>) object;
+            return resolve(map, prototype);
+        } else if (object instanceof List) {
+            @SuppressWarnings("unchecked")
+            final List<Object> list = (List<Object>) object;
+            return list.stream()
+                .map(item -> resolveAny(item, prototype))
+                .collect(toList());
+        } else {
+            throw new ResolverException(format(
+                "Unsupported value type '%s'.", object.getClass().getName()
+            ));
+        }
+    }
+
     private Map<String, Object> resolve(Map<String, Object> document, Map<String, Object> prototype) {
+        // Create an empty map
         final Map<String, Object> result = newMap();
+
+        // If the document has an 'extends' key, but the prototype does not,
+        // then write it first in the new object.
+        if (document.containsKey(EXTENDS)
+        && (prototype == null || !prototype.containsKey(EXTENDS))) {
+            result.put(EXTENDS, null);
+        }
+
+        // Apply the prototype
         if (prototype != null) apply(result, prototype);
+
+        // Apply the extended object
         withExtends(document, parent -> apply(result, parent));
+
+        // Apply the actual document
         apply(result, document);
-        result.replaceAll((key, value) -> {
-            if (isBasic(value)) return value;
-            else if (value instanceof List) {
-                @SuppressWarnings("unchecked")
-                final List<Object> list = (List<Object>) value;
-                return list.stream().map(this::resolveAny).collect(toList());
-            } else if (value instanceof Map) {
-                @SuppressWarnings("unchecked")
-                final Map<String, Object> map = (Map<String, Object>) value;
-                final Object itemsObj = map.get(ITEMS);
-                if (itemsObj == null) {
-                    return resolve(map);
-                } else {
-                    final Map<String, Object> newMap = resolve(map);
-                    withItems(newMap, this::resolve);
-                    return newMap;
-                }
-            } else {
-                throw new ResolverException(format(
-                    "Key '%s' has a value of unsupported type '%s'.",
-                    key, value
-                ));
-            }
-        });
+
+        // Go through each key-value pair and resolve the value.
+        final Map<String, Object> nextPrototype = resolvePrototype(result.get(PROTOTYPE));
+        result.replaceAll((key, value) -> resolveAny(value, nextPrototype));
+
         return result;
     }
 
     @Override
     public Map<String, Object> normalize(Map<String, Object> document) {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        Map<String, Object> map = normalizePrototype(document);
+        map = normalizeExtends(map);
+
+        final Object flat = flatten(map);
+        if (flat instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> flatMap = (Map<String, Object>) flat;
+            return flatMap;
+        } else { // Top level should be a map.
+            final Map<String, Object> root = new LinkedHashMap<>();
+            root.put(ITEMS, flat);
+            return root;
+        }
+    }
+
+    private Map<String, Object> normalizePrototype(Map<String, Object> document) {
+        Map<String, Object> diff = copy(document);
+
+        // Normalize prototypes
+        final Object prototypeObj = document.get(PROTOTYPE);
+        final Object itemsObj     = document.get(ITEMS);
+        if (prototypeObj != null && itemsObj != null) {
+
+            final List<Object> items;
+            if (itemsObj instanceof List) {
+                @SuppressWarnings("unchecked")
+                final List<Object> casted = (List<Object>) itemsObj;
+                items = casted;
+            } else {
+                throw new ResolverException(format(
+                    "Can't normalize where 'items' is of unsupported type " +
+                        "'%s'.", itemsObj.getClass().getName()
+                ));
+            }
+
+            final Map<String, Object> prototype;
+            if (prototypeObj instanceof Map) {
+                @SuppressWarnings("unchecked")
+                final Map<String, Object> casted = (Map<String, Object>) prototypeObj;
+                prototype = casted;
+
+            } else if (prototypeObj instanceof String) {
+                prototype = loadAndResolve((String) prototypeObj);
+
+            } else {
+                throw new ResolverException(format(
+                    "Can't normalize where 'prototype' is of unsupported " +
+                        "type '%s'.", prototypeObj.getClass().getName()));
+            }
+
+            final List<Object> normalizedItems = new ArrayList<>();
+            for (final Object item : items) {
+                if (item instanceof Map) {
+                    @SuppressWarnings("unchecked")
+                    final Map<String, Object> itemMap = (Map<String, Object>) item;
+                    final Map<String, Object> norm = difference(prototype, itemMap);
+                    if (norm == null) { // An empty map (no difference) is still a map
+                        normalizedItems.add(new LinkedHashMap<>());
+                    } else {
+                        normalizedItems.add(norm);
+                    }
+                } else {
+                    final Object norm = differenceAny(prototype, item);
+                    if (norm != null) normalizedItems.add(norm);
+                }
+            }
+
+            diff.put(ITEMS, normalizedItems);
+        }
+
+        final Map<String, Object> normalized = new LinkedHashMap<>();
+        diff.forEach((key, value) -> {
+            final Object n = normalizePrototypeAny(value);
+            if (n != null) normalized.put(key, n);
+        });
+
+        return normalized;
+    }
+
+    private List<Object> normalizePrototype(List<Object> list) {
+        final List<Object> normalized = new ArrayList<>();
+        for (final Object obj : list) {
+            normalized.add(normalizePrototypeAny(obj));
+        }
+        return normalized;
+    }
+
+    private Object normalizePrototypeAny(Object object) {
+        if (object == null || isBasic(object)) {
+            return object;
+
+        } else if (object instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> map = (Map<String, Object>) object;
+            return normalizePrototype(map);
+
+        } else if (object instanceof List) {
+            @SuppressWarnings("unchecked")
+            final List<Object> list = (List<Object>) object;
+            return normalizePrototype(list);
+
+        } else {
+            throw new ResolverException(format(
+                "Can't normalize value of unsupported type '%s'.",
+                object.getClass().getName()
+            ));
+        }
+    }
+
+    private Map<String, Object> normalizeExtends(Map<String, Object> document) {
+        final Object extendsObj = document.get(EXTENDS);
+
+        final Map<String, Object> diff;
+        if (extendsObj == null) {
+            diff = copy(document);
+
+        } else {
+            final Map<String, Object> extendsMap;
+            if (extendsObj instanceof Map) {
+                @SuppressWarnings("unchecked")
+                final Map<String, Object> casted = (Map<String, Object>) extendsObj;
+                extendsMap = resolve(casted);
+
+            } else if (extendsObj instanceof String) {
+                final String resName = (String) extendsObj;
+                extendsMap = loadAndResolve(resName);
+
+            } else {
+                throw new ResolverException(format(
+                    "Invalid extends value '%s' found when normalizing.",
+                    extendsObj.getClass().getName()
+                ));
+            }
+
+            diff = difference(extendsMap, document);
+        }
+
+        if (diff == null) return new LinkedHashMap<>();
+
+        final Map<String, Object> normalized = new LinkedHashMap<>();
+        diff.forEach((key, value) -> {
+            final Object n = normalizeExtendsAny(value);
+            if (n != null) normalized.put(key, n);
+        });
+
+        return normalized;
+    }
+
+    private List<Object> normalizeExtends(List<Object> list) {
+        final List<Object> normalized = new ArrayList<>();
+        for (final Object obj : list) {
+            normalized.add(normalizeExtendsAny(obj));
+        }
+        return normalized;
+    }
+
+    private Object normalizeExtendsAny(Object object) {
+        if (object == null || isBasic(object)) {
+            return object;
+
+        } else if (object instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> map = (Map<String, Object>) object;
+            return normalizeExtends(map);
+
+        } else if (object instanceof List) {
+            @SuppressWarnings("unchecked")
+            final List<Object> list = (List<Object>) object;
+            return normalizeExtends(list);
+
+        } else {
+            throw new ResolverException(format(
+                "Can't normalize value of unsupported type '%s'.",
+                object.getClass().getName()
+            ));
+        }
+    }
+
+    private Object flatten(Map<String, Object> document) {
+        final Object itemsObj = document.get(ITEMS);
+        if (itemsObj instanceof List) {
+            final Object prototypeObj = document.get(PROTOTYPE);
+            if (document.size() == 1 // There is no prototype, only items
+                ||  (prototypeObj instanceof Map && ((Map<?, ?>) prototypeObj).isEmpty())) {
+                @SuppressWarnings("unchecked")
+                final List<Object> items = (List<Object>) itemsObj;
+                return flatten(items);
+            }
+        }
+
+        final Map<String, Object> copy = new LinkedHashMap<>();
+        document.forEach((key, value) -> {
+            copy.put(key, flattenAny(value));
+        });
+
+        return copy;
+    }
+
+    private List<Object> flatten(List<Object> items) {
+        final List<Object> copy = new ArrayList<>();
+        for (final Object val : items) {
+            copy.add(flattenAny(val));
+        }
+        return copy;
+    }
+
+    private Object flattenAny(Object value) {
+        if (value == null || isBasic(value)) {
+            return value;
+        } else if (value instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> map = (Map<String, Object>) value;
+            return flatten(map);
+        } else if (value instanceof List) {
+            @SuppressWarnings("unchecked")
+            final List<Object> list = (List<Object>) value;
+            return flatten(list);
+        } else {
+            throw new ResolverException(format(
+                "Can't flatten value of type '%s' since it is not supported.",
+                value.getClass().getName()
+            ));
+        }
     }
 
     @Override
     public Map<String, Object> difference(Map<String, Object> first, Map<String, Object> second) {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (first == null || second == null) {
+            return copy(second);
+        } else if (first.equals(second)) {
+            return null;
+        }
+
+        final Map<String, Object> copy = new LinkedHashMap<>();
+
+        second.forEach((key, newValue) -> {
+            if (newValue == null) return;
+            final Object oldValue = first.get(key);
+            final Object diff = differenceAny(oldValue, newValue);
+            if (diff != null) {
+                copy.put(key, diff);
+            }
+        });
+
+        return copy;
+    }
+
+    private List<Object> difference(List<Object> first, List<Object> second) {
+        if (first == null || second == null) {
+            return copy(second);
+        } else if (first.equals(second)) {
+            return null;
+        }
+
+        final List<Object> copy = new ArrayList<>();
+
+        nextS: for (final Object s : second) {
+            final String sId = identify(s);
+
+            if (sId != null) {
+                for (final Object f : first) {
+                    final String fId = identify(f);
+                    if (sId.equals(fId)) {
+                        copy.add(differenceAny(f, s));
+                        continue nextS;
+                    }
+                }
+            }
+
+            copy.add(copyAny(s));
+        }
+
+        return copy;
+    }
+
+    private Object differenceAny(Object oldValue, Object newValue) {
+        if (oldValue == null || newValue == null) {
+            return newValue;
+
+        } else if (isBasic(oldValue) || isBasic(newValue)) {
+            if (oldValue.equals(newValue)) {
+                return null;
+            } else {
+                return newValue;
+            }
+
+        } else if (oldValue instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> oldMap = (Map<String, Object>) oldValue;
+
+            if (newValue instanceof Map) {
+                @SuppressWarnings("unchecked")
+                final Map<String, Object> newMap = (Map<String, Object>) newValue;
+                return difference(oldMap, newMap);
+
+            } else if (newValue instanceof List) {
+
+                @SuppressWarnings("unchecked")
+                final List<Object> newList = (List<Object>) newValue;
+
+                final Object oldItemsObj = oldMap.get(ITEMS);
+                if (oldItemsObj == null) {
+                    return copy(newList);
+
+                } else if (oldItemsObj instanceof List) {
+                    @SuppressWarnings("unchecked")
+                    final List<Object> oldList = (List<Object>) oldItemsObj;
+                    return difference(oldList, newList); // TODO: Since prototype is not saved, this diff potentially contains too many elements
+
+                } else {
+                    throw new ResolverException(
+                        "Can't compute difference between non-prototype " +
+                            "object.");
+                }
+            } else {
+                throw new ResolverException(format(
+                    "Can't compute difference between Map and " +
+                        "unsupported type '%s'.",
+                    newValue.getClass().getName()));
+            }
+
+        } else if (oldValue instanceof List) {
+            @SuppressWarnings("unchecked")
+            final List<Object> oldList = (List<Object>) oldValue;
+
+            if (newValue instanceof List) {
+                @SuppressWarnings("unchecked")
+                final List<Object> newList = (List<Object>) newValue;
+                return difference(oldList, newList);
+
+            } else {
+                throw new ResolverException(format(
+                    "Can't compute difference between a List and a %s",
+                    newValue.getClass().getName()
+                ));
+            }
+        } else {
+
+            throw new ResolverException(format(
+                "Can't compute difference between values " +
+                    "since the first is of unrecognized type '%s'.",
+                oldValue.getClass().getName()));
+
+        }
+    }
+
+    private Object find(List<Object> items, Object find) {
+        final String id = identify(find);
+        if (id == null) return null;
+
+        for (final Object obj : items) {
+            if (id.equals(identify(obj))) {
+                return obj;
+            }
+        }
+
+        return null;
     }
 
     private void apply(Map<String, Object> result, Map<String, Object> changes) {
+        if (changes.containsKey(EXTENDS) && !result.containsKey(EXTENDS)) {
+            result.put(EXTENDS, null);
+        }
+
+        if (changes.containsKey(PROTOTYPE) && !result.containsKey(PROTOTYPE)) {
+            result.put(PROTOTYPE, null);
+        }
+
+        if (changes.containsKey(ITEMS) && !result.containsKey(ITEMS)) {
+            result.put(ITEMS, null);
+        }
+
+        if (changes.containsKey(ID) && !result.containsKey(ID)) {
+            result.put(ID, null);
+        }
+
         changes.forEach((key, newValue) -> {
             if (newValue == null) {
                 result.put(key, null);
                 return;
             }
 
-            final Object oldValue = changes.get(key);
+            final Object oldValue = result.get(key);
             if (oldValue == null || isBasic(oldValue)) {
                 result.put(key, copyAny(newValue));
-            } else if (!isMap(oldValue, oldMap -> result.put(key, mergeAny(oldMap, newValue))) && !isList(oldValue, oldList -> {
-                if (!isList(newValue, newList -> result.put(key, merge(oldList, newList))) && !isMap(newValue, newMap -> {
-                    newMap = resolve(newMap);
-                    @SuppressWarnings("unchecked") final List<Object> newList = (List<Object>) newMap.computeIfAbsent(ITEMS, i -> new ArrayList<>());
-                    newMap.put(ITEMS, merge(oldList, newList));
-                    result.put(key, newMap);
-                })) {
+
+            } else if (oldValue instanceof List) {
+                @SuppressWarnings("unchecked")
+                final List<Object> oldList = (List<Object>) oldValue;
+
+                if (newValue instanceof List) {
+                    @SuppressWarnings("unchecked")
+                    final List<Object> newList = (List<Object>) newValue;
+
+                    for (final Object newItem : newList) {
+                        final Object oldItem = find(oldList, identify(newItem));
+                        if (oldItem == null) {
+                            oldList.add(newItem);
+                        } else {
+                            @SuppressWarnings("unchecked")
+                            final Map<String, Object> newMap = (Map<String, Object>) newItem;
+                            oldList.set(oldList.indexOf(oldItem), mergeAny(newMap, newItem));
+                        }
+                    }
+                } else if (newValue instanceof Map) {
+                    @SuppressWarnings("unchecked")
+                    final Map<String, Object> newMap = (Map<String, Object>) newValue;
+
+                    @SuppressWarnings("unchecked")
+                    final List<Object> newItems = (List<Object>) newMap.getOrDefault(ITEMS, new ArrayList<>());
+
+                    final Map<String, Object> created = newMap();
+                    apply(created, newMap);
+                    created.put(ITEMS, merge(oldList, newItems));
+                    result.put(key, created);
+                } else {
                     throw new ResolverException(format(
-                        "Unsupported newValue type '%s' for key '%s'.",
-                        newValue.getClass().getName(), key
-                    ));
+                        "Can't apply a '%s' to a List at key '%s'.",
+                        newValue.getClass().getName(), key));
                 }
-            })) throw new ResolverException(format(
-                "Unsupported oldValue type '%s' for key '%s'.",
-                oldValue.getClass().getName(), key
-            ));
+
+            } else if (oldValue instanceof Map) {
+                @SuppressWarnings("unchecked")
+                final Map<String, Object> oldMap = (Map<String, Object>) oldValue;
+                result.put(key, mergeAny(oldMap, newValue));
+
+            } else {
+                throw new ResolverException(format(
+                    "Can't apply at key '%s' since oldValue is of type '%s'.",
+                    key, oldValue.getClass().getName()
+                ));
+            }
         });
     }
 
@@ -304,6 +703,23 @@ public class NewDocumentResolverImpl implements DocumentResolver {
         if (!isNull(prototype, () -> action.accept(null))
         && !isString(prototype, res -> action.accept(loadAndResolve(res)))
         && !isMap(prototype, map -> action.accept(resolve(map)))) {
+            throw new ResolverException(format(
+                "Invalid prototype type '%s'.",
+                prototype.getClass().getName()
+            ));
+        }
+    }
+
+    private Map<String, Object> resolvePrototype(Object prototype) {
+        if (prototype == null) return null;
+        else if (prototype instanceof String) {
+            final String string = (String) prototype;
+            return load(string);
+        } else if (prototype instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<String, Object> map = (Map<String, Object>) prototype;
+            return map;
+        } else {
             throw new ResolverException(format(
                 "Invalid prototype type '%s'.",
                 prototype.getClass().getName()
@@ -323,25 +739,6 @@ public class NewDocumentResolverImpl implements DocumentResolver {
                     ));
                 }
             }
-        }
-    }
-
-    private void withItems(Object document,
-                           BiConsumer<Map<String, Object>, Map<String, Object>> action) {
-        if (document != null
-        && !isList(document,
-            list -> list.forEach(
-                item -> isMap(item,
-                    itemMap -> action.accept(itemMap, null))))
-        && !isMap(document,
-            map -> withPrototype(map.get(PROTOTYPE),
-                prototype -> isList(map.get(ITEMS),
-                    list -> list.forEach(
-                        item -> isMap(item,
-                            itemMap -> action.accept(itemMap, prototype))))))) {
-            throw new ResolverException(format(
-                "Expected 'items' to be either a Map or a List, but was a %s.",
-                document.getClass().getName()));
         }
     }
 
@@ -365,22 +762,6 @@ public class NewDocumentResolverImpl implements DocumentResolver {
             @SuppressWarnings("unchecked")
             final Map<String, Object> map = (Map<String, Object>) object;
             action.accept(map);
-            return true;
-        } else return false;
-    }
-
-    private static boolean isList(Object object, Consumer<List<Object>> action) {
-        if (object instanceof List) {
-            @SuppressWarnings("unchecked")
-            final List<Object> map = (List<Object>) object;
-            action.accept(map);
-            return true;
-        } else return false;
-    }
-
-    private static boolean isBasic(Object object, Consumer<Object> action) {
-        if (isBasic(object)) {
-            action.accept(object);
             return true;
         } else return false;
     }
