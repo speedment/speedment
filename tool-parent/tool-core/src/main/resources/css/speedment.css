@@ -16,20 +16,14 @@
  */
 
 /*** Load Custom Fonts ***/
-@font-face { src: url("../fonts/AdventPro-Bold.ttf"); }
-
 @font-face { src: url("../fonts/fontawesome-webfont.ttf"); }
 
-@font-face { src: url("../fonts/Montserrat-Bold.otf"); }
-@font-face { src: url("../fonts/Montserrat-Regular.otf"); }
-
-@font-face { src: url("../fonts/NotoSans-Bold.ttf"); }
-@font-face { src: url("../fonts/NotoSans-Regular.ttf"); }
-@font-face { src: url("../fonts/NotoSans-Italic.ttf"); }
-@font-face { src: url("../fonts/NotoSans-BoldItalic.ttf"); }
+@font-face {src: url("../fonts/TitilliumWeb-Regular.ttf"); }
 
 @font-face { src: url("../fonts/SourceSansPro-Bold.ttf"); }
 @font-face { src: url("../fonts/SourceSansPro-Regular.ttf"); }
+
+@font-face { src: url("../fonts/SourceCodePro-Regular.otf"); }
 
 /*** Constants ***/
 * {
@@ -65,9 +59,11 @@
 
     -fx-focus-color: -fx-speedment-blue;
     -fx-accent:      -fx-speedment-blue;
-    
-    -fx-font-header: 'Montserrat';
-    -fx-font-text:   'Noto Sans';
+
+}
+
+.root {
+    -fx-background-color: -fx-bg-gray;
 }
 
 /*** Titles Pane ***/
@@ -77,11 +73,11 @@
 }
 
 .titled-pane > .title {
-    -fx-background-color: -fx-speedment-blue;
+    -fx-background-color: -fx-speedment-darkgray;
     -fx-background-radius: 0px;
     -fx-font-size: 1.1em;
-    -fx-font-weight: bold;
-    -fx-font-family: -fx-font-header;
+    -fx-font-weight: normal;
+    -fx-font-family: 'Titillium Web';
 }
 
 /*** Border Panes ***/
@@ -91,13 +87,15 @@
 
 /*** Tree View ***/
 .tree-view {
-    -fx-font-family: -fx-font-text;
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
+    -fx-background-color: -fx-speedment-gray;
+    -fx-text-fill: -fx-speedment-lightgray;
 }
 
 .tree-view .tree-cell:selected {
-    -fx-background-color: #5a98c8;
+    -fx-background-color: -fx-speedment-mediumblue;
     -fx-background-radius: 0px;
     -fx-border-width: 0px;
     -fx-text-fill: white;
@@ -113,78 +111,95 @@
 
 .tree-view .gui-disabled,
 .tree-view .gui-disabled .tree-cell {
-    -fx-text-fill: -fx-speedment-lightgray;
+    -fx-text-fill: -fx-speedment-mediumgray;
     -fx-font-weight: bold;
     -fx-font-style: italic;
 }
 
 /*** Label ***/
 .label {
-    -fx-font-family: -fx-font-text;
+    -fx-font-family: 'Source Sans Pro';
+    -fx-font-size: 1.1em;
+    -fx-font-weight: normal;
+    -fx-text-fill: -fx-speedment-darkgray;
+}
+
+.form-label {
+    -fx-font-family: 'Titillium Web';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
 /*** Headers ***/
 .header {
-    -fx-font-family: -fx-font-header;
+    -fx-font-family: 'Titillium Web';
+    -fx-font-weight: normal;
     -fx-font-size: 2em;
-    -fx-font-weight: bold;
     -fx-text-fill: -fx-speedment-darkgray;
+}
+
+.header-pane {
+    -fx-font-family: 'Titillium Web';
+    -fx-font-weight: normal;
+    -fx-font-size: 1.7em;
+    -fx-text-fill: -fx-speedment-darkgray;
+    -fx-background-color: #a7b2b92e;
 }
 
 /*** Text Fields and Areas ***/
 .text-field,
 .text-area {
     -fx-background-color: white;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-darkgray;
-    -fx-font-family: -fx-font-text;
+    -fx-border-radius: 2px;
+    -fx-border-color: -fx-speedment-mediumgray;
+    -fx-font-family: 'Source Sans Pro';
+    -fx-text-fill: -fx-speedment-darkgray;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
-.text-field:focused, 
+.text-field:focused,
 .text-field:hover,
-.text-area:focused, 
+.text-area:focused,
 .text-area:hover {
-    -fx-border-color: -fx-speedment-lightgreen;
+    -fx-border-color: -fx-speedment-green;
 }
 
 /*** List Views ***/
 .list-view {
     -fx-background-color: white;
-    -fx-border-width: 2px;
-    -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-darkgray;
-    -fx-font-family: -fx-font-text;
+    /*   -fx-border-width: 2px;
+       -fx-border-style: solid;
+       -fx-border-color: -fx-speedment-darkgray; */
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
-.list-view:focused, 
+.list-view:focused,
 .list-view:hover,
-.list-view:focused, 
+.list-view:focused,
 .list-view:hover {
     -fx-border-color: -fx-speedment-green;
 }
 
 /*** Buttons ***/
 .button {
-    -fx-background-color: -fx-speedment-green;
-    -fx-background-radius: 0px;
+    -fx-background-color: -fx-speedment-darkgreen;
+    -fx-background-radius: 5px;
     -fx-border-width: 0px;
     -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-family: -fx-font-header;
+    -fx-font-weight: normal;
+    -fx-font-family: 'Titillium Web';
     -fx-font-size: 1.0em;
     -fx-cursor: hand;
     -fx-graphic-text-gap: 0.7em;
 }
 
 .button:hover {
-    -fx-background-color: -fx-speedment-lightgreen;
+    -fx-background-color: -fx-speedment-mediumgreen;
 }
 
 .button .glyph-icon {
@@ -193,50 +208,75 @@
     -fx-font-size: 1.5em;
 }
 
+.special {
+    -fx-background-color: -fx-speedment-yellow;
+}
+
 /*** Choice Box ***/
-.choice-box {
+.choice-box,
+.combo-box {
     -fx-background-color: white;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-darkgray;
-    -fx-font-family: -fx-font-text;
+    -fx-border-color: -fx-speedment-mediumgray;
+    -fx-border-radius: 2px;
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
-.choice-box:focused, .choice-box:hover {
+.choice-box:focused,
+.choice-box:hover,
+.combo-box:focused,
+.combo-box:hover {
     -fx-border-color: -fx-speedment-green;
+}
+
+.combo-box .list-cell:hover,
+.combo-box .list-cell:focused {
+    -fx-background-color: -fx-speedment-green;
+    -fx-text-fill: white;
 }
 
 /*** Tooltips ***/
 .tooltip {
     -fx-background-radius: 0px;
     -fx-background-color: white;
-    -fx-border-width: 2px;
-    -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-darkgray;
+    /*  -fx-border-width: 2px;
+      -fx-border-style: solid;
+      -fx-border-color: -fx-speedment-darkgray; */
     -fx-text-fill: black;
-    -fx-font-family: -fx-font-text;
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
 /*** Toolbars ***/
 .tool-bar {
-    -fx-background-color: -fx-speedment-gray;
+    -fx-background-color: -fx-speedment-lightgray;
 }
 
 /*** Checkboxes ***/
+.check-box {
+    -fx-font-family: 'Source Sans Pro';
+}
+
 .check-box *.box {
-    -fx-background-color: white;
-    -fx-border-width: 2px;
-    -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-darkgray;
+    -fx-background-color: -fx-speedment-mediumgray;
+    -fx-border-radius: 5px;
 }
 
 .check-box *.box:hover,
 .check-box *.box:active {
-    -fx-border-color: -fx-speedment-lightgreen;
+    -fx-background-color: -fx-speedment-lightgray;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.check-box:selected .box {
+    -fx-background-color: -fx-speedment-green;
 }
 
 /*** Split Panes ***/
@@ -246,14 +286,14 @@
 }
 
 .split-pane-divider {
-    -fx-border-color: -fx-speedment-gray;
-    -fx-background-color: -fx-speedment-gray;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
 }
 
 .split-pane-divider:hover,
 .split-pane-divider:active {
-    -fx-border-color: -fx-speedment-darkgray;
-    -fx-background-color: -fx-speedment-darkgray;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
 }
 
 /*** Scroll Bars ***/
@@ -261,6 +301,7 @@
 .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-border-width: 0px;
+    -fx-width: 1em;
 }
 
 .increment-button,
@@ -273,7 +314,7 @@
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track {
     -fx-background-color: transparent;
-    -fx-border-color: -fx-speedment-gray;
+    -fx-border-color: transparent;
     -fx-background-radius: 0px;
     -fx-border-width: 0px;
 }
@@ -282,7 +323,7 @@
 .scroll-bar:vertical .thumb {
     -fx-background-color: -fx-speedment-lightgray;
     -fx-background-insets: 0, 0, 0;
-    -fx-background-radius: 0px;
+    -fx-background-radius: 8px;
     -fx-border-width: 0px;
 }
 
@@ -290,17 +331,12 @@
 .scroll-bar:horizontal:pressed .track,
 .scroll-bar:vertical:hover .track,
 .scroll-bar:vertical:pressed .track{
-    -fx-background-color: -fx-speedment-gray;
+    -fx-background-color: transparent;
 }
 
 .scroll-bar .thumb:hover,
 .scroll-bar .thumb:pressed {
-    -fx-background-color: -fx-speedment-darkgray;
-}
-
-.increment-button:hover,
-.decrement-button:hover {
-    -fx-background-color: -fx-speedment-darkgray;
+    -fx-background-color: -fx-speedment-lightgray;
 }
 
 /*** Menus ***/
@@ -308,18 +344,18 @@
 .menu-bar .menu,
 .menu-bar .menu .menu-item {
     -fx-background-color: -fx-speedment-gray;
-    -fx-text-fill: black;
+    -fx-text-fill: white;
 }
 
 .context-menu {
     -fx-background-color: white;
     -fx-background-radius: 0px;
-    -fx-border-width: 2px;
-    -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-green;
-    -fx-text-fill: black;
+    /* -fx-border-width: 2px;
+     -fx-border-style: solid;
+     -fx-border-color: -fx-speedment-green;
+     -fx-text-fill: black; */
     -fx-padding: 0px;
-    -fx-font-family: -fx-font-text;
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
@@ -368,13 +404,17 @@
 .menu-bar .separator {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
-    -fx-background-color: -fx-speedment-green;
+    -fx-background-color: -fx-speedment-gray;
 }
 
 .menu-bar .separator .line {
-    -fx-border-width: 1px 0px 0px 0px;
+    -fx-border-width: 0.5px 0px 0px 0px;
     -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-green;
+    -fx-border-color: -fx-speedment-gray;
+}
+
+.separator {
+    -fx-border-width: 1px;
 }
 
 /*** Toolbar buttons ***/
@@ -399,7 +439,7 @@
 .header-panel > .label,
 .header-panel > .label > .text {
     -fx-text-fill: white;
-    -fx-font-family: -fx-font-text;
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 2em;
     -fx-font-weight: bold;
     -fx-fill: white;
@@ -416,11 +456,11 @@
 }
 
 .warning .header-panel {
-    -fx-background-color: -fx-speedment-orange;
+    -fx-background-color: -fx-speedment-yellow;
 }
 
 .confirmation .header-panel {
-    -fx-background-color: -fx-speedment-orange;
+    -fx-background-color: -fx-speedment-yellow;
 }
 
 .info .header-panel {
@@ -435,29 +475,34 @@
     -fx-background-color: -fx-speedment-green;
 }
 
+.h2 {
+    -fx-font-family: "Titillium Web";
+    -fx-font-size: 1.4em;
+}
+
 /*** Output messages ***/
 .label.msg {
-    -fx-font-family: 'Consolas', 'Monospace';
+    -fx-font-family: 'Source Code Pro';
     -fx-font-size: 1.1em;
     -fx-text-fill: black;
 }
 
 .label.msg.error {
-    -fx-background-color: -fx-speedment-lightred;
+    -fx-background-color: -fx-speedment-mediumred;
 }
 
 .label.msg.warning {
-    -fx-background-color: -fx-speedment-lightorange;
+    -fx-background-color: -fx-speedment-yellow;
 }
 
 .label.msg.success {
-    -fx-background-color: -fx-speedment-lightgreen;
+    -fx-background-color: -fx-speedment-green;
 }
 
 /*** Notifications ***/
 .notification {
     -fx-border-width: 0px 0px 0px 8px;
-    -fx-background-color: #eee;
+    -fx-background-color: -fx-bq-gray;
     -fx-padding: 16;
 }
 
@@ -467,12 +512,12 @@
 }
 
 .notification.info {
-    -fx-border-color: -fx-speedment-lightblue;
+    -fx-border-color: -fx-speedment-mediumblue;
 }
 
 .notification.info .glyph-icon {
-    -fx-fill: -fx-speedment-lightblue;
-    -fx-text-fill: -fx-speedment-lightblue;
+    -fx-fill: -fx-speedment-mediumblue;
+    -fx-text-fill: -fx-speedment-mediumblue;
 }
 
 .notification.success {
@@ -485,30 +530,30 @@
 }
 
 .notification.warning {
-    -fx-border-color: -fx-speedment-lightorange;
+    -fx-border-color: -fx-speedment-yellow;
 }
 
 .notification.warning .glyph-icon {
-    -fx-fill: -fx-speedment-lightorange;
-    -fx-text-fill: -fx-speedment-lightorange;
+    -fx-fill: -fx-speedment-yellow;
+    -fx-text-fill: -fx-speedment-yellow;
 }
 
 .notification.error {
-    -fx-border-color: -fx-speedment-lightred;
+    -fx-border-color: -fx-speedment-mediumred;
 }
 
 .notification.error .glyph-icon {
-    -fx-fill: -fx-speedment-lightred;
-    -fx-text-fill: -fx-speedment-lightred;
+    -fx-fill: -fx-speedment-mediumred;
+    -fx-text-fill: -fx-speedment-mediumred;
 }
 
 .notification.confirmation {
-    -fx-border-color: -fx-speedment-lightorange;
+    -fx-border-color: -fx-speedment-yellow;
 }
 
 .notification.confirmation .glyph-icon {
-    -fx-fill: -fx-speedment-lightorange;
-    -fx-text-fill: -fx-speedment-lightorange;
+    -fx-fill: -fx-speedment-lightyellow;
+    -fx-text-fill: -fx-speedment-yellow;
 }
 
 .notification.authentication {
@@ -529,6 +574,7 @@
 
 /*** Properties layout : left ***/
 .property-label {
+    -fx-font-family: 'Titillium Web';
     -fx-font-size: 1.2em;
     -fx-alignment: top-left;
     -fx-padding: 5px 0px 5px 0px;
@@ -550,4 +596,72 @@
 /*** FontAwesome Icons ***/
 .glyph-icon {
     -fx-font-family: 'FontAwesome';
+}
+
+/*** Field Validation ***/
+.correct {
+    -fx-background-color: white;
+}
+
+.wrong {
+    -fx-border-color: -fx-speedment-mediumred;
+}
+
+.small {
+    -fx-font-size: 0.8em;
+}
+
+.btn-secondary {
+    -fx-background-color: -fx-speedment-green;
+    -fx-text-fill: white;
+}
+
+.hyperlink {
+    -fx-font-family: 'Source Sans Pro';
+    -fx-font-size: 1.1em;
+    -fx-text-fill: -fx-speedment-mediumblue;
+}
+
+/* License table */
+.table-view {
+    -fx-background-color: -fx-speedment-gray;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -fx-speedment-darkgray;
+}
+
+.table-view .column-header-background .label {
+    -fx-font-family: 'Titillium Web';
+    -fx-text-fill: -fx-speedment-lightgray;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .filler {
+    -fx-background-color: -fx-speedment-darkgray;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+
+.table-row-cell{
+    -fx-background-color: -fx-speedment-gray;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-row-cell:odd{
+    -fx-background-color: -fx-speedment-mediumgray;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em; /* 0 */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: -fx-speedment-mediumblue;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
 }
