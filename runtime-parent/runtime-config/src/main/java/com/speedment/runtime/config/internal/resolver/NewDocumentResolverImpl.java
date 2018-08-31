@@ -130,7 +130,7 @@ public class NewDocumentResolverImpl implements DocumentResolver {
         result.put(EXTENDS, extended);
 
         diff.forEach((key, value) -> result.put(key, flattenAny(value)));
-        return result;
+        return reorder(result);
     }
 
     @Override

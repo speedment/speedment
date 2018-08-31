@@ -120,7 +120,11 @@ public final class InternalResolverUtil {
     private static Map<String, Object> mergeMaps(Map<String, Object> first, Map<String, Object> second) {
         final Map<String, Object> map = new LinkedHashMap<>();
         first.forEach((key, value) -> map.put(key, deepCopy(value)));
-        second.forEach((key, newValue) -> map.merge(key, newValue, InternalResolverUtil::merge));
+        second.forEach((key, newValue) -> {
+            // Can't use merge since value might be null.
+            final Object oldValue = map.get(key);
+            map.put(key, merge(oldValue, newValue));
+        });
         return map;
     }
 

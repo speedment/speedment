@@ -45,6 +45,38 @@ public final class ResolverUtil {
     }
 
     /**
+     * Creates a copy of the {@code oldValue} with the values from
+     * {@code newValue} merged into it. If the same value exists in both
+     * {@code oldValue} and {@code newValue}, then the {@code newValue} will
+     * have precedence. For {@link Map Maps}, the {@link DocumentResolver#ID}
+     * attribute will be used as identifier. This method supports the following
+     * types:
+     * <ul>
+     *     <li>{@link Integer}
+     *     <li>{@link Long}
+     *     <li>{@link Float}
+     *     <li>{@link Double}
+     *     <li>{@link Boolean}
+     *     <li>{@link String}
+     *     <li>{@link UUID}
+     *     <li>{@link Map}
+     *     <li>{@link List}
+     *     <li>{@link LocalTime}
+     *     <li>{@link LocalDate}
+     *     <li>{@link LocalDateTime}
+     * </ul>
+     *
+     * @param oldValue  the old value
+     * @param newValue  the new value
+     * @param <A>  the old value type
+     * @param <B>  the new value type
+     * @return  the merged value
+     */
+    public static <A, B> Object merge(A oldValue, B newValue) {
+        return InternalResolverUtil.merge(oldValue, newValue);
+    }
+
+    /**
      * Utility classes should not be instantiated.
      */
     private ResolverUtil() {}
