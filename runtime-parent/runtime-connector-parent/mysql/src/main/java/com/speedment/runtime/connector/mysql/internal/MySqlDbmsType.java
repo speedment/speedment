@@ -188,7 +188,8 @@ public final class MySqlDbmsType extends AbstractDbmsType {
                 .append("&zeroDateTimeBehavior=")
                 .append(driverVersion() >= 8 ? "CONVERT_TO_NULL" : "convertToNull")
                 .append("&nullNamePatternMatchesAll=true") // Fix #190
-                .append("&useLegacyDatetimeCode=true");    // Fix #190
+                .append("&useLegacyDatetimeCode=true")     // Fix #190
+                .append("&allowPublicKeyRetrieval=true");  // Fix #621
 
             if (driverVersion() <= 5) {
                 result.append("&useSSL=false");
