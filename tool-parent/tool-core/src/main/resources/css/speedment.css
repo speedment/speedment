@@ -343,8 +343,12 @@
 .menu-bar,
 .menu-bar .menu,
 .menu-bar .menu .menu-item {
-    -fx-background-color: -fx-speedment-gray;
-    -fx-text-fill: white;
+    -fx-background-color: -fx-speedment-white;
+}
+
+.menu-bar {
+    -fx-border-width: 0 0 0.5px 0;
+    -fx-border-color: -fx-speedment-darkgray;
 }
 
 .context-menu {
@@ -358,6 +362,7 @@
     -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
+    -fx-text-fill: white;
 }
 
 .menu-bar .menu:hover,
@@ -432,47 +437,54 @@
 }
 
 /*** Dialog Panels ***/
-.header-panel {
-    -fx-border-width: 0px;
-}
 
 .header-panel > .label,
 .header-panel > .label > .text {
-    -fx-text-fill: white;
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 2em;
-    -fx-font-weight: bold;
-    -fx-fill: white;
+    -fx-font-family: 'Titillium Web';
+    -fx-font-weight: normal;
+    -fx-font-size: 1.7em;
+    -fx-text-fill: -fx-speedment-darkgray;
 }
 
 .header-panel > .graphic-container .glyph-icon {
-    -fx-font-size: 2em;
-    -fx-text-fill: white;
-    -fx-fill: white;
+    -fx-font-size: 1.7em;
 }
 
-.error .header-panel {
-    -fx-background-color: -fx-speedment-red;
+.error .header-panel > .graphic-container .glyph-icon {
+    -fx-text-fill: -fx-speedment-red;
+    -fx-fill: -fx-speedment-red;
 }
 
-.warning .header-panel {
-    -fx-background-color: -fx-speedment-yellow;
+.warning .header-panel > .graphic-container .glyph-icon {
+    -fx-text-fill: -fx-speedment-yellow;
+    -fx-fill: -fx-speedment-yellow;
 }
 
-.confirmation .header-panel {
-    -fx-background-color: -fx-speedment-yellow;
+.confirmation .header-panel > .graphic-container .glyph-icon {
+    -fx-text-fill: -fx-speedment-yellow;
+    -fx-fill: -fx-speedment-yellow;
 }
 
-.info .header-panel {
-    -fx-background-color: -fx-speedment-green;
+.info .header-panel > .graphic-container .glyph-icon {
+    -fx-text-fill: -fx-speedment-green;
+    -fx-fill: -fx-speedment-green;}
+
+.authentication .header-panel > .graphic-container .glyph-icon {
+    -fx-text-fill: -fx-speedment-darkgray;
+    -fx-fill: -fx-speedment-darkgray;}
+
+.progress .header-panel > .graphic-container .glyph-icon {
+    -fx-text-fill: -fx-speedment-green;
+    -fx-fill: -fx-speedment-green;}
+
+.progress-bar > .track {
+    -fx-text-box-border: -fx-speedment-green;
+    -fx-control-inner-background: transparent;
 }
 
-.authentication .header-panel {
-    -fx-background-color: -fx-speedment-darkgray;
-}
-
-.progress .header-panel {
-    -fx-background-color: -fx-speedment-green;
+.progress-bar .bar {
+    -fx-padding: 4px;
+    -fx-background-insets: 0;
 }
 
 .h2 {
@@ -502,7 +514,7 @@
 /*** Notifications ***/
 .notification {
     -fx-border-width: 0px 0px 0px 8px;
-    -fx-background-color: -fx-bq-gray;
+    -fx-background-color: white;
     -fx-padding: 16;
 }
 
