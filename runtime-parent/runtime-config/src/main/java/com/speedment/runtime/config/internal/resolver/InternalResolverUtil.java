@@ -20,7 +20,7 @@ import static java.lang.String.format;
  * @author Emil Forslund
  * @since  3.1.7
  */
-public final class ResolverUtil {
+public final class InternalResolverUtil {
 
     public static <T> T deepCopy(T object) {
         if (object == null) return null;
@@ -120,7 +120,7 @@ public final class ResolverUtil {
     private static Map<String, Object> mergeMaps(Map<String, Object> first, Map<String, Object> second) {
         final Map<String, Object> map = new LinkedHashMap<>();
         first.forEach((key, value) -> map.put(key, deepCopy(value)));
-        second.forEach((key, newValue) -> map.merge(key, newValue, ResolverUtil::merge));
+        second.forEach((key, newValue) -> map.merge(key, newValue, InternalResolverUtil::merge));
         return map;
     }
 
@@ -327,5 +327,5 @@ public final class ResolverUtil {
             ||  value instanceof LocalDateTime);
     }
 
-    private ResolverUtil() {}
+    private InternalResolverUtil() {}
 }

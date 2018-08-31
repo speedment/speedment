@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.speedment.runtime.config.internal.resolver.ResolverUtil.deepCopy;
-import static com.speedment.runtime.config.internal.resolver.ResolverUtil.isBasic;
-import static com.speedment.runtime.config.internal.resolver.ResolverUtil.merge;
-import static com.speedment.runtime.config.internal.resolver.ResolverUtil.reorder;
+import static com.speedment.runtime.config.internal.resolver.InternalResolverUtil.deepCopy;
+import static com.speedment.runtime.config.internal.resolver.InternalResolverUtil.isBasic;
+import static com.speedment.runtime.config.internal.resolver.InternalResolverUtil.merge;
+import static com.speedment.runtime.config.internal.resolver.InternalResolverUtil.reorder;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
@@ -137,7 +137,7 @@ public class NewDocumentResolverImpl implements DocumentResolver {
     public Map<String, Object> difference(Map<String, Object> first, Map<String, Object> second) {
         final Map<String, Object> oldResolved  = resolve(first);
         final Map<String, Object> newResolved = resolve(second);
-        return ResolverUtil.difference(oldResolved, newResolved);
+        return InternalResolverUtil.difference(oldResolved, newResolved);
     }
 
     private Object flattenAny(Object object) {
