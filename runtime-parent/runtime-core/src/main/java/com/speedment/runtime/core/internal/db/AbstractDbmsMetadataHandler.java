@@ -24,7 +24,6 @@ import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.parameter.OrderType;
-import com.speedment.runtime.config.resolver.DocumentResolver;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
@@ -66,7 +65,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.config.util.DocumentLoaders.jsonLoader;
+import static com.speedment.runtime.config.resolver.ResolverUtil.deepCopy;
 import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
@@ -113,14 +112,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             final Predicate<String> filterCriteria) {
 
         requireNonNulls(filterCriteria, progress);
-
-        // Create a deep copy of the project document.
-//        final Project projectCopy = DocumentUtil.deepCopy(
-//            projectComponent.getProject(), ProjectImpl::new
-//        );
-
-        final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
-        final Project projectCopy = new ProjectImpl(resolver.copy(projectComponent.getProject().getData()));
+        final Project projectCopy = new ProjectImpl(deepCopy(
+            projectComponent.getProject().getData()));
 
         // Make sure there are not multiple dbmses with the same id
         final Set<String> ids = new HashSet<>();
