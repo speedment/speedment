@@ -81,7 +81,17 @@ public abstract class AbstractViewManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
+    public Persister<ENTITY> persister(HasLabelSet<ENTITY> fields) {
+        throw readonlyException();
+    }
+
+    @Override
     public Updater<ENTITY> updater() {
+        throw readonlyException();
+    }
+
+    @Override
+    public Updater<ENTITY> updater(HasLabelSet<ENTITY> fields) {
         throw readonlyException();
     }
 

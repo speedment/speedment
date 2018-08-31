@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.build</groupId>
         <artifactId>build-parent</artifactId>
-        <version>3.1.6-SNAPSHOT</version>
+        <version>3.1.7-SNAPSHOT</version>
     </parent>
     
     <groupId>com.speedment</groupId>
@@ -56,14 +56,6 @@
         <dependency>
             <groupId>com.speedment.plugins</groupId>
             <artifactId>enum-generator</artifactId>
-            <version>${speedment.version}</version>
-            <optional>true</optional>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.speedment.plugins</groupId>
-            <artifactId>spring-generator</artifactId>
             <version>${speedment.version}</version>
             <optional>true</optional>
             <scope>runtime</scope>

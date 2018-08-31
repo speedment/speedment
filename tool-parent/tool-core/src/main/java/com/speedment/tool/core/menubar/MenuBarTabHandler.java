@@ -95,6 +95,7 @@ public interface MenuBarTabHandler {
      * no factory with that key existed, then {@code false} is returned.
      *
      * @param key  the factory key to remove
+     * @return if the factory was removed
      */
     boolean remove(String key);
 

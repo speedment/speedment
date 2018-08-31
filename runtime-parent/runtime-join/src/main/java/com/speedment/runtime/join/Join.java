@@ -73,7 +73,6 @@ public interface Join<T> {
      * Operation is completed or if an Exception is thrown during the Terminal
      * Operation.
      * <p>
-     * <p>
      * Any Terminating Operation may throw a {@link SpeedmentException} if the
      * underlying database throws an Exception (e.g. an SqlException)
      * <p>

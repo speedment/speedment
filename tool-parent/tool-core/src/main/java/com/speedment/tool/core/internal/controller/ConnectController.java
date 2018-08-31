@@ -40,7 +40,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -82,7 +82,7 @@ public final class ConnectController implements Initializable {
 
     @FXML private TextField fieldHost;
     @FXML private TextField fieldPort;
-    @FXML private ChoiceBox<String> fieldType;
+    @FXML private ComboBox<String> fieldType;
     @FXML private TextField fieldName;
     @FXML private TextField fieldSchema;
     @FXML private TextField fieldUser;

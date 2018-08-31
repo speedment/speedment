@@ -25,18 +25,18 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox maxHeight="-Infinity"
-      maxWidth="-Infinity"
-      minHeight="-Infinity"
-      minWidth="-Infinity"
-      prefWidth="640.0"
-      spacing="8.0"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.speedment.tool.core.internal.controller.ComponentsController">
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="640.0" spacing="15.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="com.speedment.tool.core.internal.controller.ComponentsController">
     <children>
-        <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" styleClass="header" textAlignment="CENTER" />
+        <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" styleClass="header" text="Speedment" textAlignment="CENTER">
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin></Label>
         <Label fx:id="header" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Components" />
-        <TreeView fx:id="tree" VBox.vgrow="ALWAYS" />
+        <TreeView fx:id="tree" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets left="30.0" right="30.0" />
+         </VBox.margin></TreeView>
         <HBox alignment="CENTER_RIGHT">
             <children>
                 <Button fx:id="close" defaultButton="true" mnemonicParsing="false" text="Ok, got it!">
@@ -45,9 +45,9 @@
                     </padding>
                 </Button>
             </children>
+         <VBox.margin>
+            <Insets bottom="20.0" left="30.0" right="30.0" />
+         </VBox.margin>
         </HBox>
     </children>
-    <padding>
-        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-    </padding>
 </VBox>

@@ -121,6 +121,7 @@ public interface Stage<ENTITY> {
      * @param field from the table to use (nullable)
      * @param joinOperator to use when joining (nullable)
      * @param foreignField from another table (nullable)
+     * @param referencedStage the previous stage that is referenced by this stage
      * @return a mew default implementation of a Stage
      */
     static <T> Stage<T> of(

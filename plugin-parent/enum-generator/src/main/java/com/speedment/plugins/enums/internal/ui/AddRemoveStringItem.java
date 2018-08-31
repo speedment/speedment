@@ -36,17 +36,12 @@ import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.core.ApplicationMetadata;
-import com.speedment.runtime.core.component.ManagerComponent;
-import com.speedment.runtime.core.component.PasswordComponent;
-import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.component.StreamSupplierComponent;
+import com.speedment.runtime.core.component.*;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
+import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
-import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.core.manager.Persister;
-import com.speedment.runtime.core.manager.Remover;
-import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.field.Field;
@@ -75,6 +70,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
+import java.sql.ResultSet;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -82,9 +78,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
-import com.speedment.runtime.core.component.SqlAdapter;
-import com.speedment.runtime.core.db.SqlFunction;
-import java.sql.ResultSet;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.stream.Collectors.joining;
@@ -559,12 +552,22 @@ extends AbstractLabelTooltipItem {
         }
 
         @Override
+        public Persister<String> persister(HasLabelSet<String> fields) {
+            throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
         public final String update(String entity) throws SpeedmentException {
             throw new UnsupportedOperationException("This manager is read-only.");
         }
 
         @Override
         public Updater<String> updater() {
+            throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
+        public Updater<String> updater(HasLabelSet<String> fields) {
             throw new UnsupportedOperationException("This manager is read-only.");
         }
 

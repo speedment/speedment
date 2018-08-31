@@ -18,9 +18,14 @@ package com.speedment.runtime.core.util;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
 
+import static java.lang.String.format;
+
 /**
+ * Enumeration of the readiness of a particular feature. This is used internally
+ * by Speedment to print an appropriate message on launch.
  *
  * @author Per Minborg
+ * @since  3.0.21
  */
 public enum FeatureReadinessLevel {
     /**
@@ -30,7 +35,7 @@ public enum FeatureReadinessLevel {
      * lingering resource allocations and complete JVM crashes. The feature may
      * also be removed at any time without prior notice.
      * <p>
-     * THE USE OF THE FEATURE IN PRODUCTION SYSTEM IS DISSALOWED.
+     * THE USE OF THE FEATURE IN PRODUCTION SYSTEM IS DISALLOWED.
      */
     EXPERIMENTAL,
     /**
@@ -60,13 +65,21 @@ public enum FeatureReadinessLevel {
      */
     RELEASE_CANDIDATE;
 
-    public void assertAtLeast(FeatureReadinessLevel requiredLevel) {
+    /**
+     * Throw a {@link SpeedmentException} if the required
+     * {@link FeatureReadinessLevel} has not been met.
+     *
+     * @param requiredLevel       the required readiness level
+     * @throws SpeedmentException if not met
+     */
+    public void assertAtLeast(FeatureReadinessLevel requiredLevel)
+    throws SpeedmentException {
         if (this.compareTo(requiredLevel) < 0) {
-            throw new SpeedmentException(
-                "The requred " + FeatureReadinessLevel.class.getSimpleName() + " was " + requiredLevel
-                + " but this feature is only at level " + this
-            );
+            throw new SpeedmentException(format(
+                "The required %s is %s but this feature is only at level %s",
+                FeatureReadinessLevel.class.getSimpleName(),
+                requiredLevel.name(), name()
+            ));
         }
     }
-
 }

@@ -23,34 +23,46 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER"
-      maxHeight="-Infinity"
-      maxWidth="-Infinity"
-      minHeight="-Infinity"
-      minWidth="-Infinity"
-      prefWidth="320.0"
-      spacing="8.0"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.speedment.tool.core.internal.controller.AboutController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="211.0" prefWidth="395.0" spacing="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="com.speedment.tool.core.internal.controller.AboutController">
     <children>
-        <ImageView fx:id="titleImage" fitHeight="32.0" preserveRatio="true" smooth="true" />
-        <Label fx:id="version" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 2.2" />
-        <Label fx:id="license" alignment="CENTER" maxWidth="1.7976931348623157E308" text="{title} is licensed under" wrapText="true" />
-        <Label fx:id="external" alignment="CENTER" maxWidth="1.7976931348623157E308" text="" wrapText="true" />
+      <BorderPane prefHeight="52.0" prefWidth="402.0">
+         <center>
+              <ImageView fx:id="titleImage" fitHeight="53.0" fitWidth="1.0" preserveRatio="true" smooth="true" />
+         </center>
+         <VBox.margin>
+            <Insets top="15.0" />
+         </VBox.margin>
+      </BorderPane>
+        <Label fx:id="version" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Version 2.2">
+         <VBox.margin>
+            <Insets left="30.0" right="30.0" />
+         </VBox.margin></Label>
+        <Label fx:id="license" alignment="CENTER" maxWidth="1.7976931348623157E308" text="{title} is licensed under" wrapText="true">
+         <VBox.margin>
+            <Insets left="30.0" right="30.0" />
+         </VBox.margin></Label>
+        <Label fx:id="external" alignment="CENTER" maxWidth="1.7976931348623157E308" text="" wrapText="true">
+         <VBox.margin>
+            <Insets left="30.0" right="30.0" />
+         </VBox.margin></Label>
         <HBox alignment="CENTER_RIGHT">
             <children>
                 <Button fx:id="close" defaultButton="true" mnemonicParsing="false" text="Ok, got it!">
                     <padding>
                         <Insets bottom="4.0" left="8.0" right="8.0" top="4.0" />
                     </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
                 </Button>
             </children>
+         <VBox.margin>
+            <Insets bottom="15.0" left="30.0" right="30.0" />
+         </VBox.margin>
         </HBox>
     </children>
-    <padding>
-        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-    </padding>
 </VBox>
