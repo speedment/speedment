@@ -1,7 +1,6 @@
 package com.speedment.runtime.config.resolver;
 
 import com.speedment.common.json.Json;
-import com.speedment.runtime.config.internal.resolver.DocumentResolverImpl;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -12,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * @author Emil Forslund
- * @since  3.1.6
+ * @since  3.1.7
  */
 public class NormalizeTest {
 
@@ -25,7 +24,7 @@ public class NormalizeTest {
     @SuppressWarnings("unchecked")
     public void testNormalizeEmpty() {
 
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{}";
         final String expected = "{}";
@@ -37,7 +36,7 @@ public class NormalizeTest {
     @SuppressWarnings("unchecked")
     public void testNormalizeSingleton() {
 
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"a\":\"arne\"}";
         final String expected = "{\"a\":\"arne\"}";
@@ -49,7 +48,7 @@ public class NormalizeTest {
     @SuppressWarnings("unchecked")
     public void testNormalizeNull() {
 
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"a\":null}";
         final String expected = "{}";
@@ -61,7 +60,7 @@ public class NormalizeTest {
     @SuppressWarnings("unchecked")
     public void testNormalizeExtendsInline() {
 
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"extends\":{\"name\":\"b\"},\"name\":\"b\",\"id\":\"a\"}";
         final String expected = "{\"extends\":{\"name\":\"b\"},\"id\":\"a\"}";
@@ -76,7 +75,7 @@ public class NormalizeTest {
             mapBuilder("/foo.json", (Map<String, Object>) Json.fromJson("{\"b\":\"bert\",\"c\":\"carl\"}"))
                 .build();
 
-        final DocumentResolver resolver = new DocumentResolverImpl(files::get);
+        final DocumentResolver resolver = DocumentResolver.create(files::get);
 
         final String original = "{\"extends\":\"/foo.json\",\"b\":\"bert\",\"c\":\"carl\",\"a\":\"adam\"}";
         final String expected = "{\"extends\":\"/foo.json\",\"a\":\"adam\"}";
@@ -92,7 +91,7 @@ public class NormalizeTest {
                 .entry("/bar.json", (Map<String, Object>) Json.fromJson("{\"b\":\"adam\",\"a\":\"dave\"}"))
                 .build();
 
-        final DocumentResolver resolver = new DocumentResolverImpl(files::get);
+        final DocumentResolver resolver = DocumentResolver.create(files::get);
 
         final String original = "{\"extends\":\"/foo.json\",\"b\":\"bert\",\"a\":\"adam\",\"c\":\"carl\"}";
         final String expected = "{\"extends\":\"/foo.json\",\"a\":\"adam\"}";
@@ -103,7 +102,7 @@ public class NormalizeTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testNormalizeEmptyList() {
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"a\":\"adam\",\"list\":{\"items\":[]}}";
         final String expected = "{\"a\":\"adam\",\"list\":[]}";
@@ -114,7 +113,7 @@ public class NormalizeTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testNormalizeListWithEmptyObject() {
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"a\":\"adam\",\"list\":{\"items\":[{}]}}";
         final String expected = "{\"a\":\"adam\",\"list\":[{}]}";
@@ -125,7 +124,7 @@ public class NormalizeTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testNormalizeListWithInnerList() {
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"a\":\"adam\",\"list\":{\"items\":[{\"inner\":{\"items\":[]}}]}}";
         final String expected = "{\"a\":\"adam\",\"list\":[{\"inner\":[]}]}";
@@ -136,7 +135,7 @@ public class NormalizeTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testNormalizeListOfLists() {
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"a\":\"adam\",\"list\":{\"items\":[{\"items\":[]},{\"items\":[]},{\"items\":[]}]}}";
         final String expected = "{\"a\":\"adam\",\"list\":[[],[],[]]}";
@@ -147,7 +146,7 @@ public class NormalizeTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testNormalizeListWithPrototype() {
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"extends\":{\"list\":{\"prototype\":{\"a\":\"arne\"}}},\"list\":{\"prototype\":{\"a\":\"arne\"},\"items\":[{\"a\":\"arne\"}]},\"a\":\"adam\"}";
         final String expected = "{\"extends\":{\"list\":{\"prototype\":{\"a\":\"arne\"}}},\"list\":[{}],\"a\":\"adam\"}";
@@ -158,7 +157,7 @@ public class NormalizeTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testNormalizePopulatedListWithPrototype() {
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> null);
+        final DocumentResolver resolver = DocumentResolver.create(res -> null);
 
         final String original = "{\"extends\":{\"list\":{\"prototype\":{\"a\":\"arne\"}}},\"list\":{\"prototype\":{\"a\":\"arne\"},\"items\":[{\"a\":\"bert\",\"b\":\"carl\"}]},\"a\":\"adam\"}";
         final String expected = "{\"extends\":{\"list\":{\"prototype\":{\"a\":\"arne\"}}},\"list\":[{\"a\":\"bert\",\"b\":\"carl\"}],\"a\":\"adam\"}";
@@ -174,7 +173,7 @@ public class NormalizeTest {
                 .entry("/bar.json", (Map<String, Object>) Json.fromJson("{\"a\":\"curt\"}"))
                 .build();
 
-        final DocumentResolver resolver = new DocumentResolverImpl(files::get);
+        final DocumentResolver resolver = DocumentResolver.create(files::get);
 
 
 
@@ -194,7 +193,7 @@ public class NormalizeTest {
                 .entry("/level3.json", (Map<String, Object>) Json.fromJson("{\"extends\":\"/base.json\"}"))
                 .build();
 
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> {
+        final DocumentResolver resolver = DocumentResolver.create(res -> {
             System.out.println("Loading " + res);
             return files.get(res);
         });
@@ -214,7 +213,7 @@ public class NormalizeTest {
                 .entry("/level3.json", (Map<String, Object>) Json.fromJson("{}"))
                 .build();
 
-        final DocumentResolver resolver = new DocumentResolverImpl(res -> {
+        final DocumentResolver resolver = DocumentResolver.create(res -> {
             System.out.println("Loading " + res);
             return files.get(res);
         });

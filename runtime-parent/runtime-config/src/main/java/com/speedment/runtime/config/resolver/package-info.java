@@ -7,6 +7,6 @@
  * (if ever) be done in major releases.
  *
  * @author Emil Forslund
- * @since  3.1.6
+ * @since  3.1.7
  */
 package com.speedment.runtime.config.resolver;

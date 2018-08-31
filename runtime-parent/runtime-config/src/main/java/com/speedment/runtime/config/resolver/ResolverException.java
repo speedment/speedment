@@ -4,7 +4,7 @@ package com.speedment.runtime.config.resolver;
  * Exception thrown while resolving the syntax of a document.
  *
  * @author Emil Forslund
- * @since  3.1.6
+ * @since  3.1.7
  */
 public final class ResolverException extends RuntimeException {
 
