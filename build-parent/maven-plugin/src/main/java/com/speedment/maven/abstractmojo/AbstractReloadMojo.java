@@ -22,6 +22,7 @@ import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.resolver.DocumentResolver;
+import com.speedment.runtime.config.resolver.ResolverUtil;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationBuilder;
@@ -93,7 +94,7 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
         final DocumentResolver resolver = DocumentResolver.create(jsonLoader());
 
         final AtomicReference<Map<String, Object>> projectData =
-            new AtomicReference<>(resolver.copy(project.getData()));
+            new AtomicReference<>(ResolverUtil.deepCopy(project.getData()));
 
         final List<CompletableFuture<Boolean>> tasks =
             project.dbmses().filter(HasEnabled::test).map(dbms -> {
@@ -119,7 +120,13 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
                                 saveRaw(old, nextPath("old"));
                                 final Map<String, Object> newMap = resolver.resolve(p.getData());
                                 saveRaw(newMap, nextPath("new"));
-                                final Map<String, Object> merged = resolver.merge(old, newMap);
+
+                                // The only time the type changes is when
+                                // elements of different type are merged.
+                                @SuppressWarnings("unchecked")
+                                final Map<String, Object> merged =
+                                    (Map<String, Object>) ResolverUtil.merge(old, newMap);
+
                                 saveRaw(merged, nextPath("merged"));
                                 return merged;
                             });
