@@ -29,6 +29,7 @@ public interface ToolbarComponent {
      * and the new item will be inserted into the same position and side as the
      * old one.
      *
+     * @param <T>   node type
      * @param key   the key to identify it with
      * @param item  the item to install
      */
