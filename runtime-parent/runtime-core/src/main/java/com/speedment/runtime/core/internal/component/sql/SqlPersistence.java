@@ -59,5 +59,7 @@ interface SqlPersistence<ENTITY> {
      * @throws SpeedmentException  if the entity could not be removed
      */
     ENTITY remove(ENTITY entity) throws SpeedmentException;
+
+
     
 }

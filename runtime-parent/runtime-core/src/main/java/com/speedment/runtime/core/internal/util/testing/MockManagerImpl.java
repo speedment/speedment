@@ -18,10 +18,7 @@ package com.speedment.runtime.core.internal.util.testing;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.core.manager.Persister;
-import com.speedment.runtime.core.manager.Remover;
-import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.field.Field;
 
 import java.util.function.Supplier;
@@ -112,6 +109,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
+    public Persister<ENTITY> persister(HasLabelSet<ENTITY> columns) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public ENTITY remove(ENTITY entity) throws SpeedmentException {
         return remover.apply(entity);
     }
@@ -155,4 +157,10 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Updater<ENTITY> updater() {
         return updater;
     }
+
+    @Override
+    public Updater<ENTITY> updater(HasLabelSet<ENTITY> columns) {
+        throw new UnsupportedOperationException();
+    }
+
 }

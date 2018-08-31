@@ -30,9 +30,9 @@ public interface HasOn<ENTITY> {
      * {@code originalField} belongs to a previous entered manager that are used
      * for joining elements.
      *
-     * @param <V> type that the field can cold
+     * @param <V> type that the field can hold
      * @param <FIELD> type of the field
-     * @param originalField
+     * @param originalField joined field
      * @return a builder with the modified operation
      *
      * @throws NullPointerException if the provided {@code originalField } is

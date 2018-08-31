@@ -18,10 +18,7 @@ package com.speedment.runtime.bulk;
 
 import com.speedment.runtime.bulk.Operation.Type;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.core.manager.Persister;
-import com.speedment.runtime.core.manager.Remover;
-import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.field.Field;
 import org.junit.Before;
 import org.junit.Test;
@@ -264,7 +261,17 @@ public class BuilderTest {
         }
 
         @Override
+        public Persister<Point> persister(HasLabelSet<Point> fields) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
         public Updater<Point> updater() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Updater<Point> updater(HasLabelSet<Point> fields) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

@@ -23,15 +23,17 @@ import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -87,8 +89,11 @@ public final class InitialFilterOptimizer<ENTITY> implements SqlStreamOptimizer<
                 predicates
             );
 
-            sql.append(" WHERE ").append(rr.getSql());
-            values.addAll(rr.getValues());
+            final String whereFragmentSql = rr.getSql();
+            if (!whereFragmentSql.isEmpty()) {
+                sql.append(" WHERE ").append(whereFragmentSql);
+                values.addAll(rr.getValues());
+            }
         }
 
 //        final List<FieldPredicate<ENTITY>> andPredicateBuilders = topLevelAndPredicates(initialPipeline);

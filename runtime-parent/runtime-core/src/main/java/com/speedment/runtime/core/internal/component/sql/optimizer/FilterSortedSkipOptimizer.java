@@ -161,8 +161,11 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 predicates
             );
 
-            sql.append(" WHERE ").append(rr.getSql());
-            values.addAll(rr.getValues());
+            final String whereFragmentSql = rr.getSql();
+            if (!whereFragmentSql.isEmpty()) {
+                sql.append(" WHERE ").append(whereFragmentSql);
+                values.addAll(rr.getValues());
+            }
         }
 
         if (!sorteds.isEmpty()) {

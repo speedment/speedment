@@ -21,16 +21,7 @@
 
 <?import javafx.scene.control.TitledPane?>
 
-<TitledPane id="workspace"
-            fx:id="workspace"
-            collapsible="false"
-            animated="false"
-            maxWidth="1.7976931348623157E308"
-            maxHeight="1.7976931348623157E308"
-            minHeight="200.0"
-            prefWidth="300.0"
-            text="Workspace"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.speedment.tool.core.internal.controller.WorkspaceController">
+
+<TitledPane id="workspace" fx:id="workspace" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" prefWidth="300.0" styleClass="workspace" text="Workspace" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="com.speedment.tool.core.internal.controller.WorkspaceController">
 
 </TitledPane>
