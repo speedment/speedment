@@ -36,7 +36,11 @@
     <artifactId>speedment-parent</artifactId>
     <version>3.1.8-SNAPSHOT</version>
     <packaging>pom</packaging>
-    
+
+    <prerequisites>
+        <maven>3.3.0</maven>
+    </prerequisites>
+
     <!-- Project Metadata -->
     <name>Speedment</name>
     <description>
@@ -279,7 +283,17 @@
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
             </plugin>
-            
+
+            <!-- Use mvn versions:display-plugin-updates to see available updates-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+
 <!--            <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-jgitflow-plugin</artifactId>
