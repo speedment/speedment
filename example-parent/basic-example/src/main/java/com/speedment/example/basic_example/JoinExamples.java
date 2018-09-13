@@ -38,6 +38,8 @@ import com.speedment.example.basic_example.util.ExampleUtil;
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -82,6 +84,8 @@ public class JoinExamples {
         oneToManyCustomConstructor();
         manyToOne();
         manyToMany();
+        manyToManySorted();
+        manyToManySortedCombined();
         manyToManySkipLinkTable();
         join();
         linked();
@@ -250,6 +254,55 @@ public class JoinExamples {
             .forEach(System.out::println);
 
     }
+
+
+    private void manyToManySorted() {
+        ExampleUtil.log("manyToManySorted");
+
+        Join<Tuple3<FilmActor, Film, Actor>> join = joinComponent
+            .from(FilmActorManager.IDENTIFIER)
+            .innerJoinOn(Film.FILM_ID).equal(FilmActor.FILM_ID)
+            .innerJoinOn(Actor.ACTOR_ID).equal(FilmActor.ACTOR_ID)
+            .build(Tuples::of);
+
+        Comparator<Tuple3<FilmActor, Film, Actor>> byLength =Film.LENGTH.asInt().compose(Tuple3.getter1());
+        Comparator<Tuple3<FilmActor, Film, Actor>> byActorName =Actor.LAST_NAME.compose(Tuple3.getter2());
+
+        join.stream()
+            .sorted(byLength.reversed())
+            .limit(100)
+            .forEach(System.out::println);
+
+        /*join.stream()
+            .sorted(Comparator.comparing(Tuple3.<FilmActor, Film, Actor>getter1().andThen(Film.LENGTH.getter())))
+            .forEach(System.out::println);*/
+
+    }
+
+    private void manyToManySortedCombined() {
+        ExampleUtil.log("manyToManySortedCombined");
+
+        Join<Tuple3<FilmActor, Film, Actor>> join = joinComponent
+            .from(FilmActorManager.IDENTIFIER)
+            .innerJoinOn(Film.FILM_ID).equal(FilmActor.FILM_ID)
+            .innerJoinOn(Actor.ACTOR_ID).equal(FilmActor.ACTOR_ID)
+            .build(Tuples::of);
+
+        // Explicitly declare the Comparator types
+        Comparator<Tuple3<FilmActor, Film, Actor>> byLength = Film.LENGTH.asInt().compose(Tuple3.getter1());
+        Comparator<Tuple3<FilmActor, Film, Actor>> byActorName = Actor.LAST_NAME.compose(Tuple3.getter2());
+
+        join.stream()
+            .sorted(byLength.reversed().thenComparing(byActorName))
+            .limit(100)
+            .forEach(System.out::println);
+
+        /*join.stream()
+            .sorted(Comparator.comparing(Tuple3.<FilmActor, Film, Actor>getter1().andThen(Film.LENGTH.getter())))
+            .forEach(System.out::println);*/
+
+    }
+
 
     private void manyToManySkipLinkTable() {
         ExampleUtil.log("manyToManySkipLinkTable");
