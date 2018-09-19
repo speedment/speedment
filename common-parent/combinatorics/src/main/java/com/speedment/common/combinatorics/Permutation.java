@@ -36,8 +36,19 @@ public final class Permutation {
         return PermutationUtil.permutation(no, items);
     }
 
+    /**
+     * Creates and returns a Stream of all permutations of the provided {@code items} array.
+     * <p>
+     * Note that the number of permutations increases very rapidly as the length of
+     * the provided {@code items} array increases.
+     *
+     * @param items to create permutations for
+     * @param <T> type of the elements
+     * @return a Stream of all permutations of the provided {@code items} array
+     * @throws NullPointerException is the provided {@code items} array is {@code null}.
+     */
     @SafeVarargs
-    @SuppressWarnings("varargs") // Creating a List from an array is safe
+    @SuppressWarnings("varargs")
     public static <T> Stream<Stream<T>> of(final T... items) {
         return PermutationUtil.of(items);
     }
