@@ -20,7 +20,6 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.db.SqlFunction;
 import java.sql.ResultSet;
-import static javafx.scene.input.KeyCode.T;
 
 /**
  * An SqlAdapter provides a means to read entities from a RsultSet.
