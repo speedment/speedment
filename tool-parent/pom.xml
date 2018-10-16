@@ -73,7 +73,20 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
+
+    <dependencies>
+        <!-- Only for Java 11 or later -->
+        <!--
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11</version>
+        </dependency>
+        -->
+
+    </dependencies>
+
     <profiles>
         <profile>
             <id>release</id>
