@@ -48,7 +48,7 @@ public class RestBackEnd {
         serveFilms("PG-13", 3).forEach(System.out::println);
     }
 
-    private static final int PAGE_SIZE = 50;
+    private static final long PAGE_SIZE = 50;
 
     private Stream<Film> serveFilms(String rating, int page) {
         System.out.format("serveFilms(String rating=%s, int page=%d) %n", rating, page);
