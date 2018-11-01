@@ -33,6 +33,6 @@ public final class GenerationProgressToolbarItem implements ToolbarItem<Label> {
 
     @Override
     public ToolbarSide getSide() {
-        return ToolbarSide.RIGHT;
+        return ToolbarSide.LEFT;
     }
 }

@@ -62,11 +62,15 @@ public class GenerateSpecialized {
             final String arg1Replacement = importStatement(clazz).orElse("");
             final String arg2Replacement = oneArgClasses.contains(clazz) ? clazz.getSimpleName() + "<?>" : clazz.getSimpleName();
 
-            final List<String> code = Files.lines(TEMPLATE)
+            final List<String> code;
+            try (Stream<String> lines = Files.lines(TEMPLATE)
                 .map(l -> l.replace("{$0}", arg0Replacement))
                 .map(l -> l.replace("{$1}", arg1Replacement))
                 .map(l -> l.replace("{$2}", arg2Replacement))
-                .collect(toList());
+            ) {
+                code = lines.collect(toList());
+            }
+
             final Path target = Paths.get(TARGET_DIR.toString(), "Lazy" + clazz.getSimpleName() + ".java");
             Files.write(target, code, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
         }

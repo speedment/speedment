@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.6</version>
+        <version>3.1.8-SNAPSHOT</version>
     </parent>
     
     <artifactId>common-all</artifactId>
@@ -55,7 +55,7 @@
         <mutablestream.version>1.0.0</mutablestream.version>
         <singletonstream.version>1.0.1</singletonstream.version>
         <annotation.version>1.0.0</annotation.version>
-        <combinatorics.version>1.0.1</combinatorics.version>
+        <combinatorics.version>1.0.2-SNAPSHOT</combinatorics.version>
         <benchmark.version>1.0.0</benchmark.version>
         <collection.version>1.0.0</collection.version>
     </properties>

@@ -59,21 +59,21 @@ public final class PowUtil {
             case 2: return new IntPower<T, ToByte<T>>(expression, 2) {
                 @Override
                 public double applyAsDouble(T object) {
-                    final byte value = inner.applyAsByte(object);
+                    final double value = inner.applyAsByte(object);
                     return value * value;
                 }
             };
             case 3: return new IntPower<T, ToByte<T>>(expression, 3) {
                 @Override
                 public double applyAsDouble(T object) {
-                    final byte value = inner.applyAsByte(object);
+                    final double value = inner.applyAsByte(object);
                     return value * value * value;
                 }
             };
             case -1: return new IntPower<T, ToByte<T>>(expression, -1) {
                 @Override
                 public double applyAsDouble(T object) {
-                    return 1 / inner.applyAsByte(object);
+                    return 1d / inner.applyAsByte(object);
                 }
             };
             default: return new IntPower<T, ToByte<T>>(expression, power) {
@@ -118,14 +118,14 @@ public final class PowUtil {
             public double applyAsDouble(T object) {
                 final int p = power.applyAsInt(object);
                 if (p == 0) return 1;
-                final byte value = inner.applyAsByte(object);
+                final double value = inner.applyAsByte(object);
                 switch (p) {
                     case 1: return value;
                     case 2: return value * value;
                     case 3: return value * value * value;
                     case 4: return value * value * value * value;
                     case 5: return value * value * value * value * value;
-                    case -1: return 1 / value;
+                    case -1: return 1d / value;
                     default: return Math.pow(value, p);
                 }
             }
@@ -173,21 +173,21 @@ public final class PowUtil {
             case 2: return new IntPower<T, ToShort<T>>(expression, 2) {
                 @Override
                 public double applyAsDouble(T object) {
-                    final short value = inner.applyAsShort(object);
+                    final double value = inner.applyAsShort(object);
                     return value * value;
                 }
             };
             case 3: return new IntPower<T, ToShort<T>>(expression, 3) {
                 @Override
                 public double applyAsDouble(T object) {
-                    final short value = inner.applyAsShort(object);
+                    final double value = inner.applyAsShort(object);
                     return value * value * value;
                 }
             };
             case -1: return new IntPower<T, ToShort<T>>(expression, -1) {
                 @Override
                 public double applyAsDouble(T object) {
-                    return 1 / inner.applyAsShort(object);
+                    return 1d / inner.applyAsShort(object);
                 }
             };
             default: return new IntPower<T, ToShort<T>>(expression, power) {
@@ -232,14 +232,14 @@ public final class PowUtil {
             public double applyAsDouble(T object) {
                 final int p = power.applyAsInt(object);
                 if (p == 0) return 1;
-                final short value = inner.applyAsShort(object);
+                final double value = inner.applyAsShort(object);
                 switch (p) {
                     case 1: return value;
                     case 2: return value * value;
                     case 3: return value * value * value;
                     case 4: return value * value * value * value;
                     case 5: return value * value * value * value * value;
-                    case -1: return 1 / value;
+                    case -1: return 1d / value;
                     default: return Math.pow(value, p);
                 }
             }
@@ -287,21 +287,21 @@ public final class PowUtil {
             case 2: return new IntPower<T, ToInt<T>>(expression, 2) {
                 @Override
                 public double applyAsDouble(T object) {
-                    final int value = inner.applyAsInt(object);
+                    final double value = inner.applyAsInt(object);
                     return value * value;
                 }
             };
             case 3: return new IntPower<T, ToInt<T>>(expression, 3) {
                 @Override
                 public double applyAsDouble(T object) {
-                    final int value = inner.applyAsInt(object);
+                    final double value = inner.applyAsInt(object);
                     return value * value * value;
                 }
             };
             case -1: return new IntPower<T, ToInt<T>>(expression, -1) {
                 @Override
                 public double applyAsDouble(T object) {
-                    return 1 / inner.applyAsInt(object);
+                    return 1d / inner.applyAsInt(object);
                 }
             };
             default: return new IntPower<T, ToInt<T>>(expression, power) {
@@ -346,14 +346,14 @@ public final class PowUtil {
             public double applyAsDouble(T object) {
                 final int p = power.applyAsInt(object);
                 if (p == 0) return 1;
-                final int value = inner.applyAsInt(object);
+                final double value = inner.applyAsInt(object);
                 switch (p) {
                     case 1: return value;
                     case 2: return value * value;
                     case 3: return value * value * value;
                     case 4: return value * value * value * value;
                     case 5: return value * value * value * value * value;
-                    case -1: return 1 / value;
+                    case -1: return 1d / value;
                     default: return Math.pow(value, p);
                 }
             }
@@ -401,21 +401,21 @@ public final class PowUtil {
             case 2: return new IntPower<T, ToLong<T>>(expression, 2) {
                 @Override
                 public double applyAsDouble(T object) {
-                    final long value = inner.applyAsLong(object);
+                    final double value = inner.applyAsLong(object);
                     return value * value;
                 }
             };
             case 3: return new IntPower<T, ToLong<T>>(expression, 3) {
                 @Override
                 public double applyAsDouble(T object) {
-                    final long value = inner.applyAsLong(object);
+                    final double value = inner.applyAsLong(object);
                     return value * value * value;
                 }
             };
             case -1: return new IntPower<T, ToLong<T>>(expression, -1) {
                 @Override
                 public double applyAsDouble(T object) {
-                    return 1 / inner.applyAsLong(object);
+                    return 1d / inner.applyAsLong(object);
                 }
             };
             default: return new IntPower<T, ToLong<T>>(expression, power) {
@@ -460,14 +460,14 @@ public final class PowUtil {
             public double applyAsDouble(T object) {
                 final int p = power.applyAsInt(object);
                 if (p == 0) return 1;
-                final long value = inner.applyAsLong(object);
+                final double value = inner.applyAsLong(object);
                 switch (p) {
                     case 1: return value;
                     case 2: return value * value;
                     case 3: return value * value * value;
                     case 4: return value * value * value * value;
                     case 5: return value * value * value * value * value;
-                    case -1: return 1 / value;
+                    case -1: return 1d / value;
                     default: return Math.pow(value, p);
                 }
             }

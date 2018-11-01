@@ -1,11 +1,11 @@
 ## Invariant
-This module contains useful methods for checking the invariant of a method.
+This module contains useful methods for generating permutations and combinations of objects.
 
 ### Download
 ```xml
 <dependency>
     <groupId>com.speedment.common</groupId>
-    <artifactId>invariant</artifactId>
-    <version>1.0.1</version>
+    <artifactId>combinatorics</artifactId>
+    <version>1.0.2</version>
 </dependency>
 ```

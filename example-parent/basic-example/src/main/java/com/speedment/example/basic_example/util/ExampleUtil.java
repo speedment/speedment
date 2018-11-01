@@ -29,18 +29,18 @@ import java.util.stream.Stream;
  */
 public final class ExampleUtil {
 
-    private static final String DEFAULT_PASSWORD = "sakila-password";
+    private static final String DEFAULT_P = "sakila-password";
 
     @SuppressWarnings("varargs")
     @SafeVarargs
     public static SakilaApplication buildApplication(UnaryOperator<SakilaApplicationBuilder>... operators) {
 
         System.out.println("Connecting to a MySQL database on 'localhost:3306'");
-        System.out.println("Enter password (<return> = '" + DEFAULT_PASSWORD + "'): ");
+        System.out.println("Enter password (<return> = '" + DEFAULT_P + "'): ");
 
         final Scanner scan = new Scanner(System.in);
         final String inputPassword = scan.nextLine();
-        final String password = inputPassword.isEmpty() ? DEFAULT_PASSWORD : inputPassword;
+        final String password = inputPassword.isEmpty() ? DEFAULT_P : inputPassword;
 
         final SakilaApplicationBuilder builder = new SakilaApplicationBuilder()
             .withLogging(LogType.STREAM)

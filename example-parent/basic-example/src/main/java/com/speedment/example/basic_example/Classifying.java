@@ -21,6 +21,8 @@ import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.speedment.example.basic_example.util.ExampleUtil;
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+import static java.util.stream.Collectors.counting;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,6 +47,7 @@ public class Classifying {
 
     private void run() {
         classifyFilms();
+        classifyFilmsCounting();
     }
 
     private void classifyFilms() {
@@ -65,5 +68,23 @@ public class Classifying {
         );
 
     }
+
+    private void classifyFilmsCounting() {
+        ExampleUtil.log("classifyFilmsCounting");
+
+        Map<String, Long> map = films.stream()
+            .collect(
+                Collectors.groupingBy(
+                    // Apply this classifier
+                    Film.RATING,
+                    // Then apply this down-stream collector
+                    Collectors.counting()
+                    )
+            );
+
+        System.out.println(map);
+
+    }
+
 
 }

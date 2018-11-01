@@ -34,9 +34,13 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.1.6</version>
+    <version>3.1.8-SNAPSHOT</version>
     <packaging>pom</packaging>
-    
+
+    <prerequisites>
+        <maven>3.3.0</maven>
+    </prerequisites>
+
     <!-- Project Metadata -->
     <name>Speedment</name>
     <description>
@@ -279,7 +283,17 @@
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
             </plugin>
-            
+
+            <!-- Use mvn versions:display-plugin-updates to see available updates-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+
 <!--            <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-jgitflow-plugin</artifactId>
@@ -487,7 +501,7 @@
                     <plugin>
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.2</version>
+                        <version>3.5.0.1254</version>
                     </plugin>
                     
 <!--                    <plugin>
@@ -684,7 +698,7 @@
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
-                <version>3.5.1</version>
+                <version>3.14.0</version>
                 <scope>test</scope>
             </dependency>
 
@@ -704,13 +718,13 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.19.0</version>
+                <version>2.21.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-inline</artifactId>
-                <version>2.19.0</version>
+                <version>2.21.0</version>
                 <scope>test</scope>
             </dependency>
 

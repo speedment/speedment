@@ -114,6 +114,7 @@ final class InitialJoinStream<T> implements Stream<T>/*, Java9StreamAdditions<T>
         return materialize().sorted();
     }
 
+    // Todo: Render ORDER BY if possible
     @Override
     public Stream<T> sorted(Comparator<? super T> comparator) {
         requireNonNull(comparator);
