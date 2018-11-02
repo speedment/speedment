@@ -29,7 +29,7 @@
     </parent>
     
     <artifactId>combinatorics</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Combinatorics</name>
@@ -40,13 +40,13 @@
     
     <build>
         <plugins>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <configuration>
                     <skipStaging>true</skipStaging>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
