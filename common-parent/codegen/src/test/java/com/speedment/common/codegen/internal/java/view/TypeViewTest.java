@@ -82,12 +82,13 @@ public class TypeViewTest {
         
         final String actual = generator.on(file).get();
         
+/*
         System.out.println("------------------ Expected: --------------------");
         System.out.println(expected);
         System.out.println("------------------- Actual: ---------------------");
         System.out.println(actual);
         System.out.println("-------------------- End ------------------------");
-        
+*/
         Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
     }
     
@@ -152,11 +153,13 @@ public class TypeViewTest {
         
         final String actual = generator.on(file).get();
         
+/*
         System.out.println("------------------ Expected: --------------------");
         System.out.println(expected);
         System.out.println("------------------- Actual: ---------------------");
         System.out.println(actual);
         System.out.println("-------------------- End ------------------------");
+        */
         
         Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
     }
@@ -217,12 +220,14 @@ public class TypeViewTest {
             "}";
         
         final String actual = generator.on(file).get();
-        
+
+        /*
         System.out.println("------------------ Expected: --------------------");
         System.out.println(expected);
         System.out.println("------------------- Actual: ---------------------");
         System.out.println(actual);
         System.out.println("-------------------- End ------------------------");
+        */
         
         Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
     }

@@ -75,7 +75,7 @@ public final class ToShortTest extends AbstractToTest<ToShort<String>> {
     public void testCompose() {
         strings().forEach(s -> {
             final ToShortNullable<String> composed = instance.compose(str -> str + "A");
-            assertEquals((long) mapper.applyAsLong(s + "A"), composed.applyAsShort(s));
+            assertEquals(mapper.applyAsLong(s + "A"), composed.applyAsShort(s));
         });
     }
 

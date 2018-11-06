@@ -33,6 +33,7 @@ public interface FieldSet<ENTITY> extends HasLabelSet<ENTITY> {
      * @return a new FieldSet that represents the set of all fields of an entity except for the given ones
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     static <ENTITY> FieldSet<ENTITY> allExcept(Field<ENTITY>... fields) {
         return new FieldSetImpl<>(Arrays.stream(fields)).negate();
     }
@@ -45,6 +46,7 @@ public interface FieldSet<ENTITY> extends HasLabelSet<ENTITY> {
      * @return a new FieldSet that represents the set of the given fields
      */
     @SafeVarargs
+    @SuppressWarnings("varargs")
     static <ENTITY> FieldSet<ENTITY> of(Field<ENTITY>... fields) {
         return new FieldSetImpl<>(Arrays.stream(fields));
     }

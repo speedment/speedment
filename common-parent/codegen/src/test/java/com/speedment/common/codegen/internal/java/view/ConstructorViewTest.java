@@ -59,6 +59,6 @@ public class ConstructorViewTest {
             );
 
         final Generator generator = new JavaGenerator();
-        System.out.println(generator.on(file).get());
+        final String code = generator.on(file).get();
     }
 }

@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
-    public static final FieldSetImpl ALL = new FieldSetImpl<>($ -> true);
-    public static final FieldSetImpl NONE = new FieldSetImpl<>($ -> false);
+    public static final FieldSetImpl<?> ALL = new FieldSetImpl<>($ -> true);
+    public static final FieldSetImpl<?> NONE = new FieldSetImpl<>($ -> false);
 
     private final Predicate<String> includedId;
 

@@ -87,7 +87,7 @@ public class SqlStreamTerminatorComponentImplTest {
             final Method defaultTerminatorMethod = clazz.getMethod("defaultTerminator");
             final Object defaultTerminator = defaultTerminatorMethod.invoke(null);
 
-            System.out.println("Testing getter: " + clazz.getSimpleName() + ":" + instanceTerminator.getClass().getSimpleName());
+            //System.out.println("Testing getter: " + clazz.getSimpleName() + ":" + instanceTerminator.getClass().getSimpleName());
 
             assertEquals(clazz.getSimpleName(), defaultTerminator, instanceTerminator);
 
@@ -112,7 +112,7 @@ public class SqlStreamTerminatorComponentImplTest {
             final Method getter = SqlStreamTerminatorComponentImpl.class.getMethod(getterName);
             final Object instanceTerminator = getter.invoke(instance);
 
-            System.out.println("Testing setter: " + clazz.getSimpleName() + ":" + instanceTerminator.getClass().getSimpleName());
+            //System.out.println("Testing setter: " + clazz.getSimpleName() + ":" + instanceTerminator.getClass().getSimpleName());
 
             assertEquals(clazz.getSimpleName(), mockTerminator, instanceTerminator);
 
