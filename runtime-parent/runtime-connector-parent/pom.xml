@@ -41,6 +41,7 @@
         <module>mysql</module>
         <module>mariadb</module>
         <module>postgres</module>
+        <module>sqlite</module>
     </modules>
     
     <dependencyManagement>
