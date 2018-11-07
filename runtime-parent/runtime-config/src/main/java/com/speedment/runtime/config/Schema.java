@@ -17,9 +17,19 @@
 package com.speedment.runtime.config;
 
 
+import com.speedment.runtime.config.internal.SchemaImpl;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.SchemaMutator;
-import com.speedment.runtime.config.trait.*;
+import com.speedment.runtime.config.trait.HasAlias;
+import com.speedment.runtime.config.trait.HasChildren;
+import com.speedment.runtime.config.trait.HasDeepCopy;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasId;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMutator;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.util.DocumentUtil;
 
 import java.util.stream.Stream;
 
@@ -34,6 +44,7 @@ import java.util.stream.Stream;
 public interface Schema extends
         Document,
         HasParent<Dbms>,
+        HasDeepCopy,
         HasEnabled,
         HasId,        
         HasName,
@@ -80,6 +91,11 @@ public interface Schema extends
     @Override
     default SchemaMutator<? extends Schema> mutator() {
         return DocumentMutator.of(this);
+    }
+
+    @Override
+    default Schema deepCopy() {
+        return DocumentUtil.deepCopy(this, SchemaImpl::new);
     }
 
 }

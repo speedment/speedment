@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime.config;
 
+import com.speedment.runtime.config.internal.TableImpl;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.TableMutator;
 import com.speedment.runtime.config.trait.*;
+import com.speedment.runtime.config.util.DocumentUtil;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -34,6 +36,7 @@ import java.util.stream.Stream;
 public interface Table extends
         Document,
         HasParent<Schema>,
+        HasDeepCopy,
         HasEnabled,
         HasId,        
         HasName,
@@ -143,5 +146,10 @@ public interface Table extends
     @Override
     default TableMutator<? extends Table> mutator() {
         return DocumentMutator.of(this);
+    }
+
+    @Override
+    default Table deepCopy() {
+        return DocumentUtil.deepCopy(this, TableImpl::new);
     }
 }

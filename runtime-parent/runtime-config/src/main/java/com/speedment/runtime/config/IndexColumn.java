@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime.config;
 
+import com.speedment.runtime.config.internal.IndexColumnImpl;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.IndexColumnMutator;
 import com.speedment.runtime.config.trait.HasColumn;
+import com.speedment.runtime.config.trait.HasDeepCopy;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
@@ -26,6 +28,7 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasOrderType;
 import com.speedment.runtime.config.trait.HasOrdinalPosition;
 import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.util.DocumentUtil;
 
 /**
  * A typed {@link Document} that represents the column referenced by an index 
@@ -38,6 +41,7 @@ import com.speedment.runtime.config.trait.HasParent;
 public interface IndexColumn extends
         Document,
         HasParent<Index>,
+        HasDeepCopy,
         HasId,        
         HasName,
         HasOrdinalPosition,
@@ -56,4 +60,9 @@ public interface IndexColumn extends
         return DocumentMutator.of(this);
     }
 
+
+    @Override
+    default IndexColumn deepCopy() {
+        return DocumentUtil.deepCopy(this, IndexColumnImpl::new);
+    }
 }

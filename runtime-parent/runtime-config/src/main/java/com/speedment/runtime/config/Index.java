@@ -16,15 +16,19 @@
  */
 package com.speedment.runtime.config;
 
+import com.speedment.runtime.config.internal.IndexImpl;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.IndexMutator;
 import com.speedment.runtime.config.trait.HasChildren;
+import com.speedment.runtime.config.trait.HasDeepCopy;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.util.DocumentUtil;
+
 import java.util.stream.Stream;
 
 /**
@@ -39,6 +43,7 @@ import java.util.stream.Stream;
 public interface Index extends 
         Document,
         HasParent<Table>,
+        HasDeepCopy,
         HasEnabled,
         HasId,        
         HasName,
@@ -77,4 +82,8 @@ public interface Index extends
         return DocumentMutator.of(this);
     }
 
+    @Override
+    default Index deepCopy() {
+        return DocumentUtil.deepCopy(this, IndexImpl::new);
+    }
 }

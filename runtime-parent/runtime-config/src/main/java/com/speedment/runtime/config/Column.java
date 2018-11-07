@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime.config;
 
+import com.speedment.runtime.config.internal.ColumnImpl;
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.*;
+import com.speedment.runtime.config.util.DocumentUtil;
 
 /**
  * A typed {@link Document} that represents a column in the database. A
@@ -31,6 +33,7 @@ public interface Column extends
         Document,
         HasParent<Table>,
         HasEnabled,
+        HasDeepCopy,
         HasId,
         HasName,
         HasAlias,
@@ -63,5 +66,10 @@ public interface Column extends
     @Override
     default ColumnMutator<? extends Column> mutator() {
         return DocumentMutator.of(this);
+    }
+
+    @Override
+    default Column deepCopy() {
+        return DocumentUtil.deepCopy(this, ColumnImpl::new);
     }
 }

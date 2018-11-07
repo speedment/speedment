@@ -17,16 +17,20 @@
 package com.speedment.runtime.config;
 
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
+import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasChildren;
+import com.speedment.runtime.config.trait.HasDeepCopy;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.util.DocumentUtil;
+
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
@@ -44,6 +48,7 @@ public interface Dbms extends
         Document,
         HasParent<Project>,
         HasEnabled,
+        HasDeepCopy,
         HasId,        
         HasName,
         HasChildren,
@@ -131,5 +136,10 @@ public interface Dbms extends
     @Override
     default DbmsMutator<? extends Dbms> mutator() {
         return DocumentMutator.of(this);
+    }
+
+    @Override
+    default Dbms deepCopy() {
+        return DocumentUtil.deepCopy(this, DbmsImpl::new);
     }
 }
