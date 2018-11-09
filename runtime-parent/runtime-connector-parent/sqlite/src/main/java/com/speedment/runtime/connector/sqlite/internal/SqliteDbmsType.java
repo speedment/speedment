@@ -1,5 +1,6 @@
 package com.speedment.runtime.connector.sqlite.internal;
 
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.db.ConnectionUrlGenerator;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsColumnHandler;
@@ -21,9 +22,13 @@ import java.util.Set;
  */
 public final class SqliteDbmsType implements DbmsType {
 
+    public final static String SQLITE = "SQLite";
+
+    private @Inject SqliteMetadataHandler metadataHandler;
+
     @Override
     public String getName() {
-        return "SQLite";
+        return SQLITE;
     }
 
     @Override
@@ -68,7 +73,7 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public DbmsMetadataHandler getMetadataHandler() {
-        return new SqliteMetadataHandler();
+        return metadataHandler;
     }
 
     @Override

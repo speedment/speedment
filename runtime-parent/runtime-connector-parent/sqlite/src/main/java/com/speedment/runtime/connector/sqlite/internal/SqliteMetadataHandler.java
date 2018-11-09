@@ -11,12 +11,10 @@ import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.connector.sqlite.internal.types.SqlTypeMappingHelper;
 import com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
-import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.JavaTypeMap;
 import com.speedment.runtime.core.db.SqlPredicate;
 import com.speedment.runtime.core.db.SqlSupplier;
@@ -48,7 +46,6 @@ import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.
 import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.isAutoIncrement;
 import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.isWrapper;
 import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -77,8 +74,8 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
     private final static boolean APPROXIMATE_INDEX = true;
 
     private @Inject ConnectionPoolComponent connectionPool;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
     private @Inject ProjectComponent projects;
+    private @Inject SqliteDbmsType dbmsType;
 
     private JavaTypeMap javaTypeMap;
     private SqlTypeMappingHelper typeMappingHelper;
@@ -445,8 +442,6 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
      * @throws SQLException  if an error occured
      */
     private List<String> enumConstantsOf(Dbms dbms, Table table, String columnName) throws SQLException {
-
-        final DbmsType dbmsType = dbmsTypeOf(dbmsHandlerComponent, dbms);
         final DatabaseNamingConvention naming = dbmsType.getDatabaseNamingConvention();
 
         final String sql = String.format(
