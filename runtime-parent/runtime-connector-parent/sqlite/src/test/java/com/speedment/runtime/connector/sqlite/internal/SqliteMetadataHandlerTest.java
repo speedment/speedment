@@ -1,11 +1,12 @@
 package com.speedment.runtime.connector.sqlite.internal;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.json.Json;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.internal.ProjectImpl;
-import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.connector.sqlite.MockConnectionPoolComponent;
+import com.speedment.runtime.connector.sqlite.MockDbmsHandlerComponent;
 import com.speedment.runtime.connector.sqlite.MockProgress;
 import com.speedment.runtime.connector.sqlite.MockProjectComponent;
 import com.speedment.runtime.connector.sqlite.ScriptRunner;
@@ -39,6 +40,10 @@ public class SqliteMetadataHandlerTest {
     private final static String URL = "jdbc:sqlite::memory:";
     private final static String FILE = "/employees.sql";
 
+    static { // Enable pretty printing of JSON outputs
+        Json.PRETTY = true;
+    }
+
     private Connection conn;
     private Injector injector;
 
@@ -63,9 +68,10 @@ public class SqliteMetadataHandlerTest {
 
             try {
                 injector = Injector.builder()
-                    .withComponent(MockConnectionPoolComponent.class)
-                    .withComponent(MockProjectComponent.class)
                     .withBundle(SqliteBundle.class)
+                    .withComponent(MockProjectComponent.class)
+                    .withComponent(MockDbmsHandlerComponent.class)
+                    .withComponent(MockConnectionPoolComponent.class)
                     .beforeInitialized(MockConnectionPoolComponent.class,
                         pool -> pool.setConnection(conn, URL)
                     )
@@ -95,9 +101,16 @@ public class SqliteMetadataHandlerTest {
     }
 
     @After
-    public void tearDown() throws Exception {
-        conn.close();
-        conn = null;
+    public void tearDown() {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (final Exception ex) {
+                throw new RuntimeException(ex);
+            } finally {
+                conn = null;
+            }
+        }
     }
 
     @Test
@@ -115,7 +128,7 @@ public class SqliteMetadataHandlerTest {
 
         try {
             final Project loaded = task.get(10, TimeUnit.SECONDS);
-            System.out.println(DocumentUtil.toStringHelper(loaded));
+            System.out.println(Json.toJson(loaded.getData()));
         } catch (final InterruptedException | ExecutionException | TimeoutException ex) {
             throw new RuntimeException(ex);
         }

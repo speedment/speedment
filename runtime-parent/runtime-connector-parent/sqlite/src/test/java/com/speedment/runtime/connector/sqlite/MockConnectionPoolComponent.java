@@ -1,10 +1,13 @@
 package com.speedment.runtime.connector.sqlite;
 
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author Emil Forslund
@@ -61,5 +64,10 @@ public final class MockConnectionPoolComponent implements ConnectionPoolComponen
     @Override
     public long getMaxAge() {
         return 1000 * 60 * 60 * 24;
+    }
+
+    @ExecuteBefore(State.STOPPED)
+    void closeConnections() throws SQLException {
+        connection.rawClose();
     }
 }

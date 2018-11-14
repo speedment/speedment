@@ -1,6 +1,9 @@
 package com.speedment.runtime.connector.sqlite.internal;
 
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.ConnectionUrlGenerator;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsColumnHandler;
@@ -14,6 +17,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.speedment.common.injector.State.CREATED;
+import static com.speedment.common.injector.State.INITIALIZED;
+import static java.util.Collections.emptySet;
+
 /**
  * Implementation of {@link DbmsType} for the SQLite database type.
  *
@@ -25,6 +32,11 @@ public final class SqliteDbmsType implements DbmsType {
     public final static String SQLITE = "SQLite";
 
     private @Inject SqliteMetadataHandler metadataHandler;
+
+    @ExecuteBefore(INITIALIZED)
+    void install(@WithState(CREATED) DbmsHandlerComponent component) {
+        component.install(this);
+    }
 
     @Override
     public String getName() {
@@ -108,8 +120,7 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public Set<TypeInfoMetaData> getDataTypes() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return emptySet();
     }
 
     @Override

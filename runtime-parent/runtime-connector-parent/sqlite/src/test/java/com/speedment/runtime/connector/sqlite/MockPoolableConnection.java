@@ -29,6 +29,12 @@ public final class MockPoolableConnection implements PoolableConnection {
         this.created = System.currentTimeMillis();
     }
 
+
+    @Override
+    public void close() {
+        // Do nothing. The connection is closed by the pool.
+    }
+
     @Override
     public long getId() {
         return 1;
@@ -36,6 +42,7 @@ public final class MockPoolableConnection implements PoolableConnection {
 
     @Override
     public void rawClose() throws SQLException {
+        onClose();
         wrapped.close();
     }
 
@@ -97,9 +104,6 @@ public final class MockPoolableConnection implements PoolableConnection {
 
     @Override
     public void rollback() throws SQLException {wrapped.rollback();}
-
-    @Override
-    public void close() throws SQLException {wrapped.close();}
 
     @Override
     public boolean isClosed() throws SQLException {return wrapped.isClosed();}

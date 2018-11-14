@@ -8,6 +8,8 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
+import com.speedment.runtime.config.trait.HasId;
+import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.connector.sqlite.internal.types.SqlTypeMappingHelper;
 import com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil;
@@ -16,6 +18,7 @@ import com.speedment.runtime.core.component.connectionpool.ConnectionPoolCompone
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.JavaTypeMap;
+import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.db.SqlPredicate;
 import com.speedment.runtime.core.db.SqlSupplier;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
@@ -32,6 +35,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
@@ -295,7 +299,14 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             progress.setCurrentAction(describe(column));
         };
 
-        tableChilds(table.mutator()::addNewColumn, supplier, mutator);
+        tableChilds(
+            table,
+            Column.class,
+            table.mutator()::addNewColumn,
+            supplier,
+            rsChild -> ColumnMetaData.of(rsChild).getColumnName(),
+            mutator
+        );
     }
 
     private void primaryKeyColumns(Connection conn, Table table, ProgressMeasure progress) {
@@ -312,8 +323,14 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
         };
 
         tableChilds(
+            table,
+            PrimaryKeyColumn.class,
             table.mutator()::addNewPrimaryKeyColumn,
-            supplier, mutator);
+            supplier,
+            rsChild -> rsChild.getString("COLUMN_NAME"),
+            mutator
+        );
+
 
         if (!table.isView() && table.primaryKeyColumns().noneMatch(pk -> true)) {
             LOGGER.warn(format("Table '%s' does not have any primary key.",
@@ -346,7 +363,16 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
         };
 
         final SqlPredicate<ResultSet> filter = rs -> rs.getString("INDEX_NAME") != null;
-        tableChilds(table.mutator()::addNewIndex, supplier, mutator, filter);
+
+        tableChilds(
+            table,
+            Index.class,
+            table.mutator()::addNewIndex,
+            supplier,
+            rsChild -> rsChild.getString("INDEX_NAME"),
+            mutator,
+            filter
+        );
     }
 
     private void foreignKeys(Connection conn, Table table, ProgressMeasure progress) {
@@ -377,21 +403,34 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             fkcMutator.setForeignSchemaName("schema");
         };
 
-        tableChilds(table.mutator()::addNewForeignKey,
-            supplier, mutator);
+        tableChilds(
+            table,
+            ForeignKey.class,
+            table.mutator()::addNewForeignKey,
+            supplier,
+            rsChild -> rsChild.getString("FK_NAME"),
+            mutator
+        );
     }
 
-    private <T extends Document> void tableChilds(
+    private <T extends Document & HasId> void tableChilds(
+            final Table table,
+            final Class<T> childType,
             final Supplier<T> childSupplier,
             final SqlSupplier<ResultSet> resultSetSupplier,
+            final SqlFunction<ResultSet, String> childIdGetter,
             final TableChildMutator<T> resultSetMutator) {
 
-        tableChilds(childSupplier, resultSetSupplier, resultSetMutator, rs -> true);
+        tableChilds(table, childType, childSupplier, resultSetSupplier,
+            childIdGetter, resultSetMutator, rs -> true);
     }
 
-    private <T extends Document> void tableChilds(
+    private <T extends Document & HasId> void tableChilds(
+            final Table table,
+            final Class<T> childType,
             final Supplier<T> childSupplier,
             final SqlSupplier<ResultSet> resultSetSupplier,
+            final SqlFunction<ResultSet, String> childIdGetter,
             final TableChildMutator<T> resultSetMutator,
             final SqlPredicate<ResultSet> filter) {
 
@@ -418,8 +457,17 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                             val + "'");
                     }
                 }
+
                 if (filter.test(rsChild)) {
-                    resultSetMutator.mutate(childSupplier.get(), rsChild);
+                    final String id = childIdGetter.apply(rsChild);
+                    final Optional<T> existing = DocumentDbUtil.typedChildrenOf(table)
+                        .filter(childType::isInstance)
+                        .map(childType::cast)
+                        .filter(idx -> id.equals(idx.getId()))
+                        .findAny();
+
+                    final T child = existing.orElseGet(childSupplier);
+                    resultSetMutator.mutate(child, rsChild);
                 } else {
                     LOGGER.info("Skipped due to RS filtering. This is normal " +
                         "for some DBMS types.");
