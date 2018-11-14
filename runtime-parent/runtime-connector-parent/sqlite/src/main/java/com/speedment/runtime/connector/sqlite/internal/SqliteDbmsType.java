@@ -32,6 +32,7 @@ public final class SqliteDbmsType implements DbmsType {
     public final static String SQLITE = "SQLite";
 
     private @Inject SqliteMetadataHandler metadataHandler;
+    private @Inject SqliteOperationHandler operationHandler;
 
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {
@@ -90,8 +91,7 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public DbmsOperationHandler getOperationHandler() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return operationHandler;
     }
 
     @Override

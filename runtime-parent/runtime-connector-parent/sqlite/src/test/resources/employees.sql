@@ -8,6 +8,10 @@ CREATE TABLE employees (
     PRIMARY KEY (emp_no)
 );
 
+CREATE TABLE single (
+    first_name  VARCHAR(14) NOT NULL
+);
+
 CREATE TABLE departments (
     dept_no     CHAR(4)         NOT NULL,
     dept_name   VARCHAR(40)     NOT NULL,

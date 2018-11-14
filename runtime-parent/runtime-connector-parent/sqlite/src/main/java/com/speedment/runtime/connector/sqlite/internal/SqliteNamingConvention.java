@@ -7,6 +7,9 @@ import java.util.Set;
 import static java.util.Collections.emptySet;
 
 /**
+ * The {@link DatabaseNamingConvention} implementation used for SQLite
+ * databases.
+ *
  * @author Emil Forslund
  * @since  3.1.9
  */

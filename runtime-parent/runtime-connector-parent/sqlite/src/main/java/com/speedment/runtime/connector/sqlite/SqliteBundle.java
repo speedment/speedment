@@ -4,6 +4,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.runtime.connector.sqlite.internal.SqliteComponentImpl;
 import com.speedment.runtime.connector.sqlite.internal.SqliteDbmsType;
 import com.speedment.runtime.connector.sqlite.internal.SqliteMetadataHandler;
+import com.speedment.runtime.connector.sqlite.internal.SqliteOperationHandler;
 
 import java.util.stream.Stream;
 
@@ -20,6 +21,7 @@ public class SqliteBundle implements InjectBundle {
         return Stream.of(
             SqliteComponentImpl.class,
             SqliteMetadataHandler.class,
+            SqliteOperationHandler.class,
             SqliteDbmsType.class
         );
     }
