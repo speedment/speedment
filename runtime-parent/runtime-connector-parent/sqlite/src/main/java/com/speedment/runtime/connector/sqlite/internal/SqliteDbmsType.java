@@ -66,7 +66,7 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public Optional<String> getDefaultDbmsName() {
-        return Optional.of("");
+        return Optional.empty();
     }
 
     @Override
@@ -96,26 +96,25 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public DbmsColumnHandler getColumnHandler() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return new SqliteColumnHandler();
     }
 
     @Override
     public String getResultSetTableSchema() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        throw new UnsupportedOperationException(
+            "SQLite does not have concept of 'schemas', so this method " +
+            "should not be invoked."
+        );
     }
 
     @Override
     public ConnectionUrlGenerator getConnectionUrlGenerator() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return new SqliteConnectionUrlGenerator();
     }
 
     @Override
     public FieldPredicateView getFieldPredicateView() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return new SqliteFieldPredicateView();
     }
 
     @Override
