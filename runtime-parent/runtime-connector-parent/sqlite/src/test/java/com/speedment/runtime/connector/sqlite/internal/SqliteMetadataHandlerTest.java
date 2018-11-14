@@ -47,7 +47,7 @@ public class SqliteMetadataHandlerTest {
         try {
             conn = DriverManager.getConnection(URL);
 
-            final ScriptRunner runner = new ScriptRunner(conn, true, true);
+            final ScriptRunner runner = new ScriptRunner(conn, false, true);
             try (final InputStream in = SqliteMetadataHandlerTest.class.getResourceAsStream(FILE);
                  final InputStreamReader reader = new InputStreamReader(in);
                  final BufferedReader buffered = new BufferedReader(reader)) {
