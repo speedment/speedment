@@ -259,8 +259,8 @@
                     <showWarnings>true</showWarnings>
                     <meminitial>256m</meminitial>
                     <maxmem>1024m</maxmem>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <!--<source>1.8</source>
+                    <target>1.8</target>-->
                     <excludes>
                         <exclude>**/package-info.java</exclude>
                     </excludes>
