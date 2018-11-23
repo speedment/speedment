@@ -92,7 +92,6 @@
                     <version>11</version>
                 </dependency>
             </dependencies>
-
         </profile>
         <profile>
             <id>release</id>
