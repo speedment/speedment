@@ -1,15 +1,15 @@
 language: java
 
 jdk:
-  - openjdk8
+  - oraclejdk8
+  - oraclejdk9
   - openjdk11
 
 addons:
   apt:
     packages:
-      - openjfx
-#      - oracle-java8-installer
-#      - oracle-java9-installer
+      - oracle-java8-installer
+      - oracle-java9-installer
 
 dist: trusty
 sudo: false
