@@ -34,7 +34,7 @@ import com.speedment.generator.core.internal.util.HashUtil;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
-import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Project;SingletonStreamTest
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.InfoComponent;
