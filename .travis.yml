@@ -3,14 +3,14 @@ language: java
 jdk:
   - oraclejdk8
   - oraclejdk9
-  #- openjdk10
+  - oraclejdk11
 
 addons:
   apt:
     packages:
       - oracle-java8-installer
       - oracle-java9-installer
-      #- oracle-java10-installer
+      - oracle-java11-installer
 
 dist: trusty
 sudo: false
