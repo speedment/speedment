@@ -105,7 +105,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testFilter() {
-        System.out.println("testFilter");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -132,7 +131,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testTakeWhile() {
-        System.out.println("testTakeWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -159,7 +157,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testDropWhile() {
-        System.out.println("testDropWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -209,7 +206,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testDoubleFilter() {
-        System.out.println("testDoubleFilter");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -237,7 +233,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testDoubleTakeWhile() {
-        System.out.println("testDoubleTakeWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -264,7 +259,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testDoubleDropWhile() {
-        System.out.println("testDoubleDropWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -313,7 +307,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testIntFilter() {
-        System.out.println("testIntFilter");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -341,7 +334,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testIntTakeWhile() {
-        System.out.println("testIntTakeWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -368,7 +360,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testIntDropWhile() {
-        System.out.println("testIntDropWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -417,7 +408,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testLongFilter() {
-        System.out.println("testLongFilter");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -445,7 +435,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testLongTakeWhile() {
-        System.out.println("testLOngTakeWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -472,7 +461,6 @@ public class Issue403TakeWhileDropWhileTest {
 
     @Test
     public void testLongDropWhile() {
-        System.out.println("testLongDropWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -544,7 +532,7 @@ public class Issue403TakeWhileDropWhileTest {
     }
 
     private void log(String msg) {
-        System.out.println("******** " + msg);
+        // System.out.println("******** " + msg);
     }
 
 }

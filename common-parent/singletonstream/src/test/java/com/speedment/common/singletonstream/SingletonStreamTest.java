@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
@@ -82,10 +83,17 @@ public class SingletonStreamTest {
      * Test of ofNullable method, of class SingletonStream.
      */
     @Test
-    @Ignore
-    public void testOfNullable() {
+    public void testOfNullableElement() {
+        final Stream<String> ss = SingletonStream.ofNullable("B");
+        final List<String> s = ss.collect(toList());
+        assertEquals(Collections.singletonList("B"), s);
+    }
 
-
+    @Test
+    public void testOfNullableNull() {
+        final Stream<String> ss = SingletonStream.ofNullable(null);
+        final List<String> s = ss.collect(toList());
+        assertEquals(Collections.emptyList(), s);
     }
 
     /**

@@ -4,13 +4,13 @@ jdk:
   - oraclejdk8
   - oraclejdk9
   - openjdk10
+  - openjdk11
 
 addons:
   apt:
     packages:
       - oracle-java8-installer
       - oracle-java9-installer
-      #- oracle-java10-installer
 
 dist: trusty
 sudo: false

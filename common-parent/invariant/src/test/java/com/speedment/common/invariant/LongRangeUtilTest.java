@@ -34,57 +34,48 @@ public class LongRangeUtilTest {
 
     @Test
     public void testRequirePositive() {
-        System.out.println("requirePositive");
         testHelper(IS_POSITIVE, LongRangeUtil::requirePositive);
     }
 
     @Test
     public void testRequireNegative() {
-        System.out.println("requireNegative");
         testHelper(IS_NEGATIVE, LongRangeUtil::requireNegative);
     }
 
     @Test
     public void testRequireZero() {
-        System.out.println("requireZero");
         testHelper(IS_ZERO, LongRangeUtil::requireZero);
     }
 
     @Test
     public void testRequireNonPositive() {
-        System.out.println("requireNonPositive");
         testHelper(IS_POSITIVE.negate(), LongRangeUtil::requireNonPositive);
     }
 
     @Test
     public void testRequireNonNegative() {
-        System.out.println("requireNonNegative");
         testHelper(IS_NEGATIVE.negate(), LongRangeUtil::requireNonNegative);
     }
 
     @Test
     public void testRequireNonZero() {
-        System.out.println("requireNonZero");
         testHelper(IS_ZERO.negate(), LongRangeUtil::requireNonZero);
     }
 
     @Test
     public void testRequireEquals() {
-        System.out.println("requireNonZero");
         final long otherVal = 3;
         testHelper(l -> l == otherVal, l -> LongRangeUtil.requireEquals(l, otherVal));
     }
 
     @Test
     public void testRequireNotEquals() {
-        System.out.println("requireNonZero");
         final long otherVal = 3;
         testHelper(l -> l != otherVal, l -> LongRangeUtil.requireNotEquals(l, otherVal));
     }
 
     @Test
     public void testRequireInRange() {
-        System.out.println("requireInRange");
         final long first = -1;
         final long lastExclusive = 4;
         testHelper(l -> l >= first && l < lastExclusive, l -> LongRangeUtil.requireInRange(l, first, lastExclusive));
@@ -92,7 +83,6 @@ public class LongRangeUtilTest {
 
     @Test
     public void testRequireInRangeClosed() {
-        System.out.println("requireInRangeClosed");
         final long first = -1;
         final long lastInclusive = 4;
         testHelper(l -> l >= first && l <= lastInclusive, l -> LongRangeUtil.requireInRangeClosed(l, first, lastInclusive));

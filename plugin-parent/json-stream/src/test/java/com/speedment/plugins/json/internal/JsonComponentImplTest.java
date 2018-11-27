@@ -66,7 +66,7 @@ public class JsonComponentImplTest {
     public void testNoneOf() {
         final JsonEncoder<Person> result = jsonComponent.noneOf(persons);
         final String json = persons.stream().collect(result.collector());
-        System.out.println(json);
+        //System.out.println(json);
     }
 
 //    @Test
@@ -86,7 +86,7 @@ public class JsonComponentImplTest {
 //        System.out.println(json);
 //    }
 
-    private static class Person {
+    private static final class Person {
 
         public static IntField<Person, Integer> ID = IntField.create(
             Identifier.ID,
@@ -96,8 +96,8 @@ public class JsonComponentImplTest {
             true
         );
         /**
-         * This Field corresponds to the {@link Human} field that can be
-         * obtained using the {@link Human#getName()} method.
+         * This Field corresponds to the {@link Person} field that can be
+         * obtained using the {@link Person#getName()} method.
          */
         public static StringField<Person, String> NAME = StringField.create(
             Identifier.NAME,
@@ -190,7 +190,7 @@ public class JsonComponentImplTest {
         }
     }
 
-    private static class MyProjectComponent implements ProjectComponent {
+    private static final class MyProjectComponent implements ProjectComponent {
 
         private Project project;
 

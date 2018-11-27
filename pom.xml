@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.1.8</version>
+    <version>3.1.9-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -195,7 +195,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>4.1.0</version>
                     
                     <extensions>true</extensions>
                     <inherited>true</inherited>
@@ -246,7 +246,7 @@
             
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.0</version>
 
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
@@ -259,8 +259,8 @@
                     <showWarnings>true</showWarnings>
                     <meminitial>256m</meminitial>
                     <maxmem>1024m</maxmem>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <!--<source>1.8</source>
+                    <target>1.8</target>-->
                     <excludes>
                         <exclude>**/package-info.java</exclude>
                     </excludes>
@@ -276,7 +276,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20</version>
+                <version>2.22.1</version>
                 
                 <configuration>
                     <useFile>false</useFile>
@@ -288,7 +288,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.6</version>
+                <version>2.7</version>
                 <configuration>
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
@@ -344,6 +344,16 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>java11</id>
+            <activation>
+                <jdk>11</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>11</maven.compiler.source>
+                <maven.compiler.target>11</maven.compiler.target>
+            </properties>
+        </profile>
         <profile> 
             <id>release</id>
             
@@ -547,7 +557,7 @@
                         <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.7.9</version>
+                        <version>0.8.2</version>
                         
                         <executions>
                             <execution>
@@ -601,7 +611,7 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.20</version>
+                        <version>2.22.1</version>
                         <executions>
                             <execution>
                                 <id>default-test</id>
@@ -610,12 +620,10 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <argLine>${surefireArgLine}</argLine>
                                 </configuration>
                             </execution>
                         </executions>
                         <configuration>
-                            <argLine>-XX:MaxPermSize=512m</argLine>
                         </configuration>
                     </plugin>
                     
@@ -718,13 +726,13 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.21.0</version>
+                <version>2.23.4</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-inline</artifactId>
-                <version>2.21.0</version>
+                <version>2.23.4</version>
                 <scope>test</scope>
             </dependency>
 

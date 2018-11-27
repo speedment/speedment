@@ -53,23 +53,21 @@ public class MappingTest {
     @Test
     public void testTuple4() {
         Tuple4<Integer, Integer, Integer, Integer> t4 = Tuples.of(1, 2, 3, 4);
-        System.out.println(t4);
+        consume(t4);
     }
 
     @Test
     public void testTuple1() {
         Stream.of("Arne", "Tryggve")
             .map(Tuples.toTuple(String::length))
-            .forEach(System.out::println);
-
+            .forEach(MappingTest::consume);
     }
 
     @Test
     public void testTuple2b() {
         Stream.of("Arne", "Tryggve")
             .map(Tuples.toTuple(Function.identity(), String::length))
-            .forEach(System.out::println);
-
+            .forEach(MappingTest::consume);
     }
 
     @Test
@@ -77,7 +75,7 @@ public class MappingTest {
         Stream.of("Arne", "Tryggve")
             .map(Tuples.toTuple(Function.identity(), String::length))
             .map(Tuples.toTuple(Tuple2::get0, t2 -> t2.get1() + 10))
-            .forEach(System.out::println);
+            .forEach(MappingTest::consume);
 
     }
 
@@ -85,15 +83,17 @@ public class MappingTest {
     public void testTuple2Nulls() {
         Stream.of("Arne", "Tryggve")
             .map(Tuples.toTuple(Function.identity(), s -> null))
-            .forEach(System.out::println);
-
+            .forEach(MappingTest::consume);
     }
 
     @Test()
     public void testTuple2OfNullablesNulls() {
         Stream.of("Arne", "Tryggve")
             .map(TuplesOfNullables.toTupleOfNullables(Function.identity(), s -> null))
-            .forEach(System.out::println);
+            .forEach(MappingTest::consume);
+    }
+
+    private static <T> void consume(T t) {
 
     }
 

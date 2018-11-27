@@ -256,7 +256,7 @@ final class JoinSqlUtil {
             );
             values = fragments.stream().flatMap(SqlPredicateFragment::objects).collect(toList());
         } else {
-            values = emptyList();
+            values = new ArrayList<>(); // do not use emptyList(); because the list must be mutable.
         }
 
         final String sql = sb.toString();

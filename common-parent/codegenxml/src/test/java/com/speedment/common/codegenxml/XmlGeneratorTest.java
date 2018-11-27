@@ -41,7 +41,7 @@ public class XmlGeneratorTest {
         Formatting.tab("    ");
         final String html = new XmlGenerator().on(doc).get();
 
-        System.out.println(html);
+        //System.out.println(html);
     }
     
     @Test
@@ -56,6 +56,6 @@ public class XmlGeneratorTest {
         Formatting.tab("    ");
         final String html = new XmlGenerator().on(doc).get();
 
-        System.out.println(html);
+        // System.out.println(html);
     }
 }

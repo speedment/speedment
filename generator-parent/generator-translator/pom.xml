@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.generator</groupId>
         <artifactId>generator-parent</artifactId>
-        <version>3.1.8</version>
+        <version>3.1.9-SNAPSHOT</version>
     </parent>
     
     <artifactId>generator-translator</artifactId>
@@ -48,6 +48,7 @@
                         <Export-Package>
                             com.speedment.generator.translator,
                             com.speedment.generator.translator.component,
+                            com.speedment.generator.translator.component.function,
                             com.speedment.generator.translator.exception,
                             com.speedment.generator.translator.namer,
                             com.speedment.generator.translator.util

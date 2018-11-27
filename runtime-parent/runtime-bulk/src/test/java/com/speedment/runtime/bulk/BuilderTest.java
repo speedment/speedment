@@ -40,8 +40,7 @@ public class BuilderTest {
 
     @Test
     public void testRemoveAll() {
-        System.out.println("testRemoveAll");
-        BulkOperation bo = BulkOperation.builder()
+        final BulkOperation bo = BulkOperation.builder()
             .remove(mgr)
             .build();
 
@@ -50,8 +49,7 @@ public class BuilderTest {
 
     @Test
     public void testRemoveOnePredicate() {
-        System.out.println("testRemoveOnePredicate");
-        BulkOperation bo = BulkOperation.builder()
+        final BulkOperation bo = BulkOperation.builder()
             .remove(mgr).where(Point::isOrigo)
             .build();
         bo.operations().forEachOrdered(System.out::println);
@@ -59,8 +57,7 @@ public class BuilderTest {
 
     @Test
     public void testRemoveTwoPredicates() {
-        System.out.println("testRemoveTwoPredicates");
-        BulkOperation bo = BulkOperation.builder()
+        final BulkOperation bo = BulkOperation.builder()
             .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
             .build();
 
@@ -116,8 +113,7 @@ public class BuilderTest {
     
     @Test
     public void testMixed() {
-        System.out.println("testMixed");
-        BulkOperation bo = BulkOperation.builder()
+        final BulkOperation bo = BulkOperation.builder()
             .remove(mgr)
             .remove(mgr).where(Point::isOrigo)
             .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
@@ -137,6 +133,9 @@ public class BuilderTest {
     }
 
     private void printInfo(BulkOperation bo) {
+
+        /*
+
         bo.operations().forEachOrdered(o -> {
             final Type type = o.type();
             System.out.format("%10s %s %n", type, o);
@@ -171,16 +170,18 @@ public class BuilderTest {
             }
 
         });
+
+        */
     }
 
-    private static class Point {
+    private static final class Point {
 
         private int x, y;
 
         public Point() {
         }
 
-        public Point(int x, int y) {
+        private Point(int x, int y) {
             this.x = x;
             this.y = y;
         }
@@ -228,7 +229,7 @@ public class BuilderTest {
 
     }
 
-    private static class PointManager implements Manager<Point> {
+    private static final class PointManager implements Manager<Point> {
 
         @Override
         public TableIdentifier<Point> getTableIdentifier() {
