@@ -23,18 +23,18 @@ import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author pemi
  */
-public class TranslatorManagerTest extends SimpleModel {
+final class TranslatorManagerTest extends SimpleModel {
 
     @Test
-    public void testAccept() {
+    void testAccept() {
         final TranslatorManager instance = speedment.getOrThrow(TranslatorManager.class);
         
         try {
@@ -46,7 +46,7 @@ public class TranslatorManagerTest extends SimpleModel {
     }
 
     @Test
-    public void testPreview() {
+    void testPreview() {
 
         final Translator<Table, Interface> translator = speedment.getOrThrow(CodeGenerationComponent.class)
             .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);

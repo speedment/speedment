@@ -26,11 +26,13 @@ import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+
 import java.nio.file.Path;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
-import org.junit.Before;
 
 /**
  *
@@ -72,7 +74,7 @@ public abstract class SimpleModel {
         public int getFilesCreated() {return 0;}
     }
 
-    @Before
+    @BeforeEach
     public void simpleModelTestSetUp() {
 
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
