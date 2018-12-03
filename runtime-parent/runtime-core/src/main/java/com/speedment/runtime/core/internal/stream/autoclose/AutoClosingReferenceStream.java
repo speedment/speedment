@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
-
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
