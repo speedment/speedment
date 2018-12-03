@@ -23,7 +23,6 @@ package com.speedment.generator;
 
 import com.speedment.generator.translator.internal.namer.JavaLanguageNamerImpl;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
 import static com.speedment.generator.translator.namer.JavaLanguageNamer.toHumanReadable;
@@ -60,9 +59,7 @@ final class DefaultJavaLanguageNamerTest {
 
 
     @Test
-    @Ignore
     void testJavaStaticFieldName() {
-        // Fix me
         assertEquals("MY_OBJECT", instance.javaStaticFieldName("myObject"));
         assertEquals("MY_OBJECT", instance.javaStaticFieldName("my.object"));
         assertEquals("MY_OBJECT", instance.javaStaticFieldName("my object"));
