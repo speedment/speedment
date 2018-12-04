@@ -208,7 +208,7 @@ public final class InjectorImpl implements Injector {
             if (!hasAnythingChanged.get()) {
                 throw new IllegalStateException(
                     "Injector appears to be stuck in an infinite loop. The " + 
-                    "following componenets have not been stopped: " + 
+                    "following components have not been stopped: " +
                     unfinished.stream()
                         .map(DependencyNode::getRepresentedType)
                         .map(Class::getSimpleName)
