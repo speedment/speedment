@@ -16,18 +16,22 @@
  */
 package com.speedment.runtime.core.internal.db;
 
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlUpdateStatement;
@@ -40,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -64,15 +69,20 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
+    private final AtomicBoolean closed;
+
     private @Inject ConnectionPoolComponent connectionPoolComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
     private @Inject TransactionComponent transactionComponent;
 
-    protected AbstractDbmsOperationHandler() {}
+    protected AbstractDbmsOperationHandler() {
+        closed = new AtomicBoolean();
+    }
 
     @Override
     public <T> Stream<T> executeQuery(Dbms dbms, String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper) {
         requireNonNulls(sql, values, rsMapper);
+        assertNotClosed();
 
         try (
             final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
@@ -111,6 +121,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         final SqlFunction<ResultSet, T> rsMapper,
         final ParallelStrategy parallelStrategy
     ) {
+        assertNotClosed();
         return new AsynchronousQueryResultImpl<>(
             Objects.requireNonNull(sql),
             Objects.requireNonNull(values),
@@ -165,6 +176,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         requireNonNull(conn);
         requireNonNull(sqlStatementList);
 
+        assertNotClosed();
         int retryCount = 5;
         boolean transactionCompleted = false;
 
@@ -229,6 +241,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         requireNonNull(conn);
         requireNonNull(sqlStatementList);
 
+        assertNotClosed();
         final AtomicReference<SqlStatement> lastSqlStatement = new AtomicReference<>();
         try {
             executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
@@ -242,6 +255,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     private void executeSqlStatementList(List<? extends SqlStatement> sqlStatementList, AtomicReference<SqlStatement> lastSqlStatement, Dbms dbms, Connection conn) throws SQLException {
+        assertNotClosed();
         for (final SqlStatement sqlStatement : sqlStatementList) {
             lastSqlStatement.set(sqlStatement);
             switch (sqlStatement.getType()) {
@@ -266,6 +280,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     protected void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement sqlStatement) throws SQLException {
+        assertNotClosed();
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -295,6 +310,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     private void handleSqlStatementHelper(Connection conn, SqlStatement sqlStatement) throws SQLException {
+        assertNotClosed();
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.NO_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -343,6 +359,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     @Override
     public Array createArray(Dbms dbms, String typeName, Object[] elements) throws SQLException {
+        assertNotClosed();
         try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
             return connection.createArrayOf(typeName, elements);
         }
@@ -350,14 +367,31 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     @Override
     public Struct createStruct(Dbms dbms, String typeName, Object[] attributes) throws SQLException {
+        assertNotClosed();
         try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
             return connection.createStruct(typeName, attributes);
         }
     }
 
     private <T> T applyOnConnection(Dbms dbms, SqlFunction<Connection, T> mapper) throws SQLException {
+        assertNotClosed();
         try (final Connection c = connectionPoolComponent.getConnection(dbms)) {
             return mapper.apply(c);
         }
     }
+
+    @ExecuteBefore(State.STOPPED)
+    void close() {
+        closed.set(true);
+    }
+
+    private void assertNotClosed() {
+        if (closed.get()) {
+            throw new IllegalStateException(
+                "The " + DbmsOperationHandler.class.getSimpleName() + " " +
+                    getClass().getSimpleName() + " has been closed."
+            );
+        }
+    }
+
 }
