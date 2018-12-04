@@ -23,23 +23,21 @@ package com.speedment.generator;
 
 import com.speedment.generator.translator.internal.namer.JavaLanguageNamerImpl;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.speedment.generator.translator.namer.JavaLanguageNamer.toHumanReadable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author pemi
  */
+@DisplayName("Test class JavaLanguageNamer")
 final class DefaultJavaLanguageNamerTest {
 
-    JavaLanguageNamer instance = new JavaLanguageNamerImpl();
-    
+    private final JavaLanguageNamer instance = new JavaLanguageNamerImpl();
 
-    /**
-     * Test of javaTypeName method, of class JavaLanguage.
-     */
+    @DisplayName("Test of javaTypeName method")
     @Test
     void testJavaTypeName() {
         assertEquals("MyObject", instance.javaTypeName("my_object"));
@@ -47,9 +45,7 @@ final class DefaultJavaLanguageNamerTest {
         assertEquals("MyObject", instance.javaTypeName("my object"));
     }
 
-    /**
-     * Test of javaVariableName method, of class JavaLanguage.
-     */
+    @DisplayName("Test of javaVariableName method")
     @Test
     void testJavaVariableName() {
         assertEquals("myObject", instance.javaVariableName("my_object"));
@@ -58,6 +54,7 @@ final class DefaultJavaLanguageNamerTest {
     }
 
 
+    @DisplayName("Test of javaStaticFieldName method")
     @Test
     void testJavaStaticFieldName() {
         assertEquals("MY_OBJECT", instance.javaStaticFieldName("myObject"));
@@ -65,9 +62,7 @@ final class DefaultJavaLanguageNamerTest {
         assertEquals("MY_OBJECT", instance.javaStaticFieldName("my object"));
     }
 
-    /**
-     * Test of javaNameFromExternal method, of class JavaLanguage.
-     */
+    @DisplayName("Test of javaNameFromExternal method")
     @Test
     void testJavaNameFromExternal() {
         assertEquals("MyObject", instance.javaNameFromExternal("my_object"));
@@ -75,44 +70,37 @@ final class DefaultJavaLanguageNamerTest {
         assertEquals("MyObject", instance.javaNameFromExternal("my object"));
     }
 
-    /**
-     * Test of replaceIfJavaUsedWord method, of class JavaLanguage.
-     */
+    @DisplayName("Test of replaceIfJavaUsedWord method")
     @Test
     void testReplaceIfJavaUsedWord() {
         assertEquals("integer_", instance.replaceIfJavaUsedWord("integer"));
     }
 
-    /**
-     * Test of javaObjectName method, of class JavaLanguage.
-     */
+    @DisplayName("Test of javaObjectName method")
     @Test
     void testJavaObjectName() {
         assertEquals("Integer", instance.javaObjectName("int"));
         assertEquals("Integer[]", instance.javaObjectName("int[]"));
     }
 
-    /**
-     * Test of toUnderscoreSeparated method, of class JavaLanguage.
-     */
+    @DisplayName("Test of toUnderscoreSeparated method")
     @Test
     void testToUnderscoreSeparated() {
         assertEquals("my_variable_name", instance.toUnderscoreSeparated("myVariableName"));
 
     }
-    
+
+    @DisplayName("Test of replaceIfIllegalJavaIdentifierCharacter method")
     @Test
-    void testreplaceIfIllegalJavaIdentifierCharacter() {
+    void testReplaceIfIllegalJavaIdentifierCharacter() {
         assertEquals("_2my", instance.replaceIfIllegalJavaIdentifierCharacter("2my"));
         assertEquals("_2my_test_case_one", instance.replaceIfIllegalJavaIdentifierCharacter("2my test+case.one"));
     }
     
-    /**
-     * Test of toHumanReadable method, of class JavaLanguage.
-     */
+    @DisplayName("Test of toHumanReadable method")
     @Test
     void testToHumanReadable() {
-        assertEquals("My Variable Name", toHumanReadable("myVariableName"));
+        assertEquals("My Variable Name", JavaLanguageNamer.toHumanReadable("myVariableName"));
     }
 
 }
