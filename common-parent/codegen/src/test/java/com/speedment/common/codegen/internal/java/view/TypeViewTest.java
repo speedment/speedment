@@ -27,15 +27,15 @@ import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.example.Person;
 import com.speedment.example.PersonImpl;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static com.speedment.common.codegen.util.Formatting.indent;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -46,7 +46,7 @@ public class TypeViewTest {
 
     private Generator generator;
     
-    @Before
+    @BeforeEach
     public void setup() {
         this.generator = new JavaGenerator();
         Formatting.tab("    ");
@@ -89,7 +89,7 @@ public class TypeViewTest {
         System.out.println(actual);
         System.out.println("-------------------- End ------------------------");
 */
-        Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
+        assertEquals( expected, actual, "Make sure generated file matches expected:");
     }
     
     @Test
@@ -161,7 +161,7 @@ public class TypeViewTest {
         System.out.println("-------------------- End ------------------------");
         */
         
-        Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
+        assertEquals(expected, actual, "Make sure generated file matches expected:");
     }
     
     @Test
@@ -229,6 +229,6 @@ public class TypeViewTest {
         System.out.println("-------------------- End ------------------------");
         */
         
-        Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
+        assertEquals(expected, actual, "Make sure generated file matches expected:");
     }
 }
