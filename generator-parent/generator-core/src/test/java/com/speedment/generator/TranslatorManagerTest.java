@@ -25,6 +25,7 @@ import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -36,25 +37,17 @@ final class TranslatorManagerTest extends SimpleModel {
     @Test
     void testAccept() {
         final TranslatorManager instance = speedment.getOrThrow(TranslatorManager.class);
-        
-        try {
-            instance.accept(project);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw ex;
-        }
+
+        assertDoesNotThrow(()->instance.accept(project));
     }
 
     @Test
     void testPreview() {
-
         final Translator<Table, Interface> translator = speedment.getOrThrow(CodeGenerationComponent.class)
             .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);
+        final JavaLanguageNamer javaLanguageNamer = speedment.getOrThrow(JavaLanguageNamer.class);
 
         final String code = translator.toCode();
-        //System.out.println(code);
-
-        final JavaLanguageNamer javaLanguageNamer = speedment.getOrThrow(JavaLanguageNamer.class);
 
         assertTrue(code.contains(javaLanguageNamer.javaVariableName(table.getId())));
         assertTrue(code.contains(javaLanguageNamer.javaTypeName(table.getId())));
