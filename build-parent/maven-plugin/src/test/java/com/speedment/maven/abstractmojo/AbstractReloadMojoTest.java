@@ -18,11 +18,11 @@ package com.speedment.maven.abstractmojo;
 
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -32,8 +32,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-// Since ConfigFileHelper is final we need to use Powermock so it is possible to actually mock it.
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AbstractReloadMojoTest {
 
     private AbstractReloadMojoTestImpl mojo;
@@ -44,7 +43,7 @@ public class AbstractReloadMojoTest {
     @Mock
     private ConfigFileHelper mockedConfigFileHelper;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MavenProject mavenProject = mock(MavenProject.class);
         when(mavenProject.getBasedir()).thenReturn(new File("baseDir"));

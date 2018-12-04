@@ -16,8 +16,9 @@
  */
 package com.speedment.maven.component;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 
 public final class MavenPathCompoentTest {
 

@@ -15,6 +15,8 @@
  * the License.
  */
 package com.speedment.maven.abstractmojo;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,29 +25,30 @@ import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.nio.file.Paths;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AbstractClearTablesMojoTest {
 
 	private AbstractClearTablesMojoTestImpl mojo;
 
 	private String mockedConfigLocation = "testFile.txt";
+
 	@Mock
     private Speedment mockedSpeedment;
-	@Mock private ConfigFileHelper mockedConfigFileHelper;
+	@Mock
+	private ConfigFileHelper mockedConfigFileHelper;
 	@Mock private MavenProject mockedMavenProject;
 
-
-	@Before
+	@BeforeEach
 	public void setup() {
 		when(mockedMavenProject.getBasedir()).thenReturn(new File("baseDir"));
 
@@ -58,28 +61,28 @@ public class AbstractClearTablesMojoTest {
 	}
 
 	@Test
-	public void execute() throws Exception {
+	public void execute() {
 		// Given
 		when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
 		mojo.setConfigFile(mockedConfigLocation);
 
 		// When
-		mojo.execute(mockedSpeedment);
+		assertDoesNotThrow(()->mojo.execute(mockedSpeedment));
 
 		// Then
 		verify(mockedConfigFileHelper).setCurrentlyOpenFile(Paths.get("baseDir", mockedConfigLocation).toFile());
 		verify(mockedConfigFileHelper).clearTablesAndSaveToFile();
 	}
 
-	@Test(expected = MojoExecutionException.class)
-	public void executeException() throws Exception {
+	@Test
+	public void executeException() {
 		// Given
 		when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
 		doThrow(new RuntimeException("test Exception")).when(mockedConfigFileHelper).clearTablesAndSaveToFile();
 		mojo.setConfigFile(mockedConfigLocation);
 
 		// When
-		mojo.execute(mockedSpeedment);
+		assertThrows(MojoExecutionException.class, () -> mojo.execute(mockedSpeedment));
 
 		// Then
 	}
