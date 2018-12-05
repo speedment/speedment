@@ -4,7 +4,7 @@ import com.speedment.runtime.core.db.JavaTypeMap;
 
 import java.util.Optional;
 
-class RuleUtil {
+final class RuleUtil {
     /**
      * All default rules that need more than just the jdbc type name to trigger
      */
