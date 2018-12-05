@@ -42,18 +42,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author  Emil Forslund
  * @since   2.4.1
  */
-public class TypeViewTest {
+final class TypeViewTest {
 
     private Generator generator;
     
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.generator = new JavaGenerator();
         Formatting.tab("    ");
     }
     
     @Test
-    public void testMain() {
+    void testMain() {
         final File file = File.of("com/example/Main.java")
             .add(Class.of("Main")
                 .public_().final_()
@@ -93,7 +93,7 @@ public class TypeViewTest {
     }
     
     @Test
-    public void testList() {
+    void testList() {
         final File file = File.of("com/example/EntityList.java")
             .add(Import.of(ArrayList.class))
             .add(Import.of(Objects.class).static_().setStaticMember("requireNonNull"))
@@ -165,7 +165,7 @@ public class TypeViewTest {
     }
     
     @Test
-    public void testInnerClassImport() {
+    void testInnerClassImport() {
         final File file = File.of("com/example/PersonFactory.java")
             .add(Import.of(PersonImpl.class))
             .add(Class.of("PersonFactory")

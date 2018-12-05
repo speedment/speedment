@@ -37,14 +37,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Emil Forslund
  * @since  2.4.4
  */
-public class HasImportsViewTest {
+final class HasImportsViewTest {
     
     private Generator gen;
     private HasImportsView<File> view;
     private File file;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         gen  = new JavaGenerator();
         view = new MockImportsFile();
         file = File.of("com/example/TestFile.java");
@@ -54,7 +54,7 @@ public class HasImportsViewTest {
     }
     
     @Test
-    public void makeSureAllImportsArePresent() {
+    void makeSureAllImportsArePresent() {
         // Given
         final Import[] expected = {
             Import.of(Objects.class),
@@ -70,7 +70,7 @@ public class HasImportsViewTest {
     }
 
     @Test
-    public void testRenderImports() {
+    void testRenderImports() {
         // Given
         final String expected = Formatting.separate(nl(), 
             "import java.util.Objects;",
