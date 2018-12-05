@@ -17,11 +17,13 @@
 package com.speedment.runtime.core.internal.config.mapper.string;
 
 import com.speedment.runtime.typemapper.string.StringToLocaleMapper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -32,7 +34,7 @@ public class StringToLocaleMapperTest {
 
     private StringToLocaleMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mapper = new StringToLocaleMapper();
     }
@@ -42,9 +44,9 @@ public class StringToLocaleMapperTest {
         String string = "DE";
 
         Locale javaType = mapper.toJavaType(null, null, string);
-        Assert.assertEquals("JavaType should have value 'de'", new Locale("de"), javaType);
+        assertEquals(new Locale("de"), javaType, "JavaType should have value 'de'");
 
         String databaseType = mapper.toDatabaseType(javaType);
-        Assert.assertTrue("DatabaseType should have value 'de'", string.equalsIgnoreCase(databaseType));
+        assertTrue(string.equalsIgnoreCase(databaseType), "DatabaseType should have value 'de'");
     }
 }

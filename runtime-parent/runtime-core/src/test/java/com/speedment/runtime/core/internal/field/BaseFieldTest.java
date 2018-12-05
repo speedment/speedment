@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,10 +36,8 @@ public class BaseFieldTest {
     protected List<String> names;
     protected List<Entity> entities;
 
-    public BaseFieldTest() {
-    }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         names = Stream.of(null, "a", "a", "a", null, "b", "c", "d", "e", "f", "g", "h", null, "i", "j", null,
             "ab", "abc", "abcd", "abcde", "abcdef", "abcdefg",
@@ -58,7 +56,7 @@ public class BaseFieldTest {
             .collect(toList());
     }
 
-    protected <T> void printList(String header, List<T> list) {
+    <T> void printList(String header, List<T> list) {
 //        System.out.println("*** " + header + " ***");
 //        list.forEach(System.out::println);
     }

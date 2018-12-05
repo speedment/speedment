@@ -20,23 +20,25 @@ import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.util.TestUtil;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DocumentUtilTest extends AbstractDocumentTest {
+final class DocumentUtilTest extends AbstractDocumentTest {
 
     @Test
-    public void testTraverseOver() {
+    void testTraverseOver() {
 
         final List<Document> visited = DocumentUtil.traverseOver(schemaA).collect(toList());
 
@@ -45,7 +47,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         final Set<Integer> set = visited.stream()
             .map(d -> System.identityHashCode(d.getData()))
             .collect(toSet());
-        assertEquals("Duplicates in " + idsOf(visited), visited.size(), set.size());
+        assertEquals(visited.size(), set.size(), "Duplicates in " + idsOf(visited));
 
         assertThatFirstIsBeforeOthers(visited, schemaA,
             tableA, columnA1, columnA2, primaryKeyColumnA1, indexA2, indexColumnA2, foreignKeyA2_C1, foreignKeyColumnA2_C1,
@@ -68,13 +70,13 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         );
 
         for (final Document document : Arrays.asList(tableB, columnB1, columnB2)) {
-            assertTrue("Illegal node traversed " + idOf(document), index(visited, document) == -1);
+            assertTrue(index(visited, document) == -1, "Illegal node traversed " + idOf(document));
         }
 
     }
 
     @Test
-    public void testAncestor() {
+    void testAncestor() {
         assertEquals(Optional.empty(), DocumentUtil.ancestor(project, Project.class));
         stream().filter(d -> !Project.class.isInstance(d)).forEach(d -> {
             assertEquals(Optional.of(project), DocumentUtil.ancestor(d, Project.class));
@@ -106,20 +108,20 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
     }
 
     @Test
-    @Ignore
-    public void testChildrenOf() {
+    @Disabled
+    void testChildrenOf() {
         // Todo: implement
     }
 
     @Test
-    @Ignore
-    public void testNewDocument() {
+    @Disabled
+    void testNewDocument() {
         // Todo: implement
     }
 
     @Test
-    @Ignore
-    public void testRelativeName3Arg() {
+    @Disabled
+    void testRelativeName3Arg() {
         {
             final String expected = "Dbms A.Schema A.Table A.Column A";
             final String result = DocumentUtil.relativeName(columnA1, Dbms.class, DocumentUtil.Name.DATABASE_NAME);
@@ -133,47 +135,47 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
     }
 
     @Test
-    @Ignore
-    public void testRelativeName4Arg() {
+    @Disabled
+    void testRelativeName4Arg() {
         final String expected = "#Dbms A.#Schema A.#Table A.#Column A";
         final String result = DocumentUtil.relativeName(columnA1, Dbms.class, DocumentUtil.Name.DATABASE_NAME, s -> "#" + s);
         assertEquals(expected, result);
     }
 
     @Test
-    @Ignore
-    public void testRelativeName5Arg() {
+    @Disabled
+    void testRelativeName5Arg() {
         final String expected = "#Dbms A|#Schema A|#Table A|#Column A";
         final String result = DocumentUtil.relativeName(columnA1, Dbms.class, DocumentUtil.Name.DATABASE_NAME, "|", s -> "#" + s);
         assertEquals(expected, result);
     }
 
     @Test
-    @Ignore
-    public void testDeepCopy2Arg() {
+    @Disabled
+    void testDeepCopy2Arg() {
         // Todo: implement
     }
 
     @Test
-    @Ignore
-    public void testDeepCopy3Arg() {
+    @Disabled
+    void testDeepCopy3Arg() {
         // Todo: implement
     }
 
     @Test
-    @Ignore
-    public void testNewNoSuchElementExceptionFor() {
+    @Disabled
+    void testNewNoSuchElementExceptionFor() {
         // Todo: implement
     }
 
     @Test
-    @Ignore
-    public void testToStringHelper() {
+    @Disabled
+    void testToStringHelper() {
         // Todo: implement
     }
 
     @Test
-    public void createInstance() {
+    void createInstance() {
         TestUtil.assertNonInstansiable(DocumentUtil.class);
     }
 

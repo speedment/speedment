@@ -14,11 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
@@ -34,7 +29,7 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.test_support.MockDbmsType;
 import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,13 +40,13 @@ import java.util.function.Predicate;
 import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
 import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.renderSqlWhere;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author Per Minborg
  */
-public class StreamTerminatorUtilTest {
+final class StreamTerminatorUtilTest {
 
     private static final DbmsType DBMS_TYPE = new MockDbmsType();
     private static final Function<Field<Person>, String> COLUMN_NAMER = f -> f.identifier().getColumnId();
@@ -78,37 +73,37 @@ public class StreamTerminatorUtilTest {
     private static final Predicate<Person> COMPLEX = ID_GT_0.and(AGE_EQ_2).or(ID_GT_1.and(AGE_EQ_3));
 
     @Test
-    public void testIsContainingOnlyFieldPredicateLambda() {
+    void testIsContainingOnlyFieldPredicateLambda() {
         assertFalse(isContainingOnlyFieldPredicate(p -> true));
     }
 
     @Test
-    public void testIsContainingOnlyFieldPredicateSimple() {
+    void testIsContainingOnlyFieldPredicateSimple() {
         assertTrue(isContainingOnlyFieldPredicate(ID_GT_0));
     }
 
     @Test
-    public void testIsContainingOnlyFieldPredicateAnd() {
+    void testIsContainingOnlyFieldPredicateAnd() {
         assertTrue(isContainingOnlyFieldPredicate(ID_GT_0_AND_AGE_EQ_2));
     }
 
     @Test
-    public void testIsContainingOnlyFieldPredicateOr() {
+    void testIsContainingOnlyFieldPredicateOr() {
         assertTrue(isContainingOnlyFieldPredicate(ID_GT_0_AND_AGE_EQ_2));
     }
 
     @Test
-    public void testIsContainingOnlyFieldPredicateComplex() {
+    void testIsContainingOnlyFieldPredicateComplex() {
         assertTrue(isContainingOnlyFieldPredicate(COMPLEX));
     }
 
     @Test
-    public void testIsContainingOnlyFieldPredicateComplexAndPolluted() {
+    void testIsContainingOnlyFieldPredicateComplexAndPolluted() {
         assertFalse(isContainingOnlyFieldPredicate(COMPLEX.and(person -> true)));
     }
 
     @Test
-    public void testBasicRenderSqlWhere() {
+    void testBasicRenderSqlWhere() {
         testRender(singletonList(ID_GT_0), rr -> {
             System.out.println(rr);
             assertEquals("(id > ?)", rr.getSql());
@@ -117,7 +112,7 @@ public class StreamTerminatorUtilTest {
     }
     
     @Test
-    public void testRenderSqlWhereNot() {
+    void testRenderSqlWhereNot() {
         testRender(singletonList(ID_GT_0_AND_AGE_EQ_2.negate()), rr -> {
             System.out.println(rr);
             assertEquals("((id <= ?) OR (NOT (age = ?)))", rr.getSql());
@@ -126,7 +121,7 @@ public class StreamTerminatorUtilTest {
     }
 
     @Test
-    public void test2RenderSqlWhere() {
+    void test2RenderSqlWhere() {
         testRender(Arrays.asList(ID_GT_0, AGE_EQ_2), rr -> {
             System.out.println(rr);
             assertEquals("(id > ?) AND (age = ?)", rr.getSql());
@@ -135,7 +130,7 @@ public class StreamTerminatorUtilTest {
     }
 
     @Test
-    public void testAndComnbinedRenderSqlWhere() {
+    void testAndComnbinedRenderSqlWhere() {
         testRender(singletonList(ID_GT_0_AND_AGE_EQ_2), rr -> {
             System.out.println(rr);
             assertEquals("((id > ?) AND (age = ?))", rr.getSql());
@@ -144,7 +139,7 @@ public class StreamTerminatorUtilTest {
     }
 
     @Test
-    public void testOrComnbinedRenderSqlWhere() {
+    void testOrComnbinedRenderSqlWhere() {
         testRender(singletonList(ID_GT_0_OR_AGE_EQ_2), rr -> {
             System.out.println(rr);
             assertEquals("((id > ?) OR (age = ?))", rr.getSql());
@@ -153,7 +148,7 @@ public class StreamTerminatorUtilTest {
     }
 
     @Test
-    public void testComplexComnbinedRenderSqlWhere() {
+    void testComplexComnbinedRenderSqlWhere() {
         testRender(singletonList(COMPLEX), rr -> {
             System.out.println(rr);
             assertEquals("(((id > ?) AND (age = ?)) OR ((id > ?) AND (age = ?)))", rr.getSql());
@@ -162,7 +157,7 @@ public class StreamTerminatorUtilTest {
     }
 
     @Test
-    public void testComplexPollutedComnbinedRenderSqlWhere() {
+    void testComplexPollutedComnbinedRenderSqlWhere() {
         try {
             testRender(singletonList(COMPLEX.and(p -> true)), rr -> {
             });

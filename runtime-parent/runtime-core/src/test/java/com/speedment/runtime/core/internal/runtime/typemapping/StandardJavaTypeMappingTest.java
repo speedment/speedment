@@ -18,20 +18,20 @@ package com.speedment.runtime.core.internal.runtime.typemapping;
 
 import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.core.internal.component.resultset.StandardJavaTypeMapping;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author pemi
  */
-public class StandardJavaTypeMappingTest {
+final class StandardJavaTypeMappingTest {
 
     @Test
-    public void testParse() {
+    void testParse() {
         testMapping(Boolean.class, Boolean.TRUE, m -> m.parse("true"));
         testMapping(Boolean.class, Boolean.FALSE, m -> m.parse("false"));
         testMapping(Byte.class,   (byte)  -47, m -> m.parse("-47"));

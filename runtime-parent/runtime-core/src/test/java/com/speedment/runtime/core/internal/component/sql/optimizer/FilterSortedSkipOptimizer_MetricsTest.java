@@ -31,14 +31,16 @@ import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.test_support.MockDbmsType;
 import com.speedment.runtime.test_support.MockEntity;
 import com.speedment.runtime.test_support.MockEntityUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.stream.Stream;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *
@@ -60,7 +62,7 @@ public class FilterSortedSkipOptimizer_MetricsTest {
 
     private FilterSortedSkipOptimizer<MockEntity> instance;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new FilterSortedSkipOptimizer<>();
     }
@@ -170,7 +172,7 @@ public class FilterSortedSkipOptimizer_MetricsTest {
 //                expected = expected == 0 ? Integer.MIN_VALUE : expected;
                 Pipeline pipeline = pipelineOf(l.stream().toArray(Action[]::new));
 
-                assertEquals("Failed for " + l, expected, instance.metrics(pipeline, DBMS_TYPE).getPipelineReductions());
+                assertEquals( expected, instance.metrics(pipeline, DBMS_TYPE).getPipelineReductions(), "Failed for " + l);
             }
             );
     }

@@ -168,20 +168,33 @@
         </dependency>
         
         <!--Test Dependencies-->
-        <dependency>
+<!--        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
-        <dependency>
+
+<!--        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>com.opera</groupId>
             <artifactId>operadriver</artifactId>
@@ -192,6 +205,7 @@
                     <artifactId>selenium-remote-driver</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
+
     </dependencies>
 </project>
