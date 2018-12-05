@@ -17,6 +17,10 @@ final class RuleUtil {
                 if (columnSize > 31) {  // jdbc will return unsigned 32 bit for BIT(32) which does not fit in Integer
                     return Optional.of(Long.class);
                 }
+                if (columnSize == 0 || columnSize == 1) {
+                    return Optional.of(Boolean.class);
+                }
+                break;
             }
         }
 
