@@ -1,65 +1,89 @@
 package com.speedment.runtime.core.internal.stream.autoclose;
 
+import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
+import java.util.Comparator;
+import java.util.stream.BaseStream;
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.core.internal.stream.autoclose.AutoClosingStreamTestUtil.MAX_VALUE;
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-final class AutoClosingReferenceStreamTest {
+final class AutoClosingReferenceStreamTest extends AbstractAutoClosingStreamTest<Integer, Stream<Integer>> {
 
-    private AtomicInteger closeCounter;
-
-    @BeforeEach
-    void setup() {
-        closeCounter = new AtomicInteger();
+    @Override
+    Stream<Integer> createStream() {
+        return Stream.iterate(0, i -> i++).limit(32);
     }
 
-    @Test
-    void test() {
-        new AutoClosingReferenceStream<>(createStream())
-            .onClose(closeHandler())
-            .count();
-
-        assertEquals(1, closeCounter.get());
-
+    @Override
+    Stream<Integer> createAutoclosableStream() {
+        return new AutoClosingReferenceStream<>(createStream());
     }
 
-    private Stream<Integer> createStream() {
-        return Stream.of(0, 1, 2, 3);
+    @Override
+    void assertTypedArraysEquals(Object expected, Object actual) {
+        assertArrayEquals((Object[]) expected, (Object[]) actual);
     }
 
-    private Runnable closeHandler() {
-        return () -> closeCounter.incrementAndGet();
-    }
-
-    private Stream<Consumer<Stream<Integer>>> terminatingOperations() {
+    @Override
+    Stream<NamedUnaryOperator<Stream<Integer>>> intermediateJava8Operations() {
         return Stream.of(
-            Stream::count,
-            s -> s.forEach(t -> { }),
-            s -> s.forEachOrdered(t -> { }),
-            Stream::toArray,
-            s -> s.toArray(Integer[]::new),
-            s -> s.reduce(0, Integer::sum),
-            s -> s.reduce(Integer::sum),
-            s -> s.reduce(0, Integer::sum, Integer::sum),
-            s -> s.collect(() -> 0, Integer::sum, Integer::sum),
-            s -> s.collect(toList()),
-            s -> s.min(Integer::compareTo),
-            s -> s.max(Integer::compareTo),
-            s -> s.anyMatch(i -> i > 2),
-            s -> s.allMatch(i -> i == 2),
-            s -> s.noneMatch(i -> i == 2),
-            Stream::findFirst,
-            Stream::findAny
+            NamedUnaryOperator.of("filter", s -> s.filter(i -> i < MAX_VALUE / 2)),
+            NamedUnaryOperator.of("map", s -> s.map(i -> i + 1)),
+            // mapToInt, mapToLong, mapToDouble
+            NamedUnaryOperator.of("flatMap", s -> s.flatMap(i -> Stream.of(i, i + 1))),
+            // flatMapToInt, flatMapToLong, flatMapToDouble
+            NamedUnaryOperator.of("distinct", Stream::distinct),
+            NamedUnaryOperator.of("sorted", Stream::sorted),
+            NamedUnaryOperator.of("sorted1Arg", s -> s.sorted(Comparator.reverseOrder())),
+            NamedUnaryOperator.of("peek", s -> s.peek(blackHole())),
+            NamedUnaryOperator.of("limit", s -> s.limit(MAX_VALUE - 2)),
+            NamedUnaryOperator.of("skip", s -> s.skip(3)),
+            NamedUnaryOperator.of("parallel", BaseStream::parallel),
+            NamedUnaryOperator.of("sequential", BaseStream::sequential),
+            NamedUnaryOperator.of("unordered", BaseStream::unordered)
+        );
+
+    }
+
+    @Override
+    Stream<NamedUnaryOperator<Stream<Integer>>> intermediateJava9Operations() {
+        return Stream.of(
+            NamedUnaryOperator.of("takeWhile", s -> Java9StreamUtil.takeWhile(s, i -> i < MAX_VALUE / 3)),
+            NamedUnaryOperator.of("dropWhile", s -> Java9StreamUtil.dropWhile(s, i -> i < MAX_VALUE / 3))
+        );
+
+    }
+
+    @Override
+    Stream<NamedFunction<Stream<Integer>, Object>> terminatingOperations() {
+        return Stream.<NamedFunction<Stream<Integer>, Object>>of(
+            NamedFunction.of("count", Stream::count),
+            NamedFunction.of("forEach", (Stream<Integer> s) -> {
+                s.forEach(blackHole());
+                return void.class;
+            }),
+            NamedFunction.of("forEachOrdered", (Stream<Integer> s) -> {
+                s.forEachOrdered(blackHole());
+                return void.class;
+            }),
+            NamedFunction.of("toArray", Stream::toArray),
+            NamedFunction.of("toArray1Arg", s -> s.toArray(Integer[]::new)),
+            NamedFunction.of("reduce2Arg", s -> s.reduce(0, Integer::sum)),
+            NamedFunction.of("reduce1Arg", s -> s.reduce(Integer::sum)),
+            NamedFunction.of("reduce3Arg", s -> s.reduce(0, Integer::sum, Integer::sum)),
+            NamedFunction.of("collect3Arg", s -> s.collect(() -> 0, Integer::sum, Integer::sum)),
+            NamedFunction.of("collect1Arg", s -> s.collect(toList())),
+            NamedFunction.of("min", s -> s.min(Integer::compareTo)),
+            NamedFunction.of("max", s -> s.max(Integer::compareTo)),
+            NamedFunction.of("anyMatch", s -> s.anyMatch(i -> i > 2)),
+            NamedFunction.of("allMatch", s -> s.allMatch(i -> i == 2)),
+            NamedFunction.of("noneMatch", s -> s.noneMatch(i -> i == 2)),
+            NamedFunction.of("findFirst", Stream::findFirst),
+            NamedFunction.of("findAny", Stream::findAny)
         );
     }
-
-
 
 }
