@@ -16,6 +16,9 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
+import com.speedment.runtime.core.internal.util.java9.Java9StreamAdditions;
+import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -36,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class AutoClosingReferenceStream<T>
     extends AbstractAutoClosingStream
-    implements Stream<T> {
+    implements Stream<T>, Java9StreamAdditions<T> {
 
     private final Stream<T> stream;
 
@@ -139,6 +142,16 @@ public final class AutoClosingReferenceStream<T>
     @Override
     public Stream<T> skip(long n) {
         return wrap(stream.skip(n));
+    }
+
+    @Override
+    public Stream<T> takeWhile(Predicate<? super T> predicate) {
+        return wrap(Java9StreamUtil.takeWhile(stream, predicate));
+    }
+
+    @Override
+    public Stream<T> dropWhile(Predicate<? super T> predicate) {
+        return wrap(Java9StreamUtil.dropWhile(stream, predicate));
     }
 
     @Override

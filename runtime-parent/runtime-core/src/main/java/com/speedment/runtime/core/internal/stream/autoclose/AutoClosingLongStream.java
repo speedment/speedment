@@ -16,6 +16,9 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
+import com.speedment.runtime.core.internal.util.java9.Java9LongStreamAdditions;
+import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -26,13 +29,9 @@ import java.util.stream.*;
  */
 final class AutoClosingLongStream
     extends AbstractAutoClosingStream
-    implements LongStream {
+    implements LongStream, Java9LongStreamAdditions {
 
     private final LongStream stream;
-
-/*    AutoClosingLongStream(LongStream stream) {
-        this(stream, newSet(), false);
-    }*/
 
     AutoClosingLongStream(
         final LongStream stream,
@@ -101,6 +100,16 @@ final class AutoClosingLongStream
     @Override
     public LongStream skip(long n) {
         return wrap(stream.skip(n));
+    }
+
+    @Override
+    public LongStream takeWhile​(LongPredicate predicate) {
+        return wrap(Java9StreamUtil.takeWhile(stream, predicate));
+    }
+
+    @Override
+    public LongStream dropWhile​(LongPredicate predicate) {
+        return wrap(Java9StreamUtil.dropWhile(stream, predicate));
     }
 
     @Override

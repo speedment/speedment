@@ -16,6 +16,10 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
+import com.speedment.runtime.core.internal.util.java9.Java9DoubleStreamAdditions;
+import com.speedment.runtime.core.internal.util.java9.Java9IntStreamAdditions;
+import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -26,13 +30,9 @@ import java.util.stream.*;
  */
 final class AutoClosingDoubleStream
     extends AbstractAutoClosingStream
-    implements DoubleStream {
+    implements DoubleStream, Java9DoubleStreamAdditions {
 
     private final DoubleStream stream;
-
-/*    AutoClosingDoubleStream(DoubleStream stream) {
-        this(stream, newSet(), false);
-    }*/
 
     AutoClosingDoubleStream(
         final DoubleStream stream,
@@ -101,6 +101,16 @@ final class AutoClosingDoubleStream
     @Override
     public DoubleStream skip(long n) {
         return wrap(stream.skip(n));
+    }
+
+    @Override
+    public DoubleStream takeWhile​(DoublePredicate predicate) {
+        return wrap(Java9StreamUtil.takeWhile(stream, predicate));
+    }
+
+    @Override
+    public DoubleStream dropWhile​(DoublePredicate predicate) {
+        return wrap(Java9StreamUtil.dropWhile(stream, predicate));
     }
 
     @Override
