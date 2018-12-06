@@ -16,22 +16,23 @@
  */
 package com.speedment.runtime.connector.mariadb.internal;
 
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.connector.mysql.internal.MySqlDbmsMetadataHandler;
 import com.speedment.runtime.connector.mysql.internal.MySqlDbmsOperationHandler;
+import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateView;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
-
 
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateView;
+import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -51,6 +52,9 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
     private MySqlDbmsOperationHandler operationHandler;
     @Inject
     private MySqlSpeedmentPredicateView fieldPredicateView;
+
+    @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
+    private String binaryCollationName;
 
     private MariaDbDbmsType() {
         namingConvention = new MariaDbNamingConvention();
@@ -115,6 +119,11 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
     @Override
     public String getInitialQuery() {
         return "select version() as `MariaDB version`";
+    }
+
+    @Override
+    public SqlPredicateFragment getCollateFragment() {
+        return of(" COLLATE " + binaryCollationName);
     }
 
     @Override

@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.core.db;
 
-import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.util.Comparator;
 import java.util.List;
@@ -219,6 +219,12 @@ public interface DbmsType {
      * database during speedment startup
      */
     String getInitialQuery();
+
+    /**
+     * Returns the COLLATE fragment needed to make ORDER BY statements sort correctly, using default collation
+     * @return the COLLATE fragment needed to make ORDER BY statements sort correctly, using default collation
+     */
+    SqlPredicateFragment getCollateFragment();
 
     enum SkipLimitSupport {
         STANDARD, ONLY_AFTER_SORTED, NONE;

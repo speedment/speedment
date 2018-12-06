@@ -222,6 +222,10 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                         }
 
                         sql.append(fieldName);
+                        if (String.class.equals(info.getSqlDatabaseTypeFunction().apply(fieldComparator.getField()))) {
+                            sql.append(dbmsType.getCollateFragment().getSql());
+                        }
+
                         if (isReversed) {
                             sql.append(" DESC");
                         } else {
