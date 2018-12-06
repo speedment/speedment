@@ -19,8 +19,8 @@ package com.speedment.runtime.field;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +58,7 @@ public final class IntFieldTest {
     private BasicEntity k;
     private BasicEntity l;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         field = IntField.create(
             BasicEntity.Identifier.VAR_INT,
