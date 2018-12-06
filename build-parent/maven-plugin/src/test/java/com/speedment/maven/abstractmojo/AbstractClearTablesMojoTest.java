@@ -36,7 +36,7 @@ import java.nio.file.Paths;
 
 
 @ExtendWith(MockitoExtension.class)
-public class AbstractClearTablesMojoTest {
+final class AbstractClearTablesMojoTest {
 
 	private AbstractClearTablesMojoTestImpl mojo;
 
@@ -49,7 +49,7 @@ public class AbstractClearTablesMojoTest {
 	@Mock private MavenProject mockedMavenProject;
 
 	@BeforeEach
-	public void setup() {
+	void setup() {
 		when(mockedMavenProject.getBasedir()).thenReturn(new File("baseDir"));
 
 		mojo = new AbstractClearTablesMojoTestImpl() {
@@ -61,7 +61,7 @@ public class AbstractClearTablesMojoTest {
 	}
 
 	@Test
-	public void execute() {
+	void execute() {
 		// Given
 		when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
 		mojo.setConfigFile(mockedConfigLocation);
@@ -75,7 +75,7 @@ public class AbstractClearTablesMojoTest {
 	}
 
 	@Test
-	public void executeException() {
+	void executeException() {
 		// Given
 		when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
 		doThrow(new RuntimeException("test Exception")).when(mockedConfigFileHelper).clearTablesAndSaveToFile();
