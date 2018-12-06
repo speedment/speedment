@@ -53,7 +53,7 @@
         <mapstream.version>2.3.5</mapstream.version>
         <mapbuilder.version>1.0.0</mapbuilder.version>
         <mutablestream.version>1.0.0</mutablestream.version>
-        <singletonstream.version>1.0.1</singletonstream.version>
+        <singletonstream.version>1.0.2-SNAPSHOT</singletonstream.version>
         <annotation.version>1.0.0</annotation.version>
         <combinatorics.version>1.0.3-SNAPSHOT</combinatorics.version>
         <benchmark.version>1.0.0</benchmark.version>
