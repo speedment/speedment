@@ -49,7 +49,7 @@
         <codegenxml.version>1.0.4-SNAPSHOT</codegenxml.version>
         <injector.version>1.2.2-SNAPSHOT</injector.version>
         <rest.version>1.0.4</rest.version>
-        <lazy.version>1.0.3</lazy.version>
+        <lazy.version>1.0.4-SNAPSHOT</lazy.version>
         <mapstream.version>2.3.5</mapstream.version>
         <mapbuilder.version>1.0.0</mapbuilder.version>
         <mutablestream.version>1.0.0</mutablestream.version>

@@ -16,8 +16,8 @@
  */
 package com.speedment.common.lazy;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
@@ -27,8 +27,9 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author pemi
@@ -48,30 +49,34 @@ public abstract class AbstractLazyTest<T> {
 
     protected Lazy<T> instance;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = newInstance();
     }
 
     @Test
-    public void checkFirstAndSecondValue() {
+    void checkFirstAndSecondValue() {
         assertNotEquals(firstValue(), secondValue());
     }
 
     @Test
-    public void testGetOrCompute() {
-        assertEquals(firstValue(), instance.getOrCompute(() -> firstValue()));
-        assertEquals(firstValue(), instance.getOrCompute(() -> secondValue()));
+    void testGetOrCompute() {
+        assertEquals(firstValue(), instance.getOrCompute(this::firstValue));
+        assertEquals(firstValue(), instance.getOrCompute(this::secondValue));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testGetOrComputeSuppliedNull() {
-        instance.getOrCompute(NULL_SUPPLIER);
+    @Test
+    void testGetOrComputeSuppliedNull() {
+        assertThrows(NullPointerException.class, () -> {
+            instance.getOrCompute(NULL_SUPPLIER);
+        });
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testGetOrComputeSupplierIsNull() {
-        instance.getOrCompute(null);
+    @Test
+    void testGetOrComputeSupplierIsNull() {
+        assertThrows(NullPointerException.class, () -> {
+            instance.getOrCompute(null);
+        });
     }
 
     @Test
@@ -94,7 +99,7 @@ public abstract class AbstractLazyTest<T> {
                 .map(AbstractLazyTest::getFutureValue)
                 .collect(toSet());
 
-            assertEquals("Failed at iteration " + i, 1, results.size());
+            assertEquals(1, results.size(), "Failed at iteration " + i);
 
         }
 
