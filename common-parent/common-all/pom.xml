@@ -48,16 +48,16 @@
         <codegen.version>2.5.1-SNAPSHOT</codegen.version>
         <codegenxml.version>1.0.4-SNAPSHOT</codegenxml.version>
         <injector.version>1.2.2-SNAPSHOT</injector.version>
-        <rest.version>1.0.4</rest.version>
+        <rest.version>1.0.5-SNAPSHOT</rest.version>
         <lazy.version>1.0.4-SNAPSHOT</lazy.version>
-        <mapstream.version>2.3.5</mapstream.version>
-        <mapbuilder.version>1.0.0</mapbuilder.version>
-        <mutablestream.version>1.0.0</mutablestream.version>
+        <mapstream.version>2.3.6-SNAPSHOT</mapstream.version>
+        <mapbuilder.version>1.0.1-SNAPSHOT</mapbuilder.version>
+        <mutablestream.version>1.0.1-SNAPSHOT</mutablestream.version>
         <singletonstream.version>1.0.2-SNAPSHOT</singletonstream.version>
-        <annotation.version>1.0.0</annotation.version>
+        <annotation.version>1.0.1-SNAPSHOT</annotation.version>
         <combinatorics.version>1.0.3-SNAPSHOT</combinatorics.version>
-        <benchmark.version>1.0.0</benchmark.version>
-        <collection.version>1.0.0</collection.version>
+        <benchmark.version>1.0.1-SNAPSHOT</benchmark.version>
+        <collection.version>1.0.1-SNAPSHOT</collection.version>
     </properties>
     
     <dependencyManagement>

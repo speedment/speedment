@@ -26,11 +26,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.2</version>
+        <version>3.1.10-SNAPSHOT</version>
     </parent>
     
     <artifactId>mutable-stream</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - MutableStream</name>
