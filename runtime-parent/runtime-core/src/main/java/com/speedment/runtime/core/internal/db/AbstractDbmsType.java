@@ -25,7 +25,6 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsColumnHandler;
 import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.sql.Driver;
@@ -38,7 +37,6 @@ import java.util.function.Predicate;
 import static com.speedment.common.injector.State.CREATED;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.LongRangeUtil.requireNonNegative;
-import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -133,11 +131,6 @@ public abstract class AbstractDbmsType implements DbmsType {
     @Override
     public String getInitialQuery() {
         return "select 1 from dual";
-    }
-
-    @Override
-    public SqlPredicateFragment getCollateFragment() {
-        return of("");
     }
 
     @Override

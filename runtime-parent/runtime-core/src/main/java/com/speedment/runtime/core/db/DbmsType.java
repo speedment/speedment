@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.speedment.common.mapstream.MapStream.comparing;
+import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms
@@ -224,7 +225,9 @@ public interface DbmsType {
      * Returns the COLLATE fragment needed to make ORDER BY statements sort correctly, using default collation
      * @return the COLLATE fragment needed to make ORDER BY statements sort correctly, using default collation
      */
-    SqlPredicateFragment getCollateFragment();
+    default SqlPredicateFragment getCollateFragment() {
+        return of("");
+    }
 
     enum SkipLimitSupport {
         STANDARD, ONLY_AFTER_SORTED, NONE;
