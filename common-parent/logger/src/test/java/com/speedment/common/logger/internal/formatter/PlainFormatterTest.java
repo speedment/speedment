@@ -17,32 +17,35 @@
 package com.speedment.common.logger.internal.formatter;
 
 import com.speedment.common.logger.Level;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.time.Instant;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class PlainFormatterTest {
+final class PlainFormatterTest {
 
     PlainFormatter instance;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = new PlainFormatter();
     }
 
     @Test
-    public void Java9TestInstantNowToString() {
+    void Java9TestInstantNowToString() {
         // Java 9 test
         System.out.println("Instant.now().toString():" + Instant.now().toString());
     }
 
     @Test
-    public void testApply() {
+    void testApply() {
         final String actual = instance.apply(Level.DEBUG, "LOGGER_NAME", "Some message");
         assertTrue(actual.contains("DEBUG"));
         assertTrue(actual.contains("LOGGER_NAME"));
@@ -54,13 +57,13 @@ public class PlainFormatterTest {
     }
 
     @Test
-    public void testHighResolutionTime() {
+    void testHighResolutionTime() {
         final String actual = instance.formatInstance("2017-03-30T02:02:42.988290Z");
         System.out.println("Hi resolution:" + actual);
     }
 
     @Test
-    public void testFormatInstanceCorrectLength() {
+    void testFormatInstanceCorrectLength() {
         final String expected = "2017-03-29T21:55:39.169Z";
         final String actual = instance.formatInstance("2017-03-29T21:55:39.169Z");
         System.out.println(actual);
@@ -68,7 +71,7 @@ public class PlainFormatterTest {
     }
 
     @Test
-    public void testFormatInstance1Missing() {
+    void testFormatInstance1Missing() {
         final String expected = "2017-03-29T21:55:39.160Z";
         final String actual = instance.formatInstance("2017-03-29T21:55:39.16Z");
         System.out.println(actual);
@@ -76,7 +79,7 @@ public class PlainFormatterTest {
     }
 
     @Test
-    public void testFormatInstance2Missing() {
+    void testFormatInstance2Missing() {
         final String expected = "2017-03-29T21:55:39.100Z";
         final String actual = instance.formatInstance("2017-03-29T21:55:39.1Z");
         System.out.println(actual);
@@ -84,7 +87,7 @@ public class PlainFormatterTest {
     }
 
     @Test
-    public void testFormatInstance3Missing() {
+    void testFormatInstance3Missing() {
         final String expected = "2017-03-29T21:55:39.000Z";
         final String actual = instance.formatInstance("2017-03-29T21:55:39.Z");
         System.out.println(actual);
@@ -92,7 +95,7 @@ public class PlainFormatterTest {
     }
 
     @Test
-    public void testFormatInstance4Missing() {
+    void testFormatInstance4Missing() {
         final String expected = "2017-03-29T21:55:39.000Z";
         final String actual = instance.formatInstance("2017-03-29T21:55:39Z");
         System.out.println(actual);

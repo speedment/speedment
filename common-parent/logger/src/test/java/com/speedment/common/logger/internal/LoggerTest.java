@@ -19,13 +19,13 @@ package com.speedment.common.logger.internal;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author Per Minborg
  */
-public class LoggerTest {
+final class LoggerTest {
 
     private static final Logger LOGGER = LoggerManager.getLogger(LoggerTest.class);
 
@@ -33,7 +33,7 @@ public class LoggerTest {
     private static final String MESSAGE_2 = "We are superstitious";
 
     @Test
-    public void test() {
+    void test() {
         LOGGER.setLevel(Level.TRACE);
 
         LOGGER.trace(MESSAGE_1);
