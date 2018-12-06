@@ -38,14 +38,14 @@ import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.internal.component.join.JoinComponentImpl;
 import com.speedment.runtime.join.internal.component.join.test_support.MockEmptyJoinStreamSupplierComponent;
 import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author Per Minborg
  */
-public class JoinSketchTest {
+final class JoinSketchTest {
 
     JoinComponent jc = null;
     Manager<User> users = null;
@@ -64,8 +64,8 @@ public class JoinSketchTest {
     LEFT JOIN Email AS e1 ON u1.email = e1.id;
     */
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         try {
             Injector injector = Injector.builder()
                 .withComponent(JoinComponentImpl.class)
@@ -79,7 +79,7 @@ public class JoinSketchTest {
 
 
     @Test
-    public void simpleProblemTest() {
+    void simpleProblemTest() {
         jc.from(PictureManager.IDENTIFIER)
             .innerJoinOn(User.USER_ID).equal(Picture.USER_ID)
             .build(Tuples::of);
