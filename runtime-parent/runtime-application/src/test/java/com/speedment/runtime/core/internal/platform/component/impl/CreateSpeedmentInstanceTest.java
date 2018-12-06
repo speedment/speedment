@@ -18,18 +18,18 @@ package com.speedment.runtime.core.internal.platform.component.impl;
 
 import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.Speedment;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public class CreateSpeedmentInstanceTest {
+final class CreateSpeedmentInstanceTest {
     
     @Test
-    public void createSpeedmentInstance() {
+    void createSpeedmentInstance() {
         final Speedment speedment = ApplicationBuilders.empty()
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
