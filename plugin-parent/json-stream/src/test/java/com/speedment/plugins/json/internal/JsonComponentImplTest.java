@@ -34,12 +34,12 @@ import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.TypeMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Objects.requireNonNull;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import org.junit.Before;
-import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,14 +47,14 @@ import static org.mockito.Mockito.when;
  *
  * @author Per Minborg
  */
-public class JsonComponentImplTest {
+final class JsonComponentImplTest {
 
     private JsonComponent jsonComponent;
     private Manager<Person> persons;
 
-    @Before
+    @BeforeEach
     @SuppressWarnings("unchecked")
-    public void init() {
+    void init() {
         jsonComponent = newComponent();
         persons = (Manager<Person>) mock(Manager.class);
         final Stream<Person> personStream = IntStream.range(0, 8).mapToObj(i -> new Person(i));
@@ -63,10 +63,9 @@ public class JsonComponentImplTest {
     }
 
     @Test
-    public void testNoneOf() {
+    void testNoneOf() {
         final JsonEncoder<Person> result = jsonComponent.noneOf(persons);
         final String json = persons.stream().collect(result.collector());
-        //System.out.println(json);
     }
 
 //    @Test
