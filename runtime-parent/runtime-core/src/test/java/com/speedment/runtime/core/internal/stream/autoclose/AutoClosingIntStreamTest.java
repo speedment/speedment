@@ -11,6 +11,7 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.stream.autoclose.AutoClosingStreamTestUtil.MAX_VALUE;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 final class AutoClosingIntStreamTest extends AbstractAutoClosingStreamTest<Integer, IntStream> {
@@ -81,7 +82,16 @@ final class AutoClosingIntStreamTest extends AbstractAutoClosingStreamTest<Integ
             NamedFunction.of("allMatch", s -> s.allMatch(i -> i == 2)),
             NamedFunction.of("noneMatch", s -> s.noneMatch(i -> i == 2)),
             NamedFunction.of("findFirst", IntStream::findFirst),
-            NamedFunction.of("findAny", IntStream::findAny)
+            NamedFunction.of("findAny", IntStream::findAny),
+            NamedFunction.of("summaryStatistics", s -> s.summaryStatistics().getSum()),
+
+            // Simulated ones for mapToX and flatMapTox etc.
+            NamedFunction.of(".boxed.collect", s -> s.boxed().collect(toList())),
+            NamedFunction.of(".asDoubleStream.sum", s -> s.asDoubleStream().sum()),
+            NamedFunction.of(".mapToLong.sum", s -> s.mapToLong(i -> i).sum()),
+            NamedFunction.of(".mapToDouble.sum", s -> s.mapToDouble(i -> i).sum()),
+            NamedFunction.of(".mapToObj.sum", s -> s.mapToObj(i -> i).collect(toList())),
+            NamedFunction.of(".mapToDouble.sum", s -> s.mapToDouble(i -> i).sum())
         );
 
 

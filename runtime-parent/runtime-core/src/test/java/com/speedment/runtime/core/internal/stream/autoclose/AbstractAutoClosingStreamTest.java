@@ -9,14 +9,11 @@ import java.util.function.*;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 abstract class AbstractAutoClosingStreamTest<T, S extends BaseStream<T, S>> {
 
-    // Todo: Test parallel, sequential, iterator, spliterator etc.
-
-    // Todo: test isParallel()
+    // Todo: iterator, spliterator etc.
 
     @TestFactory
     Stream<DynamicTest> testTerm() {
@@ -90,6 +87,8 @@ abstract class AbstractAutoClosingStreamTest<T, S extends BaseStream<T, S>> {
     abstract Stream<NamedFunction<S, Object>> terminatingOperations();
 
     abstract void assertTypedArraysEquals(Object expected, Object actual);
+
+/*    abstract IntStream toIntStream(S stream);*/
 
     <A> Consumer<A> blackHole() {
         return (A t) -> {};

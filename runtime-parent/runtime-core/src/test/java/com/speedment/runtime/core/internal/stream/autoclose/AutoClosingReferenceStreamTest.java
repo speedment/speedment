@@ -3,8 +3,7 @@ package com.speedment.runtime.core.internal.stream.autoclose;
 import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
 
 import java.util.Comparator;
-import java.util.stream.BaseStream;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 import static com.speedment.runtime.core.internal.stream.autoclose.AutoClosingStreamTestUtil.MAX_VALUE;
 import static java.util.stream.Collectors.toList;
@@ -82,7 +81,14 @@ final class AutoClosingReferenceStreamTest extends AbstractAutoClosingStreamTest
             NamedFunction.of("allMatch", s -> s.allMatch(i -> i == 2)),
             NamedFunction.of("noneMatch", s -> s.noneMatch(i -> i == 2)),
             NamedFunction.of("findFirst", Stream::findFirst),
-            NamedFunction.of("findAny", Stream::findAny)
+            NamedFunction.of("findAny", Stream::findAny),
+            // Simulated ones for mapToX and flatMapTox
+            NamedFunction.of(".mapToInt.sum", s -> s.mapToInt(i -> i).sum()),
+            NamedFunction.of(".mapToLong.sum", s -> s.mapToLong(i -> i).sum()),
+            NamedFunction.of(".mapToDouble.sum", s -> s.mapToDouble(i -> i).sum()),
+            NamedFunction.of(".flatMapToInt.sum", s -> s.flatMapToInt(i -> IntStream.of(i , i+1)).sum()),
+            NamedFunction.of(".flatMapToLong.sum", s -> s.flatMapToLong(i -> LongStream.of(i , i+1)).sum()),
+            NamedFunction.of(".flatMapToDouble.sum", s -> s.flatMapToDouble(i -> DoubleStream.of(i , i+1)).sum())
         );
     }
 
