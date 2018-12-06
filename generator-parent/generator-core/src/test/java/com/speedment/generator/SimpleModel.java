@@ -26,7 +26,6 @@ import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.nio.file.Path;
