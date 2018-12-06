@@ -23,57 +23,59 @@ package com.speedment.example.typemapper;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper.Ordering;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author Per Minborg
  */
-public class IntegerZeroOneToYesNoTypeMapperTest {
+final class IntegerZeroOneToYesNoTypeMapperTest {
 
     private IntegerZeroOneToYesNoTypeMapper mapper;
     private Column column;
     private Class<?> entityType;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         mapper = new IntegerZeroOneToYesNoTypeMapper();
         column = null;
         entityType = null;
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         mapper = null;
     }
 
     @Test
-    public void testGetLabel() {
+    void testGetLabel() {
         assertNotNull(mapper.getLabel());
     }
 
     @Test
-    public void testGetJavaType() {
+    void testGetJavaType() {
         assertEquals(String.class, mapper.getJavaType(column));
     }
 
     @Test
-    public void testToJavaType() {
+    void testToJavaType() {
         assertEquals("Yes", mapper.toJavaType(column, entityType, 1));
         assertEquals("No", mapper.toJavaType(column, entityType, 0));
     }
 
     @Test
-    public void testToDatabaseType() {
+    void testToDatabaseType() {
         assertEquals((Integer) 1, mapper.toDatabaseType("Yes"));
         assertEquals((Integer) 0, mapper.toDatabaseType("No"));
     }
 
     @Test
-    public void testGetOrdering() {
+    void testGetOrdering() {
         assertEquals(Ordering.RETAIN, mapper.getOrdering());
     }
 
