@@ -85,30 +85,21 @@
             <artifactId>function</artifactId>
         </dependency>
         
-       
-        <!-- Runtime Dependencies -->
-<!--        <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-config</artifactId>
-            <version>${speedment.version}</version>
-        </dependency>-->
-        
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>
             <version>${speedment.version}</version>
         </dependency>
-        
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
-        
+
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
+
     </dependencies>
 </project>
