@@ -17,31 +17,32 @@
 package com.speedment.runtime.typemapper.other;
 
 import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 /**
  * @author Emil Forslund
  * @since  3.0.10
  */
-public class BinaryToUuidMapperTest {
+final class BinaryToUuidMapperTest {
 
     private TypeMapper<Object, UUID> uuidMapper;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         uuidMapper = new BinaryToUuidMapper();
     }
 
     @Test
-    public void toJavaTypeHex() throws Exception {
+    void toJavaTypeHex() throws Exception {
         final byte[] test = {
             0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
             0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
@@ -51,11 +52,11 @@ public class BinaryToUuidMapperTest {
         final String actual = uuidMapper.toJavaType(null, null, test).toString()
             .replace("-", "").toLowerCase();
 
-        assertEquals("Compare as HEX: ", expected, actual);
+        assertEquals(expected, actual, "Compare as HEX: ");
     }
 
     @Test
-    public void toJavaTypeUUID() throws Exception {
+    void toJavaTypeUUID() throws Exception {
         final ByteBuffer test = ByteBuffer.wrap(new byte[] {
             0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
             0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
@@ -64,11 +65,11 @@ public class BinaryToUuidMapperTest {
         final UUID expected = new UUID(test.getLong(), test.getLong());
         final UUID actual   = uuidMapper.toJavaType(null, null, test.array());
 
-        assertEquals("Compare as UUID: ", expected, actual);
+        assertEquals(expected, actual, "Compare as UUID: ");
     }
 
     @Test
-    public void toDatabaseType() throws Exception {
+    void toDatabaseType() throws Exception {
         final byte[] expected = {
             0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
             0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
@@ -79,9 +80,9 @@ public class BinaryToUuidMapperTest {
 
         final Object actual = uuidMapper.toDatabaseType(original);
 
-        assertNotNull("Result not null: ", actual);
-        assertEquals("Result correct type: ", byte[].class, actual.getClass());
-        assertArrayEquals("Result correct values: ", expected, (byte[]) actual);
+        assertNotNull(actual);
+        assertEquals(byte[].class, actual.getClass(), "Result correct type: ");
+        assertArrayEquals(expected, (byte[]) actual, "Result correct values: ");
     }
 
     private final static char[] HEX = "0123456789abcdef".toCharArray();
