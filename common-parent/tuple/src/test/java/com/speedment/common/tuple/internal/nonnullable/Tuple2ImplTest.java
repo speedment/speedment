@@ -16,22 +16,22 @@
  */
 package com.speedment.common.tuple.internal.nonnullable;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-public final class Tuple2ImplTest<T0, T1> extends AbstractTupleImplTest<Tuple2Impl<Integer, Integer>> {
+final class Tuple2ImplTest<T0, T1> extends AbstractTupleImplTest<Tuple2Impl<Integer, Integer>> {
     
-    public Tuple2ImplTest() {
+    Tuple2ImplTest() {
         super(() -> new Tuple2Impl<>(0, 1), 2);
     }
     
     @Test
-    public void get0Test() {
+    void get0Test() {
         assertEquals(0, (int) instance.get0());
     }
     
     @Test
-    public void get1Test() {
+    void get1Test() {
         assertEquals(1, (int) instance.get1());
     }
 }
