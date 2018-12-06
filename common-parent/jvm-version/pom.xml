@@ -25,11 +25,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.0.14</version>
+        <version>3.1.10-SNAPSHOT</version>
     </parent>
     
     <artifactId>jvm-version</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - JVM Version</name>
@@ -80,15 +80,15 @@
         </profile>
     </profiles>
     <dependencies>
+        <!--Test dependencies-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
     </dependencies>
 </project>
