@@ -39,7 +39,7 @@
     </description>
     
     <properties>
-        <invariant.version>1.0.3</invariant.version>
+        <invariant.version>1.0.4-SNAPSHOT</invariant.version>
         <function.version>1.0.5</function.version>
         <jvm-version.version>1.0.0</jvm-version.version> <!-- Yeah, I know... -->
         <json.version>1.0.4</json.version>

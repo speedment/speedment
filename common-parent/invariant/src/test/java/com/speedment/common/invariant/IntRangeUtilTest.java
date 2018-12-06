@@ -18,8 +18,11 @@ package com.speedment.common.invariant;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.function.IntPredicate;
+import java.util.function.IntUnaryOperator;
 import java.util.function.LongPredicate;
 import java.util.function.LongUnaryOperator;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,76 +31,76 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Per Minborg
  */
-final class LongRangeUtilTest {
+final class IntRangeUtilTest {
 
-    private static final LongPredicate IS_POSITIVE = l -> l > 0;
-    private static final LongPredicate IS_NEGATIVE = l -> l < 0;
-    private static final LongPredicate IS_ZERO = l -> l == 0;
+    private static final IntPredicate IS_POSITIVE = l -> l > 0;
+    private static final IntPredicate IS_NEGATIVE = l -> l < 0;
+    private static final IntPredicate IS_ZERO = l -> l == 0;
 
     @Test
     void testRequirePositive() {
-        testHelper(IS_POSITIVE, LongRangeUtil::requirePositive);
+        testHelper(IS_POSITIVE, IntRangeUtil::requirePositive);
     }
 
     @Test
     void testRequireNegative() {
-        testHelper(IS_NEGATIVE, LongRangeUtil::requireNegative);
+        testHelper(IS_NEGATIVE, IntRangeUtil::requireNegative);
     }
 
     @Test
     void testRequireZero() {
-        testHelper(IS_ZERO, LongRangeUtil::requireZero);
+        testHelper(IS_ZERO, IntRangeUtil::requireZero);
     }
 
     @Test
     void testRequireNonPositive() {
-        testHelper(IS_POSITIVE.negate(), LongRangeUtil::requireNonPositive);
+        testHelper(IS_POSITIVE.negate(), IntRangeUtil::requireNonPositive);
     }
 
     @Test
     void testRequireNonNegative() {
-        testHelper(IS_NEGATIVE.negate(), LongRangeUtil::requireNonNegative);
+        testHelper(IS_NEGATIVE.negate(), IntRangeUtil::requireNonNegative);
     }
 
     @Test
     void testRequireNonZero() {
-        testHelper(IS_ZERO.negate(), LongRangeUtil::requireNonZero);
+        testHelper(IS_ZERO.negate(), IntRangeUtil::requireNonZero);
     }
 
     @Test
     void testRequireEquals() {
-        final long otherVal = 3;
-        testHelper(l -> l == otherVal, l -> LongRangeUtil.requireEquals(l, otherVal));
+        final int otherVal = 3;
+        testHelper(l -> l == otherVal, l -> IntRangeUtil.requireEquals(l, otherVal));
     }
 
     @Test
     void testRequireNotEquals() {
-        final long otherVal = 3;
-        testHelper(l -> l != otherVal, l -> LongRangeUtil.requireNotEquals(l, otherVal));
+        final int otherVal = 3;
+        testHelper(l -> l != otherVal, l -> IntRangeUtil.requireNotEquals(l, otherVal));
     }
 
     @Test
     void testRequireInRange() {
-        final long first = -1;
-        final long lastExclusive = 4;
-        testHelper(l -> l >= first && l < lastExclusive, l -> LongRangeUtil.requireInRange(l, first, lastExclusive));
+        final int first = -1;
+        final int lastExclusive = 4;
+        testHelper(l -> l >= first && l < lastExclusive, l -> IntRangeUtil.requireInRange(l, first, lastExclusive));
     }
 
     @Test
     void testRequireInRangeClosed() {
-        final long first = -1;
-        final long lastInclusive = 4;
-        testHelper(l -> l >= first && l <= lastInclusive, l -> LongRangeUtil.requireInRangeClosed(l, first, lastInclusive));
+        final int first = -1;
+        final int lastInclusive = 4;
+        testHelper(l -> l >= first && l <= lastInclusive, l -> IntRangeUtil.requireInRangeClosed(l, first, lastInclusive));
     }
 
-    private void testHelper(LongPredicate predicate, LongUnaryOperator validator) {
-        LongStream.range(-257, 257).forEach(l -> {
+    private void testHelper(IntPredicate predicate, IntUnaryOperator validator) {
+        IntStream.range(-257, 257).forEach(l -> {
             if (predicate.test(l)) {
-                long expected = validator.applyAsLong(l);
+                long expected = validator.applyAsInt(l);
                 assertEquals(l, expected);
             } else {
                 try {
-                    long expected = validator.applyAsLong(l);
+                    long expected = validator.applyAsInt(l);
                 } catch (IllegalArgumentException e) {
                     // Ignore
                 }
