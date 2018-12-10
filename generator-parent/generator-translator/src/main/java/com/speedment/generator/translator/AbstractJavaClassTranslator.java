@@ -42,11 +42,19 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.util.DocumentDbUtil;
+import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.component.InfoComponent;
 import java.lang.reflect.Type;
 import java.util.*;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toSet;
+
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -216,72 +224,76 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
         }
 
         @Override
-        public BuilderImpl forEveryProject(Phase phase, BiConsumer<T, Project> consumer) {
+        public Builder<T> forEveryProject(Phase phase, BiConsumer<T, Project> consumer) {
             aquireListAndAdd(phase, PROJECTS, wrap(consumer, ProjectImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl forEveryDbms(Phase phase, BiConsumer<T, Dbms> consumer) {
+        public Builder<T> forEveryDbms(Phase phase, BiConsumer<T, Dbms> consumer) {
             aquireListAndAdd(phase, Project.DBMSES, wrap(consumer, DbmsImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl forEverySchema(Phase phase, BiConsumer<T, Schema> consumer) {
+        public Builder<T> forEverySchema(Phase phase, BiConsumer<T, Schema> consumer) {
             aquireListAndAdd(phase, Dbms.SCHEMAS, wrap(consumer, SchemaImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl forEveryTable(Phase phase, BiConsumer<T, Table> consumer) {
+        public Builder<T> forEveryTable(Phase phase, BiConsumer<T, Table> consumer) {
             aquireListAndAdd(phase, Schema.TABLES, wrap(consumer, TableImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl forEveryColumn(Phase phase, BiConsumer<T, Column> consumer) {
+        public Builder<T> forEveryColumn(Phase phase, BiConsumer<T, Column> consumer) {
             aquireListAndAdd(phase, Table.COLUMNS, wrap(consumer, ColumnImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl forEveryIndex(Phase phase, BiConsumer<T, Index> consumer) {
+        public Builder<T> forEveryIndex(Phase phase, BiConsumer<T, Index> consumer) {
             aquireListAndAdd(phase, Table.INDEXES, wrap(consumer, IndexImpl::new));
             return this;
         }
 
         @Override
-        public BuilderImpl forEveryForeignKey(Phase phase, BiConsumer<T, ForeignKey> consumer) {
+        public Builder<T> forEveryForeignKey(Phase phase, BiConsumer<T, ForeignKey> consumer) {
             aquireListAndAdd(phase, Table.FOREIGN_KEYS, wrap(consumer, ForeignKeyImpl::new));
             return this;
         }
 
         private <P extends Document, D extends Document> BiConsumer<T, Document> wrap(BiConsumer<T, D> consumer, BiFunction<P, Map<String, Object>, D> constructor) {
+/*            // Guard against running several times (related to the fix of #224)
+            // This could perhaps be handled in a better way
+            final AtomicBoolean executed = new AtomicBoolean();*/
             return (t, doc) -> {
-                @SuppressWarnings("unchecked")
-                final P parent = (P) doc.getParent().orElse(null);
-                consumer.accept(t, constructor.apply(parent, doc.getData()));
+/*                if (executed.compareAndSet(false, true)) { */
+                    @SuppressWarnings("unchecked") final P parent = (P) doc.getParent().orElse(null);
+                    consumer.accept(t, constructor.apply(parent, doc.getData()));
+/*                }*/
             };
         }
 
         @Override
-        public BuilderImpl forEveryForeignKeyReferencingThis(Phase phase, BiConsumer<T, ForeignKey> consumer) {
+        public Builder<T> forEveryForeignKeyReferencingThis(Phase phase, BiConsumer<T, ForeignKey> consumer) {
             foreignKeyReferencesThisTableConsumers.get(phase).add(requireNonNull(consumer));
             return this;
         }
 
         @SuppressWarnings("unchecked")
-        protected void aquireListAndAdd(Phase phase, String key, BiConsumer<T, Document> consumer) {
+        private void aquireListAndAdd(Phase phase, String key, BiConsumer<T, Document> consumer) {
             aquireList(phase, key).add(requireNonNull(consumer));
         }
 
         @SuppressWarnings("unchecked")
-        protected <C extends Document> List<BiConsumer<T, C>> aquireList(Phase phase, String key) {
+        private <C extends Document> List<BiConsumer<T, C>> aquireList(Phase phase, String key) {
             return (List<BiConsumer<T, C>>) (List<?>) map.get(phase).computeIfAbsent(key, $ -> new CopyOnWriteArrayList<>());
         }
 
-        public <D extends Document & HasMainInterface> void act(Phase phase, String key, T item, D document) {
+        private <D extends Document & HasMainInterface> void act(Phase phase, String key, T item, D document) {
             aquireList(phase, key).forEach(c
                 -> c.accept(requireNonNull(item), requireNonNull(document))
             );
@@ -306,20 +318,19 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
                     .forEachOrdered((key, actor) -> table()
                         .ifPresent(table -> MapStream.of(table.getData())
                             .filterKey(key::equals)
-                            
+
                             // Filter out elements that map to a list and flat
                             // map the stream so that every value in the list
                             // becomes an element of the stream.
                             .filterValue(List.class::isInstance)
                             .mapValue(v -> {
-                                @SuppressWarnings("unchecked")
-                                final List<Map<String, Object>> val =
+                                @SuppressWarnings("unchecked") final List<Map<String, Object>> val =
                                     (List<Map<String, Object>>) v;
-                                
+
                                 return val;
                             })
                             .flatMapValue(List::stream)
-                            
+
                             // The foreignKeys-property is special in that only
                             // keys that reference enabled and existing table
                             // and columns are to be included.
@@ -328,27 +339,27 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
                                     return new ForeignKeyImpl(table, v)
                                         .foreignKeyColumns()
                                         .map(ForeignKeyColumn::findColumn)
-                                        .allMatch(c -> 
+                                        .allMatch(c ->
                                             c.filter(Column::isEnabled)
                                                 .map(Column::getParentOrThrow)
                                                 .filter(Table::isEnabled)
                                                 .isPresent()
                                         );
-                                    
-                                // Indexes, PrimaryKeyColumns and Columns should
-                                // be handled as usual.
+
+                                    // Indexes, PrimaryKeyColumns and Columns should
+                                    // be handled as usual.
                                 } else return true;
                             })
-                            
+
                             // We are now done with the keys. Use the values of
                             // the stream to produce an ordinary stream of base
                             // documents.
                             .values()
                             .map(data -> new BaseDocument(table, data))
-                            
+
                             // All the documents that are enabled should be
                             // passed to the actor.
-                            .filter(HasEnabled::test)                            
+                            .filter(HasEnabled::test)
                             .forEachOrdered(c -> actor.accept(model, c))
                         )
                     );
@@ -356,7 +367,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
                 if (Table.class.equals(getDocument().mainInterface())) {
                     schema().ifPresent(schema -> schema.tables()
                         .filter(HasEnabled::test)
-                        .flatMap(t -> t.foreignKeys())
+                        .flatMap(Table::foreignKeys)
                         .filter(HasEnabled::test)
                         .filter(fk -> fk.foreignKeyColumns()
                             .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getId()))
@@ -366,19 +377,67 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
                             .isPresent()
                         ).forEachOrdered(fk
                             -> foreignKeyReferencesThisTableConsumers.get(phase).forEach(
-                                c -> c.accept(model, fk)
+                            c -> c.accept(model, fk)
                             )
                         )
                     );
                 }
-            }
 
+                // Traverse downwards, Fix #224
+                namedChildren(document)
+                    .forEach(e -> {
+                        processDocument(model, phase, e.getKey(), e.getValue());
+                    });
+
+            }
             return model;
         }
+
+        private Stream<Map.Entry<String, Document>> namedChildren(Document doc) {
+            @SuppressWarnings("unchecked")
+            Stream<Map.Entry<String, Document>> s =
+             doc.getData()
+                .entrySet()
+                .stream()
+                .filter(e -> e.getValue() instanceof List)
+                .flatMap(e -> ((List<Map<String, Object>>) e.getValue()).stream().map(m -> new AbstractMap.SimpleEntry<>(e.getKey(), new BaseDocument(document, m))));
+
+                return s.filter(e -> HasEnabled.test(e.getValue()));
+        }
+
+        private final Set<String> ABOVE_TABLE = Stream.of(
+            Project.DBMSES,
+            Dbms.SCHEMAS,
+            Schema.TABLES
+        )
+        .collect(toSet());
+
+        private void processDocument(T model, Phase phase, String key, Document doc) {
+            // Recursively invoke on the children
+            if (ABOVE_TABLE.contains(key)) {
+                /*System.out.println(model + " " + phase + " " + key);*/
+                namedChildren(doc)
+                    .forEach(e -> {
+                        // Tables and below has already been handled.
+
+                        processDocument(model, phase, e.getKey(), e.getValue());
+
+                    });
+
+                // Process the document if in right phase and for right key (type of document)
+                map
+                    .getOrDefault(phase, emptyMap())
+                    .getOrDefault(key, emptyList())
+                    .forEach(c -> c.accept(model, doc));
+            }
+
+        }
+
     }
 
     protected final Builder<T> newBuilder(File file, String className) {
-        requireNonNulls(file, className);
+        requireNonNull(file);
+        requireNonNull(className);
         final Builder<T> builder = new BuilderImpl(className);
         listeners().forEachOrdered(action -> action.accept(file, builder));
         return builder;
