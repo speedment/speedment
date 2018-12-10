@@ -55,7 +55,9 @@ implements Transform<InterfaceMethod, String>,
             .filter(s -> model.getModifiers().contains(DEFAULT)
                       || model.getModifiers().contains(STATIC)
             );
-        
+
+        final String spacing = body.map($ -> " ").orElse("");
+
         return Optional.of(
             renderJavadoc(gen, model) +
             renderAnnotations(gen, model) +
@@ -63,7 +65,7 @@ implements Transform<InterfaceMethod, String>,
             renderGenerics(gen, model) +
             renderType(gen, model) +
             renderName(gen, model) + ((model.getFields().size() > 3) ? "(" + nl() : "(") +
-            renderFields(gen, model) + ") " +
+            renderFields(gen, model) + ")" + spacing +
             renderThrows(gen, model) + 
             body.orElse(";")
         );
