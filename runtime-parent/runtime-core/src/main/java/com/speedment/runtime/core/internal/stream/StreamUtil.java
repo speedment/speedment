@@ -184,7 +184,7 @@ public final class StreamUtil {
         public void forEachRemaining(Consumer<? super T> action) {
             if (state == State.NOT_DETERMINED) {
                 if (!hasNext()) {
-                    throwNoSuchElementException();
+                    return;
                 };
             }
 
