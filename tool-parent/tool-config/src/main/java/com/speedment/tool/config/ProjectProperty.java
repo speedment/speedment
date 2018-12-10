@@ -32,9 +32,12 @@ import javafx.util.StringConverter;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static java.util.Collections.singletonList;
 
 /**
  *
@@ -120,7 +123,7 @@ implements Project,
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return ImmutableListUtil.of(key);
+        return singletonList(key);
     }
 
     private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {

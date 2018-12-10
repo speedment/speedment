@@ -162,13 +162,13 @@ public final class StreamUtil {
         @Override
         public T next() {
             if (state == State.NOT_DETERMINED) {
-                hasNext();
+                if (!hasNext()) {
+                    throwNoSuchElementException();
+                };
             }
 
             if (state == State.NO_NEXT) {
-                throw new NoSuchElementException(
-                    "Next was called even though hasNext() returned false."
-                );
+                throwNoSuchElementException();
             }
 
             state = State.NOT_DETERMINED;
@@ -183,7 +183,9 @@ public final class StreamUtil {
         @Override
         public void forEachRemaining(Consumer<? super T> action) {
             if (state == State.NOT_DETERMINED) {
-                hasNext();
+                if (!hasNext()) {
+                    throwNoSuchElementException();
+                };
             }
 
             if (state == State.NO_NEXT) {
@@ -204,7 +206,15 @@ public final class StreamUtil {
                 state = State.NO_NEXT;
             }
         }
+
+        private void throwNoSuchElementException() {
+            throw new NoSuchElementException(
+                "Next was called even though hasNext() returned false."
+            );
+        }
+
     }
+
 
     /**
      * Utility classes should not be instantiated.

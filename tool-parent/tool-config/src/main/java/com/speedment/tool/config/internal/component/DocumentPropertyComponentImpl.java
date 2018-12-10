@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -44,7 +45,7 @@ public final class DocumentPropertyComponentImpl implements DocumentPropertyComp
     public DocumentPropertyComponentImpl() {
         root = new Branch(DEFAULT_CONSTRUCTOR);
 
-        root.find(ImmutableListUtil.of()).set(parent -> new ProjectProperty());
+        root.find(emptyList()).set(parent -> new ProjectProperty());
         root.find(DBMSES).set(parent -> new DbmsProperty((Project) parent));
         root.find(SCHEMAS).set(parent -> new SchemaProperty((Dbms) parent));
         root.find(TABLES).set(parent -> new TableProperty((Schema) parent));

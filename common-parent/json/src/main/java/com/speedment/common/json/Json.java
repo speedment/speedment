@@ -34,8 +34,10 @@ import java.nio.charset.StandardCharsets;
  * @since  1.0.0
  */
 public final class Json {
-    
-    public static boolean PRETTY = true;
+
+    private Json() {}
+
+    private final static boolean PRETTY = true;
     
     /**
      * Parses the specified object to a JSON string. The following
@@ -93,7 +95,36 @@ public final class Json {
      */
     public static void toJson(Object object, OutputStream out) 
     throws IllegalArgumentException, IOException {
-        new JsonSerializer(out, PRETTY).print(object);
+        toJson(object, out, PRETTY);
+    }
+
+
+    /**
+     * Parses the specified object to JSON and prints it to the specified
+     * stream. The following objects are supported:
+     * <ul>
+     *      <li>{@code Map<String, Object>}
+     *      <li>{@code List<Object>}
+     *      <li>{@code String}
+     *      <li>{@code Double}
+     *      <li>{@code Long}
+     *      <li>{@code null}
+     * </ul>
+     * <p>
+     * This method will output a nicely formatted JSON string (with spaces and
+     * new-lines).
+     *
+     * @param object  the object to parse
+     * @param out     the stream to write the result to
+     * @param pretty  if the result should be formatted in a pretty way
+     *
+     * @throws IllegalArgumentException  if the input object is of or contains
+     *                                   unsupported types
+     * @throws IOException               if the stream could not be written to
+     */
+    public static void toJson(Object object, OutputStream out, boolean pretty)
+        throws IllegalArgumentException, IOException {
+        new JsonSerializer(out, pretty).print(object);
     }
     
     /**
@@ -148,8 +179,4 @@ public final class Json {
         }
     }
 
-    /**
-     * Utility classes should never be instantiated.
-     */
-    private Json() {}
 }

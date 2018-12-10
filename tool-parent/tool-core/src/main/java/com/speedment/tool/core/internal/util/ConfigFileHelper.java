@@ -482,7 +482,9 @@ public final class ConfigFileHelper {
         // always start with a new file.
         if (currentlyOpenFile.isFile()) {
             if (currentlyOpenFile.exists()) {
-                currentlyOpenFile.delete();
+                if (!currentlyOpenFile.delete()) {
+                    userInterfaceComponent.log(OutputUtil.warning("Unable to delete " + currentlyOpenFile));
+                }
             }
             DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
         } else {
