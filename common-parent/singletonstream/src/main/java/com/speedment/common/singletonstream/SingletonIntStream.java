@@ -353,7 +353,10 @@ public class SingletonIntStream implements IntStream {
             @Override
             public Integer next() {
                 if (TRIPWIRE_ENABLED) {
-                    trip(getClass(), "{0} calling SingletonIntStream.singletonIterator.nextInt()");
+                    trip(getClass(), "{0} calling SingletonIntStream.singletonIterator.next()");
+                }
+                if (!hasNext) {
+                    throw new NoSuchElementException();
                 }
                 return nextInt();
             }

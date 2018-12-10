@@ -63,8 +63,7 @@ implements Transform<InterfaceMethod, String>,
             renderGenerics(gen, model) +
             renderType(gen, model) +
             renderName(gen, model) + ((model.getFields().size() > 3) ? "(" + nl() : "(") +
-            renderFields(gen, model) + ")" +
-                (body.isPresent() ? " " : "") +
+            renderFields(gen, model) + ") " +
             renderThrows(gen, model) + 
             body.orElse(";")
         );

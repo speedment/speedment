@@ -207,13 +207,12 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                         // If we got here, and conn is not null, the
                         // transaction should be rolled back, as not
                         // all work has been done
-                        if (conn != null) {
-                            try {
-                                conn.rollback();
-                            } finally {
-                                conn.close();
-                            }
+                        try {
+                            conn.rollback();
+                        } finally {
+                            conn.close();
                         }
+
                     } catch (SQLException sqlEx) {
                         //
                         // If we got an exception here, something

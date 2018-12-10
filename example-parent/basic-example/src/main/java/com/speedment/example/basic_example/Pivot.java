@@ -31,6 +31,8 @@ import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -121,10 +123,10 @@ public class Pivot {
         private final Actor actor;
         private final String rating;
 
-        public ActorRating(FilmActor fa, Film film, Actor actor) {
+        private ActorRating(FilmActor fa, Film film, Actor actor) {
             // fa is not used
             this.actor = actor;
-            this.rating = film.getRating().get();
+            this.rating = film.getRating().orElseThrow(NoSuchElementException::new);
         }
 
         public Actor actor() {

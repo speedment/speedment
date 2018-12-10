@@ -169,7 +169,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
             owner = infoComponent.getTitle();
             message = getGeneratedJavadocMessage();
         } else {
-            owner = project().get().getCompanyName();
+            owner = project().orElseThrow(NoSuchElementException::new).getCompanyName();
             message = JAVADOC_MESSAGE;
         }
 
