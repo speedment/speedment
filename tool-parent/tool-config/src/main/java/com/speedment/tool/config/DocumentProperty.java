@@ -22,21 +22,13 @@ import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.tool.config.trait.HasUiVisibleProperties;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 import javafx.beans.Observable;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+
+import java.util.function.*;
+import java.util.stream.Stream;
 
 /**
  * A special interface marking implementations of {@link Document} that can be
@@ -56,8 +48,8 @@ import javafx.collections.ObservableMap;
  * {@link #observableListOf(String)}, or if you want all 
  * children as they have been exposed so far, call {@link #childrenProperty()}.
  * <p>
- * As with all JavaFX componenets, the state of this property might not be
- * updated immediatly. It is therefore important to use the appropriate property
+ * As with all JavaFX components, the state of this property might not be
+ * updated immediately. It is therefore important to use the appropriate property
  * getter methods to keep notified about changes to this document.
  * 
  * @author  Emil Forslund

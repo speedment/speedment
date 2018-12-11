@@ -31,8 +31,8 @@ import java.util.stream.Stream;
 
 /**
  * The {@code Document} is the base structure for storing configuration 
- * parameters and can be seen as a hierarchial key-value store. Parameters can
- * be retreived using the different typed {@code getAsXXX()} methods listed 
+ * parameters and can be seen as a hierarchical key-value store. Parameters can
+ * be retrieved using the different typed {@code getAsXXX()} methods listed
  * here:
  * <ul>
  *      <li>{@link #get(String)}
