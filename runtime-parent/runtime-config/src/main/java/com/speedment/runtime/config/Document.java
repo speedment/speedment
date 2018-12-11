@@ -18,14 +18,8 @@ package com.speedment.runtime.config;
 
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.runtime.config.util.DocumentUtil;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.OptionalLong;
+
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 

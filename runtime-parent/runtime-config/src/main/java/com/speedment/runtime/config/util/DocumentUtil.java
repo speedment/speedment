@@ -109,7 +109,7 @@ public final class DocumentUtil {
         return document.getData().values().stream()
             .filter(obj -> obj instanceof List<?>)
             .map(list -> (List<Object>) list)
-            .flatMap(list -> list.stream())
+            .flatMap(Collection::stream)
             .filter(obj -> obj instanceof Map<?, ?>)
             .map(map -> (Map<String, Object>) map)
             .map(map -> childConstructor.apply(document, map));
