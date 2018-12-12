@@ -21,7 +21,6 @@ import com.speedment.common.codegen.Generator;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import com.speedment.common.codegen.controller.AlignTabs;
 import com.speedment.common.codegen.controller.AutoImports;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.ClassOrInterface;
@@ -42,8 +41,6 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.config.util.DocumentDbUtil;
-import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.component.InfoComponent;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -54,7 +51,6 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -62,44 +58,43 @@ import java.util.stream.Stream;
 
 /**
  *
- * @param <DOC>  document type.
+ * @param <D>  document type.
  * @param <T>    Java type (Interface, Class or Enum) to generate
  * 
  * @author  Per Minborg
  */
-public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
-    implements JavaClassTranslator<DOC, T> {
+public abstract class AbstractJavaClassTranslator<D extends Document & HasId & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
+    implements JavaClassTranslator<D, T> {
 
-    public static final String 
-        GETTER_METHOD_PREFIX = "get",
-        SETTER_METHOD_PREFIX = "set",
-        FINDER_METHOD_PREFIX = "find",
-        JAVADOC_MESSAGE
+    public static final String GETTER_METHOD_PREFIX = "get";
+    public static final String SETTER_METHOD_PREFIX = "set";
+    public static final String FINDER_METHOD_PREFIX = "find";
+    public static final String JAVADOC_MESSAGE
         = "\n<p>\nThis file is safe to edit. It will not be overwritten by the "
         + "code generator.";
 
-    private @Inject Generator generator;
-    private @Inject InfoComponent infoComponent;
-    private @Inject TypeMapperComponent typeMappers;
-    private @Inject Injector injector;
+    @Inject private Generator generator;
+    @Inject private InfoComponent infoComponent;
+    @Inject private TypeMapperComponent typeMappers;
+    @Inject private Injector injector;
     
-    private final DOC document;
+    private final D document;
     private final Function<String, T> mainModelConstructor;
     private final List<BiConsumer<File, Builder<T>>> listeners;
 
-    protected AbstractJavaClassTranslator(DOC document, Function<String, T> mainModelConstructor) {
+    protected AbstractJavaClassTranslator(D document, Function<String, T> mainModelConstructor) {
         this.document             = requireNonNull(document);
         this.mainModelConstructor = requireNonNull(mainModelConstructor);
         this.listeners            = new CopyOnWriteArrayList<>();
     }
 
     @Override
-    public final TranslatorSupport<DOC> getSupport() {
+    public final TranslatorSupport<D> getSupport() {
         return new TranslatorSupport<>(injector, document);
     }
 
     @Override
-    public final DOC getDocument() {
+    public final D getDocument() {
         return document;
     }
 
@@ -163,7 +158,8 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
     protected abstract String getJavadocRepresentText();
 
     protected Javadoc getJavaDoc() {
-        final String owner, message;
+        final String owner;
+        final String message;
 
         if (isInGeneratedPackage()) {
             owner = infoComponent.getTitle();
@@ -199,7 +195,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
 
     protected final class BuilderImpl implements Translator.Builder<T> {
 
-        private final static String PROJECTS = "projects";
+        private static final String PROJECTS = "projects";
         private final String name;
         private final Map<Phase, Map<String, List<BiConsumer<T, Document>>>> map;
 
@@ -266,14 +262,9 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
         }
 
         private <P extends Document, D extends Document> BiConsumer<T, Document> wrap(BiConsumer<T, D> consumer, BiFunction<P, Map<String, Object>, D> constructor) {
-/*            // Guard against running several times (related to the fix of #224)
-            // This could perhaps be handled in a better way
-            final AtomicBoolean executed = new AtomicBoolean();*/
             return (t, doc) -> {
-/*                if (executed.compareAndSet(false, true)) { */
-                    @SuppressWarnings("unchecked") final P parent = (P) doc.getParent().orElse(null);
-                    consumer.accept(t, constructor.apply(parent, doc.getData()));
-/*                }*/
+                @SuppressWarnings("unchecked") final P parent = (P) doc.getParent().orElse(null);
+                consumer.accept(t, constructor.apply(parent, doc.getData()));
             };
         }
 
@@ -290,7 +281,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
 
         @SuppressWarnings("unchecked")
         private <C extends Document> List<BiConsumer<T, C>> aquireList(Phase phase, String key) {
-            return (List<BiConsumer<T, C>>) (List<?>) map.get(phase).computeIfAbsent(key, $ -> new CopyOnWriteArrayList<>());
+            return (List<BiConsumer<T, C>>) (List<?>) map.get(phase).computeIfAbsent(key, unused -> new CopyOnWriteArrayList<>());
         }
 
         private <D extends Document & HasMainInterface> void act(Phase phase, String key, T item, D document) {
@@ -324,9 +315,8 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
                             // becomes an element of the stream.
                             .filterValue(List.class::isInstance)
                             .mapValue(v -> {
-                                @SuppressWarnings("unchecked") final List<Map<String, Object>> val =
-                                    (List<Map<String, Object>>) v;
-
+                                @SuppressWarnings("unchecked")
+                                final List<Map<String, Object>> val = (List<Map<String, Object>>) v;
                                 return val;
                             })
                             .flatMapValue(List::stream)
@@ -372,9 +362,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
                         .filter(fk -> fk.foreignKeyColumns()
                             .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getId()))
                             .filter(HasEnabled::test)
-                            .filter(fkc -> fkc.findForeignColumn().map(HasEnabled::test).orElse(false))
-                            .findFirst()
-                            .isPresent()
+                            .anyMatch(fkc -> fkc.findForeignColumn().map(HasEnabled::test).orElse(false))
                         ).forEachOrdered(fk
                             -> foreignKeyReferencesThisTableConsumers.get(phase).forEach(
                             c -> c.accept(model, fk)
@@ -385,9 +373,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
 
                 // Traverse downwards, Fix #224
                 namedChildren(document)
-                    .forEach(e -> {
-                        processDocument(model, phase, e.getKey(), e.getValue());
-                    });
+                    .forEach(e -> processDocument(model, phase, e.getKey(), e.getValue()));
 
             }
             return model;
@@ -405,7 +391,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
                 return s.filter(e -> HasEnabled.test(e.getValue()));
         }
 
-        private final Set<String> ABOVE_TABLE = Stream.of(
+        private final Set<String> aboveTable = Stream.of(
             Project.DBMSES,
             Dbms.SCHEMAS,
             Schema.TABLES
@@ -414,15 +400,13 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
 
         private void processDocument(T model, Phase phase, String key, Document doc) {
             // Recursively invoke on the children
-            if (ABOVE_TABLE.contains(key)) {
+            if (aboveTable.contains(key)) {
                 /*System.out.println(model + " " + phase + " " + key);*/
                 namedChildren(doc)
-                    .forEach(e -> {
+                    .forEach(e ->
                         // Tables and below has already been handled.
-
-                        processDocument(model, phase, e.getKey(), e.getValue());
-
-                    });
+                        processDocument(model, phase, e.getKey(), e.getValue())
+                    );
 
                 // Process the document if in right phase and for right key (type of document)
                 map
@@ -459,7 +443,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId &
     }
 
     public Constructor copyConstructor(Type type, CopyConstructorMode mode) {
-        final TranslatorSupport<DOC> support = getSupport();
+        final TranslatorSupport<D> support = getSupport();
         final Constructor constructor = Constructor.of().protected_()
             .add(Field.of(support.variableName(), type));
 
