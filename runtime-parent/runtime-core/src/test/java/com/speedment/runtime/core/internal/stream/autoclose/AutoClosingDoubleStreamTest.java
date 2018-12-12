@@ -3,12 +3,9 @@ package com.speedment.runtime.core.internal.stream.autoclose;
 import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
 
 import java.util.HashSet;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.DoubleAdder;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.stream.autoclose.AutoClosingStreamTestUtil.MAX_VALUE;
@@ -45,9 +42,9 @@ final class AutoClosingDoubleStreamTest extends AbstractAutoClosingStreamTest<Do
             NamedUnaryOperator.of("peek", s -> s.peek(doubleBlackHole())),
             NamedUnaryOperator.of("limit", s -> s.limit(MAX_VALUE - 2)),
             NamedUnaryOperator.of("skip", s -> s.skip(3)),
-            NamedUnaryOperator.of("parallel", BaseStream::parallel),
-            NamedUnaryOperator.of("sequential", BaseStream::sequential),
-            NamedUnaryOperator.of("unordered", BaseStream::unordered)
+            NamedUnaryOperator.of("parallel", DoubleStream::parallel),
+            NamedUnaryOperator.of("sequential", DoubleStream::sequential),
+            NamedUnaryOperator.of("unordered", DoubleStream::unordered)
         );
 
     }

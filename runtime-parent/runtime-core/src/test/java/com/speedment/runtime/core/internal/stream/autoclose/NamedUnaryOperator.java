@@ -5,7 +5,7 @@ import java.util.function.UnaryOperator;
 
 interface NamedUnaryOperator<T> extends UnaryOperator<T>, HasName {
 
-    static <T, R> NamedUnaryOperator<T> of(String name, UnaryOperator<T> function) {
+    static <T> NamedUnaryOperator<T> of(String name, UnaryOperator<T> function) {
         return new NamedUnaryOperatorImpl<>(name, function);
     }
 

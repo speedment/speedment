@@ -197,7 +197,7 @@ public interface InjectorBuilder {
      * @return  the default logger
      */
     static Logger logger() {
-        return InjectorBuilderImpl.LOGGER;
+        return InjectorBuilderImpl.LOGGER_INSTANCE;
     }
 
 }

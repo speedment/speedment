@@ -44,9 +44,9 @@ final class AutoClosingIntStreamTest extends AbstractAutoClosingStreamTest<Integ
             NamedUnaryOperator.of("peek", s -> s.peek(intBlackHole())),
             NamedUnaryOperator.of("limit", s -> s.limit(MAX_VALUE - 2)),
             NamedUnaryOperator.of("skip", s -> s.skip(3)),
-            NamedUnaryOperator.of("parallel", BaseStream::parallel),
-            NamedUnaryOperator.of("sequential", BaseStream::sequential),
-            NamedUnaryOperator.of("unordered", BaseStream::unordered)
+            NamedUnaryOperator.of("parallel", IntStream::parallel),
+            NamedUnaryOperator.of("sequential", IntStream::sequential),
+            NamedUnaryOperator.of("unordered", IntStream::unordered)
         );
 
     }

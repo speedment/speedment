@@ -39,9 +39,9 @@ final class AutoClosingLongStreamTest extends AbstractAutoClosingStreamTest<Long
             NamedUnaryOperator.of("peek", s -> s.peek(longBlackHole())),
             NamedUnaryOperator.of("limit", s -> s.limit(MAX_VALUE - 2)),
             NamedUnaryOperator.of("skip", s -> s.skip(3)),
-            NamedUnaryOperator.of("parallel", BaseStream::parallel),
-            NamedUnaryOperator.of("sequential", BaseStream::sequential),
-            NamedUnaryOperator.of("unordered", BaseStream::unordered)
+            NamedUnaryOperator.of("parallel", LongStream::parallel),
+            NamedUnaryOperator.of("sequential", LongStream::sequential),
+            NamedUnaryOperator.of("unordered", LongStream::unordered)
         );
 
     }

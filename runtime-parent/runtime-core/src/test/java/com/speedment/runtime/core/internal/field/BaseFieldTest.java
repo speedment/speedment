@@ -31,15 +31,13 @@ import static java.util.stream.Collectors.toList;
  *
  * @author pemi
  */
-public class BaseFieldTest {
+abstract class BaseFieldTest {
 
-    protected List<String> names;
-    protected List<Entity> entities;
-
+    List<Entity> entities;
 
     @BeforeEach
-    public void setUp() {
-        names = Stream.of(null, "a", "a", "a", null, "b", "c", "d", "e", "f", "g", "h", null, "i", "j", null,
+    void setUp() {
+        List<String> names = Stream.of(null, "a", "a", "a", null, "b", "c", "d", "e", "f", "g", "h", null, "i", "j", null,
             "ab", "abc", "abcd", "abcde", "abcdef", "abcdefg",
             "Ab", "AbC", "AbCd", "AbCdE", "AbCdEf", "AbCdEfG",
             ""

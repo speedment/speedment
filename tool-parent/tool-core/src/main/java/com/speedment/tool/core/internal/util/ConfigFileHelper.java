@@ -292,9 +292,10 @@ public final class ConfigFileHelper {
                     table.columns().map(c -> (Column) c).filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
                         String mapperName = column.getTypeMapper().get();
                         try {
-                            Class<?> mapperClass = Class.forName(mapperName);
                             //noinspection unchecked
-                            setTypeMapper(to, dbms, schema, table, column, (Class<? extends TypeMapper<?, ?>>) mapperClass);
+                            @SuppressWarnings("unchecked")
+                            Class<? extends TypeMapper<?, ?>> mapperClass = (Class<? extends TypeMapper<?, ?>>)Class.forName(mapperName);
+                            setTypeMapper(to, dbms, schema, table, column,  mapperClass);
                         } catch (ClassNotFoundException | ClassCastException e) {
                             throw new IllegalStateException("Unable to find mapper class " + mapperName);
                         }
@@ -324,13 +325,10 @@ public final class ConfigFileHelper {
             .map(d -> (Dbms) d)
             .flatMap(Dbms::schemas)
             .filter(s -> s.getId().equals(schema.getId()))
-            .map(s -> (Schema) s)
             .flatMap(Schema::tables)
             .filter(t -> t.getId().equals(table.getId()))
-            .map(t -> (Table) t)
             .flatMap(Table::columns)
             .filter(c -> c.getId().equals(column.getId()))
-            .map(c -> (Column) c)
             // If the data type has changed, we do not want to keep the old mapper
             .filter(c -> c.getDatabaseType().equals(column.getDatabaseType()))
             // Perhaps one would expect this to match a single column, so findFirst would do,
