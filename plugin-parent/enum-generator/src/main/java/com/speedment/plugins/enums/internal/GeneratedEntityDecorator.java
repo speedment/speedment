@@ -237,6 +237,11 @@ implements TranslatorDecorator<Table, Interface> {
                                     .add("return \"" + shortName(dbType.getTypeName()) +
                                         " to " + enumShortName + " Mapper\";")
                                 )
+                                .add(Method.of("getOrdering", TypeMapper.Ordering.class)
+                                    .public_().add(OVERRIDE)
+                                    .add("return " + TypeMapper.Ordering.class.getSimpleName() +
+                                        "." + TypeMapper.Ordering.RETAIN.name() + ";")
+                                )
                                 .add(Method.of("getJavaTypeCategory", TypeMapper.Category.class)
                                     .public_().add(OVERRIDE)
                                     .add(Field.of("column", Column.class))
