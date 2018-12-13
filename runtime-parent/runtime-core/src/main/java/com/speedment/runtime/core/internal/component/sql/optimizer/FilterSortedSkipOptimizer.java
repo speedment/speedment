@@ -293,73 +293,17 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
         // Keeps track on where we are in the path
         // Start with the first operation type (i.e. either SORTED or FILTER)
-        Operation<ENTITY> operation = path.get(0);
-
+        int pathStart = 0;
         for (Action<?, ?> action : pipeline) {
-
-            // Are we on the first operation type in the path
-            if (operation == path.get(0)) {
-                // Check if the current stream action is of the first operational type (e.g. SORTED)
-                if (operation.is(action)) {
-                    // If so, consume the stream action (e.g. increase a counter or put it in a list)
-                    operation.consume(action, consumers);
-                    continue;
-                } else {
-                    // Check if the current stream action is of the second operational type (e.g. FILTER)
-                    if (path.get(1).is(action)) {
-                        // Move the operation state to the second operational type
-                        operation = path.get(1);
-                    } else {
-                        if (path.get(2).is(action)) {
-                            operation = path.get(2);
-                        } else {
-                            if (path.get(3).is(action)) {
-                                operation = path.get(3);
-                            } else {
-                                return;
-                            }
-                        }
-                    }
+            for(int pos = pathStart; true; pos++) {
+                if (pos >= path.size()) {
+                    return;  // Reached the end of the path without finding the action
                 }
-            }
-
-            // The same principle as above but starting at the second operation type in the path
-            if (operation == path.get(1)) {
+                Operation<ENTITY> operation = path.get(pos);
                 if (operation.is(action)) {
                     operation.consume(action, consumers);
-                    continue;
-                } else {
-                    if (path.get(2).is(action)) {
-                        operation = path.get(2);
-                    } else {
-                        if (path.get(3).is(action)) {
-                            operation = path.get(3);
-                        } else {
-                            return;
-                        }
-                    }
-                }
-            }
-
-            if (operation == path.get(2)) {
-                if (operation.is(action)) {
-                    operation.consume(action, consumers);
-                    continue;
-                } else {
-                    if (path.get(3).is(action)) {
-                        operation = path.get(3);
-                    } else {
-                        return;
-                    }
-                }
-            }
-
-            if (operation == path.get(3)) {
-                if (operation.is(action)) {
-                    operation.consume(action, consumers);
-                    continue;
-                } else {
-                    return;
+                    pathStart = pos;  // Never look back at parts of the path that are now to be considered passed
+                    break;
                 }
             }
         }
