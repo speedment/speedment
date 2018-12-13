@@ -30,9 +30,11 @@ import com.speedment.runtime.core.internal.stream.builder.streamterminator.Strea
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+import com.speedment.runtime.field.EnumField;
 import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.comparator.ReferenceFieldComparator;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -179,13 +181,15 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                     @SuppressWarnings("unchecked")
                     final FieldComparator<ENTITY> fieldComparator = (FieldComparator<ENTITY>) sortedAction.getComparator();
                     fieldComparators.add(fieldComparator);
-                }
-                if (comparator instanceof CombinedComparator) {
+                } else if (comparator instanceof CombinedComparator) {
                     @SuppressWarnings("unchecked")
                     final CombinedComparator<ENTITY> combinedComparator = (CombinedComparator<ENTITY>) sortedAction.getComparator();
                     combinedComparator.stream()
                         .map(c -> (FieldComparator<ENTITY>) c)
                         .forEachOrdered(fieldComparators::add);
+                } else {
+                    // We sort on a field that we do not know how to handle. Fallback to no optimization.
+                    return initialPipeline;
                 }
             }
 
