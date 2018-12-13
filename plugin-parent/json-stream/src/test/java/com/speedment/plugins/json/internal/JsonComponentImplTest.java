@@ -35,7 +35,11 @@ import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.TypeMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Objects.requireNonNull;
 import java.util.stream.IntStream;
@@ -47,19 +51,20 @@ import static org.mockito.Mockito.when;
  *
  * @author Per Minborg
  */
+@ExtendWith(MockitoExtension.class)
+@Disabled("None of the tests actually tests anything, it is just code being called.")
 final class JsonComponentImplTest {
 
     private JsonComponent jsonComponent;
+    @Mock
     private Manager<Person> persons;
 
     @BeforeEach
     @SuppressWarnings("unchecked")
     void init() {
         jsonComponent = newComponent();
-        persons = (Manager<Person>) mock(Manager.class);
         final Stream<Person> personStream = IntStream.range(0, 8).mapToObj(i -> new Person(i));
         when(persons.stream()).thenReturn(personStream);
-        when(persons.fields()).thenReturn(Stream.of(Person.ID, Person.NAME));
     }
 
     @Test
