@@ -35,15 +35,18 @@ import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.TypeMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Objects.requireNonNull;
+
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -51,31 +54,38 @@ import static org.mockito.Mockito.when;
  *
  * @author Per Minborg
  */
+//TODO: Figure out if the tests here are actually testing for the correct values and fix the disabled test
+    // Oh, and don't just comment non functioning tests, actually fix them.
 @ExtendWith(MockitoExtension.class)
-@Disabled("None of the tests actually tests anything, it is just code being called.")
 final class JsonComponentImplTest {
 
-    private JsonComponent jsonComponent;
+    @Mock
+    private Project project;
     @Mock
     private Manager<Person> persons;
+    @Mock
+    private ProjectComponent projectComponent;
+    @InjectMocks
+    private JsonComponentImpl jsonComponent;
 
     @BeforeEach
     @SuppressWarnings("unchecked")
     void init() {
-        jsonComponent = newComponent();
         final Stream<Person> personStream = IntStream.range(0, 8).mapToObj(i -> new Person(i));
         when(persons.stream()).thenReturn(personStream);
+        when(projectComponent.getProject()).thenReturn(project);
     }
 
     @Test
     void testNoneOf() {
         final JsonEncoder<Person> result = jsonComponent.noneOf(persons);
         final String json = persons.stream().collect(result.collector());
+        assertEquals("[{},{},{},{},{},{},{},{}]", json);
     }
 
 //    @Test
 //    public void testAllOf() {
-//        System.out.println("allOf");
+//        when(persons.fields()).thenReturn(Stream.of(Person.ID, Person.NAME));
 //        final JsonEncoder<Person> result = jsonComponent.allOf(persons);
 //        final String json = persons.stream().collect(result.collector());
 //        System.out.println(json);
