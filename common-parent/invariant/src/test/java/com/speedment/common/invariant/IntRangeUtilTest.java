@@ -20,10 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.IntPredicate;
 import java.util.function.IntUnaryOperator;
-import java.util.function.LongPredicate;
-import java.util.function.LongUnaryOperator;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

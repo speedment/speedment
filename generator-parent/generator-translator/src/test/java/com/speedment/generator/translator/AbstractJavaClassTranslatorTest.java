@@ -2,14 +2,11 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.function.OptionalBoolean;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.internal.AbstractChildDocument;
 import com.speedment.runtime.config.internal.BaseDocument;
-import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.internal.SchemaImpl;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
