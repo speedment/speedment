@@ -33,7 +33,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.core.internal.db.RuleUtil.DEFAULT_OSS_RULE;
+import static com.speedment.runtime.core.internal.db.RuleUtil.DEFAULT_RULE;
 import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static java.util.Objects.requireNonNull;
 
@@ -95,7 +95,7 @@ public class JavaTypeMapImpl implements JavaTypeMap {
         inner.put("UUID", UUID.class);
         
         installer.accept(inner);
-        rules.add(DEFAULT_OSS_RULE);
+        rules.add(DEFAULT_RULE);
         assertJavaTypesKnown();
     }
     
