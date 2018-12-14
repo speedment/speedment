@@ -64,9 +64,9 @@ public class JavaTypeMapImpl implements JavaTypeMap {
         inner.put("CHAR", String.class);
         inner.put("VARCHAR", String.class);
         inner.put("LONGVARCHAR", String.class);
-        inner.put("LONGVARCHAR", String.class);
         inner.put("NUMERIC", BigDecimal.class);
         inner.put("DECIMAL", BigDecimal.class);
+        inner.put("NUMBER", BigDecimal.class);
         inner.put("BIT", Integer.class); ///
         inner.put("TINYINT", Byte.class);
         inner.put("TINYINT UNSIGNED", Short.class);

@@ -3,6 +3,7 @@ package com.speedment.runtime.core.internal.db;
 import com.speedment.runtime.core.db.JavaTypeMap;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 final class RuleUtil {
@@ -50,6 +51,19 @@ final class RuleUtil {
                     }
                 }
             }
+        }
+
+        if (typeName.matches("TIMESTAMP\\([0-9]\\) WITH LOCAL TIME ZONE")) {
+            return Optional.of(Timestamp.class);
+        }
+        if (typeName.matches("TIMESTAMP\\([0-9]\\) WITH TIME ZONE")) {
+            return Optional.of(Timestamp.class);
+        }
+        if (typeName.matches("INTERVAL YEAR\\([0-9]\\) TO MONTH")) {
+            return Optional.of(String.class);
+        }
+        if (typeName.matches("INTERVAL DAY\\([0-9]\\) TO SECOND\\([0-9]\\)")) {
+            return Optional.of(String.class);
         }
 
         return Optional.empty();
