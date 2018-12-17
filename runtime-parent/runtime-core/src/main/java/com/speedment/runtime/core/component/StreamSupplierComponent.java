@@ -102,4 +102,18 @@ public interface StreamSupplierComponent {
      * Stops the stream suppler and releases any previously allocated resources.
      */
     default void stop(){}
+
+    /**
+     * Creates and returns a new Stream of underlying {@code StreamSupplierComponent} objects
+     * that provides data to this {@code StreamSupplierComponent}. If no such component exists
+     * (i.e. the component draws data only from external sources like databases or files) an
+     * empty stream is returned.
+     *
+     * @return a new Stream of underlying {@code StreamSupplierComponent} objects
+     * that provides data to this {@code StreamSupplierComponent}
+     */
+    default Stream<StreamSupplierComponent> sourceStreamSupplierComponents() {
+        return Stream.empty();
+    }
+
 }

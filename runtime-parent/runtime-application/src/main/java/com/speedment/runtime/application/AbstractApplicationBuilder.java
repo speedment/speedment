@@ -35,10 +35,7 @@ import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.component.InfoComponent;
-import com.speedment.runtime.core.component.PasswordComponent;
-import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.*;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -51,6 +48,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
@@ -377,6 +375,8 @@ public abstract class AbstractApplicationBuilder<
             checkDatabaseConnectivity(inj);
         }
 
+        printStreamSupplierOrder(inj);
+
         return build(inj);
     }
 
@@ -527,12 +527,13 @@ public abstract class AbstractApplicationBuilder<
             Runtime.getRuntime().maxMemory()
         );
 
-        // Invoke any HasOnWelcome methods
+        // Invoke all HasOnWelcome methods
         injector.injectables()
             .flatMap(injector::stream)
             .filter(HasOnWelcome.class::isInstance)
             .map(HasOnWelcome.class::cast)
             .forEach(HasOnWelcome::onWelcome);
+
     }
 
     private BUILDER self() {
@@ -565,4 +566,26 @@ public abstract class AbstractApplicationBuilder<
         requireNonNull(injectableImplType);
         injector.withComponent(injectableImplType);
     }
+
+    private void printStreamSupplierOrder(Injector injector) {
+        injector.get(StreamSupplierComponent.class).ifPresent(root -> {
+            if (root.sourceStreamSupplierComponents().findAny().isPresent()) {
+                LOGGER.info("Current " + StreamSupplierComponent.class.getSimpleName() + " hierarchy:");
+                printStreamSupplierOrder(root, 0);
+            }
+        });
+    }
+
+    private void printStreamSupplierOrder(StreamSupplierComponent ssc, int level) {
+        LOGGER.info("%s%s (0x%08x) %s", indent(level), ssc.getClass().getSimpleName(), ssc.hashCode(), ssc.isImmutable() ? "mutable" : "immutable");
+        ssc.sourceStreamSupplierComponents()
+            .forEachOrdered(child -> printStreamSupplierOrder(child, level + 1));
+    }
+
+    private String indent(int level) {
+        return IntStream.range(0, level)
+            .collect(StringBuilder::new, (sb, i) -> sb.append("    "), StringBuilder::append)
+            .toString();
+    }
+
 }
