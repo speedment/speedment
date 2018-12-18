@@ -34,9 +34,31 @@ import static com.speedment.common.mapstream.MapStream.comparing;
  * types.
  *
  * @author Per Minborg
- * @since 2.0.0
+ * @since  2.0.0
  */
 public interface DbmsType {
+
+    /**
+     * The type of connection that this {@link DbmsType} uses. Most JDBC
+     * connectors opens a socket to a specific port at some remote host.
+     * However, there are lightweight databases that runs the entire database
+     * engine in the connector and that only requires a file or group of files
+     * to work with.
+     */
+    enum ConnectionType {
+
+        /**
+         * Speedment connects to the database using a
+         * {@link Dbms#getIpAddress() host} and a {@link Dbms#getPort()}.
+         */
+        HOST_AND_PORT,
+
+        /**
+         * Speedment connects to the database by reading a file from a
+         * {@link Dbms#getLocalPath() local path}.
+         */
+        DBMS_AS_FILE
+    }
 
     Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);
 
@@ -159,6 +181,15 @@ public interface DbmsType {
      * @return the non-null name for this {@code DbmsType}
      */
     String getDriverName();
+
+    /**
+     * Returns the connection type used in this {@code DbmsType}.
+     *
+     * @return  the connection type
+     */
+    default ConnectionType getConnectionType() {
+        return ConnectionType.HOST_AND_PORT;
+    }
 
     /**
      * Returns the naming convention used by this database.
