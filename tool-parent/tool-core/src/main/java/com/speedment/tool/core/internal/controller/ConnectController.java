@@ -335,8 +335,13 @@ public final class ConnectController implements Initializable {
                 .mutator().addNewDbms();
 
             dbms.typeNameProperty().set(dbmsType.get().getName());
-            dbms.ipAddressProperty().set(fieldHost.getText());
-            dbms.portProperty().set(Integer.valueOf(fieldPort.getText()));
+
+            if (type.getConnectionType() == DbmsType.ConnectionType.HOST_AND_PORT) {
+                dbms.ipAddressProperty().set(fieldHost.getText());
+                dbms.portProperty().set(Integer.valueOf(fieldPort.getText()));
+            } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
+                dbms.localPathProperty().set(fieldFile.getText());
+            }
 
             if (type.hasDatabaseUsers()) {
                 dbms.usernameProperty().set(fieldUser.getText());
@@ -360,8 +365,20 @@ public final class ConnectController implements Initializable {
                 .orElseGet(() -> type.getDefaultSchemaName().orElseGet(dbms::getName));
 
             // Set the default project name to the name of the schema.
-            ui.projectProperty().nameProperty()
-                .setValue(schema);
+            if (type.hasSchemaNames() || type.hasDatabaseNames()) {
+                ui.projectProperty().nameProperty()
+                    .setValue(schema);
+            } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
+                String filename = Paths.get(fieldFile.getText()).getFileName().toString();
+                if (filename.contains(".")) {
+                    filename = filename.substring(0, filename.lastIndexOf("."));
+                }
+                ui.projectProperty().nameProperty()
+                    .setValue(filename);
+            } else {
+                ui.projectProperty().nameProperty()
+                    .setValue("Demo");
+            }
 
             // Connect to database
             if (cfHelper.loadFromDatabase(dbms, schema)) {
