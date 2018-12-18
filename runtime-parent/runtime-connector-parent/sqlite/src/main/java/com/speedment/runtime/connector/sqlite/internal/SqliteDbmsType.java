@@ -144,31 +144,43 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public String getInitialQuery() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return "SELECT 1";
     }
 
     @Override
     public SkipLimitSupport getSkipLimitSupport() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return SkipLimitSupport.STANDARD;
     }
 
     @Override
     public String applySkipLimit(String originalSql, List<Object> params, long skip, long limit) {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (skip == 0 && limit == Long.MAX_VALUE) {
+            return originalSql;
+        }
+
+        final StringBuilder sb = new StringBuilder(originalSql);
+        if (limit == Long.MAX_VALUE) {
+            sb.append(" LIMIT 223372036854775807"); // Some big number that does not overflow
+        } else {
+            sb.append(" LIMIT ?");
+            params.add(limit);
+        }
+
+        if (skip > 0) {
+            sb.append(" OFFSET ?");
+            params.add(skip);
+        }
+
+        return sb.toString();
     }
 
     @Override
     public SubSelectAlias getSubSelectAlias() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return SubSelectAlias.PROHIBITED;
     }
 
     @Override
     public SortByNullOrderInsertion getSortByNullOrderInsertion() {
-        // TODO: Implement this method.
-        throw new UnsupportedOperationException("Not yet implemented");
+        return SortByNullOrderInsertion.PRE;
     }
 }

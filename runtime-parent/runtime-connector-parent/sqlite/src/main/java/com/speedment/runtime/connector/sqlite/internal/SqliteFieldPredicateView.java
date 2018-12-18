@@ -30,37 +30,37 @@ public class SqliteFieldPredicateView extends AbstractFieldPredicateView {
 
     @Override
     protected SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE CONCAT(?, \"%\") ESCAPE \"_\")", negated)
+        return of("(" + cn + " LIKE (? || \"%\") ESCAPE \"_\")", negated)
             .add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment startsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " COLLATE NOCASE LIKE CONCAT(?, \"%\") ESCAPE \"_\")", negated)
+        return of("(" + cn + " COLLATE NOCASE LIKE (? || \"%\") ESCAPE \"_\")", negated)
             .add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE CONCAT(\"%\", ?) ESCAPE \"_\")", negated)
+        return of("(" + cn + " LIKE (\"%\" || ?) ESCAPE \"_\")", negated)
             .add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment endsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " COLLATE NOCASE LIKE CONCAT(\"%\", ?) ESCAPE \"_\")", negated)
+        return of("(" + cn + " COLLATE NOCASE LIKE (\"%\" || ?) ESCAPE \"_\")", negated)
             .add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment containsHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE CONCAT(\"%\", ?, \"%\") ESCAPE \"_\")", negated)
+        return of("(" + cn + " LIKE (\"%\" || ? || \"%\") ESCAPE \"_\")", negated)
             .add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " COLLATE NOCASE LIKE CONCAT(\"%\", ?, \"%\") ESCAPE \"_\")", negated)
+        return of("(" + cn + " COLLATE NOCASE LIKE (\"%\" || ? || \"%\") ESCAPE \"_\")", negated)
             .add(getFirstOperandAsRaw(model));
     }
 }
