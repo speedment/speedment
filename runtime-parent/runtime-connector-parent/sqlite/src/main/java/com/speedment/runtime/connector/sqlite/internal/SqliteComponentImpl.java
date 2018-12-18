@@ -6,8 +6,4 @@ import com.speedment.runtime.connector.sqlite.SqliteComponent;
  * @author Emil Forslund
  * @since  3.1.9
  */
-public final class SqliteComponentImpl implements SqliteComponent {
-
-
-
-}
+public final class SqliteComponentImpl implements SqliteComponent {}

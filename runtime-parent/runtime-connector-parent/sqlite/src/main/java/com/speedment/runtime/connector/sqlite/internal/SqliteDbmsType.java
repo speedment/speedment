@@ -65,6 +65,11 @@ public final class SqliteDbmsType implements DbmsType {
     }
 
     @Override
+    public ConnectionType getConnectionType() {
+        return ConnectionType.DBMS_AS_FILE;
+    }
+
+    @Override
     public int getDefaultPort() {
         return 0; // In SQLite, you connect to a file directly.
     }

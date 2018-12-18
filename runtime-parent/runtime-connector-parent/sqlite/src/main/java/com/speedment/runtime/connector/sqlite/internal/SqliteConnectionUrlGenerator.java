@@ -11,6 +11,6 @@ public final class SqliteConnectionUrlGenerator implements ConnectionUrlGenerato
 
     @Override
     public String from(Dbms dbms) {
-        return "jdbc:sqlite::memory:"; // TODO: Add custom config property to read from a file.
+        return "jdbc:sqlite:" + dbms.getLocalPath().orElse(":memory:");
     }
 }
