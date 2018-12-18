@@ -46,11 +46,11 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
  */
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
 implements Dbms,
-            HasEnabledProperty,
-            HasExpandedProperty,
-            HasIdProperty,
-            HasNameProperty,
-            HasAliasProperty,
+           HasEnabledProperty,
+           HasExpandedProperty,
+           HasIdProperty,
+           HasNameProperty,
+           HasAliasProperty,
            HasNameProtectedProperty {
 
     public DbmsProperty(Project parent) {
@@ -89,6 +89,15 @@ implements Dbms,
     @Override
     public OptionalInt getPort() {
         return OptionalUtil.ofNullable(portProperty().get());
+    }
+
+    public StringProperty localPathProperty() {
+        return stringPropertyOf(LOCAL_PATH,  () -> Dbms.super.getLocalPath().orElse(null));
+    }
+
+    @Override
+    public Optional<String> getLocalPath() {
+        return Optional.ofNullable(localPathProperty().get());
     }
     
     public StringProperty connectionUrlProperty() {
