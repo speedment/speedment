@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.core.db;
 
-import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.util.Comparator;
 import java.util.List;
@@ -125,6 +125,19 @@ public interface DbmsType {
      * @return  {@code true} if dbms names are meaningful, else {@code false}
      */
     default boolean hasDatabaseNames() {
+        return true;
+    }
+
+    /**
+     * Returns {@code true} if this {@link DbmsType} uses authentication with
+     * username and password and {@code false} otherwise. Some database managers
+     * don't require authentication since they are only intended to be used for
+     * tests or because security is handled at a different level.
+     *
+     * @return  {@code true} if authentication is supported, otherwise
+     *          {@code false}
+     */
+    default boolean hasDatabaseUsers() {
         return true;
     }
 
