@@ -25,7 +25,7 @@
     </Label>
 
     <GridPane fx:id="grid" maxHeight="1.7976931348623157E308"
-              maxWidth="1.7976931348623157E308" minHeight="320.0"
+              maxWidth="1.7976931348623157E308"
               VBox.vgrow="ALWAYS">
 
         <columnConstraints>
