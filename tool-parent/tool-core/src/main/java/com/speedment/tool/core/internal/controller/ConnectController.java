@@ -94,7 +94,11 @@ public final class ConnectController implements Initializable {
     @FXML private GridPane grid;
     @FXML private RowConstraints dbmsRow;
     @FXML private RowConstraints schemaRow;
+    @FXML private RowConstraints userRow;
+    @FXML private RowConstraints passRow;
 
+    private FilteredList<Node> userRowChildren;
+    private FilteredList<Node> passRowChildren;
     private FilteredList<Node> dbmsRowChildren;
     private FilteredList<Node> schemaRowChildren;
 
@@ -102,6 +106,8 @@ public final class ConnectController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         buttonConnect.setGraphic(FontAwesome.SIGN_IN.view());
 
+        userRowChildren   = inRow(userRow);
+        passRowChildren   = inRow(passRow);
         dbmsRowChildren   = inRow(dbmsRow);
         schemaRowChildren = inRow(schemaRow);
 
@@ -123,37 +129,64 @@ public final class ConnectController implements Initializable {
         final Runnable recalculateFields = () -> {
             final DbmsType item = dbmsType.get();
 
+            System.out.println("Recomputing values.");
+
             // Hide name rows if particular Dbms doesn't support them.
+            toggleVisibility(userRow, userRowChildren, item.hasDatabaseUsers());
+            toggleVisibility(passRow, passRowChildren, item.hasDatabaseUsers());
             toggleVisibility(dbmsRow, dbmsRowChildren, item.hasDatabaseNames());
             toggleVisibility(schemaRow, schemaRowChildren, item.hasSchemaNames());
 
-            // Disable Dbms Name-property for database types that doesn't use it
             if (fieldHost.getText().isEmpty()
             ||  fieldHost.getText().equals(generatedHost.get())) {
                 fieldHost.textProperty().setValue(DEFAULT_HOST);
                 generatedHost.set(DEFAULT_HOST);
             }
 
-            if (fieldUser.getText().isEmpty()
-            ||  fieldUser.getText().equals(generatedUser.get())) {
-                fieldUser.textProperty().setValue(DEFAULT_USER);
+            // Disable Dbms User-property for database types that doesn't use it
+            if (item.hasDatabaseUsers()) {
+                fieldUser.setDisable(false);
+                fieldPass.setDisable(false);
+
+                if (fieldUser.getText().isEmpty()
+                ||  fieldUser.getText().equals(generatedUser.get())) {
+                    fieldUser.textProperty().setValue(DEFAULT_USER);
+                    generatedUser.set(DEFAULT_USER);
+                }
+            } else {
                 generatedUser.set(DEFAULT_USER);
+                fieldUser.setDisable(true);
+                fieldPass.setDisable(true);
             }
 
-            if (fieldName.getText().isEmpty()
-            ||  fieldName.getText().equals(generatedName.get())) {
-                item.getDefaultDbmsName().ifPresent(name -> {
-                    fieldName.textProperty().setValue(name);
-                    generatedName.set(name);
-                });
+            // Disable Dbms Name-property for database types that doesn't use it
+            if (item.hasDatabaseNames()) {
+                fieldName.setDisable(false);
+
+                if (fieldName.getText().isEmpty()
+                ||  fieldName.getText().equals(generatedName.get())) {
+                    item.getDefaultDbmsName().ifPresent(name -> {
+                        fieldName.textProperty().setValue(name);
+                        generatedName.set(name);
+                    });
+                }
+            } else {
+                item.getDefaultDbmsName().ifPresent(generatedName::set);
+                fieldName.setDisable(true);
             }
 
-            if (fieldSchema.getText().isEmpty()
-            ||  fieldSchema.getText().equals(generatedSchema.get())) {
-                item.getDefaultSchemaName().ifPresent(name -> {
-                    fieldSchema.textProperty().setValue(name);
-                    generatedSchema.set(name);
-                });
+            if (item.hasSchemaNames()) {
+                fieldSchema.setDisable(false);
+
+                if (fieldSchema.getText().isEmpty()
+                ||  fieldSchema.getText().equals(generatedSchema.get())) {
+                    item.getDefaultSchemaName().ifPresent(name -> {
+                        fieldSchema.textProperty().setValue(name);
+                        generatedSchema.set(name);
+                    });
+                }
+            } else {
+                fieldSchema.setDisable(true);
             }
 
             fieldName.getTooltip().setText(item.getDbmsNameMeaning());
@@ -225,8 +258,8 @@ public final class ConnectController implements Initializable {
             () -> fieldHost.textProperty().isEmpty().get()
             ||    fieldPort.textProperty().isEmpty().get()
             ||    fieldType.getSelectionModel().isEmpty()
-            ||    fieldName.textProperty().isEmpty().get()
-            ||    fieldUser.textProperty().isEmpty().get(),
+            ||   (fieldName.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseNames())
+            ||   (fieldUser.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseUsers()),
 
             fieldHost.textProperty(),
             fieldPort.textProperty(),
@@ -237,6 +270,7 @@ public final class ConnectController implements Initializable {
 
         // Connect to database action
         buttonConnect.setOnAction(ev -> {
+            final DbmsType type = dbmsType.get();
 
             // Register password in password component
             passwordComponent.put(
@@ -251,8 +285,15 @@ public final class ConnectController implements Initializable {
             dbms.typeNameProperty().set(dbmsType.get().getName());
             dbms.ipAddressProperty().set(fieldHost.getText());
             dbms.portProperty().set(Integer.valueOf(fieldPort.getText()));
-            dbms.usernameProperty().set(fieldUser.getText());
-            dbms.nameProperty().set(fieldName.getText());
+
+            if (type.hasDatabaseUsers()) {
+                dbms.usernameProperty().set(fieldUser.getText());
+            }
+
+            Optional.of(fieldName.getText())
+                .filter(s -> dbmsType.get().hasDatabaseNames())
+                .filter(s -> !s.isEmpty())
+                .orElseGet(() -> type.getDefaultDbmsName().orElseGet(fieldName::getText));
 
             if (!areaConnectionUrl.getText().isEmpty()
             &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
@@ -264,7 +305,7 @@ public final class ConnectController implements Initializable {
             final String schema = Optional.of(fieldSchema.getText())
                 .filter(s -> dbmsType.get().hasSchemaNames())
                 .filter(s -> !s.isEmpty())
-                .orElseGet(dbms::getName);
+                .orElseGet(() -> type.getDefaultSchemaName().orElseGet(dbms::getName));
 
             // Set the default project name to the name of the schema.
             userInterfaceComponent.projectProperty().nameProperty()

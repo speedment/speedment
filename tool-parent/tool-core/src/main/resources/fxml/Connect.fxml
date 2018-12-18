@@ -36,8 +36,8 @@
         <rowConstraints>
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- Dbms Type -->
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- IP + Port -->
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- Username -->
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- Password -->
+            <RowConstraints fx:id="userRow" minHeight="10.0" vgrow="SOMETIMES"/>   <!-- Username -->
+            <RowConstraints fx:id="passRow" minHeight="10.0" vgrow="SOMETIMES"/>   <!-- Password -->
             <RowConstraints fx:id="dbmsRow" minHeight="10.0" vgrow="SOMETIMES"/>   <!-- Dbms Name -->
             <RowConstraints fx:id="schemaRow" minHeight="10.0" vgrow="SOMETIMES"/> <!-- Schema Name -->
             <RowConstraints minHeight="10.0" vgrow="ALWAYS"/>                      <!-- Connection URL -->

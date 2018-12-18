@@ -62,10 +62,6 @@
 
 }
 
-.root {
-    -fx-background-color: -fx-bg-gray;
-}
-
 /*** Titles Pane ***/
 .titled-pane {
     -fx-background-color: -fx-speedment-gray;
