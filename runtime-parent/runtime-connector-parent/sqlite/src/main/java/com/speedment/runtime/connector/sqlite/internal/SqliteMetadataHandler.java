@@ -27,6 +27,9 @@ import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -34,11 +37,13 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -54,6 +59,7 @@ import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandle
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Implementation of {@link DbmsMetadataHandler} for SQLite databases.
@@ -408,11 +414,22 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
         final SqlSupplier<ResultSet> supplier = () ->
             conn.getMetaData().getImportedKeys(null, null, table.getId());
 
+        final Set<String> fksThatNeedNewNames = new LinkedHashSet<>();
+
         final TableChildMutator<ForeignKey> mutator = (foreignKey, rs) -> {
 
             final String foreignKeyName = rs.getString("FK_NAME");
-            foreignKey.mutator().setId(foreignKeyName);
-            foreignKey.mutator().setName(foreignKeyName);
+            if (foreignKeyName == null || foreignKeyName.trim().isEmpty()) {
+                if (rs.getInt("KEY_SEQ") == 1) {
+                    final String uniqueName = UUID.randomUUID().toString();
+                    foreignKey.mutator().setId(uniqueName);
+                    foreignKey.mutator().setName(uniqueName);
+                    fksThatNeedNewNames.add(uniqueName);
+                }
+            } else {
+                foreignKey.mutator().setId(foreignKeyName);
+                foreignKey.mutator().setName(foreignKeyName);
+            }
 
             final ForeignKeyColumn foreignKeyColumn = foreignKey.mutator().addNewForeignKeyColumn();
             final ForeignKeyColumnMutator<?> fkcMutator = foreignKeyColumn.mutator();
@@ -434,9 +451,59 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             ForeignKey.class,
             table.mutator()::addNewForeignKey,
             supplier,
-            rsChild -> rsChild.getString("FK_NAME"),
+            rsChild -> rsChild.getInt("KEY_SEQ") == 1 ? ""
+                : fksThatNeedNewNames.stream()
+                    .skip(fksThatNeedNewNames.size() - 1)
+                    .findFirst().orElseThrow(IllegalStateException::new),
             mutator
         );
+
+        // Fix foreign keys without any id by finding an index with the same
+        // set of columns.
+        table.foreignKeys()
+            .filter(fk -> fksThatNeedNewNames.contains(fk.getId()))
+            .forEach(fk -> {
+                final Set<String> thisSet = fk.foreignKeyColumns()
+                    .map(ForeignKeyColumn::getId)
+                    .collect(toSet());
+
+                final Optional<? extends Index> found = table.indexes()
+                    .filter(idx -> idx.indexColumns()
+                        .map(IndexColumn::getId)
+                        .collect(toSet())
+                        .equals(thisSet)
+                    ).findFirst();
+
+                if (found.isPresent()) {
+                    fk.mutator().setId(found.get().getId());
+                    fk.mutator().setName(found.get().getName());
+                } else {
+                    final String randName = md5(thisSet.toString());
+                    fk.mutator().setId(randName);
+                    fk.mutator().setName(randName);
+                    LOGGER.error(format(
+                        "Found a foreign key in table '%s' with no name. " +
+                        "Assigning it a random name '%s'",
+                        table.getId(), randName));
+                }
+            });
+
+    }
+
+    private static String md5(String str) {
+        try {
+            final MessageDigest md = MessageDigest.getInstance("MD5");
+            final byte[] mdbytes = md.digest(str.getBytes(StandardCharsets.UTF_8));
+
+            final StringBuilder sb = new StringBuilder();
+            for (byte mdbyte : mdbytes) {
+                sb.append(Integer.toString((mdbyte & 0xff) + 0x100, 16).substring(1));
+            }
+
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new RuntimeException("MD5 algorithm not supported.", ex);
+        }
     }
 
     private <T extends Document & HasId> void tableChilds(
