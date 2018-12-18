@@ -35,7 +35,8 @@
 
         <rowConstraints>
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- Dbms Type -->
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- IP + Port -->
+            <RowConstraints fx:id="hostRow" minHeight="10.0" vgrow="SOMETIMES"/>   <!-- IP + Port -->
+            <RowConstraints fx:id="fileRow" minHeight="10.0" vgrow="SOMETIMES"/>   <!-- Local File -->
             <RowConstraints fx:id="userRow" minHeight="10.0" vgrow="SOMETIMES"/>   <!-- Username -->
             <RowConstraints fx:id="passRow" minHeight="10.0" vgrow="SOMETIMES"/>   <!-- Password -->
             <RowConstraints fx:id="dbmsRow" minHeight="10.0" vgrow="SOMETIMES"/>   <!-- Dbms Name -->
@@ -85,11 +86,37 @@
             </TextField>
         </HBox>
 
+        <!-- Local File -->
+        <Label styleClass="form-label" text="Database File"
+               GridPane.rowIndex="2"/>
+        <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="240.0"
+              spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="2"
+              GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets bottom="8"/>
+            </GridPane.margin>
+            <TextField fx:id="fieldFile"
+                       disable="true"
+                       maxWidth="1.7976931348623157E308"
+                       nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0"
+                       prefWidth="248.0" promptText="Select a local file"
+                       HBox.hgrow="ALWAYS">
+                <tooltip>
+                    <Tooltip text="The database file to load from."/>
+                </tooltip>
+            </TextField>
+            <Button fx:id="fieldFileBtn" minWidth="32.0">
+                <padding>
+                    <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                </padding>
+            </Button>
+        </HBox>
+
         <!-- Username -->
         <Label styleClass="form-label" text="Username"
-               GridPane.rowIndex="2"/>
+               GridPane.rowIndex="3"/>
         <TextField fx:id="fieldUser" promptText="Username"
-                   GridPane.columnIndex="1" GridPane.rowIndex="2">
+                   GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="The database username."/>
             </tooltip>
@@ -100,9 +127,9 @@
 
         <!-- Password -->
         <Label styleClass="form-label" text="Password"
-               GridPane.rowIndex="3"/>
+               GridPane.rowIndex="4"/>
         <PasswordField fx:id="fieldPass" promptText="Password"
-                       GridPane.columnIndex="1" GridPane.rowIndex="3">
+                       GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="The database password."/>
             </tooltip>
@@ -113,9 +140,9 @@
 
         <!-- Database name -->
         <Label styleClass="form-label" text="Database Name"
-               GridPane.rowIndex="4"/>
+               GridPane.rowIndex="5"/>
         <TextField fx:id="fieldName" promptText="Database name"
-                   GridPane.columnIndex="1" GridPane.rowIndex="4">
+                   GridPane.columnIndex="1" GridPane.rowIndex="5">
             <tooltip>
                 <Tooltip text="The name of the database."/>
             </tooltip>
@@ -126,9 +153,9 @@
 
         <!-- Schema name -->
         <Label styleClass="form-label" text="Schema Name"
-               GridPane.rowIndex="5"/>
+               GridPane.rowIndex="6"/>
         <TextField fx:id="fieldSchema" promptText="Schema name"
-                   GridPane.columnIndex="1" GridPane.rowIndex="5">
+                   GridPane.columnIndex="1" GridPane.rowIndex="6">
             <tooltip>
                 <Tooltip text="The database schema to generate code from."/>
             </tooltip>
@@ -139,7 +166,7 @@
 
         <!-- Connection URL -->
         <CheckBox fx:id="enableConnectionUrl" mnemonicParsing="false"
-                  text="Use Connection URL" GridPane.rowIndex="6"
+                  text="Use Connection URL" GridPane.rowIndex="7"
                   GridPane.valignment="TOP">
             <GridPane.margin>
                 <Insets top="6.0"/>
@@ -151,7 +178,7 @@
         <TextArea fx:id="areaConnectionUrl" prefRowCount="3"
                   prefWidth="240.0" promptText="Connection URL"
                   wrapText="true" GridPane.columnIndex="1"
-                  GridPane.rowIndex="6">
+                  GridPane.rowIndex="7">
             <tooltip>
                 <Tooltip text="Connection URL to use when connecting to the database."/>
             </tooltip>
@@ -164,7 +191,7 @@
         <Button fx:id="buttonConnect" defaultButton="true" disable="true"
                 mnemonicParsing="false" text="Connect"
                 GridPane.columnIndex="1" GridPane.halignment="RIGHT"
-                GridPane.rowIndex="7">
+                GridPane.rowIndex="8">
             <padding>
                 <Insets bottom="4.0" left="16.0" right="16.0" top="4.0"/>
             </padding>
