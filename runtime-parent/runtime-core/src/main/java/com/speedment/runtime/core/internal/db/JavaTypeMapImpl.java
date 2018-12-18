@@ -61,7 +61,6 @@ public class JavaTypeMapImpl implements JavaTypeMap {
         inner.put("CHAR", String.class);
         inner.put("VARCHAR", String.class);
         inner.put("LONGVARCHAR", String.class);
-        inner.put("LONGVARCHAR", String.class);
         inner.put("NUMERIC", BigDecimal.class);
         inner.put("DECIMAL", BigDecimal.class);
         inner.put("BIT", Integer.class); ///
@@ -77,6 +76,7 @@ public class JavaTypeMapImpl implements JavaTypeMap {
         inner.put("FLOAT", Double.class);
         inner.put("DOUBLE", Double.class);
         inner.put("DATE", java.sql.Date.class);
+        inner.put("DATETIME", Timestamp.class);
         inner.put("TIME", Time.class);
         inner.put("TIMESTAMP", Timestamp.class);
         inner.put("CLOB", Clob.class);
@@ -112,25 +112,28 @@ public class JavaTypeMapImpl implements JavaTypeMap {
         if (ruled.isPresent()) {
             return ruled.get();
         } else {
-        
             // Secondly, try  md.getTypeName()
-            Class<?> result = sqlTypeMapping.get(md.getTypeName());
+            final String typeName = md.getTypeName();
+            final Class<?> innerType = inner.get(typeName);
+            if (innerType != null) return innerType;
+
+            Class<?> result = sqlTypeMapping.get(typeName);
             if (result == null) {
-                
-                // Type (int) according to java.sql.Types (e.g. 4) that 
+
+                // Type (int) according to java.sql.Types (e.g. 4) that
                 // we got from the ColumnMetaData
-                final int type = md.getDataType(); 
-                
+                final int type = md.getDataType();
+
                 // Variable name (String) according to java.sql.Types (e.g. INTEGER)
-                final Optional<String> oTypeName = TypeInfoMetaData.lookupJavaSqlType(type);        
+                final Optional<String> oTypeName = TypeInfoMetaData.lookupJavaSqlType(type);
                 if (oTypeName.isPresent()) {
-                    final String typeName = oTypeName.get();
-                    // Thirdly, try the corresponding name using md.getDataType() 
+                    final String typeName2 = oTypeName.get();
+                    // Thirdly, try the corresponding name using md.getDataType()
                     // and then lookup java.sql.Types name
-                    result = sqlTypeMapping.get(typeName);
+                    result = sqlTypeMapping.get(typeName2);
                 }
             }
-            
+
             return result;
         }
     }
@@ -150,10 +153,9 @@ public class JavaTypeMapImpl implements JavaTypeMap {
     private void assertJavaTypesKnown() {
         final Map<String, Class<?>> unmapped = new LinkedHashMap<>();
         
-        inner.entrySet().forEach((entry) -> {
-            final String key = entry.getKey();
-            final Class<?> clazz = entry.getValue();
-            if (!StandardJavaTypeMapping.stream().anyMatch(jtm -> jtm.getJavaClass().equals(clazz))) {
+        inner.forEach((key, clazz) -> {
+            if (StandardJavaTypeMapping.stream()
+                .noneMatch(jtm -> jtm.getJavaClass().equals(clazz))) {
                 unmapped.put(key, clazz);
             }
         });
