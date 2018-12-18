@@ -40,6 +40,21 @@ public final class SqliteDbmsType implements DbmsType {
     }
 
     @Override
+    public boolean hasSchemaNames() {
+        return false;
+    }
+
+    @Override
+    public boolean hasDatabaseNames() {
+        return false;
+    }
+
+    @Override
+    public boolean hasDatabaseUsers() {
+        return false;
+    }
+
+    @Override
     public String getName() {
         return SQLITE;
     }
