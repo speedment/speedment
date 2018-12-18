@@ -20,7 +20,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.runtime.connector.mariadb.MariaDbBundle;
 import com.speedment.runtime.connector.mysql.MySqlBundle;
 import com.speedment.runtime.connector.postgres.PostgresBundle;
-
+import com.speedment.runtime.connector.sqlite.SqliteBundle;
 import com.speedment.runtime.core.internal.component.ConnectionPoolComponentImpl;
 import com.speedment.runtime.core.internal.component.DbmsHandlerComponentImpl;
 import com.speedment.runtime.core.internal.component.EntityManagerImpl;
@@ -71,6 +71,7 @@ public class RuntimeBundle implements InjectBundle {
             .withBundle(new MySqlBundle())
             .withBundle(new MariaDbBundle())
             .withBundle(new PostgresBundle())
+            .withBundle(new SqliteBundle())
             .withBundle(new JoinBundle())
             .injectables();
     }

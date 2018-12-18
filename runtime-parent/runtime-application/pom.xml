@@ -110,6 +110,12 @@
 
         <dependency>
             <groupId>com.speedment.runtime</groupId>
+            <artifactId>connector-sqlite</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-welcome</artifactId>
             <version>${speedment.version}</version>
         </dependency>
