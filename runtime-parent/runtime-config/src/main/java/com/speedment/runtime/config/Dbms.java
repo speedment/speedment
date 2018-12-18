@@ -31,6 +31,7 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
@@ -60,6 +61,7 @@ public interface Dbms extends
         TYPE_NAME      = "typeName",
         IP_ADDRESS     = "ipAddress",
         PORT           = "port",
+        LOCAL_PATH     = "localPath",
         CONNECTION_URL = "connectionUrl",
         USERNAME       = "username",
         SCHEMAS        = "schemas";
@@ -98,6 +100,17 @@ public interface Dbms extends
      */
     default OptionalInt getPort() {
         return getAsInt(PORT);
+    }
+
+    /**
+     * Returns the local path to the file where the data of this Dbms is stored.
+     * The file name should be parsable using {@link Paths#get}. This property
+     * is optional and not even supported in most database systems.
+     *
+     * @return the local path to the data file
+     */
+    default Optional<String> getLocalPath() {
+        return getAsString(LOCAL_PATH);
     }
     
     /**
