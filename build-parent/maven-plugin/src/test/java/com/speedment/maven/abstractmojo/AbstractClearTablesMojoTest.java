@@ -15,8 +15,10 @@
  * the License.
  */
 package com.speedment.maven.abstractmojo;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static java.lang.Boolean.TRUE;
+import static java.lang.Boolean.FALSE;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,12 +48,11 @@ final class AbstractClearTablesMojoTest {
     private Speedment mockedSpeedment;
 	@Mock
 	private ConfigFileHelper mockedConfigFileHelper;
-	@Mock private MavenProject mockedMavenProject;
+	@Mock
+    private MavenProject mockedMavenProject;
 
 	@BeforeEach
 	void setup() {
-		when(mockedMavenProject.getBasedir()).thenReturn(new File("baseDir"));
-
 		mojo = new AbstractClearTablesMojoTestImpl() {
 			@Override
 			protected MavenProject project() {
@@ -63,6 +64,7 @@ final class AbstractClearTablesMojoTest {
 	@Test
 	void execute() {
 		// Given
+        when(mockedMavenProject.getBasedir()).thenReturn(new File("baseDir"));
 		when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
 		mojo.setConfigFile(mockedConfigLocation);
 
@@ -77,6 +79,7 @@ final class AbstractClearTablesMojoTest {
 	@Test
 	void executeException() {
 		// Given
+        when(mockedMavenProject.getBasedir()).thenReturn(new File("baseDir"));
 		when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
 		doThrow(new RuntimeException("test Exception")).when(mockedConfigFileHelper).clearTablesAndSaveToFile();
 		mojo.setConfigFile(mockedConfigLocation);
@@ -86,4 +89,41 @@ final class AbstractClearTablesMojoTest {
 
 		// Then
 	}
+
+	@Test
+	void testDebugTrue() {
+		// Given
+        mojo.setDebug(TRUE);
+
+		// When
+		boolean result = mojo.debug();
+
+		// Then
+		assertTrue(result);
+	}
+
+	@Test
+	void testDebugFalse() {
+		// Given
+        mojo.setDebug(FALSE);
+
+		// When
+		boolean result = mojo.debug();
+
+		// Then
+		assertFalse(result);
+	}
+
+	@Test
+	void testDebugNull() {
+		// Given
+		mojo.setDebug(null);
+
+		// When
+		boolean result = mojo.debug();
+
+		// Then
+		assertFalse(result);
+	}
 }
+

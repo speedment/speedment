@@ -47,4 +47,16 @@ public class AbstractReloadMojoTestImpl extends AbstractReloadMojo {
             e.printStackTrace();
         }
     }
+
+    public void setDebug(Boolean mockedDebug) {
+        try {
+            Field field = AbstractReloadMojo.class.getDeclaredField("debug");
+            field.setAccessible(true);
+            field.set(this, mockedDebug);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 }

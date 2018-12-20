@@ -43,4 +43,16 @@ public class AbstractClearTablesMojoTestImpl extends AbstractClearTablesMojo {
 			e.printStackTrace();
 		}
 	}
+
+	public void setDebug(Boolean mockedDebug) {
+		try {
+			Field field = AbstractClearTablesMojo.class.getDeclaredField("debug");
+			field.setAccessible(true);
+			field.set(this, mockedDebug);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
 }
