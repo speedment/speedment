@@ -16,7 +16,7 @@
  */
 package com.speedment.common.combinatorics;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
@@ -24,17 +24,17 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class CombinationTest {
+final class CombinationTest {
 
     @Test
-    public void testOfEmpty() {
+    void testOfEmpty() {
         final List<List<String>> actual = Combination.<String>of()
             .collect(toList());
 
@@ -42,7 +42,7 @@ public class CombinationTest {
     }
 
     @Test
-    public void testOfSingleton() {
+    void testOfSingleton() {
         final List<List<String>> actual = Combination.of("a")
             .collect(toList());
 
@@ -55,7 +55,7 @@ public class CombinationTest {
     }
 
     @Test
-    public void testOfTwo() {
+    void testOfTwo() {
         final Set<List<String>> actual = Combination.of("a", "b")
             .collect(toSet());
 
@@ -70,7 +70,7 @@ public class CombinationTest {
     }
 
     @Test
-    public void testOfThree() {
+    void testOfThree() {
         final Set<List<String>> actual = Combination.of("a", "b", "c")
             .collect(toSet());
 

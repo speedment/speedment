@@ -26,9 +26,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.config.mutator.ProjectMutator;
@@ -40,9 +38,9 @@ import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
-
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.core.util.ProgressMeasure;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
@@ -134,6 +132,8 @@ public final class ConfigFileHelper {
             );
         }
 
+        final Project projectCopy = ImmutableProject.wrap(project);
+
         project.dbmses().map(dbms -> {
             final DbmsType dbmsType = dbmsHandlerComponenet.findByName(dbms.getTypeName())
                 .orElseThrow(() -> new SpeedmentToolException(
@@ -163,6 +163,7 @@ public final class ConfigFileHelper {
             try {
                 final Project newProject = fut.get();
                 synchronized (project) {
+                    setTypeMappersFrom(newProject, projectCopy);
                     project.merge(documentPropertyComponent, newProject);
                 }
             } catch (final ExecutionException ex) {
@@ -233,6 +234,10 @@ public final class ConfigFileHelper {
                             // Make sure any old data is cleared before merging in
                             // the new state from the database.
                             dbms.schemasProperty().clear();
+
+                            // printTypeMappers("From DB", p);
+                            setTypeMappersFrom(p, projectCopy);
+
                             userInterfaceComponent.projectProperty()
                                 .merge(documentPropertyComponent, p);
 
@@ -272,6 +277,88 @@ public final class ConfigFileHelper {
         }
 
         return false;
+    }
+
+    /**
+     * Set any compatible type mappers in Project <code>{@code to}</code> found in Project <code>{@code from}</code>.
+     **
+     * @param to the project to mutate
+     * @param from the project defining the type mappers
+     */
+    private void setTypeMappersFrom(Project to, Project from) {
+        from.dbmses().map(d -> (Dbms) d).forEach(dbms -> {
+            dbms.schemas().map(s -> (Schema) s).forEach(schema -> {
+                schema.tables().map(t -> (Table) t).forEach(table -> {
+                    table.columns().map(c -> (Column) c).filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
+                        String mapperName = column.getTypeMapper().get();
+                        try {
+                            //noinspection unchecked
+                            @SuppressWarnings("unchecked")
+                            Class<? extends TypeMapper<?, ?>> mapperClass = (Class<? extends TypeMapper<?, ?>>)Class.forName(mapperName);
+                            setTypeMapper(to, dbms, schema, table, column,  mapperClass);
+                        } catch (ClassNotFoundException | ClassCastException e) {
+                            throw new IllegalStateException("Unable to find mapper class " + mapperName);
+                        }
+                    });
+                });
+            });
+        });
+    }
+
+    /**
+     * Set all typemappers in the given project that match dbms, schema, table, column and column database type.
+     *
+     * The idea is to use this method to reset TypeMappers from an old project when new metadata has been loaded.
+     * We make sure to match column database type to avoid setting an incompatible mapper if the new project has
+     * changed database type for the referenced column.
+     *
+     * @param to the project to mutate
+     * @param dbms the dbms holding the typemapper
+     * @param schema the schema of the typemapper
+     * @param table the table of the typemapper
+     * @param column the column of the typemapper
+     * @param typeMapperClass the new type mapper class to set
+     */
+    private void setTypeMapper(Project to, Dbms dbms, Schema schema, Table table, Column column, Class<? extends TypeMapper<?, ?>> typeMapperClass) {
+        to.dbmses()
+            .filter(d -> d.getId().equals(dbms.getId()))
+            .map(d -> (Dbms) d)
+            .flatMap(Dbms::schemas)
+            .filter(s -> s.getId().equals(schema.getId()))
+            .flatMap(Schema::tables)
+            .filter(t -> t.getId().equals(table.getId()))
+            .flatMap(Table::columns)
+            .filter(c -> c.getId().equals(column.getId()))
+            // If the data type has changed, we do not want to keep the old mapper
+            .filter(c -> c.getDatabaseType().equals(column.getDatabaseType()))
+            // Perhaps one would expect this to match a single column, so findFirst would do,
+            // but fetching metadata from the database seems to create multiple instances of
+            // similar dbmses in the same Project, so we make sure to do this forEach copy.
+            .forEach(c -> {
+                c.mutator().setTypeMapper(typeMapperClass);
+            });
+    }
+
+    /**
+     * Debug method used to track type mappers of a project. May be of future use if one perhaps would venture to
+     * investigate why we get several copies of the dbms from the database
+     */
+    private void printTypeMappers(String heading, Project p) {
+        System.out.println(heading);
+        p.dbmses().map(d -> (Dbms) d).forEach(dbms -> {
+            dbms.schemas().map(s -> (Schema) s).forEach(schema -> {
+                schema.tables().map(t -> (Table) t).forEach(table -> {
+                    table.columns().map(c -> (Column) c).filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
+                        String mapperName = column.getTypeMapper().get();
+                        if (mapperName.endsWith("PrimitiveTypeMapper")) {
+                            mapperName = "Primitive";
+                        }
+                        System.out.println(" - " + dbms.getName() + ":" + schema.getName() + "/" +
+                            table.getName() + "." + column.getName() + " mapped by " + mapperName);
+                    });
+                });
+            });
+        });
     }
 
     public void loadConfigFile(File file, ReuseStage reuse) {
@@ -482,7 +569,9 @@ public final class ConfigFileHelper {
         // always start with a new file.
         if (currentlyOpenFile.isFile()) {
             if (currentlyOpenFile.exists()) {
-                currentlyOpenFile.delete();
+                if (!currentlyOpenFile.delete()) {
+                    userInterfaceComponent.log(OutputUtil.warning("Unable to delete " + currentlyOpenFile));
+                }
             }
             DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
         } else {

@@ -17,18 +17,19 @@
 package com.speedment.common.codegenxml;
 
 import com.speedment.common.codegen.util.Formatting;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.speedment.common.codegenxml.Elements.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class ViewImplTest {
+final class ViewImplTest {
 
     @Test
-    public void testSimpleHTML() {
+    void testSimpleHTML() {
         final Document doc = Document.html(
             html()
                 .add(head()
@@ -40,12 +41,11 @@ public class ViewImplTest {
 
         Formatting.tab("    ");
         final String html = new XmlGenerator().on(doc).get();
-
-        System.out.println(html);
+        assertTrue(html.contains("Welcome"));
     }
     
     @Test
-    public void testSimpleXML() {
+    void testSimpleXML() {
         final Document doc = Document.xmlWithDocType(
             TagElement.of("project")
                 .add(TagElement.of("dependencies")
@@ -56,6 +56,6 @@ public class ViewImplTest {
         Formatting.tab("    ");
         final String html = new XmlGenerator().on(doc).get();
 
-        System.out.println(html);
+        assertTrue(html.contains("Speedment"));
     }
 }

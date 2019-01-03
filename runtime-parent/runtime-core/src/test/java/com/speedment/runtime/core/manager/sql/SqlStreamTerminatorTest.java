@@ -32,6 +32,8 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.test_support.MockDbmsType;
 import com.speedment.runtime.test_support.MockEntity;
 import com.speedment.runtime.test_support.MockEntityUtil;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import static java.util.Collections.singletonList;
 import java.util.List;
@@ -39,13 +41,13 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNull;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SqlStreamTerminatorTest {
+final class SqlStreamTerminatorTest {
 
     private static final long SQL_COUNT_RESULT = 100L;
     private static final String SELECT_SQL = "SELECT * FROM table";
@@ -57,7 +59,7 @@ public class SqlStreamTerminatorTest {
     private List<Object> lastCountingValues;
 
     @Test
-    public void testCountGeneralFilter() {
+    void testCountGeneralFilter() {
         lastCountingSql = null;
         final Action<Stream<MockEntity>, Stream<MockEntity>> filterAction = new FilterAction<>(e -> e.getId() % 10 == 3);
         assertEquals(10, countStreamOf(filterAction));
@@ -65,7 +67,7 @@ public class SqlStreamTerminatorTest {
     }
 
     @Test
-    public void testCountSizePreservingFilter() {
+    void testCountSizePreservingFilter() {
         final Action<Stream<MockEntity>, Stream<Integer>> mapAction = new MapAction<>(MockEntity::getId);
         assertEquals(SQL_COUNT_RESULT, countStreamOf(mapAction));
         assertEquals(SELECT_COUNT_SQL, lastCountingSql);
@@ -73,7 +75,7 @@ public class SqlStreamTerminatorTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testCountFieldPredicateFilter() {
+    void testCountFieldPredicateFilter() {
         final Predicate<MockEntity> predicate = MockEntity.NAME.equal("ABBA");
         final Action<Stream<MockEntity>, Stream<MockEntity>> filterAction = new FilterAction<>(predicate);
         assertEquals(SQL_COUNT_RESULT, countStreamOf(filterAction));
@@ -83,7 +85,7 @@ public class SqlStreamTerminatorTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testCountFieldPredicateFilterPolluted() {
+    void testCountFieldPredicateFilterPolluted() {
         final Predicate<MockEntity> predicate = MockEntity.NAME.equal("ABBA").or(me -> me.getName().equals("Olle"));
         final Action<Stream<MockEntity>, Stream<MockEntity>> filterAction = new FilterAction<>(predicate);
         assertEquals(0, countStreamOf(filterAction));

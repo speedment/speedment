@@ -16,17 +16,17 @@
  */
 package com.speedment.common.tuple;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Emil Forslund
  * @since  1.0.5
  */
-public class TuplesTest {
+final class TuplesTest {
 
     /**
      * Attempts to recreate issue #500 (initializing a very large tuple caused
@@ -35,7 +35,7 @@ public class TuplesTest {
      * {@link Tuple#degree()}-method before the inner array was initialized.)
      */
     @Test
-    public void of() {
+    void of() {
         final Random random = new Random();
         final Integer[] array = new Integer[100];
         for (int i = 0; i < 100; i++) {

@@ -21,58 +21,47 @@
  */
 package com.speedment.common.singletonstream;
 
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public class SingletonStreamTest {
+final class SingletonStreamTest {
 
     private SingletonStream<String> instance;
 
-    public SingletonStreamTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = SingletonStream.of("A");
     }
 
-    @After
-    public void tearDown() {
-    }
 
     @Test
-    public void testSome() {
-        instance.map("A"::indexOf).distinct().unordered().forEach(this::consume);
+    void testSome() {
+        instance.map("A"::indexOf).distinct().unordered().forEach(blackHole());
     }
 
-    private <T> void consume(T t) {
-
+    private <T> Consumer<T> blackHole() {
+        return (T t) -> {};
     }
 
     /**
      * Test of of method, of class SingletonStream.
      */
     @Test
-    public void testOf() {
+    void testOf() {
         final SingletonStream<String> ss = SingletonStream.of("B");
         final List<String> s = ss.collect(toList());
         assertEquals(Collections.singletonList("B"), s);
@@ -82,17 +71,24 @@ public class SingletonStreamTest {
      * Test of ofNullable method, of class SingletonStream.
      */
     @Test
-    @Ignore
-    public void testOfNullable() {
+    void testOfNullableElement() {
+        final Stream<String> ss = SingletonStream.ofNullable("B");
+        final List<String> s = ss.collect(toList());
+        assertEquals(Collections.singletonList("B"), s);
+    }
 
-
+    @Test
+    void testOfNullableNull() {
+        final Stream<String> ss = SingletonStream.ofNullable(null);
+        final List<String> s = ss.collect(toList());
+        assertEquals(Collections.emptyList(), s);
     }
 
     /**
      * Test of filter method, of class SingletonStream.
      */
     @Test
-    public void testFilter() {
+    void testFilter() {
         assertEquals(1L, instance.filter("A"::equals).count());
         assertEquals(1L, instance.filter("A"::equals).filter(Objects::nonNull).count());
     }
@@ -101,7 +97,7 @@ public class SingletonStreamTest {
      * Test of map method, of class SingletonStream.
      */
     @Test
-    public void testMap() {
+    void testMap() {
         final Optional<String> binLen = instance.map(String::length).map(Integer::toBinaryString).findFirst();
         assertEquals(Optional.of("1"), binLen);
 
@@ -114,7 +110,7 @@ public class SingletonStreamTest {
      * Test of mapToInt method, of class SingletonStream.
      */
     @Test
-    public void testMapToInt() {
+    void testMapToInt() {
         assertEquals(1, instance.mapToInt(String::length).sum());
     }
 

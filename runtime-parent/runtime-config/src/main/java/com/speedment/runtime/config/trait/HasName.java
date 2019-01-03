@@ -22,6 +22,7 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.speedment.runtime.config.util.TraitUtil.viewOf;
@@ -65,7 +66,7 @@ public interface HasName extends Document, HasMainInterface {
             final String defaultName = getParent()
                     .map(HasChildren.class::cast)
                     .map(parent -> parent.defaultNameFor(this))
-                    .get();
+                    .orElseThrow(NoSuchElementException::new);
 
             getData().put(NAME, defaultName);
             return defaultName;

@@ -25,7 +25,7 @@ import java.lang.reflect.Field;
 public class AbstractClearTablesMojoTestImpl extends AbstractClearTablesMojo {
 	@Override
 	protected String launchMessage() {
-		return "test implementaiton of AbstractClearTablesMojo";
+		return "test implementation of AbstractClearTablesMojo";
 	}
 
 	public void execute(Speedment speedment) throws MojoFailureException, MojoExecutionException {
@@ -37,6 +37,18 @@ public class AbstractClearTablesMojoTestImpl extends AbstractClearTablesMojo {
 			Field field = AbstractClearTablesMojo.class.getDeclaredField("configFile");
 			field.setAccessible(true);
 			field.set(this, mockedConfigLocation);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setDebug(Boolean mockedDebug) {
+		try {
+			Field field = AbstractClearTablesMojo.class.getDeclaredField("debug");
+			field.setAccessible(true);
+			field.set(this, mockedDebug);
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

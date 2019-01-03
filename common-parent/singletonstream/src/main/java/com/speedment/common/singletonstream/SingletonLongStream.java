@@ -285,12 +285,12 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public PrimitiveIterator.OfLong iterator() {
-        return singletonIntIterator(element);
+        return singletonLongIterator(element);
     }
 
     @Override
     public Spliterator.OfLong spliterator() {
-        return singletonIntSpliterator(element);
+        return singletonLongSpliterator(element);
     }
 
     @Override
@@ -327,7 +327,7 @@ public class SingletonLongStream implements LongStream {
         return LongStream.empty();
     }
 
-    private static PrimitiveIterator.OfLong singletonIntIterator(final long e) {
+    private static PrimitiveIterator.OfLong singletonLongIterator(final long e) {
         return new PrimitiveIterator.OfLong() {
             private boolean hasNext = true;
 
@@ -348,7 +348,10 @@ public class SingletonLongStream implements LongStream {
             @Override
             public Long next() {
                 if (TRIPWIRE_ENABLED) {
-                    trip(getClass(), "{0} calling SingletonLongStream.singletonIterator.nextInt()");
+                    trip(getClass(), "{0} calling SingletonLongStream.singletonIterator.next()");
+                }
+                if (!hasNext) {
+                    throw new NoSuchElementException();
                 }
                 return nextLong();
             }
@@ -369,7 +372,7 @@ public class SingletonLongStream implements LongStream {
         };
     }
 
-    private static Spliterator.OfLong singletonIntSpliterator(final long element) {
+    private static Spliterator.OfLong singletonLongSpliterator(final long element) {
         return new Spliterator.OfLong() {
             long estimatedSize = 1;
 

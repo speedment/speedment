@@ -17,18 +17,19 @@
 package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.config.util.*;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public final class HasIdTest extends AbstractDocumentTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+final class HasIdTest extends AbstractDocumentTest {
 
     @Test
-    public void testFallbackToName() {
+    void testFallbackToName() {
         assertEquals(tableA.getName(), tableA.getId());
     }
 
     @Test
-    public void testGetId() {
+    void testGetId() {
         assertEquals(DBMS_A_ID, dbmsA.getId());
     }
 

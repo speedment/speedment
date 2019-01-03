@@ -16,20 +16,20 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.speedment.runtime.core.internal.field.Entity.ID;
 import static com.speedment.runtime.core.internal.field.Entity.NAME;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author pemi
  */
-public class FieldTest extends BaseFieldTest {
+final class FieldTest extends BaseFieldTest {
 
     @Test
-    public void testField() throws Exception {
+    void testField() {
         assertEquals("id", ID.identifier().getColumnId());
         assertEquals("name", NAME.identifier().getColumnId());
     }

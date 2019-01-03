@@ -16,30 +16,31 @@
  */
 package com.speedment.runtime.field.comparator;
 
+import org.junit.jupiter.api.Test;
+
 import static com.speedment.runtime.field.comparator.NullOrder.FIRST;
 import static com.speedment.runtime.field.comparator.NullOrder.LAST;
 import static com.speedment.runtime.field.comparator.NullOrder.NONE;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public class NullOrderTest {
+final class NullOrderTest {
 
     @Test
-    public void testNoneReversed() {
+    void testNoneReversed() {
         assertEquals(NONE, NONE.reversed());
     }
 
     @Test
-    public void testFirstReversed() {
+    void testFirstReversed() {
         assertEquals(LAST, FIRST.reversed());
     }
 
     @Test
-    public void testLastReversed() {
+    void testLastReversed() {
         assertEquals(FIRST, LAST.reversed());
     }
 

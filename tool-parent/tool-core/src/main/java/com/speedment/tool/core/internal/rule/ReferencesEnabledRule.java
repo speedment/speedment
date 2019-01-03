@@ -67,7 +67,8 @@ public final class ReferencesEnabledRule implements Rule {
             final String sourceName = nameOf(source);
             
             if (target.isPresent()) {
-                if (!HasEnabled.test(target.get())) {
+                final Column col = target.get();
+                if (!col.isEnabled()) {
                     noIssues.set(false);
                     
                     final String targetName = nameOf(target.get());
@@ -75,12 +76,12 @@ public final class ReferencesEnabledRule implements Rule {
                     issues.post(new Issue() {
                         @Override
                         public String getTitle() {
-                            return "Reference not enabled: " + target.get().getId();
+                            return "Reference not enabled: " + col.getId();
                         }
 
                         @Override
                         public String getDescription() {
-                            return "The referenced element " + target.get().getId()
+                            return "The referenced element " + col.getId()
                                 + ", is not enabled. Disabled elements will "
                                 + "not be generated. Thus, referencing a disabled element "
                                 + "will result in broken code.\n"

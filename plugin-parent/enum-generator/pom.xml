@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.plugins</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>3.1.9-SNAPSHOT</version>
+        <version>3.1.10-SNAPSHOT</version>
     </parent>
     
     <artifactId>enum-generator</artifactId>
@@ -134,15 +134,5 @@
             <artifactId>tool-core</artifactId>
         </dependency>
         
-        <!-- Test Dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-        </dependency>
     </dependencies>
 </project>

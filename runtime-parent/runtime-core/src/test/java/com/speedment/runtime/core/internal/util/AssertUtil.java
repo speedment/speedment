@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.internal.util;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  *
  * @author pemi
@@ -42,7 +44,7 @@ public class AssertUtil {
 
         public void test() {
             if (!eval()) {
-                org.junit.Assert.fail("Throwable not as expected");
+                fail("Throwable not as expected");
             }
         }
 

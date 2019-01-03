@@ -19,25 +19,27 @@ package com.speedment.runtime.config.mutator;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.util.*;
+import org.junit.jupiter.api.Test;
+
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.stream.Stream;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 
 @SuppressWarnings("rawtypes")
-public final class HasIdMutatorTest extends AbstractDocumentTest {
+final class HasIdMutatorTest extends AbstractDocumentTest {
 
     private static final String ID = "TryggveArneOchSven";
 
     @Test
-    public void testIdMutator() {
+    void testIdMutator() {
         tableA.mutator().setId(ID);
         assertEquals(ID, tableA.getId());
     }
 
     @Test
-    public void testIdMutatorTrait() {
+    void testIdMutatorTrait() {
 
         final Set<Class<?>> hasNameMutator = mutatorClasses()
             .filter(c -> HasNameMutator.class.isAssignableFrom(c))

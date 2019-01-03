@@ -19,6 +19,10 @@ package com.speedment.runtime.core.internal.component;
 import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.InfoComponent;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,53 +30,53 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.junit.After;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class InfoComponentImplTest {
+final class InfoComponentImplTest {
 
     private Speedment speedment;
     private InfoComponent instance;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         speedment = ApplicationBuilders.empty().withComponent(InfoComponentImpl.class).build();
         instance = speedment.getOrThrow(InfoComponent.class);
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         speedment.close();
     }
 
     @Test
-    public void testVendor() {
+    void testVendor() {
         assertEquals("Speedment, Inc.", instance.getVendor());
     }
 
     @Test
-    public void testTitle() {
+    void testTitle() {
         assertNotNull(instance.getTitle());
     }
 
     @Test
-    public void testSubtitle() {
+    void testSubtitle() {
         assertNotNull(instance.getSubtitle());
     }
 
     @Test
-    public void testImplementationVersion() {
+    void testImplementationVersion() {
         assertEquals(versionFromPom(), instance.getImplementationVersion());
     }
 
     @Test
-    public void testSpecificationVersion() {
+    void testSpecificationVersion() {
         assertNotNull(instance.getSpecificationVersion());
         assertTrue(instance.getImplementationVersion().contains(instance.getSpecificationVersion()));
     }

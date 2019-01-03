@@ -59,7 +59,7 @@ public class TransactionComponentImpl implements TransactionComponent {
     void setupSingleDbms(@WithState(State.RESOLVED) ProjectComponent projectComponent) {
         final Set<Dbms> dbmses = projectComponent.getProject().dbmses().collect(toSet());
         if (dbmses.size() == 1) {
-            singleDbms = dbmses.stream().findAny().get();
+            singleDbms = dbmses.iterator().next();
         }
     }
 

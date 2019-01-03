@@ -21,22 +21,25 @@
  */
 package com.speedment.common.tuple;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.stream.Stream;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  *
  * @author Per Minborg
  */
-public class MappingTest {
+final class MappingTest {
 
     @Test
-    public void testTuple2() {
+    void testTuple2() {
 
         final List<Tuple2<String, Integer>> expected = Arrays.asList(
             Tuples.of("Arne", "Arne".length()),
@@ -47,31 +50,31 @@ public class MappingTest {
             .map(Tuples.toTuple(Function.identity(), String::length))
             .collect(toList());
 
-        Assert.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void testTuple4() {
+    void testTuple4() {
         Tuple4<Integer, Integer, Integer, Integer> t4 = Tuples.of(1, 2, 3, 4);
         consume(t4);
     }
 
     @Test
-    public void testTuple1() {
+    void testTuple1() {
         Stream.of("Arne", "Tryggve")
             .map(Tuples.toTuple(String::length))
             .forEach(MappingTest::consume);
     }
 
     @Test
-    public void testTuple2b() {
+    void testTuple2b() {
         Stream.of("Arne", "Tryggve")
             .map(Tuples.toTuple(Function.identity(), String::length))
             .forEach(MappingTest::consume);
     }
 
     @Test
-    public void testTuple2Variant() {
+    void testTuple2Variant() {
         Stream.of("Arne", "Tryggve")
             .map(Tuples.toTuple(Function.identity(), String::length))
             .map(Tuples.toTuple(Tuple2::get0, t2 -> t2.get1() + 10))
@@ -79,15 +82,17 @@ public class MappingTest {
 
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testTuple2Nulls() {
-        Stream.of("Arne", "Tryggve")
-            .map(Tuples.toTuple(Function.identity(), s -> null))
-            .forEach(MappingTest::consume);
+    @Test
+    void testTuple2Nulls() {
+        assertThrows(NullPointerException.class, () -> {
+            Stream.of("Arne", "Tryggve")
+                .map(Tuples.toTuple(Function.identity(), s -> null))
+                .forEach(MappingTest::consume);
+        });
     }
 
     @Test()
-    public void testTuple2OfNullablesNulls() {
+    void testTuple2OfNullablesNulls() {
         Stream.of("Arne", "Tryggve")
             .map(TuplesOfNullables.toTupleOfNullables(Function.identity(), s -> null))
             .forEach(MappingTest::consume);

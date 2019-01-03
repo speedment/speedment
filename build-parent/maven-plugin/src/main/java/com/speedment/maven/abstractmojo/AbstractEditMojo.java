@@ -189,8 +189,9 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             final int index = where.lastIndexOf(PATH_SEPARATOR);
             final String parentIds = where.substring(0, index).trim();
             lastWhere = where.substring(index + PATH_SEPARATOR.length()).trim();
-            if (document.getParent().isPresent()) {
-                if (!matches(document.getParent().get(), parentIds)) {
+            final Optional<? extends Document> parent = document.getParent();
+            if (parent.isPresent()) {
+                if (!matches(parent.get(), parentIds)) {
                     return false;
                 }
             }

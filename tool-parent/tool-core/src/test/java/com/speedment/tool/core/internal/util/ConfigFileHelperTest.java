@@ -20,32 +20,32 @@ import com.speedment.common.json.Json;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.util.DocumentTranscoder;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import java.io.File;
 import java.util.Map;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
-public class ConfigFileHelperTest {
+final class ConfigFileHelperTest {
 
     private ConfigFileHelper helper;
     @Mock
     private File mockedCurrentlyOpenFile;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         helper = new ConfigFileHelper();
         helper.setCurrentlyOpenFile(mockedCurrentlyOpenFile);
     }
 
     @Test
-    @Ignore
-    public void clearTablesAndSaveToFile() throws Exception {
+    @Disabled
+    void clearTablesAndSaveToFile() throws Exception {
 
         try {
 
@@ -64,8 +64,8 @@ public class ConfigFileHelperTest {
     }
 
     @Test
-    @Ignore
-    public void clearTablesAndSaveToFileNoTables() throws Exception {
+    @Disabled
+    void clearTablesAndSaveToFileNoTables() throws Exception {
 
         try {
             // Given

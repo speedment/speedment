@@ -26,11 +26,10 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.0</version>
+        <version>3.1.10-SNAPSHOT</version>
     </parent>
-    
     <artifactId>codegen</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - CodeGen</name>
@@ -92,13 +91,14 @@
     <dependencies>
         <!--Test dependencies-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
-        
+
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
+
     </dependencies>
 </project>

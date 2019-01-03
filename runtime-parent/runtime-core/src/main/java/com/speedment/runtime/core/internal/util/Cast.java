@@ -19,7 +19,6 @@ package com.speedment.runtime.core.internal.util;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -27,6 +26,8 @@ import static java.util.Objects.requireNonNull;
  * @author pemi
  */
 public final class Cast {
+
+    private Cast() {}
 
     /**
      * Casts and returns the provided object if it is assignable from the given
@@ -67,13 +68,7 @@ public final class Cast {
         return Optional.of(object)
             .filter(o -> clazz.isAssignableFrom(o.getClass()))
             .map(clazz::cast)
-            .get();
+            .orElseThrow(NoSuchElementException::new);
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private Cast() {
-        instanceNotAllowed(getClass());
-    }
 }

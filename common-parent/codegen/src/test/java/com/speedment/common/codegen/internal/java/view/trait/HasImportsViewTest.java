@@ -21,30 +21,30 @@ import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.util.Formatting;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.ModelTreeUtil.importsOf;
 import static com.speedment.common.codegen.util.Formatting.nl;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Emil Forslund
  * @since  2.4.4
  */
-public class HasImportsViewTest {
+final class HasImportsViewTest {
     
     private Generator gen;
     private HasImportsView<File> view;
     private File file;
     
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         gen  = new JavaGenerator();
         view = new MockImportsFile();
         file = File.of("com/example/TestFile.java");
@@ -54,20 +54,24 @@ public class HasImportsViewTest {
     }
     
     @Test
-    public void makeSureAllImportsArePresent() {
+    void makeSureAllImportsArePresent() {
+        // Given
         final Import[] expected = {
             Import.of(Objects.class),
             Import.of(Objects.class).static_().setStaticMember("requireNonNull"),
             Import.of(Objects.class).static_().setStaticMember("equals")
         };
-        
+
+        // When
         final Import[] actual = importsOf(file).toArray(new Import[0]);
-        
+
+        // Then
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void testRenderImports() {
+    void testRenderImports() {
+        // Given
         final String expected = Formatting.separate(nl(), 
             "import java.util.Objects;",
             "",
@@ -76,9 +80,11 @@ public class HasImportsViewTest {
             "", // <-- Finish with an empty line.
             ""  // <-- Generation continues on here.
         );
-        
+
+        // When
         final String actual = view.transform(gen, file).orElse(null);
-        
+
+        // Then
         try { assertEquals(expected, actual); }
         catch (final Throwable thrw) {
             System.out.println("------------------ Expected -----------------");

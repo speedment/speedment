@@ -29,8 +29,8 @@ import com.speedment.runtime.typemapper.TypeMapper;
 public class MockEntity {
 
     /**
-     * This Field corresponds to the {@link Country} field that can be obtained
-     * using the {@link Country#getId()} method.
+     * This Field corresponds to the  Country field that can be obtained
+     * using the Country#getId() method.
      */
     public static final IntField<MockEntity, Integer> ID = IntField.create(
         Identifier.ID,

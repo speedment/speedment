@@ -181,32 +181,11 @@ public final class JsonSerializer {
         out.write(0x6C); // l
         out.write(0x6C); // l
     }
-    
-    @SuppressWarnings("fallthrough")
+
     private void printIndent() throws IOException {
-        switch (tabSize * level) {
-            case 16 : out.write(SPACE);
-            case 15 : out.write(SPACE);
-            case 14 : out.write(SPACE);
-            case 13 : out.write(SPACE);
-            case 12 : out.write(SPACE);
-            case 11 : out.write(SPACE);
-            case 10 : out.write(SPACE);
-            case 9  : out.write(SPACE);
-            case 8  : out.write(SPACE);
-            case 7  : out.write(SPACE);
-            case 6  : out.write(SPACE);
-            case 5  : out.write(SPACE);
-            case 4  : out.write(SPACE);
-            case 3  : out.write(SPACE);
-            case 2  : out.write(SPACE);
-            case 1  : out.write(SPACE);
-            case 0  : return;
-            default :
-                final int count = tabSize * level;
-                for (int i = 0; i < count; i++) {
-                    out.write(SPACE);
-                }
+        final int count = tabSize * level;
+        for (int i = 0; i < count; i++) {
+            out.write(SPACE);
         }
     }
     

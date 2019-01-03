@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 /**
  *
@@ -46,9 +48,9 @@ public final class DefaultDocumentProperty extends
     protected List<String> keyPathEndingWith(String key) {
         if (parent == null) {
             if (key == null) {
-                return ImmutableListUtil.of();
+                return emptyList();
             } else {
-                return ImmutableListUtil.of(key);
+                return singletonList(key);
             }
         } else {
             final List<String> path = parent.keyPathEndingWith(this.key);

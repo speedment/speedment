@@ -16,17 +16,18 @@
  */
 package com.speedment.common.tuple;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public class TupleBuilderTest {
+final class TupleBuilderTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
         final Tuple3<Integer, String, Long> expected = Tuples.of(1, "Olle", Long.MAX_VALUE);
         final Tuple3<Integer, String, Long> actual = TupleBuilder.builder().add(1).add("Olle").add(Long.MAX_VALUE).build();
         assertEquals(expected, actual);

@@ -30,9 +30,11 @@ import com.speedment.runtime.core.internal.stream.builder.streamterminator.Strea
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+import com.speedment.runtime.field.EnumField;
 import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.comparator.ReferenceFieldComparator;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -179,13 +181,15 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                     @SuppressWarnings("unchecked")
                     final FieldComparator<ENTITY> fieldComparator = (FieldComparator<ENTITY>) sortedAction.getComparator();
                     fieldComparators.add(fieldComparator);
-                }
-                if (comparator instanceof CombinedComparator) {
+                } else if (comparator instanceof CombinedComparator) {
                     @SuppressWarnings("unchecked")
                     final CombinedComparator<ENTITY> combinedComparator = (CombinedComparator<ENTITY>) sortedAction.getComparator();
                     combinedComparator.stream()
                         .map(c -> (FieldComparator<ENTITY>) c)
                         .forEachOrdered(fieldComparators::add);
+                } else {
+                    // We sort on a field that we do not know how to handle. Fallback to no optimization.
+                    return initialPipeline;
                 }
             }
 
@@ -222,6 +226,10 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                         }
 
                         sql.append(fieldName);
+                        if (String.class.equals(info.getSqlDatabaseTypeFunction().apply(fieldComparator.getField()))) {
+                            sql.append(dbmsType.getCollateFragment().getSql());
+                        }
+
                         if (isReversed) {
                             sql.append(" DESC");
                         } else {
@@ -285,73 +293,17 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
         // Keeps track on where we are in the path
         // Start with the first operation type (i.e. either SORTED or FILTER)
-        Operation<ENTITY> operation = path.get(0);
-
+        int pathStart = 0;
         for (Action<?, ?> action : pipeline) {
-
-            // Are we on the first operation type in the path
-            if (operation == path.get(0)) {
-                // Check if the current stream action is of the first operational type (e.g. SORTED)
-                if (operation.is(action)) {
-                    // If so, consume the stream action (e.g. increase a counter or put it in a list)
-                    operation.consume(action, consumers);
-                    continue;
-                } else {
-                    // Check if the current stream action is of the second operational type (e.g. FILTER)
-                    if (path.get(1).is(action)) {
-                        // Move the operation state to the second operational type
-                        operation = path.get(1);
-                    } else {
-                        if (path.get(2).is(action)) {
-                            operation = path.get(2);
-                        } else {
-                            if (path.get(3).is(action)) {
-                                operation = path.get(3);
-                            } else {
-                                return;
-                            }
-                        }
-                    }
+            for(int pos = pathStart; true; pos++) {
+                if (pos >= path.size()) {
+                    return;  // Reached the end of the path without finding the action
                 }
-            }
-
-            // The same principle as above but starting at the second operation type in the path
-            if (operation == path.get(1)) {
+                Operation<ENTITY> operation = path.get(pos);
                 if (operation.is(action)) {
                     operation.consume(action, consumers);
-                    continue;
-                } else {
-                    if (path.get(2).is(action)) {
-                        operation = path.get(2);
-                    } else {
-                        if (path.get(3).is(action)) {
-                            operation = path.get(3);
-                        } else {
-                            return;
-                        }
-                    }
-                }
-            }
-
-            if (operation == path.get(2)) {
-                if (operation.is(action)) {
-                    operation.consume(action, consumers);
-                    continue;
-                } else {
-                    if (path.get(3).is(action)) {
-                        operation = path.get(3);
-                    } else {
-                        return;
-                    }
-                }
-            }
-
-            if (operation == path.get(3)) {
-                if (operation.is(action)) {
-                    operation.consume(action, consumers);
-                    continue;
-                } else {
-                    return;
+                    pathStart = pos;  // Never look back at parts of the path that are now to be considered passed
+                    break;
                 }
             }
         }

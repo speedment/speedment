@@ -24,20 +24,23 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.SUPPRESS_WARNINGS_UNCHECKED;
 import static com.speedment.common.codegen.util.Formatting.block;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Emil Forslund
  * @since  2.4.10
  */
-public class ConstructorViewTest {
+final class ConstructorViewTest {
 
     @Test
-    public void transform() {
+    void transform() {
         final File file = File.of("com/example/Main.java")
             .add(Import.of(StringBuilder.class))
             .add(Class.of("Main").public_().final_()
@@ -60,5 +63,22 @@ public class ConstructorViewTest {
 
         final Generator generator = new JavaGenerator();
         final String code = generator.on(file).get();
+
+        assertNotNull(code);
+
+        Stream.of(
+            "package com.example;",
+            "public final class Main",
+            "public Main(",
+            String.class.getSimpleName(),
+            StringBuilder.class.getSimpleName(),
+            "Main",
+            "public",
+            "final",
+            "private"
+        ).forEach(s -> {
+            assertTrue(code.contains(s));
+        });
+
     }
 }

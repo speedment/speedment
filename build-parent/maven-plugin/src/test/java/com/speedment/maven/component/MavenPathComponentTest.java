@@ -16,17 +16,19 @@
  */
 package com.speedment.maven.component;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public final class MavenPathCompoentTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+final class MavenPathComponentTest {
 
     @Test
-    public void testClassName() {
+    void testClassName() {
         assertEquals(
-            "There is a reason that this class should have this name...",
             "MavenPathComponent",
-            MavenPathComponent.class.getSimpleName()
+            MavenPathComponent.class.getSimpleName(),
+            "There is a reason that this class should have this name..."
         );
     }
 

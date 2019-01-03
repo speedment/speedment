@@ -17,34 +17,36 @@
 package com.speedment.runtime.core.config.mapper.integer;
 
 import com.speedment.runtime.typemapper.integer.IntegerZeroOneToBooleanMapper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Roberts Vartinss
  */
-public class IntegerZeroOneToBooleanMapperTest {
+final class IntegerZeroOneToBooleanMapperTest {
 
     private IntegerZeroOneToBooleanMapper mapper;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         mapper = new IntegerZeroOneToBooleanMapper();
     }
 
     @Test
-    public void testStringYesMapping() {
-        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(null, null, 1));
-        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(null, null, 2));
-        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(null, null, -1));
-        Assert.assertTrue("DatabaseType should have value '1'", 1 == mapper.toDatabaseType(true));
+    void testStringYesMapping() {
+        assertEquals(Boolean.TRUE, mapper.toJavaType(null, null, 1), "JavaType should have value 'true'");
+        assertEquals(Boolean.TRUE, mapper.toJavaType(null, null, 2), "JavaType should have value 'true'");
+        assertEquals(Boolean.TRUE, mapper.toJavaType(null, null, -1), "JavaType should have value 'true'");
+        assertTrue( 1 == mapper.toDatabaseType(true), "DatabaseType should have value '1'");
     }
 
     @Test
-    public void testStringNoMapping() {
-    	Assert.assertEquals("JavaType should have value 'false'",  Boolean.FALSE, mapper.toJavaType(null, null, 0));
-    	Assert.assertTrue("DatabaseType should have value '0'", 0 == mapper.toDatabaseType(false));
+    void testStringNoMapping() {
+    	assertEquals(Boolean.FALSE, mapper.toJavaType(null, null, 0), "JavaType should have value 'false'");
+    	assertTrue( 0 == mapper.toDatabaseType(false), "DatabaseType should have value '0'");
     }
 }

@@ -110,7 +110,7 @@ public final class StandardJavaTypeMapping {
         ),
         
         new JavaTypeMappingImpl<>(
-            BigInteger.class, "Object", BigInteger::new, l -> LongUtil.cast(l, BigInteger.class)
+            BigInteger.class, "BigInteger", BigInteger::new, l -> LongUtil.cast(l, BigInteger.class)
         ),
         
         new JavaTypeMappingImpl<>(

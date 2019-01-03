@@ -108,12 +108,14 @@ public class MetricsImpl implements Metrics {
         return hash;
     }
 
-    public static final Metrics EMPTY = new MetricsImpl(0, 0, 0, 0, 0) {
+    public static final Metrics EMPTY_INSTANCE = new MetricsImpl(0, 0, 0, 0, 0) {
         @Override
         public String toString() {
             return "Metrics.empty()";
         }
 
     };
+
+
 
 }

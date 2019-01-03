@@ -22,17 +22,18 @@
 package com.speedment.runtime.core;
 
 import com.speedment.runtime.application.RuntimeBundle;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class RuntimeBundleTest {
+final class RuntimeBundleTest {
     
     @Test
-    public void testInjectables() {
+    void testInjectables() {
         assertTrue(new RuntimeBundle().injectables().count() > 0);
     }
     

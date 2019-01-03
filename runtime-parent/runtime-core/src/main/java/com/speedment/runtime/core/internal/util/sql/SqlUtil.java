@@ -26,6 +26,7 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -154,7 +155,7 @@ public final class SqlUtil {
             "SELECT COUNT(*) FROM " + sqlTableReference(naming, table),
             Collections.emptyList(),
             rs -> rs.getLong(1)
-        ).findAny().get();
+        ).findAny().orElseThrow(() -> new NoSuchElementException("Unable to get sql count for table " + table.getId() + " in dbms " + dbms.getId()));
     }
 
     /**

@@ -30,13 +30,18 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
+import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.predicate.CombinedPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.internal.component.stream.SqlAdapterMapper;
 import com.speedment.runtime.join.stage.JoinOperator;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.ResultSet;
 import java.util.*;
@@ -45,6 +50,7 @@ import static com.speedment.runtime.join.JoinComponent.MAX_DEGREE;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -244,19 +250,16 @@ final class JoinSqlUtil {
             final String joinSql = renderJoin(sqlInfo.namingConvention(), sqlStages, stages, i);
             sb.append(joinSql);
         }
+
+        final StringBuilder predicateSql = new StringBuilder();
+        final List<Object> values = new ArrayList<>(); // Must be a mutable list
+
         // The predicates connected to each specific table is rendered
         // at the end of the query.
-        final List<SqlPredicateFragment> fragments
-            = renderPredicates(sqlInfo.project(), sqlInfo.namingConvention(), sqlInfo.fieldPredicateView(), stages);
+        renderPredicates(sqlInfo, stages, predicateSql, values);
 
-        final List<?> values;
-        if (!fragments.isEmpty()) {
-            sb.append(
-                fragments.stream().map(SqlPredicateFragment::getSql).collect(joining(" AND ", " WHERE ", ""))
-            );
-            values = fragments.stream().flatMap(SqlPredicateFragment::objects).collect(toList());
-        } else {
-            values = emptyList();
+        if (predicateSql.length()>0) {
+            sb.append(" WHERE ").append(predicateSql);
         }
 
         final String sql = sb.toString();
@@ -281,42 +284,97 @@ final class JoinSqlUtil {
         return ALIASES[index];
     }
 
-    private static List<SqlPredicateFragment> renderPredicates(
-        final Project project,
-        final DatabaseNamingConvention naming,
-        final FieldPredicateView fieldPredicateView,
-        final List<Stage<?>> stages
+    private static void renderPredicates(
+        final SqlInfo sqlInfo,
+        final List<Stage<?>> stages,
+        final StringBuilder sql,
+        final List<Object> values
     ) {
-        requireNonNull(project);
-        requireNonNull(naming);
-        requireNonNull(fieldPredicateView);
+        requireNonNull(sqlInfo);
         requireNonNull(stages);
-        final List<SqlPredicateFragment> result = new ArrayList<>();
-        for (int i = 0; i < stages.size(); i++) {
-            final int stageIndex = i;
+        requireNonNull(sql);
+        requireNonNull(values);
+
+        int cnt = 0;
+        for (int stageIndex = 0; stageIndex < stages.size(); stageIndex++) {
             final Stage<?> stage = stages.get(stageIndex);
 
             if (!stage.predicates().isEmpty()) {
                 for (int j = 0; j < stage.predicates().size(); j++) {
                     final Predicate<?> predicate = stage.predicates().get(j);
-                    if (!(predicate instanceof FieldPredicate)) {
-                        throw new IllegalStateException(predicate + " is not implementing " + FieldPredicate.class.getName()+". Anonymous lambdas are not supported: "+predicate.getClass().getName());
+                    if (predicate instanceof FieldPredicate) {
+                        if (((FieldPredicate)predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
+                            // Remove redundant ALWAYS_TRUE predicates
+                            continue;
+                        };
                     }
-                    final FieldPredicate<?> fieldPredicate = (FieldPredicate<?>) predicate;
-
-                    result.add(
-                        fieldPredicateView.transform(
-                            f -> tableAlias(stageIndex) + "." + naming.encloseField(f.identifier().getColumnId()),
-                            f -> f.findColumn(project).get().findDatabaseType(),
-                            fieldPredicate
-                        )
-                    );
-
+                    if (cnt++ != 0) {
+                        sql.append(" AND ");
+                    }
+                    renderPredicateHelper(sqlInfo, stage, stageIndex, sql, values, predicate);
                 }
             }
         }
-        return result;
     }
+
+    // See StreamTerminatorUtil::renderSqlWhereHelper for regular streams
+
+    private static <ENTITY> void renderPredicateHelper(
+        final SqlInfo sqlInfo,
+        final Stage<?> stage,
+        final int stageIndex,
+        final StringBuilder sql,
+        final List<Object> values,
+        final Predicate<ENTITY> predicate
+    ) {
+        requireNonNull(sqlInfo);
+        requireNonNull(stage);
+        requireNonNegative(stageIndex);
+        requireNonNull(sql);
+        requireNonNull(values);
+        requireNonNull(predicate);
+
+        if (predicate instanceof FieldPredicate) {
+            final FieldPredicate<ENTITY> fieldPredicate = (FieldPredicate<ENTITY>) predicate;
+            final SqlPredicateFragment fragment = sqlInfo.fieldPredicateView().transform(
+                f -> tableAlias(stageIndex) + "." + sqlInfo.namingConvention().encloseField(f.identifier().getColumnId()),
+                f -> f.findColumn(sqlInfo.project()).get().findDatabaseType(),
+                fieldPredicate
+            );
+            final Field<ENTITY> referenceFieldTrait = fieldPredicate.getField();
+            @SuppressWarnings("unchecked")
+            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) referenceFieldTrait.typeMapper();
+
+            sql.append(fragment.getSql());
+            fragment.objects().map(tm::toDatabaseType).forEachOrdered(values::add);
+        } else if (predicate instanceof CombinedPredicate) {
+            final CombinedPredicate<ENTITY> combinedPredicate = (CombinedPredicate<ENTITY>) predicate;
+            final StringBuilder internalSql = new StringBuilder();
+            final List<Object> internalValues = new ArrayList<>();
+            final AtomicInteger cnt = new AtomicInteger();
+            combinedPredicate.stream().forEachOrdered(internalPredicate -> {
+                if (cnt.getAndIncrement() != 0) {
+                    internalSql.append(" ").append(combinedPredicate.getType().toString()).append(" ");
+                }
+                @SuppressWarnings("unchecked")
+                final Predicate<ENTITY> castedInternalPredicate = (Predicate<ENTITY>) internalPredicate;
+                renderPredicateHelper(
+                    sqlInfo,
+                    stage,
+                    stageIndex,
+                    internalSql,
+                    internalValues,
+                    castedInternalPredicate
+                );
+            });
+            sql.append("(").append(internalSql).append(")");
+            values.addAll(internalValues);
+        } else {
+            throw new IllegalArgumentException("A predicate that is nether an instanceof FieldPredicate nor CombinedPredicate was given:" + predicate.toString());
+        }
+
+    }
+
 
     private static String renderJoin(
         final DatabaseNamingConvention naming,

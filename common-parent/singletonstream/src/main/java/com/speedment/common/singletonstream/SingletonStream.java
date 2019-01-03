@@ -133,7 +133,7 @@ public final class SingletonStream<T> implements Stream<T> {
     public DoubleStream mapToDouble(ToDoubleFunction<? super T> mapper) {
         requireNonNull(mapper);
         if (STRICT) {
-            toStream().mapToDouble(mapper);
+            return toStream().mapToDouble(mapper);
         }
         return DoubleStream.of(mapper.applyAsDouble(element));
     }

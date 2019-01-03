@@ -22,6 +22,7 @@ import com.speedment.common.codegen.model.value.InvocationValue;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.util.Formatting.indent;
@@ -48,7 +49,7 @@ implements Transform<InvocationValue, String> {
 
         return Optional.of(
             (model.getType() == null ? "" :
-                gen.on(realType).get() + ".") +
+                gen.on(realType).orElseThrow(NoSuchElementException::new) + ".") +
             model.getValue() +
             (model.getValues().size() <= 3
                 ? gen.onEach(model.getValues()).collect(joining(", ", "(", ")"))

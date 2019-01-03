@@ -48,7 +48,8 @@ public class StatisticsReporterSchedulerComponentImpl implements StatisticsRepor
         try {
             scheduler.awaitTermination(2, TimeUnit.SECONDS);
         } catch (InterruptedException ie) {
-
+            System.out.println("Unable to terminate " + StatisticsReporterSchedulerComponentImpl.class.getSimpleName());
+            throw new RuntimeException(ie);
         } finally {
             scheduler.shutdownNow();
         }

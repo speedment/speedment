@@ -22,18 +22,18 @@
 package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.ExpressionType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.speedment.runtime.compute.TestUtil.strings;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public final class ToByteTest extends AbstractToTest<ToByte<String>> {
+final class ToByteTest extends AbstractToTest<ToByte<String>> {
 
-    public ToByteTest() {
+    ToByteTest() {
         super(ExpressionType.BYTE);
     }
 
@@ -43,7 +43,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     }
 
     @Test
-    public void testApplyAsInt() {
+    void testApplyAsInt() {
         strings().forEach(s -> {
             final long actual = mapper.applyAsLong(s);
             final long expected = instance.applyAsByte(s);
@@ -52,7 +52,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     }
 
     @Test
-    public void testMapToDouble() {
+    void testMapToDouble() {
         strings().forEach(s -> {
             final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToDouble<String> toDouble = instance.mapToDouble(l -> l + 1);
@@ -62,7 +62,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     }
 
     @Test
-    public void testMap() {
+    void testMap() {
         strings().forEach(s -> {
             final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToByte<String> to = instance.map(l -> (byte) (l + 1));
@@ -72,7 +72,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     }
 
     @Test
-    public void testCompose() {
+    void testCompose() {
         strings().forEach(s -> {
             final ToByteNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals( mapper.applyAsLong(s + "A"), composed.applyAsByte(s));
@@ -80,7 +80,7 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
     }
     
     @Test
-    public void testOf() {
+    void testOf() {
         strings().forEach(s -> {
             final ToByte<String> created = ToByte.of(str -> (byte) str.length());
             assertEquals(s.length(), created.applyAsByte(s));

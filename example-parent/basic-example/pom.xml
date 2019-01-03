@@ -25,7 +25,7 @@
     <parent>
         <groupId>com.speedment.example</groupId>
         <artifactId>example-parent</artifactId>
-        <version>3.1.9-SNAPSHOT</version>
+        <version>3.1.10-SNAPSHOT</version>
     </parent>
 
     <artifactId>basic-example</artifactId>

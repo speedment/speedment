@@ -20,6 +20,7 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.AnnotationUsage;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -39,12 +40,10 @@ public final class AnnotationUsageView implements Transform<AnnotationUsage, Str
         requireNonNull(model);
 
         final Optional<String> value = gen.on(model.getValue());
-        final Stream<String> valueStream = value.isPresent() 
-            ? Stream.of(value.get()) 
-            : Stream.empty();
+        final Stream<String> valueStream = value.map(Stream::of).orElseGet(Stream::empty);
 
         return Optional.of(
-                "@" + gen.on(model.getType()).get()
+                "@" + gen.on(model.getType()).orElseThrow(NoSuchElementException::new)
                 + Stream.of(
                     model.getValues().stream()
                         .map(e -> e.getKey() + 

@@ -27,6 +27,8 @@ import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.exception.SpeedmentException;
 
+import java.util.NoSuchElementException;
+
 import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
 import static java.util.Objects.requireNonNull;
 
@@ -53,7 +55,7 @@ public final class FkHolder {
         this.fkc = fk.foreignKeyColumns().findFirst().orElseThrow(this::noEnabledForeignKeyException);
         
         this.column        = fkc.findColumn().orElseThrow(this::couldNotFindLocalColumnException);
-        this.table         = ancestor(column, Table.class).get();
+        this.table         = ancestor(column, Table.class).orElseThrow(NoSuchElementException::new);
         this.foreignColumn = fkc.findForeignColumn().orElseThrow(this::foreignKeyWasNullException);
         this.foreignTable  = fkc.findForeignTable().orElseThrow(this::foreignKeyWasNullException);
     }

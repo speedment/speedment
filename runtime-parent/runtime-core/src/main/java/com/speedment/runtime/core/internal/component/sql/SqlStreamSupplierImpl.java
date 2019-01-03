@@ -211,7 +211,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
             sql,
             values,
             rs -> rs.getLong(1)
-        ).findAny().get();
+        ).findAny().orElseThrow(() -> new NoSuchElementException("No long value for " + sql + ", values " + values));
     }
 
     private String sqlColumnNamer(Field<ENTITY> field) {

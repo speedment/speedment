@@ -18,21 +18,15 @@ package com.speedment.runtime.config;
 
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.runtime.config.util.DocumentUtil;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.OptionalLong;
+
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
  * The {@code Document} is the base structure for storing configuration 
- * parameters and can be seen as a hierarchial key-value store. Parameters can
- * be retreived using the different typed {@code getAsXXX()} methods listed 
+ * parameters and can be seen as a hierarchical key-value store. Parameters can
+ * be retrieved using the different typed {@code getAsXXX()} methods listed
  * here:
  * <ul>
  *      <li>{@link #get(String)}

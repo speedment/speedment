@@ -17,9 +17,11 @@
 package com.speedment.runtime.core.internal.config.mapper.string;
 
 import com.speedment.runtime.typemapper.string.YesNoStringToBooleanMapper;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -30,7 +32,7 @@ public class YesNoStringToBooleanMapperTest {
 
     private YesNoStringToBooleanMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mapper = new YesNoStringToBooleanMapper();
     }
@@ -40,10 +42,10 @@ public class YesNoStringToBooleanMapperTest {
         String string = "YES";
 
         Boolean javaType = mapper.toJavaType(null, null, string);
-        Assert.assertEquals("JavaType should have value 'true'",  true, javaType);
+        assertEquals( true, javaType, "JavaType should have value 'true'");
 
         String databaseType = mapper.toDatabaseType(javaType);
-        Assert.assertTrue("DatabaseType should have value 'yes'", string.equalsIgnoreCase(databaseType));
+        assertTrue(string.equalsIgnoreCase(databaseType), "DatabaseType should have value 'yes'");
     }
 
     @Test
@@ -51,9 +53,9 @@ public class YesNoStringToBooleanMapperTest {
         String string = "NO";
 
         Boolean javaType = mapper.toJavaType(null, null, string);
-        Assert.assertEquals("JavaType should have value 'false'",  false, javaType);
+        assertEquals(  false, javaType, "JavaType should have value 'false'");
 
         String databaseType = mapper.toDatabaseType(javaType);
-        Assert.assertTrue("DatabaseType should have value 'no'", string.equalsIgnoreCase(databaseType));
+        assertTrue(string.equalsIgnoreCase(databaseType), "DatabaseType should have value 'no'");
     }
 }

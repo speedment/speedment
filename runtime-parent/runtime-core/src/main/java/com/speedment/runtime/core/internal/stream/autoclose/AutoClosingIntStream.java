@@ -16,6 +16,9 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
+import com.speedment.runtime.core.internal.util.java9.Java9IntStreamAdditions;
+import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -26,13 +29,10 @@ import java.util.stream.*;
  */
 final class AutoClosingIntStream
     extends AbstractAutoClosingStream
-    implements IntStream {
+    implements IntStream, Java9IntStreamAdditions {
 
     private final IntStream stream;
 
-    /*AutoClosingIntStream(IntStream stream) {
-        this(stream, newSet(), false);
-    }*/
 
     AutoClosingIntStream(
         final IntStream stream,
@@ -101,6 +101,16 @@ final class AutoClosingIntStream
     @Override
     public IntStream skip(long n) {
         return wrap(stream.skip(n));
+    }
+
+    @Override
+    public IntStream takeWhile​(IntPredicate predicate) {
+        return wrap(Java9StreamUtil.takeWhile(stream, predicate));
+    }
+
+    @Override
+    public IntStream dropWhile​(IntPredicate predicate) {
+        return wrap(Java9StreamUtil.dropWhile(stream, predicate));
     }
 
     @Override

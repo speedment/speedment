@@ -24,6 +24,7 @@ import com.speedment.common.codegen.internal.java.view.trait.HasInitializersView
 import com.speedment.common.codegen.internal.java.view.trait.HasMethodsView;
 import com.speedment.common.codegen.model.value.AnonymousValue;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -57,7 +58,7 @@ implements Transform<AnonymousValue, String>,
 
     @Override
     public Optional<String> transform(Generator gen, AnonymousValue model) {
-        return Optional.of("new " + gen.on(model.getValue()).get() +
+        return Optional.of("new " + gen.on(model.getValue()).orElseThrow(NoSuchElementException::new) +
             gen.onEach(model.getTypeParameters()).collect(joinIfNotEmpty(", ", "<", ">")) +
             gen.onEach(model.getValues()).collect(joining(", ", "(", ")")) + " " + block(
                 separate(

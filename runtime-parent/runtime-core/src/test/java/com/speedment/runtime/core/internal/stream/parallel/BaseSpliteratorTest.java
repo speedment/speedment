@@ -14,21 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.speedment.runtime.core.internal.stream.parallel;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.Test;
 
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -41,24 +36,21 @@ public abstract class BaseSpliteratorTest {
 
     protected Spliterator<Integer> instance;
 
-    @Rule
-    public TestName name = new TestName();
-
     protected void printTestName() {
         //System.out.println(name.getMethodName());
     }
 
     @Test
-    public void testCharacteristics() {
-        printTestName();
+    void testCharacteristics() {
         assertTrue(instance.hasCharacteristics(Spliterator.SIZED));
         assertTrue(instance.hasCharacteristics(Spliterator.SUBSIZED));
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testGetComparator() {
-        printTestName();
-        instance.getComparator();
+    @Test
+    void testGetComparator() {
+        assertThrows(IllegalStateException.class, () -> {
+            instance.getComparator();
+        });
     }
 
 }

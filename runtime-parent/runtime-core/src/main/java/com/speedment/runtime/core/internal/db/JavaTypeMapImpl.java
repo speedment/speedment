@@ -16,13 +16,12 @@
  */
 package com.speedment.runtime.core.internal.db;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.runtime.core.db.JavaTypeMap;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.resultset.StandardJavaTypeMapping;
-import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Blob;
@@ -30,9 +29,13 @@ import java.sql.Clob;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.core.internal.db.RuleUtil.DEFAULT_RULE;
+import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -63,6 +66,7 @@ public class JavaTypeMapImpl implements JavaTypeMap {
         inner.put("LONGVARCHAR", String.class);
         inner.put("NUMERIC", BigDecimal.class);
         inner.put("DECIMAL", BigDecimal.class);
+        inner.put("NUMBER", BigDecimal.class);
         inner.put("BIT", Integer.class); ///
         inner.put("TINYINT", Byte.class);
         inner.put("TINYINT UNSIGNED", Short.class);
@@ -92,6 +96,7 @@ public class JavaTypeMapImpl implements JavaTypeMap {
         inner.put("UUID", UUID.class);
         
         installer.accept(inner);
+        rules.add(DEFAULT_RULE);
         assertJavaTypesKnown();
     }
     

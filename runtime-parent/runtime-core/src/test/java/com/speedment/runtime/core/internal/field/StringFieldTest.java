@@ -16,22 +16,22 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.speedment.runtime.core.internal.field.Entity.NAME;
 import static com.speedment.runtime.core.internal.util.AssertUtil.assertThrown;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author pemi
  */
-public class StringFieldTest extends BaseFieldTest {
+final class StringFieldTest extends BaseFieldTest {
 
     @Test
-    public void equalIgnoreCase() throws Exception {
+    void equalIgnoreCase() {
         final List<Entity> expected = collect(e -> e.getName() != null && e.getName().equalsIgnoreCase("abcdef"));
         final List<Entity> result = collect(NAME.equalIgnoreCase("abcdef"));
 
@@ -41,7 +41,7 @@ public class StringFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void notEqualIgnoreCase() throws Exception {
+    void notEqualIgnoreCase() {
         final List<Entity> expected = collect(e -> e.getName() != null && !e.getName().equalsIgnoreCase("abcdef"));
         final List<Entity> result = collect(NAME.notEqualIgnoreCase("abcdef"));
 
@@ -51,7 +51,7 @@ public class StringFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void startsWith() throws Exception {
+    void startsWith() {
 
         //assertTrue(STARTS_WITH_PREDICATE.test("ab", "abc"));
         final List<Entity> expected = collect(e -> e.getName() != null && e.getName().startsWith("abc"));
@@ -66,7 +66,7 @@ public class StringFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void endsWith() throws Exception {
+    void endsWith() {
         
         final List<Entity> expected = collect(e -> e.getName() != null && e.getName().endsWith("f"));
         final List<Entity> result = collect(NAME.endsWith("f"));
@@ -79,7 +79,7 @@ public class StringFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void contains() throws Exception {
+    void contains()  {
 
         final List<Entity> expected = collect(e -> e.getName() != null && e.getName().contains("a"));
         final List<Entity> result = collect(NAME.contains("a"));
@@ -92,14 +92,14 @@ public class StringFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void isEmpty() throws Exception {
+    void isEmpty() {
         final List<Entity> expected = collect(e -> e.getName() == null || e.getName().isEmpty());
         final List<Entity> result = collect(NAME.isEmpty());
         assertEquals(expected, result);
     }
 
     @Test
-    public void isNotEmpty() throws Exception {
+    void isNotEmpty()  {
         final List<Entity> expected = collect(e -> e.getName() != null && !e.getName().isEmpty());
         final List<Entity> result = collect(NAME.isNotEmpty());
         assertEquals(expected, result);

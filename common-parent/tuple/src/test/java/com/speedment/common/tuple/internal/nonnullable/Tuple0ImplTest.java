@@ -16,11 +16,12 @@
  */
 package com.speedment.common.tuple.internal.nonnullable;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-public final class Tuple0ImplTest extends AbstractTupleImplTest<Tuple0Impl> {
+final class Tuple0ImplTest extends AbstractTupleImplTest<Tuple0Impl> {
     
-    public Tuple0ImplTest() {
+    Tuple0ImplTest() {
         super(() -> (Tuple0Impl) Tuple0Impl.EMPTY_TUPLE, 0);
     }
 }

@@ -21,18 +21,18 @@
  */
 package com.speedment.runtime.core.internal.code.model.java;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author pemi
  */
-public class SimpleModelTest extends SimpleModel {
+final class SimpleModelTest extends SimpleModel {
     
     @Test
-    public void testModel() {
+    void testModel() {
         assertNotNull(project);
         assertNotNull(dbms);
         assertNotNull(schema);

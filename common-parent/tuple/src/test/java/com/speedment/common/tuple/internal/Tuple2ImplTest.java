@@ -14,90 +14,87 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.common.tuple.internal;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.internal.nonnullable.Tuple2Impl;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class Tuple2ImplTest {
+final class Tuple2ImplTest {
 
     private static final Integer ONE = 1;
     private static final String TWO = "two";
     private Tuple2<Integer, String> t2;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         t2 = new Tuple2Impl<>(ONE, TWO);
     }
 
     @Test
-    public void testGet0() {
+    void testGet0() {
         assertEquals(ONE, t2.get0());
     }
 
     @Test
-    public void testGet1() {
+    void testGet1() {
         assertEquals(TWO, t2.get1());
     }
 
     @Test
-    public void testGetIndex0() {
+    void testGetIndex0() {
         assertEquals(ONE, t2.get(0));
     }
 
     @Test
-    public void testGetIndex1() {
+    void testGetIndex1() {
         assertEquals(TWO, t2.get(1));
     }
 
     @Test
-    public void testLength() {
+    void testLength() {
         assertEquals(2, t2.degree());
     }
 
     @Test
-    public void testStream() {
+    void testStream() {
         final List<Object> expected = Arrays.asList(ONE, TWO);
         final List<Object> actual = t2.stream().collect(toList());
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testStreamOf() {
+    void testStreamOf() {
         final List<String> expected = Arrays.asList(TWO);
         final List<String> actual = t2.streamOf(String.class).collect(toList());
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         final Tuple2<Integer, String> expected = new Tuple2Impl<>(ONE, TWO);
         assertEquals(expected, t2);
     }
 
     @Test
-    public void testHashcode() {
+    void testHashcode() {
         final Tuple2<Integer, String> expected = new Tuple2Impl<>(ONE, TWO);
         assertEquals(expected.hashCode(), t2.hashCode());
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         final String toString = t2.toString();
         System.out.println(toString);
         assertTrue(toString.contains(ONE.toString()));

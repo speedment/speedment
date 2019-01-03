@@ -32,12 +32,13 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.test_support.MockDbmsType;
 import com.speedment.runtime.test_support.MockEntity;
 import com.speedment.runtime.test_support.MockEntityUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *
@@ -58,7 +59,7 @@ public class FilterSortedSkipOptimizer_OptimizeTest {
     private AsynchronousQueryResult<MockEntity> asynchronousQueryResult;
     private SqlStreamOptimizerInfo<MockEntity> sqlStreamOptimizerInfo;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new FilterSortedSkipOptimizer<>();
         asynchronousQueryResult = new AsynchronousQueryResultImpl<>(

@@ -16,113 +16,115 @@
  */
 package com.speedment.common.json;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import static org.junit.Assert.*;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author Emil Forslund
  */
-public class JsonTest {
+final class JsonTest {
     
     @Test
-    public void testParse_String() {
+    void testParse_String() {
         final String json = "{\"message\":\"Hello, World!\"}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", "Hello, World!", map.get("message"));
+        assertEquals("Hello, World!", map.get("message"));
     }
     
     @Test
-    public void testParse_String2() {
+    void testParse_String2() {
         final String json = "{\"title\" : \"Greetings!\", \"message\" : \"Hello, World!\"}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", "Hello, World!", map.get("message"));
-        assertEquals("Check value: ", "Greetings!", map.get("title"));
+        assertEquals("Hello, World!", map.get("message"));
+        assertEquals("Greetings!", map.get("title"));
     }
     
     @Test
-    public void testParse_Long() {
+    void testParse_Long() {
         final String json = "{\"id\" : 5678}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", 5678L, map.get("id"));
+        assertEquals(5678L, map.get("id"));
     }
     
     @Test
-    public void testParse_NegativeLong() {
+    void testParse_NegativeLong() {
         final String json = "{\"id\" : -5678}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", -5678L, map.get("id"));
+        assertEquals(-5678L, map.get("id"));
     }
     
     @Test
-    public void testParse_Double() {
+    void testParse_Double() {
         final String json = "{\"average\" : 0.6789}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", 0.6789, map.get("average"));
+        assertEquals(0.6789, map.get("average"));
     }
     
     @Test
-    public void testParse_NegativeDouble() {
+    void testParse_NegativeDouble() {
         final String json = "{\"average\" : -0.6789}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", -0.6789, map.get("average"));
+        assertEquals(-0.6789, map.get("average"));
     }
     
     @Test
-    public void testParse_False() {
+    void testParse_False() {
         final String json = "{\"condition\" : false}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", false, map.get("condition"));
+        assertEquals(false, map.get("condition"));
     }
     
     @Test
-    public void testParse_True() {
+    void testParse_True() {
         final String json = "{\"condition\" : true}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", true, map.get("condition"));
+        assertEquals(true, map.get("condition"));
     }
     
     @Test
-    public void testParse_Null() {
+    void testParse_Null() {
         final String json = "{\"random\" : null}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertTrue("Key exists: ", map.containsKey("random"));
-        assertNull("Check value: ", map.get("random"));
+        assertTrue(map.containsKey("random"));
+        assertNull(map.get("random"));
     }
     
     @Test
-    public void testParse_Array() {
+    void testParse_Array() {
         final String json = "{\"items\" : [\"one\", \"two\", \"three\"]}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         final List<String> expected = Arrays.asList("one", "two", "three");
         assertNotNull(map);
-        assertEquals("Check value: ", expected, map.get("items"));
+        assertEquals(expected, map.get("items"));
     }
     
     @Test
-    public void testParse_ArrayOfObjects() {
+    void testParse_ArrayOfObjects() {
         final String json = "{\"numbers\" : [{\"one\":1}, {\"two\":2}, {\"three\":3}]}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
@@ -131,13 +133,13 @@ public class JsonTest {
         @SuppressWarnings("unchecked")
         final List<Map<String, Object>> list = (List<Map<String, Object>>) map.get("numbers");
         
-        assertEquals("Check one: ", 1L, list.get(0).get("one"));
-        assertEquals("Check one: ", 2L, list.get(1).get("two"));
-        assertEquals("Check one: ", 3L, list.get(2).get("three"));
+        assertEquals(1L, list.get(0).get("one"));
+        assertEquals(2L, list.get(1).get("two"));
+        assertEquals(3L, list.get(2).get("three"));
     }
     
     @Test
-    public void testParse_ArrayOfNegativeObjects() {
+    void testParse_ArrayOfNegativeObjects() {
         final String json = "{\"numbers\" : [{\"one\":-1}, {\"two\":-2}, {\"three\":-3}]}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
@@ -146,17 +148,17 @@ public class JsonTest {
         @SuppressWarnings("unchecked")
         final List<Map<String, Object>> list = (List<Map<String, Object>>) map.get("numbers");
         
-        assertEquals("Check one: ", -1L, list.get(0).get("one"));
-        assertEquals("Check one: ", -2L, list.get(1).get("two"));
-        assertEquals("Check one: ", -3L, list.get(2).get("three"));
+        assertEquals(-1L, list.get(0).get("one"));
+        assertEquals(-2L, list.get(1).get("two"));
+        assertEquals(-3L, list.get(2).get("three"));
     }
 
     @Test
-    public void testParse_EscapedString() {
+    void testParse_EscapedString() {
         final String json = "{\"message\":\"Hello, \\\"World\\\"!\\n\"}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
-        assertEquals("Check value: ", "Hello, \"World\"!\n", map.get("message"));
+        assertEquals("Hello, \"World\"!\n", map.get("message"));
     }
 }

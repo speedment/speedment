@@ -80,6 +80,9 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
         if (!baseClass.isInstance(obj)) {
             return false;
         }

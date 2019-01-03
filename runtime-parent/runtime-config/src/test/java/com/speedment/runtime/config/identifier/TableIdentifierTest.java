@@ -21,19 +21,20 @@
  */
 package com.speedment.runtime.config.identifier;
 
-import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class TableIdentifierTest {
+final class TableIdentifierTest {
 
     @Test
-    public void testOf() {
+    void testOf() {
         final String db = "db";
         final String sc = "sc";
         final String ta = "ta";

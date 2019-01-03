@@ -103,7 +103,7 @@ public interface Metrics {
      * @return Returns an empty metrics
      */
     static Metrics empty() {
-        return MetricsImpl.EMPTY;
+        return MetricsImpl.EMPTY_INSTANCE;
     }
 
 }

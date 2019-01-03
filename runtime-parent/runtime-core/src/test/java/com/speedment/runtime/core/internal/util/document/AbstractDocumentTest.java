@@ -19,7 +19,7 @@ package com.speedment.runtime.core.internal.util.document;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.*;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.AbstractMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ public abstract class AbstractDocumentTest {
     protected ForeignKey foreignKeyA2_C1, foreignKeyB2_D1;
     protected ForeignKeyColumn foreignKeyColumnA2_C1, foreignKeyColumnB2_D1;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         final Map<String, Object> data = map(
             entry(Project.NAME, "Project"),
