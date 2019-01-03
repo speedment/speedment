@@ -98,21 +98,25 @@
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>
+            <version>${speedment.version}</version>
         </dependency>
         
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-field</artifactId>
+            <version>${speedment.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
+            <version>${speedment.version}</version>
         </dependency>    
         
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>connector-mysql</artifactId>
+            <version>${speedment.version}</version>
         </dependency>                
         
     </dependencies>

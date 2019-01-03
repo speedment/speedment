@@ -37,7 +37,7 @@ public final class Json {
 
     private Json() {}
 
-    private final static boolean PRETTY = true;
+    public static boolean PRETTY = true;
     
     /**
      * Parses the specified object to a JSON string. The following

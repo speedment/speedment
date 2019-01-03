@@ -39,6 +39,7 @@
     </description>
     
     <modules>
+        <module>runtime-welcome</module>
         <module>runtime-compute</module>
         <module>runtime-config</module>
         <module>runtime-typemapper</module>
@@ -49,7 +50,6 @@
         <module>runtime-connector-parent</module>
         <module>runtime-application</module>
         <module>runtime-all</module>
-        <module>runtime-welcome</module>
     </modules>
     
     <dependencyManagement>
