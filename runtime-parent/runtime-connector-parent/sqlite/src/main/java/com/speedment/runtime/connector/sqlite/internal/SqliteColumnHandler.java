@@ -9,7 +9,7 @@ import java.util.function.Predicate;
  * Implementation of {@link DbmsColumnHandler} for SQLite databases.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public final class SqliteColumnHandler implements DbmsColumnHandler {
     @Override

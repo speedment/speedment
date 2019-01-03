@@ -11,7 +11,7 @@ import static java.lang.String.format;
 
 /**
  * @author Emil Forslund
- * @since  1.0.0
+ * @since  3.1.10
  */
 public class MockDbmsHandlerComponent implements DbmsHandlerComponent {
 

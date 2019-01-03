@@ -13,7 +13,7 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public final class MockPoolableConnection implements PoolableConnection {
 

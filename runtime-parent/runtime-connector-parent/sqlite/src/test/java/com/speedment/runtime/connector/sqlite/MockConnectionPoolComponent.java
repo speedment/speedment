@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 /**
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public final class MockConnectionPoolComponent implements ConnectionPoolComponent {
 

@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 /**
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public class MockProgress implements ProgressMeasure {
 

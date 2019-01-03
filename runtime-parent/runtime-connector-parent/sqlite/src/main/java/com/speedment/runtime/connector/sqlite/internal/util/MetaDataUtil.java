@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * Utility class used to read values from JDBC Metadata objects.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public final class MetaDataUtil {
 

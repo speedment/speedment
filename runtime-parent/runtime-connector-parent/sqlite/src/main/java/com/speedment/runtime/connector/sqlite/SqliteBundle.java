@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * The main bundle for adding runtime support for the SQLite database manager.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public class SqliteBundle implements InjectBundle {
 

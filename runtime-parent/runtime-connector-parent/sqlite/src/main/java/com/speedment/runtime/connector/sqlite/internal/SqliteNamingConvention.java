@@ -11,7 +11,7 @@ import static java.util.Collections.emptySet;
  * databases.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public class SqliteNamingConvention implements DatabaseNamingConvention {
 

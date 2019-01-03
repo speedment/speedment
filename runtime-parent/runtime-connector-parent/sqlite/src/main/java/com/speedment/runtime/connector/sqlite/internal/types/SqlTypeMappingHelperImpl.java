@@ -28,7 +28,7 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
  * Default implementation of the {@link SqlTypeMappingHelper} interface.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public final class SqlTypeMappingHelperImpl implements SqlTypeMappingHelper {
 

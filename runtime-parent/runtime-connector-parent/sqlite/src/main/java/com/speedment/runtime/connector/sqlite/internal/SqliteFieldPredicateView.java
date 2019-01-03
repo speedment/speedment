@@ -8,7 +8,7 @@ import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOper
 
 /**
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public class SqliteFieldPredicateView extends AbstractFieldPredicateView {
 

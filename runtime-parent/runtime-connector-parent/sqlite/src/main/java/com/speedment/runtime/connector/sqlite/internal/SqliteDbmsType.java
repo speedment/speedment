@@ -25,7 +25,7 @@ import static java.util.Collections.emptySet;
  * Implementation of {@link DbmsType} for the SQLite database type.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public final class SqliteDbmsType implements DbmsType {
 

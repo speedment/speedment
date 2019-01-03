@@ -12,9 +12,9 @@ import com.speedment.runtime.connector.sqlite.MockProjectComponent;
 import com.speedment.runtime.connector.sqlite.ScriptRunner;
 import com.speedment.runtime.connector.sqlite.SqliteBundle;
 import com.speedment.runtime.core.component.ProjectComponent;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,9 +33,9 @@ import static java.util.Collections.singletonList;
 
 /**
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
-public class SqliteMetadataHandlerTest {
+class SqliteMetadataHandlerTest {
 
     private final static String URL = "jdbc:sqlite::memory:";
     private final static String FILE = "/employees.sql";
@@ -47,8 +47,8 @@ public class SqliteMetadataHandlerTest {
     private Connection conn;
     private Injector injector;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         try {
             conn = DriverManager.getConnection(URL);
 
@@ -100,8 +100,8 @@ public class SqliteMetadataHandlerTest {
         }
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         if (conn != null) {
             try {
                 conn.close();
@@ -114,7 +114,7 @@ public class SqliteMetadataHandlerTest {
     }
 
     @Test
-    public void readSchemaMetadata() {
+    void readSchemaMetadata() {
         final SqliteMetadataHandler metadataHandler =
             injector.getOrThrow(SqliteMetadataHandler.class);
 

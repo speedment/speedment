@@ -65,7 +65,7 @@ import static java.util.stream.Collectors.toSet;
  * Implementation of {@link DbmsMetadataHandler} for SQLite databases.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public final class SqliteMetadataHandler implements DbmsMetadataHandler {
 

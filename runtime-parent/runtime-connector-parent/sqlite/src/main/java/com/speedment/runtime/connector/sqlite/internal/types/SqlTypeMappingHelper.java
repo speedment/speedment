@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
  * Used to load the type map from a SQL database asynchronously.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public interface SqlTypeMappingHelper {
 

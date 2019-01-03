@@ -8,7 +8,7 @@ import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
  * The implementation of {@link DbmsOperationHandler} for SQLite databases.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 @InjectKey(DbmsOperationHandler.class)
 public final class SqliteOperationHandler

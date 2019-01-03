@@ -12,7 +12,7 @@ import java.util.StringJoiner;
  * Utility class for writing pretty output to the log.
  *
  * @author Emil Forslund
- * @since  3.1.9
+ * @since  3.1.10
  */
 public final class LoggingUtil {
 
