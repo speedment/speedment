@@ -41,5 +41,6 @@
     <modules>
         <module>custom-typemapper</module>
         <module>basic-example</module>
+        <module>spring-webshop</module>
     </modules>
 </project>

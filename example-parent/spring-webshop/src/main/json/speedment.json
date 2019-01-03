@@ -1,0 +1,285 @@
+{
+  "config" : {
+    "speedmentVersion" : "Speedment:3.1.10-SNAPSHOT",
+    "nameProtected" : false,
+    "expanded" : true,
+    "appId" : "4bc98d9c-7106-403a-b04c-daadee8825ca",
+    "companyName" : "speedment",
+    "name" : "webshop",
+    "packageLocation" : "target/generated-sources/main/java/",
+    "id" : "webshop",
+    "packageName" : "com.speedment.example.webshop.db",
+    "dbmses" : [
+      {
+        "nameProtected" : true,
+        "expanded" : true,
+        "port" : 0,
+        "schemas" : [
+          {
+            "nameProtected" : true,
+            "tables" : [
+              {
+                "nameProtected" : true,
+                "expanded" : false,
+                "primaryKeyColumns" : [
+                  {
+                    "expanded" : true,
+                    "name" : "installed_rank",
+                    "id" : "installed_rank",
+                    "ordinalPosition" : 1,
+                    "enabled" : true
+                  }
+                ],
+                "indexes" : [
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "flyway_schema_history_s_idx",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "NONE",
+                        "expanded" : true,
+                        "name" : "success",
+                        "id" : "success",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "flyway_schema_history_s_idx",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : true,
+                    "name" : "sqlite_autoindex_flyway_schema_history_1",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "NONE",
+                        "expanded" : true,
+                        "name" : "installed_rank",
+                        "id" : "installed_rank",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "sqlite_autoindex_flyway_schema_history_1",
+                    "enabled" : true
+                  }
+                ],
+                "isView" : false,
+                "columns" : [
+                  {
+                    "databaseType" : "java.lang.Integer",
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "name" : "installed_rank",
+                    "id" : "installed_rank",
+                    "ordinalPosition" : 1,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.String",
+                    "expanded" : true,
+                    "nullable" : true,
+                    "name" : "version",
+                    "id" : "version",
+                    "ordinalPosition" : 2,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.String",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "name" : "description",
+                    "id" : "description",
+                    "ordinalPosition" : 3,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.String",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "name" : "type",
+                    "id" : "type",
+                    "ordinalPosition" : 4,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.String",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "name" : "script",
+                    "id" : "script",
+                    "ordinalPosition" : 5,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.Integer",
+                    "expanded" : true,
+                    "nullable" : true,
+                    "name" : "checksum",
+                    "id" : "checksum",
+                    "ordinalPosition" : 6,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.String",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "name" : "installed_by",
+                    "id" : "installed_by",
+                    "ordinalPosition" : 7,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.String",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "name" : "installed_on",
+                    "id" : "installed_on",
+                    "ordinalPosition" : 8,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.Integer",
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "name" : "execution_time",
+                    "id" : "execution_time",
+                    "ordinalPosition" : 9,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.Boolean",
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "name" : "success",
+                    "id" : "success",
+                    "ordinalPosition" : 10,
+                    "enabled" : true
+                  }
+                ],
+                "name" : "flyway_schema_history",
+                "id" : "flyway_schema_history",
+                "enabled" : false
+              },
+              {
+                "nameProtected" : true,
+                "expanded" : true,
+                "primaryKeyColumns" : [
+                  {
+                    "expanded" : true,
+                    "name" : "id",
+                    "id" : "id",
+                    "ordinalPosition" : 1,
+                    "enabled" : true
+                  }
+                ],
+                "indexes" : [
+                  {
+                    "expanded" : false,
+                    "unique" : true,
+                    "name" : "sqlite_autoindex_products_1",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "NONE",
+                        "expanded" : true,
+                        "name" : "id",
+                        "id" : "id",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "sqlite_autoindex_products_1",
+                    "enabled" : true
+                  }
+                ],
+                "isView" : false,
+                "columns" : [
+                  {
+                    "databaseType" : "java.lang.Integer",
+                    "nameProtected" : true,
+                    "expanded" : true,
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "nullable" : false,
+                    "autoIncrement" : false,
+                    "name" : "id",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "id",
+                    "ordinalPosition" : 1,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.String",
+                    "nameProtected" : true,
+                    "expanded" : true,
+                    "nullable" : false,
+                    "autoIncrement" : false,
+                    "name" : "name",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "name",
+                    "ordinalPosition" : 2,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.String",
+                    "nameProtected" : true,
+                    "expanded" : true,
+                    "nullable" : false,
+                    "autoIncrement" : false,
+                    "name" : "description",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "description",
+                    "ordinalPosition" : 3,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.Integer",
+                    "nameProtected" : true,
+                    "expanded" : true,
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "nullable" : false,
+                    "autoIncrement" : false,
+                    "name" : "stock",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "stock",
+                    "ordinalPosition" : 4,
+                    "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.Integer",
+                    "nameProtected" : true,
+                    "expanded" : true,
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "nullable" : false,
+                    "autoIncrement" : false,
+                    "name" : "price",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "price",
+                    "ordinalPosition" : 5,
+                    "enabled" : true
+                  }
+                ],
+                "name" : "products",
+                "alias" : "product",
+                "id" : "products",
+                "packageName" : "com.speedment.example.webshop.db.products",
+                "enabled" : true
+              }
+            ],
+            "expanded" : true,
+            "name" : "schema",
+            "id" : "schema",
+            "enabled" : true
+          }
+        ],
+        "typeName" : "SQLite",
+        "localPath" : "webshop.db",
+        "name" : "Dbms1",
+        "id" : "Dbms1",
+        "enabled" : true
+      }
+    ],
+    "enabled" : true
+  }
+}
