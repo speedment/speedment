@@ -128,7 +128,7 @@ class SqliteMetadataHandlerTest {
 
         try {
             final Project loaded = task.get(10, TimeUnit.SECONDS);
-            System.out.println(Json.toJson(loaded.getData()));
+            //System.out.println(Json.toJson(loaded.getData()));
         } catch (final InterruptedException | ExecutionException | TimeoutException ex) {
             throw new RuntimeException(ex);
         }

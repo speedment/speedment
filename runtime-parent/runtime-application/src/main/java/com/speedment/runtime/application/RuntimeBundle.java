@@ -36,6 +36,7 @@ import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerCompo
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
 import com.speedment.runtime.core.internal.component.transaction.TransactionComponentImpl;
+import com.speedment.runtime.core.internal.db.DriverComponentImpl;
 import com.speedment.runtime.join.JoinBundle;
 
 import java.util.stream.Stream;
@@ -65,8 +66,8 @@ public class RuntimeBundle implements InjectBundle {
             StatisticsReporterSchedulerComponentImpl.class,
             SqlStreamOptimizerComponentImpl.class,
             SqlStreamTerminatorComponentImpl.class,
-            TransactionComponentImpl.class
-
+            TransactionComponentImpl.class,
+            DriverComponentImpl.class
         )
             .withBundle(new MySqlBundle())
             .withBundle(new MariaDbBundle())

@@ -4,13 +4,7 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.db.ConnectionUrlGenerator;
-import com.speedment.runtime.core.db.DatabaseNamingConvention;
-import com.speedment.runtime.core.db.DbmsColumnHandler;
-import com.speedment.runtime.core.db.DbmsMetadataHandler;
-import com.speedment.runtime.core.db.DbmsOperationHandler;
-import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.db.FieldPredicateView;
+import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.util.List;
@@ -31,6 +25,7 @@ public final class SqliteDbmsType implements DbmsType {
 
     public final static String SQLITE = "SQLite";
 
+    private @Inject DriverComponent drivers;
     private @Inject SqliteMetadataHandler metadataHandler;
     private @Inject SqliteOperationHandler operationHandler;
 
@@ -91,7 +86,7 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public boolean isSupported() {
-        return true;
+        return drivers.driver(getDriverName()).isPresent();
     }
 
     @Override

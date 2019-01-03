@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.db;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
@@ -25,6 +24,7 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsColumnHandler;
 import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.runtime.core.db.DriverComponent;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.sql.Driver;
@@ -37,7 +37,6 @@ import java.util.function.Predicate;
 import static com.speedment.common.injector.State.CREATED;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.LongRangeUtil.requireNonNegative;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -58,8 +57,7 @@ public abstract class AbstractDbmsType implements DbmsType {
         }
     };
 
-    @Inject
-    private Injector injector;
+    @Inject private DriverComponent drivers;
 
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {
@@ -86,31 +84,7 @@ public abstract class AbstractDbmsType implements DbmsType {
     }
 
     protected Optional<Driver> driver(String driverName) {
-        requireNonNull(driverName);
-        Driver driver = null;
-        try {
-            final Class<?> driverClass = Class.forName(
-                driverName,
-                true,
-                injector.classLoader()
-            );
-            if (Driver.class.isAssignableFrom(driverClass)) {
-                driver = (Driver) driverClass.newInstance();
-            }
-        } catch (final ClassNotFoundException ex) {
-            try {
-                // Some JavaEE servers, notably Tomcat, runs the driver on the
-                // standard classloader.  This is the reason we need to check an
-                // extra time.
-                final Class<?> driverClass = Class.forName(driverName);
-                if (Driver.class.isAssignableFrom(driverClass)) {
-                    driver = (Driver) driverClass.newInstance();
-                }
-            } catch (final ClassNotFoundException | IllegalAccessException | InstantiationException ex2) {
-            }
-        } catch (IllegalAccessException | InstantiationException e) {
-        }
-        return Optional.ofNullable(driver);
+        return drivers.driver(driverName);
     }
 
     @Override
