@@ -4,6 +4,7 @@ import com.speedment.example.webshop.db.WebshopApplication;
 import com.speedment.example.webshop.db.WebshopApplicationBuilder;
 import com.speedment.example.webshop.db.products.ProductManager;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
+import org.flywaydb.core.Flyway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class SpeedmentConfig {
 
     @Bean
-    WebshopApplication application() {
+    WebshopApplication application(Flyway flyway) {
         return new WebshopApplicationBuilder().build();
     }
 

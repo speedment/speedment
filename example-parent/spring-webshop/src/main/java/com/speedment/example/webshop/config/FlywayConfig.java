@@ -9,9 +9,13 @@ public class FlywayConfig {
 
     @Bean
     Flyway migrate() {
-        return Flyway.configure()
+        final Flyway flyway = Flyway.configure()
             .dataSource("jdbc:sqlite:webshop.db", null, null)
             .load();
+
+        flyway.migrate();
+
+        return flyway;
     }
 
 }

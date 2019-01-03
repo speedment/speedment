@@ -6,6 +6,7 @@ import com.speedment.example.webshop.db.products.ProductManager;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,7 +86,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping
+    @PostMapping(consumes=MediaType.APPLICATION_JSON_VALUE)
     void postProduct(@RequestBody PostProduct body) {
         products.persist(new ProductImpl()
             .setId(ThreadLocalRandom.current().nextInt())
@@ -135,7 +136,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path="/{id}", consumes=MediaType.APPLICATION_JSON_VALUE)
     void putProduct(@PathVariable("id") int id, @RequestBody PutProduct body) {
         final Product product = new ProductImpl().setId(id);
         ofNullable(body.getName()).ifPresent(product::setName);
