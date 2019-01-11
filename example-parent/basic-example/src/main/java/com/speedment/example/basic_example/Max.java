@@ -73,7 +73,7 @@ public class Max {
     }
 
     private void maxViaOrder() {
-        ExampleUtil.log("max");
+        ExampleUtil.log("maxViaOrder");
 
         Optional<Film> longestFilm = films.stream()
             .sorted(Film.LENGTH.reversed())
