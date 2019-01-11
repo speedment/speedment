@@ -20,7 +20,6 @@ import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PersistenceComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -30,6 +29,7 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.STARTED;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -52,35 +52,10 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     private @Inject StreamSupplierComponent streamSupplierComponent;
-    private PersistenceComponent persistenceComponent;
-    private TableIdentifier<ENTITY> tableId;
 
-    private Persister<ENTITY> persister;
-    private Updater<ENTITY> updater;
-    private Remover<ENTITY> remover;
+    private PersistenceProvider<ENTITY> persistenceProvider;
 
-    protected AbstractManager() {}
-
-    /**
-     * In the {@link State#INITIALIZED}-phase, create an instance of each of the
-     * three interfaces {@link Persister}, {@link Updater} and {@link Remover} 
-     * to use when making changes to the data store.
-     * <p>
-     * THIS METHOD IS INTENDED TO BE INVOKED AUTOMATICALLY BY THE DEPENDENCY
-     * INJECTOR. IT SHOULD THEREFORE NEVER BE CALLED DIRECTLY!
-     * 
-     * @param persistenceComponent  auto-injected persistenceComponent
-     */
-    @ExecuteBefore(INITIALIZED)
-    final void createSupport(
-            @WithState(INITIALIZED) PersistenceComponent persistenceComponent) {
-        
-        tableId = getTableIdentifier();
-
-        this.persistenceComponent = persistenceComponent; // TODO - figure out if @Inject on the field will do the same (i.e. enrure initialized
-        this.persister = persistenceComponent.persister(tableId);
-        this.updater   = persistenceComponent.updater(tableId);
-        this.remover   = persistenceComponent.remover(tableId);
+    protected AbstractManager() {
     }
 
     /**
@@ -103,6 +78,11 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         managerComponent.put(this);
     }
 
+    @ExecuteBefore(STARTED)
+    final void resolve(@WithState(INITIALIZED) PersistenceComponent persistenceComponent) {
+        persistenceProvider = persistenceComponent.persistenceProvider(this);
+    }
+
     @Override
     public Stream<ENTITY> stream() {
         return streamSupplierComponent.stream(
@@ -113,26 +93,26 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     @Override
     public Persister<ENTITY> persister() {
-        return persister;
+        return persistenceProvider.persister();
     }
 
     @Override
     public Persister<ENTITY> persister(HasLabelSet<ENTITY> fields) {
-        return persistenceComponent.persister(tableId, fields);
+        return persistenceProvider.persister(fields);
     }
 
     @Override
     public Updater<ENTITY> updater() {
-        return updater;
+        return persistenceProvider.updater();
     }
 
     @Override
     public Updater<ENTITY> updater(HasLabelSet<ENTITY> fields) {
-        return persistenceComponent.updater(tableId, fields);
+        return persistenceProvider.updater(fields);
     }
 
     @Override
     public Remover<ENTITY> remover() {
-        return remover;
+        return persistenceProvider.remover();
     }
 }
