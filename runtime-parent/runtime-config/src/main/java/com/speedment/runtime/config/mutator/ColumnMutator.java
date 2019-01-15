@@ -19,12 +19,17 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
+import com.speedment.runtime.config.mutator.trait.HasColumnSizeMutator;
+import com.speedment.runtime.config.mutator.trait.HasDecimalDigitsMutator;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
 
-import static com.speedment.runtime.config.Column.*;
-import com.speedment.runtime.config.mutator.trait.HasIdMutator;
+import static com.speedment.runtime.config.Column.AUTO_INCREMENT;
+import static com.speedment.runtime.config.Column.DATABASE_TYPE;
+import static com.speedment.runtime.config.Column.ENUM_CONSTANTS;
+import static com.speedment.runtime.config.Column.TYPE_MAPPER;
 import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
 
 /**
@@ -37,7 +42,9 @@ public class ColumnMutator<DOC extends Column> extends DocumentMutatorImpl<DOC> 
         HasEnabledMutator<DOC>, 
         HasIdMutator<DOC>,
         HasNameMutator<DOC>, 
-        HasAliasMutator<DOC>, 
+        HasAliasMutator<DOC>,
+        HasColumnSizeMutator<DOC>,
+        HasDecimalDigitsMutator<DOC>,
         HasOrdinalPositionMutator<DOC> {
 
     public ColumnMutator(DOC column) {
