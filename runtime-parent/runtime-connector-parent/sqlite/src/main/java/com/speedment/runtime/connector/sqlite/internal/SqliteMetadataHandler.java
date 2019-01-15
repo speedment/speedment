@@ -48,6 +48,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -71,6 +72,8 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
 
     private final static Logger LOGGER = LoggerManager.getLogger(SqliteMetadataHandler.class);
     private final static String[] TABLES_AND_VIEWS = {"TABLE", "VIEW"};
+    private final static Pattern INTEGER_BOOLEAN_TYPE = Pattern.compile(
+        "^(?:BIT|INT|INTEGER|TINYINT)\\(1\\)$");
 
     /**
      * Fix #566: Some connectors throw an exception if getIndexInfo() is invoked
@@ -102,6 +105,13 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
         javaTypeMap.addRule((mappings, md) ->
             md.getTypeName().toUpperCase().startsWith("DECIMAL(")
                 ? Optional.of(Double.class) : Optional.empty()
+        );
+
+        javaTypeMap.addRule((mappings, md) ->
+            Optional.of(md.getTypeName())
+                .map(String::toUpperCase)
+                .filter(str -> INTEGER_BOOLEAN_TYPE.matcher(str).find())
+                .map(str -> Boolean.class)
         );
     }
 
@@ -320,6 +330,14 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                         return Object.class;
                     })
             );
+
+            if (!md.isDecimalDigitsNull()) {
+                column.mutator().setDecimalDigits(md.getDecimalDigits());
+            }
+
+            if (!md.isColumnSizeNull() && md.getColumnSize() != 2_000_000_000) {
+                column.mutator().setColumnSize(md.getColumnSize());
+            }
 
             if (isAutoIncrement(md)) column.mutator().setAutoIncrement(true);
 
