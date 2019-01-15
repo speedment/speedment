@@ -44,7 +44,7 @@ public class ProductController {
     Product getProductById(@PathVariable("id") int id) {
         return products.stream()
             .filter(Product.ID.equal(id))
-            .findAny().orElseThrow();
+            .findAny().get();
     }
 
     private final static class PostProduct {
