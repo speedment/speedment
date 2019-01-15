@@ -98,6 +98,11 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             md.getTypeName().toUpperCase().startsWith("NUMERIC(")
                 ? Optional.of(Double.class) : Optional.empty()
         );
+
+        javaTypeMap.addRule((mappings, md) ->
+            md.getTypeName().toUpperCase().startsWith("DECIMAL(")
+                ? Optional.of(Double.class) : Optional.empty()
+        );
     }
 
     @ExecuteBefore(State.RESOLVED)
