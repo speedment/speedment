@@ -48,6 +48,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -72,8 +73,21 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
 
     private final static Logger LOGGER = LoggerManager.getLogger(SqliteMetadataHandler.class);
     private final static String[] TABLES_AND_VIEWS = {"TABLE", "VIEW"};
+
     private final static Pattern INTEGER_BOOLEAN_TYPE = Pattern.compile(
         "^(?:BIT|INT|INTEGER|TINYINT)\\(1\\)$");
+
+    private final static Pattern BIT_TYPES = Pattern.compile(
+        "^BIT\\((\\d+)\\)$");
+
+    private final static Pattern SHORT_TYPES = Pattern.compile(
+        "^(?:UNSIGNED\\s+TINY\\s?INT|SHORT(?:\\s?INT)?)(?:\\((\\d+)\\))?$");
+
+    private final static Pattern INT_TYPES = Pattern.compile(
+        "^(?:UNSIGNED (?:SHORT|MEDIUM\\s?INT)|INT(?:EGER)?|MEDIUM\\s?INT)(?:\\((\\d+)\\))?$");
+
+    private final static Pattern LONG_TYPES = Pattern.compile(
+        "^(?:UNSIGNED(?: INT(?:EGER)?)|(?:UNSIGNED\\s*)?(?:BIG\\s?INT|LONG))(?:\\((\\d+)\\))?$");
 
     /**
      * Fix #566: Some connectors throw an exception if getIndexInfo() is invoked
@@ -113,6 +127,44 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                 .filter(str -> INTEGER_BOOLEAN_TYPE.matcher(str).find())
                 .map(str -> Boolean.class)
         );
+
+        javaTypeMap.addRule((mappings, md) -> patternMapper(SHORT_TYPES, md, Short.class));
+        javaTypeMap.addRule((mappings, md) -> patternMapper(LONG_TYPES, md, Long.class));
+        javaTypeMap.addRule((mappings, md) -> patternMapper(INT_TYPES, md, Integer.class));
+
+        javaTypeMap.addRule((mappings, md) ->
+            Optional.of(md.getTypeName())
+                .map(String::toUpperCase)
+                .map(BIT_TYPES::matcher)
+                .filter(Matcher::find)
+                .map(match -> match.group(1))
+                .map(Integer::parseInt)
+                .map(bits -> {
+                    if      (bits > Integer.SIZE) return Long.class;
+                    else if (bits > Short.SIZE)   return Integer.class;
+                    else if (bits > Byte.SIZE)    return Short.class;
+                    else return Byte.class;
+                })
+        );
+    }
+
+    private static Optional<Class<?>> patternMapper(Pattern pattern, ColumnMetaData md, Class<?> expected) {
+        return Optional.of(md.getTypeName())
+            .map(String::toUpperCase)
+            .map(pattern::matcher)
+            .filter(Matcher::find)
+            .map(match -> {
+                final String group = match.group(1);
+                if (group == null) {
+                    return expected;
+                } else {
+                    final int digits = Integer.parseInt(group);
+                    if      (digits > 11) return Long.class;
+                    else if (digits > 4)  return Integer.class;
+                    else if (digits > 2)  return Short.class;
+                    else                  return Byte.class;
+                }
+            });
     }
 
     @ExecuteBefore(State.RESOLVED)
@@ -309,6 +361,8 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             final ColumnMetaData md = ColumnMetaData.of(rs);
             final String columnName = md.getColumnName();
 
+            column.getData().put("debugColumnType", md.getTypeName());
+
             column.mutator().setId(columnName);
             column.mutator().setName(columnName);
             column.mutator().setOrdinalPosition(md.getOrdinalPosition());
@@ -385,7 +439,6 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             rsChild -> rsChild.getString("COLUMN_NAME"),
             mutator
         );
-
 
         if (!table.isView() && table.primaryKeyColumns().noneMatch(pk -> true)) {
             LOGGER.warn(format("Table '%s' does not have any primary key.",
