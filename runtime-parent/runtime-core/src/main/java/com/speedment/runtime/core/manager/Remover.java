@@ -35,13 +35,17 @@ import java.util.function.UnaryOperator;
 public interface Remover<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY> {
 
     /**
-     * Removes the entity from the data store, returning the same or a different
-     * entity with any auto-generated fields updated.
-     * 
-     * @param entity  the entity to remove
-     * @return        the removed entity (same instance or new is not defined)
-     * 
-     * @throws SpeedmentException  if removing the entity failed
+     * Removes the provided entity from the underlying database and returns the
+     * provided entity instance. If the deletion fails for any reason, an
+     * unchecked {@link SpeedmentException} is thrown.
+     * <p>
+     * Entities are uniquely identified by their primary key(s).
+     *
+     * @param entity to remove
+     * @return the provided entity instance
+     *
+     * @throws SpeedmentException if the underlying database throws an exception
+     * (e.g. SQLException)
      */
     @Override
     ENTITY apply(ENTITY entity) throws SpeedmentException;

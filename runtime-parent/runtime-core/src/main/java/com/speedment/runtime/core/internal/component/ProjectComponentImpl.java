@@ -44,7 +44,10 @@ public final class ProjectComponentImpl implements ProjectComponent {
 
     @ExecuteBefore(INITIALIZED)
     void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
-        project = metadata.makeProject();
+        project = requireNonNull(metadata.makeProject(),
+            "Metadata has not yet been loaded! This is probably due to an "
+                + "incorrect initialization order."
+        );;
     }
 
     @ExecuteBefore(STARTED)
@@ -64,11 +67,6 @@ public final class ProjectComponentImpl implements ProjectComponent {
 
     @Override
     public Project getProject() {
-        requireNonNull(project,
-            "Metadata has not yet been loaded! This is probably due to an "
-            + "incorrect initialization order."
-        );
-
         return project;
     }
 

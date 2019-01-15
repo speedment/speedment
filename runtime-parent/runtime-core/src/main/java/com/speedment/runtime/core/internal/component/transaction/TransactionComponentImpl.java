@@ -17,32 +17,34 @@
 package com.speedment.runtime.core.internal.component.transaction;
 
 import com.speedment.common.injector.State;
-import static com.speedment.common.injector.State.STARTED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
-import com.speedment.runtime.core.db.SqlConsumer;
 import com.speedment.runtime.core.component.transaction.DataSourceHandler;
 import com.speedment.runtime.core.component.transaction.Isolation;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
+import com.speedment.runtime.core.db.SqlConsumer;
 import com.speedment.runtime.core.exception.TransactionException;
+
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static com.speedment.common.injector.State.STARTED;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  *
@@ -97,11 +99,11 @@ public class TransactionComponentImpl implements TransactionComponent {
         if (singleDbms == null) {
             throw new IllegalStateException("This project does not contain exactly one Dbms.");
         }
-        return creaateTransactionHandler(singleDbms);
+        return createTransactionHandler(singleDbms);
     }
 
     @Override
-    public <T> TransactionHandler creaateTransactionHandler(T dataSource) {
+    public <T> TransactionHandler createTransactionHandler(T dataSource) {
         return new TransactionHandlerImpl(this, dataSource, findMapping(dataSource));
     }
 

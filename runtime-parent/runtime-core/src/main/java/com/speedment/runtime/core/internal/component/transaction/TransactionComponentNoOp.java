@@ -20,6 +20,7 @@ import com.speedment.runtime.core.component.transaction.DataSourceHandler;
 import com.speedment.runtime.core.component.transaction.TransactionBundle;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -38,7 +39,7 @@ public class TransactionComponentNoOp implements TransactionComponent {
     }
 
     @Override
-    public <T> TransactionHandler creaateTransactionHandler(T dataSource) {
+    public <T> TransactionHandler createTransactionHandler(T dataSource) {
         throw createException();
     }
 
