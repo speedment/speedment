@@ -361,7 +361,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             final ColumnMetaData md = ColumnMetaData.of(rs);
             final String columnName = md.getColumnName();
 
-            column.getData().put("debugColumnType", md.getTypeName());
+            //column.getData().put("debugColumnType", md.getTypeName());
 
             column.mutator().setId(columnName);
             column.mutator().setName(columnName);
