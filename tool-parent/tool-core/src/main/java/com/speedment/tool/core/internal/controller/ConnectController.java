@@ -347,10 +347,10 @@ public final class ConnectController implements Initializable {
                 dbms.usernameProperty().set(fieldUser.getText());
             }
 
-            Optional.of(fieldName.getText())
+            dbms.nameProperty().set(Optional.of(fieldName.getText())
                 .filter(s -> dbmsType.get().hasDatabaseNames())
                 .filter(s -> !s.isEmpty())
-                .orElseGet(() -> type.getDefaultDbmsName().orElseGet(fieldName::getText));
+                .orElseGet(() -> type.getDefaultDbmsName().orElseGet(fieldName::getText)));
 
             if (!areaConnectionUrl.getText().isEmpty()
             &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
