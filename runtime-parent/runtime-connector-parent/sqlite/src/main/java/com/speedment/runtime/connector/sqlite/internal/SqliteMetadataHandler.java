@@ -385,7 +385,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                     })
             );
 
-            if (!md.isDecimalDigitsNull()) {
+            if (!md.isDecimalDigitsNull() && md.getDecimalDigits() != 10) {
                 column.mutator().setDecimalDigits(md.getDecimalDigits());
             }
 
