@@ -317,7 +317,7 @@ implements ConnectionPoolComponent {
             }
 
             if (available) {
-                System.out.println("Releasing connection");
+                LOGGER_CONNECTION.debug("Releasing connection");
                 lock.release();
                 available = false;
             }
