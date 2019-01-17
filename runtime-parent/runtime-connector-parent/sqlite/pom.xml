@@ -25,7 +25,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.runtime.connector.mysql
+                            com.speedment.runtime.connector.sqlite
                         </Export-Package>
                     </instructions>
                 </configuration>
