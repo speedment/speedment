@@ -16,7 +16,9 @@
  */
 package com.speedment.runtime.core.internal.component;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -71,6 +73,33 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     public ConnectionPoolComponentImpl() {
         pools = new ConcurrentHashMap<>();
         leasedConnections = new ConcurrentHashMap<>();
+    }
+
+    @ExecuteBefore(State.STOPPED)
+    void closeOpenConnections() {
+        leasedConnections.values().forEach(conn -> {
+            try {
+                if (!conn.isClosed()) {
+                    conn.close();
+                    LOGGER_CONNECTION.warn("Leased connection had to be closed automatically.");
+                }
+            } catch (final SQLException ex) {
+                throw new SpeedmentException(ex);
+            }
+        });
+
+        pools.values().forEach(queue -> {
+            PoolableConnection conn;
+            while ((conn = queue.poll()) != null) {
+                try {
+                    if (!conn.isClosed()) {
+                        conn.rawClose();
+                    }
+                } catch (final SQLException ex) {
+                    throw new SpeedmentException("Error closing connection.", ex);
+                }
+            }
+        });
     }
 
     @Override
