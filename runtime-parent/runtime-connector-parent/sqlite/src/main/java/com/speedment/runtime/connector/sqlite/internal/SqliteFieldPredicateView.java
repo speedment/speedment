@@ -24,7 +24,7 @@ public class SqliteFieldPredicateView extends AbstractFieldPredicateView {
 
     @Override
     protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " COLLATE NOCASE " + (negated ? "= ?)" : "!= ?)"))
+        return of("(" + cn + " COLLATE NOCASE " + (negated ? "!= ?)" : "= ?)"))
             .add(getFirstOperandAsRaw(model));
     }
 
