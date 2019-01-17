@@ -311,23 +311,21 @@ implements ConnectionPoolComponent {
         }
 
         @Override
-        public void close() throws SQLException {
-            if (closed) {
-                throw new IllegalStateException("This connection is already closed.");
-            }
+        public void close() {
+            if (!closed) {
+                if (available) {
+                    LOGGER_CONNECTION.debug("Releasing connection");
+                    lock.release();
+                    available = false;
+                }
 
-            if (available) {
-                LOGGER_CONNECTION.debug("Releasing connection");
-                lock.release();
-                available = false;
+                closed = true;
+                counter.decrementAndGet();
             }
-
-            closed = true;
-            counter.decrementAndGet();
         }
 
         @Override
-        public boolean isClosed() throws SQLException {
+        public boolean isClosed() {
             return closed;
         }
 
