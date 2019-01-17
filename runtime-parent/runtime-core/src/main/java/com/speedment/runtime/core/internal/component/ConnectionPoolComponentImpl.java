@@ -26,6 +26,7 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
+import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.pool.PoolableConnectionImpl;
 import com.speedment.runtime.core.util.DatabaseUtil;
@@ -75,10 +76,15 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     @Override
     public PoolableConnection getConnection(Dbms dbms) {
         final String uri = DatabaseUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
-        final String username = unwrap(dbms.getUsername());
-        final char[] password = unwrap(passwordComponent.get(dbms));
+        final DbmsType type = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
 
-        return getConnection(uri, username, password);
+        if (type.hasDatabaseUsers()) {
+            final String username = unwrap(dbms.getUsername());
+            final char[] password = unwrap(passwordComponent.get(dbms));
+            return getConnection(uri, username, password);
+        }
+
+        return getConnection(uri, null, null);
     }
 
     @Override
