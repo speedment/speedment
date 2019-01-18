@@ -16,6 +16,8 @@ import com.speedment.runtime.core.util.DatabaseUtil;
 
 import java.io.Closeable;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
@@ -201,7 +203,7 @@ implements ConnectionPoolComponent {
         private final char[] password;
         private final boolean blocking;
         private boolean available, closed;
-        private Runnable onClose;
+        private List<Runnable> onClose;
 
         SerializedConnection(Semaphore lock, Connection connection, AtomicInteger counter, String uri, String user, char[] password, boolean blocking) {
             this.id         = ThreadLocalRandom.current().nextLong();
@@ -215,8 +217,7 @@ implements ConnectionPoolComponent {
             this.blocking   = blocking;
             this.available  = false;
             this.closed     = false;
-
-            this.counter.incrementAndGet();
+            this.onClose = new ArrayList<>();
         }
 
         @Override
@@ -254,12 +255,14 @@ implements ConnectionPoolComponent {
 
         @Override
         public void onClose() {
-            if (onClose != null) onClose.run();
+            for (final Runnable action : onClose) {
+                action.run();
+            }
         }
 
         @Override
         public void setOnClose(Runnable runnable) {
-            this.onClose = requireNonNull(runnable);
+            onClose.add(requireNonNull(runnable));
         }
 
         @Override
@@ -320,6 +323,7 @@ implements ConnectionPoolComponent {
                 }
 
                 closed = true;
+                onClose();
                 counter.decrementAndGet();
             }
         }
@@ -613,6 +617,7 @@ implements ConnectionPoolComponent {
                     throw new SpeedmentException(
                         "Interrupted while waiting for available connection.", ex);
                 }
+                this.counter.incrementAndGet();
                 available = true;
             }
         }
