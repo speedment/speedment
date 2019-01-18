@@ -322,24 +322,36 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                             primaryKeyColumns(conn, table, progress);
 
                             // If no primary key exists, a rowId should be created.
-                            if (!table.isView()
-                            &&  table.primaryKeyColumns().noneMatch(pkc -> true)
-                            &&  table.columns().noneMatch(Column::isAutoIncrement)
-                            &&  table.columns().map(Column::getId).noneMatch("rowid"::equalsIgnoreCase)) {
-                                final Column column = table.mutator().addNewColumn();
-                                column.mutator().setId("rowid");
-                                column.mutator().setName("rowid");
-                                column.mutator().setOrdinalPosition(0);
-                                column.mutator().setDatabaseType(Long.class);
-                                column.mutator().setAutoIncrement(true);
-                                column.mutator().setNullable(false);
-                                column.mutator().setTypeMapper(PrimitiveTypeMapper.class);
+                            if (!table.isView()) {
+                                final Optional<? extends PrimaryKeyColumn> oPkc =
+                                    table.primaryKeyColumns().findAny();
+                                if (table.columns().noneMatch(Column::isAutoIncrement)) {
+                                    if (oPkc.isPresent()) {
+                                        final Column pkCol = oPkc.get().findColumn().get();
+                                        if (Integer.class.getName().equals(pkCol.getDatabaseType())) {
+                                            pkCol.mutator().setAutoIncrement(true);
+                                        }
+                                    } else {
+                                        if (table.columns().noneMatch(Column::isAutoIncrement)
+                                        &&  table.columns().map(Column::getId).noneMatch("rowid"::equalsIgnoreCase)) {
+                                            final Column column = table.mutator().addNewColumn();
+                                            column.mutator().setId("rowid");
+                                            column.mutator().setName("rowid");
+                                            column.mutator().setOrdinalPosition(0);
+                                            column.mutator().setDatabaseType(Long.class);
+                                            column.mutator().setAutoIncrement(true);
+                                            column.mutator().setNullable(false);
+                                            column.mutator().setTypeMapper(PrimitiveTypeMapper.class);
 
-                                final PrimaryKeyColumn pkc = table.mutator().addNewPrimaryKeyColumn();
-                                pkc.mutator().setId("rowid");
-                                pkc.mutator().setName("rowid");
-                                pkc.mutator().setOrdinalPosition(1);
+                                            final PrimaryKeyColumn pkc = table.mutator().addNewPrimaryKeyColumn();
+                                            pkc.mutator().setId("rowid");
+                                            pkc.mutator().setName("rowid");
+                                            pkc.mutator().setOrdinalPosition(1);
+                                        }
+                                    }
+                                }
                             }
+
 
                             progress.setProgress(cnt.incrementAndGet() / noTables);
                         } catch (final SQLException ex) {
@@ -393,7 +405,9 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                 column.mutator().setColumnSize(md.getColumnSize());
             }
 
-            if (isAutoIncrement(md)) column.mutator().setAutoIncrement(true);
+            if (isAutoIncrement(md)) {
+                column.mutator().setAutoIncrement(true);
+            }
 
             if (!column.isNullable() && isWrapper(column.findDatabaseType())) {
                 column.mutator().setTypeMapper(TypeMapper.primitive().getClass());
