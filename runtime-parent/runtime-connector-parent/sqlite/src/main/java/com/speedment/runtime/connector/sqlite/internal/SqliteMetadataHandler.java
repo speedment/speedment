@@ -74,6 +74,9 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
     private final static Logger LOGGER = LoggerManager.getLogger(SqliteMetadataHandler.class);
     private final static String[] TABLES_AND_VIEWS = {"TABLE", "VIEW"};
 
+    private final static Pattern BINARY_TYPES = Pattern.compile(
+        "^(?:(?:TINY|MEDIUM|LONG)?\\s?BLOB|(?:VAR)?BINARY)(?:\\(\\d+\\))?$");
+
     private final static Pattern INTEGER_BOOLEAN_TYPE = Pattern.compile(
         "^(?:BIT|INT|INTEGER|TINYINT)\\(1\\)$");
 
@@ -145,6 +148,13 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                     else if (bits > Byte.SIZE)    return Short.class;
                     else return Byte.class;
                 })
+        );
+
+        javaTypeMap.addRule((mappings, md) ->
+            Optional.of(md.getTypeName())
+                .map(String::toUpperCase)
+                .filter(str -> BINARY_TYPES.matcher(str).find())
+                .map(str -> byte[].class)
         );
     }
 
