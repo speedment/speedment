@@ -18,9 +18,11 @@ package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
-import static com.speedment.runtime.config.trait.HasTypeMapper.DATABASE_TYPE;
-import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExceptionFor;
+import com.speedment.runtime.config.util.ClassUtil;
+
 import java.util.Optional;
+
+import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExceptionFor;
 
 /**
  * Trait for documents that have a {@code TypeMapper} specified.
@@ -72,7 +74,7 @@ public interface HasTypeMapper extends Document {
         final String name = getDatabaseType();
 
         try {
-            return Class.forName(name);
+            return ClassUtil.classFromString(name);
         } catch (final ClassNotFoundException ex) {
             throw new SpeedmentConfigException(
                 "Could not find database type: '" + name + "'.", 

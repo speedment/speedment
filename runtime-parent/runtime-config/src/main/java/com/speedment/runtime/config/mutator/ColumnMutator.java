@@ -25,6 +25,7 @@ import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
+import com.speedment.runtime.config.util.ClassUtil;
 
 import static com.speedment.runtime.config.Column.AUTO_INCREMENT;
 import static com.speedment.runtime.config.Column.DATABASE_TYPE;
@@ -60,11 +61,11 @@ public class ColumnMutator<DOC extends Column> extends DocumentMutatorImpl<DOC> 
     }
 
     public void setTypeMapper(Class<?> typeMapperClass) {
-        put(TYPE_MAPPER, typeMapperClass.getName());
+        put(TYPE_MAPPER, ClassUtil.classToString(typeMapperClass));
     }
 
     public void setDatabaseType(Class<?> databaseType) {
-        put(DATABASE_TYPE, databaseType.getName());
+        put(DATABASE_TYPE, ClassUtil.classToString(databaseType));
     }
     
     public void setEnumConstants(String enumConstants) {
