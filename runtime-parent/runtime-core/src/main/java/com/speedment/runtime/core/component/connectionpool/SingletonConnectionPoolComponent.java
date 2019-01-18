@@ -291,8 +291,10 @@ implements ConnectionPoolComponent {
 
         @Override
         public void setAutoCommit(boolean autoCommit) throws SQLException {
-            blockUntilAvailable();
-            connection.setAutoCommit(autoCommit);
+            if (!closed) { // Nothing to do.
+                blockUntilAvailable();
+                connection.setAutoCommit(autoCommit);
+            }
         }
 
         @Override
@@ -303,8 +305,10 @@ implements ConnectionPoolComponent {
 
         @Override
         public void commit() throws SQLException {
-            blockUntilAvailable();
-            connection.commit();
+            if (!closed) { // Nothing to do.
+                blockUntilAvailable();
+                connection.commit();
+            }
         }
 
         @Override
@@ -598,6 +602,10 @@ implements ConnectionPoolComponent {
         }
 
         private void blockUntilAvailable() {
+            if (closed) {
+                throw new IllegalStateException("This connection has already been closed.");
+            }
+
             if (!available) {
                 LOGGER_CONNECTION.debug("Aquiring connection");
                 try {
