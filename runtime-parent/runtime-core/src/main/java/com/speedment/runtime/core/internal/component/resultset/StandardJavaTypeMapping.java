@@ -153,6 +153,12 @@ public final class StandardJavaTypeMapping {
         
         new JavaTypeMappingImpl<>(
             UUID.class, "UUID", java.util.UUID::fromString, l -> unableToMapLong(UUID.class)
+        ),
+
+        new JavaTypeMappingImpl<>(
+            byte[].class, "Bytes",
+            s -> unableToMapString(byte[].class),
+            l -> unableToMapLong(byte[].class)
         )
     };
 

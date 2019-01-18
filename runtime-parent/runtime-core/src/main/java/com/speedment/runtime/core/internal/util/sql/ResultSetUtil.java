@@ -221,6 +221,10 @@ public final class ResultSetUtil {
     public static UUID getUUID(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
         return getNullableFrom(resultSet, rs -> (UUID) rs.getObject(ordinalPosition));
     }
+
+    public static byte[] getBytes(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> rs.getBytes(ordinalPosition));
+    }
     
 //    public static Object getPGLine(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
 //        return getNullableFrom(resultSet, rs -> (Object) rs.getObject(ordinalPosition));
