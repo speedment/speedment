@@ -28,6 +28,11 @@
                     "id" : "installed_rank",
                     "ordinalPosition" : 1,
                     "enabled" : true
+                  },
+                  {
+                    "name" : "rowid",
+                    "id" : "rowid",
+                    "ordinalPosition" : 1
                   }
                 ],
                 "indexes" : [
@@ -159,6 +164,15 @@
                     "id" : "success",
                     "ordinalPosition" : 10,
                     "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.Long",
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "nullable" : false,
+                    "autoIncrement" : true,
+                    "name" : "rowid",
+                    "id" : "rowid",
+                    "ordinalPosition" : 0
                   }
                 ],
                 "name" : "flyway_schema_history",
@@ -175,6 +189,11 @@
                     "id" : "id",
                     "ordinalPosition" : 1,
                     "enabled" : true
+                  },
+                  {
+                    "name" : "rowid",
+                    "id" : "rowid",
+                    "ordinalPosition" : 1
                   }
                 ],
                 "indexes" : [
@@ -259,6 +278,15 @@
                     "id" : "price",
                     "ordinalPosition" : 5,
                     "enabled" : true
+                  },
+                  {
+                    "databaseType" : "java.lang.Long",
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "nullable" : false,
+                    "autoIncrement" : true,
+                    "name" : "rowid",
+                    "id" : "rowid",
+                    "ordinalPosition" : 0
                   }
                 ],
                 "name" : "products",
