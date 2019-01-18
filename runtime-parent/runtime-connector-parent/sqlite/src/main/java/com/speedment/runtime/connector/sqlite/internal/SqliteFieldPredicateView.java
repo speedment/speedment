@@ -30,7 +30,7 @@ public class SqliteFieldPredicateView extends AbstractFieldPredicateView {
 
     @Override
     protected SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE (? || \"%\") ESCAPE \"_\")", negated)
+        return of("(" + cn + " GLOB (? || \"*\"))", negated)
             .add(getFirstOperandAsRaw(model));
     }
 
@@ -42,7 +42,7 @@ public class SqliteFieldPredicateView extends AbstractFieldPredicateView {
 
     @Override
     protected SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE (\"%\" || ?) ESCAPE \"_\")", negated)
+        return of("(" + cn + " GLOB (\"*\" || ?))", negated)
             .add(getFirstOperandAsRaw(model));
     }
 
@@ -54,7 +54,7 @@ public class SqliteFieldPredicateView extends AbstractFieldPredicateView {
 
     @Override
     protected SqlPredicateFragment containsHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE (\"%\" || ? || \"%\") ESCAPE \"_\")", negated)
+        return of("(" + cn + " GLOB (\"*\" || ? || \"*\"))", negated)
             .add(getFirstOperandAsRaw(model));
     }
 
