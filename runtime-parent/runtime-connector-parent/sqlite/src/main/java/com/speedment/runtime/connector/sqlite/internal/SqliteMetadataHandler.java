@@ -8,6 +8,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
+import com.speedment.runtime.config.mutator.IndexMutator;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
@@ -60,6 +61,7 @@ import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.
 import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
@@ -73,6 +75,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
 
     private final static Logger LOGGER = LoggerManager.getLogger(SqliteMetadataHandler.class);
     private final static String[] TABLES_AND_VIEWS = {"TABLE", "VIEW"};
+    private final static String ORIGINAL_TYPE = "originalDatabaseType";
 
     private final static Pattern BINARY_TYPES = Pattern.compile(
         "^(?:(?:TINY|MEDIUM|LONG)?\\s?BLOB|(?:VAR)?BINARY)(?:\\(\\d+\\))?$");
@@ -331,37 +334,77 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                             foreignKeys(conn, table, progress);
                             primaryKeyColumns(conn, table, progress);
 
-                            // If no primary key exists, a rowId should be created.
                             if (!table.isView()) {
-                                final Optional<? extends PrimaryKeyColumn> oPkc =
-                                    table.primaryKeyColumns().findAny();
-                                if (table.columns().noneMatch(Column::isAutoIncrement)) {
-                                    if (oPkc.isPresent()) {
-                                        final Column pkCol = oPkc.get().findColumn().get();
-                                        if (Integer.class.getName().equals(pkCol.getDatabaseType())) {
-                                            pkCol.mutator().setAutoIncrement(true);
-                                        }
-                                    } else {
-                                        if (table.columns().noneMatch(Column::isAutoIncrement)
-                                        &&  table.columns().map(Column::getId).noneMatch("rowid"::equalsIgnoreCase)) {
-                                            final Column column = table.mutator().addNewColumn();
-                                            column.mutator().setId("rowid");
-                                            column.mutator().setName("rowid");
-                                            column.mutator().setOrdinalPosition(0);
-                                            column.mutator().setDatabaseType(Long.class);
-                                            column.mutator().setAutoIncrement(true);
-                                            column.mutator().setNullable(false);
-                                            column.mutator().setTypeMapper(PrimitiveTypeMapper.class);
 
-                                            final PrimaryKeyColumn pkc = table.mutator().addNewPrimaryKeyColumn();
-                                            pkc.mutator().setId("rowid");
-                                            pkc.mutator().setName("rowid");
-                                            pkc.mutator().setOrdinalPosition(1);
+                                // If no INTEGER PRIMARY KEY exists, a rowId should be created.
+                                if (table.columns()
+                                    .filter(col -> col.getAsString(ORIGINAL_TYPE).filter("INTEGER"::equalsIgnoreCase).isPresent())
+                                    .noneMatch(col -> table.primaryKeyColumns().anyMatch(pkc -> DocumentDbUtil.isSame(pkc.findColumn().get(), col)))
+                                &&  table.columns().map(Column::getId).noneMatch("rowid"::equalsIgnoreCase)) {
+                                    final Column column = table.mutator().addNewColumn();
+
+                                    column.mutator().setId("rowid");
+                                    column.mutator().setName("rowid");
+                                    column.mutator().setOrdinalPosition(0);
+                                    column.mutator().setDatabaseType(Long.class);
+                                    column.mutator().setAutoIncrement(true);
+                                    column.mutator().setNullable(false);
+                                    column.mutator().setTypeMapper(PrimitiveTypeMapper.class);
+
+                                    // When we introduce a new primary key, we need to
+                                    // add a UNIQUE index that represents the same set
+                                    // of columns as the old primary key.
+                                    if (table.primaryKeyColumns().anyMatch(pkc -> true)) {
+                                        final Set<String> oldPks = table.primaryKeyColumns()
+                                            .map(PrimaryKeyColumn::getId)
+                                            .collect(toCollection(LinkedHashSet::new));
+
+                                        // Make sure such an index doesn't already exist
+                                        if (table.indexes()
+                                            .filter(Index::isUnique)
+                                            .noneMatch(idx -> oldPks.equals(idx.indexColumns()
+                                                .map(IndexColumn::getId)
+                                                .collect(toCollection(LinkedHashSet::new))
+                                            ))) {
+
+                                            final Index pkReplacement = table.mutator().addNewIndex();
+                                            final String idxName = md5(oldPks.toString());
+
+                                            final IndexMutator<? extends Index> mutator = pkReplacement.mutator();
+                                            mutator.setId(idxName);
+                                            mutator.setName(idxName);
+                                            mutator.setUnique(true);
+
+                                            table.primaryKeyColumns().forEachOrdered(pkc -> {
+                                                final int ordNo = 1 + (int) pkReplacement.indexColumns().count();
+                                                final IndexColumn idxCol = mutator.addNewIndexColumn();
+                                                idxCol.mutator().setId(pkc.getId());
+                                                idxCol.mutator().setName(pkc.getName());
+                                                idxCol.mutator().setOrdinalPosition(ordNo);
+                                            });
                                         }
+
+                                        // Remove the existing primary key since the rowid is
+                                        // the only value that should be considered part of
+                                        // the primary key
+                                        table.getData().remove(Table.PRIMARY_KEY_COLUMNS);
                                     }
+
+                                    final PrimaryKeyColumn pkc = table.mutator().addNewPrimaryKeyColumn();
+                                    pkc.mutator().setId("rowid");
+                                    pkc.mutator().setName("rowid");
+                                    pkc.mutator().setOrdinalPosition(1);
+                                } else {
+                                    table.columns()
+                                        .filter(col -> col.getAsString(ORIGINAL_TYPE).filter("INTEGER"::equalsIgnoreCase).isPresent())
+                                        .filter(col -> table.primaryKeyColumns().anyMatch(pkc -> DocumentDbUtil.isSame(pkc.findColumn().get(), col)))
+                                        .forEach(col -> col.mutator().setAutoIncrement(true));
                                 }
                             }
 
+                            table.columns().forEach(col -> {
+                                col.getData().remove(ORIGINAL_TYPE);
+                            });
 
                             progress.setProgress(cnt.incrementAndGet() / noTables);
                         } catch (final SQLException ex) {
@@ -383,7 +426,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             final ColumnMetaData md = ColumnMetaData.of(rs);
             final String columnName = md.getColumnName();
 
-            //column.getData().put("debugColumnType", md.getTypeName());
+            column.getData().put(ORIGINAL_TYPE, md.getTypeName());
 
             column.mutator().setId(columnName);
             column.mutator().setName(columnName);
