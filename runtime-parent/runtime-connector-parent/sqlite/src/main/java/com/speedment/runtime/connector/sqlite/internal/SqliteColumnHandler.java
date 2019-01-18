@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 public final class SqliteColumnHandler implements DbmsColumnHandler {
     @Override
     public Predicate<Column> excludedInInsertStatement() {
-        return col -> false;
+        return Column::isAutoIncrement;
     }
 
     @Override
