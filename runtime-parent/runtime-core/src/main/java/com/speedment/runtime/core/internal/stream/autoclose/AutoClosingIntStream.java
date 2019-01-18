@@ -28,209 +28,199 @@ import java.util.stream.*;
  * @author pemi
  */
 final class AutoClosingIntStream
-    extends AbstractAutoClosingStream
+    extends AbstractAutoClosingStream<Integer, IntStream>
     implements IntStream, Java9IntStreamAdditions {
-
-    private final IntStream stream;
-
 
     AutoClosingIntStream(
         final IntStream stream,
-        final Set<BaseStream<?, ?>> streamSet,
         final boolean allowStreamIteratorAndSpliterator
     ) {
-        super(streamSet, allowStreamIteratorAndSpliterator);
-        this.stream = stream;
-    }
-
-    @Override
-    protected IntStream getStream() {
-        return stream;
+        super(stream, allowStreamIteratorAndSpliterator);
     }
 
     @Override
     public IntStream filter(IntPredicate predicate) {
-        return wrap(stream.filter(predicate));
+        return wrap(stream().filter(predicate));
     }
 
     @Override
     public IntStream map(IntUnaryOperator mapper) {
-        return wrap(stream.map(mapper));
+        return wrap(stream().map(mapper));
     }
 
     @Override
     public <U> Stream<U> mapToObj(IntFunction<? extends U> mapper) {
-        return wrap(stream.mapToObj(mapper));
+        return wrap(stream().mapToObj(mapper));
     }
 
     @Override
     public LongStream mapToLong(IntToLongFunction mapper) {
-        return wrap(stream.mapToLong(mapper));
+        return wrap(stream().mapToLong(mapper));
     }
 
     @Override
     public DoubleStream mapToDouble(IntToDoubleFunction mapper) {
-        return wrap(stream.mapToDouble(mapper));
+        return wrap(stream().mapToDouble(mapper));
     }
 
     @Override
     public IntStream flatMap(IntFunction<? extends IntStream> mapper) {
-        return wrap(stream.flatMap(mapper));
+        return wrap(stream().flatMap(mapper));
     }
 
     @Override
     public IntStream distinct() {
-        return wrap(stream.distinct());
+        return wrap(stream().distinct());
     }
 
     @Override
     public IntStream sorted() {
-        return wrap(stream.sorted());
+        return wrap(stream().sorted());
     }
 
     @Override
     public IntStream peek(IntConsumer action) {
-        return wrap(stream.peek(action));
+        return wrap(stream().peek(action));
     }
 
     @Override
     public IntStream limit(long maxSize) {
-        return wrap(stream.limit(maxSize));
+        return wrap(stream().limit(maxSize));
     }
 
     @Override
     public IntStream skip(long n) {
-        return wrap(stream.skip(n));
+        return wrap(stream().skip(n));
     }
 
     @Override
     public IntStream takeWhile​(IntPredicate predicate) {
-        return wrap(Java9StreamUtil.takeWhile(stream, predicate));
+        return wrap(Java9StreamUtil.takeWhile(stream(), predicate));
     }
 
     @Override
     public IntStream dropWhile​(IntPredicate predicate) {
-        return wrap(Java9StreamUtil.dropWhile(stream, predicate));
+        return wrap(Java9StreamUtil.dropWhile(stream(), predicate));
     }
 
     @Override
     public void forEach(IntConsumer action) {
-        finallyClose(() -> stream.forEach(action));
+        finallyClose(() -> stream().forEach(action));
     }
 
     @Override
     public void forEachOrdered(IntConsumer action) {
-        finallyClose(() -> stream.forEachOrdered(action));
+        finallyClose(() -> stream().forEachOrdered(action));
     }
 
     @Override
     public int[] toArray() {
         try {
-            return stream.toArray();
+            return stream().toArray();
         } finally {
-            stream.close();
+            stream().close();
         }
     }
 
     @Override
     public int reduce(int identity, IntBinaryOperator op) {
-        return finallyClose(() -> stream.reduce(identity, op));
+        return finallyClose(() -> stream().reduce(identity, op));
     }
 
     @Override
     public OptionalInt reduce(IntBinaryOperator op) {
-        return finallyClose(() -> stream.reduce(op));
+        return finallyClose(() -> stream().reduce(op));
     }
 
     @Override
     public <R> R collect(Supplier<R> supplier, ObjIntConsumer<R> accumulator, BiConsumer<R, R> combiner) {
-        return finallyClose(() -> stream.collect(supplier, accumulator, combiner));
+        return finallyClose(() -> stream().collect(supplier, accumulator, combiner));
     }
 
     @Override
     public int sum() {
-        return finallyClose(stream::sum);
+        return finallyClose(stream()::sum);
     }
 
     @Override
     public OptionalInt min() {
-        return finallyClose(stream::min);
+        return finallyClose(stream()::min);
     }
 
     @Override
     public OptionalInt max() {
-        return finallyClose(stream::max);
+        return finallyClose(stream()::max);
     }
 
     @Override
     public long count() {
-        return finallyClose(stream::count);
+        return finallyClose(stream()::count);
     }
 
     @Override
     public OptionalDouble average() {
-        return finallyClose(stream::average);
+        return finallyClose(stream()::average);
     }
 
     @Override
     public IntSummaryStatistics summaryStatistics() {
-        return finallyClose(stream::summaryStatistics);
+        return finallyClose(stream()::summaryStatistics);
     }
 
     @Override
     public boolean anyMatch(IntPredicate predicate) {
-        return finallyClose(() -> stream.anyMatch(predicate));
+        return finallyClose(() -> stream().anyMatch(predicate));
     }
 
     @Override
     public boolean allMatch(IntPredicate predicate) {
-        return finallyClose(() -> stream.allMatch(predicate));
+        return finallyClose(() -> stream().allMatch(predicate));
     }
 
     @Override
     public boolean noneMatch(IntPredicate predicate) {
-        return finallyClose(() -> stream.noneMatch(predicate));
+        return finallyClose(() -> stream().noneMatch(predicate));
     }
 
     @Override
     public OptionalInt findFirst() {
-        return finallyClose(stream::findFirst);
+        return finallyClose(stream()::findFirst);
     }
 
     @Override
     public OptionalInt findAny() {
-        return finallyClose(stream::findAny);
+        return finallyClose(stream()::findAny);
     }
 
     @Override
     public LongStream asLongStream() {
-        return wrap(stream.asLongStream());
+        return wrap(stream().asLongStream());
     }
 
     @Override
     public DoubleStream asDoubleStream() {
-        return wrap(stream.asDoubleStream());
+        return wrap(stream().asDoubleStream());
     }
 
     @Override
     public Stream<Integer> boxed() {
-        return wrap(stream.boxed());
+        return wrap(stream().boxed());
     }
 
     @Override
     public IntStream sequential() {
-        return wrap(stream.sequential());
+        return wrap(stream().sequential());
     }
 
     @Override
     public IntStream parallel() {
-        return wrap(stream.parallel());
+        return wrap(stream().parallel());
     }
 
     @Override
     public PrimitiveIterator.OfInt iterator() {
         if (isAllowStreamIteratorAndSpliterator()) {
-            return stream.iterator();
+            return stream().iterator();
         }
         throw newUnsupportedException("iterator");
     }
@@ -238,29 +228,24 @@ final class AutoClosingIntStream
     @Override
     public Spliterator.OfInt spliterator() {
         if (isAllowStreamIteratorAndSpliterator()) {
-            return stream.spliterator();
+            return stream().spliterator();
         }
         throw newUnsupportedException("spliterator");
     }
 
     @Override
     public boolean isParallel() {
-        return stream.isParallel();
+        return stream().isParallel();
     }
 
     @Override
     public IntStream unordered() {
-        return wrap(stream.unordered());
+        return wrap(stream().unordered());
     }
 
     @Override
     public IntStream onClose(Runnable closeHandler) {
-        return wrap(stream.onClose(closeHandler));
-    }
-
-    @Override
-    public void close() {
-        stream.close();
+        return wrap(stream().onClose(closeHandler));
     }
 
 }

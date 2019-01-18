@@ -2,6 +2,7 @@ package com.speedment.runtime.core.internal.stream.autoclose;
 
 import com.speedment.runtime.core.internal.util.testing.JavaVersionUtil;
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,6 +35,16 @@ abstract class AbstractAutoClosingStreamTest<T, S extends BaseStream<T, S>> {
                     .map(iop1::andThenNamed)
             )
             .flatMap(this::test);
+    }
+
+    @Test
+    void testAutoCloseSingleCloseProperty() {
+        final AtomicInteger cnt = new AtomicInteger();
+        try (S stream = createAutoclosableStream()) {
+            stream.onClose(cnt::incrementAndGet);
+            stream.close();
+        }
+        assertEquals(1, cnt.get());
     }
 
     private Stream<DynamicTest> test(NamedUnaryOperator<S> iop) {

@@ -1,15 +1,60 @@
 package com.speedment.runtime.core.internal.stream.autoclose;
 
 import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.*;
 
 import static com.speedment.runtime.core.internal.stream.autoclose.AutoClosingStreamTestUtil.MAX_VALUE;
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 final class AutoClosingReferenceStreamTest extends AbstractAutoClosingStreamTest<Integer, Stream<Integer>> {
+
+    @Test
+    void testAutoCloseSingleClosePropertyAAA() {
+        final AtomicInteger cnt = new AtomicInteger();
+        try (Stream<Integer> stream = createAutoclosableStream().onClose(cnt::incrementAndGet)) {
+            stream.forEach(blackHole());
+        }
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void testDoubleClose() {
+        final AtomicInteger cnt = new AtomicInteger();
+        final Stream<Integer> stream = Stream.of(0, 1).onClose(cnt::incrementAndGet);
+        stream.close();
+        stream.close();
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void testReuseAfterClose() {
+        final AtomicInteger cnt = new AtomicInteger();
+        final Stream<Integer> stream = createAutoclosableStream();
+        stream.onClose(cnt::incrementAndGet);
+        stream.close();
+        stream.close();
+        assertThrows(IllegalStateException.class, () -> {
+            stream.forEach(blackHole());
+        });
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void testMapToIntMapToLong() {
+        final AtomicInteger cnt = new AtomicInteger();
+
+        final Stream<Integer> stream = createAutoclosableStream();
+        final IntStream is = stream.mapToInt(i -> i);
+        try(LongStream ls = is.mapToLong(i -> i).onClose(cnt::incrementAndGet)) {
+            ls.forEach(l -> {});
+        }
+        assertEquals(1, cnt.get());
+    }
 
     @Override
     Stream<Integer> createStream() {
@@ -86,9 +131,9 @@ final class AutoClosingReferenceStreamTest extends AbstractAutoClosingStreamTest
             NamedFunction.of(".mapToInt.sum", s -> s.mapToInt(i -> i).sum()),
             NamedFunction.of(".mapToLong.sum", s -> s.mapToLong(i -> i).sum()),
             NamedFunction.of(".mapToDouble.sum", s -> s.mapToDouble(i -> i).sum()),
-            NamedFunction.of(".flatMapToInt.sum", s -> s.flatMapToInt(i -> IntStream.of(i , i+1)).sum()),
-            NamedFunction.of(".flatMapToLong.sum", s -> s.flatMapToLong(i -> LongStream.of(i , i+1)).sum()),
-            NamedFunction.of(".flatMapToDouble.sum", s -> s.flatMapToDouble(i -> DoubleStream.of(i , i+1)).sum())
+            NamedFunction.of(".flatMapToInt.sum", s -> s.flatMapToInt(i -> IntStream.of(i, i + 1)).sum()),
+            NamedFunction.of(".flatMapToLong.sum", s -> s.flatMapToLong(i -> LongStream.of(i, i + 1)).sum()),
+            NamedFunction.of(".flatMapToDouble.sum", s -> s.flatMapToDouble(i -> DoubleStream.of(i, i + 1)).sum())
         );
     }
 

@@ -23,7 +23,7 @@ final class AutoClosingIntStreamTest extends AbstractAutoClosingStreamTest<Integ
 
     @Override
     IntStream createAutoclosableStream() {
-        return new AutoClosingIntStream(createStream(), new HashSet<>(), false);
+        return new AutoClosingIntStream(createStream(), false);
     }
 
     @Override

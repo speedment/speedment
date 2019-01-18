@@ -21,7 +21,7 @@ final class AutoClosingDoubleStreamTest extends AbstractAutoClosingStreamTest<Do
 
     @Override
     DoubleStream createAutoclosableStream() {
-        return new AutoClosingDoubleStream(createStream(), new HashSet<>(), false);
+        return new AutoClosingDoubleStream(createStream(), false);
     }
 
     @Override

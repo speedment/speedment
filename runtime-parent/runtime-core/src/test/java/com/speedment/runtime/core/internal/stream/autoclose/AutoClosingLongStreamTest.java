@@ -18,7 +18,7 @@ final class AutoClosingLongStreamTest extends AbstractAutoClosingStreamTest<Long
 
     @Override
     LongStream createAutoclosableStream() {
-        return new AutoClosingLongStream(createStream(), new HashSet<>(), false);
+        return new AutoClosingLongStream(createStream(),  false);
     }
 
     @Override

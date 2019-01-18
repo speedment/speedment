@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.stream.autoclose;
 
 import com.speedment.runtime.core.internal.util.java9.Java9DoubleStreamAdditions;
-import com.speedment.runtime.core.internal.util.java9.Java9IntStreamAdditions;
 import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
 
 import java.util.*;
@@ -29,104 +28,95 @@ import java.util.stream.*;
  * @author pemi
  */
 final class AutoClosingDoubleStream
-    extends AbstractAutoClosingStream
+    extends AbstractAutoClosingStream<Double, DoubleStream>
     implements DoubleStream, Java9DoubleStreamAdditions {
-
-    private final DoubleStream stream;
 
     AutoClosingDoubleStream(
         final DoubleStream stream,
-        final Set<BaseStream<?, ?>> streamSet,
         final boolean allowStreamIteratorAndSpliterator
     ) {
-        super(streamSet, allowStreamIteratorAndSpliterator);
-        this.stream = stream;
-    }
-
-    @Override
-    protected DoubleStream getStream() {
-        return stream;
+        super(stream, allowStreamIteratorAndSpliterator);
     }
 
     @Override
     public DoubleStream filter(DoublePredicate predicate) {
-        return wrap(stream.filter(predicate));
+        return wrap(stream().filter(predicate));
     }
 
     @Override
     public DoubleStream map(DoubleUnaryOperator mapper) {
-        return wrap(stream.map(mapper));
+        return wrap(stream().map(mapper));
     }
 
     @Override
     public <U> Stream<U> mapToObj(DoubleFunction<? extends U> mapper) {
-        return wrap(stream.mapToObj(mapper));
+        return wrap(stream().mapToObj(mapper));
     }
 
     @Override
     public IntStream mapToInt(DoubleToIntFunction mapper) {
-        return wrap(stream.mapToInt(mapper));
+        return wrap(stream().mapToInt(mapper));
     }
 
     @Override
     public LongStream mapToLong(DoubleToLongFunction mapper) {
-        return wrap(stream.mapToLong(mapper));
+        return wrap(stream().mapToLong(mapper));
     }
 
     @Override
     public DoubleStream flatMap(DoubleFunction<? extends DoubleStream> mapper) {
-        return wrap(stream.flatMap(mapper));
+        return wrap(stream().flatMap(mapper));
     }
 
     @Override
     public DoubleStream distinct() {
-        return wrap(stream.distinct());
+        return wrap(stream().distinct());
     }
 
     @Override
     public DoubleStream sorted() {
-        return wrap(stream.sorted());
+        return wrap(stream().sorted());
     }
 
     @Override
     public DoubleStream peek(DoubleConsumer action) {
-        return wrap(stream.peek(action));
+        return wrap(stream().peek(action));
     }
 
     @Override
     public DoubleStream limit(long maxSize) {
-        return wrap(stream.limit(maxSize));
+        return wrap(stream().limit(maxSize));
     }
 
     @Override
     public DoubleStream skip(long n) {
-        return wrap(stream.skip(n));
+        return wrap(stream().skip(n));
     }
 
     @Override
     public DoubleStream takeWhile​(DoublePredicate predicate) {
-        return wrap(Java9StreamUtil.takeWhile(stream, predicate));
+        return wrap(Java9StreamUtil.takeWhile(stream(), predicate));
     }
 
     @Override
     public DoubleStream dropWhile​(DoublePredicate predicate) {
-        return wrap(Java9StreamUtil.dropWhile(stream, predicate));
+        return wrap(Java9StreamUtil.dropWhile(stream(), predicate));
     }
 
     @Override
     public void forEach(DoubleConsumer action) {
-        finallyClose(() -> stream.forEach(action));
+        finallyClose(() -> stream().forEach(action));
     }
 
     @Override
     public void forEachOrdered(DoubleConsumer action) {
-        finallyClose(() -> stream.forEachOrdered(action));
+        finallyClose(() -> stream().forEachOrdered(action));
     }
 
     @Override
     public double[] toArray() {
         try {
-            return stream.toArray();
+            return stream().toArray();
         } finally {
             close();
         }
@@ -134,93 +124,93 @@ final class AutoClosingDoubleStream
 
     @Override
     public double reduce(double identity, DoubleBinaryOperator op) {
-        return finallyClose(() -> stream.reduce(identity, op));
+        return finallyClose(() -> stream().reduce(identity, op));
     }
 
     @Override
     public OptionalDouble reduce(DoubleBinaryOperator op) {
-        return finallyClose(() -> stream.reduce(op));
+        return finallyClose(() -> stream().reduce(op));
     }
 
     @Override
     public <R> R collect(Supplier<R> supplier, ObjDoubleConsumer<R> accumulator, BiConsumer<R, R> combiner) {
-        return finallyClose(() -> stream.collect(supplier, accumulator, combiner));
+        return finallyClose(() -> stream().collect(supplier, accumulator, combiner));
     }
 
     @Override
     public double sum() {
-        return finallyClose(stream::sum);
+        return finallyClose(stream()::sum);
     }
 
     @Override
     public OptionalDouble min() {
-        return finallyClose(stream::min);
+        return finallyClose(stream()::min);
     }
 
     @Override
     public OptionalDouble max() {
-        return finallyClose(stream::max);
+        return finallyClose(stream()::max);
     }
 
     @Override
     public long count() {
-        return finallyClose(stream::count);
+        return finallyClose(stream()::count);
     }
 
     @Override
     public OptionalDouble average() {
-        return finallyClose(stream::average);
+        return finallyClose(stream()::average);
     }
 
     @Override
     public DoubleSummaryStatistics summaryStatistics() {
-        return finallyClose(stream::summaryStatistics);
+        return finallyClose(stream()::summaryStatistics);
     }
 
     @Override
     public boolean anyMatch(DoublePredicate predicate) {
-        return finallyClose(() -> stream.anyMatch(predicate));
+        return finallyClose(() -> stream().anyMatch(predicate));
     }
 
     @Override
     public boolean allMatch(DoublePredicate predicate) {
-        return finallyClose(() -> stream.allMatch(predicate));
+        return finallyClose(() -> stream().allMatch(predicate));
     }
 
     @Override
     public boolean noneMatch(DoublePredicate predicate) {
-        return finallyClose(() -> stream.noneMatch(predicate));
+        return finallyClose(() -> stream().noneMatch(predicate));
     }
 
     @Override
     public OptionalDouble findFirst() {
-        return finallyClose(stream::findFirst);
+        return finallyClose(stream()::findFirst);
     }
 
     @Override
     public OptionalDouble findAny() {
-        return finallyClose(stream::findAny);
+        return finallyClose(stream()::findAny);
     }
 
     @Override
     public Stream<Double> boxed() {
-        return wrap(stream.boxed());
+        return wrap(stream().boxed());
     }
 
     @Override
     public DoubleStream sequential() {
-        return wrap(stream.sequential());
+        return wrap(stream().sequential());
     }
 
     @Override
     public DoubleStream parallel() {
-        return wrap(stream.parallel());
+        return wrap(stream().parallel());
     }
 
     @Override
     public PrimitiveIterator.OfDouble iterator() {
         if (isAllowStreamIteratorAndSpliterator()) {
-            return stream.iterator();
+            return stream().iterator();
         }
         throw newUnsupportedException("iterator");
     }
@@ -228,29 +218,25 @@ final class AutoClosingDoubleStream
     @Override
     public Spliterator.OfDouble spliterator() {
         if (isAllowStreamIteratorAndSpliterator()) {
-            return stream.spliterator();
+            return stream().spliterator();
         }
         throw newUnsupportedException("spliterator");
     }
 
     @Override
     public boolean isParallel() {
-        return stream.isParallel();
+        return stream().isParallel();
     }
 
     @Override
     public DoubleStream unordered() {
-        return wrap(stream.unordered());
+        return wrap(stream().unordered());
     }
 
     @Override
     public DoubleStream onClose(Runnable closeHandler) {
-        return wrap(stream.onClose(closeHandler));
+        return wrap(stream().onClose(closeHandler));
     }
 
-    @Override
-    public void close() {
-        stream.close();
-    }
 
 }
