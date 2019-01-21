@@ -159,13 +159,18 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     protected void execute(Dbms dbms, List<? extends SqlStatement> sqlStatementList) throws SQLException {
-        final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
-        if (connectionInfo.isInTransaction()) {
-            executeInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
-        } else {
-            executeNotInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
+        // The ConnectionInfo::close method checks if it is a transaction and, in such case, does not close the
+        // underlying connection.
+        try (final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent)) {
+            if (connectionInfo.isInTransaction()) {
+                executeInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
+            } else {
+                executeNotInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
+            }
         }
     }
+
+    // Todo: Rewrite the method below.
 
     protected void executeNotInTransaction(
         final Dbms dbms,
