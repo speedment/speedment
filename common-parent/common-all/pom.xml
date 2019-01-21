@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.10-SNAPSHOT</version>
+        <version>3.1.10</version>
     </parent>
     
     <artifactId>common-all</artifactId>
@@ -40,24 +40,24 @@
     
     <properties>
         <invariant.version>1.0.4-SNAPSHOT</invariant.version>
-        <function.version>1.0.5</function.version>
-        <jvm-version.version>1.0.1-SNAPSHOT</jvm-version.version> <!-- Yeah, I know... -->
-        <json.version>1.0.5-SNAPSHOT</json.version>
-        <tuple.version>1.0.10-SNAPSHOT</tuple.version>
-        <logger.version>1.0.5-SNAPSHOT</logger.version>
-        <codegen.version>2.5.1-SNAPSHOT</codegen.version>
-        <codegenxml.version>1.0.4-SNAPSHOT</codegenxml.version>
-        <injector.version>1.2.2-SNAPSHOT</injector.version>
-        <rest.version>1.0.5-SNAPSHOT</rest.version>
-        <lazy.version>1.0.4-SNAPSHOT</lazy.version>
-        <mapstream.version>2.3.6-SNAPSHOT</mapstream.version>
-        <mapbuilder.version>1.0.1-SNAPSHOT</mapbuilder.version>
-        <mutablestream.version>1.0.1-SNAPSHOT</mutablestream.version>
-        <singletonstream.version>1.0.2-SNAPSHOT</singletonstream.version>
-        <annotation.version>1.0.1-SNAPSHOT</annotation.version>
-        <combinatorics.version>1.0.3-SNAPSHOT</combinatorics.version>
-        <benchmark.version>1.0.1-SNAPSHOT</benchmark.version>
-        <collection.version>1.0.1-SNAPSHOT</collection.version>
+        <function.version>1.0.6</function.version>
+        <jvm-version.version>1.0.1</jvm-version.version> <!-- Yeah, I know... -->
+        <json.version>1.0.5</json.version>
+        <tuple.version>1.0.10</tuple.version>
+        <logger.version>1.0.5</logger.version>
+        <codegen.version>2.5.1</codegen.version>
+        <codegenxml.version>1.0.4</codegenxml.version>
+        <injector.version>1.2.2</injector.version>
+        <rest.version>1.0.5</rest.version>
+        <lazy.version>1.0.4</lazy.version>
+        <mapstream.version>2.3.6</mapstream.version>
+        <mapbuilder.version>1.0.1</mapbuilder.version>
+        <mutablestream.version>1.0.1</mutablestream.version>
+        <singletonstream.version>1.0.2</singletonstream.version>
+        <annotation.version>1.0.1</annotation.version>
+        <combinatorics.version>1.0.3</combinatorics.version>
+        <benchmark.version>1.0.1</benchmark.version>
+        <collection.version>1.0.1</collection.version>
     </properties>
     
     <dependencyManagement>

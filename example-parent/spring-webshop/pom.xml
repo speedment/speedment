@@ -7,7 +7,7 @@
 
     <groupId>com.speedment.example</groupId>
     <artifactId>spring-webshop</artifactId>
-    <version>3.1.10-SNAPSHOT</version>
+    <version>3.1.10</version>
     <packaging>jar</packaging>
 
     <name>Spring Webshop Example</name>
