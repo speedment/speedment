@@ -75,6 +75,7 @@ public interface HasAnnotationUsage<T extends HasAnnotationUsage<T>> {
      * of the annotation to {@code textValue}.
      *
      * @param annotation  the new annotation usage
+     * @param textValue   the value of the text for this annotation
      * @return            a reference to this
      *
      * @since 2.5

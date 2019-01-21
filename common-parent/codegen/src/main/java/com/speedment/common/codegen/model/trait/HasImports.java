@@ -74,6 +74,7 @@ public interface HasImports<T extends HasImports<T>> {
      * it to this model.
      *
      * @param type  the dependency to add
+     * @param method name of the static member method
      * @return      a reference to this
      *
      * @since 2.5

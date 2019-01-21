@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.LongConsumer;
 
 /**
  *
@@ -46,7 +47,7 @@ public final class PostgresDbmsOperationHandler extends AbstractDbmsOperationHan
     );
 
     @Override
-    public void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement sqlStatement) throws SQLException {
+    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
         /*
          * There does not seem to be any way to find the generated keys from a Postgres JDBC driver
          * since getGeneratedKeys() returns the whole set of columns. This causes
@@ -62,7 +63,8 @@ public final class PostgresDbmsOperationHandler extends AbstractDbmsOperationHan
             while (generatedKeys.next()) {
                 final int columnType = generatedKeys.getMetaData().getColumnType(1);
                 if (generatedKeys.getMetaData().isAutoIncrement(1) && LONG_GETTABLE_TYPES.contains(columnType)) {
-                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+                    longConsumer.accept(generatedKeys.getLong(1));
+                    //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
                 }
             }
         }

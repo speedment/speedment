@@ -47,6 +47,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -295,15 +296,16 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             }
             ps.executeUpdate();
 
-            handleGeneratedKeys(ps, sqlStatement);
+            handleGeneratedKeys(ps, sqlStatement::addGeneratedKey);
         }
     }
 
     @Override
-    public void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement sqlStatement) throws SQLException {
+    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
         try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
             while (generatedKeys.next()) {
-                sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+                longConsumer.accept(generatedKeys.getLong(1));
+                //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
             }
         }
     }

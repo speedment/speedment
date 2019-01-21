@@ -97,6 +97,7 @@ public interface HasJavadocTags<T extends HasJavadocTags<T>> extends HasImports<
      * this javadoc.
      *
      * @param name  the name of the param
+     * @param description the description (text) to use
      * @return      a reference to this
      */
     default T param(final String name, String description) {
