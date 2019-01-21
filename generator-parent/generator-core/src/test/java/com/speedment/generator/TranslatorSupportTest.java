@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,250 +25,239 @@ import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
  * @author Per Minborg
  */
-public class TranslatorSupportTest extends SimpleModel {
+final class TranslatorSupportTest extends SimpleModel {
 
     private static final String PATH = "com.company.myproject.mydbms.myschema.user";
 
     private TranslatorSupport<Table> instance;
 
-    public TranslatorSupportTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = new TranslatorSupport<>(
             speedment.getOrThrow(Injector.class), table
         );
     }
 
-    @After
-    public void tearDown() {
-    }
 
     @Test
-    public void testNamer() {
+    void testNamer() {
         assertEquals(speedment.getOrThrow(JavaLanguageNamer.class), instance.namer());
     }
 
     @Test
-    public void testDocument() {
+    void testDocument() {
         assertEquals(table, instance.tableOrThrow());
     }
 
     @Test
-    public void testEntityName() {
+    void testEntityName() {
         assertEquals("User", instance.entityName());
     }
 
     @Test
-    public void testEntityImplName() {
+    void testEntityImplName() {
         assertEquals("UserImpl", instance.entityImplName());
     }
 
     @Test
-    public void testGeneratedEntityName() {
+    void testGeneratedEntityName() {
         assertEquals("GeneratedUser", instance.generatedEntityName());
     }
 
     @Test
-    public void testGeneratedEntityImplName() {
+    void testGeneratedEntityImplName() {
         assertEquals("GeneratedUserImpl", instance.generatedEntityImplName());
     }
 
     @Test
-    public void testManagerName() {
+    void testManagerName() {
         assertEquals("UserManager", instance.managerName());
     }
 
     @Test
-    public void testManagerImplName() {
+    void testManagerImplName() {
         assertEquals("UserManagerImpl", instance.managerImplName());
     }
 
     @Test
-    public void testGeneratedManagerName() {
+    void testGeneratedManagerName() {
         assertEquals("GeneratedUserManager", instance.generatedManagerName());
     }
 
     @Test
-    public void testGeneratedManagerImplName() {
+    void testGeneratedManagerImplName() {
         assertEquals("GeneratedUserManagerImpl", instance.generatedManagerImplName());
     }
 
     @Test
-    public void testEntityType() {
+    void testEntityType() {
         assertEquals(fullName("User"), instance.entityType().getTypeName());
     }
 
     @Test
-    public void testEntityImplType() {
+    void testEntityImplType() {
         assertEquals(fullName("UserImpl"), instance.entityImplType().getTypeName());
     }
 
     @Test
-    public void testGeneratedEntityType() {
+     void testGeneratedEntityType() {
         assertEquals(fullNameGen("GeneratedUser"), instance.generatedEntityType().getTypeName());
     }
 
     @Test
-    public void testGeneratedEntityImplType() {
+    void testGeneratedEntityImplType() {
         assertEquals(fullNameGen("GeneratedUserImpl"), instance.generatedEntityImplType().getTypeName());
     }
 
     @Test
-    public void testManagerType() {
+    void testManagerType() {
         assertEquals(fullName("UserManager"), instance.managerType().getTypeName());
     }
 
     @Test
-    public void testManagerImplType() {
+    void testManagerImplType() {
         assertEquals(fullName("UserManagerImpl"), instance.managerImplType().getTypeName());
     }
 
     @Test
-    public void testGeneratedManagerType() {
+    void testGeneratedManagerType() {
         assertEquals(fullNameGen("GeneratedUserManager"), instance.generatedManagerType().getTypeName());
     }
 
     @Test
-    public void testGeneratedManagerImplType() {
+    void testGeneratedManagerImplType() {
         assertEquals(fullNameGen("GeneratedUserManagerImpl"), instance.generatedManagerImplType().getTypeName());
     }
 
     @Test
-    public void testVariableName_0args() {
+    void testVariableName_0args() {
         assertEquals("user", instance.variableName());
     }
 
     @Test
-    public void testVariableName_HasAlias() {
+    void testVariableName_HasAlias() {
         assertEquals("mySchema", instance.variableName(schema));
     }
 
     @Test
-    public void testTypeName_0args() {
+    void testTypeName_0args() {
         assertEquals("User", instance.typeName());
     }
 
     @Test
-    public void testTypeName_HasAlias() {
+    void testTypeName_HasAlias() {
         assertEquals("MySchema", instance.typeName(schema));
     }
 
     @Test
-    public void testTypeName_Project() {
+    void testTypeName_Project() {
         assertEquals("MyProject", instance.typeName(project));
     }
 
     @Test
-    public void testManagerTypeName_0args() {
+    void testManagerTypeName_0args() {
         assertEquals("UserManager", instance.managerTypeName());
     }
 
     @Test
-    public void testManagerTypeName_HasAlias() {
+    void testManagerTypeName_HasAlias() {
         assertEquals("UserManager", instance.managerTypeName(table));
     }
 
     @Test
-    public void testFullyQualifiedTypeName_0args() {
+    void testFullyQualifiedTypeName_0args() {
         assertEquals(fullName("User"), instance.fullyQualifiedTypeName());
     }
 
     @Test
-    public void testFullyQualifiedTypeName_String() {
+    void testFullyQualifiedTypeName_String() {
         assertEquals(fullName("olle.User"), instance.fullyQualifiedTypeName("olle"));
     }
 
     @Test
-    @Ignore
-    public void testFullyQualifiedTypeName_String_String() {
+    @Disabled
+    void testFullyQualifiedTypeName_String_String() {
         // Todo: implement this test
         String result = instance.fullyQualifiedTypeName("subPath", "filePrefix");
         fail("The test case is a prototype.");
     }
 
     @Test
-    public void testBasePackageName() {
+    void testBasePackageName() {
         assertEquals(PATH, instance.basePackageName());
     }
 
     @Test
-    public void testBaseDirectoryName() {
+    void testBaseDirectoryName() {
         assertEquals(PATH.replace('.', '/'), instance.baseDirectoryName());
     }
 
     @Test
-    public void testProject() {
+    void testProject() {
         assertEquals(project, instance.project().get());
     }
 
     @Test
-    public void testDbms() {
+    void testDbms() {
         assertEquals(dbms, instance.dbms().get());
     }
 
     @Test
-    public void testSchema() {
+    void testSchema() {
         assertEquals(schema, instance.schema().get());
     }
 
     @Test
-    public void testTable() {
+    void testTable() {
         assertEquals(table, instance.table().get());
     }
 
     @Test
-    public void testColumn() {
+    void testColumn() {
         assertEquals(Optional.empty(), instance.column());
     }
 
     @Test
-    public void testProjectOrThrow() {
+    void testProjectOrThrow() {
         assertEquals(project, instance.projectOrThrow());
     }
 
     @Test
-    public void testDbmsOrThrow() {
+    void testDbmsOrThrow() {
         assertEquals(dbms, instance.dbmsOrThrow());
     }
 
     @Test
-    public void testSchemaOrThrow() {
+    void testSchemaOrThrow() {
         assertEquals(schema, instance.schemaOrThrow());
     }
 
     @Test
-    public void testTableOrThrow() {
+    void testTableOrThrow() {
         assertEquals(table, instance.tableOrThrow());
     }
 
-    @Test(expected = java.lang.IllegalStateException.class)
-    public void testColumnOrThrow() {
-        instance.columnOrThrow();
+    @Test
+    void testColumnOrThrow() {
+        assertThrows(IllegalStateException.class, () -> instance.columnOrThrow());
     }
 
     @Test
-    public void testShortTableName() {
+    void testShortTableName() {
         final TranslatorSupport<Table> support = new TranslatorSupport<>(
             speedment.getOrThrow(Injector.class), table2
         );

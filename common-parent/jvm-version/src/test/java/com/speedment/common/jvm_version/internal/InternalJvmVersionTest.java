@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,67 +16,70 @@
  */
 package com.speedment.common.jvm_version.internal;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class InternalJvmVersionTest {
+final class InternalJvmVersionTest {
 
     private static final InternalJvmVersion instance = new InternalJvmVersion();
 
     @Test
-    public void testGetSpecificationTitle() {
+    void testGetSpecificationTitle() {
         final String result = instance.getSpecificationTitle();
         assertNotNull(result);
     }
 
     @Test
-    public void testGetSpecificationVersion() {
+    void testGetSpecificationVersion() {
         final String result = instance.getSpecificationVersion();
         assertNotNull(result);
     }
 
     @Test
-    public void testGetSpecificationVendor() {
+    void testGetSpecificationVendor() {
         final String result = instance.getSpecificationVendor();
         assertNotNull(result);
     }
 
     @Test
-    public void testGetImplementationTitle() {
+    void testGetImplementationTitle() {
         final String result = instance.getImplementationTitle();
         assertNotNull(result);
     }
 
     @Test
-    public void testGetImplementationVersion() {
+    void testGetImplementationVersion() {
         final String result = instance.getImplementationVersion();
         assertNotNull(result);
     }
 
     @Test
-    public void testGetImplementationVendor() {
+    void testGetImplementationVendor() {
         final String result = instance.getImplementationVendor();
         assertNotNull(result);
     }
 
     @Test
-    public void testMajor() {
+    void testMajor() {
         final int result = instance.major();
         assertTrue(result >= 8);
     }
 
     @Test
-    public void testMinor() {
+    void testMinor() {
         final int result = instance.minor();
         assertTrue(result >= 0);
     }
 
     @Test
-    public void testSecurity() {
+    void testSecurity() {
         final int result = instance.security();
         assertTrue(result >= 0);
     }

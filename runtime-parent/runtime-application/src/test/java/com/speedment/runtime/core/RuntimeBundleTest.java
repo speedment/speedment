@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,17 +22,18 @@
 package com.speedment.runtime.core;
 
 import com.speedment.runtime.application.RuntimeBundle;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class RuntimeBundleTest {
+final class RuntimeBundleTest {
     
     @Test
-    public void testInjectables() {
+    void testInjectables() {
         assertTrue(new RuntimeBundle().injectables().count() > 0);
     }
     

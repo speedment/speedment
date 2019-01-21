@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,14 +17,16 @@
 package com.speedment.common.tuple.internal.nonnullable;
 
 import com.speedment.common.tuple.Tuple;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.IntStream;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -42,32 +44,32 @@ public abstract class AbstractTupleImplTest<T extends Tuple> {
         this.degree = degree;
     }
 
-    @Before
-    public void before() {
+    @BeforeEach
+    void before() {
         instance = constructor.get();
     }
 
     @Test
-    public void testDegree() {
+    void testDegree() {
         assertEquals(degree, instance.degree());
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         IntStream.range(0, degree).forEachOrdered(i -> {
             assertEquals(i, (int) instance.get(i));
         });
     }
 
     @Test
-    public void testStream() {
+    void testStream() {
         final List<Integer> expected = IntStream.range(0, degree).boxed().collect(toList());
         final List<Object> actual = instance.stream().collect(toList());
         assertEquals(expected, actual);
     }
 
     @Test
-    public void testStreamOfType() {
+    void testStreamOfType() {
         assertEquals(0, instance.streamOf(String.class).count());
         assertEquals(degree, instance.streamOf(Integer.class).count());
     }

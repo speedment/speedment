@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,13 +17,15 @@
 package com.speedment.runtime.config.util;
 
 import com.speedment.runtime.config.internal.util.Trees;
+import org.junit.jupiter.api.Test;
+
 import static com.speedment.runtime.config.internal.util.Trees.TraversalOrder.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 
 /**
  *
@@ -35,7 +37,7 @@ public class TreesTest {
      * Test of traverse method, of class Trees.
      */
     @Test
-    public void testTraverse() {
+    void testTraverse() {
 
         final Node nodeE = new Node("E");
         
@@ -70,13 +72,13 @@ public class TreesTest {
         assertEquals(expectedResult, result);
     }
 
-    public class Node {
+    static class Node {
 
         private final Node left;
         private final Node right;
         private final String name;
 
-        public Node(final String name, final Node left, final Node right) {
+        Node(final String name, final Node left, final Node right) {
             this.left = left;
             this.right = right;
             this.name = name;

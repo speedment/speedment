@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,7 +17,7 @@
 package com.speedment.runtime.core.internal.stream;
 
 import com.speedment.runtime.core.db.SqlFunction;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -28,19 +28,19 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Emil Forslund
  * @since 3.0.11
  */
-public class ResultSetIteratorTest {
+final class ResultSetIteratorTest {
 
     private static final SqlFunction<ResultSet, Integer> RS_MAPPER = rs -> rs.getInt(1);
     private static final int SIZE = 33;
 
     @Test
-    public void testZero() {
+    void testZero() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(0);
         final StreamUtil.ResultSetIterator<?> it
@@ -53,7 +53,7 @@ public class ResultSetIteratorTest {
     }
 
     @Test
-    public void testOne() {
+    void testOne() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(1);
         final StreamUtil.ResultSetIterator<?> it
@@ -67,7 +67,7 @@ public class ResultSetIteratorTest {
     }
 
     @Test
-    public void testTwo() {
+    void testTwo() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(2);
         final StreamUtil.ResultSetIterator<?> it
@@ -84,7 +84,7 @@ public class ResultSetIteratorTest {
     }
 
     @Test
-    public void testIterate() {
+    void testIterate() {
         final ResultSet rs = new MockResultSet(SIZE);
         final StreamUtil.ResultSetIterator<Integer> it
             = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
@@ -97,7 +97,7 @@ public class ResultSetIteratorTest {
     }
 
     @Test
-    public void testForEachRemaining() {
+    void testForEachRemaining() {
         for (int initialNext = 0; initialNext < SIZE; initialNext++) {
             final ResultSet rs = new MockResultSet(SIZE);
             final StreamUtil.ResultSetIterator<Integer> it

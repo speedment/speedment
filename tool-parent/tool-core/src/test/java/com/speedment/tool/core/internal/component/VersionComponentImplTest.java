@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,11 +23,12 @@ import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.component.VersionComponent;
+import org.junit.jupiter.api.Test;
+
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.Test;
 
 /**
  * Tests the default {@link VersionComponent} to make sure it can query the
@@ -36,7 +37,7 @@ import org.junit.Test;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public class VersionComponentImplTest {
+final class VersionComponentImplTest {
 
     private final static Logger LOGGER =
         LoggerManager.getLogger(VersionComponentImplTest.class);
@@ -45,7 +46,7 @@ public class VersionComponentImplTest {
      * Test of latestVersion method, of class VersionComponentImpl.
      */
     @Test
-    public void testLatestVersion() {
+    void testLatestVersion() {
         LOGGER.info("Determining the latest version of Speedment.");
         final Speedment speedment = ApplicationBuilders.empty()
             .withBundle(GeneratorBundle.class)

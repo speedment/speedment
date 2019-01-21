@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.core.db;
 
-import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.util.Comparator;
 import java.util.List;
@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.speedment.common.mapstream.MapStream.comparing;
+import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms
@@ -34,9 +35,31 @@ import static com.speedment.common.mapstream.MapStream.comparing;
  * types.
  *
  * @author Per Minborg
- * @since 2.0.0
+ * @since  2.0.0
  */
 public interface DbmsType {
+
+    /**
+     * The type of connection that this {@link DbmsType} uses. Most JDBC
+     * connectors opens a socket to a specific port at some remote host.
+     * However, there are lightweight databases that runs the entire database
+     * engine in the connector and that only requires a file or group of files
+     * to work with.
+     */
+    enum ConnectionType {
+
+        /**
+         * Speedment connects to the database using a
+         * {@link Dbms#getIpAddress() host} and a {@link Dbms#getPort()}.
+         */
+        HOST_AND_PORT,
+
+        /**
+         * Speedment connects to the database by reading a file from a
+         * {@link Dbms#getLocalPath() local path}.
+         */
+        DBMS_AS_FILE
+    }
 
     Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);
 
@@ -129,6 +152,19 @@ public interface DbmsType {
     }
 
     /**
+     * Returns {@code true} if this {@link DbmsType} uses authentication with
+     * username and password and {@code false} otherwise. Some database managers
+     * don't require authentication since they are only intended to be used for
+     * tests or because security is handled at a different level.
+     *
+     * @return  {@code true} if authentication is supported, otherwise
+     *          {@code false}
+     */
+    default boolean hasDatabaseUsers() {
+        return true;
+    }
+
+    /**
      * Returns if this {@code DbmsType} is supported by Speedment in the current
      * implementation.
      *
@@ -146,6 +182,15 @@ public interface DbmsType {
      * @return the non-null name for this {@code DbmsType}
      */
     String getDriverName();
+
+    /**
+     * Returns the connection type used in this {@code DbmsType}.
+     *
+     * @return  the connection type
+     */
+    default ConnectionType getConnectionType() {
+        return ConnectionType.HOST_AND_PORT;
+    }
 
     /**
      * Returns the naming convention used by this database.
@@ -219,6 +264,14 @@ public interface DbmsType {
      * database during speedment startup
      */
     String getInitialQuery();
+
+    /**
+     * Returns the COLLATE fragment needed to make ORDER BY statements sort correctly, using default collation
+     * @return the COLLATE fragment needed to make ORDER BY statements sort correctly, using default collation
+     */
+    default SqlPredicateFragment getCollateFragment() {
+        return of("");
+    }
 
     enum SkipLimitSupport {
         STANDARD, ONLY_AFTER_SORTED, NONE;

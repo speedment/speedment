@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -32,19 +32,21 @@ import com.speedment.runtime.config.internal.immutable.ImmutableTable;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.*;
+import org.junit.jupiter.api.Test;
+
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public final class ImmutableHasIdTest extends AbstractDocumentTest {
+import java.util.stream.Stream;
+
+final class ImmutableHasIdTest extends AbstractDocumentTest {
 
     private static final String ID = "TryggveArneOchSven";
 
     @Test
-    public void testIdMutator() {
+    void testIdMutator() {
         dbmsA.mutator().setId(ID);
         final Project immutableProject = ImmutableProject.wrap(project);
         final Dbms immutableDbms = immutableProject.dbmses().findFirst().get();
@@ -61,7 +63,7 @@ public final class ImmutableHasIdTest extends AbstractDocumentTest {
     }
 
     @Test
-    public void testImmutableIdTrait() {
+    void testImmutableIdTrait() {
 
         final Set<Class<?>> hasImmutableName = immutableClasses()
             .filter(c -> HasName.class.isAssignableFrom(c))

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,8 +20,19 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.*;
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.of;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
+
 import com.speedment.tool.config.DocumentProperty;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Describes which implementations the {@link Document} interface to use at
@@ -34,16 +45,16 @@ import java.util.List;
 public interface DocumentPropertyComponent {
 
     List<String>
-        PROJECTS            = of(),
-        DBMSES              = of(Project.DBMSES),
-        SCHEMAS             = concat(DBMSES, Dbms.SCHEMAS),
-        TABLES              = concat(SCHEMAS, Schema.TABLES),
-        COLUMNS             = concat(TABLES, Table.COLUMNS),
-        PRIMARY_KEY_COLUMNS = concat(TABLES, Table.PRIMARY_KEY_COLUMNS),
-        FOREIGN_KEYS        = concat(TABLES, Table.FOREIGN_KEYS),
-        FOREIGN_KEY_COLUMNS = concat(FOREIGN_KEYS, ForeignKey.FOREIGN_KEY_COLUMNS),
-        INDEXES             = concat(TABLES, Table.INDEXES),
-        INDEX_COLUMNS       = concat(INDEXES, Index.INDEX_COLUMNS);
+        PROJECTS            = emptyList(),
+        DBMSES              = singletonList(Project.DBMSES),
+        SCHEMAS             = Stream.concat(DBMSES.stream(), Stream.of(Dbms.SCHEMAS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
+        TABLES              = Stream.concat(SCHEMAS.stream(), Stream.of(Schema.TABLES)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
+        COLUMNS             = Stream.concat(TABLES.stream(), Stream.of(Table.COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
+        PRIMARY_KEY_COLUMNS = Stream.concat(TABLES.stream(), Stream.of(Table.PRIMARY_KEY_COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
+        FOREIGN_KEYS        = Stream.concat(TABLES.stream(), Stream.of(Table.FOREIGN_KEYS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
+        FOREIGN_KEY_COLUMNS = Stream.concat(FOREIGN_KEYS.stream(), Stream.of(ForeignKey.FOREIGN_KEY_COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
+        INDEXES             = Stream.concat(TABLES.stream(), Stream.of(Table.INDEXES)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
+        INDEX_COLUMNS       = Stream.concat(INDEXES.stream(), Stream.of(Index.INDEX_COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList));
 
     /**
      * Functional interface that describes a constructor for an observable 

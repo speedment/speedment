@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -102,4 +102,18 @@ public interface StreamSupplierComponent {
      * Stops the stream suppler and releases any previously allocated resources.
      */
     default void stop(){}
+
+    /**
+     * Creates and returns a new Stream of underlying {@code StreamSupplierComponent} objects
+     * that provides data to this {@code StreamSupplierComponent}. If no such component exists
+     * (i.e. the component draws data only from external sources like databases or files) an
+     * empty stream is returned.
+     *
+     * @return a new Stream of underlying {@code StreamSupplierComponent} objects
+     * that provides data to this {@code StreamSupplierComponent}
+     */
+    default Stream<StreamSupplierComponent> sourceStreamSupplierComponents() {
+        return Stream.empty();
+    }
+
 }

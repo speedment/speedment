@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,30 +16,31 @@
  */
 package com.speedment.runtime.field.comparator;
 
+import org.junit.jupiter.api.Test;
+
 import static com.speedment.runtime.field.comparator.NullOrder.FIRST;
 import static com.speedment.runtime.field.comparator.NullOrder.LAST;
 import static com.speedment.runtime.field.comparator.NullOrder.NONE;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public class NullOrderTest {
+final class NullOrderTest {
 
     @Test
-    public void testNoneReversed() {
+    void testNoneReversed() {
         assertEquals(NONE, NONE.reversed());
     }
 
     @Test
-    public void testFirstReversed() {
+    void testFirstReversed() {
         assertEquals(LAST, FIRST.reversed());
     }
 
     @Test
-    public void testLastReversed() {
+    void testLastReversed() {
         assertEquals(FIRST, LAST.reversed());
     }
 

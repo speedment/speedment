@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,16 +17,21 @@
 package com.speedment.runtime.config;
 
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
+import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasChildren;
+import com.speedment.runtime.config.trait.HasDeepCopy;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.util.DocumentUtil;
+
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
@@ -44,6 +49,7 @@ public interface Dbms extends
         Document,
         HasParent<Project>,
         HasEnabled,
+        HasDeepCopy,
         HasId,        
         HasName,
         HasChildren,
@@ -55,6 +61,7 @@ public interface Dbms extends
         TYPE_NAME      = "typeName",
         IP_ADDRESS     = "ipAddress",
         PORT           = "port",
+        LOCAL_PATH     = "localPath",
         CONNECTION_URL = "connectionUrl",
         USERNAME       = "username",
         SCHEMAS        = "schemas";
@@ -94,6 +101,17 @@ public interface Dbms extends
     default OptionalInt getPort() {
         return getAsInt(PORT);
     }
+
+    /**
+     * Returns the local path to the file where the data of this Dbms is stored.
+     * The file name should be parsable using {@link Paths#get}. This property
+     * is optional and not even supported in most database systems.
+     *
+     * @return the local path to the data file
+     */
+    default Optional<String> getLocalPath() {
+        return getAsString(LOCAL_PATH);
+    }
     
     /**
      * Returns the explicit connection URL to use for this {@code Dbms} if the
@@ -131,5 +149,10 @@ public interface Dbms extends
     @Override
     default DbmsMutator<? extends Dbms> mutator() {
         return DocumentMutator.of(this);
+    }
+
+    @Override
+    default Dbms deepCopy() {
+        return DocumentUtil.deepCopy(this, DbmsImpl::new);
     }
 }

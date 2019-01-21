@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,22 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.join.internal.component.join;
+package com.speedment.runtime.connector.sqlite.internal;
 
-import static org.junit.Assert.fail;
-import org.junit.Ignore;
-import org.junit.Test;
+import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.runtime.core.db.DbmsOperationHandler;
+import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
 
 /**
+ * The implementation of {@link DbmsOperationHandler} for SQLite databases.
  *
- * @author Per Minborg
+ * @author Emil Forslund
+ * @since  3.1.10
  */
-public final class FailTest {
-
-    @Test
-    @Ignore
-    public void innerJoin2() {
-        fail("Test Jenkins Fail");
-    }
-
-}
+@InjectKey(DbmsOperationHandler.class)
+public final class SqliteOperationHandler
+extends AbstractDbmsOperationHandler {}

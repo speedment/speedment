@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,9 +17,19 @@
 package com.speedment.runtime.config;
 
 
+import com.speedment.runtime.config.internal.PrimaryKeyColumnImpl;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.PrimaryKeyColumnMutator;
-import com.speedment.runtime.config.trait.*;
+import com.speedment.runtime.config.trait.HasColumn;
+import com.speedment.runtime.config.trait.HasDeepCopy;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasId;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMutator;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasOrdinalPosition;
+import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.util.DocumentUtil;
 
 /**
  * A typed {@link Document} that represents the primary key column instance in
@@ -32,6 +42,7 @@ import com.speedment.runtime.config.trait.*;
 public interface PrimaryKeyColumn extends
     Document,
     HasParent<Table>,
+    HasDeepCopy,
     HasId,    
     HasName,
     HasEnabled,
@@ -50,4 +61,9 @@ public interface PrimaryKeyColumn extends
         return DocumentMutator.of(this);
     }
 
+
+    @Override
+    default PrimaryKeyColumn deepCopy() {
+        return DocumentUtil.deepCopy(this, PrimaryKeyColumnImpl::new);
+    }
 }

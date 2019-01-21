@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,16 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.internal.stream.parallel;
 
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
-import org.junit.*;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,39 +39,23 @@ import static java.util.stream.Collectors.toList;
  *
  * @author pemi
  */
-public class ComputeIntensityParallelStrategyTest {
+final class ComputeIntensityParallelStrategyTest {
 
     private static final int SIZE = 1 << 20;
     private List<Integer> list;
 
-    public ComputeIntensityParallelStrategyTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         list = IntStream.range(0, SIZE).boxed().collect(toList());
     }
 
-    @After
-    public void tearDown() {
-    }
-    @Rule
-    public TestName name = new TestName();
 
     protected void printTestName() {
         //System.out.println(name.getMethodName());
     }
 
     @Test
-    public void testSpliteratorUnknownSize() {
+    void testSpliteratorUnknownSize() {
         printTestName();
         strategies().forEach(strategy -> {
 
@@ -103,7 +82,7 @@ public class ComputeIntensityParallelStrategyTest {
     }
 
     @Test
-    public void testAll() {
+    void testAll() {
         printTestName();
         for (int i = 2; i < 18; i++) {
             final int size = 1 << i;

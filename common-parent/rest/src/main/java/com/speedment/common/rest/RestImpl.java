@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,12 +24,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Iterator;
+import java.util.*;
+
 import static java.util.Objects.requireNonNull;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import static java.util.stream.Collectors.joining;
+
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -322,29 +325,40 @@ class RestImpl implements Rest {
 
         @Override
         public String next() {
-            throw new IllegalStateException(
+            throw new NoSuchElementException(
                 "This method should never be called."
             );
         }
     };
-    
-    private final static class SingletonIterator<T> implements Iterator<T> {
-        
-        private final AtomicBoolean first = new AtomicBoolean(true);
-        private final T instance;
-        
-        private SingletonIterator(T instance) {
-            this.instance = instance;
+
+    private final static class SingletonIterator<E> implements Iterator<E> {
+
+        private final E e;
+        private boolean hasNext = true;
+
+        private SingletonIterator(E e) {
+            this.e = e;
         }
 
-        @Override
         public boolean hasNext() {
-            return first.compareAndSet(true, false);
+            return hasNext;
+        }
+
+        public E next() {
+            if (hasNext) {
+                hasNext = false;
+                return e;
+            }
+            throw new NoSuchElementException();
         }
 
         @Override
-        public T next() {
-            return instance;
+        public void forEachRemaining(Consumer<? super E> action) {
+            Objects.requireNonNull(action);
+            if (hasNext) {
+                action.accept(e);
+                hasNext = false;
+            }
         }
     }
     

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,46 +17,44 @@
 package com.speedment.common.tuple.mutable;
 
 import com.speedment.common.tuple.MutableTuples;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Per Minborg
  */
-public class MutableTuplesTest {
+final class MutableTuplesTest {
 
     @Test
-    public void degree0() {
+    void degree0() {
         final MutableTuple0 t0 = MutableTuples.create0();
         test(t0);
     }
 
     @Test
-    public void constructor0() {
+    void constructor0() {
         final MutableTuple0 t0 = MutableTuples.constructor().get();
         test(t0);
     }
 
     @Test
-    public void degree1() {
+    void degree1() {
         final MutableTuple1<Integer> t0 = MutableTuples.create1();
         test(t0);
     }
 
     @Test
-    public void constructor1() {
+    void constructor1() {
         test(MutableTuples.constructor(Integer.class).get());
     }
 
     @Test
-    public void constructor5() {
+    void constructor5() {
         final MutableTuple5<Integer, Integer, String, String, Long> t5 = MutableTuples.create5();
         t5.set0(0);
         t5.set1(1);

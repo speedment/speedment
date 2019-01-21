@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -32,12 +32,13 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.test_support.MockDbmsType;
 import com.speedment.runtime.test_support.MockEntity;
 import com.speedment.runtime.test_support.MockEntityUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *
@@ -58,7 +59,7 @@ public class FilterSortedSkipOptimizer_OptimizeTest {
     private AsynchronousQueryResult<MockEntity> asynchronousQueryResult;
     private SqlStreamOptimizerInfo<MockEntity> sqlStreamOptimizerInfo;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new FilterSortedSkipOptimizer<>();
         asynchronousQueryResult = new AsynchronousQueryResultImpl<>(

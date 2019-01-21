@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -46,11 +46,11 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
  */
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
 implements Dbms,
-            HasEnabledProperty,
-            HasExpandedProperty,
-            HasIdProperty,
-            HasNameProperty,
-            HasAliasProperty,
+           HasEnabledProperty,
+           HasExpandedProperty,
+           HasIdProperty,
+           HasNameProperty,
+           HasAliasProperty,
            HasNameProtectedProperty {
 
     public DbmsProperty(Project parent) {
@@ -89,6 +89,15 @@ implements Dbms,
     @Override
     public OptionalInt getPort() {
         return OptionalUtil.ofNullable(portProperty().get());
+    }
+
+    public StringProperty localPathProperty() {
+        return stringPropertyOf(LOCAL_PATH,  () -> Dbms.super.getLocalPath().orElse(null));
+    }
+
+    @Override
+    public Optional<String> getLocalPath() {
+        return Optional.ofNullable(localPathProperty().get());
     }
     
     public StringProperty connectionUrlProperty() {

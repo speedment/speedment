@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,15 +22,12 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.tuple.nullable.Tuple2OfNullables;
 import com.speedment.runtime.core.ApplicationBuilder;
-import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.JoinBundle;
 import com.speedment.runtime.join.JoinComponent;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
 import com.speedment.runtime.join.internal.component.join.test_support.*;
-import com.speedment.runtime.join.internal.component.stream.SqlJoinStreamSupplierComponent;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
@@ -40,7 +37,7 @@ import static java.util.stream.Collectors.toSet;
  *
  * @author Per Minborg
  */
-public final class JoinTest {
+final class JoinTest {
 
     private final static Logger LOGGER_JOIN =
         LoggerManager.getLogger(ApplicationBuilder.LogType.JOIN.getLoggerName());
@@ -49,8 +46,8 @@ public final class JoinTest {
     private JoinStreamSupplierComponent jssc;
 
 
-    @Before
-    public void init() throws InstantiationException {
+    @BeforeEach
+    void init() throws InstantiationException {
         LOGGER_JOIN.setLevel(Level.DEBUG);
 
 //        final Speedment app = new DefaultApplicationBuilder(MockMetadata.class)
@@ -85,7 +82,7 @@ public final class JoinTest {
     }
 
     @Test
-    public void crossJoin2() {
+    void crossJoin2() {
         final Join<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> join = jc
             .from(JoinTestUtil.E0Manager.IDENTIFIER)
             .crossJoin(JoinTestUtil.E1Manager.IDENTIFIER)
@@ -96,7 +93,7 @@ public final class JoinTest {
     }
 
     @Test
-    public void innerJoin2() {
+    void innerJoin2() {
         final Join<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> join = jc
             .from(JoinTestUtil.E0Manager.IDENTIFIER)
             .leftJoinOn(JoinTestUtil.E1.ID1).equal(JoinTestUtil.E0.ID0)

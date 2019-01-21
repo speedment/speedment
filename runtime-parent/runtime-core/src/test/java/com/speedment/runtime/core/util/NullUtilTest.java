@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,117 +14,107 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.util;
 
 import com.speedment.common.invariant.NullUtil;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author Per Minborg
  */
-public class NullUtilTest {
+final class NullUtilTest {
 
     private static final String[] ARRAY_WITH_NULL = {"A", "B", null, "D"};
     private static final String[] ARRAY_WITHOUT_NULL = {"A", "B", "C", "D"};
     private static final List<String> LIST_WITH_NULL = Arrays.asList(ARRAY_WITH_NULL);
     private static final List<String> LIST_WITHOUT_NULL = Arrays.asList(ARRAY_WITHOUT_NULL);
 
-    public NullUtilTest() {
-    }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
+    @Test
+    void testRequireNonNullElements_array_null() {
+        assertThrows(NullPointerException.class, () -> {
+            NullUtil.requireNonNullElements((Object[]) null);
+        });
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRequireNonNullElements_array_null() {
-        NullUtil.requireNonNullElements((Object[]) null);
     }
 
     @Test
-    public void testRequireNonNullElements_array_no_nulls() {
+    void testRequireNonNullElements_array_no_nulls() {
         NullUtil.requireNonNullElements(ARRAY_WITHOUT_NULL);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testRequireNonNullElements_array_contains_null() {
-        NullUtil.requireNonNullElements(ARRAY_WITH_NULL);
+    @Test
+    void testRequireNonNullElements_array_contains_null() {
+        assertThrows(NullPointerException.class, () -> {
+            NullUtil.requireNonNullElements(ARRAY_WITH_NULL);
+        });
     }
 
     @Test
-    public void testRequireNonNullElements_array_contains_no_nulls() {
+    void testRequireNonNullElements_array_contains_no_nulls() {
         assertArrayEquals(ARRAY_WITHOUT_NULL, NullUtil.requireNonNullElements(ARRAY_WITHOUT_NULL));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testRequireNonNullElements_collection_null() {
-        Collection<String> collection = null;
-        NullUtil.requireNonNullElements(collection);
+    @Test
+    void testRequireNonNullElements_collection_null() {
+        assertThrows(NullPointerException.class, () -> {
+            Collection<String> collection = null;
+            NullUtil.requireNonNullElements(collection);
+        });
     }
 
     @Test
-    public void testRequireNonNullElements_collection_whithout_null() {
+    void testRequireNonNullElements_collection_whithout_null() {
         assertEquals(LIST_WITHOUT_NULL, NullUtil.requireNonNullElements(LIST_WITHOUT_NULL));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testRequireNonNullElements_collection_containts_null() {
-        NullUtil.requireNonNullElements(LIST_WITH_NULL);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRequireNonNullElements_GenericType_String() {
-        final String msg = "OlleOchTryggve";
-        try {
-            final String[] result = NullUtil.requireNonNullElements(ARRAY_WITH_NULL, msg);
-        } catch (NullPointerException ex) {
-            assertTrue(ex.getMessage().contains(msg));
-            throw ex;
-        }
+    @Test
+    void testRequireNonNullElements_collection_containts_null() {
+        assertThrows(NullPointerException.class, () -> {
+            NullUtil.requireNonNullElements(LIST_WITH_NULL);
+        });
     }
 
     @Test
-    public void testRequireNonNullElements_GenericType_String_Ok() {
+    void testRequireNonNullElements_GenericType_String() {
+        assertThrows(NullPointerException.class, () -> {
+            final String msg = "OlleOchTryggve";
+            try {
+                final String[] result = NullUtil.requireNonNullElements(ARRAY_WITH_NULL, msg);
+            } catch (NullPointerException ex) {
+                assertTrue(ex.getMessage().contains(msg));
+                throw ex;
+            }
+        });
+    }
+
+    @Test
+    void testRequireNonNullElements_GenericType_String_Ok() {
         final String[] result = NullUtil.requireNonNullElements(ARRAY_WITHOUT_NULL, "A");
         assertArrayEquals(ARRAY_WITHOUT_NULL, result);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testRequireNonNulls_Object() {
-        final String o0 = null;
-        NullUtil.requireNonNulls(o0);
+    @Test
+    void testRequireNonNulls_Object() {
+        assertThrows(NullPointerException.class, () -> {
+            final String o0 = null;
+            NullUtil.requireNonNulls(o0);
+        });
     }
 
     @Test
-    public void testRequireNonNulls_Object_NotNull() {
+    void testRequireNonNulls_Object_NotNull() {
         final String o0 = "A";
         NullUtil.requireNonNulls(o0);
     }
 
     @Test
-    public void testRequireNonNulls_Object_Object() {
+    void testRequireNonNulls_Object_Object() {
         final String obj0 = "A";
         final String obj1 = "B";
         requireNullPointerException(() -> NullUtil.requireNonNulls(obj0, null));
@@ -133,7 +123,7 @@ public class NullUtilTest {
     }
 
     @Test
-    public void testRequireNonNulls_3args() {
+    void testRequireNonNulls_3args() {
         final String obj0 = "A";
         final String obj1 = "B";
         final String obj2 = "C";
@@ -144,7 +134,7 @@ public class NullUtilTest {
     }
 
     @Test
-    public void testRequireNonNulls_4args() {
+    void testRequireNonNulls_4args() {
         final String obj0 = "A";
         final String obj1 = "B";
         final String obj2 = "C";
@@ -157,7 +147,7 @@ public class NullUtilTest {
     }
 
     @Test
-    public void testRequireNonNulls_5args() {
+    void testRequireNonNulls_5args() {
         final String obj0 = "A";
         final String obj1 = "B";
         final String obj2 = "C";
@@ -172,7 +162,7 @@ public class NullUtilTest {
     }
 
     @Test
-    public void testRequireNonNulls_6args() {
+    void testRequireNonNulls_6args() {
         final String obj0 = "A";
         final String obj1 = "B";
         final String obj2 = "C";
@@ -189,7 +179,7 @@ public class NullUtilTest {
     }
 
     @Test
-    public void testRequireNonNulls_7args() {
+    void testRequireNonNulls_7args() {
         final String obj0 = "A";
         final String obj1 = "B";
         final String obj2 = "C";
@@ -208,7 +198,7 @@ public class NullUtilTest {
     }
 
     @Test
-    public void testRequireNonNulls_8args() {
+    void testRequireNonNulls_8args() {
         final String obj0 = "A";
         final String obj1 = "B";
         final String obj2 = "C";
@@ -228,38 +218,46 @@ public class NullUtilTest {
         NullUtil.requireNonNulls(obj0, obj1, obj2, obj3, obj4, obj5, obj6, obj7);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testRequireKeys_2args_1() {
-        NullUtil.requireKeys(null);
+    @Test
+    void testRequireKeys_2args_1() {
+        assertThrows(NullPointerException.class, () -> {
+            NullUtil.requireKeys(null);
+        });
     }
 
     @Test
-    public void testRequireKeys_2args_1_NotNull() {
+    void testRequireKeys_2args_1_NotNull() {
         NullUtil.requireKeys(new HashMap<String, String>());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testRequireKeys_2args_2() {
-        final String[] arr = {"A"};
-        NullUtil.requireKeys((Map<String, String>) null, arr);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testRequireKeys_2args_2_2() {
-        NullUtil.requireKeys(new HashMap<String, String>(), (String) null);
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void testRequireKeys_2args_2_3_err() {
-        final Map<String, String> map = new HashMap<>();
-        map.put("A", "Tryggve");
-        map.put("B", "Sven");
-        final String[] arr = {"A", "B", "StangeKey"};
-        final Map<String, String> result = NullUtil.requireKeys(map, arr);
+    @Test
+    void testRequireKeys_2args_2() {
+        assertThrows(NullPointerException.class, () -> {
+            final String[] arr = {"A"};
+            NullUtil.requireKeys((Map<String, String>) null, arr);
+        });
     }
 
     @Test
-    public void testRequireKeys_2args_2_3() {
+    void testRequireKeys_2args_2_2() {
+        assertThrows(NullPointerException.class, () -> {
+            NullUtil.requireKeys(new HashMap<String, String>(), (String) null);
+        });
+    }
+
+    @Test
+    void testRequireKeys_2args_2_3_err() {
+        assertThrows(NoSuchElementException.class, () -> {
+            final Map<String, String> map = new HashMap<>();
+            map.put("A", "Tryggve");
+            map.put("B", "Sven");
+            final String[] arr = {"A", "B", "StangeKey"};
+            final Map<String, String> result = NullUtil.requireKeys(map, arr);
+        });
+    }
+
+    @Test
+    void testRequireKeys_2args_2_3() {
         final Map<String, String> map = new HashMap<>();
         map.put("A", "Tryggve");
         map.put("B", "Sven");
@@ -268,16 +266,18 @@ public class NullUtilTest {
         assertEquals(map, result);
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void testRequireKeys_3args() {
-        final Map<String, String> map = new HashMap<>();
-        map.put("A", "Tryggve");
-        map.put("B", "Sven");
-        final Map<String, String> result = NullUtil.requireKeys(map, "A", "Z");
+    @Test
+     void testRequireKeys_3args() {
+        assertThrows(NoSuchElementException.class, () -> {
+            final Map<String, String> map = new HashMap<>();
+            map.put("A", "Tryggve");
+            map.put("B", "Sven");
+            final Map<String, String> result = NullUtil.requireKeys(map, "A", "Z");
+        });
     }
 
     @Test
-    public void testRequireKeys_3args_2() {
+    void testRequireKeys_3args_2() {
         final Map<String, String> map = new HashMap<>();
         map.put("A", "Tryggve");
         map.put("B", "Sven");
@@ -285,17 +285,19 @@ public class NullUtilTest {
         assertEquals(map, result);
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void testRequireKeys_4args() {
-        final Map<String, String> map = new HashMap<>();
-        map.put("A", "Tryggve");
-        map.put("B", "Sven");
-        map.put("C", "Glenn");
-        final Map<String, String> result = NullUtil.requireKeys(map, "A", "B", "Z");
+    @Test
+    void testRequireKeys_4args() {
+        assertThrows(NoSuchElementException.class, () -> {
+            final Map<String, String> map = new HashMap<>();
+            map.put("A", "Tryggve");
+            map.put("B", "Sven");
+            map.put("C", "Glenn");
+            final Map<String, String> result = NullUtil.requireKeys(map, "A", "B", "Z");
+        });
     }
 
     @Test
-    public void testRequireKeys_4args_2() {
+    void testRequireKeys_4args_2() {
         final Map<String, String> map = new HashMap<>();
         map.put("A", "Tryggve");
         map.put("B", "Sven");
@@ -305,7 +307,7 @@ public class NullUtilTest {
     }
 
     @Test
-    public void createInstance() {
+    void createInstance() {
         TestUtil.assertNonInstansiable(NullUtil.class);
     }
 

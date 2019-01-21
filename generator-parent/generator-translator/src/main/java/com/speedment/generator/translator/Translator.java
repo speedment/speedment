@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -52,7 +52,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
 
     /**
      * Return this node or any ancestral node that is a {@link Project}. If no
-     * such node exists, an {@code IllegalStateException} is thrown.
+     * such node exists, an {@code Optional.empty()} is returned.
      *
      * @return the project node
      */
@@ -61,8 +61,8 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
     }
 
     /**
-     * Return this node or any ancestral node that is a {@link Dbms}. If no such
-     * node exists, an {@code IllegalStateException} is thrown.
+     * Return this node or any ancestral node that is a {@link Dbms}. If no
+     * such node exists, an {@code Optional.empty()} is returned.
      *
      * @return the dbms node
      */
@@ -72,7 +72,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
 
     /**
      * Return this node or any ancestral node that is a {@link Schema}. If no
-     * such node exists, an {@code IllegalStateException} is thrown.
+     * such node exists, an {@code Optional.empty()} is returned.
      *
      * @return the schema node
      */
@@ -82,7 +82,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
 
     /**
      * Return this node or any ancestral node that is a {@link Table}. If no
-     * such node exists, an {@code IllegalStateException} is thrown.
+     * such node exists, an {@code Optional.empty()} is returned.
      *
      * @return the table node
      */
@@ -92,7 +92,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
 
     /**
      * Return this node or any ancestral node that is a {@link Column}. If no
-     * such node exists, an {@code IllegalStateException} is thrown.
+     * such node exists, an {@code Optional.empty()} is returned.
      *
      * @return the column node
      */
@@ -126,7 +126,8 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
     default Stream<? extends Index> indexes() {
         return table()
             .map(Table::indexes)
-            .orElse(Stream.empty()).filter(HasEnabled::test);
+            .orElse(Stream.empty())
+            .filter(HasEnabled::test);
     }
 
     /**
@@ -168,8 +169,8 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
 
     /**
      * Returns this node or one of the ancestor nodes if it matches the
-     * specified {@code Class}. If no such node exists, an
-     * {@code IllegalStateException} is thrown.
+     * specified {@code Class}. If no
+     * such node exists, an {@code Optional.empty()} is returned.
      *
      * @param <E> the type of the class to match
      * @param clazz the class to match

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,20 +22,20 @@
 package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.ExpressionType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
 import static com.speedment.runtime.compute.TestUtil.strings;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>> {
+final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>> {
 
-    public ToBigDecimalTest() {
+    ToBigDecimalTest() {
         super(ExpressionType.BIG_DECIMAL);
     }
 
@@ -45,7 +45,7 @@ public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>>
     }
 
     @Test
-    public void testApplyAsInt() {
+    void testApplyAsInt() {
         strings().forEach(s -> {
             final long actual = mapper.applyAsLong(s);
             final long expected = instance.apply(s).longValue();
@@ -64,7 +64,7 @@ public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>>
 //        });
 //    }
     @Test
-    public void testMap() {
+    void testMap() {
         strings().forEach(s -> {
             final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToBigDecimal<String> to = instance.map(l -> l.add(BigDecimal.ONE));
@@ -74,7 +74,7 @@ public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>>
     }
 
     @Test
-    public void testCompose() {
+    void testCompose() {
         strings().forEach(s -> {
             final ToBigDecimalNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals(BigDecimal.valueOf(mapper.applyAsLong(s + "A")), composed.apply(s));
@@ -82,7 +82,7 @@ public final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>>
     }
     
     @Test
-    public void testOf() {
+    void testOf() {
         strings().forEach(s -> {
             final ToBigDecimal<String> created = ToBigDecimal.of(str -> BigDecimal.valueOf(str.length()));
             assertEquals(BigDecimal.valueOf(s.length()), created.apply(s));

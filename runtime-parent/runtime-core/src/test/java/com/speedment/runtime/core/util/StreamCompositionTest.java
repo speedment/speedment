@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,29 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.util;
 
-import org.junit.*;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author pemi
  */
-public class StreamCompositionTest {
+final class StreamCompositionTest {
 
     List<String> producedItems;
     List<Boolean> closeStatus;
@@ -45,19 +40,8 @@ public class StreamCompositionTest {
     Stream<String> b;
     Stream<String> c;
 
-    public StreamCompositionTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         producedItems = new ArrayList<>();
         closeStatus = Arrays.asList(false, false, false);
 
@@ -67,19 +51,12 @@ public class StreamCompositionTest {
 
     }
 
-    @Rule
-    public TestName name = new TestName();
-
     private void produceException(String s) {
         throw new RuntimeException("Opps, something went south.");
     }
 
-    @After
-    public void tearDown() {
-    }
-
     @Test
-    public void testPureStream() {
+    void testPureStream() {
         printTestName();
         List<String> result = StreamComposition.concatAndAutoClose(a, b, c).collect(toList());
         assertEquals(Arrays.asList("A", "B", "C"), result);
@@ -87,7 +64,7 @@ public class StreamCompositionTest {
     }
 
     @Test
-    public void testPartialIteration() {
+    void testPartialIteration() {
         printTestName();
         Optional<String> result = StreamComposition.concatAndAutoClose(a, b, c).findFirst();
         assertEquals(Optional.of("A"), result);
@@ -97,7 +74,7 @@ public class StreamCompositionTest {
     }
 
     @Test
-    public void testException() {
+    void testException() {
         printTestName();
         final AtomicBoolean fClosed = new AtomicBoolean();
         boolean gotException = false;
@@ -114,7 +91,7 @@ public class StreamCompositionTest {
     }
 
     @Test
-    public void testExceptionInClose() {
+    void testExceptionInClose() {
         printTestName();
         final AtomicBoolean fClosed = new AtomicBoolean();
         final AtomicBoolean gClosed = new AtomicBoolean();
@@ -140,7 +117,7 @@ public class StreamCompositionTest {
     }
 
     @Test
-    public void testChainedStreams() {
+    void testChainedStreams() {
         printTestName();
 
         // This test makes sure that "chained" streams gets closed all the way up to the "root"

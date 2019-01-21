@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,6 +23,7 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.predicate.CombinedPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
@@ -111,11 +112,13 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
 
     void addPredicate(Predicate<? super T> predicate) {
         requireNonNull(predicate);
-        if (!(predicate instanceof FieldPredicate)) {
+        if (!(predicate instanceof FieldPredicate || predicate instanceof CombinedPredicate)) {
             throw new IllegalArgumentException(
                 "The predicate " + predicate + " for join stage "
                 + stageBeans.size() + " does not implement "
                 + FieldPredicate.class.getName()
+                + " or "
+                + CombinedPredicate.class.getName()
                 + ". Only Speedment predicates can be used for join operations"
                 + " (and thus no anonymous lambdas)."
             );

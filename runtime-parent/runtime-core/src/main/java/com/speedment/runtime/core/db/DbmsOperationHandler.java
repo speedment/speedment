@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.db;
 
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 import java.sql.*;
@@ -25,6 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 /**
@@ -303,6 +303,6 @@ public interface DbmsOperationHandler {
         // Do nothing by default
     }
        
-    <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement sqlStatement) throws SQLException;
+    void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException;
 
 }

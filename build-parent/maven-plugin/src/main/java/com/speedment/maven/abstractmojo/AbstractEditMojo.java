@@ -1,3 +1,19 @@
+/**
+ *
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.maven.abstractmojo;
 
 import com.speedment.common.json.Json;
@@ -189,8 +205,9 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             final int index = where.lastIndexOf(PATH_SEPARATOR);
             final String parentIds = where.substring(0, index).trim();
             lastWhere = where.substring(index + PATH_SEPARATOR.length()).trim();
-            if (document.getParent().isPresent()) {
-                if (!matches(document.getParent().get(), parentIds)) {
+            final Optional<? extends Document> parent = document.getParent();
+            if (parent.isPresent()) {
+                if (!matches(parent.get(), parentIds)) {
                     return false;
                 }
             }

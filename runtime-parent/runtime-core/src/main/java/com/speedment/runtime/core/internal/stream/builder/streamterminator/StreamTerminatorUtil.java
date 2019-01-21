@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -201,7 +201,7 @@ public final class StreamTerminatorUtil {
         private final String sql;
         private final List<Object> values;
 
-        public RenderResultImpl(String sql, List<Object> values /*, Pipeline pipeline*/) {
+        RenderResultImpl(String sql, List<Object> values /*, Pipeline pipeline*/) {
             this.sql = sql;
             this.values = values;
         }
@@ -246,12 +246,14 @@ public final class StreamTerminatorUtil {
             if (cnt.getAndIncrement() != 0) {
                 sql.append(" AND ");
             }
-            renderSqlWhileHelper(predicateView, columnNamer, columnDbTypeFunction, sql, values, predicate);
+            renderSqlWhereHelper(predicateView, columnNamer, columnDbTypeFunction, sql, values, predicate);
         });
         return new RenderResultImpl(sql.toString(), values);
     }
 
-    private static <T extends Pipeline, ENTITY> void renderSqlWhileHelper(
+    // See JoinSqlUtil::renderPredicateHelper for JOIN streams
+
+    private static <T extends Pipeline, ENTITY> void renderSqlWhereHelper(
         final FieldPredicateView spv,
         final Function<Field<ENTITY>, String> columnNamer,
         final Function<Field<ENTITY>, Class<?>> columnDbTypeFunction,
@@ -279,7 +281,7 @@ public final class StreamTerminatorUtil {
                 }
                 @SuppressWarnings("unchecked")
                 final Predicate<ENTITY> castedInternalPredicate = (Predicate<ENTITY>) internalPredicate;
-                renderSqlWhileHelper(
+                renderSqlWhereHelper(
                     spv,
                     columnNamer,
                     columnDbTypeFunction,

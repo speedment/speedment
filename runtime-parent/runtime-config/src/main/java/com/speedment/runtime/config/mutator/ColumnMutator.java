@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,12 +19,18 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
+import com.speedment.runtime.config.mutator.trait.HasColumnSizeMutator;
+import com.speedment.runtime.config.mutator.trait.HasDecimalDigitsMutator;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
+import com.speedment.runtime.config.util.ClassUtil;
 
-import static com.speedment.runtime.config.Column.*;
-import com.speedment.runtime.config.mutator.trait.HasIdMutator;
+import static com.speedment.runtime.config.Column.AUTO_INCREMENT;
+import static com.speedment.runtime.config.Column.DATABASE_TYPE;
+import static com.speedment.runtime.config.Column.ENUM_CONSTANTS;
+import static com.speedment.runtime.config.Column.TYPE_MAPPER;
 import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
 
 /**
@@ -37,7 +43,9 @@ public class ColumnMutator<DOC extends Column> extends DocumentMutatorImpl<DOC> 
         HasEnabledMutator<DOC>, 
         HasIdMutator<DOC>,
         HasNameMutator<DOC>, 
-        HasAliasMutator<DOC>, 
+        HasAliasMutator<DOC>,
+        HasColumnSizeMutator<DOC>,
+        HasDecimalDigitsMutator<DOC>,
         HasOrdinalPositionMutator<DOC> {
 
     public ColumnMutator(DOC column) {
@@ -53,11 +61,11 @@ public class ColumnMutator<DOC extends Column> extends DocumentMutatorImpl<DOC> 
     }
 
     public void setTypeMapper(Class<?> typeMapperClass) {
-        put(TYPE_MAPPER, typeMapperClass.getName());
+        put(TYPE_MAPPER, ClassUtil.classToString(typeMapperClass));
     }
 
     public void setDatabaseType(Class<?> databaseType) {
-        put(DATABASE_TYPE, databaseType.getName());
+        put(DATABASE_TYPE, ClassUtil.classToString(databaseType));
     }
     
     public void setEnumConstants(String enumConstants) {

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,18 +18,18 @@ package com.speedment.runtime.core.internal.platform.component.impl;
 
 import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.Speedment;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public class CreateSpeedmentInstanceTest {
+final class CreateSpeedmentInstanceTest {
     
     @Test
-    public void createSpeedmentInstance() {
+    void createSpeedmentInstance() {
         final Speedment speedment = ApplicationBuilders.empty()
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()

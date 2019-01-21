@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,73 +16,75 @@
  */
 package com.speedment.common.invariant;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.function.LongPredicate;
 import java.util.function.LongUnaryOperator;
 import java.util.stream.LongStream;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public class LongRangeUtilTest {
+final class LongRangeUtilTest {
 
     private static final LongPredicate IS_POSITIVE = l -> l > 0;
     private static final LongPredicate IS_NEGATIVE = l -> l < 0;
     private static final LongPredicate IS_ZERO = l -> l == 0;
 
     @Test
-    public void testRequirePositive() {
+    void testRequirePositive() {
         testHelper(IS_POSITIVE, LongRangeUtil::requirePositive);
     }
 
     @Test
-    public void testRequireNegative() {
+    void testRequireNegative() {
         testHelper(IS_NEGATIVE, LongRangeUtil::requireNegative);
     }
 
     @Test
-    public void testRequireZero() {
+    void testRequireZero() {
         testHelper(IS_ZERO, LongRangeUtil::requireZero);
     }
 
     @Test
-    public void testRequireNonPositive() {
+    void testRequireNonPositive() {
         testHelper(IS_POSITIVE.negate(), LongRangeUtil::requireNonPositive);
     }
 
     @Test
-    public void testRequireNonNegative() {
+    void testRequireNonNegative() {
         testHelper(IS_NEGATIVE.negate(), LongRangeUtil::requireNonNegative);
     }
 
     @Test
-    public void testRequireNonZero() {
+    void testRequireNonZero() {
         testHelper(IS_ZERO.negate(), LongRangeUtil::requireNonZero);
     }
 
     @Test
-    public void testRequireEquals() {
+    void testRequireEquals() {
         final long otherVal = 3;
         testHelper(l -> l == otherVal, l -> LongRangeUtil.requireEquals(l, otherVal));
     }
 
     @Test
-    public void testRequireNotEquals() {
+    void testRequireNotEquals() {
         final long otherVal = 3;
         testHelper(l -> l != otherVal, l -> LongRangeUtil.requireNotEquals(l, otherVal));
     }
 
     @Test
-    public void testRequireInRange() {
+    void testRequireInRange() {
         final long first = -1;
         final long lastExclusive = 4;
         testHelper(l -> l >= first && l < lastExclusive, l -> LongRangeUtil.requireInRange(l, first, lastExclusive));
     }
 
     @Test
-    public void testRequireInRangeClosed() {
+    void testRequireInRangeClosed() {
         final long first = -1;
         final long lastInclusive = 4;
         testHelper(l -> l >= first && l <= lastInclusive, l -> LongRangeUtil.requireInRangeClosed(l, first, lastInclusive));

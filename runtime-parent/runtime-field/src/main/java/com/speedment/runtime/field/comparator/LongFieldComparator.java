@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,10 +17,11 @@
 package com.speedment.runtime.field.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.field.LongField;
 import com.speedment.runtime.field.trait.HasLongValue;
 
 /**
- * A {@link FieldComparator} that compares values of a {@link HasLongValue}.
+ * A {@link FieldComparator} that compares values of a {@link LongField}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type

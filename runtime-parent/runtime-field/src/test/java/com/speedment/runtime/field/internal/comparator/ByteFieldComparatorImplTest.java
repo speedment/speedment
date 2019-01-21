@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,29 +26,32 @@ import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  *
  * @author Per Minborg
  */
-public class ByteFieldComparatorImplTest {
+final class ByteFieldComparatorImplTest {
 
     ByteFieldComparatorImpl<ByteValue, Byte> instance;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = new ByteFieldComparatorImpl<>(ByteValue.BYTE);
     }
 
     @Test
-    public void testGetField() {
+    void testGetField() {
         final ByteField<ByteValue, Byte> expResult = ByteValue.BYTE;
         final ByteField<ByteValue, Byte> result =
             (ByteField<ByteValue, Byte>) instance.getField();
@@ -56,21 +59,21 @@ public class ByteFieldComparatorImplTest {
     }
 
     @Test
-    public void testGetNullOrder() {
+    void testGetNullOrder() {
         final NullOrder expResult = NullOrder.NONE;
         final NullOrder result = instance.getNullOrder();
         assertEquals(expResult, result);
     }
 
     @Test
-    public void testIsReversed() {
+    void testIsReversed() {
         boolean expResult = false;
         boolean result = instance.isReversed();
         assertEquals(expResult, result);
     }
 
     @Test
-    public void testReversed() {
+    void testReversed() {
         final FieldComparator<ByteValue> expResult = new ByteFieldComparatorImpl<>(ByteValue.BYTE, true);
         final FieldComparator<ByteValue> result = instance.reversed();
         assertEquals(expResult, result);
@@ -78,7 +81,7 @@ public class ByteFieldComparatorImplTest {
     }
 
     @Test
-    public void testCompareSimple() {
+    void testCompareSimple() {
         final ByteValue first = ByteValue.of((byte) 0);
         final ByteValue second = ByteValue.of((byte) 1);
         int expResult = -1;
@@ -87,7 +90,7 @@ public class ByteFieldComparatorImplTest {
     }
 
     @Test
-    public void testCompareAllTheThings() {
+    void testCompareAllTheThings() {
         IntStream.rangeClosed(Byte.MIN_VALUE, Byte.MAX_VALUE).forEach(first -> {
             IntStream.rangeClosed(Byte.MIN_VALUE, Byte.MAX_VALUE).forEach(second -> {
                 final ByteValue firstByteValue = ByteValue.of((byte) first);
@@ -110,20 +113,20 @@ public class ByteFieldComparatorImplTest {
     }
 
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         final int expResult = new ByteFieldComparatorImpl<>(ByteValue.BYTE, false).reversed().reversed().hashCode();
         final int result = instance.hashCode();
         assertEquals(expResult, result);
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         final ByteFieldComparatorImpl<ByteValue, Byte> result = new ByteFieldComparatorImpl<>(ByteValue.BYTE, false);
         assertEquals(instance, result);
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         final String result = instance.toString();
         assertNotNull(result);
     }

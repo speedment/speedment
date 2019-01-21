@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -60,6 +60,8 @@ public final class EnumForeignKeyFieldImpl
     <ENTITY, D, E extends Enum<E>, FK>
 implements EnumForeignKeyField<ENTITY, D, E, FK>,
            FieldComparator<ENTITY> {
+
+    public static final String UNKNOWN_INCLUSION = "Unknown inclusion";
 
     private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, E> getter;
@@ -311,7 +313,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return e.compareTo(start) >= 0 && e.compareTo(end) <= 0;
                 default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
+                    UNKNOWN_INCLUSION + " '" + inclusion + "'."
                 );
             }
         });
@@ -330,7 +332,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return e.compareTo(start) <  0 || e.compareTo(end) >  0;
                 default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
+                    UNKNOWN_INCLUSION + " '" + inclusion + "'."
                 );
             }
         });
@@ -408,7 +410,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return str.compareTo(start) >= 0 && str.compareTo(end) <= 0;
                 default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
+                    UNKNOWN_INCLUSION + " '" + inclusion + "'."
                 );
             }
         });
@@ -430,7 +432,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return str.compareTo(start) <  0 || str.compareTo(end) >  0;
                 default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
+                    UNKNOWN_INCLUSION + " '" + inclusion + "'."
                 );
             }
         });

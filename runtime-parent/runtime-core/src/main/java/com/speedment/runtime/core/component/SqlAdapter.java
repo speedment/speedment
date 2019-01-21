@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,10 +19,11 @@ package com.speedment.runtime.core.component;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.db.SqlFunction;
+
 import java.sql.ResultSet;
 
 /**
- * An SqlAdapter provides a means to read entities from a RsultSet.
+ * An SqlAdapter provides a means to read entities from a ResultSet.
  *
  * @author Per Minborg
  * @param <ENTITY> type for which mapping shall be carried out

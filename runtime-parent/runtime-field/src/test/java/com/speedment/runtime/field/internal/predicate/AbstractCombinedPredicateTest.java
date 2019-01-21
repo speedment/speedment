@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,7 +22,7 @@
 package com.speedment.runtime.field.internal.predicate;
 
 import com.speedment.runtime.field.predicate.CombinedPredicate;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,14 +32,14 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class AbstractCombinedPredicateTest {
+final class AbstractCombinedPredicateTest {
 
     private static final Predicate<Integer> MOD2 = new Predicate<Integer>() {
         @Override
@@ -88,7 +88,7 @@ public class AbstractCombinedPredicateTest {
     };
 
     @Test
-    public void testStream() {
+    void testStream() {
         final Set<Predicate<Integer>> set = Stream.of(MOD2, MOD4, MOD8).collect(toSet());
 
         CombinedPredicate<Integer> p = CombinedPredicate.and(MOD2, MOD4);
@@ -97,7 +97,7 @@ public class AbstractCombinedPredicateTest {
     }
 
     @Test
-    public void testSize() {
+    void testSize() {
         CombinedPredicate<Integer> p = CombinedPredicate.and(MOD2, MOD4);
         p = p.and(MOD8);
         final long actual = p.stream().count();
@@ -105,7 +105,7 @@ public class AbstractCombinedPredicateTest {
     }
 
     @Test
-    public void testGetPredicates() {
+    void testGetPredicates() {
         CombinedPredicate<Integer> p = new AbstractCombinedPredicate.AndCombinedBasePredicate<>(Arrays.asList(MOD2, MOD4));
         p = p.and(MOD8);
         final List<Predicate<Integer>> expected = Arrays.asList(MOD2, MOD4, MOD8);
@@ -114,7 +114,7 @@ public class AbstractCombinedPredicateTest {
     }
 
     @Test
-    public void testGetType() {
+    void testGetType() {
         final CombinedPredicate<Integer> or = CombinedPredicate.or(MOD2, MOD4);
         assertEquals(CombinedPredicate.Type.OR, or.getType());
         final CombinedPredicate<Integer> and = CombinedPredicate.and(MOD2, MOD4);
@@ -128,7 +128,7 @@ public class AbstractCombinedPredicateTest {
     }
 
     @Test
-    public void testAnd() {
+    void testAnd() {
         CombinedPredicate<Integer> p = CombinedPredicate.and(MOD2, MOD4);
         p = p.and(MOD8);
 
@@ -141,7 +141,7 @@ public class AbstractCombinedPredicateTest {
     }
 
     @Test
-    public void testOr() {
+    void testOr() {
         CombinedPredicate<Integer> p = CombinedPredicate.or(MOD2, MOD4);
         p = p.or(MOD8);
 
@@ -153,7 +153,7 @@ public class AbstractCombinedPredicateTest {
     }
 
     @Test
-    public void testComposed() {
+    void testComposed() {
         CombinedPredicate<Integer> p = CombinedPredicate.and(MOD2, MOD4);
         p = p.and(MOD8);
         p = p.or(MOD3);
@@ -165,7 +165,7 @@ public class AbstractCombinedPredicateTest {
     }
 
     @Test
-    public void testNegate() {
+    void testNegate() {
         CombinedPredicate<Integer> p = CombinedPredicate.and(MOD2, MOD4);
         p = p.and(MOD8);
         p = p.negate();

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,18 +21,18 @@
  */
 package com.speedment.runtime.core.internal.code.model.java;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author pemi
  */
-public class SimpleModelTest extends SimpleModel {
+final class SimpleModelTest extends SimpleModel {
     
     @Test
-    public void testModel() {
+    void testModel() {
         assertNotNull(project);
         assertNotNull(dbms);
         assertNotNull(schema);

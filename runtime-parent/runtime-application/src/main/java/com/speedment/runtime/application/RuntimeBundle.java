@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,7 +20,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.runtime.connector.mariadb.MariaDbBundle;
 import com.speedment.runtime.connector.mysql.MySqlBundle;
 import com.speedment.runtime.connector.postgres.PostgresBundle;
-
+import com.speedment.runtime.connector.sqlite.SqliteBundle;
 import com.speedment.runtime.core.internal.component.ConnectionPoolComponentImpl;
 import com.speedment.runtime.core.internal.component.DbmsHandlerComponentImpl;
 import com.speedment.runtime.core.internal.component.EntityManagerImpl;
@@ -36,6 +36,7 @@ import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerCompo
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
 import com.speedment.runtime.core.internal.component.transaction.TransactionComponentImpl;
+import com.speedment.runtime.core.internal.db.DriverComponentImpl;
 import com.speedment.runtime.join.JoinBundle;
 
 import java.util.stream.Stream;
@@ -65,12 +66,13 @@ public class RuntimeBundle implements InjectBundle {
             StatisticsReporterSchedulerComponentImpl.class,
             SqlStreamOptimizerComponentImpl.class,
             SqlStreamTerminatorComponentImpl.class,
-            TransactionComponentImpl.class
-
+            TransactionComponentImpl.class,
+            DriverComponentImpl.class
         )
             .withBundle(new MySqlBundle())
             .withBundle(new MariaDbBundle())
             .withBundle(new PostgresBundle())
+            .withBundle(new SqliteBundle())
             .withBundle(new JoinBundle())
             .injectables();
     }

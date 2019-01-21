@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -133,7 +133,7 @@ public final class SingletonStream<T> implements Stream<T> {
     public DoubleStream mapToDouble(ToDoubleFunction<? super T> mapper) {
         requireNonNull(mapper);
         if (STRICT) {
-            toStream().mapToDouble(mapper);
+            return toStream().mapToDouble(mapper);
         }
         return DoubleStream.of(mapper.applyAsDouble(element));
     }

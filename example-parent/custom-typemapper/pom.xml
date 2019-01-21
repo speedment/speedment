@@ -2,7 +2,7 @@
 <!--
 
 
-    Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+    Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License"); You may not
     use this file except in compliance with the License. You may obtain a copy of
@@ -25,7 +25,7 @@
     <parent>
         <groupId>com.speedment.example</groupId>
         <artifactId>example-parent</artifactId>
-        <version>3.1.9</version>
+        <version>3.1.10-SNAPSHOT</version>
     </parent>
 
     <artifactId>custom-typemapper</artifactId>
@@ -49,16 +49,17 @@
             <version>${speedment.version}</version>
             <type>pom</type>
         </dependency>
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
+
     </dependencies>
     
     <profiles>

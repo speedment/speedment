@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,20 +16,20 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.speedment.runtime.core.internal.field.Entity.ID;
 import static com.speedment.runtime.core.internal.field.Entity.NAME;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author pemi
  */
-public class FieldTest extends BaseFieldTest {
+final class FieldTest extends BaseFieldTest {
 
     @Test
-    public void testField() throws Exception {
+    void testField() {
         assertEquals("id", ID.identifier().getColumnId());
         assertEquals("name", NAME.identifier().getColumnId());
     }

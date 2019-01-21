@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,13 +16,9 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import com.speedment.common.function.TriFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.stream.ComposeRunnableUtil;
-
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -33,35 +29,27 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-abstract class AbstractAutoClosingStream implements AutoCloseable {
+abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implements AutoCloseable {
 
-    private final Set<BaseStream<?, ?>> streamSet;
+    private final S stream;
     private final boolean allowStreamIteratorAndSpliterator;
+    private final AtomicBoolean closed;
 
     AbstractAutoClosingStream(
-        final Set<BaseStream<?, ?>> streamSet,
+        final S stream,
         final boolean allowStreamIteratorAndSpliterator
     ) {
-        this.streamSet = requireNonNull(streamSet);
+        this.stream = requireNonNull(stream);
         this.allowStreamIteratorAndSpliterator = allowStreamIteratorAndSpliterator;
+        this.closed = new AtomicBoolean();
     }
 
-    protected Set<BaseStream<?, ?>> getStreamSet() {
-        return streamSet;
-    }
-
-    protected abstract BaseStream<?, ?> getStream();
+    protected S stream(){ return stream; };
 
     @Override
     public void close() {
-        final Set<BaseStream<?, ?>> streamsToClose = new HashSet<>(streamSet); // Copy the set
-        streamSet.clear(); // Clear the shared streamSet so that other streams will not close again
-        try {
-            ComposeRunnableUtil.composedClose(streamsToClose.toArray(new BaseStream<?, ?>[0]));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            getStream().close(); // Close the underlying stream
+        if (closed.compareAndSet(false,true)) {
+            stream().close();
         }
     }
 
@@ -118,34 +106,30 @@ abstract class AbstractAutoClosingStream implements AutoCloseable {
     }
 
     <T> Stream<T> wrap(Stream<T> stream) {
-        return wrap(stream, getStreamSet(), AutoClosingReferenceStream::new);
+        return wrap(stream, /*getStreamSet(),*/ AutoClosingReferenceStream::new);
     }
 
     IntStream wrap(IntStream stream) {
-        return wrap(stream, getStreamSet(), AutoClosingIntStream::new);
+        return wrap(stream, /*getStreamSet(),*/ AutoClosingIntStream::new);
     }
 
     LongStream wrap(LongStream stream) {
-        return wrap(stream, getStreamSet(), AutoClosingLongStream::new);
+        return wrap(stream, /*getStreamSet(),*/ AutoClosingLongStream::new);
     }
 
     DoubleStream wrap(DoubleStream stream) {
-        return wrap(stream, getStreamSet(), AutoClosingDoubleStream::new);
+        return wrap(stream, /*getStreamSet(),*/ AutoClosingDoubleStream::new);
     }
 
-    private <T> T wrap(T stream, Set<BaseStream<?, ?>> streamSet, TriFunction<T, Set<BaseStream<?, ?>>, Boolean, T> wrapper) {
+    private <T> T wrap(T stream, BiFunction<T, Boolean, T> wrapper) {
         if (stream instanceof AbstractAutoClosingStream) {
             return stream; // If we already are wrapped, then do not wrap again
         }
-        return wrapper.apply(stream, streamSet, allowStreamIteratorAndSpliterator);
+        return wrapper.apply(stream, allowStreamIteratorAndSpliterator);
     }
 
     static UnsupportedOperationException newUnsupportedException(String methodName) {
         return new UnsupportedOperationException("The " + methodName + "() method is unsupported because otherwise the AutoClose property cannot be guaranteed");
-    }
-
-    static Set<BaseStream<?, ?>> newSet() {
-        return new HashSet<>();
     }
 
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,30 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.internal.util.testing;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public class JavaVersionUtilTest {
+final class JavaVersionUtilTest {
 
     @Test
-    public void testGetJavaVersion() {
-        System.out.println("Running java version " + JavaVersionUtil.getJavaVersion());
+    void testGetJavaVersion() {
+        assertNotEquals(JavaVersionUtil.JavaVersion.UNKNOWN, JavaVersionUtil.getJavaVersion());
     }
 
-    @Test
-    public void testGetJavaVersion2() {
-        System.out.println("Running java package version " + Runtime.class.getPackage().getImplementationVersion());
-    }
 
 }

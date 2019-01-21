@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -46,8 +46,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -73,15 +78,17 @@ public final class ConnectController implements Initializable {
         DEFAULT_HOST   = "127.0.0.1",
         DEFAULT_USER   = "root";
     
-    @Inject private UserInterfaceComponent userInterfaceComponent;
-    @Inject private DbmsHandlerComponent dbmsHandlerComponent;
-    @Inject private PasswordComponent passwordComponent;
-    @Inject private ConfigFileHelper configFileHelper;
-    @Inject private EventComponent eventComponent;
+    @Inject private UserInterfaceComponent ui;
+    @Inject private DbmsHandlerComponent dbmsHandler;
+    @Inject private PasswordComponent passwords;
+    @Inject private ConfigFileHelper cfHelper;
+    @Inject private EventComponent events;
     @Inject private InjectionLoader loader;
 
     @FXML private TextField fieldHost;
     @FXML private TextField fieldPort;
+    @FXML private TextField fieldFile;
+    @FXML private Button fieldFileBtn;
     @FXML private ComboBox<String> fieldType;
     @FXML private TextField fieldName;
     @FXML private TextField fieldSchema;
@@ -92,16 +99,29 @@ public final class ConnectController implements Initializable {
     @FXML private TextArea areaConnectionUrl;
 
     @FXML private GridPane grid;
+    @FXML private RowConstraints hostRow;
+    @FXML private RowConstraints fileRow;
     @FXML private RowConstraints dbmsRow;
     @FXML private RowConstraints schemaRow;
+    @FXML private RowConstraints userRow;
+    @FXML private RowConstraints passRow;
 
+    private FilteredList<Node> hostRowChildren;
+    private FilteredList<Node> fileRowChildren;
+    private FilteredList<Node> userRowChildren;
+    private FilteredList<Node> passRowChildren;
     private FilteredList<Node> dbmsRowChildren;
     private FilteredList<Node> schemaRowChildren;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        fieldFileBtn.setGraphic(FontAwesome.FOLDER_OPEN.view());
         buttonConnect.setGraphic(FontAwesome.SIGN_IN.view());
 
+        hostRowChildren   = inRow(hostRow);
+        fileRowChildren   = inRow(fileRow);
+        userRowChildren   = inRow(userRow);
+        passRowChildren   = inRow(passRow);
         dbmsRowChildren   = inRow(dbmsRow);
         schemaRowChildren = inRow(schemaRow);
 
@@ -124,36 +144,63 @@ public final class ConnectController implements Initializable {
             final DbmsType item = dbmsType.get();
 
             // Hide name rows if particular Dbms doesn't support them.
+            toggleVisibility(hostRow, hostRowChildren, item.getConnectionType() == DbmsType.ConnectionType.HOST_AND_PORT);
+            toggleVisibility(fileRow, fileRowChildren, item.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE);
+            toggleVisibility(userRow, userRowChildren, item.hasDatabaseUsers());
+            toggleVisibility(passRow, passRowChildren, item.hasDatabaseUsers());
             toggleVisibility(dbmsRow, dbmsRowChildren, item.hasDatabaseNames());
             toggleVisibility(schemaRow, schemaRowChildren, item.hasSchemaNames());
 
-            // Disable Dbms Name-property for database types that doesn't use it
             if (fieldHost.getText().isEmpty()
             ||  fieldHost.getText().equals(generatedHost.get())) {
                 fieldHost.textProperty().setValue(DEFAULT_HOST);
                 generatedHost.set(DEFAULT_HOST);
             }
 
-            if (fieldUser.getText().isEmpty()
-            ||  fieldUser.getText().equals(generatedUser.get())) {
-                fieldUser.textProperty().setValue(DEFAULT_USER);
+            // Disable Dbms User-property for database types that doesn't use it
+            if (item.hasDatabaseUsers()) {
+                fieldUser.setDisable(false);
+                fieldPass.setDisable(false);
+
+                if (fieldUser.getText().isEmpty()
+                ||  fieldUser.getText().equals(generatedUser.get())) {
+                    fieldUser.textProperty().setValue(DEFAULT_USER);
+                    generatedUser.set(DEFAULT_USER);
+                }
+            } else {
                 generatedUser.set(DEFAULT_USER);
+                fieldUser.setDisable(true);
+                fieldPass.setDisable(true);
             }
 
-            if (fieldName.getText().isEmpty()
-            ||  fieldName.getText().equals(generatedName.get())) {
-                item.getDefaultDbmsName().ifPresent(name -> {
-                    fieldName.textProperty().setValue(name);
-                    generatedName.set(name);
-                });
+            // Disable Dbms Name-property for database types that doesn't use it
+            if (item.hasDatabaseNames()) {
+                fieldName.setDisable(false);
+
+                if (fieldName.getText().isEmpty()
+                ||  fieldName.getText().equals(generatedName.get())) {
+                    item.getDefaultDbmsName().ifPresent(name -> {
+                        fieldName.textProperty().setValue(name);
+                        generatedName.set(name);
+                    });
+                }
+            } else {
+                item.getDefaultDbmsName().ifPresent(generatedName::set);
+                fieldName.setDisable(true);
             }
 
-            if (fieldSchema.getText().isEmpty()
-            ||  fieldSchema.getText().equals(generatedSchema.get())) {
-                item.getDefaultSchemaName().ifPresent(name -> {
-                    fieldSchema.textProperty().setValue(name);
-                    generatedSchema.set(name);
-                });
+            if (item.hasSchemaNames()) {
+                fieldSchema.setDisable(false);
+
+                if (fieldSchema.getText().isEmpty()
+                ||  fieldSchema.getText().equals(generatedSchema.get())) {
+                    item.getDefaultSchemaName().ifPresent(name -> {
+                        fieldSchema.textProperty().setValue(name);
+                        generatedSchema.set(name);
+                    });
+                }
+            } else {
+                fieldSchema.setDisable(true);
             }
 
             fieldName.getTooltip().setText(item.getDbmsNameMeaning());
@@ -169,8 +216,9 @@ public final class ConnectController implements Initializable {
             ||  areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
                 final String url = item.getConnectionUrlGenerator().from(
                     TemporaryDbms.create(
-                        userInterfaceComponent.projectProperty(),
+                        ui.projectProperty(),
                         fieldName.getText(),
+                        fieldFile.getText(),
                         fieldHost.getText(),
                         Integer.parseInt(fieldPort.getText())
                     )
@@ -192,6 +240,7 @@ public final class ConnectController implements Initializable {
 
         fieldHost.textProperty().addListener((ob, o, n) -> recalculateFields.run());
         fieldPort.textProperty().addListener((ob, o, n) -> recalculateFields.run());
+        fieldFile.textProperty().addListener((ob, o, n) -> recalculateFields.run());
         fieldUser.textProperty().addListener((ob, o, n) -> recalculateFields.run());
         fieldName.textProperty().addListener((ob, o, n) -> recalculateFields.run());
         fieldSchema.textProperty().addListener((ob, o, n) -> recalculateFields.run());
@@ -200,6 +249,11 @@ public final class ConnectController implements Initializable {
         // Disable the Connection Url field if the checkbox is not checked.
         areaConnectionUrl.disableProperty().bind(
             enableConnectionUrl.selectedProperty().not()
+        );
+
+        // Disable the file chooser if connection URL is enabled
+        fieldFileBtn.disableProperty().bind(
+            enableConnectionUrl.selectedProperty()
         );
 
         // Find the preferred dbms-type
@@ -212,7 +266,7 @@ public final class ConnectController implements Initializable {
                 "as a dependency in the projects pom.xml-file under the " +
                 "speedment-maven-plugin <plugin> tag.";
 
-            userInterfaceComponent.showError(
+            ui.showError(
                 "Couldn't find any installed JDBC drivers",
                 msg
             );
@@ -222,37 +276,81 @@ public final class ConnectController implements Initializable {
 
         // Disable the Connect-button if all fields have not been entered.
         buttonConnect.disableProperty().bind(createBooleanBinding(
-            () -> fieldHost.textProperty().isEmpty().get()
-            ||    fieldPort.textProperty().isEmpty().get()
-            ||    fieldType.getSelectionModel().isEmpty()
-            ||    fieldName.textProperty().isEmpty().get()
-            ||    fieldUser.textProperty().isEmpty().get(),
+            () -> ((fieldHost.textProperty().isEmpty().get()
+            ||      fieldPort.textProperty().isEmpty().get())
+                && dbmsType.get().getConnectionType() == DbmsType.ConnectionType.HOST_AND_PORT)
+            ||     (fieldFile.textProperty().isEmpty().get() && dbmsType.get().getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE)
+            ||      fieldType.getSelectionModel().isEmpty()
+            ||     (fieldName.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseNames())
+            ||     (fieldUser.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseUsers()),
 
             fieldHost.textProperty(),
             fieldPort.textProperty(),
+            fieldFile.textProperty(),
             fieldType.selectionModelProperty(),
             fieldName.textProperty(),
             fieldUser.textProperty()
         ));
 
+        // Load dbms from file-action
+        final FileChooser fileChooser = new FileChooser();
+        fieldFileBtn.setOnAction(ev -> {
+            fileChooser.setTitle("Open Database File");
+
+            if (!"".equals(fieldFile.getText().trim())) {
+                final Path path = Paths.get(fieldFile.getText().trim());
+
+                if (Files.exists(path.getParent())) {
+                    final String parentFolder = path.getParent().toString();
+
+
+                    if (!"".equals(parentFolder)) {
+                        fileChooser.setInitialDirectory(new File(parentFolder));
+                    }
+                }
+
+                if (Files.exists(path)) {
+                    fileChooser.setInitialFileName(fieldFile.getText());
+                }
+            }
+
+            final File file = fileChooser.showOpenDialog(ui.getStage());
+            if (file != null) {
+                fieldFile.setText(Paths.get(".").toAbsolutePath().getParent().relativize(file.toPath()).toString());
+            }
+        });
+
         // Connect to database action
         buttonConnect.setOnAction(ev -> {
+            final DbmsType type = dbmsType.get();
 
             // Register password in password component
-            passwordComponent.put(
+            passwords.put(
                 fieldName.getText(),
                 fieldPass.getText().toCharArray()
             );
 
             // Create a new Dbms using the settings configured.
-            final DbmsProperty dbms = userInterfaceComponent.projectProperty()
+            final DbmsProperty dbms = ui.projectProperty()
                 .mutator().addNewDbms();
 
             dbms.typeNameProperty().set(dbmsType.get().getName());
-            dbms.ipAddressProperty().set(fieldHost.getText());
-            dbms.portProperty().set(Integer.valueOf(fieldPort.getText()));
-            dbms.usernameProperty().set(fieldUser.getText());
-            dbms.nameProperty().set(fieldName.getText());
+
+            if (type.getConnectionType() == DbmsType.ConnectionType.HOST_AND_PORT) {
+                dbms.ipAddressProperty().set(fieldHost.getText());
+                dbms.portProperty().set(Integer.valueOf(fieldPort.getText()));
+            } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
+                dbms.localPathProperty().set(fieldFile.getText());
+            }
+
+            if (type.hasDatabaseUsers()) {
+                dbms.usernameProperty().set(fieldUser.getText());
+            }
+
+            dbms.nameProperty().set(Optional.of(fieldName.getText())
+                .filter(s -> dbmsType.get().hasDatabaseNames())
+                .filter(s -> !s.isEmpty())
+                .orElseGet(() -> type.getDefaultDbmsName().orElseGet(fieldName::getText)));
 
             if (!areaConnectionUrl.getText().isEmpty()
             &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
@@ -264,28 +362,40 @@ public final class ConnectController implements Initializable {
             final String schema = Optional.of(fieldSchema.getText())
                 .filter(s -> dbmsType.get().hasSchemaNames())
                 .filter(s -> !s.isEmpty())
-                .orElseGet(dbms::getName);
+                .orElseGet(() -> type.getDefaultSchemaName().orElseGet(dbms::getName));
 
             // Set the default project name to the name of the schema.
-            userInterfaceComponent.projectProperty().nameProperty()
-                .setValue(schema);
+            if (type.hasSchemaNames() || type.hasDatabaseNames()) {
+                ui.projectProperty().nameProperty()
+                    .setValue(schema);
+            } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
+                String filename = Paths.get(fieldFile.getText()).getFileName().toString();
+                if (filename.contains(".")) {
+                    filename = filename.substring(0, filename.lastIndexOf("."));
+                }
+                ui.projectProperty().nameProperty()
+                    .setValue(filename);
+            } else {
+                ui.projectProperty().nameProperty()
+                    .setValue("Demo");
+            }
 
             // Connect to database
-            if (configFileHelper.loadFromDatabase(dbms, schema)) {
+            if (cfHelper.loadFromDatabase(dbms, schema)) {
                 loader.loadAndShow("Scene");
-                eventComponent.notify(UIEvent.OPEN_MAIN_WINDOW);
+                events.notify(UIEvent.OPEN_MAIN_WINDOW);
             }
         });
     }
     
     private Stream<String> getDbmsTypes() {
-        return dbmsHandlerComponent
+        return dbmsHandler
             .supportedDbmsTypes()
             .map(DbmsType::getName);
     }
 
     private DbmsType findDbmsType(String dbmsTypeName) {
-        return dbmsHandlerComponent.findByName(dbmsTypeName).orElseThrow(() ->
+        return dbmsHandler.findByName(dbmsTypeName).orElseThrow(() ->
             new SpeedmentToolException(
                 "Could not find any DbmsType with name '" +
                 dbmsTypeName + "'."
@@ -320,12 +430,13 @@ public final class ConnectController implements Initializable {
 
     private static final class TemporaryDbms implements Dbms {
 
-        public static TemporaryDbms create(Project project, String name, String ip, int port) {
+        public static TemporaryDbms create(Project project, String name, String file, String ip, int port) {
             final Map<String, Object> data = new LinkedHashMap<>();
             data.put(Dbms.ID,         name);
             data.put(Dbms.NAME,       name);
             data.put(Dbms.IP_ADDRESS, ip);
             data.put(Dbms.PORT,       port);
+            data.put(Dbms.LOCAL_PATH, file);
             return new TemporaryDbms(project, data);
         }
 

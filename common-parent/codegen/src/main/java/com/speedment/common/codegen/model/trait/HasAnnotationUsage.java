@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -75,6 +75,7 @@ public interface HasAnnotationUsage<T extends HasAnnotationUsage<T>> {
      * of the annotation to {@code textValue}.
      *
      * @param annotation  the new annotation usage
+     * @param textValue   the value of the text for this annotation
      * @return            a reference to this
      *
      * @since 2.5

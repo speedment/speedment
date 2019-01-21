@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,7 +25,7 @@ import static com.speedment.runtime.core.internal.util.testing.JavaVersionUtil.J
 public final class JavaVersionUtil {
 
     public enum JavaVersion {
-        UNKNOWN, EIGHT, NINE, TEN;
+        UNKNOWN, EIGHT, NINE, TEN, ELEVEN, TWELVE;
     }
 
     public static boolean is8() {
@@ -38,6 +38,14 @@ public final class JavaVersionUtil {
 
     public static boolean is10() {
         return getJavaVersion() == TEN;
+    }
+
+    public static boolean is11() {
+        return getJavaVersion() == ELEVEN;
+    }
+
+    public static boolean is12() {
+        return getJavaVersion() == TWELVE;
     }
 
     public static JavaVersion getJavaVersion() {
@@ -53,6 +61,12 @@ public final class JavaVersionUtil {
         }
         if (version.startsWith("10")) {
             return TEN;
+        }
+        if (version.startsWith("11")) {
+            return ELEVEN;
+        }
+        if (version.startsWith("12")) {
+            return TWELVE;
         }
         return UNKNOWN;
     }

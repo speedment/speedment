@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -71,8 +71,7 @@ public final class InjectorImpl implements Injector {
         return new InjectorBuilderImpl(classLoader);
     }
 
-    public final static Logger LOGGER = 
-        LoggerManager.getLogger(InjectorImpl.class);
+    public final static Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorImpl.class);
 
     private final Set<Class<?>> injectables;
     private final List<Object> instances;
@@ -156,7 +155,7 @@ public final class InjectorImpl implements Injector {
                 // when stopping.
                 if (n.canBe(State.STOPPED)) {
 
-                    LOGGER.debug(horizontalLine());
+                    LOGGER_INSTANCE.debug(horizontalLine());
 
                     // Retreive the instance for that node
                     final Object inst = find(n.getRepresentedType(), true);
@@ -174,10 +173,10 @@ public final class InjectorImpl implements Injector {
 
                             // We might want to log exactly which steps we
                             // have completed.
-                            if (LOGGER.getLevel()
+                            if (LOGGER_INSTANCE.getLevel()
                                 .isEqualOrLowerThan(Level.DEBUG)) {
 
-                                LOGGER.debug(
+                                LOGGER_INSTANCE.debug(
                                     "| -> %-76s |", 
                                     limit(exec.toString(), 76)
                                 );
@@ -197,7 +196,7 @@ public final class InjectorImpl implements Injector {
                     n.setState(State.STOPPED);
                     hasAnythingChanged.set(true);
 
-                    LOGGER.debug(
+                    LOGGER_INSTANCE.debug(
                         "| %-66s %12s |",
                         n.getRepresentedType().getSimpleName(),
                         State.STOPPED.name()
@@ -208,7 +207,7 @@ public final class InjectorImpl implements Injector {
             if (!hasAnythingChanged.get()) {
                 throw new IllegalStateException(
                     "Injector appears to be stuck in an infinite loop. The " + 
-                    "following componenets have not been stopped: " + 
+                    "following components have not been stopped: " +
                     unfinished.stream()
                         .map(DependencyNode::getRepresentedType)
                         .map(Class::getSimpleName)
@@ -217,12 +216,12 @@ public final class InjectorImpl implements Injector {
             }
         }
         
-        LOGGER.debug(horizontalLine());
-        LOGGER.debug(
+        LOGGER_INSTANCE.debug(horizontalLine());
+        LOGGER_INSTANCE.debug(
             "| %-79s |",
             "All " + instances.size() + " components have been stopped!"
         );
-        LOGGER.debug(horizontalLine());
+        LOGGER_INSTANCE.debug(horizontalLine());
     }
 
     @Override
@@ -265,7 +264,7 @@ public final class InjectorImpl implements Injector {
                         field.getName() +
                         "' in class '" + value.getClass().getName() +
                         "' of type '" + field.getType() + "'.";
-                    LOGGER.error(ex, err);
+                    LOGGER_INSTANCE.error(ex, err);
                     throw new RuntimeException(err, ex);
                 }
             });

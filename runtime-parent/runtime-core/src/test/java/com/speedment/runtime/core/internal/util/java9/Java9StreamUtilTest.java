@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,39 +14,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.internal.util.java9;
 
 import com.speedment.runtime.core.internal.util.testing.JavaVersionUtil;
+import org.junit.jupiter.api.Test;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.stream.Stream;
-import static org.junit.Assert.*;
-import org.junit.Test;
 
 /**
  *
  * @author Per Minborg
  */
-public class Java9StreamUtilTest {
+final class Java9StreamUtilTest {
 
     private static final Supplier<Stream<String>> STREAM_SUPPLIER = () -> Stream.of("a", "b", "c", "d", "e", "a");
     private static final Predicate<String> LESS_THAN_C = s -> "c".compareTo(s) > 0;
 
     @Test
-    public void testPredicate() {
+    void testPredicate() {
         STREAM_SUPPLIER.get().filter(LESS_THAN_C).forEach(System.out::println);
     }
 
     @Test
-    public void testTakeWhile() {
+    void testTakeWhile() {
         if (JavaVersionUtil.is8()) {
             try {
                 Java9StreamUtil.takeWhile(STREAM_SUPPLIER.get(), LESS_THAN_C);
@@ -65,7 +63,7 @@ public class Java9StreamUtilTest {
     }
 
     @Test
-    public void testDropWhile() {
+    void testDropWhile() {
         if (JavaVersionUtil.is8()) {
             try {
                 Java9StreamUtil.dropWhile(STREAM_SUPPLIER.get(), LESS_THAN_C);
@@ -84,7 +82,7 @@ public class Java9StreamUtilTest {
     }
 
     @Test
-    public void testFilter() {
+    void testFilter() {
         
         final List<String> expected = STREAM_SUPPLIER.get()
             .filter(LESS_THAN_C)

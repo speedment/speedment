@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,11 +26,12 @@ import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
+import org.junit.jupiter.api.BeforeEach;
+
 import java.nio.file.Path;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
-import org.junit.Before;
 
 /**
  *
@@ -72,7 +73,7 @@ public abstract class SimpleModel {
         public int getFilesCreated() {return 0;}
     }
 
-    @Before
+    @BeforeEach
     public void simpleModelTestSetUp() {
 
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)

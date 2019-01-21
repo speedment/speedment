@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -38,11 +38,12 @@ import com.speedment.runtime.config.internal.PrimaryKeyColumnImpl;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.internal.SchemaImpl;
 import com.speedment.runtime.config.internal.TableImpl;
+import org.junit.jupiter.api.BeforeEach;
+
 import java.util.AbstractMap;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import org.junit.Before;
 
 /**
  *
@@ -63,7 +64,7 @@ public abstract class AbstractDocumentTest {
     protected ForeignKey foreignKeyA2_C1, foreignKeyB2_D1;
     protected ForeignKeyColumn foreignKeyColumnA2_C1, foreignKeyColumnB2_D1;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         final Map<String, Object> data = map(
             entry(Project.NAME, "Project"),

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -30,6 +31,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -49,6 +51,9 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     @Inject private MySqlDbmsMetadataHandler metadataHandler;
     @Inject private MySqlDbmsOperationHandler operationHandler;
     @Inject private MySqlSpeedmentPredicateView fieldPredicateView;
+
+    @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
+    private String binaryCollationName;
 
     private MySqlDbmsType() {
         namingConvention = new MySqlNamingConvention();
@@ -119,6 +124,11 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     @Override
     public String getInitialQuery() {
         return "select version() as `MySQL version`";
+    }
+
+    @Override
+    public SqlPredicateFragment getCollateFragment() {
+        return of(" COLLATE " + binaryCollationName);
     }
 
     @Override

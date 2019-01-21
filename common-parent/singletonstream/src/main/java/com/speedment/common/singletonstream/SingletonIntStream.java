@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -353,7 +353,10 @@ public class SingletonIntStream implements IntStream {
             @Override
             public Integer next() {
                 if (TRIPWIRE_ENABLED) {
-                    trip(getClass(), "{0} calling SingletonIntStream.singletonIterator.nextInt()");
+                    trip(getClass(), "{0} calling SingletonIntStream.singletonIterator.next()");
+                }
+                if (!hasNext) {
+                    throw new NoSuchElementException();
                 }
                 return nextInt();
             }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.maven.component;
+package com.speedment.runtime.core.internal.stream.autoclose;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-
-public final class MavenPathCompoentTest {
-
-    @Test
-    public void testClassName() {
-        assertEquals(
-            "There is a reason that this class should have this name...",
-            "MavenPathComponent",
-            MavenPathComponent.class.getSimpleName()
-        );
-    }
-
+interface HasName {
+    String name();
 }

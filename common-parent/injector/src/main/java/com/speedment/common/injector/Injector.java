@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -135,12 +135,12 @@ public interface Injector {
     }
     
     /**
-     * Returns the {@link logger} object used by the default implementation of 
+     * Returns the {@link Logger} object used by the default implementation of
      * the {@code Injector}.
      * 
      * @return  the default logger
      */
     static Logger logger() {
-        return InjectorImpl.LOGGER;
+        return InjectorImpl.LOGGER_INSTANCE;
     }
 }

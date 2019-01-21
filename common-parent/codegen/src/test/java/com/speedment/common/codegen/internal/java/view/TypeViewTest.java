@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -27,33 +27,33 @@ import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.example.Person;
 import com.speedment.example.PersonImpl;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static com.speedment.common.codegen.util.Formatting.indent;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author  Emil Forslund
  * @since   2.4.1
  */
-public class TypeViewTest {
+final class TypeViewTest {
 
     private Generator generator;
     
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         this.generator = new JavaGenerator();
         Formatting.tab("    ");
     }
     
     @Test
-    public void testMain() {
+    void testMain() {
         final File file = File.of("com/example/Main.java")
             .add(Class.of("Main")
                 .public_().final_()
@@ -89,11 +89,11 @@ public class TypeViewTest {
         System.out.println(actual);
         System.out.println("-------------------- End ------------------------");
 */
-        Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
+        assertEquals( expected, actual, "Make sure generated file matches expected:");
     }
     
     @Test
-    public void testList() {
+    void testList() {
         final File file = File.of("com/example/EntityList.java")
             .add(Import.of(ArrayList.class))
             .add(Import.of(Objects.class).static_().setStaticMember("requireNonNull"))
@@ -161,11 +161,11 @@ public class TypeViewTest {
         System.out.println("-------------------- End ------------------------");
         */
         
-        Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
+        assertEquals(expected, actual, "Make sure generated file matches expected:");
     }
     
     @Test
-    public void testInnerClassImport() {
+    void testInnerClassImport() {
         final File file = File.of("com/example/PersonFactory.java")
             .add(Import.of(PersonImpl.class))
             .add(Class.of("PersonFactory")
@@ -229,6 +229,6 @@ public class TypeViewTest {
         System.out.println("-------------------- End ------------------------");
         */
         
-        Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
+        assertEquals(expected, actual, "Make sure generated file matches expected:");
     }
 }

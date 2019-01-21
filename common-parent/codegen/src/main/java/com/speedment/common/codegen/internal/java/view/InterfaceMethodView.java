@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -55,7 +55,9 @@ implements Transform<InterfaceMethod, String>,
             .filter(s -> model.getModifiers().contains(DEFAULT)
                       || model.getModifiers().contains(STATIC)
             );
-        
+
+        final String spacing = body.map($ -> " ").orElse("");
+
         return Optional.of(
             renderJavadoc(gen, model) +
             renderAnnotations(gen, model) +
@@ -63,8 +65,7 @@ implements Transform<InterfaceMethod, String>,
             renderGenerics(gen, model) +
             renderType(gen, model) +
             renderName(gen, model) + ((model.getFields().size() > 3) ? "(" + nl() : "(") +
-            renderFields(gen, model) + ")" +
-                (body.isPresent() ? " " : "") +
+            renderFields(gen, model) + ")" + spacing +
             renderThrows(gen, model) + 
             body.orElse(";")
         );

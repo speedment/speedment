@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,8 +19,8 @@ package com.speedment.runtime.field;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +58,7 @@ public final class ByteFieldTest {
     private BasicEntity k;
     private BasicEntity l;
     
-    @Before
+    @BeforeEach
     public void setUp() {
         field = ByteField.create(
             BasicEntity.Identifier.VAR_BYTE,

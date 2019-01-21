@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,19 +21,20 @@
  */
 package com.speedment.runtime.config.identifier;
 
-import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class TableIdentifierTest {
+final class TableIdentifierTest {
 
     @Test
-    public void testOf() {
+    void testOf() {
         final String db = "db";
         final String sc = "sc";
         final String ta = "ta";

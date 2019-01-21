@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -35,7 +35,7 @@ import java.util.function.Consumer;
  * representation.
  * <p>
  * This implementation includes a line and column counter that makes it easier
- * to debug an errenous JSON string. These might add additional overhead to the
+ * to debug an erroneous JSON string. These might add additional overhead to the
  * parsing time and should therefore only be used if the input is expected to
  * have errors.
  * 
@@ -508,13 +508,16 @@ public final class JsonDeserializer implements AutoCloseable {
     }
     
     private Object parseNull() throws IOException {
-        if (next() == 0x75    // u
-        &&  next() == 0x6C    // l
-        &&  next() == 0x6C) { // l
-            return null;
-        } else {
-            throw unexpectedCharacterException();
+        // SonarQube detects bug if next() is called with 0x6C two times
+        if (next() == 0x75) {   // u
+            if (next() == 0x6C) {    // l
+                if (next() == 0x6C) {  // l
+                    return null;
+                }
+            }
         }
+        throw unexpectedCharacterException();
+
     }
     
     private CloseMethod parseNumber(Consumer<Number> consumer) throws IOException {
@@ -601,7 +604,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     break parser;
                     
                 case 0x09 : // tab
-                    col.addAndGet(TAB_SIZE - 1);
+                    col.addAndGet(TAB_SIZE - 1L);
                     method = CloseMethod.NOT_DECIDED;
                     break parser;
                     
@@ -637,7 +640,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     col.set(-1);
                     continue;
                 case 0x09 : // tab
-                    col.addAndGet(TAB_SIZE - 1);
+                    col.addAndGet(TAB_SIZE - 1L);
                     continue;
                 case 0x20 : // space
                 case 0x0D : // return (ignore)
@@ -660,7 +663,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     col.set(-1);
                     break;
                 case 0x09 : // tab
-                    col.addAndGet(TAB_SIZE - 1);
+                    col.addAndGet(TAB_SIZE - 1L);
                     break;
             }
             

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,29 +17,26 @@
 package com.speedment.runtime.core.internal.util.document;
 
 import com.speedment.runtime.config.util.DocumentDbUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DocumentDbUtilTest extends AbstractDocumentTest {
+final class DocumentDbUtilTest extends AbstractDocumentTest {
 
-    /**
-     * Test of isUnique method, of class DocumentDbUtil.
-     */
     @Test
-    public void testIsUnique() {
-        assertTrue("  Is " + columnA1.getId() + " unique: ", DocumentDbUtil.isUnique(columnA1));
-        assertFalse("  Is " + columnA2.getId() + " unique: ", DocumentDbUtil.isUnique(columnA2));
-        assertTrue("  Is " + columnB1.getId() + " unique: ", DocumentDbUtil.isUnique(columnB1));
-        assertTrue("  Is " + columnB2.getId() + " unique: ", DocumentDbUtil.isUnique(columnB2));
-        assertTrue("  Is " + columnC1.getId() + " unique: ", DocumentDbUtil.isUnique(columnC1));
-        assertFalse("  Is " + columnC2.getId() + " unique: ", DocumentDbUtil.isUnique(columnC2));
-        assertTrue("  Is " + columnD1.getId() + " unique: ", DocumentDbUtil.isUnique(columnD1));
-        assertFalse("  Is " + columnD2.getId() + " unique: ", DocumentDbUtil.isUnique(columnD2));
+    void testIsUnique() {
+        assertTrue( DocumentDbUtil.isUnique(columnA1), "  Is " + columnA1.getId() + " unique: ");
+        assertFalse(DocumentDbUtil.isUnique(columnA2), "  Is " + columnA2.getId() + " unique: ");
+        assertTrue(DocumentDbUtil.isUnique(columnB1), "  Is " + columnB1.getId() + " unique: ");
+        assertTrue(DocumentDbUtil.isUnique(columnB2), "  Is " + columnB2.getId() + " unique: ");
+        assertTrue( DocumentDbUtil.isUnique(columnC1), "  Is " + columnC1.getId() + " unique: ");
+        assertFalse( DocumentDbUtil.isUnique(columnC2), "  Is " + columnC2.getId() + " unique: ");
+        assertTrue( DocumentDbUtil.isUnique(columnD1), "  Is " + columnD1.getId() + " unique: ");
+        assertFalse( DocumentDbUtil.isUnique(columnD2), "  Is " + columnD2.getId() + " unique: ");
     }
 }

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,12 +17,7 @@
 package com.speedment.runtime.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.manager.HasLabelSet;
-import com.speedment.runtime.core.manager.Persister;
-import com.speedment.runtime.core.manager.Remover;
-import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.core.manager.PersistenceProvider;
 
 /**
  * The {@code PersistanceComponent} handles persisting, updating and deleting 
@@ -30,54 +25,10 @@ import com.speedment.runtime.core.manager.Updater;
  * There can be multiple specialized interfaces that expose more methods to this
  * component.
  *
- * @author  Emil Forslund
+ * @author  Dan Lawesson
  * @since   3.0.1
  */
 @InjectKey(PersistenceComponent.class)
 public interface PersistenceComponent {
-
-    /**
-     * Creates and returns a {@link Persister} that describes how entities are 
-     * persisted to the specified table. The returned {@link Persister} can then 
-     * be applied by supplying an entity.
-     * 
-     * @param <ENTITY>         the entity type
-     * @param tableIdentifier  identifier for the table to persist to
-     * @return                 the created {@code Persister}
-     * 
-     * @throws SpeedmentException  if it could not be created
-     */
-    <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
-
-    <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) throws SpeedmentException;
-
-    /**
-     * Creates and returns an {@link Updater} that describes how entities are 
-     * updated in the specified table. The returned {@code Updater} can then be 
-     * applied by supplying an entity.
-     * 
-     * @param <ENTITY>         the entity type
-     * @param tableIdentifier  identifier for the table to update
-     * @return                 the created {@link Updater}
-     * 
-     * @throws SpeedmentException  if it could not be created
-     */
-    <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
-
-    <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier, HasLabelSet<ENTITY> fields) throws SpeedmentException;
-
-
-    /**
-     * Creates and returns a {@link Remover} that describes how entities are 
-     * removed from the specified table. The returned {@code Remover} can then 
-     * be applied by supplying an entity.
-     * 
-     * @param <ENTITY>         the entity type
-     * @param tableIdentifier  identifier for the table to remove from
-     * @return                 the created {@link Remover}
-     * 
-     * @throws SpeedmentException  if it could not be created
-     */
-    <ENTITY> Remover<ENTITY> remover(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
-    
+    <ENTITY> PersistenceProvider<ENTITY> persistenceProvider(PersistenceTableInfo<ENTITY> tableMetaData);
 }

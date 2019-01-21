@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,22 +18,23 @@ package com.speedment.maven.abstractmojo;
 
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.nio.file.Paths;
 import org.apache.maven.project.MavenProject;
-import static org.mockito.Mockito.mock;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-// Since ConfigFileHelper is final we need to use Powermock so it is possible to actually mock it.
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AbstractReloadMojoTest {
 
     private AbstractReloadMojoTestImpl mojo;
@@ -43,16 +44,16 @@ public class AbstractReloadMojoTest {
     private Speedment mockedSpeedment;
     @Mock
     private ConfigFileHelper mockedConfigFileHelper;
+    @Mock
+    private MavenProject mockedMavenProject;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        MavenProject mavenProject = mock(MavenProject.class);
-        when(mavenProject.getBasedir()).thenReturn(new File("baseDir"));
 
         mojo = new AbstractReloadMojoTestImpl() {
             @Override
             protected MavenProject project() {
-                return mavenProject;
+                return mockedMavenProject;
             }
 
         };
@@ -61,15 +62,66 @@ public class AbstractReloadMojoTest {
     @Test
     public void execute() throws Exception {
         // Given
+        when(mockedMavenProject.getBasedir()).thenReturn(new File("baseDir"));
         when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
         mojo.setConfigFile(mockedConfigLocation);
 
         // When
-        mojo.execute(mockedSpeedment);
+        assertDoesNotThrow(()->mojo.execute(mockedSpeedment));
 
         // Then
         verify(mockedConfigFileHelper).setCurrentlyOpenFile(Paths.get("baseDir", mockedConfigLocation).toFile());
         verify(mockedConfigFileHelper).loadFromDatabaseAndSaveToFile();
+    }
+
+    @Test
+    public void executeException() throws Exception {
+        // Given
+        when(mockedMavenProject.getBasedir()).thenReturn(new File("baseDir"));
+        when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
+        doThrow(new RuntimeException("test Exception")).when(mockedConfigFileHelper).loadFromDatabaseAndSaveToFile();
+        mojo.setConfigFile(mockedConfigLocation);
+
+        // When
+        assertThrows(MojoExecutionException.class, () -> mojo.execute(mockedSpeedment));
+
+        // Then
+    }
+
+    @Test
+    void testDebugTrue() {
+        // Given
+        mojo.setDebug(TRUE);
+
+        // When
+        boolean result = mojo.debug();
+
+        // Then
+        assertTrue(result);
+    }
+
+    @Test
+    void testDebugFalse() {
+        // Given
+        mojo.setDebug(FALSE);
+
+        // When
+        boolean result = mojo.debug();
+
+        // Then
+        assertFalse(result);
+    }
+
+    @Test
+    void testDebugNull() {
+        // Given
+        mojo.setDebug(null);
+
+        // When
+        boolean result = mojo.debug();
+
+        // Then
+        assertFalse(result);
     }
 
 }

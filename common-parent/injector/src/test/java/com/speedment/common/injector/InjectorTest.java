@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,6 +20,8 @@ import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.common.injector.State.STARTED;
 import static com.speedment.common.injector.State.STOPPED;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
@@ -31,26 +33,22 @@ import com.speedment.common.injector.test_b.B;
 import com.speedment.common.injector.test_b.C;
 import com.speedment.common.injector.test_c.ChildType;
 import com.speedment.common.injector.test_c.ParentType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *
  * @author Emil Forslund
  * @since  1.0.0
  */
-public class InjectorTest {
+final class InjectorTest {
     
     @Test
-    public void testSimpleInjector() {
+    void testSimpleInjector() {
         final Injector injector;
         
         try {
@@ -75,7 +73,7 @@ public class InjectorTest {
     }
     
     @Test
-    public void testPotentialCyclicDependency() {
+    void testPotentialCyclicDependency() {
         final Injector injector;
         
         try {
@@ -99,7 +97,7 @@ public class InjectorTest {
     }
     
     @Test
-    public void testInheritance() {
+    void testInheritance() {
         final Injector injector;
         
         try {
@@ -122,7 +120,7 @@ public class InjectorTest {
     }
     
     @Test
-    public void testKeyMultiples() {
+    void testKeyMultiples() {
         final Injector injector;
         
         try {
@@ -138,12 +136,12 @@ public class InjectorTest {
             );
         }
         
-        assertNotNull("Make sure Foo has an implementation", injector.get(Foo.class).orElse(null));
-        assertNotNull("Make sure Bar had an implementation", injector.get(Bar.class).orElse(null));
-        assertNotNull("Make sure Baz had an implementation", injector.get(Baz.class).orElse(null));
+        assertNotNull(injector.get(Foo.class).orElse(null), "Make sure Foo has an implementation");
+        assertNotNull(injector.get(Bar.class).orElse(null), "Make sure Bar had an implementation");
+        assertNotNull(injector.get(Baz.class).orElse(null), "Make sure Baz had an implementation");
         
-        assertEquals("Make sure the default implementation is Baz.", Baz.class, injector.get(Foo.class).get().getClass());
-        assertEquals("Make sure the Bar can still be accessed",      Bar.class, injector.get(Bar.class).get().getClass());
+        assertEquals(Baz.class, injector.get(Foo.class).get().getClass(), "Make sure the default implementation is Baz.");
+        assertEquals(Bar.class, injector.get(Bar.class).get().getClass(), "Make sure the Bar can still be accessed");
     }
     
     @InjectKey(Foo.class)
@@ -152,7 +150,7 @@ public class InjectorTest {
     private final static class Baz implements Foo {}
     
     @Test
-    public void testKeyWithoutOverwrite() {
+    void testKeyWithoutOverwrite() {
         final Injector injector;
         
         try {
@@ -169,15 +167,15 @@ public class InjectorTest {
             );
         }
         
-        assertNotNull("Make sure Foo has an implementation", injector.get(Foo.class).orElse(null));
-        assertNotNull("Make sure Bar had an implementation", injector.get(Bar.class).orElse(null));
-        assertNotNull("Make sure Baz had an implementation", injector.get(Baz.class).orElse(null));
-        assertNotNull("Make sure Baz had an implementation", injector.get(FooNoOverwrite.class).orElse(null));
+        assertNotNull(injector.get(Foo.class).orElse(null), "Make sure Foo has an implementation");
+        assertNotNull(injector.get(Bar.class).orElse(null), "Make sure Bar had an implementation");
+        assertNotNull(injector.get(Baz.class).orElse(null), "Make sure Baz had an implementation");
+        assertNotNull(injector.get(FooNoOverwrite.class).orElse(null), "Make sure Baz had an implementation");
         
-        assertEquals("Make sure the default implementation is FooNoOverwrite.", FooNoOverwrite.class, injector.get(Foo.class).get().getClass());
-        assertEquals("Make sure FooNoOverwrite can be accessed directly.", FooNoOverwrite.class, injector.get(FooNoOverwrite.class).get().getClass());
-        assertEquals("Make sure the Bar can still be accessed", Bar.class, injector.get(Bar.class).get().getClass());
-        assertEquals("Make sure the Baz can still be accessed", Baz.class, injector.get(Baz.class).get().getClass());
+        assertEquals(FooNoOverwrite.class, injector.get(Foo.class).get().getClass(), "Make sure the default implementation is FooNoOverwrite.");
+        assertEquals(FooNoOverwrite.class, injector.get(FooNoOverwrite.class).get().getClass(), "Make sure FooNoOverwrite can be accessed directly.");
+        assertEquals(Bar.class, injector.get(Bar.class).get().getClass(), "Make sure the Bar can still be accessed");
+        assertEquals(Baz.class, injector.get(Baz.class).get().getClass(), "Make sure the Baz can still be accessed");
     }
     
     @InjectKey(value=Foo.class, overwrite=false)
@@ -199,8 +197,8 @@ public class InjectorTest {
     
     private ClassWithConfig configTest;
     
-    @Before
-    public void setupConfigTest() throws InstantiationException {
+    @BeforeEach
+    void setupConfigTest() throws InstantiationException {
         configTest = new ClassWithConfig();
         
         final Injector injector = Injector.builder()
@@ -214,19 +212,19 @@ public class InjectorTest {
     }
     
     @Test
-    public void testDefaultConfig() {
-        assertEquals("Test default string param: ", "example", configTest.defaultString);
-        assertEquals("Test default int param: ", -104726, configTest.defaultInt);
-        assertEquals("Test default float param: ", 0.43472f, configTest.defaultFloat, 0.00000001f);
-        assertEquals("Test default boolean param: ", false, configTest.defaultBoolean);
+    void testDefaultConfig() {
+        assertEquals("example", configTest.defaultString, "Test default string param: ");
+        assertEquals(-104726, configTest.defaultInt, "Test default int param: ");
+        assertEquals(0.43472f, configTest.defaultFloat, 0.00000001f, "Test default float param: ");
+        assertEquals(false, configTest.defaultBoolean, "Test default boolean param: ");
     }
     
     @Test
-    public void testOverridenConfig() {
-        assertEquals("Test overriden string param: ", "anotherExample", configTest.overridenString);
-        assertEquals("Test overriden int param: ", 56629, configTest.overridenInt);
-        assertEquals("Test overriden float param: ", -476.443f, configTest.overridenFloat, 0.00000001f);
-        assertEquals("Test overriden boolean param: ", true, configTest.overridenBoolean);
+    void testOverridenConfig() {
+        assertEquals("anotherExample", configTest.overridenString, "Test overriden string param: ");
+        assertEquals(56629, configTest.overridenInt, "Test overriden int param: ");
+        assertEquals(-476.443f, configTest.overridenFloat, 0.00000001f, "Test overriden float param: ");
+        assertEquals(true, configTest.overridenBoolean, "Test overriden boolean param: ");
     }
     
     private static abstract class AbstractComponent {
@@ -275,7 +273,7 @@ public class InjectorTest {
     }
     
     @Test
-    public void testParentChildExecutors() {
+    void testParentChildExecutors() {
         try {
             final Injector injector = Injector.builder()
                 .withComponent(ImplementingComponent.class)
@@ -284,7 +282,7 @@ public class InjectorTest {
             final ImplementingComponent component =
                 injector.getOrThrow(ImplementingComponent.class);
             
-            assertEquals("Make sure all executors was executed: ", 6, component.getCount());
+            assertEquals( 6, component.getCount(), "Make sure all executors was executed: ");
         } catch (final InstantiationException ex) {
             fail("InstantiationException!");
         }
@@ -322,7 +320,7 @@ public class InjectorTest {
     }
     
     @Test
-    public void testInvokeExecutors() {
+    void testInvokeExecutors() {
         try {
             final Injector injector = Injector.builder()
                 .withComponent(ExecutableComponent.class)
@@ -339,33 +337,33 @@ public class InjectorTest {
             final ExecutableComponent c =
                 injector.getOrThrow(ExecutableComponent.class);
             
-            assertTrue("Make sure 'a' was added before stop: ", c.getActionsInvoked().contains("a"));
-            assertTrue("Make sure 'b' was added before stop: ", c.getActionsInvoked().contains("b"));
-            assertTrue("Make sure 'c' was added before stop: ", c.getActionsInvoked().contains("c"));
-            assertFalse("Make sure 'd' was NOT added before stop: ", c.getActionsInvoked().contains("d"));
-            assertTrue("Make sure 'e' was added before stop: ", c.getActionsInvoked().contains("e"));
-            assertTrue("Make sure 'f' was added before stop: ", c.getActionsInvoked().contains("f"));
-            assertFalse("Make sure 'g' was NOT added before stop: ", c.getActionsInvoked().contains("g"));
-            assertTrue("Make sure 'h' was added before stop: ", c.getActionsInvoked().contains("h"));
-            assertTrue("Make sure 'q' was added before stop: ", c.getActionsInvoked().contains("q"));
-            assertFalse("Make sure 'z' was NOT added before stop: ", c.getActionsInvoked().contains("z"));
+            assertTrue(c.getActionsInvoked().contains("a"), "Make sure 'a' was added before stop: ");
+            assertTrue(c.getActionsInvoked().contains("b"), "Make sure 'b' was added before stop: ");
+            assertTrue(c.getActionsInvoked().contains("c"), "Make sure 'c' was added before stop: ");
+            assertFalse(c.getActionsInvoked().contains("d"), "Make sure 'd' was NOT added before stop: ");
+            assertTrue(c.getActionsInvoked().contains("e"), "Make sure 'e' was added before stop: ");
+            assertTrue(c.getActionsInvoked().contains("f"), "Make sure 'f' was added before stop: ");
+            assertFalse(c.getActionsInvoked().contains("g"), "Make sure 'g' was NOT added before stop: ");
+            assertTrue(c.getActionsInvoked().contains("h"), "Make sure 'h' was added before stop: ");
+            assertTrue(c.getActionsInvoked().contains("q"), "Make sure 'q' was added before stop: ");
+            assertFalse(c.getActionsInvoked().contains("z"), "Make sure 'z' was NOT added before stop: ");
             
-            assertEquals("Make sure the total count is right before stop: ", 7, c.getCount());
+            assertEquals(7, c.getCount(), "Make sure the total count is right before stop: ");
             
             injector.stop();
             
-            assertTrue("Make sure 'a' was added after stop: ", c.getActionsInvoked().contains("a"));
-            assertTrue("Make sure 'b' was added after stop: ", c.getActionsInvoked().contains("b"));
-            assertTrue("Make sure 'c' was added after stop: ", c.getActionsInvoked().contains("c"));
-            assertTrue("Make sure 'd' was added after stop: ", c.getActionsInvoked().contains("d"));
-            assertTrue("Make sure 'e' was added after stop: ", c.getActionsInvoked().contains("e"));
-            assertTrue("Make sure 'f' was added after stop: ", c.getActionsInvoked().contains("f"));
-            assertTrue("Make sure 'g' was added after stop: ", c.getActionsInvoked().contains("g"));
-            assertTrue("Make sure 'h' was added after stop: ", c.getActionsInvoked().contains("h"));
-            assertTrue("Make sure 'q' was added after stop: ", c.getActionsInvoked().contains("q"));
-            assertTrue("Make sure 'z' was added after stop: ", c.getActionsInvoked().contains("z"));
+            assertTrue(c.getActionsInvoked().contains("a"), "Make sure 'a' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("b"), "Make sure 'b' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("c"), "Make sure 'c' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("d"), "Make sure 'd' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("e"), "Make sure 'e' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("f"), "Make sure 'f' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("g"), "Make sure 'g' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("h"), "Make sure 'h' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("q"), "Make sure 'q' was added after stop: ");
+            assertTrue(c.getActionsInvoked().contains("z"), "Make sure 'z' was added after stop: ");
             
-            assertEquals("Make sure the total count is right after stop: ", 10, c.getCount());
+            assertEquals(10, c.getCount(), "Make sure the total count is right after stop: ");
             
         } catch (final InstantiationException ex) {
             fail("InstantiationException!");

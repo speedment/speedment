@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,6 +21,7 @@ import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.trait.HasChildren;
+import com.speedment.runtime.config.trait.HasDeepCopy;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
@@ -46,6 +47,7 @@ import java.util.stream.Stream;
 public interface Project
 extends Document,
         HasEnabled,
+        HasDeepCopy,
         HasId,        
         HasName,
         HasPackageName,
@@ -202,5 +204,10 @@ extends Document,
             .tables().filter(t -> tableId.equals(t.getId())).findAny()
             .orElseThrow(() -> new IllegalArgumentException(
                 "Could not find table: '" + tableId + "'."));
+    }
+
+    @Override
+    default Project deepCopy() {
+        return DocumentUtil.deepCopy(this, ProjectImpl::new);
     }
 }

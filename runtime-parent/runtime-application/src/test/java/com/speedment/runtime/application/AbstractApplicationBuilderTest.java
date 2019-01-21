@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,28 +16,27 @@
  */
 package com.speedment.runtime.application;
 
-import com.speedment.runtime.application.AbstractApplicationBuilder;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
-import org.junit.Assert;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author Per Minborg
  */
-public class AbstractApplicationBuilderTest {
+final class AbstractApplicationBuilderTest {
 
     private static final String COLUMN_NAME = "column_name";
     private static final String TABLE_NAME = "table_name";
@@ -68,57 +67,41 @@ public class AbstractApplicationBuilderTest {
 
     private AbstractApplicationBuilder<Speedment, DefaultApplicationBuilder> instance;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = new DefaultApplicationBuilder(TestApplicationMetadata.class)
             .withSkipCheckDatabaseConnectivity()
             .withSkipLogoPrintout()
             .withSkipValidateRuntimeConfig();
-        //instance = new AbstractApplicationBuilderImpl<>(Injector.builder());
     }
 
     @Test
-    public void checkVersion() {
+    void checkVersion() {
         assertEquals(Optional.of(Boolean.TRUE), instance.isVersionOk());
-
-//        final Map<String, Optional<Boolean>> testVector = new LinkedHashMap<>();
-//
-//        testVector.put("1.8.0_39", Optional.of(Boolean.FALSE));
-//        testVector.put("1.8.0_40", Optional.of(Boolean.TRUE));
-//        testVector.put("1.8.0_101", Optional.of(Boolean.TRUE));
-//        testVector.put("1.7.0_40", Optional.of(Boolean.FALSE));
-//        testVector.put("0.8.0_40", Optional.of(Boolean.FALSE));
-//        testVector.put("Arne", Optional.empty());
-//
-//        testVector.entrySet().forEach((e) -> {
-//            final Optional<Boolean> expected = e.getValue();
-//            final Optional<Boolean> result = instance.isVersionOk(e.getKey());
-//            assertEquals(e.getKey(), expected, result);
-//        });
     }
 
     @Test
-    public void withColumnTest() {
+    void withColumnTest() {
         withDocTest((ref) -> instance.withColumn(COLUMN_IDENTITY, ref::set));
     }
 
     @Test
-    public void withTableTest() {
+    void withTableTest() {
         withDocTest((ref) -> instance.withTable(COLUMN_IDENTITY, ref::set));
     }
 
     @Test
-    public void withSchemaTest() {
+    void withSchemaTest() {
         withDocTest((ref) -> instance.withSchema(COLUMN_IDENTITY, ref::set));
     }
 
     @Test
-    public void withDbmsTest() {
+    void withDbmsTest() {
         withDocTest((ref) -> instance.withDbms(COLUMN_IDENTITY, ref::set));
     }
 
     @Test
-    public void withPasswordCharArrayTest() {
+    void withPasswordCharArrayTest() {
         final char[] expected = "Olle".toCharArray();
         instance.withPassword(COLUMN_IDENTITY, expected);
         final char[] actual = instance.build().getOrThrow(PasswordComponent.class).get(DBMS_NAME).get();
@@ -126,7 +109,7 @@ public class AbstractApplicationBuilderTest {
     }
 
     @Test
-    public void withPasswordStringTest() {
+    void withPasswordStringTest() {
         final String expected = "Olle";
         instance.withPassword(COLUMN_IDENTITY, expected);
         final String actual = String.valueOf(instance.build().getOrThrow(PasswordComponent.class).get(DBMS_NAME).get());
@@ -134,7 +117,7 @@ public class AbstractApplicationBuilderTest {
     }
 
     @Test
-    public void withUsername() {
+    void withUsername() {
         final String expected = "SvenGlenn";
         instance.withUsername(COLUMN_IDENTITY, expected);
         final String actual = instance.build().getOrThrow(ProjectComponent.class).getProject().dbmses().findFirst().get().getUsername().get();
@@ -142,7 +125,7 @@ public class AbstractApplicationBuilderTest {
     }
 
     @Test
-    public void withIpAddressTest() {
+    void withIpAddressTest() {
         final String expected = "Olle";
         instance.withIpAddress(COLUMN_IDENTITY, expected);
         final String actual = instance.build().getOrThrow(ProjectComponent.class).getProject().dbmses().findFirst().get().getIpAddress().get();
@@ -150,7 +133,7 @@ public class AbstractApplicationBuilderTest {
     }
 
     @Test
-    public void withPortTest() {
+    void withPortTest() {
         final int expected = 42;
         instance.withPort(COLUMN_IDENTITY, expected);
         final int actual = instance.build().getOrThrow(ProjectComponent.class).getProject().dbmses().findFirst().get().getPort().getAsInt();
@@ -161,7 +144,7 @@ public class AbstractApplicationBuilderTest {
         final AtomicReference<Object> tableRef = new AtomicReference<>();
         consumer.accept(tableRef);
         instance.build();
-        Assert.assertNotNull(tableRef.get());
+        assertNotNull(tableRef.get());
     }
 
     private static class TestApplicationMetadata extends AbstractApplicationMetadata {
@@ -225,17 +208,4 @@ public class AbstractApplicationBuilderTest {
 
     }
 
-//
-//    public class AbstractApplicationBuilderImpl<
-//        APP extends Speedment, BUILDER extends AbstractApplicationBuilder<APP, BUILDER>> extends AbstractApplicationBuilder<APP, BUILDER> {
-//
-//        public AbstractApplicationBuilderImpl(Injector.Builder injector) {
-//            super(injector);
-//        }
-//
-//        @Override
-//        protected APP build(Injector injector) {
-//            throw new UnsupportedOperationException("Should never be called.");
-//        }
-//    }
 }

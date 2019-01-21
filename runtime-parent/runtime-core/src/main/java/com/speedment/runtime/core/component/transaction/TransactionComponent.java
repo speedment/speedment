@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.component.transaction;
 
 import com.speedment.common.injector.annotation.InjectKey;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -50,7 +51,7 @@ public interface TransactionComponent {
      * determine that the provided data source can be used with transactions.
      * @throws NullPointerException if the provided data source is null.
      */
-    <T> TransactionHandler creaateTransactionHandler(T dataSource); // <T extends TransactionCapable>
+    <T> TransactionHandler createTransactionHandler(T dataSource); // <T extends TransactionCapable>
 
     /**
      * Associates a certain data store class (e.g. Dbms) to some way of handling

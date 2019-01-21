@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,17 +16,22 @@
  */
 package com.speedment.runtime.config;
 
+import com.speedment.runtime.config.internal.ForeignKeyColumnImpl;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.trait.HasColumn;
+import com.speedment.runtime.config.trait.HasDeepCopy;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasOrdinalPosition;
 import com.speedment.runtime.config.trait.HasParent;
-import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExceptionFor;
+import com.speedment.runtime.config.util.DocumentUtil;
+
 import java.util.Optional;
+
+import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExceptionFor;
 
 /**
  * A typed {@link Document} that represents the column referenced by a foreign
@@ -39,6 +44,7 @@ import java.util.Optional;
 public interface ForeignKeyColumn extends
     Document,
     HasParent<ForeignKey>,
+    HasDeepCopy,
     HasId,    
     HasName,
     HasOrdinalPosition,
@@ -131,5 +137,10 @@ public interface ForeignKeyColumn extends
     @Override
     default ForeignKeyColumnMutator<? extends ForeignKeyColumn> mutator() {
         return DocumentMutator.of(this);
+    }
+
+    @Override
+    default ForeignKeyColumn deepCopy() {
+        return DocumentUtil.deepCopy(this, ForeignKeyColumnImpl::new);
     }
 }

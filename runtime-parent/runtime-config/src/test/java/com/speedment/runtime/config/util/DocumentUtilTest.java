@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,21 +25,21 @@ import com.speedment.runtime.config.IndexColumn;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DocumentUtilTest extends AbstractDocumentTest {
+final class DocumentUtilTest extends AbstractDocumentTest {
 
     /**
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_Column_Column() {
+    void testIsSame_Column_Column() {
         final Column[] columns = new Column[] {
             columnA1, columnA2, columnB1, columnB2,
             columnC1, columnC2, columnD1, columnD2
@@ -48,9 +48,9 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < columns.length; i++) {
             for (int j = 0; j < columns.length; j++) {
                 assertEquals(
-                    "  Is " + columns[i].getId() + 
-                    " same as " + columns[j].getId() + 
-                    ": ", i == j, 
+                    "  Is " + columns[i].getId() +
+                    " same as " + columns[j].getId() +
+                    ": ", i == j,
                     DocumentDbUtil.isSame(columns[i], columns[j])
                 );
             }
@@ -61,7 +61,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_IndexColumn_IndexColumn() {
+    void testIsSame_IndexColumn_IndexColumn() {
         final IndexColumn[] indexColumns = new IndexColumn[] {
             indexColumnA2, indexColumnB2
         };
@@ -69,9 +69,9 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < indexColumns.length; i++) {
             for (int j = 0; j < indexColumns.length; j++) {
                 assertEquals(
-                    "  Is " + indexColumns[i].getId() + 
-                    " same as " + indexColumns[j].getId() + 
-                    ": ", i == j, 
+                    "  Is " + indexColumns[i].getId() +
+                    " same as " + indexColumns[j].getId() +
+                    ": ", i == j,
                     DocumentDbUtil.isSame(indexColumns[i], indexColumns[j])
                 );
             }
@@ -82,7 +82,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_Index_Index() {
+    void testIsSame_Index_Index() {
         final Index[] indexes = new Index[] {
             indexA2, indexB2
         };
@@ -103,7 +103,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_PrimaryKeyColumn_PrimaryKeyColumn() {
+    void testIsSame_PrimaryKeyColumn_PrimaryKeyColumn() {
         final PrimaryKeyColumn[] primaryKeyColumns = new PrimaryKeyColumn[] {
             primaryKeyColumnA1, primaryKeyColumnB1, 
             primaryKeyColumnC1, primaryKeyColumnD1
@@ -125,7 +125,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_ForeignKeyColumn_ForeignKeyColumn() {
+    void testIsSame_ForeignKeyColumn_ForeignKeyColumn() {
         final ForeignKeyColumn[] foreignKeyColumns = new ForeignKeyColumn[] {
             foreignKeyColumnA2_C1, foreignKeyColumnB2_D1
         };
@@ -142,11 +142,14 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         }
     }
 
+    private void assertEquals(String s, boolean b, boolean same) {
+    }
+
     /**
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_ForeignKey_ForeignKey() {
+    void testIsSame_ForeignKey_ForeignKey() {
         final ForeignKey[] foreignKeys = new ForeignKey[] {
             foreignKeyA2_C1, foreignKeyB2_D1
         };
@@ -167,7 +170,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_Table_Table() {
+    void testIsSame_Table_Table() {
         final Table[] tables = new Table[] {
             tableA, tableB, tableC, tableD
         };
@@ -188,7 +191,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_Schema_Schema() {
+    void testIsSame_Schema_Schema() {
         final Schema[] schemas = new Schema[] {
             schemaA, schemaB
         };
@@ -209,7 +212,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_Dbms_Dbms() {
+    void testIsSame_Dbms_Dbms() {
         final Dbms[] dbmses = new Dbms[] {
             dbmsA, dbmsB
         };
@@ -230,11 +233,10 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
      * Test of isSame method, of class DocumentDbUtil.
      */
     @Test
-    public void testIsSame_Project_Project() {
+    void testIsSame_Project_Project() {
         assertTrue(
-            "  Is " + project.getId() + 
-            " same as " + project.getId() + ": ",
-            DocumentDbUtil.isSame(project, project)
+            DocumentDbUtil.isSame(project, project),
+            "  Is " + project.getId() + " same as " + project.getId() + ": "
         );
     }
 }

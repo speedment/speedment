@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,33 +18,32 @@ package com.speedment.runtime.core.internal.stream.builder;
 
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import java.util.stream.Stream;
-import org.junit.After;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
  * @author Per Minborg
  */
-public class ReferenceStreamBuilderTest {
+final class ReferenceStreamBuilderTest {
 
     private ReferenceStreamBuilder<String> instance;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         final PipelineImpl<String> pipeline = new PipelineImpl<>(() -> Stream.of("A", "B"));
         final StreamTerminator streamTerminator = new MockStreamTerminator();
         instance = new ReferenceStreamBuilder<>(pipeline, streamTerminator);
     }
 
-    @After
-    public void tearDown() {
-    }
 
     @Test
-    public void testIssue384() {
+    void testIssue384() {
         final Stream<String> s0 = instance;
         final Stream<String> s1 = s0.map(s -> s + " Svensson");
         try {
@@ -58,147 +57,183 @@ public class ReferenceStreamBuilderTest {
     }
 
     @Test
-    public void testFilter() {
+    @Disabled
+    void testFilter() {
     }
 
     @Test
-    public void testMap() {
+    @Disabled
+    void testMap() {
     }
 
     @Test
-    public void testMapToInt() {
+    @Disabled
+    void testMapToInt() {
     }
 
     @Test
-    public void testMapToLong() {
+    @Disabled
+    void testMapToLong() {
     }
 
     @Test
-    public void testMapToDouble() {
+    @Disabled
+    void testMapToDouble() {
     }
 
     @Test
-    public void testFlatMap() {
+    @Disabled
+    void testFlatMap() {
     }
 
     @Test
-    public void testFlatMapToInt() {
+    @Disabled
+    void testFlatMapToInt() {
     }
 
     @Test
-    public void testFlatMapToLong() {
+    @Disabled
+    void testFlatMapToLong() {
     }
 
     @Test
-    public void testFlatMapToDouble() {
+    @Disabled
+    void testFlatMapToDouble() {
     }
 
     @Test
-    public void testDistinct() {
+    @Disabled
+    void testDistinct() {
     }
 
     @Test
-    public void testSorted_0args() {
+    @Disabled
+    void testSorted_0args() {
     }
 
     @Test
-    public void testSorted_Comparator() {
+    @Disabled
+    void testSorted_Comparator() {
     }
 
     @Test
-    public void testPeek() {
+    @Disabled
+    void testPeek() {
     }
 
     @Test
-    public void testLimit() {
+    @Disabled
+    void testLimit() {
     }
 
     @Test
-    public void testSkip() {
+    @Disabled
+    void testSkip() {
     }
 
     @Test
-    public void testTakeWhile() {
+    @Disabled
+    void testTakeWhile() {
     }
 
     @Test
-    public void testDropWhile() {
+    @Disabled
+    void testDropWhile() {
     }
 
     @Test
-    public void testForEach() {
+    @Disabled
+    void testForEach() {
     }
 
     @Test
-    public void testForEachOrdered() {
+    @Disabled
+    void testForEachOrdered() {
     }
 
     @Test
-    public void testToArray_0args() {
+    @Disabled
+    void testToArray_0args() {
     }
 
     @Test
-    public void testToArray_IntFunction() {
+    @Disabled
+    void testToArray_IntFunction() {
     }
 
     @Test
-    public void testReduce_GenericType_BinaryOperator() {
+    @Disabled
+    void testReduce_GenericType_BinaryOperator() {
     }
 
     @Test
-    public void testReduce_BinaryOperator() {
+    @Disabled
+    void testReduce_BinaryOperator() {
     }
 
     @Test
-    public void testReduce_3args() {
+    @Disabled
+    void testReduce_3args() {
     }
 
     @Test
-    public void testCollect_3args() {
+    @Disabled
+    void testCollect_3args() {
     }
 
     @Test
-    public void testCollect_Collector() {
+    @Disabled
+    void testCollect_Collector() {
     }
 
     @Test
-    public void testMin() {
+    @Disabled
+    void testMin() {
     }
 
     @Test
-    public void testMax() {
+    @Disabled
+    void testMax() {
     }
 
     @Test
-    public void testCount() {
+    @Disabled
+    void testCount() {
     }
 
     @Test
-    public void testAnyMatch() {
+    @Disabled
+    void testAnyMatch() {
     }
 
     @Test
-    public void testAllMatch() {
+    @Disabled
+    void testAllMatch() {
     }
 
     @Test
-    public void testNoneMatch() {
+    @Disabled
+    void testNoneMatch() {
     }
 
     @Test
-    public void testFindFirst() {
+    @Disabled
+    void testFindFirst() {
     }
 
     @Test
-    public void testFindAny() {
+    @Disabled
+    void testFindAny() {
     }
 
     @Test
-    public void testIterator() {
+    @Disabled
+    void testIterator() {
     }
 
     @Test
-    public void testSpliterator() {
+    @Disabled
+    void testSpliterator() {
     }
 
     private class MockStreamTerminator implements StreamTerminator {

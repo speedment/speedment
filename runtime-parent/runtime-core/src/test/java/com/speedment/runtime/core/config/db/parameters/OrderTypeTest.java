@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,18 +17,21 @@
 package com.speedment.runtime.core.config.db.parameters;
 
 import com.speedment.runtime.config.parameter.OrderType;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class OrderTypeTest {
+final class OrderTypeTest {
 
     final AtomicBoolean asc = new AtomicBoolean();
     final AtomicBoolean desc = new AtomicBoolean();
@@ -41,42 +44,26 @@ public class OrderTypeTest {
         return "B";
     };
 
-
-    public OrderTypeTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         asc.set(false);
         desc.set(false);
        // none.set(false);
     }
 
-    @After
-    public void tearDown() {
-    }
-
     @Test
-    public void testValues() {
+    void testValues() {
         assertEquals(3, OrderType.values().length);
     }
 
     @Test
-    public void testSelectLazilyASC() {
+    void testSelectLazilyASC() {
         assertEquals("A", OrderType.ASC.selectLazily(ascSupplier, descSupplier/*, noneSupplier*/));
         assertAscSelected();
     }
 
     @Test
-    public void testSelectLazilyDESC() {
+    void testSelectLazilyDESC() {
         assertEquals("B", OrderType.DESC.selectLazily(ascSupplier, descSupplier/*, noneSupplier*/));
         assertDescSelected();
     }
@@ -89,20 +76,20 @@ public class OrderTypeTest {
 //    }
 
     @Test
-    public void testSelect() {
+    void testSelect() {
         assertEquals("A", OrderType.ASC.select("A", "B"));
         assertEquals("B", OrderType.DESC.select("A", "B"));
         assertEquals("A", OrderType.NONE.select("A", "B"));
     }
 
     @Test
-    public void testSelectRunnableASC() {
+    void testSelectRunnableASC() {
         OrderType.ASC.selectRunnable(() -> asc.set(true), () -> desc.set(true));
         assertAscSelected();
     }
 
     @Test
-    public void testSelectRunnableDesc() {
+    void testSelectRunnableDesc() {
         OrderType.DESC.selectRunnable(() -> asc.set(true), () -> desc.set(true));
         assertDescSelected();
     }

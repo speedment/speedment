@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,6 +15,8 @@
  * the License.
  */
 package com.speedment.runtime.core.internal.util;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
@@ -42,7 +44,7 @@ public class AssertUtil {
 
         public void test() {
             if (!eval()) {
-                org.junit.Assert.fail("Throwable not as expected");
+                fail("Throwable not as expected");
             }
         }
 

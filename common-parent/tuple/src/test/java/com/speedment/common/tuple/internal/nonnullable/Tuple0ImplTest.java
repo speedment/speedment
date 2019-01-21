@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,11 +16,12 @@
  */
 package com.speedment.common.tuple.internal.nonnullable;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-public final class Tuple0ImplTest extends AbstractTupleImplTest<Tuple0Impl> {
+final class Tuple0ImplTest extends AbstractTupleImplTest<Tuple0Impl> {
     
-    public Tuple0ImplTest() {
+    Tuple0ImplTest() {
         super(() -> (Tuple0Impl) Tuple0Impl.EMPTY_TUPLE, 0);
     }
 }

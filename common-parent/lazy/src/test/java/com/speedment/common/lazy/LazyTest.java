@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,8 @@
  */
 package com.speedment.common.lazy;
 
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
@@ -26,12 +27,13 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author pemi
  */
-public class LazyTest {
+final class LazyTest {
 
     private static final Integer ONE = 1;
     private static final Integer TWO = 2;
@@ -41,39 +43,27 @@ public class LazyTest {
 
     LazyReference<Integer> instance;
 
-    public LazyTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = LazyReference.create();
     }
 
-    @After
-    public void tearDown() {
-    }
 
     @Test
-    public void testGetOrCompute() {
+    void testGetOrCompute() {
         assertEquals(ONE, instance.getOrCompute(ONE_SUPPLIER));
         assertEquals(ONE, instance.getOrCompute(TWO_SUPPLIER));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testGetOrComputeSuppliedNull() {
-        instance.getOrCompute(NULL_SUPPLIER);
+    @Test
+    void testGetOrComputeSuppliedNull() {
+        assertThrows(NullPointerException.class, () -> {
+            instance.getOrCompute(NULL_SUPPLIER);
+        });
     }
 
     @Test
-    public void testConcurrency() throws InterruptedException, ExecutionException {
+    void testConcurrency() throws InterruptedException {
         final int threads = 8;
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
@@ -92,7 +82,7 @@ public class LazyTest {
                     .map(LazyTest::getFutureValue)
                     .collect(toSet());
 
-            assertEquals("Failed at iteration " + i, 1, ids.size());
+            assertEquals(1, ids.size(), "Failed at iteration " + i);
 
         }
 

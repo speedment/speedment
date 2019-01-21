@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,6 +26,8 @@ import static java.util.Objects.requireNonNull;
  * @author Per Minborg
  */
 public final class Cast {
+
+    private Cast() {}
 
     /**
      * Casts and returns the provided object if it is assignable from the given
@@ -66,13 +68,7 @@ public final class Cast {
         return Optional.of(object)
             .filter(o -> clazz.isAssignableFrom(o.getClass()))
             .map(clazz::cast)
-            .get();
+            .orElseThrow(NoSuchElementException::new);
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private Cast() {
-        throw new UnsupportedOperationException();
-    }
 }

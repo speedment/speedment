@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -297,20 +297,20 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    //                        Private Helper Methods                          //
+    //                             Helper Methods                             //
     ////////////////////////////////////////////////////////////////////////////
 
-    private SqlPredicateFragment equalHelper(String cn, Object argument) {
+    protected SqlPredicateFragment equalHelper(String cn, Object argument) {
         return of("(" + cn + " = ?)").add(argument);
     }
 
-    private SqlPredicateFragment notEqualHelper(String cn, Object argument) {
+    protected SqlPredicateFragment notEqualHelper(String cn, Object argument) {
         return of("(NOT (" + cn + " = ?))").add(argument);
     }
 
-    private SqlPredicateFragment betweenHelper(String cn,
-                                                     FieldPredicate<?> model,
-                                                     boolean negated) {
+    protected SqlPredicateFragment betweenHelper(String cn,
+                                                 FieldPredicate<?> model,
+                                                 boolean negated) {
 
         final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
@@ -339,9 +339,9 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
     }
 
-    private SqlPredicateFragment inHelper(String cn,
-                                          FieldPredicate<?> model,
-                                          boolean negated) {
+    protected SqlPredicateFragment inHelper(String cn,
+                                            FieldPredicate<?> model,
+                                            boolean negated) {
 
         final Set<?> set = getFirstOperandAsRawSet(model);
         if (set.isEmpty()) {

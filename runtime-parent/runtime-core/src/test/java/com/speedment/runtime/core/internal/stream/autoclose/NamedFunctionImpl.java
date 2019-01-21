@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,18 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.stream;
+package com.speedment.runtime.core.internal.stream.autoclose;
 
-import java.util.stream.Stream;
+import java.util.function.Function;
 
-/**
- * Indicates that this class is Streamable.
- *
- * @author pemi
- * @param <T> type of {@link Stream}
- */
-public interface Streamable<T> {
+import static java.util.Objects.requireNonNull;
 
-    Stream<T> stream();
+final class NamedFunctionImpl<T, R> extends HasNameImpl implements NamedFunction<T, R> {
 
+    private final Function<T, R> function;
+
+    NamedFunctionImpl(String name, Function<T, R> function) {
+        super(name);
+        this.function = requireNonNull(function);
+    }
+
+    @Override
+    public R apply(T t) {
+        return function.apply(t);
+    }
 }

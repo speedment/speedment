@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,18 +22,18 @@
 package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.ExpressionType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.speedment.runtime.compute.TestUtil.strings;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public final class ToLongTest extends AbstractToTest<ToLong<String>> {
+final class ToLongTest extends AbstractToTest<ToLong<String>> {
 
-    public ToLongTest() {
+    ToLongTest() {
         super(ExpressionType.LONG);
     }
 
@@ -43,7 +43,7 @@ public final class ToLongTest extends AbstractToTest<ToLong<String>> {
     }
 
     @Test
-    public void testApplyAsLong() {
+    void testApplyAsLong() {
         strings().forEach(s -> {
             final long actual = mapper.applyAsLong(s);
             final long expected = instance.applyAsLong(s);
@@ -52,7 +52,7 @@ public final class ToLongTest extends AbstractToTest<ToLong<String>> {
     }
 
     @Test
-    public void testMapToDouble() {
+    void testMapToDouble() {
         strings().forEach(s -> {
             final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToDouble<String> toDouble = instance.mapToDouble(l -> l + 1);
@@ -62,7 +62,7 @@ public final class ToLongTest extends AbstractToTest<ToLong<String>> {
     }
 
     @Test
-    public void testMap() {
+    void testMap() {
         strings().forEach(s -> {
             final double expected = (double) mapper.applyAsLong(s) + 1.0;
             final ToLong<String> to = instance.map(l -> l + 1);
@@ -72,7 +72,7 @@ public final class ToLongTest extends AbstractToTest<ToLong<String>> {
     }
 
     @Test
-    public void testCompose() {
+    void testCompose() {
         strings().forEach(s -> {
             final ToLongNullable<String> composed = instance.compose(str -> str + "A");
             assertEquals(mapper.applyAsLong(s + "A"), composed.applyAsLong(s));
@@ -80,7 +80,7 @@ public final class ToLongTest extends AbstractToTest<ToLong<String>> {
     }
     
     @Test
-    public void testOf() {
+    void testOf() {
         strings().forEach(s -> {
             final ToLong<String> created = ToLong.of(String::length);
             assertEquals(s.length(), created.applyAsLong(s));

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,12 +16,11 @@
  */
 package com.speedment.runtime.bulk;
 
-import com.speedment.runtime.bulk.Operation.Type;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.field.Field;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
 
@@ -29,17 +28,17 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
-public class BuilderTest {
+final class BuilderTest {
 
     private Manager<Point> mgr;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         mgr = new PointManager();
     }
 
     @Test
-    public void testRemoveAll() {
+    void testRemoveAll() {
         final BulkOperation bo = BulkOperation.builder()
             .remove(mgr)
             .build();
@@ -48,7 +47,7 @@ public class BuilderTest {
     }
 
     @Test
-    public void testRemoveOnePredicate() {
+    void testRemoveOnePredicate() {
         final BulkOperation bo = BulkOperation.builder()
             .remove(mgr).where(Point::isOrigo)
             .build();
@@ -56,7 +55,7 @@ public class BuilderTest {
     }
 
     @Test
-    public void testRemoveTwoPredicates() {
+    void testRemoveTwoPredicates() {
         final BulkOperation bo = BulkOperation.builder()
             .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
             .build();
@@ -112,7 +111,7 @@ public class BuilderTest {
     */
     
     @Test
-    public void testMixed() {
+    void testMixed() {
         final BulkOperation bo = BulkOperation.builder()
             .remove(mgr)
             .remove(mgr).where(Point::isOrigo)

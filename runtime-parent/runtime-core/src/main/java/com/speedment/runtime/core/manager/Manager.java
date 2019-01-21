@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,9 +16,8 @@
  */
 package com.speedment.runtime.core.manager;
 
-import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.component.PersistenceTableInfo;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.trait.HasFinder;
@@ -40,38 +39,7 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.0.0
  */
-public interface Manager<ENTITY> {
-
-    /**
-     * Returns an identifier for the table that this {@code Manager} handles
-     * entities for.
-     *
-     * @return the table identifier
-     */
-    TableIdentifier<ENTITY> getTableIdentifier();
-
-    /**
-     * Returns the entity class for this Manager.
-     *
-     * @return the entity class
-     */
-    Class<ENTITY> getEntityClass();
-
-    /**
-     * Returns a stream of the fields that every entity in this {@code Manager}
-     * contains.
-     *
-     * @return a stream of all fields
-     */
-    Stream<Field<ENTITY>> fields();
-
-    /**
-     * Returns a stream of the fields that are included in the primary key of
-     * the table represented by this {@code Manager}.
-     *
-     * @return the primary key fields
-     */
-    Stream<Field<ENTITY>> primaryKeyFields();
+public interface Manager<ENTITY> extends PersistenceProvider<ENTITY>, PersistenceTableInfo<ENTITY> {
 
     /**
      * Creates and returns a new {@link Stream} over all entities in the
@@ -211,17 +179,6 @@ public interface Manager<ENTITY> {
     }
 
     /**
-     * Returns a {@link Persister} that when its
-     * {@link Persister#apply(java.lang.Object) } method is called, will produce
-     * the same result as {@link #persist(java.lang.Object) }
-     *
-     * @return a Persister
-     */
-    Persister<ENTITY> persister();
-
-    Persister<ENTITY> persister(HasLabelSet<ENTITY> fields);
-
-    /**
      * Updates the provided entity in the underlying database and returns a
      * potentially updated entity. If the update fails for any reason, an
      * unchecked {@link SpeedmentException} is thrown.
@@ -250,16 +207,6 @@ public interface Manager<ENTITY> {
     }
 
     /**
-     * Returns an {@link Updater} that when its {@link Persister#apply(Object)}
-     * method is called, will produce the same result as {@link #update(Object)}
-     *
-     * @return an Updater
-     */
-    Updater<ENTITY> updater();
-
-    Updater<ENTITY> updater(HasLabelSet<ENTITY> fields);
-
-    /**
      * Removes the provided entity from the underlying database and returns the
      * provided entity instance. If the deletion fails for any reason, an
      * unchecked {@link SpeedmentException} is thrown.
@@ -275,14 +222,6 @@ public interface Manager<ENTITY> {
     default ENTITY remove(ENTITY entity) throws SpeedmentException {
         return remover().apply(entity);
     }
-
-    /**
-     * Returns a {@link Remover} that when its {@link Persister#apply(Object)}
-     * method is called, will produce the same result as {@link #remove(Object)}
-     *
-     * @return a Remover
-     */
-    Remover<ENTITY> remover();
 
     /**
      * Returns a Function that, when it is applied, will produce an equivalent

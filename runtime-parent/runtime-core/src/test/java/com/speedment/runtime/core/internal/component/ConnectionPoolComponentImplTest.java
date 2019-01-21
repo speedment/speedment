@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,14 +23,15 @@ package com.speedment.runtime.core.internal.component;
 
 
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
-import com.speedment.runtime.core.internal.component.ConnectionPoolComponentImpl;
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.Executor;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -38,20 +39,9 @@ import static org.junit.Assert.*;
  */
 public class ConnectionPoolComponentImplTest {
 
-    ConnectionPoolComponentImpl instance;
+    private ConnectionPoolComponentImpl instance;
 
-    public ConnectionPoolComponentImplTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new ConnectionPoolComponentImpl() {
             @Override
@@ -61,15 +51,6 @@ public class ConnectionPoolComponentImplTest {
         };
     }
 
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of getConnection method, of class ConnectionPoolComponentImpl.
-     *
-     * @throws java.lang.Exception
-     */
     @Test
     public void testGetConnection() throws Exception {
         String uri = "thecooldatabase";
@@ -79,11 +60,6 @@ public class ConnectionPoolComponentImplTest {
         assertNotNull(result);
     }
 
-    /**
-     * Test of returnConnection method, of class ConnectionPoolComponentImpl.
-     *
-     * @throws java.lang.Exception
-     */
     @Test
     public void testReturnConnection() throws Exception {
         String uri = "thecooldatabase";
@@ -93,11 +69,6 @@ public class ConnectionPoolComponentImplTest {
         instance.returnConnection(connection);
     }
 
-    /**
-     * Test of newConnection method, of class ConnectionPoolComponentImpl.
-     *
-     * @throws java.lang.Exception
-     */
     @Test
     public void testNewConnection() throws Exception {
         String uri = "someurl";
@@ -108,9 +79,6 @@ public class ConnectionPoolComponentImplTest {
         assertFalse(result.isClosed());
     }
 
-    /**
-     * Test of getMaxAge method, of class ConnectionPoolComponentImpl.
-     */
     @Test
     public void testGetMaxAge() {
         long result = instance.getMaxAge();
@@ -119,18 +87,12 @@ public class ConnectionPoolComponentImplTest {
         assertEquals(60_000, instance.getMaxAge());
     }
 
-    /**
-     * Test of setMaxAge method, of class ConnectionPoolComponentImpl.
-     */
     @Test
     public void testSetMaxAge() {
         instance.setMaxAge(40_000);
         assertEquals(40_000, instance.getMaxAge());
     }
 
-    /**
-     * Test of getPoolSize method, of class ConnectionPoolComponentImpl.
-     */
     @Test
     public void testGetPoolSize() {
         final int result = instance.getMaxRetainSize();
@@ -141,7 +103,7 @@ public class ConnectionPoolComponentImplTest {
 
     // Leaking connections
     @Test
-    @Ignore
+    @Disabled
     public void testLeak() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";

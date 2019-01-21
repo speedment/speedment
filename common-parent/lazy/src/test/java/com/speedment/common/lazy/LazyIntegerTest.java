@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,9 +16,8 @@
  */
 package com.speedment.common.lazy;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
@@ -27,7 +26,8 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author pemi
@@ -52,25 +52,27 @@ public class LazyIntegerTest {
 //        return (int) t.getId();
 //    }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = newInstance();
     }
 
     @Test
-    public void testGetOrCompute() {
+    void testGetOrCompute() {
         assertEquals(firstValue(), instance.getOrCompute(() -> firstValue()));
         assertEquals(firstValue(), instance.getOrCompute(() -> secondValue()));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testGetOrComputeSupplierIsNull() {
-        instance.getOrCompute(null);
+    @Test
+    void testGetOrComputeSupplierIsNull() {
+        assertThrows(NullPointerException.class, () -> {
+            instance.getOrCompute(null);
+        });
     }
 
     // Todo: Enable this test
     @Test
-    public void testConcurrency() throws InterruptedException, ExecutionException {
+    void testConcurrency() throws InterruptedException, ExecutionException {
         final int threads = 8;
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
@@ -89,7 +91,7 @@ public class LazyIntegerTest {
                 .map(AbstractLazyTest::getFutureValue)
                 .collect(toSet());
 
-            assertEquals("Failed at iteration " + i, 1, results.size());
+            assertEquals(1, results.size(), "Failed at iteration " + i);
 
         }
 

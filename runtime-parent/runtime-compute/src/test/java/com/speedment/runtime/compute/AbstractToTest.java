@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,24 +24,22 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.trait.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.util.function.Function;
 import java.util.function.ToLongFunction;
 
 import static com.speedment.runtime.compute.TestUtil.strings;
 import static java.util.Objects.requireNonNull;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-
-
-
-abstract class AbstractToTest<T extends 
+abstract class AbstractToTest<T extends
         Expression<String> & 
         HasAsDouble<String> & 
         HasAsInt<String> & 
@@ -72,18 +70,18 @@ abstract class AbstractToTest<T extends
 
     abstract T create();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         instance = create();
     }
 
     @Test
-    public void testExpressionType() {
+    void testExpressionType() {
         assertEquals(expressionType, instance.expressionType());
     }
 
     @Test
-    public void testAsDouble() {
+    void testAsDouble() {
         strings().forEach(s -> {
             final double expected = mapper.applyAsLong(s);
             final ToDouble<String> asDouble = instance.asDouble();
@@ -94,7 +92,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testAsInt() {
+    void testAsInt() {
         strings().forEach(s -> {
             final int expected = (int) mapper.applyAsLong(s);
             final ToInt<String> asInt = instance.asInt();
@@ -105,7 +103,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testAsLong() {
+    void testAsLong() {
         strings().forEach(s -> {
             final long expected = mapper.applyAsLong(s);
             final ToLong<String> asLong = instance.asLong();
@@ -116,7 +114,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testAbs() {
+    void testAbs() {
         strings().forEach(s -> {
             final long expected = mapper.applyAsLong(s);
             final T negatedAbs = instance.negate().abs();
@@ -127,7 +125,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testSign() {
+    void testSign() {
         strings().forEach(s -> {
 
             final ToByte<String> sign = instance.sign();
@@ -144,7 +142,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testSqrt() {
+    void testSqrt() {
         strings().forEach(s -> {
             final double actual = instance.sqrt().asDouble().applyAsDouble(s);
             assertEquals(Math.sqrt(mapper.applyAsLong(s)), actual, EPSILON);
@@ -153,7 +151,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testPow_int() {
+    void testPow_int() {
         strings().forEach(s -> {
             final double actual = instance.pow(2).applyAsDouble(s);
             assertEquals(Math.pow(mapper.applyAsLong(s), 2), actual, EPSILON);
@@ -161,7 +159,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testPow_double() {
+    void testPow_double() {
         strings().forEach(s -> {
             final double actual = instance.pow(2.0).applyAsDouble(s);
             assertEquals(Math.pow(mapper.applyAsLong(s), 2), actual, EPSILON);
@@ -169,7 +167,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testPow_ToInt() {
+    void testPow_ToInt() {
         strings().forEach(s -> {
             final double actual = instance.pow((ToInt<String>) u -> 2).applyAsDouble(s);
             assertEquals(Math.pow(mapper.applyAsLong(s), 2), actual, EPSILON);
@@ -177,7 +175,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testPow_ToDouble() {
+    void testPow_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.pow((ToInt<String>) u -> 2).applyAsDouble(s);
             assertEquals(Math.pow(mapper.applyAsLong(s), 2), actual, EPSILON);
@@ -186,7 +184,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testPlus_byte() {
+    void testPlus_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((byte) 1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
@@ -195,7 +193,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testPlus_ToByte() {
+    void testPlus_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToByte<String>) u -> (byte) 1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
@@ -204,7 +202,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testPlus_int() {
+    void testPlus_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus(1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
@@ -213,7 +211,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testPlus_ToInt() {
+    void testPlus_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToInt<String>) u -> 1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
@@ -222,7 +220,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testPlus_long() {
+    void testPlus_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus(1L)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
@@ -231,7 +229,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testPlus_ToLong() {
+    void testPlus_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.plus((ToLong<String>) u -> 1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
@@ -239,7 +237,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testPlus_double() {
+    void testPlus_double() {
         strings().forEach(s -> {
             final double actual = instance.plus(1.0).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
@@ -247,7 +245,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testPlus_ToDouble() {
+    void testPlus_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.plus((ToDouble<String>) u -> 1.0).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) + 1.0, actual, EPSILON);
@@ -256,7 +254,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMinus_byte() {
+    void testMinus_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((byte) 1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
@@ -265,7 +263,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMinus_ToByte() {
+    void testMinus_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToByte<String>) u -> (byte) 1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
@@ -274,7 +272,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMinus_int() {
+    void testMinus_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus(1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
@@ -283,7 +281,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMinus_ToInt() {
+    void testMinus_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToInt<String>) u -> 1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
@@ -292,7 +290,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMinus_long() {
+    void testMinus_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus(1L)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
@@ -301,7 +299,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMinus_ToLong() {
+    void testMinus_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.minus((ToLong<String>) u -> 1)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
@@ -309,7 +307,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testMinus_double() {
+    void testMinus_double() {
         strings().forEach(s -> {
             final double actual = instance.minus(1.0).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
@@ -317,7 +315,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testMinus_ToDouble() {
+    void testMinus_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.minus((ToDouble<String>) u -> 1.0).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) - 1.0, actual, EPSILON);
@@ -326,7 +324,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMultiply_byte() {
+    void testMultiply_byte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((byte) 2)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
@@ -335,7 +333,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMultiply_ToByte() {
+    void testMultiply_ToByte() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToByte<String>) u -> (byte) 2)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
@@ -344,7 +342,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMultiply_int() {
+    void testMultiply_int() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply(2)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
@@ -353,7 +351,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMultiply_ToInt() {
+    void testMultiply_ToInt() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToInt<String>) u -> 2)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
@@ -362,7 +360,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMultiply_long() {
+    void testMultiply_long() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply(2L)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
@@ -371,7 +369,7 @@ abstract class AbstractToTest<T extends
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMultiply_ToLong() {
+    void testMultiply_ToLong() {
         strings().forEach(s -> {
             final double actual = ((HasAsDouble<String>)instance.multiply((ToLong<String>) u -> 2)).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
@@ -379,7 +377,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testMultiply_double() {
+    void testMultiply_double() {
         strings().forEach(s -> {
             final double actual = instance.multiply(2.0).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
@@ -387,7 +385,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testMultiply_ToDouble() {
+    void testMultiply_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.multiply((ToDouble<String>) u -> 2).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) * 2.0, actual, EPSILON);
@@ -395,7 +393,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testDivide_int() {
+    void testDivide_int() {
         strings().forEach(s -> {
             final double actual = instance.divide(2).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
@@ -403,7 +401,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testDivide_ToInt() {
+    void testDivide_ToInt() {
         strings().forEach(s -> {
             final double actual = instance.divide((ToInt<String>) u -> 2).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
@@ -411,7 +409,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testDivide_long() {
+    void testDivide_long() {
         strings().forEach(s -> {
             final double actual = instance.divide(2L).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
@@ -419,7 +417,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testDivide_ToLong() {
+    void testDivide_ToLong() {
         strings().forEach(s -> {
             final double actual = instance.divide((ToLong<String>) u -> 2).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
@@ -427,7 +425,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testDivide_double() {
+    void testDivide_double() {
         strings().forEach(s -> {
             final double actual = instance.divide(2.0).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
@@ -435,7 +433,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testDivide_ToDouble() {
+    void testDivide_ToDouble() {
         strings().forEach(s -> {
             final double actual = instance.divide((ToDouble<String>) u -> 2).asDouble().applyAsDouble(s);
             assertEquals(mapper.applyAsLong(s) / 2.0, actual, EPSILON);
@@ -443,7 +441,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testNegate() {
+    void testNegate() {
         strings().forEach(s -> {
 
             final double actual = instance.negate().asDouble().applyAsDouble(s);
@@ -452,7 +450,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testHash() {
+    void testHash() {
         strings().forEach(s -> {
             final long actual = instance.hash(s);
             final long NOT_expected = instance.hash(s + "A");
@@ -462,7 +460,7 @@ abstract class AbstractToTest<T extends
     }
 
     @Test
-    public void testCompare() {
+    void testCompare() {
         final int cmpAb = instance.compare("SHORT", "VERY LONG STRING");
         assertTrue(cmpAb < 0);
 

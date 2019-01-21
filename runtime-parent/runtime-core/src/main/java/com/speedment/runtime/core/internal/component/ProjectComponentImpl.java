@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -44,7 +44,10 @@ public final class ProjectComponentImpl implements ProjectComponent {
 
     @ExecuteBefore(INITIALIZED)
     void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
-        project = metadata.makeProject();
+        project = requireNonNull(metadata.makeProject(),
+            "Metadata has not yet been loaded! This is probably due to an "
+                + "incorrect initialization order."
+        );;
     }
 
     @ExecuteBefore(STARTED)
@@ -64,11 +67,6 @@ public final class ProjectComponentImpl implements ProjectComponent {
 
     @Override
     public Project getProject() {
-        requireNonNull(project,
-            "Metadata has not yet been loaded! This is probably due to an "
-            + "incorrect initialization order."
-        );
-
         return project;
     }
 

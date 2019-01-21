@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,11 +21,7 @@
  */
 package com.speedment.runtime.field.predicate;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -33,35 +29,18 @@ import java.util.Map;
 
 import static com.speedment.runtime.field.predicate.PredicateType.*;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author pemi
  */
-public class PredicateTypeTest {
-
-    public PredicateTypeTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
+final class PredicateTypeTest {
 
     @Test
-    public void testComplementType() {
+    void testComplementType() {
         // Make sure that each Type has a (unique) negated type
         final Map<PredicateType, PredicateType> map = new EnumMap<>(PredicateType.class);
 
@@ -79,19 +58,19 @@ public class PredicateTypeTest {
     }
 
     @Test
-    public void testGetComplementType() {
+    void testGetComplementType() {
         assertEquals(EQUAL, NOT_EQUAL.negate());
         assertEquals(NOT_EQUAL, EQUAL.negate());
     }
 
     @Test
-    public void testEffectiveType() {
+    void testEffectiveType() {
         assertEquals(EQUAL, EQUAL.effectiveType(false));
         assertEquals(NOT_EQUAL, EQUAL.effectiveType(true));
     }
 
     @Test
-    public void testBetween() {
+    void testBetween() {
         assertEquals(BETWEEN, BETWEEN.effectiveType(false));
         assertEquals(NOT_BETWEEN, NOT_BETWEEN.effectiveType(false));
         assertEquals(NOT_BETWEEN, BETWEEN.effectiveType(true));

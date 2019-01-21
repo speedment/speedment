@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,6 +26,8 @@ import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.exception.SpeedmentException;
+
+import java.util.NoSuchElementException;
 
 import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
 import static java.util.Objects.requireNonNull;
@@ -53,7 +55,7 @@ public final class FkHolder {
         this.fkc = fk.foreignKeyColumns().findFirst().orElseThrow(this::noEnabledForeignKeyException);
         
         this.column        = fkc.findColumn().orElseThrow(this::couldNotFindLocalColumnException);
-        this.table         = ancestor(column, Table.class).get();
+        this.table         = ancestor(column, Table.class).orElseThrow(NoSuchElementException::new);
         this.foreignColumn = fkc.findForeignColumn().orElseThrow(this::foreignKeyWasNullException);
         this.foreignTable  = fkc.findForeignTable().orElseThrow(this::foreignKeyWasNullException);
     }

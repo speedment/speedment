@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -110,7 +110,7 @@ public final class StandardJavaTypeMapping {
         ),
         
         new JavaTypeMappingImpl<>(
-            BigInteger.class, "Object", BigInteger::new, l -> LongUtil.cast(l, BigInteger.class)
+            BigInteger.class, "BigInteger", BigInteger::new, l -> LongUtil.cast(l, BigInteger.class)
         ),
         
         new JavaTypeMappingImpl<>(
@@ -153,6 +153,12 @@ public final class StandardJavaTypeMapping {
         
         new JavaTypeMappingImpl<>(
             UUID.class, "UUID", java.util.UUID::fromString, l -> unableToMapLong(UUID.class)
+        ),
+
+        new JavaTypeMappingImpl<>(
+            byte[].class, "Bytes",
+            s -> unableToMapString(byte[].class),
+            l -> unableToMapLong(byte[].class)
         )
     };
 

@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -236,6 +236,11 @@ implements TranslatorDecorator<Table, Interface> {
                                     .public_().add(OVERRIDE)
                                     .add("return \"" + shortName(dbType.getTypeName()) +
                                         " to " + enumShortName + " Mapper\";")
+                                )
+                                .add(Method.of("getOrdering", TypeMapper.Ordering.class)
+                                    .public_().add(OVERRIDE)
+                                    .add("return " + TypeMapper.Ordering.class.getSimpleName() +
+                                        "." + TypeMapper.Ordering.RETAIN.name() + ";")
                                 )
                                 .add(Method.of("getJavaTypeCategory", TypeMapper.Category.class)
                                     .public_().add(OVERRIDE)

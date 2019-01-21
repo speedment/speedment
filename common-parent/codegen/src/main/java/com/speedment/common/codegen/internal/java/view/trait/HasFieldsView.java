@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,6 +28,7 @@ import com.speedment.common.codegen.model.trait.HasFields;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -74,11 +75,11 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
         }
 
         if (useTripleDot() && !model.getFields().isEmpty()) {
-            final String last = gen.on(wrapField(new LinkedList<>(model.getFields()).getLast())).get();
+            final String last = gen.on(wrapField(new LinkedList<>(model.getFields()).getLast())).orElseThrow(NoSuchElementException::new);
             if (last.contains("[] ")) {
                 rendered = Stream.concat(
                     model.getFields().stream()
-                        .limit(model.getFields().size() - 1)
+                        .limit(model.getFields().size() - 1L)
                         .map(this::wrapField)
                         .map(gen::on)
                         .map(Optional::get),

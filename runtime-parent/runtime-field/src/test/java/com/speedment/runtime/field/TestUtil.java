@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,20 +19,22 @@ package com.speedment.runtime.field;
 import java.util.List;
 import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Emil Forslund
  * @since  3.0.3
  */
-public final class TestUtil {
-    
-    public static <E> void assertListEqual(String msg, List<E> actual, List<E> expected, Function<E, String> toString) {
-        Assert.assertTrue(msg +
-            "\n  'actual'   = " + listToString(actual, toString) +
-            "\n  'expected' = " + listToString(expected, toString), 
-            actual.equals(expected)
+final class TestUtil {
+
+    private TestUtil() {}
+
+    static <E> void assertListEqual(String msg, List<E> actual, List<E> expected, Function<E, String> toString) {
+        assertTrue(
+            actual.equals(expected), msg +
+                "\n  'actual'   = " + listToString(actual, toString) +
+                "\n  'expected' = " + listToString(expected, toString)
         );
     }
     
@@ -45,6 +47,4 @@ public final class TestUtil {
                 .collect(joining(",", "[", "]"));
         }
     }
-    
-    private TestUtil() {}
 }

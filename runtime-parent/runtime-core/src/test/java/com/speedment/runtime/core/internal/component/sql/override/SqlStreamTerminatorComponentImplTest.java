@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -37,12 +37,14 @@ import com.speedment.runtime.core.component.sql.override.reference.SpliteratorTe
 import com.speedment.runtime.core.component.sql.override.reference.ToArrayGeneratorTerminator;
 import com.speedment.runtime.core.component.sql.override.reference.ToArrayTerminator;
 import com.speedment.runtime.core.internal.component.sql.override.optimized.reference.OptimizedCountTerminator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.stream.Stream;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -53,7 +55,7 @@ public class SqlStreamTerminatorComponentImplTest {
 
     private SqlStreamTerminatorComponentImpl instance;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new SqlStreamTerminatorComponentImpl();
     }
@@ -89,7 +91,7 @@ public class SqlStreamTerminatorComponentImplTest {
 
             //System.out.println("Testing getter: " + clazz.getSimpleName() + ":" + instanceTerminator.getClass().getSimpleName());
 
-            assertEquals(clazz.getSimpleName(), defaultTerminator, instanceTerminator);
+            assertEquals(defaultTerminator, instanceTerminator, clazz.getSimpleName());
 
         } catch (NoSuchMethodException
             | SecurityException
@@ -114,7 +116,7 @@ public class SqlStreamTerminatorComponentImplTest {
 
             //System.out.println("Testing setter: " + clazz.getSimpleName() + ":" + instanceTerminator.getClass().getSimpleName());
 
-            assertEquals(clazz.getSimpleName(), mockTerminator, instanceTerminator);
+            assertEquals(mockTerminator, instanceTerminator, clazz.getSimpleName());
 
         } catch (NoSuchMethodException
             | SecurityException

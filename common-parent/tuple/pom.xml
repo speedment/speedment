@@ -2,7 +2,7 @@
 <!--
 
 
-    Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+    Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License"); You may not
     use this file except in compliance with the License. You may obtain a copy of
@@ -26,11 +26,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.2</version>
+        <version>3.1.10-SNAPSHOT</version>
     </parent>
     
     <artifactId>tuple</artifactId>
-    <version>1.0.9</version>
+    <version>1.0.10-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Tuple</name>
@@ -85,13 +85,15 @@
         </profile>
     </profiles>
     <dependencies>
+        <!--Test dependencies-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
     </dependencies>
 </project>

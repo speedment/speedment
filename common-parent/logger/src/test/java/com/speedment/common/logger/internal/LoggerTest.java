@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,13 +19,13 @@ package com.speedment.common.logger.internal;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author Per Minborg
  */
-public class LoggerTest {
+final class LoggerTest {
 
     private static final Logger LOGGER = LoggerManager.getLogger(LoggerTest.class);
 
@@ -33,7 +33,7 @@ public class LoggerTest {
     private static final String MESSAGE_2 = "We are superstitious";
 
     @Test
-    public void test() {
+    void test() {
         LOGGER.setLevel(Level.TRACE);
 
         LOGGER.trace(MESSAGE_1);

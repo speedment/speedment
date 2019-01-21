@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,14 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.internal.stream.parallel;
 
-import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,13 +28,15 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author pemi
  */
-public class ArraySpliteratorTest extends BaseSpliteratorTest {
+final class ArraySpliteratorTest extends BaseSpliteratorTest {
 
     private static final int SIZE = 2048;
 
@@ -48,31 +47,17 @@ public class ArraySpliteratorTest extends BaseSpliteratorTest {
     private Integer[] array;
     private Set<Integer> expectedSet;
 
-    public ArraySpliteratorTest() {
-    }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         array = STREAM_SUPPLIER.get().toArray(Integer[]::new);
         instance = new ArraySpliterator<>(array, 0);
         expectedSet = STREAM_SUPPLIER.get().collect(toSet());
     }
 
-    @After
-    public void tearDown() {
-    }
-
     @Test
-    @Ignore
-    public void testTrySplit() {
+    @Disabled
+    void testTrySplit() {
         printTestName();
         Set<String> threadNames = new HashSet<>();
         final Set<Integer> set = StreamSupport.stream(instance, true)
@@ -84,7 +69,7 @@ public class ArraySpliteratorTest extends BaseSpliteratorTest {
     }
 
     @Test
-    public void testForEachRemaining() {
+    void testForEachRemaining() {
         printTestName();
         final Set<Integer> set = new HashSet<>();
         assertTrue(instance.tryAdvance(set::add));
@@ -93,14 +78,14 @@ public class ArraySpliteratorTest extends BaseSpliteratorTest {
     }
 
     @Test
-    public void testTryAdvance() {
+    void testTryAdvance() {
         printTestName();
-        IntStream.range(0, SIZE).forEach(i -> assertTrue("error for:" + i, instance.tryAdvance(DO_NOTHING)));
+        IntStream.range(0, SIZE).forEach(i -> assertTrue( instance.tryAdvance(DO_NOTHING), "error for:" + i));
         assertFalse(instance.tryAdvance(DO_NOTHING));
     }
 
     @Test
-    public void testEstimateSize() {
+    void testEstimateSize() {
         printTestName();
         int remains = SIZE;
         for (int i = 0; i < SIZE; i++) {

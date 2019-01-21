@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,9 @@
  */
 package com.speedment.runtime.core.internal.component;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -26,10 +28,11 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
+import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.pool.PoolableConnectionImpl;
 import com.speedment.runtime.core.util.DatabaseUtil;
-import static com.speedment.runtime.core.util.OptionalUtil.unwrap;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -37,9 +40,11 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+
+import static com.speedment.runtime.core.util.OptionalUtil.unwrap;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A fully concurrent implementation of a connection pool.
@@ -70,13 +75,45 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         leasedConnections = new ConcurrentHashMap<>();
     }
 
+    @ExecuteBefore(State.STOPPED)
+    void closeOpenConnections() {
+        leasedConnections.values().forEach(conn -> {
+            try {
+                if (!conn.isClosed()) {
+                    conn.close();
+                    LOGGER_CONNECTION.warn("Leased connection had to be closed automatically.");
+                }
+            } catch (final SQLException ex) {
+                throw new SpeedmentException(ex);
+            }
+        });
+
+        pools.values().forEach(queue -> {
+            PoolableConnection conn;
+            while ((conn = queue.poll()) != null) {
+                try {
+                    if (!conn.isClosed()) {
+                        conn.rawClose();
+                    }
+                } catch (final SQLException ex) {
+                    throw new SpeedmentException("Error closing connection.", ex);
+                }
+            }
+        });
+    }
+
     @Override
     public PoolableConnection getConnection(Dbms dbms) {
         final String uri = DatabaseUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
-        final String username = unwrap(dbms.getUsername());
-        final char[] password = unwrap(passwordComponent.get(dbms));
+        final DbmsType type = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
 
-        return getConnection(uri, username, password);
+        if (type.hasDatabaseUsers()) {
+            final String username = unwrap(dbms.getUsername());
+            final char[] password = unwrap(passwordComponent.get(dbms));
+            return getConnection(uri, username, password);
+        }
+
+        return getConnection(uri, null, null);
     }
 
     @Override

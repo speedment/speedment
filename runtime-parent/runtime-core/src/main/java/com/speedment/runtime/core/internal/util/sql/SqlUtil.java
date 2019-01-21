@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,6 +26,7 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -154,7 +155,7 @@ public final class SqlUtil {
             "SELECT COUNT(*) FROM " + sqlTableReference(naming, table),
             Collections.emptyList(),
             rs -> rs.getLong(1)
-        ).findAny().get();
+        ).findAny().orElseThrow(() -> new NoSuchElementException("Unable to get sql count for table " + table.getId() + " in dbms " + dbms.getId()));
     }
 
     /**

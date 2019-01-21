@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,38 +24,19 @@ package com.speedment.common.tuple.old_tests;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleBuilder;
 import com.speedment.common.tuple.Tuples;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public class TupleBuilderTest {
-
-    public TupleBuilderTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
+final class TupleBuilderTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
         final Tuple expected = Tuples.of("Arne", 1, 3L);
         final Tuple notExpected = Tuples.of("Arne", 1, 3L, "Tryggve");
         final Tuple result = TupleBuilder.builder().add("Arne").add(1).add(3L).build();

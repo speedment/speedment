@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -162,13 +162,13 @@ public final class StreamUtil {
         @Override
         public T next() {
             if (state == State.NOT_DETERMINED) {
-                hasNext();
+                if (!hasNext()) {
+                    throwNoSuchElementException();
+                };
             }
 
             if (state == State.NO_NEXT) {
-                throw new NoSuchElementException(
-                    "Next was called even though hasNext() returned false."
-                );
+                throwNoSuchElementException();
             }
 
             state = State.NOT_DETERMINED;
@@ -183,7 +183,9 @@ public final class StreamUtil {
         @Override
         public void forEachRemaining(Consumer<? super T> action) {
             if (state == State.NOT_DETERMINED) {
-                hasNext();
+                if (!hasNext()) {
+                    return;
+                };
             }
 
             if (state == State.NO_NEXT) {
@@ -204,7 +206,15 @@ public final class StreamUtil {
                 state = State.NO_NEXT;
             }
         }
+
+        private void throwNoSuchElementException() {
+            throw new NoSuchElementException(
+                "Next was called even though hasNext() returned false."
+            );
+        }
+
     }
+
 
     /**
      * Utility classes should not be instantiated.

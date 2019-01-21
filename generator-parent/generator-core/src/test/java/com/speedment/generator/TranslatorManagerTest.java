@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,38 +23,31 @@ import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author pemi
  */
-public class TranslatorManagerTest extends SimpleModel {
+final class TranslatorManagerTest extends SimpleModel {
 
     @Test
-    public void testAccept() {
+    void testAccept() {
         final TranslatorManager instance = speedment.getOrThrow(TranslatorManager.class);
-        
-        try {
-            instance.accept(project);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw ex;
-        }
+
+        assertDoesNotThrow(()->instance.accept(project));
     }
 
     @Test
-    public void testPreview() {
-
+    void testPreview() {
         final Translator<Table, Interface> translator = speedment.getOrThrow(CodeGenerationComponent.class)
             .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);
+        final JavaLanguageNamer javaLanguageNamer = speedment.getOrThrow(JavaLanguageNamer.class);
 
         final String code = translator.toCode();
-        //System.out.println(code);
-
-        final JavaLanguageNamer javaLanguageNamer = speedment.getOrThrow(JavaLanguageNamer.class);
 
         assertTrue(code.contains(javaLanguageNamer.javaVariableName(table.getId())));
         assertTrue(code.contains(javaLanguageNamer.javaTypeName(table.getId())));

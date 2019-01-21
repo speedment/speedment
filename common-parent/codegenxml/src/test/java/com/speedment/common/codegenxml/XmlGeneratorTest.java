@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,18 +17,19 @@
 package com.speedment.common.codegenxml;
 
 import com.speedment.common.codegen.util.Formatting;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.speedment.common.codegenxml.Elements.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
  * @author Per Minborg
  */
-public class XmlGeneratorTest {
+final class XmlGeneratorTest {
     
     @Test
-    public void testSimpleHTML() {
+    void testSimpleHTML() {
         final Document doc = Document.html(
             html()
                 .add(head()
@@ -41,11 +42,11 @@ public class XmlGeneratorTest {
         Formatting.tab("    ");
         final String html = new XmlGenerator().on(doc).get();
 
-        //System.out.println(html);
+        assertTrue(html.contains("Welcome"));
     }
     
     @Test
-    public void testSimpleXML() {
+    void testSimpleXML() {
         final Document doc = Document.xml(
             TagElement.of("project")
                 .add(TagElement.of("dependencies")
@@ -56,6 +57,6 @@ public class XmlGeneratorTest {
         Formatting.tab("    ");
         final String html = new XmlGenerator().on(doc).get();
 
-        // System.out.println(html);
+        assertTrue(html.contains("Speedment"));
     }
 }

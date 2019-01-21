@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,8 +21,8 @@ import com.speedment.runtime.field.*;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
 import java.util.List;
@@ -32,29 +32,27 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Emil Forslund
  * @since  3.0.11
  */
-public class CombinedComparatorImplTest {
+final class CombinedComparatorImplTest {
 
     private static final int ENTITIES = 1000;
 
     private Random random;
     private List<Entity> list;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         random = new Random(1);
         list   = Stream.generate(this::next).limit(ENTITIES).collect(toList());
     }
 
     @Test
-    public void compare() throws Exception {
+    void compare() throws Exception {
         comparatorsAndReverses().forEachOrdered(comp -> {
             final Comparator<Entity> mock = mockComparator(
                 comp.getField(),
@@ -66,11 +64,11 @@ public class CombinedComparatorImplTest {
                 final List<Entity> expected = list.stream().sorted(mock).collect(toList());
                 final List<Entity> actual = list.stream().sorted(comp).collect(toList());
 
-                assertThat(format(
+                assertEquals(actual, expected, format(
                     "Compare %s using %s",
                     comp.getField().identifier().getColumnId(),
                     comp
-                ), actual, is(expected));
+                ));
             } catch (final IllegalArgumentException ex) {
                 throw new RuntimeException(format(
                     "Error comparing %s using %s",
@@ -82,7 +80,7 @@ public class CombinedComparatorImplTest {
     }
 
     @Test
-    public void reversed() throws Exception {
+    void reversed() throws Exception {
         comparatorsAndReverses().forEachOrdered(comp -> {
             final boolean reversed = comp.isReversed();
             assertEquals(!reversed, comp.reversed().isReversed());
@@ -90,7 +88,7 @@ public class CombinedComparatorImplTest {
     }
 
     @Test
-    public void thenComparing() throws Exception {
+    void thenComparing() throws Exception {
         comparatorsAndReverses().forEachOrdered(comp1 -> {
             final Comparator<Entity> mock1 = mockComparator(
                 comp1.getField(),
@@ -110,20 +108,18 @@ public class CombinedComparatorImplTest {
 
                 final List<Entity> expected = list.stream().sorted(mock).collect(toList());
                 final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
-                assertThat(
-                    format("Compare %s then %s (reversed) using %s",
-                        comp1.getField().identifier().getColumnId(),
-                        comp2.getField().identifier().getColumnId(),
-                        comp
-                    ),
-                    actual, is(expected)
+                assertEquals(actual, expected, format("Compare %s then %s (reversed) using %s",
+                    comp1.getField().identifier().getColumnId(),
+                    comp2.getField().identifier().getColumnId(),
+                    comp
+                )
                 );
             });
         });
     }
 
     @Test
-    public void thenComparing1() throws Exception {
+    void thenComparing1() throws Exception {
         comparatorsAndReverses().forEachOrdered(comp1 -> {
             final Comparator<Entity> mock1 = mockComparator(
                 comp1.getField(),
@@ -136,18 +132,17 @@ public class CombinedComparatorImplTest {
 
             final List<Entity> expected = list.stream().sorted(mock).collect(toList());
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
-            assertThat(
-                format("Compare %s then %s using %s",
-                    comp1.getField().identifier().getColumnId(),
-                    Entity.STRING.identifier().getColumnId(),
-                    comp
-                ), actual, is(expected)
+            assertEquals(actual, expected, format("Compare %s then %s using %s",
+                comp1.getField().identifier().getColumnId(),
+                Entity.STRING.identifier().getColumnId(),
+                comp
+            )
             );
         });
     }
 
     @Test
-    public void thenComparing2() throws Exception {
+    void thenComparing2() throws Exception {
         comparatorsAndReverses().forEachOrdered(comp1 -> {
             final Comparator<Entity> mock1 = mockComparator(
                 comp1.getField(),
@@ -160,19 +155,17 @@ public class CombinedComparatorImplTest {
 
             final List<Entity> expected = list.stream().sorted(mock).collect(toList());
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
-            assertThat(
-                format("Compare %s then %s (reversed) using %s",
-                    comp1.getField().identifier().getColumnId(),
-                    Entity.STRING.identifier().getColumnId(),
-                    comp
-                ),
-                actual, is(expected)
+            assertEquals(actual, expected, format("Compare %s then %s (reversed) using %s",
+                comp1.getField().identifier().getColumnId(),
+                Entity.STRING.identifier().getColumnId(),
+                comp
+                )
             );
         });
     }
 
     @Test
-    public void thenComparingInt() throws Exception {
+    void thenComparingInt() throws Exception {
         comparatorsAndReverses().forEachOrdered(comp1 -> {
             final Comparator<Entity> mock1 = mockComparator(
                 comp1.getField(),
@@ -185,19 +178,17 @@ public class CombinedComparatorImplTest {
 
             final List<Entity> expected = list.stream().sorted(mock).collect(toList());
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
-            assertThat(
-                format("Compare %s then %s using %s",
-                    comp1.getField().identifier().getColumnId(),
-                    Entity.INT.identifier().getColumnId(),
-                    comp
-                ),
-                actual, is(expected)
+            assertEquals(actual, expected, format("Compare %s then %s using %s",
+                comp1.getField().identifier().getColumnId(),
+                Entity.INT.identifier().getColumnId(),
+                comp
+                )
             );
         });
     }
 
     @Test
-    public void thenComparingLong() throws Exception {
+    void thenComparingLong() throws Exception {
         comparatorsAndReverses().forEachOrdered(comp1 -> {
             final Comparator<Entity> mock1 = mockComparator(
                 comp1.getField(),
@@ -210,19 +201,17 @@ public class CombinedComparatorImplTest {
 
             final List<Entity> expected = list.stream().sorted(mock).collect(toList());
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
-            assertThat(
-                format("Compare %s then %s using %s",
-                    comp1.getField().identifier().getColumnId(),
-                    Entity.LONG.identifier().getColumnId(),
-                    comp
-                ),
-                actual, is(expected)
+            assertEquals(actual, expected, format("Compare %s then %s using %s",
+                comp1.getField().identifier().getColumnId(),
+                Entity.LONG.identifier().getColumnId(),
+                comp
+                )
             );
         });
     }
 
     @Test
-    public void thenComparingDouble() throws Exception {
+    void thenComparingDouble() throws Exception {
         comparatorsAndReverses().forEachOrdered(comp1 -> {
             final Comparator<Entity> mock1 = mockComparator(
                 comp1.getField(),
@@ -235,13 +224,11 @@ public class CombinedComparatorImplTest {
 
             final List<Entity> expected = list.stream().sorted(mock).collect(toList());
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
-            assertThat(
-                format("Compare %s then %s using %s",
-                    comp1.getField().identifier().getColumnId(),
-                    Entity.DOUBLE.identifier().getColumnId(),
-                    comp
-                ),
-                actual, is(expected)
+            assertEquals(actual, expected, format("Compare %s then %s using %s",
+                comp1.getField().identifier().getColumnId(),
+                Entity.DOUBLE.identifier().getColumnId(),
+                comp
+                )
             );
         });
     }

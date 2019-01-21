@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,11 +17,8 @@
 package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.join.JoinSketchTest;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E0;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E0Manager;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E1;
@@ -42,28 +39,30 @@ import com.speedment.runtime.join.stage.JoinOperator;
 import static com.speedment.runtime.join.stage.JoinOperator.EQUAL;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.stream.Stream;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *
  * @author Per Minborg
  */
-public final class JoinBuilderTest {
+final class JoinBuilderTest {
 
     private MockEmptyJoinStreamSupplierComponent ss;
     private JoinBuilder1Impl<E0> bldr;
 
-    @Before
-    public void init() throws InstantiationException {
+    @BeforeEach
+    void init() throws InstantiationException {
         final Injector injector = Injector.builder()
             .withComponent(MockStreamSupplierComponent.class)
             .withComponent(MockEmptyJoinStreamSupplierComponent.class)
@@ -74,7 +73,7 @@ public final class JoinBuilderTest {
     }
 
     @Test
-    public void testIllegalField() {
+    void testIllegalField() {
         try {
             bldr.leftJoinOn(E1.ID1).equal(EX.IDX)
                 .leftJoinOn(E2.ID2).equal(E0.ID0)
@@ -88,7 +87,7 @@ public final class JoinBuilderTest {
     }
 
     @Test
-    public void testNullBuildArgument() {
+    void testNullBuildArgument() {
         try {
             bldr.leftJoinOn(E1.ID1).equal(E0.ID0)
                 .leftJoinOn(E2.ID2).equal(E0.ID0)
@@ -102,7 +101,7 @@ public final class JoinBuilderTest {
     }
 
     @Test
-    public void testCrossJoin() {
+    void testCrossJoin() {
         bldr.crossJoin(E1Manager.IDENTIFIER)
             .crossJoin(E2Manager.IDENTIFIER)
             .crossJoin(E3Manager.IDENTIFIER)
@@ -133,7 +132,7 @@ public final class JoinBuilderTest {
     }
 
     @Test
-    public void testLeftJoin() {
+    void testLeftJoin() {
         bldr.leftJoinOn(E1.ID1).equal(E0.ID0)
             .leftJoinOn(E2.ID2).equal(E0.ID0)
             .leftJoinOn(E3.ID3).equal(E0.ID0)
@@ -204,7 +203,7 @@ public final class JoinBuilderTest {
 //    }
 
     @Test
-    public void testOnColumnMustComeFromPreviousTable() {
+    void testOnColumnMustComeFromPreviousTable() {
 
     }
 
@@ -251,7 +250,7 @@ public final class JoinBuilderTest {
     @SuppressWarnings("varargs")
     private final void assertIdentifiersInCreateJoinEquals(TableIdentifier<?>... identifiers) {
         for (int i = 0; i < identifiers.length; i++) {
-            assertEquals(Integer.toString(i), identifiers[i], ss.t(i));
+            assertEquals(identifiers[i], ss.t(i), Integer.toString(i));
         }
     }
 

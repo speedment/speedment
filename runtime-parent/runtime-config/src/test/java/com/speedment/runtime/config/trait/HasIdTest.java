@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,18 +17,19 @@
 package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.config.util.*;
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public final class HasIdTest extends AbstractDocumentTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+final class HasIdTest extends AbstractDocumentTest {
 
     @Test
-    public void testFallbackToName() {
+    void testFallbackToName() {
         assertEquals(tableA.getName(), tableA.getId());
     }
 
     @Test
-    public void testGetId() {
+    void testGetId() {
         assertEquals(DBMS_A_ID, dbmsA.getId());
     }
 

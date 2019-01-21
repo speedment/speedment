@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,17 +16,18 @@
  */
 package com.speedment.common.tuple;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author Per Minborg
  */
-public class TupleBuilderTest {
+final class TupleBuilderTest {
 
     @Test
-    public void testBuilder() {
+    void testBuilder() {
         final Tuple3<Integer, String, Long> expected = Tuples.of(1, "Olle", Long.MAX_VALUE);
         final Tuple3<Integer, String, Long> actual = TupleBuilder.builder().add(1).add("Olle").add(Long.MAX_VALUE).build();
         assertEquals(expected, actual);
