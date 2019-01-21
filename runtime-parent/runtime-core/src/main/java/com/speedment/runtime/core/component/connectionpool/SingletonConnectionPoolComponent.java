@@ -136,12 +136,17 @@ implements ConnectionPoolComponent {
 
     @Override
     public int poolSize() {
-        return 1;
+        return (int) connectionManagers.values().stream()
+            .mapToInt(man -> man.counter.get())
+            .filter(c -> c == 0L)
+            .count();
     }
 
     @Override
     public int leaseSize() {
-        return 1;
+        return connectionManagers.values().stream()
+            .mapToInt(man -> man.counter.get())
+            .sum();
     }
 
     @Override
