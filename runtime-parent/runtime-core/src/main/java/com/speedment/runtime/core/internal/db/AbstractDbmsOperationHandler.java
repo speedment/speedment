@@ -84,8 +84,8 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         requireNonNulls(sql, values, rsMapper);
         assertNotClosed();
 
+        final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
         try (
-            final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
             final PreparedStatement ps = connectionInfo.connection().prepareStatement(sql, java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY)) {
             configureSelect(ps);
             connectionInfo.ifNotInTransaction(c -> c.setAutoCommit(false));
@@ -110,6 +110,12 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         } catch (final SQLException sqle) {
             LOGGER.error(sqle, "Error querying " + sql);
             throw new SpeedmentException(sqle);
+        } finally {
+            try {
+                connectionInfo.close();
+            } catch (SQLException sqle) {
+                throw new SpeedmentException(sqle);
+            }
         }
     }
 
@@ -159,14 +165,11 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     protected void execute(Dbms dbms, List<? extends SqlStatement> sqlStatementList) throws SQLException {
-        // The ConnectionInfo::close method checks if it is a transaction and, in such case, does not close the
-        // underlying connection.
-        try (final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent)) {
-            if (connectionInfo.isInTransaction()) {
-                executeInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
-            } else {
-                executeNotInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
-            }
+        final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
+        if (connectionInfo.isInTransaction()) {
+            executeInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
+        } else {
+            executeNotInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
         }
     }
 

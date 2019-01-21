@@ -31,6 +31,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -114,7 +116,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         closeSilently(rs);
         closeSilently(ps);
         commitSilently(connectionInfo);
-        closeSilently(connectionInfo);
+        actionSilently(connectionInfo, ConnectionInfo::close, "closing");
         setState(State.CLOSED);
     }
 
@@ -129,6 +131,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     }
 
     private void closeSilently(final AutoCloseable closeable) {
+        actionSilently(closeable, AutoCloseable::close, "closing");
         try {
             if (closeable != null) {
                 closeable.close();
@@ -138,6 +141,23 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
             // Just log the error. No re-throw
         }
     }
+
+    @FunctionalInterface
+    private interface ThrowingConsumer<T>  {
+        void accept(T t) throws Exception;
+    }
+
+    private <T> void actionSilently(final T actionTarget, ThrowingConsumer<T> action, String actionLabel) {
+        try {
+            if (actionTarget != null) {
+                action.accept(actionTarget);
+            }
+        } catch (Exception e) {
+            LOGGER.error(e, "Error " + actionLabel + " " + actionTarget);
+            // Just log the error. No re-throw
+        }
+    }
+
 
     @Override
     public String toString() {

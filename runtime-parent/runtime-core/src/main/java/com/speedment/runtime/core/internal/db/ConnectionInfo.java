@@ -29,7 +29,7 @@ import java.util.Optional;
  *
  * @author Per Minborg Since 3.0.17
  */
-public final class ConnectionInfo implements AutoCloseable {
+public final class ConnectionInfo {
 
     private final Connection connection;
     private final boolean inTransaction;
@@ -69,7 +69,7 @@ public final class ConnectionInfo implements AutoCloseable {
     /**
      * Only closes the connection if it is NOT from a transaction.
      *
-     * @throws SQLException
+     * @throws SQLException if there is a SQL error
      */
     public void close() throws SQLException {
         if (!inTransaction) {
