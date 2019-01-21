@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.internal.component;
 
 import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.core.component.StatisticsReporterComponent;
 import com.speedment.runtime.core.component.StatisticsReporterSchedulerComponent;
@@ -30,28 +31,42 @@ import java.util.concurrent.TimeUnit;
  */
 public class StatisticsReporterSchedulerComponentImpl implements StatisticsReporterSchedulerComponent {
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-        final Thread t = new Thread(r);
-        t.setDaemon(true);
-        return t;
-    }); // Make the threads daemon to allow speedment applications to exit via main method completion Fix #322 
+    @Config(name = "statistics.scheduler.enabled", value = "true")
+    private boolean enabled;
+
+    private ScheduledExecutorService scheduler;
+
+    @ExecuteBefore(State.INITIALIZED)
+    public void init() {
+        if (enabled) {
+            scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+                final Thread t = new Thread(r);
+                t.setDaemon(true);
+                return t;
+            }); // Make the threads daemon to allow speedment applications to exit via main method completion Fix #322
+        }
+    }
 
     @ExecuteBefore(State.STARTED)
     public void start(StatisticsReporterComponent src) {
-        scheduler.submit(src::reportStarted);
-        scheduler.scheduleAtFixedRate(src::alive, 1, 1, TimeUnit.HOURS);
+        if (enabled) {
+            scheduler.submit(src::reportStarted);
+            scheduler.scheduleAtFixedRate(src::alive, 1, 1, TimeUnit.HOURS);
+        }
     }
 
     @ExecuteBefore(State.STOPPED)
     public void stop(StatisticsReporterComponent src) {
-        scheduler.submit(src::reportStopped);
-        try {
-            scheduler.awaitTermination(2, TimeUnit.SECONDS);
-        } catch (InterruptedException ie) {
-            System.out.println("Unable to terminate " + StatisticsReporterSchedulerComponentImpl.class.getSimpleName());
-            throw new RuntimeException(ie);
-        } finally {
-            scheduler.shutdownNow();
+        if (enabled) {
+            scheduler.submit(src::reportStopped);
+            try {
+                scheduler.awaitTermination(2, TimeUnit.SECONDS);
+            } catch (InterruptedException ie) {
+                System.out.println("Unable to terminate " + StatisticsReporterSchedulerComponentImpl.class.getSimpleName());
+                throw new RuntimeException(ie);
+            } finally {
+                scheduler.shutdownNow();
+            }
         }
     }
 
