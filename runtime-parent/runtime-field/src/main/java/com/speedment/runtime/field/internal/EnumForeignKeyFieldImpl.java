@@ -61,6 +61,8 @@ public final class EnumForeignKeyFieldImpl
 implements EnumForeignKeyField<ENTITY, D, E, FK>,
            FieldComparator<ENTITY> {
 
+    public static final String UNKNOWN_INCLUSION = "Unknown inclusion";
+
     private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, E> getter;
     private final ReferenceSetter<ENTITY, E> setter;
@@ -311,7 +313,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return e.compareTo(start) >= 0 && e.compareTo(end) <= 0;
                 default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
+                    UNKNOWN_INCLUSION + " '" + inclusion + "'."
                 );
             }
         });
@@ -330,7 +332,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return e.compareTo(start) <  0 || e.compareTo(end) >  0;
                 default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
+                    UNKNOWN_INCLUSION + " '" + inclusion + "'."
                 );
             }
         });
@@ -408,7 +410,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return str.compareTo(start) >= 0 && str.compareTo(end) <= 0;
                 default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
+                    UNKNOWN_INCLUSION + " '" + inclusion + "'."
                 );
             }
         });
@@ -430,7 +432,7 @@ implements EnumForeignKeyField<ENTITY, D, E, FK>,
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return str.compareTo(start) <  0 || str.compareTo(end) >  0;
                 default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
+                    UNKNOWN_INCLUSION + " '" + inclusion + "'."
                 );
             }
         });
