@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.12-SNAPSHOT</version>
+        <version>3.1.13-SNAPSHOT</version>
     </parent>
     
     <artifactId>common-all</artifactId>
@@ -38,11 +38,11 @@
         version of all common modules.
     </description>
     
-    <properties>
+    <!--<properties>
         <invariant.version>1.0.4</invariant.version>
         <function.version>1.0.6</function.version>
-        <jvm-version.version>1.0.1</jvm-version.version> <!-- Yeah, I know... -->
-        <json.version>1.0.6-SNAPSHOT</json.version>
+        <jvm-version.version>1.0.1</jvm-version.version>
+        <json.version>1.0.5</json.version>
         <tuple.version>1.0.10</tuple.version>
         <logger.version>1.0.5</logger.version>
         <codegen.version>2.5.1</codegen.version>
@@ -58,122 +58,122 @@
         <combinatorics.version>1.0.3</combinatorics.version>
         <benchmark.version>1.0.1</benchmark.version>
         <collection.version>1.0.1</collection.version>
-    </properties>
+    </properties>-->
     
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>invariant</artifactId>
-                <version>${invariant.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>function</artifactId>
-                <version>${function.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>jvm-version</artifactId>
-                <version>${jvm-version.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>json</artifactId>
-                <version>${json.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>tuple</artifactId>
-                <version>${tuple.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>logger</artifactId>
-                <version>${logger.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>mapstream</artifactId>
-                <version>${mapstream.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>mapbuilder</artifactId>
-                <version>${mapbuilder.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>codegen</artifactId>
-                <version>${codegen.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>codegenxml</artifactId>
-                <version>${codegenxml.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>injector</artifactId>
-                <version>${injector.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>rest</artifactId>
-                <version>${rest.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>lazy</artifactId>
-                <version>${lazy.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>mutable-stream</artifactId>
-                <version>${mutablestream.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>singleton-stream</artifactId>
-                <version>${singletonstream.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>annotation</artifactId>
-                <version>${annotation.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>combinatorics</artifactId>
-                <version>${combinatorics.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>benchmark</artifactId>
-                <version>${benchmark.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>collection</artifactId>
-                <version>${collection.version}</version>
+                <version>${speedment.version}</version>
             </dependency>
             
         </dependencies>

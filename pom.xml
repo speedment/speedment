@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.1.12-SNAPSHOT</version>
+    <version>3.1.13-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -578,14 +578,16 @@
                         <version>3.5.0.1254</version>
                     </plugin>
                     
-                    <plugin>
+                    <!--The license-maven-plugin plugin MUST BE COMMENTED OUT DURING DEPLOYMENT, otherwise nexus-staging-maven-plugin will fail (sic!)-->
+
+                    <!--<plugin>
                         <groupId>com.mycila</groupId>
                         <artifactId>license-maven-plugin</artifactId>
                         <version>3.0</version>
 
                         <configuration>
                             <header>license_header.txt</header>
-                            <properties>ByteFieldComparator.java
+                            <properties>
                                 <currentYear>2019</currentYear>
                             </properties>
                             <excludes>
@@ -615,7 +617,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>-->
                     
                     <plugin>
                         <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
