@@ -76,6 +76,15 @@
                         <component>com.speedment.example.typemapper.CustomTypeMapperInstaller</component>
                     </components>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>Generate code for the database model</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
             </plugin>
         </plugins>
     </build>
