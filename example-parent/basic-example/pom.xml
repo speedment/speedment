@@ -25,7 +25,7 @@
     <parent>
         <groupId>com.speedment.example</groupId>
         <artifactId>example-parent</artifactId>
-        <version>3.1.10</version>
+        <version>3.1.11-SNAPSHOT</version>
     </parent>
 
     <artifactId>basic-example</artifactId>
@@ -76,6 +76,15 @@
                         <component>com.speedment.example.typemapper.CustomTypeMapperInstaller</component>
                     </components>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>Generate code for the database model</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
             </plugin>
         </plugins>
     </build>
