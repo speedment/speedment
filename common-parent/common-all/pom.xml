@@ -42,7 +42,7 @@
         <invariant.version>1.0.4</invariant.version>
         <function.version>1.0.6</function.version>
         <jvm-version.version>1.0.1</jvm-version.version> <!-- Yeah, I know... -->
-        <json.version>1.0.5</json.version>
+        <json.version>1.0.6-SNAPSHOT</json.version>
         <tuple.version>1.0.10</tuple.version>
         <logger.version>1.0.5</logger.version>
         <codegen.version>2.5.1</codegen.version>
