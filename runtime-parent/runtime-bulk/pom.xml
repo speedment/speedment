@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.11</version>
+        <version>3.1.12</version>
     </parent>
     
     <artifactId>runtime-bulk</artifactId>

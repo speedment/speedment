@@ -25,11 +25,10 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.10</version>
+        <version>3.1.12</version>
     </parent>
     
     <artifactId>invariant</artifactId>
-    <version>1.0.4</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Invariant</name>
@@ -69,15 +68,6 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <configuration>
-                            <skipStaging>true</skipStaging>
-                        </configuration>
-                    </plugin>
-                    
                 </plugins>
             </build>
         </profile>

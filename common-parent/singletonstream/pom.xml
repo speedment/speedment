@@ -26,11 +26,10 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.10</version>
+        <version>3.1.12</version>
     </parent>
     
     <artifactId>singleton-stream</artifactId>
-    <version>1.0.2</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - SingletonStream</name>
@@ -62,13 +61,6 @@
     
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <configuration>
-                    <skipStaging>true</skipStaging>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
