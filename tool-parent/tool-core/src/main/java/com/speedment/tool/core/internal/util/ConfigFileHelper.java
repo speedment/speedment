@@ -68,7 +68,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
 import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
-import static com.speedment.runtime.core.internal.util.TextUtil.alignRight;
 import static com.speedment.tool.core.util.OutputUtil.error;
 import static com.speedment.tool.core.util.OutputUtil.success;
 import static java.util.stream.Collectors.toSet;
@@ -509,7 +508,7 @@ public final class ConfigFileHelper {
                 userInterfaceComponent.log(OutputUtil.success(
                     "+------------: Generation completed! :------------+" + "\n"
                     //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                    + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
+                    + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 43) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
 
@@ -528,8 +527,8 @@ public final class ConfigFileHelper {
                 userInterfaceComponent.log(OutputUtil.error(
                     "+--------------: Generation failed! :-------------+" + "\n"
                     //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                    + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
-                    + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
+                    + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 43) + " |\n"
+                    + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 43) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
 
@@ -539,6 +538,10 @@ public final class ConfigFileHelper {
                 userInterfaceComponent.showError("Failed to generate code", ex.getMessage(), ex);
             });
         }
+    }
+
+    private String alignRight(String substring, int totalWidth) {
+        return String.format("%" + totalWidth + "s", substring);
     }
 
     public void clearTablesAndSaveToFile() {
