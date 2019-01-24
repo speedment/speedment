@@ -502,13 +502,12 @@ public final class ConfigFileHelper {
 
         try {
             translatorManager.accept(projectComponent.getProject());
-//            stopwatch.stop();
 
             runLater(() -> {
                 userInterfaceComponent.log(OutputUtil.success(
                     "+------------: Generation completed! :------------+" + "\n"
                     //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                    + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 43) + " |\n"
+                    + "| Files generated  " + alignRight("" + translatorManager.getFilesCreated(), 41) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
 
@@ -520,15 +519,12 @@ public final class ConfigFileHelper {
                 );
             });
         } catch (final Exception ex) {
-//            if (!stopwatch.isStopped()) {
-//                stopwatch.stop();
-//            }
             runLater(() -> {
                 userInterfaceComponent.log(OutputUtil.error(
                     "+--------------: Generation failed! :-------------+" + "\n"
                     //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                    + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 43) + " |\n"
-                    + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 43) + " |\n"
+                    + "| Files generated  " + alignRight("" + translatorManager.getFilesCreated(), 41) + " |\n"
+                    + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 41) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
 
