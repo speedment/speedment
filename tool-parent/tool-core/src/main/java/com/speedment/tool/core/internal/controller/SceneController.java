@@ -109,8 +109,11 @@ public final class SceneController implements Initializable {
                             );
                         }
                     })).get(3, TimeUnit.SECONDS);
-            } catch (final InterruptedException | ExecutionException ex) {
+            } catch (final ExecutionException ex) {
                 LOGGER.debug(ex, "Error loading last released version.");
+            } catch (final InterruptedException ex) {
+                LOGGER.debug(ex, "Error loading last released version.");
+                Thread.currentThread().interrupt();
             } catch (final TimeoutException ex) {
                 LOGGER.debug(ex, "Request for latest released version timed out.");
             }

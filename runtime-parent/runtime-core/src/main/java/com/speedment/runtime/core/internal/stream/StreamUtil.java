@@ -163,12 +163,12 @@ public final class StreamUtil {
         public T next() {
             if (state == State.NOT_DETERMINED) {
                 if (!hasNext()) {
-                    throwNoSuchElementException();
+                    throw noSuchElementException();
                 };
             }
 
             if (state == State.NO_NEXT) {
-                throwNoSuchElementException();
+                throw noSuchElementException();
             }
 
             state = State.NOT_DETERMINED;
@@ -207,8 +207,8 @@ public final class StreamUtil {
             }
         }
 
-        private void throwNoSuchElementException() {
-            throw new NoSuchElementException(
+        private NoSuchElementException noSuchElementException() {
+            return new NoSuchElementException(
                 "Next was called even though hasNext() returned false."
             );
         }

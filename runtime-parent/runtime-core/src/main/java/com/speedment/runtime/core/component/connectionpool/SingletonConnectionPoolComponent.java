@@ -643,8 +643,12 @@ implements ConnectionPoolComponent {
                         }
                     }
                 } catch (final InterruptedException ex) {
-                    throw new SpeedmentException(
-                        "Interrupted while waiting for available connection.", ex);
+                    try {
+                        throw new SpeedmentException(
+                            "Interrupted while waiting for available connection.", ex);
+                    } finally {
+                        Thread.currentThread().interrupt();
+                    }
                 }
                 this.counter.incrementAndGet();
                 available = true;

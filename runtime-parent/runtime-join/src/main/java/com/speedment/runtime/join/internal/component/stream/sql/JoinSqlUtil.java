@@ -118,8 +118,10 @@ final class JoinSqlUtil {
         int nullOffset = -1;
 
         // Check if this stage renders an on-field to be nullable
-        if (stage.joinType().isPresent() && stage.joinType().get().isNullableSelf()) {
-            nullOffset = findNullOffset(table, stage, stage.field().get());
+        if (stage.joinType().isPresent()) {
+            if (stage.joinType().get().isNullableSelf()) {
+                nullOffset = findNullOffset(table, stage, stage.field().orElseThrow(() -> new NoSuchElementException("field is missing in stage" + stage)));
+            }
         }
 
         // Check if another (RIGHT JOIN) stage renders an on-field in this stage to be nullable
@@ -132,13 +134,16 @@ final class JoinSqlUtil {
                     continue;
                 }
                 final Stage<?> otherStage = stages.get(i);
-                if (otherStage.joinType().isPresent() && otherStage.joinType().get().isNullableOther()) {
-                    final TableIdentifier<?> referencedId = otherStage.foreignField().get().identifier().asTableIdentifier();
-                    if (thisId.equals(referencedId)) {
-                        nullOffset = findNullOffset(table, otherStage, otherStage.foreignField().get());
-                        // If we have a between operation where there is another field pointed, my
-                        // belief is that we can safely ignore that because both fields will be null and we
-                        // only need to detect one
+                if (otherStage.joinType().isPresent()) {
+                    if (otherStage.joinType().get().isNullableOther()) {
+                        final HasComparableOperators<?, ?> otherStageForeignField = otherStage.foreignField().orElseThrow(() -> new NoSuchElementException("Foreign fiels is missing in other stage " + otherStage));
+                        final TableIdentifier<?> referencedId = otherStageForeignField.identifier().asTableIdentifier();
+                        if (thisId.equals(referencedId)) {
+                            nullOffset = findNullOffset(table, otherStage, otherStageForeignField);
+                            // If we have a between operation where there is another field pointed, my
+                            // belief is that we can safely ignore that because both fields will be null and we
+                            // only need to detect one
+                        }
                     }
                 }
             }
@@ -151,6 +156,8 @@ final class JoinSqlUtil {
         }
 
     }
+
+
 
     private static int findNullOffset(
         final Table table,

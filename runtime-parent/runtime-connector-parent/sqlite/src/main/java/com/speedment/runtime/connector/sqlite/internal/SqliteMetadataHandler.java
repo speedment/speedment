@@ -612,7 +612,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             supplier,
             rsChild -> rsChild.getInt("KEY_SEQ") == 1 ? ""
                 : fksThatNeedNewNames.stream()
-                    .skip(fksThatNeedNewNames.size() - 1)
+                    .skip(fksThatNeedNewNames.size() - 1L)
                     .findFirst().orElseThrow(IllegalStateException::new),
             mutator
         );
