@@ -73,7 +73,9 @@
                         <artifactId>maven-source-plugin</artifactId>
                         <version>${maven-source-plugin-version}</version>
                         <configuration>
-                            <excludePackageNames>com.speedment.common.logger:com.speedment.common.logger.*</excludePackageNames>
+                            <excludes>
+                                <exclude>com.speedment.common.logger</exclude>
+                            </excludes>
                         </configuration>
                     </plugin>
                 </plugins>
