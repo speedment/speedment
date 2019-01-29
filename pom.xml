@@ -372,7 +372,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Use com.ning.maven.plugins:maven-dependency-versions-check-plugin:list to analyze dependencies -->
+            <!-- Use mvn com.ning.maven.plugins:maven-dependency-versions-check-plugin:list to analyze dependencies -->
             <plugin>
                 <groupId>com.ning.maven.plugins</groupId>
                 <artifactId>maven-dependency-versions-check-plugin</artifactId>
