@@ -34,12 +34,12 @@ public final class XmlGenerator extends DefaultGenerator {
 
         private XmlTransformFactory() {
             super(XmlTransformFactory.class.getSimpleName());
-            install(Document.class, DocumentView.class);
-            install(XmlDeclaration.class, XmlDeclarationView.class);
-            install(DocType.class, DocTypeView.class);
-            install(Attribute.class, AttributeView.class);
-            install(ContentElement.class, ContentElementView.class);
-            install(TagElement.class, TagElementView.class);
+            install(Document.class, DocumentView::new);
+            install(XmlDeclaration.class, XmlDeclarationView::new);
+            install(DocType.class, DocTypeView::new);
+            install(Attribute.class, AttributeView::new);
+            install(ContentElement.class, ContentElementView::new);
+            install(TagElement.class, TagElementView::new);
         }
     }
 }
