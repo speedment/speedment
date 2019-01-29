@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>logger</artifactId>
-            <version>1.0.4</version>
+            <version>${speedment.version}</version>
         </dependency>
 
         <!--Test dependencies-->

@@ -36,11 +36,7 @@
         An XML module for CodeGen that makes it easy to generate XML-code in an
         object-oriented way.
     </description>
-    
-    <properties>
-        <codegen.version>2.4.9</codegen.version>
-    </properties>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -84,7 +80,7 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>codegen</artifactId>
-            <version>${codegen.version}</version>
+            <version>${speedment.version}</version>
         </dependency>
         
         <!-- Test Dependencies -->

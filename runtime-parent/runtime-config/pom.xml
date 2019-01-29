@@ -65,6 +65,7 @@
 
     <dependencies>
         <!-- Common Dependencies -->
+
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>mapstream</artifactId>

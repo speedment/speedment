@@ -36,11 +36,7 @@
     <description>
         A small dependency injection library.
     </description>
-    
-    <properties>
-        <logger.version>1.0.5</logger.version>
-    </properties>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -90,7 +86,7 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>logger</artifactId>
-            <version>${logger.version}</version>
+            <version>${speedment.version}</version>
         </dependency>
 
         <!--Test dependencies-->
