@@ -21,6 +21,7 @@
 *.iml
 *.iws
 *.xml.versionsBackup
+*.DS_Store
 
 m\.sh
 .project

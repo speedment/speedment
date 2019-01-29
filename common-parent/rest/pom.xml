@@ -55,7 +55,7 @@
             </plugin>                            
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>
@@ -64,11 +64,13 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin-version}</version>
                     </plugin>
-                    
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin-version}</version>
                     </plugin>
                 </plugins>
             </build>

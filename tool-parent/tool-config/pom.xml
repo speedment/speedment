@@ -61,12 +61,10 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <plugin><!-- Generate sources jar -->
-                        <artifactId>maven-source-plugin</artifactId>
-                    </plugin>
-                    
+
                     <plugin><!-- Generate javadoc jar -->
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin-version}</version>
                         
                         <configuration>
                             <dependencySourceIncludes>

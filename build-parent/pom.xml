@@ -59,7 +59,7 @@
                         <!-- Create a shaded artifact with sources included -->
                         <plugin>
                             <artifactId>maven-shade-plugin</artifactId>
-                            <version>3.2.1</version>
+                            <version>${maven-shade-plugin-version}</version>
 
                             <inherited>true</inherited>
                             
@@ -84,6 +84,7 @@
                         <!-- Unpack the sources into a separate folder -->
                         <plugin>
                             <artifactId>maven-dependency-plugin</artifactId>
+                            <version>${maven-dependency-plugin-version}</version>
                             <inherited>true</inherited>
                             
                             <executions>
@@ -115,6 +116,7 @@
                         <!-- Generate javadoc for the unpacked sources -->
                         <plugin>
                             <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>${maven-javadoc-plugin-version}</version>
                             <inherited>true</inherited>
 
                             <configuration>

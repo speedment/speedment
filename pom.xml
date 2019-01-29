@@ -69,6 +69,12 @@
         <mockito.version>2.23.4</mockito.version>
         <speedment.version>${project.version}</speedment.version>
         <common.version>${project.version}</common.version>
+
+        <!-- later maven-javadoc-plugin versions does not support aggregate? -->
+        <maven-javadoc-plugin-version>2.10.4</maven-javadoc-plugin-version>
+        <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
+        <maven-dependency-plugin-version>3.1.1</maven-dependency-plugin-version>
+        <maven-shade-plugin-version>3.2.1</maven-shade-plugin-version>
     </properties>
     
     <organization>
@@ -240,6 +246,71 @@
                     <version>1.6.8</version>
                 </plugin>
 
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M3</version>
+
+                    <configuration>
+                        <useFile>false</useFile>
+                        <trimStackTrace>false</trimStackTrace>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin-version}</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.7.1</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin-version}</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin-version}</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>${maven-shade-plugin-version}</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
         
@@ -255,7 +326,6 @@
             
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
 
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
@@ -285,8 +355,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M3</version>
-                
+
                 <configuration>
                     <useFile>false</useFile>
                     <trimStackTrace>false</trimStackTrace>
@@ -425,7 +494,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
-
+                        <version>${maven-javadoc-plugin-version}</version>
                         <reportSets>
                             <reportSet>
                                 <id>aggregate</id>
@@ -449,7 +518,7 @@
                     <plugins>
                         <plugin>
                             <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>2.10.4</version> <!-- later versions does not support aggregate? -->
+                            <version>${maven-javadoc-plugin-version}</version>
                             
                             <inherited>true</inherited>
 
@@ -549,7 +618,7 @@
 
                         <plugin>
                             <artifactId>maven-source-plugin</artifactId>
-                            <version>3.0.1</version>
+                            <version>${maven-source-plugin-version}</version>
                             <inherited>true</inherited>
                             
                             <executions>
@@ -677,7 +746,6 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.22.1</version>
                         <executions>
                             <execution>
                                 <id>default-test</id>
@@ -717,8 +785,6 @@
                     
                     <plugin>
                         <artifactId>maven-deploy-plugin</artifactId>
-                        <version>2.8.2</version>
-                        
                         <configuration>
                             <!-- Deployment is already handled by nexus-staging-maven-plugin -->
                             <skip>true</skip>

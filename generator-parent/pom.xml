@@ -70,19 +70,25 @@
             <id>release</id>
             
             <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            
-                            <inherited>true</inherited>
-                            
-                            <configuration>
-                                <excludePackageNames>*.internal.*:com.speedment.common.*:com.speedment.runtime.*</excludePackageNames>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
+
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin-version}</version>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <excludePackageNames>*.internal.*:com.speedment.common.*:com.speedment.runtime.*</excludePackageNames>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin-version}</version>
+                    </plugin>
+                </plugins>
+
             </build>
         </profile>
     </profiles>

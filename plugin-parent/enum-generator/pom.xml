@@ -62,10 +62,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                    </plugin>
-                    
-                    <plugin>
-                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-javadoc-plugin-version}</version>
                     </plugin>
                 </plugins>
             </build>
