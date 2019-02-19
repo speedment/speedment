@@ -76,6 +76,13 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         leasedConnections = new ConcurrentHashMap<>();
     }
 
+    /* For testing only */
+    ConnectionPoolComponentImpl(ConnectionDecorator  connectionDecorator) {
+        this();
+        this.connectionDecorator = connectionDecorator;
+    }
+
+
     @ExecuteBefore(State.STOPPED)
     void closeOpenConnections() {
         leasedConnections.values().forEach(conn -> {

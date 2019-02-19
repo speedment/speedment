@@ -14,14 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.internal.component;
 
 
+import com.speedment.runtime.core.component.connectionpool.ConnectionDecorator;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -37,22 +33,26 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author pemi
  */
-public class ConnectionPoolComponentImplTest {
+final class ConnectionPoolComponentImplTest {
+
+    private static final ConnectionDecorator CONNECTION_DECORATOR = connection -> {};
 
     private ConnectionPoolComponentImpl instance;
 
     @BeforeEach
-    public void setUp() {
-        instance = new ConnectionPoolComponentImpl() {
+    void setUp() {
+        instance = new ConnectionPoolComponentImpl(CONNECTION_DECORATOR) {
+
             @Override
             public Connection newConnection(String uri, String user, char[] password) {
                 return new DummyConnectionImpl(uri, user, password);
             }
+
         };
     }
 
     @Test
-    public void testGetConnection() throws Exception {
+    void testGetConnection() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";
         char[] password = "arne".toCharArray();
@@ -61,7 +61,7 @@ public class ConnectionPoolComponentImplTest {
     }
 
     @Test
-    public void testReturnConnection() throws Exception {
+    void testReturnConnection() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";
         char[] password = "arne".toCharArray();
@@ -70,7 +70,7 @@ public class ConnectionPoolComponentImplTest {
     }
 
     @Test
-    public void testNewConnection() throws Exception {
+    void testNewConnection() throws Exception {
         String uri = "someurl";
         String user = "a";
         char[] password = "b".toCharArray();
@@ -80,7 +80,7 @@ public class ConnectionPoolComponentImplTest {
     }
 
     @Test
-    public void testGetMaxAge() {
+    void testGetMaxAge() {
         long result = instance.getMaxAge();
         assertTrue(result >= 0);
         instance.setMaxAge(60_000);
@@ -88,7 +88,7 @@ public class ConnectionPoolComponentImplTest {
     }
 
     @Test
-    public void testSetMaxAge() {
+    void testSetMaxAge() {
         instance.setMaxAge(40_000);
         assertEquals(40_000, instance.getMaxAge());
     }
@@ -104,7 +104,7 @@ public class ConnectionPoolComponentImplTest {
     // Leaking connections
     @Test
     @Disabled
-    public void testLeak() throws Exception {
+    void testLeak() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";
         char[] password = "arne".toCharArray();
@@ -118,7 +118,7 @@ public class ConnectionPoolComponentImplTest {
     }
 
     @Test
-    public void testMaxOutAndReturn() throws Exception {
+    void testMaxOutAndReturn() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";
         char[] password = "arne".toCharArray();
@@ -146,13 +146,13 @@ public class ConnectionPoolComponentImplTest {
      * Test of setPoolSize method, of class ConnectionPoolComponentImpl.
      */
     @Test
-    public void testSetPoolSize() {
+    void testSetPoolSize() {
         int poolSize = 40;
         instance.setMaxRetainSize(poolSize);
         assertEquals(instance.getMaxRetainSize(), 40);
     }
 
-    private class DummyConnectionImpl implements Connection {
+    private static final class DummyConnectionImpl implements Connection {
 
         final String uri;
         final String user;
@@ -442,7 +442,7 @@ public class ConnectionPoolComponentImplTest {
 
     }
 
-    private void log(String msg) {
+    private static void log(String msg) {
         //System.out.println(new Timestamp(System.currentTimeMillis()) + " " + msg);
     }
 
