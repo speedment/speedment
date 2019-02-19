@@ -26,6 +26,7 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionDecorator;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.core.db.DbmsType;
@@ -53,9 +54,9 @@ import static java.util.Objects.requireNonNull;
  */
 public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
-    protected static final Logger LOGGER_CONNECTION = LoggerManager.getLogger(
-        ApplicationBuilder.LogType.CONNECTION.getLoggerName()
-    );
+    protected static final Logger LOGGER_CONNECTION = LoggerManager.getLogger(ApplicationBuilder.LogType.CONNECTION.getLoggerName());
+
+    @Inject ConnectionDecorator connectionDecorator;
 
     @Config(name = "connectionpool.maxAge", value = "30000")
     private long maxAge;
@@ -159,6 +160,11 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         try {
             final Connection connection = DriverManager.getConnection(uri, username, charsToString(password));
             LOGGER_CONNECTION.debug("New external connection: %s", connection);
+            try {
+                connectionDecorator.configure(connection);
+            } catch (SQLException sqle) {
+                LOGGER_CONNECTION.warn(sqle, "Unable to configure connection. Configuration might be ignored.");
+            }
             return connection;
         } catch (final SQLException ex) {
             final String msg = "Unable to get connection using url \"" + uri
@@ -196,6 +202,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         requireNonNull(connection);
         LOGGER_CONNECTION.debug("Discard: %s", connection);
         try {
+            connectionDecorator.cleanup(connection);
             connection.rawClose();
         } catch (SQLException sqle) {
             LOGGER_CONNECTION.error(sqle, "Error closing a connection.");
