@@ -50,8 +50,45 @@ public interface Injector {
      * 
      * @throws IllegalArgumentException  if it could not be found
      */
-    <T> T getOrThrow(Class<T> type) throws IllegalArgumentException;
-    
+    <T> T getOrThrow(Class<T> type);
+
+    /**
+     * Returns the instance associated with the specified class signature where
+     * the returned instance is not identical to the provided {@code except} instance.
+     * <p>
+     * If the specified type could not be found, an
+     * {@code IllegalArgumentException} is thrown.
+     * <P>
+     * This method is useful for components that delegates functionality:
+     * <pre>{@code
+     * public class HazelcastUserInterfaceComponentImpl implements UserInterfaceComponent {
+     *
+     *     private UserInterfaceComponent inner;
+     *
+     *     @ExecuteBefore(State.INITIALIZED)
+     *     private void setup(Injector injector) {
+     *         inner = injector.getOrThrowExcept(UserInterfaceComponent.class, this);
+     *     }
+     * }
+     * </pre>
+     *
+     * @param <T>    the class signature of the injectable type
+     * @param type   the expected type
+     * @param except the instance to exclude from the result
+     * @return       the automatically resolved instance
+     *
+     * @throws IllegalArgumentException  if it could not be found
+     */
+    default <T> T getOrThrowExcept(Class<T> type, T except) {
+        return stream(type)
+            .filter(instance -> instance != except)
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                "A component of type "+ type.getName() +
+                "other than "+except+" could not be found")
+            );
+    }
+
     /**
      * Looks for an dependency injectable instance of the specified class
      * and if it exists, returns it. If it does not exist, an empty Optional

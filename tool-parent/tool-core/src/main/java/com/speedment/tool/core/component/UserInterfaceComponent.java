@@ -170,14 +170,24 @@ public interface UserInterfaceComponent {
     void prepareWorkspace(SplitPane parent, Node workspace);
 
     void prepareOutput(SplitPane parent, Node output);
-    
+
     /**
-     * Opens the default internet browser and shows the Speedment Gitter page.
+     * Opens the default internet browser and shows the relevant manual page.
+     */
+    void showManual();
+
+    /**
+     * Opens the default internet browser and shows the relevant Gitter page.
      */
     void showGitter();
 
     /**
-     * Opens the default internet browser and shows the Speedment Github page.
+     * Opens the default internet browser and shows the relevant issue page.
+     */
+    void reportIssue();
+
+    /**
+     * Opens the default internet browser and shows the relevant Github page.
      */
     void showGithub();
 

@@ -89,8 +89,10 @@ public final class DefaultMenuItemFactories {
             });
 
         menuBar.forTab(MenuBarTab.HELP)
-            .addMenuItem("Show _Gitter", SpeedmentIcon.USER_COMMENT, ev -> ui.showGitter())
-            .addMenuItem("Show Git_Hub", SpeedmentIcon.USER_COMMENT, ev -> ui.showGithub())
+            .addMenuItem("Online _Manual", SpeedmentIcon.BOOK, ev -> ui.showManual())
+            .addMenuItem("Online Help Chat on _Gitter", SpeedmentIcon.USER_COMMENT, ev -> ui.showGitter())
+            .addMenuItem("Report an _Issue", SpeedmentIcon.USER_COMMENT, ev -> ui.reportIssue())
+            .addMenuItem("Open the Git_Hub page", SpeedmentIcon.USER_COMMENT, ev -> ui.showGithub())
             .addSeparator()
             .addMenuItem("_Components", SpeedmentIcon.BRICKS, ev -> loader.loadAsModal("Components"))
             .addSeparator()
