@@ -21,6 +21,8 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.internal.InjectorImpl;
 import com.speedment.common.logger.Logger;
+
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -39,7 +41,7 @@ import java.util.stream.Stream;
 public interface Injector {
     
     /**
-     * Returns the instance associated with the specified class signature.
+     * Returns the instance associated with the specified class token.
      * <p>
      * If the specified type could not be found, an
      * {@code IllegalArgumentException} is thrown.
@@ -53,8 +55,8 @@ public interface Injector {
     <T> T getOrThrow(Class<T> type);
 
     /**
-     * Returns the instance associated with the specified class signature where
-     * the returned instance is not identical to the provided {@code except} instance.
+     * Returns the instance immediately after the provided {@code before} instance
+     * which is associated with the provided {@code type} class token.
      * <p>
      * If the specified type could not be found, an
      * {@code IllegalArgumentException} is thrown.
@@ -67,30 +69,23 @@ public interface Injector {
      *
      *     @ExecuteBefore(State.INITIALIZED)
      *     private void setup(Injector injector) {
-     *         inner = injector.getOrThrowExcept(UserInterfaceComponent.class, this);
+     *         inner = injector.getAfterOrThrow(UserInterfaceComponent.class, this);
      *     }
      * }
      * </pre>
      *
      * @param <T>    the class signature of the injectable type
      * @param type   the expected type
-     * @param except the instance to exclude from the result
-     * @return       the automatically resolved instance
+     * @param before the instance before the desired component
+     * @return       the instance immediately after the provided {@code before} instance
+     *               associated with the provided {@code type} class token
      *
      * @throws IllegalArgumentException  if it could not be found
      */
-    default <T> T getOrThrowExcept(Class<T> type, T except) {
-        return stream(type)
-            .filter(instance -> instance != except)
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(
-                "A component of type "+ type.getName() +
-                "other than "+except+" could not be found")
-            );
-    }
+    <T> T getAfterOrThrow(Class<T> type, T before);
 
     /**
-     * Looks for an dependency injectable instance of the specified class
+     * Looks for an dependency injectable instance of the specified class token
      * and if it exists, returns it. If it does not exist, an empty Optional
      * is returned.
      * 
@@ -102,7 +97,7 @@ public interface Injector {
     
     /**
      * Returns a stream of all the instances associated with the specified class
-     * signature.
+     * token.
      * 
      * @param <T>   the class signature of the injectable type
      * @param type  the expected type
