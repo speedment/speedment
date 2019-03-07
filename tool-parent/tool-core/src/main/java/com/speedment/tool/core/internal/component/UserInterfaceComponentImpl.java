@@ -327,7 +327,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         
         final TranslatorSupport<Project> support = new TranslatorSupport<>(injector, project);
 
-        log(OutputUtil.info("Prepairing for generating classes " + support.basePackageName() + "." + project.getId() + ".*"));
+        log(OutputUtil.info("Preparing for generating classes " + support.basePackageName() + "." + project.getId() + ".*"));
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
         log(OutputUtil.info("Performing rule verifications..."));
 
