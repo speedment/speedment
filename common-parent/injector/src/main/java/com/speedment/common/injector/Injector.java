@@ -67,12 +67,12 @@ public interface Injector {
      *
      *     private UserInterfaceComponent inner;
      *
-     *     @ExecuteBefore(State.INITIALIZED)
+     *     {@literal @}ExecuteBefore(State.INITIALIZED)
      *     private void setup(Injector injector) {
      *         inner = injector.getAfterOrThrow(UserInterfaceComponent.class, this);
      *     }
      * }
-     * </pre>
+     * }</pre>
      *
      * @param <T>    the class signature of the injectable type
      * @param type   the expected type
