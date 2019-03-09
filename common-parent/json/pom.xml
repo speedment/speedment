@@ -26,11 +26,10 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.13-SNAPSHOT</version>
+        <version>3.1.13</version>
     </parent>
     
     <artifactId>json</artifactId>
-    <version>3.1.13-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - JSON</name>
