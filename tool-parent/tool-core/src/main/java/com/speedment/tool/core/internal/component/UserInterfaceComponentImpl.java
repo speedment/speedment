@@ -95,8 +95,10 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     
     private static final Logger LOGGER = LoggerManager.getLogger(UserInterfaceComponentImpl.class);
 
-    private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
+    private static final String MANUAL_URI = "https://speedment.github.io/speedment-doc/index.html";
     private static final String GITTER_URI = "https://gitter.im/speedment/speedment/";
+    private static final String ISSUE_URI = "https://github.com/speedment/speedment/issues/new";
+    private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
 
     private static final Predicate<Optional<char[]>> NO_PASSWORD_SPECIFIED
         = pass -> !pass.isPresent() || pass.get().length == 0;
@@ -325,7 +327,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         
         final TranslatorSupport<Project> support = new TranslatorSupport<>(injector, project);
 
-        log(OutputUtil.info("Prepairing for generating classes " + support.basePackageName() + "." + project.getId() + ".*"));
+        log(OutputUtil.info("Preparing for generating classes " + support.basePackageName() + "." + project.getId() + ".*"));
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
         log(OutputUtil.info("Performing rule verifications..."));
 
@@ -336,7 +338,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         future.handleAsync((bool, ex) -> {
             if (ex != null) {
                 final String err = 
-                    "An error occured while the error checker was looking " + 
+                    "An error occurred while the error checker was looking " +
                     "for issues in the project configuration.";
                 LOGGER.error(ex, err);
                 runLater(() -> {
@@ -368,8 +370,18 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     }
 
     @Override
+    public void showManual() {
+        browse(MANUAL_URI);
+    }
+
+    @Override
     public void showGitter() {
         browse(GITTER_URI);
+    }
+
+    @Override
+    public void reportIssue() {
+        browse(ISSUE_URI);
     }
 
     @Override

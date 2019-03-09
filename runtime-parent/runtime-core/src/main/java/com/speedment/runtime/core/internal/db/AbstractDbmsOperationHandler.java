@@ -112,11 +112,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             LOGGER.error(sqle, "Error querying " + sql);
             throw new SpeedmentException(sqle);
         } finally {
-            try {
-                connectionInfo.close();
-            } catch (SQLException sqle) {
-                throw new SpeedmentException(sqle);
-            }
+            closeQuietly(connectionInfo::close);
         }
     }
 
@@ -216,20 +212,15 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                         // If we got here, and conn is not null, the
                         // transaction should be rolled back, as not
                         // all work has been done
-                        try {
-                            conn.rollback();
-                        } finally {
-                            conn.close();
-                        }
+                       conn.rollback();
 
                     } catch (SQLException sqlEx) {
-                        //
                         // If we got an exception here, something
-                        // pretty serious is going on, so we better
-                        // pass it up the stack, rather than just
-                        // logging it. . .
+                        // pretty serious is going on
                         LOGGER.error(sqlEx, "Rollback error! connection:" + sqlEx.getMessage());
-                        throw sqlEx;
+                        retryCount = 0;
+                    } finally {
+                        conn.close();
                     }
                 }
             }
@@ -400,6 +391,18 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                 "The " + DbmsOperationHandler.class.getSimpleName() + " " +
                     getClass().getSimpleName() + " has been closed."
             );
+        }
+    }
+
+    protected interface ThrowingClosable {
+        void close() throws Exception;
+    }
+
+    protected void closeQuietly(ThrowingClosable closeable) {
+        try {
+            closeable.close();
+        } catch (Exception e) {
+            LOGGER.warn(e);
         }
     }
 

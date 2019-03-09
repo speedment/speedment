@@ -25,7 +25,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.12</version>
+        <version>3.1.13-SNAPSHOT</version>
     </parent>
     
     <artifactId>codegenxml</artifactId>
@@ -36,11 +36,7 @@
         An XML module for CodeGen that makes it easy to generate XML-code in an
         object-oriented way.
     </description>
-    
-    <properties>
-        <codegen.version>2.4.9</codegen.version>
-    </properties>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -57,7 +53,7 @@
             </plugin>                            
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>
@@ -66,11 +62,13 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin-version}</version>
                     </plugin>
-                    
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin-version}</version>
                     </plugin>
                 </plugins>
             </build>
@@ -82,7 +80,7 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>codegen</artifactId>
-            <version>${codegen.version}</version>
+            <version>${speedment.version}</version>
         </dependency>
         
         <!-- Test Dependencies -->

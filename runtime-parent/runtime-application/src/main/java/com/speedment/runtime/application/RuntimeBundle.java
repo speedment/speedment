@@ -21,15 +21,7 @@ import com.speedment.runtime.connector.mariadb.MariaDbBundle;
 import com.speedment.runtime.connector.mysql.MySqlBundle;
 import com.speedment.runtime.connector.postgres.PostgresBundle;
 import com.speedment.runtime.connector.sqlite.SqliteBundle;
-import com.speedment.runtime.core.internal.component.ConnectionPoolComponentImpl;
-import com.speedment.runtime.core.internal.component.DbmsHandlerComponentImpl;
-import com.speedment.runtime.core.internal.component.EntityManagerImpl;
-import com.speedment.runtime.core.internal.component.InfoComponentImpl;
-import com.speedment.runtime.core.internal.component.ManagerComponentImpl;
-import com.speedment.runtime.core.internal.component.PasswordComponentImpl;
-import com.speedment.runtime.core.internal.component.ProjectComponentImpl;
-import com.speedment.runtime.core.internal.component.StatisticsReporterComponentImpl;
-import com.speedment.runtime.core.internal.component.StatisticsReporterSchedulerComponentImpl;
+import com.speedment.runtime.core.internal.component.*;
 import com.speedment.runtime.core.internal.component.resultset.ResultSetMapperComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.SqlPersistanceComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
@@ -67,7 +59,8 @@ public class RuntimeBundle implements InjectBundle {
             SqlStreamOptimizerComponentImpl.class,
             SqlStreamTerminatorComponentImpl.class,
             TransactionComponentImpl.class,
-            DriverComponentImpl.class
+            DriverComponentImpl.class,
+            DefaultConnectionDecorator.class
         )
             .withBundle(new MySqlBundle())
             .withBundle(new MariaDbBundle())

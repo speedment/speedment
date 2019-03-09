@@ -68,7 +68,7 @@
          <children>
             <Region prefHeight="0.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
               
-              <Button fx:id="okey" alignment="CENTER" defaultButton="true" disable="true" mnemonicParsing="false" text="Okey, I accept!">
+              <Button fx:id="okay" alignment="CENTER" defaultButton="true" disable="true" mnemonicParsing="false" text="Okey, I accept!">
                   <padding>
                       <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
                   </padding>

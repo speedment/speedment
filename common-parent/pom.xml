@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment-parent</artifactId>
-        <version>3.1.12</version>
+        <version>3.1.13-SNAPSHOT</version>
     </parent>
     
     <groupId>com.speedment.common</groupId>
@@ -62,16 +62,4 @@
         <module>collection</module>
     </modules>
     
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.speedment</groupId>
-                <artifactId>speedmentversion-maven-plugin</artifactId>
-                
-                <configuration>
-                    <minVersion>1.0.0</minVersion>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

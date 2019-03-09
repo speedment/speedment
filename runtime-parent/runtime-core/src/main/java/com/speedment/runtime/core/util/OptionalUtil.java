@@ -57,7 +57,7 @@ public final class OptionalUtil {
      * @return          the inner value or {@code null}
      */
     public static <T> T unwrap(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> optional) {
-        if (optional == null) {
+        if ((Object) optional == null) { // (Object) cast suppress SonarCube warning
             return null;
         }
         return optional.orElse(null);

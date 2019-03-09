@@ -37,7 +37,7 @@ public final class Json {
 
     private Json() {}
 
-    public static boolean PRETTY = true;
+
     
     /**
      * Parses the specified object to a JSON string. The following
@@ -95,7 +95,7 @@ public final class Json {
      */
     public static void toJson(Object object, OutputStream out) 
     throws IllegalArgumentException, IOException {
-        toJson(object, out, PRETTY);
+        toJson(object, out, true);
     }
 
 
@@ -142,7 +142,7 @@ public final class Json {
      * @param json  the json to parse
      * @return      the created object
      * 
-     * @throws JsonSyntaxException  if the specified json is malformed  
+     * @throws JsonSyntaxException  if the specified json is malformed
      */
     public static Object fromJson(String json) throws JsonSyntaxException {
         try (final InputStream stream = 
@@ -170,7 +170,7 @@ public final class Json {
      * @return    the created object
      * 
      * @throws IOException          if the stream can not be read 
-     * @throws JsonSyntaxException  if the specified json is malformed  
+     * @throws JsonSyntaxException  if the specified json is malformed
      */
     public static Object fromJson(InputStream in) 
     throws IOException, JsonSyntaxException {

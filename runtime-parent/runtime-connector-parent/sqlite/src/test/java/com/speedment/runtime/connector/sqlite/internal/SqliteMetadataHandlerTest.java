@@ -17,7 +17,6 @@
 package com.speedment.runtime.connector.sqlite.internal;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.json.Json;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.internal.ProjectImpl;
@@ -55,10 +54,6 @@ class SqliteMetadataHandlerTest {
 
     private final static String URL = "jdbc:sqlite::memory:";
     private final static String FILE = "/employees.sql";
-
-    static { // Enable pretty printing of JSON outputs
-        Json.PRETTY = true;
-    }
 
     private Connection conn;
     private Injector injector;
@@ -144,7 +139,7 @@ class SqliteMetadataHandlerTest {
 
         try {
             final Project loaded = task.get(10, TimeUnit.SECONDS);
-            //System.out.println(Json.toJson(loaded.getData()));
+            //System.out.println(Json.toJson(loaded.getData(), true));
         } catch (final InterruptedException | ExecutionException | TimeoutException ex) {
             throw new RuntimeException(ex);
         }

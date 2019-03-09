@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.12</version>
+        <version>3.1.13-SNAPSHOT</version>
     </parent>
     
     <artifactId>mapbuilder</artifactId>
@@ -53,7 +53,7 @@
             </plugin>                            
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>
@@ -62,14 +62,17 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin-version}</version>
                     </plugin>
-                    
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin-version}</version>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
+
 </project>

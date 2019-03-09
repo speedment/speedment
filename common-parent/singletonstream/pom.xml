@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.12</version>
+        <version>3.1.13-SNAPSHOT</version>
     </parent>
     
     <artifactId>singleton-stream</artifactId>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>logger</artifactId>
-            <version>1.0.4</version>
+            <version>${speedment.version}</version>
         </dependency>
 
         <!--Test dependencies-->
@@ -74,21 +74,26 @@
             </plugin>                            
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin-version}</version>
                     </plugin>
-                    
+
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin-version}</version>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
+
 </project>

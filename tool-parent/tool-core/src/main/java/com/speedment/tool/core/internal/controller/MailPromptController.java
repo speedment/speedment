@@ -60,18 +60,18 @@ public final class MailPromptController implements Initializable {
     
     private @FXML TextField email;
     private @FXML TextArea terms;
-    private @FXML Button okey;
+    private @FXML Button okay;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        okey.setGraphic(FontAwesome.CHECK.view());
-        okey.disableProperty().bind(Bindings.createBooleanBinding(
+        okay.setGraphic(FontAwesome.CHECK.view());
+        okay.disableProperty().bind(Bindings.createBooleanBinding(
             () -> IS_INVALID_MAIL.test(email.getText()), 
             email.textProperty()
         ));
 
-        okey.setOnAction(ev -> {
+        okay.setOnAction(ev -> {
             loader.loadAndShow("Connect");
 
             if (EmailUtil.hasEmail()) {

@@ -101,11 +101,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
             } catch (Exception e) {
                 throw new SpeedmentException(e);
             } finally {
-                try {
-                    ComposeRunnableUtil.composedClose(streamSet.toArray(new AutoCloseable[0])); // Close the other streams
-                } catch (Exception e) {
-                    throw new SpeedmentException(e);
-                }
+                ComposeRunnableUtil.composedClose(streamSet.toArray(new AutoCloseable[0])); // Close the other streams
             }
         }
     }

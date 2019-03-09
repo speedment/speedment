@@ -560,7 +560,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     break parser;
                     
                 case 0x09 : // tab
-                    col.addAndGet(TAB_SIZE - 1);
+                    col.addAndGet(TAB_SIZE - 1L);
                     method = CloseMethod.NOT_DECIDED;
                     break parser;
                     
