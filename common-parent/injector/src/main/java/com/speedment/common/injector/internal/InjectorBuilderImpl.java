@@ -111,6 +111,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     }
 
     private <T> InjectorBuilder withComponentAndSupplier(Class<T> injectableType, Supplier<T> instanceSupplier) {
+        requireNonNull(injectableType);
 
         Injectable<T> injectable = new Injectable<>(injectableType, instanceSupplier);
 
