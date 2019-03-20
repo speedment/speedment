@@ -19,14 +19,14 @@ package com.speedment.common.injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.execution.ExecutionBuilder;
-import static com.speedment.common.injector.execution.ExecutionBuilder.initialized;
-import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
-import static com.speedment.common.injector.execution.ExecutionBuilder.started;
-import static com.speedment.common.injector.execution.ExecutionBuilder.stopped;
 import com.speedment.common.injector.internal.InjectorBuilderImpl;
 import com.speedment.common.logger.Logger;
+
 import java.nio.file.Path;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static com.speedment.common.injector.execution.ExecutionBuilder.*;
 
 /**
  * Builder pattern for the {@link Injector} interface.
@@ -56,6 +56,8 @@ public interface InjectorBuilder {
      */
     InjectorBuilder withComponent(Class<?> injectableType) 
     throws NoDefaultConstructorException;
+
+    <T> InjectorBuilder withComponent(Class<T> injectableType, Supplier<T> supplier);
 
     /**
      * Puts one or multiple classes contained in an InjectBundle that can be

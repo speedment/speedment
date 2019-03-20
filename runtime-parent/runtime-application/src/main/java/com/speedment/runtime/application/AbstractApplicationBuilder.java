@@ -48,6 +48,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
@@ -332,6 +333,12 @@ public abstract class AbstractApplicationBuilder<
     public BUILDER withComponent(Class<?> injectableClass) {
         requireNonNull(injectableClass);
         injectorBuilder.withComponent(injectableClass);
+        return self();
+    }
+
+    public <T> BUILDER withComponent(Class<T> injectableClass, Supplier<T> supplier) {
+        requireNonNulls(injectableClass, supplier);
+        injectorBuilder.withComponent(injectableClass, supplier);
         return self();
     }
 

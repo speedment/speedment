@@ -27,20 +27,22 @@ import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.internal.util.InjectorUtil;
+import com.speedment.common.logger.Level;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
+
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
 import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
 import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.atomic.AtomicBoolean;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  * The default implementation of the {@link Injector} interface.
@@ -73,7 +75,7 @@ public final class InjectorImpl implements Injector {
 
     public final static Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorImpl.class);
 
-    private final Set<Class<?>> injectables;
+    private final Set<Injectable<?>> injectables;
     private final List<Object> instances;
     private final Properties properties;
     private final ClassLoader classLoader;
@@ -81,7 +83,7 @@ public final class InjectorImpl implements Injector {
     private final InjectorBuilder builder;
 
     InjectorImpl(
-            Set<Class<?>> injectables, 
+            Set<Injectable<?>> injectables,
             List<Object> instances,
             Properties properties,
             ClassLoader classLoader,
@@ -128,7 +130,7 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public Stream<Class<?>> injectables() {
-        return injectables.stream();
+        return injectables.stream().map(Injectable::get);
     }
 
     @Override

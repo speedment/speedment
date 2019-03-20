@@ -27,15 +27,17 @@ import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.internal.InjectorImpl;
 import com.speedment.common.injector.internal.execution.ReflectionExecutionImpl;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
+import static java.util.stream.Collectors.joining;
 
 /**
  * The default implementation of the {@link DependencyGraph} interface.
@@ -47,7 +49,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
     
     private final Map<Class<?>, DependencyNode> nodes;
     
-    public static DependencyGraph create(Set<Class<?>> injectables) 
+    public static DependencyGraph create(Stream<Class<?>> injectables)
             throws CyclicReferenceException {
         
         final DependencyGraphImpl graph = new DependencyGraphImpl();
