@@ -349,7 +349,7 @@ public abstract class AbstractApplicationBuilder<
         if (LogType.APPLICATION_BUILDER.getLoggerName()
                 .equals(namer.getLoggerName())) {
             
-            // Special case becaues its in a common module
+            // Special case because its in a common module
             Injector.logger().setLevel(Level.DEBUG); 
             InjectorBuilder.logger().setLevel(Level.DEBUG);
         }
