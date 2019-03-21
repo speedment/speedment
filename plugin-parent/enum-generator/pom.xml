@@ -85,6 +85,11 @@
             <groupId>com.speedment.common</groupId>
             <artifactId>lazy</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>singleton-stream</artifactId>
+        </dependency>
         
         <dependency>
             <groupId>com.speedment.common</groupId>

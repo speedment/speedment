@@ -64,6 +64,11 @@
             <artifactId>runtime-core</artifactId>
             <version>${speedment.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>jvm-version</artifactId>
+        </dependency>
                                                                 
         <dependency>
             <groupId>com.speedment.runtime</groupId>

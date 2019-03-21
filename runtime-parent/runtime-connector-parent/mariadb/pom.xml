@@ -55,24 +55,10 @@
     
     <dependencies>
         <!-- Common dependencies -->
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>logger</artifactId>
-        </dependency>
-        
+
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>injector</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>tuple</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
         </dependency>
         
         <!-- Runtime dependencies -->
@@ -82,12 +68,6 @@
             <version>${speedment.version}</version>
         </dependency>
         
-        <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-field</artifactId>
-            <version>${speedment.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>

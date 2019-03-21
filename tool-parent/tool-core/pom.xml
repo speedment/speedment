@@ -102,11 +102,6 @@
         
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
             <artifactId>mapstream</artifactId>
         </dependency>
         

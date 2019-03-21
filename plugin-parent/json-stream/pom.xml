@@ -92,11 +92,6 @@
         </dependency>
         
         <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>function</artifactId>
-        </dependency>
-        
-        <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
         </dependency>
@@ -104,6 +99,11 @@
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-field</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-typemapper</artifactId>
         </dependency>
         
         <dependency>

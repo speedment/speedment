@@ -113,16 +113,6 @@
             <artifactId>lazy</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>jvm-version</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>singleton-stream</artifactId>
-        </dependency>
-        
         <!-- Runtime Dependencies -->
         <dependency>
             <groupId>com.speedment.runtime</groupId>

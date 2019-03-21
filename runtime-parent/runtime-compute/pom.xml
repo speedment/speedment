@@ -62,11 +62,6 @@
         <!-- Common Dependencies -->
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.speedment.common</groupId>
             <artifactId>function</artifactId>
         </dependency>
         
