@@ -17,6 +17,8 @@
 package com.speedment.common.invariant;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.function.LongPredicate;
 import java.util.function.LongUnaryOperator;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Per Minborg
  */
+@Execution(ExecutionMode.CONCURRENT)
 final class LongRangeUtilTest {
 
     private static final LongPredicate IS_POSITIVE = l -> l > 0;

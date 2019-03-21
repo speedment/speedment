@@ -37,8 +37,7 @@ final class TranslatorManagerTest extends SimpleModel {
     @Test
     void testAccept() {
         final TranslatorManager instance = speedment.getOrThrow(TranslatorManager.class);
-
-        assertDoesNotThrow(()->instance.accept(project));
+        instance.accept(project);
     }
 
     @Test

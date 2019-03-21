@@ -17,6 +17,8 @@
 package com.speedment.common.json;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author Emil Forslund
  */
+@Execution(ExecutionMode.CONCURRENT)
 final class JsonTest {
     
     @Test

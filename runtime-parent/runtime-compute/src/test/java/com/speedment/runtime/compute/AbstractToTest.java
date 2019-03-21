@@ -26,6 +26,8 @@ import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.trait.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.function.ToLongFunction;
 
@@ -39,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Per Minborg
  */
+@Execution(ExecutionMode.CONCURRENT)
 abstract class AbstractToTest<T extends
         Expression<String> & 
         HasAsDouble<String> & 
