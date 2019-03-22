@@ -35,7 +35,7 @@
     <name>Speedment - Tool - Config</name>
     <description>
         An observable configuration system that models the layout of a 
-        relational database in a JavaFX observable fassion.
+        relational database in a JavaFX observable fashion.
     </description>
     
     <build>
