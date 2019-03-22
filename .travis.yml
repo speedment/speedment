@@ -5,7 +5,7 @@ jdk:
   - oraclejdk9
   - openjdk10
   - openjdk11
-  - openjdk12
+  - openjdk-ea
 
 addons:
   apt:
