@@ -28,6 +28,8 @@ import com.speedment.runtime.join.JoinStreamSupplierComponent;
 import com.speedment.runtime.join.internal.component.join.test_support.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.Set;
 
@@ -37,6 +39,7 @@ import static java.util.stream.Collectors.toSet;
  *
  * @author Per Minborg
  */
+@Execution(ExecutionMode.CONCURRENT)
 final class JoinTest {
 
     private final static Logger LOGGER_JOIN =

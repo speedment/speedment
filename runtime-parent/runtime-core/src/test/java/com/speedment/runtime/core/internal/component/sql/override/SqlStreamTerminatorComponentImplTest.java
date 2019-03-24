@@ -39,6 +39,8 @@ import com.speedment.runtime.core.component.sql.override.reference.ToArrayTermin
 import com.speedment.runtime.core.internal.component.sql.override.optimized.reference.OptimizedCountTerminator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -51,24 +53,25 @@ import static org.mockito.Mockito.mock;
  *
  * @author Per Minborg
  */
-public class SqlStreamTerminatorComponentImplTest {
+@Execution(ExecutionMode.CONCURRENT)
+final class SqlStreamTerminatorComponentImplTest {
 
     private SqlStreamTerminatorComponentImpl instance;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         instance = new SqlStreamTerminatorComponentImpl();
     }
 
     @Test
-    public void testGetters() {
+    void testGetters() {
         referenceTerminators()
             .filter(c -> !CountTerminator.class.equals(c)) // Count is optimized by default. Test separately
             .forEach(this::testGetter);
     }
 
     @Test
-    public void testGetCountTerminator() {
+    void testGetCountTerminator() {
         assertEquals(
             OptimizedCountTerminator.create().getClass().getName(),
             instance.getCountTerminator().getClass().getName()
@@ -76,7 +79,7 @@ public class SqlStreamTerminatorComponentImplTest {
     }
 
     @Test
-    public void testSetters() {
+    void testSetters() {
         referenceTerminators()
             .forEach(this::testSetter);
     }
@@ -127,7 +130,7 @@ public class SqlStreamTerminatorComponentImplTest {
         }
     }
 
-    public Stream<Class<? extends ReferenceTerminator>> referenceTerminators() {
+    Stream<Class<? extends ReferenceTerminator>> referenceTerminators() {
         return Stream.of(
             AllMatchTerminator.class,
             AnyMatchTerminator.class,

@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment-parent</artifactId>
-        <version>3.1.13</version>
+        <version>3.1.14</version>
     </parent>
     
     <groupId>com.speedment.tool</groupId>
@@ -75,6 +75,43 @@
     </dependencyManagement>
 
     <profiles>
+        <profile>
+            <id>java13</id>
+            <activation>
+                <jdk>13</jdk>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-controls</artifactId>
+                    <version>11</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-fxml</artifactId>
+                    <version>11</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>java12</id>
+            <activation>
+                <jdk>12</jdk>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-controls</artifactId>
+                    <version>11</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-fxml</artifactId>
+                    <version>11</version>
+                </dependency>
+            </dependencies>
+        </profile>
         <profile>
             <id>java11</id>
             <activation>

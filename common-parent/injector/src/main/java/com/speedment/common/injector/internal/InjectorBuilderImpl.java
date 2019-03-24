@@ -32,35 +32,27 @@ import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.internal.dependency.DependencyGraphImpl;
-import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
-import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
-import static com.speedment.common.injector.internal.util.PrintUtil.limit;
-import static com.speedment.common.injector.internal.util.PropertiesUtil.loadProperties;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.newInstance;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseAncestors;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableSet;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
+
+import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
+import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
+import static com.speedment.common.injector.internal.util.PrintUtil.limit;
+import static com.speedment.common.injector.internal.util.PropertiesUtil.loadProperties;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.*;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableSet;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
 
@@ -71,12 +63,12 @@ import static java.util.stream.Collectors.toSet;
  * @since  1.2.0
  */
 public final class InjectorBuilderImpl implements InjectorBuilder {
-    
+
     public final static Logger LOGGER_INSTANCE =
         LoggerManager.getLogger(InjectorBuilderImpl.class);
 
     private final ClassLoader classLoader;
-    private final Map<String, List<Class<?>>> injectables;
+    private final Map<String, List<Injectable<?>>> injectables;
     private final List<ExecutionBuilder<?>> executions;
     private final Map<String, String> overriddenParams;
     private Path configFileLocation;
@@ -108,12 +100,26 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     @Override
     public InjectorBuilder withComponent(Class<?> injectableType) {
         requireNonNull(injectableType);
+        return withComponentAndSupplier(injectableType, null);
+    }
+
+    @Override
+    public <T> InjectorBuilder withComponent(Class<T> injectableType, Supplier<T> instanceSupplier) {
+        requireNonNull(injectableType);
+        requireNonNull(instanceSupplier);
+        return withComponentAndSupplier(injectableType, instanceSupplier);
+    }
+
+    private <T> InjectorBuilder withComponentAndSupplier(Class<T> injectableType, Supplier<T> instanceSupplier) {
+        requireNonNull(injectableType);
+
+        Injectable<T> injectable = new Injectable<>(injectableType, instanceSupplier);
 
         // Store the injectable under every superclass in the map, as well
         // as under every inherited InjectorKey value.
         traverseAncestors(injectableType)
 
-            // only include classes that has an ancestor with the 
+            // only include classes that has an ancestor with the
             // InjectorKey-annotation, or that are the original class.
             .filter(c -> c == injectableType || traverseAncestors(c)
                 .anyMatch(c2 -> c2.isAnnotationPresent(InjectKey.class))
@@ -121,14 +127,14 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
             .forEachOrdered(c -> {
                 // Store it under the class name itself
-                appendInjectable(c.getName(), injectableType, true);
+                appendInjectable(c.getName(), injectable, true);
 
                 // Include InjectorKey value
                 if (c.isAnnotationPresent(InjectKey.class)) {
                     final InjectKey key = c.getAnnotation(InjectKey.class);
                     appendInjectable(
-                        key.value().getName(), 
-                        injectableType, 
+                        key.value().getName(),
+                        injectable,
                         key.overwrite()
                     );
                 }
@@ -175,14 +181,14 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         final Properties properties = loadProperties(LOGGER_INSTANCE, configFile);
         overriddenParams.forEach(properties::setProperty);
 
-        final Set<Class<?>> injectablesSet = unmodifiableSet(
+        final Set<Injectable<?>> injectablesSet = unmodifiableSet(
             injectables.values().stream()
                 .flatMap(List::stream)
                 .collect(toCollection(() -> new LinkedHashSet<>()))
         );
 
         final DependencyGraph graph = 
-            DependencyGraphImpl.create(injectablesSet);
+            DependencyGraphImpl.create(injectablesSet.stream().map(Injectable::get));
 
         final LinkedList<Object> instances = new LinkedList<>();
 
@@ -192,17 +198,17 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         LOGGER_INSTANCE.debug(horizontalLine());
 
         // Create an instance of every injectable type
-        for (final Class<?> injectable : injectablesSet) {
+        for (final Injectable<?> injectable : injectablesSet) {
 
             // If we are currently debugging, print out every created
             // instance and which configuration options are available for
             // it.
             if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
                 LOGGER_INSTANCE.debug("| %-71s CREATED |",
-                    limit(injectable.getSimpleName(), 71)
+                    limit(injectable.get().getSimpleName(), 71)
                 );
 
-                traverseFields(injectable)
+                traverseFields(injectable.get())
                     .filter(f -> f.isAnnotationPresent(Config.class))
                     .map(f -> f.getAnnotation(Config.class))
                     .map(a -> String.format(
@@ -218,7 +224,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 LOGGER_INSTANCE.debug(horizontalLine());
             }
 
-            final Object instance = newInstance(injectable, properties);
+            Supplier<?> supplier = injectable.supplier();
+            final Object instance = supplier != null ? supplier.get() : newInstance(injectable.get(), properties);
             instances.addFirst(instance);
         }
 
@@ -392,8 +399,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         return injector;
     }
 
-    private void appendInjectable(String key, Class<?> clazz, boolean overwrite) {
-        final List<Class<?>> list = Optional.ofNullable(
+    private void appendInjectable(String key, Injectable<?> clazz, boolean overwrite) {
+        final List<Injectable<?>> list = Optional.ofNullable(
             injectables.remove(key)
         ).orElseGet(LinkedList::new);
 

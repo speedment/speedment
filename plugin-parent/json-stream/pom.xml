@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.plugins</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>3.1.13</version>
+        <version>3.1.14</version>
     </parent>
     
     <artifactId>json-stream</artifactId>
@@ -92,11 +92,6 @@
         </dependency>
         
         <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>function</artifactId>
-        </dependency>
-        
-        <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
         </dependency>
@@ -104,6 +99,11 @@
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-field</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-typemapper</artifactId>
         </dependency>
         
         <dependency>

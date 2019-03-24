@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.tool</groupId>
         <artifactId>tool-parent</artifactId>
-        <version>3.1.13</version>
+        <version>3.1.14</version>
     </parent>
         
     <artifactId>tool-core</artifactId>
@@ -98,11 +98,6 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>json</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
         </dependency>
         
         <dependency>

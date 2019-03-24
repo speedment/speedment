@@ -16,12 +16,6 @@
  */
 package com.speedment.common.injector;
 
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
-import static com.speedment.common.injector.State.STARTED;
-import static com.speedment.common.injector.State.STOPPED;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
@@ -39,6 +33,9 @@ import org.junit.jupiter.api.Test;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.speedment.common.injector.State.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -71,7 +68,19 @@ final class InjectorTest {
         assertEquals(mapper, mappers.toDatabaseTypeMappers().get(String.class));
         assertEquals(mapper, mappers.toJavaTypeMappers().get(String.class));
     }
-    
+
+    @Test
+    void testInjectorWithSupplier() throws InstantiationException {
+        Injector injector = Injector.builder()
+                .withComponent(String.class, () -> "foo")
+                .withComponent(Integer.class, () -> 42)
+                .build();
+
+        assertEquals("foo", injector.getOrThrow(String.class));
+        assertEquals(42, injector.getOrThrow(Integer.class).intValue());
+    }
+
+
     @Test
     void testPotentialCyclicDependency() {
         final Injector injector;

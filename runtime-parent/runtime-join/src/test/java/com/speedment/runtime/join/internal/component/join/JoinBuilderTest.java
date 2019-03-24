@@ -41,6 +41,8 @@ import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
@@ -56,6 +58,7 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
+@Execution(ExecutionMode.CONCURRENT)
 final class JoinBuilderTest {
 
     private MockEmptyJoinStreamSupplierComponent ss;

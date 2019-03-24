@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.tool</groupId>
         <artifactId>tool-parent</artifactId>
-        <version>3.1.13</version>
+        <version>3.1.14</version>
     </parent>
     
     <artifactId>tool-config</artifactId>
@@ -35,7 +35,7 @@
     <name>Speedment - Tool - Config</name>
     <description>
         An observable configuration system that models the layout of a 
-        relational database in a JavaFX observable fassion.
+        relational database in a JavaFX observable fashion.
     </description>
     
     <build>
@@ -106,11 +106,6 @@
         </dependency>
         
         <!-- Generator dependencies -->
-        <dependency>
-            <groupId>com.speedment.generator</groupId>
-            <artifactId>generator-core</artifactId>
-        </dependency>
-        
         <dependency>
             <groupId>com.speedment.generator</groupId>
             <artifactId>generator-translator</artifactId>

@@ -18,6 +18,8 @@ package com.speedment.common.jvm_version.internal;
 
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Per Minborg
  */
+@Execution(ExecutionMode.CONCURRENT)
 final class InternalJvmVersionTest {
 
     private static final InternalJvmVersion instance = new InternalJvmVersion();

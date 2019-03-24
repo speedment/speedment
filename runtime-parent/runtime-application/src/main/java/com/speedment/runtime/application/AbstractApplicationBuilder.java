@@ -48,6 +48,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
@@ -335,6 +336,12 @@ public abstract class AbstractApplicationBuilder<
         return self();
     }
 
+    public <T> BUILDER withComponent(Class<T> injectableClass, Supplier<T> supplier) {
+        requireNonNulls(injectableClass, supplier);
+        injectorBuilder.withComponent(injectableClass, supplier);
+        return self();
+    }
+
     @Override
     public BUILDER withLogging(HasLoggerName namer) {
         LoggerManager.getLogger(namer.getLoggerName()).setLevel(Level.DEBUG);
@@ -342,7 +349,7 @@ public abstract class AbstractApplicationBuilder<
         if (LogType.APPLICATION_BUILDER.getLoggerName()
                 .equals(namer.getLoggerName())) {
             
-            // Special case becaues its in a common module
+            // Special case because its in a common module
             Injector.logger().setLevel(Level.DEBUG); 
             InjectorBuilder.logger().setLevel(Level.DEBUG);
         }

@@ -84,6 +84,15 @@ public class RestBackEnd {
 
     }
 
+    private Stream<Film> serveFilmsRatingNonNull(String rating, int page) {
+        return films.stream()
+            .filter(Film.RATING.equal(rating))
+            .sorted(Film.LENGTH)
+            .skip(page * PAGE_SIZE)
+            .limit(PAGE_SIZE);
+    }
+
+
     private Stream<Film> serveFilmsWithfunctionalFold(String rating, int page) {
         System.out.format("serveFilmsWithfunctionalFold(String rating=%s, int page=%d) %n", rating, page);
 

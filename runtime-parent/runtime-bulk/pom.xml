@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.13</version>
+        <version>3.1.14</version>
     </parent>
     
     <artifactId>runtime-bulk</artifactId>
@@ -56,16 +56,7 @@
 
     <dependencies>
         <!-- Common Dependencies -->
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>function</artifactId>
-        </dependency>
-        
+
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>

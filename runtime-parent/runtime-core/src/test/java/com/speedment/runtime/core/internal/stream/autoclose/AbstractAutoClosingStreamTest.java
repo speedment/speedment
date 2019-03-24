@@ -20,6 +20,8 @@ import com.speedment.runtime.core.internal.util.testing.JavaVersionUtil;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
@@ -28,6 +30,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Execution(ExecutionMode.CONCURRENT)
 abstract class AbstractAutoClosingStreamTest<T, S extends BaseStream<T, S>> {
 
     // Todo: iterator, spliterator etc.

@@ -19,14 +19,14 @@ package com.speedment.common.injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.execution.ExecutionBuilder;
-import static com.speedment.common.injector.execution.ExecutionBuilder.initialized;
-import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
-import static com.speedment.common.injector.execution.ExecutionBuilder.started;
-import static com.speedment.common.injector.execution.ExecutionBuilder.stopped;
 import com.speedment.common.injector.internal.InjectorBuilderImpl;
 import com.speedment.common.logger.Logger;
+
 import java.nio.file.Path;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import static com.speedment.common.injector.execution.ExecutionBuilder.*;
 
 /**
  * Builder pattern for the {@link Injector} interface.
@@ -56,6 +56,24 @@ public interface InjectorBuilder {
      */
     InjectorBuilder withComponent(Class<?> injectableType) 
     throws NoDefaultConstructorException;
+
+    /**
+     * Appends a class that can be automatically dependency injected into
+     * other classes to the builder. Classes can be appended in any order.
+     * The final injection order will be determined once the
+     * {@link #build()}-method is called.
+     * <p>
+     * If a class has already been passed as injectable with the same
+     * InjectorKey, the previous one will be replaced by this new one. The
+     * old one will never be instantiated.
+     * <p>
+     * This method will not replace any previous injectables.
+     *
+     * @param injectableType the type that should be injectable
+     * @param instanceSupplier a supplier of the component instance
+     * @return a reference to this builder
+     */
+    <T> InjectorBuilder withComponent(Class<T> injectableType, Supplier<T> instanceSupplier);
 
     /**
      * Puts one or multiple classes contained in an InjectBundle that can be
