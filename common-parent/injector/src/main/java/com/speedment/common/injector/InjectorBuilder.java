@@ -48,13 +48,13 @@ public interface InjectorBuilder {
      * <p>
      * This method will not replace any previous injectables.
      *
-     * @param injectableType the type that should be injectable
+     * @param injectableClass the class that should be injectable
      * @return a reference to this builder
      *
      * @throws NoDefaultConstructorException if the specified type does not
      * have a default constructor.
      */
-    InjectorBuilder withComponent(Class<?> injectableType) 
+    InjectorBuilder withComponent(Class<?> injectableClass)
     throws NoDefaultConstructorException;
 
     /**
@@ -69,13 +69,14 @@ public interface InjectorBuilder {
      * <p>
      * This method will not replace any previous injectables.
      *
-     * @param injectableType the type that should be injectable
+     * @param <T> the type of the injectable class
+     * @param injectableClass the class that should be injectable
      * @param instanceSupplier a supplier of the component instance
      * @return a reference to this builder
      */
-    <T> InjectorBuilder withComponent(Class<T> injectableType, Supplier<T> instanceSupplier);
+    <T> InjectorBuilder withComponent(Class<T> injectableClass, Supplier<T> instanceSupplier);
 
-    /**
+    /**EntityStoreCloseTest.testClose
      * Puts one or multiple classes contained in an InjectBundle that can be
      * automatically dependency injected into other classes to the builder.
      * Classes can be appended in any order. The final injection order will
