@@ -113,6 +113,7 @@ Speedment Open Source comes with support for the following databases out-of-the-
 * MySQL
 * MariaDB
 * PostgreSQL
+* SQLite
 
 For Enterprise database connectors see [www.speedment.com](www.speedment.com/pricing). 
 
