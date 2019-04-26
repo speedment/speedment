@@ -18,6 +18,7 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
+import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.internal.util.Cast;
 import com.speedment.tool.config.ColumnProperty;
@@ -48,13 +49,13 @@ import java.util.ResourceBundle;
 public final class WorkspaceController implements Initializable {
     
     private final ObservableList<PropertyEditor.Item> properties;
-    
-    private @Inject UserInterfaceComponent ui;
-    private @Inject EventComponent events;
-    private @Inject PropertyEditorComponent editors;
-    
-    private @FXML TitledPane workspace;
-    
+
+    @Inject private UserInterfaceComponent ui;
+    @Inject private EventComponent events;
+    @Inject private PropertyEditorComponent editors;
+
+    @FXML  private TitledPane workspace;
+
     public WorkspaceController() {
         this.properties = FXCollections.observableArrayList();
     }
@@ -68,13 +69,11 @@ public final class WorkspaceController implements Initializable {
                 properties.clear();
                 
                 if (!change.getList().isEmpty()) {
-                    final TreeItem<DocumentProperty> treeItem = 
-                        change.getList().get(0);
+                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
                     
                     if (treeItem != null) {
                         final DocumentProperty property = treeItem.getValue();
                     
-                        @SuppressWarnings("unchecked")
                         final HasNameProperty withName = (HasNameProperty) property;
                         
                         final Optional<String> extraInfo = Cast.cast(property, ColumnProperty.class)
@@ -84,7 +83,7 @@ public final class WorkspaceController implements Initializable {
                         
                         workspace.textProperty().bind(
                             Bindings.createStringBinding(() -> String.format(
-                                "Settings for %s '%s' %s",
+                                "Settings for db %s '%s' %s",
                                 withName instanceof Table
                                     ? ((Table) withName).isView()
                                         ? "view" : "table"

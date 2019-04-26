@@ -87,7 +87,7 @@ abstract class AbstractTextItem extends AbstractLabelTooltipItem {
     }
 
     @Override
-    protected Node createUndecoratedEditor() {
+    protected HBox createUndecoratedEditor() {
         //TODO: CustomValue should be bound to defaultValue until we disable auto for the first time
         final HBox container = new HBox();
         final TextInputControl textInput = getInputControl();
