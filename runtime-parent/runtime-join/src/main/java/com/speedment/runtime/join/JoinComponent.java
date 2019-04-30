@@ -48,17 +48,17 @@ public interface JoinComponent {
     int MAX_DEGREE = 10;
     
     /**
-     * Adds a provided {@code firstManager} to the collection of joined
-     * managers. Rows are joined from the provided {@code firstManager}
+     * Adds a provided {@code firstTableIdentifier} to the collection of joined
+     * managers. Rows are joined from the provided {@code firstTableIdentifier}
      * depending on how subsequent managers are added to the builder.
      *
      * @param <T0> type of entities for the first manager
-     * @param firstManager to use
-     * @return a builder where the provided {@code firstManager} is added
+     * @param firstTableIdentifier to use
+     * @return a builder where the provided {@code firstTableIdentifier} is added
      *
-     * @throws NullPointerException if the provided {@code firstManager} is
+     * @throws NullPointerException if the provided {@code firstTableIdentifier} is
      * {@code null}
      */
-    <T0> JoinBuilder1<T0> from(TableIdentifier<T0> firstManager);
+    <T0> JoinBuilder1<T0> from(TableIdentifier<T0> firstTableIdentifier);
 
 }
