@@ -53,6 +53,8 @@ public class DbmsMutator<DOC extends Dbms> extends DocumentMutatorImpl<DOC> impl
     public void setPort(Integer port) {
         put(PORT, port);
     }
+
+    public void setLocalPath(String localPath) { put(LOCAL_PATH, localPath); }
     
     public void setUsername(String username) {
         put(USERNAME, username);
