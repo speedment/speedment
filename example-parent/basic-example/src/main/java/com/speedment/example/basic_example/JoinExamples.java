@@ -36,17 +36,15 @@ import com.speedment.common.tuple.Tuples;
 import com.speedment.common.tuple.nullable.Tuple2OfNullables;
 import com.speedment.example.basic_example.util.ExampleUtil;
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+import static java.util.stream.Collectors.*;
+
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  *
@@ -92,6 +90,8 @@ public class JoinExamples {
 
         selfJoin();
         selfJoin2();
+
+        joinGroupByOrderBy();
 
     }
 
@@ -390,6 +390,31 @@ public class JoinExamples {
         );
 
     }
+
+    private void joinGroupByOrderBy() {
+        ExampleUtil.log("joinGroupByOrderBy");
+
+        Join<Tuple3<FilmActor, Film, Actor>> join = joinComponent
+            .from(FilmActorManager.IDENTIFIER)
+            .innerJoinOn(Film.FILM_ID).equal(FilmActor.FILM_ID)
+            .innerJoinOn(Actor.ACTOR_ID).equal(FilmActor.ACTOR_ID)
+            .build(Tuples::of);
+
+        Comparator<Tuple2<String, String>> comparator = Comparator.comparing((Function<Tuple2<String, String>, String>) Tuple2::get0).thenComparing(Tuple2::get1);
+
+        Map<Tuple2<String, String>, Long> grouped = join.stream()
+            .collect(
+                groupingBy(t -> Tuples.of(t.get1().getRating().orElse("Unknown"), t.get2().getLastName()), () -> new TreeMap<>(comparator), counting())
+            )
+            ;
+
+        grouped.forEach((k, v) -> {
+            System.out.format("%-32s, %,d%n", k, v);
+        });
+
+
+    }
+
 
     private final class TitleLanguageName {
 
