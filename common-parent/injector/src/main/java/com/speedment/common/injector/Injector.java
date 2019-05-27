@@ -94,7 +94,36 @@ public interface Injector {
      * @return      the found instance
      */
     <T> Optional<T> get(Class<T> type);
-    
+
+    /**
+     * Returns the instance immediately after the provided {@code before} instance
+     * which is associated with the provided {@code type} class token, or else Optional.empty()
+     *
+     * This method is useful for components that delegates functionality:
+     * <pre>{@code
+     * public class HazelcastUserInterfaceComponentImpl implements UserInterfaceComponent {
+     *
+     *     private UserInterfaceComponent inner;
+     *
+     *     {@literal @}ExecuteBefore(State.INITIALIZED)
+     *     private void setup(Injector injector) {
+     *         inner = injector.getAfter(UserInterfaceComponent.class, this).orElse(null);
+     *     }
+     * }
+     * }</pre>
+     *
+     * @param <T>    the class signature of the injectable type
+     * @param type   the expected type
+     * @param before the instance before the desired component
+     * @return       the instance immediately after the provided {@code before} instance
+     *               which is associated with the provided {@code type} class token, or
+     *               else Optional.empty()
+     *
+     * @throws IllegalArgumentException  if it could not be found
+     */
+    <T> Optional<T> getAfter(Class<T> type, T before);
+
+
     /**
      * Returns a stream of all the instances associated with the specified class
      * token.

@@ -142,6 +142,12 @@ public final class DependencyGraphImpl implements DependencyGraph {
                         throw new CyclicReferenceException(
                             m.getDeclaringClass(), ex
                         );
+                    } catch (final IllegalArgumentException iae) {
+                        throw new IllegalStateException(
+                            "Unable to resolve " + m.toString() + " (" + type.toString() + ") at state " + state.toString()
+                            ,
+                            iae
+                        );
                     }
                 }
             }

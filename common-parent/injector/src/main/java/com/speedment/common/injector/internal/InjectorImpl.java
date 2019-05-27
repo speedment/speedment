@@ -110,22 +110,30 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public <T> T getAfterOrThrow(Class<T> type, T before) {
-        boolean found = false;
-        for (Iterator<T> i = stream(type).iterator();i.hasNext(); ) {
-            final T t = i.next();
-            if (found) {
-                return t;
-            }
-            if (t == before) {
-                found = true;
-            }
-        }
-        throw new IllegalArgumentException("A component after "+ before + " of type " + type.getName() + " could not be found");
+        return getAfter(type, before).orElseThrow(() ->
+            new IllegalArgumentException("A component after "+ before + " of type " + type.getName() + " could not be found")
+        );
     }
 
     @Override
     public <T> Optional<T> get(Class<T> type) {
         return Optional.ofNullable(find(type, false));
+    }
+
+
+    @Override
+    public <T> Optional<T> getAfter(Class<T> type, T before) {
+        boolean found = false;
+        for (Iterator<T> i = stream(type).iterator();i.hasNext(); ) {
+            final T t = i.next();
+            if (found) {
+                return Optional.of(t);
+            }
+            if (t == before) {
+                found = true;
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
