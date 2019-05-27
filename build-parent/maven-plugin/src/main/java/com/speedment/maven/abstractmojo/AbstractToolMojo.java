@@ -73,8 +73,7 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
     protected void configureBuilder(ApplicationBuilder<?, ?> builder) {
         // Add tool specific items, #733
         builder.
-            withBundle(ToolBundle.class)
-            .withComponent(UserInterfaceComponentImpl.class);
+            withBundle(ToolBundle.class);
     }
 
     @Override
