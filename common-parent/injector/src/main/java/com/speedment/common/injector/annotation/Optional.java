@@ -16,29 +16,15 @@
  */
 package com.speedment.common.injector.annotation;
 
-import com.speedment.common.injector.State;
-
 import java.lang.annotation.*;
 
 /**
- * Annotates that the method parameter should be set to
- * something with a certain state.
+ * Annotates a field that should be set automatically using dependency injection.
  * 
  * @author  Emil Forslund
  * @since   1.0.0
  */
 @Inherited
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface WithState {
-    
-    /**
-     * The {@link State} that the injected value must be in before 
-     * it can be injected.
-     * <p>
-     * The default state is {@link State#CREATED}.
-     * 
-     * @return  the expected phase of the injected component
-     */
-    State value() default State.CREATED;
-}
+public @interface Optional {}

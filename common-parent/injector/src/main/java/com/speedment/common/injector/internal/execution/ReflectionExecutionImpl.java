@@ -17,6 +17,8 @@
 package com.speedment.common.injector.internal.execution;
 
 import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.Optional;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
@@ -24,6 +26,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import static java.util.Objects.requireNonNull;
+
+import java.util.Objects;
 import java.util.Set;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
@@ -40,6 +44,7 @@ import java.util.stream.Stream;
 public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
     private final Method method;
+    private final boolean allOptional;
 
     public ReflectionExecutionImpl(
             Class<T> component,
@@ -49,6 +54,9 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
         
         super(component, state, dependencies);
         this.method = requireNonNull(method);
+        allOptional = method.getParameterCount() > 0 && Stream.of(method.getParameters())
+            .map(m -> m.getAnnotation(Optional.class))
+            .allMatch(Objects::nonNull);
     }
 
     @Override
@@ -57,7 +65,19 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
            IllegalArgumentException, 
            InvocationTargetException, 
            NotInjectableException {
-        
+
+        if (allOptional) {
+            if (Stream.of(method.getParameters())
+                .map(Parameter::getType)
+                .map(classMapper::applyOrNull)
+                .allMatch(Objects::isNull)
+            ) {
+                // Do not invoke if all arguments are optional
+                // and the arguments are all null
+                return;
+            }
+        }
+
         final Object[] args = Stream.of(method.getParameters())
             .map(Parameter::getType)
             .map(classMapper::apply)

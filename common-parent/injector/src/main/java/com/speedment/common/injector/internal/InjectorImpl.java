@@ -34,6 +34,7 @@ import com.speedment.common.logger.LoggerManager;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
@@ -42,6 +43,7 @@ import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -111,7 +113,7 @@ public final class InjectorImpl implements Injector {
     @Override
     public <T> T getAfterOrThrow(Class<T> type, T before) {
         return getAfter(type, before).orElseThrow(() ->
-            new IllegalArgumentException("A component after "+ before + " of type " + type.getName() + " could not be found")
+            new IllegalArgumentException("A component after " + before + " of type " + type.getName() + " could not be found. Components of type: " + stream(type).map(Object::getClass).map(Class::getSimpleName).collect(Collectors.joining(", ")))
         );
     }
 

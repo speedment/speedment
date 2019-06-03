@@ -64,8 +64,7 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class InjectorBuilderImpl implements InjectorBuilder {
 
-    public final static Logger LOGGER_INSTANCE =
-        LoggerManager.getLogger(InjectorBuilderImpl.class);
+    public final static Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorBuilderImpl.class);
 
     private final ClassLoader classLoader;
     private final Map<String, List<Injectable<?>>> injectables;
@@ -112,9 +111,18 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
     private <T> InjectorBuilder withComponentAndSupplier(Class<T> injectableType, Supplier<T> instanceSupplier) {
         requireNonNull(injectableType);
+        final Injectable<T> injectable = new Injectable<>(injectableType, instanceSupplier);
 
-        Injectable<T> injectable = new Injectable<>(injectableType, instanceSupplier);
+        // Append the class itself under its own name
+        appendInjectable(injectableType.getName(), injectable, true);
 
+        // Append the class under its InjectKey(s) (if any)
+        traverseAncestors(injectableType)
+            .filter(c -> c.isAnnotationPresent(InjectKey.class))
+            .map(c -> c.getAnnotation(InjectKey.class))
+            .forEachOrdered(key -> appendInjectable(key.value().getName(), injectable, key.overwrite()));
+
+/*
         // Store the injectable under every superclass in the map, as well
         // as under every inherited InjectorKey value.
         traverseAncestors(injectableType)
@@ -128,6 +136,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             .forEachOrdered(c -> {
                 // Store it under the class name itself
                 appendInjectable(c.getName(), injectable, true);
+                System.out.println("Added component: " + injectableType + " under " + c.getName());
 
                 // Include InjectorKey value
                 if (c.isAnnotationPresent(InjectKey.class)) {
@@ -137,17 +146,19 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                         injectable,
                         key.overwrite()
                     );
+                    System.out.println("Added component: " + injectableType + " under " + key.value().getName());
                 }
-            });
+            });*/
 
         return this;
     }
 
     @Override
     public InjectorBuilder withBundle(Class<? extends InjectBundle> bundleClass) {
+        //System.out.println("Added Bundle: " + bundleClass.getSimpleName());
         try {
             final InjectBundle bundle = bundleClass.newInstance();
-            bundle.injectables().forEach(this::withComponent);
+            bundle.injectables().forEachOrdered(this::withComponent);
         } catch (IllegalAccessException | InstantiationException e) {
             throw new NoDefaultConstructorException(e);
         }
@@ -173,8 +184,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     }
 
     @Override
-    public Injector build() 
-    throws InstantiationException, NoDefaultConstructorException {
+    public Injector build() throws InstantiationException, NoDefaultConstructorException {
 
         // Load settings
         final File configFile = configFileLocation.toFile();
@@ -251,6 +261,16 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     true // Required = true
                 );
             }
+
+            @Override
+            public <T> T applyOrNull(Class<T> type) {
+                return findIn(
+                    type,
+                    injector,
+                    instances,
+                    false
+                );
+            }
         };
 
         // Set the auto-injected fields
@@ -313,16 +333,14 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
                 unfinished.forEach(n -> {
                     // Determine the next state of this node.
-                    final State state = State.values()[
-                        n.getCurrentState().ordinal() + 1
-                    ];
+                    final State state = n.getCurrentState().next();
 
                     // Check if all its dependencies have been satisfied.
                     if (n.canBe(state)) {
 
                         LOGGER_INSTANCE.debug(horizontalLine());
 
-                        // Retreive the instance for that node
+                        // Retrieve the instance for that node
                         final Object instance = findIn(
                             n.getRepresentedType(), 
                             injector, 
