@@ -29,10 +29,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static com.speedment.common.injector.State.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -427,17 +425,14 @@ final class InjectorTest {
         private boolean initCalled;
         private boolean init2Called;
 
-        @ExecuteBefore(State.INITIALIZED)
-        void init(@Optional Bar bar) {
+        @ExecuteBefore(value = State.INITIALIZED, orThrow = false)
+        void init(Bar bar) {
             initCalled = true;
         }
 
-        @ExecuteBefore(State.INITIALIZED)
-        void init2(@Optional Bar bar, @Optional Baz baz) {
+        @ExecuteBefore(value = State.INITIALIZED, orThrow = false)
+        void init2(Bar bar, Baz baz) {
             init2Called = true;
         }
-
     }
-
-
 }

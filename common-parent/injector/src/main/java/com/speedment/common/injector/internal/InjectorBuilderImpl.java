@@ -26,6 +26,7 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
+import com.speedment.common.injector.exception.ConstructorResolutionException;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
@@ -49,7 +50,9 @@ import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
 import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
 import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.loadProperties;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.*;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseAncestors;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.tryToCreate;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
@@ -122,40 +125,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             .map(c -> c.getAnnotation(InjectKey.class))
             .forEachOrdered(key -> appendInjectable(key.value().getName(), injectable, key.overwrite()));
 
-/*
-        // Store the injectable under every superclass in the map, as well
-        // as under every inherited InjectorKey value.
-        traverseAncestors(injectableType)
-
-            // only include classes that has an ancestor with the
-            // InjectorKey-annotation, or that are the original class.
-            .filter(c -> c == injectableType || traverseAncestors(c)
-                .anyMatch(c2 -> c2.isAnnotationPresent(InjectKey.class))
-            )
-
-            .forEachOrdered(c -> {
-                // Store it under the class name itself
-                appendInjectable(c.getName(), injectable, true);
-                System.out.println("Added component: " + injectableType + " under " + c.getName());
-
-                // Include InjectorKey value
-                if (c.isAnnotationPresent(InjectKey.class)) {
-                    final InjectKey key = c.getAnnotation(InjectKey.class);
-                    appendInjectable(
-                        key.value().getName(),
-                        injectable,
-                        key.overwrite()
-                    );
-                    System.out.println("Added component: " + injectableType + " under " + key.value().getName());
-                }
-            });*/
-
         return this;
     }
 
     @Override
     public InjectorBuilder withBundle(Class<? extends InjectBundle> bundleClass) {
-        //System.out.println("Added Bundle: " + bundleClass.getSimpleName());
         try {
             final InjectBundle bundle = bundleClass.newInstance();
             bundle.injectables().forEachOrdered(this::withComponent);
@@ -208,36 +182,73 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         LOGGER_INSTANCE.debug(horizontalLine());
 
         // Create an instance of every injectable type
-        for (final Injectable<?> injectable : injectablesSet) {
 
-            // If we are currently debugging, print out every created
-            // instance and which configuration options are available for
-            // it.
-            if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                LOGGER_INSTANCE.debug("| %-71s CREATED |",
-                    limit(injectable.get().getSimpleName(), 71)
-                );
+        final Set<Injectable<?>> injectablesLeft = new LinkedHashSet<>(injectablesSet);
+        int injectablesLeftSize = injectablesLeft.size();
+        while (!injectablesLeft.isEmpty()) {
+            final Iterator<Injectable<?>> it = injectablesLeft.iterator();
 
-                traverseFields(injectable.get())
-                    .filter(f -> f.isAnnotationPresent(Config.class))
-                    .map(f -> f.getAnnotation(Config.class))
-                    .map(a -> String.format(
-                        "|     %-48s %26s |", 
-                        limit(a.name(), 48),
-                        limit(properties.containsKey(a.name())
-                            ? properties.get(a.name()).toString()
-                            : a.value(), 26
-                        )
-                    ))
-                    .forEachOrdered(LOGGER_INSTANCE::debug);
+            while (it.hasNext()) {
+                final Injectable<?> injectable = it.next();
 
-                LOGGER_INSTANCE.debug(horizontalLine());
+                // If we are currently debugging, print out every created
+                // instance and which configuration options are available for
+                // it.
+                if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                    LOGGER_INSTANCE.debug("| %-71s CREATED |",
+                        limit(injectable.get().getSimpleName(), 71)
+                    );
+
+                    traverseFields(injectable.get())
+                        .filter(f -> f.isAnnotationPresent(Config.class))
+                        .map(f -> f.getAnnotation(Config.class))
+                        .map(a -> String.format(
+                            "|     %-48s %26s |",
+                            limit(a.name(), 48),
+                            limit(properties.containsKey(a.name())
+                                ? properties.get(a.name()).toString()
+                                : a.value(), 26
+                            )
+                        ))
+                        .forEachOrdered(LOGGER_INSTANCE::debug);
+
+                    LOGGER_INSTANCE.debug(horizontalLine());
+                }
+
+                boolean created = false;
+                if (injectable.hasSupplier()) {
+                    final Object instance = injectable.supplier().get();
+                    instances.addFirst(instance);
+                    created = true;
+                } else {
+                    final Optional<?> instance = tryToCreate(injectable.get(), properties, instances);
+                    if (instance.isPresent()) {
+                        instances.addFirst(instance.get());
+                        created = true;
+                    }
+                }
+
+                if (created) {
+                    it.remove();
+                }
             }
 
-            Supplier<?> supplier = injectable.supplier();
-            final Object instance = supplier != null ? supplier.get() : newInstance(injectable.get(), properties);
-            instances.addFirst(instance);
+            // Check if no injectables was instantiated this pass
+            if (injectablesLeftSize == injectablesLeft.size()) {
+                final StringBuilder msg = new StringBuilder();
+                msg.append(injectablesLeft.size());
+                msg.append("  injectables could not be instantiated. These where: [\n");
+                injectablesLeft.stream()
+                    .map(Injectable::get)
+                    .map(Class::getName)
+                    .forEachOrdered(s -> msg.append("  ").append(s).append('\n'));
+                msg.append("]");
+                throw new ConstructorResolutionException(msg.toString());
+            }
+
+            injectablesLeftSize = injectablesLeft.size();
         }
+
 
         // Build the Injector
         final Injector injector = new InjectorImpl(

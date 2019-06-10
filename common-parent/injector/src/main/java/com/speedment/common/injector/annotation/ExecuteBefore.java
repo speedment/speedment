@@ -44,4 +44,15 @@ public @interface ExecuteBefore {
      * @return  the state
      */
     State value();
+
+    /**
+     * If the annotated method can not be executed due to one of the
+     * dependencies (parameters) missing, should the injector throw an exception
+     * or should it continue without invoking the method. If this is
+     * {@code true}
+     *
+     * @return  {@code true} if an exception is thrown if the method can't be
+     *          executed, and {@code false} if it will ignore it instead
+     */
+    boolean orThrow() default true;
 }

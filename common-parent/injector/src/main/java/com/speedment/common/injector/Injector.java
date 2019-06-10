@@ -86,7 +86,7 @@ public interface Injector {
 
     /**
      * Looks for an dependency injectable instance of the specified class token
-     * and if it exists, returns it. If it does not exist, an empty Optional
+     * and if it exists, returns it. If it does not exist, an empty NotRequired
      * is returned.
      * 
      * @param <T>   the type to look for
@@ -97,7 +97,7 @@ public interface Injector {
 
     /**
      * Returns the instance immediately after the provided {@code before} instance
-     * which is associated with the provided {@code type} class token, or else Optional.empty()
+     * which is associated with the provided {@code type} class token, or else NotRequired.empty()
      *
      * This method is useful for components that delegates functionality:
      * <pre>{@code
@@ -117,7 +117,7 @@ public interface Injector {
      * @param before the instance before the desired component
      * @return       the instance immediately after the provided {@code before} instance
      *               which is associated with the provided {@code type} class token, or
-     *               else Optional.empty()
+     *               else NotRequired.empty()
      *
      * @throws IllegalArgumentException  if it could not be found
      */

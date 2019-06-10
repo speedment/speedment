@@ -25,6 +25,6 @@ import java.lang.annotation.*;
  * @since   1.0.0
  */
 @Inherited
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Inject {}

@@ -17,20 +17,21 @@
 package com.speedment.common.injector.internal.execution;
 
 import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.Optional;
-import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import static java.util.Objects.requireNonNull;
-
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * An implementation of {@link Execution} that uses reflection to invoke a 
@@ -44,7 +45,7 @@ import java.util.stream.Stream;
 public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
     private final Method method;
-    private final boolean allOptional;
+    private final boolean doNotThrowIfMissingDependencies;
 
     public ReflectionExecutionImpl(
             Class<T> component,
@@ -54,9 +55,9 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
         
         super(component, state, dependencies);
         this.method = requireNonNull(method);
-        allOptional = method.getParameterCount() > 0 && Stream.of(method.getParameters())
-            .map(m -> m.getAnnotation(Optional.class))
-            .allMatch(Objects::nonNull);
+        this.doNotThrowIfMissingDependencies =
+            Optional.ofNullable(method.getAnnotation(ExecuteBefore.class))
+                .filter(ExecuteBefore::orThrow).isPresent();
     }
 
     @Override
@@ -66,7 +67,7 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
            InvocationTargetException, 
            NotInjectableException {
 
-        if (allOptional) {
+        if (doNotThrowIfMissingDependencies) {
             if (Stream.of(method.getParameters())
                 .map(Parameter::getType)
                 .map(classMapper::applyOrNull)
