@@ -24,6 +24,7 @@ import com.speedment.runtime.core.component.StatisticsReporterSchedulerComponent
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *
@@ -31,10 +32,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class StatisticsReporterSchedulerComponentImpl implements StatisticsReporterSchedulerComponent {
 
+    private final AtomicBoolean outstanding;
+
     @Config(name = "statistics.scheduler.enabled", value = "true")
     private boolean enabled;
 
     private ScheduledExecutorService scheduler;
+
+    public StatisticsReporterSchedulerComponentImpl() {
+        outstanding = new AtomicBoolean();
+    }
 
     @ExecuteBefore(State.INITIALIZED)
     public void init() {
@@ -51,7 +58,7 @@ public class StatisticsReporterSchedulerComponentImpl implements StatisticsRepor
     public void start(StatisticsReporterComponent src) {
         if (enabled) {
             scheduler.submit(src::reportStarted);
-            scheduler.scheduleAtFixedRate(src::alive, 1, 1, TimeUnit.HOURS);
+            scheduler.scheduleAtFixedRate(() -> guardedCall(src::alive), 1, 1, TimeUnit.HOURS);
         }
     }
 
@@ -67,6 +74,21 @@ public class StatisticsReporterSchedulerComponentImpl implements StatisticsRepor
             } finally {
                 scheduler.shutdownNow();
             }
+        }
+    }
+
+    /**
+     * Method to guard from multiple invocations. Used to fix #708
+     * @param r runnable
+     */
+    void guardedCall(Runnable r) {
+        if (outstanding.compareAndSet(false,true)) {
+            try {
+                r.run();
+            } finally {
+                outstanding.set(false);
+            }
+
         }
     }
 
