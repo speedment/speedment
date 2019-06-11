@@ -388,7 +388,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
                                             LOGGER_INSTANCE.debug(
                                                 "|      %-74s |",
-                                                limit("(Ignored due to missing dependencies.)", 74)
+                                                limit("(Not invoked due to missing optional dependencies.)", 74)
                                             );
                                         }
                                     }
