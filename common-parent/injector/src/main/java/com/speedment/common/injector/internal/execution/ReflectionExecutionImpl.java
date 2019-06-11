@@ -67,12 +67,11 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
            InvocationTargetException, 
            NotInjectableException {
 
-        if (doNotThrowIfMissingDependencies) {
+        if (doNotThrowIfMissingDependencies && method.getParameterCount() > 0) {
             if (Stream.of(method.getParameters())
                 .map(Parameter::getType)
                 .map(classMapper::applyOrNull)
-                .allMatch(Objects::isNull)
-            ) {
+                .allMatch(Objects::isNull)) {
                 // Do not invoke if all arguments are optional
                 // and the arguments are all null
                 return;
