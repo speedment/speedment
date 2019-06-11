@@ -436,4 +436,42 @@ final class InjectorTest {
             init2Called = true;
         }
     }
+
+    @Test
+    void testConfigDefault() throws InstantiationException {
+        final Injector injector = Injector.builder()
+            .withComponent(ComponentWithConfigInConstructor.class)
+            .build();
+
+        assertEquals(1000L, injector.getOrThrow(ComponentWithConfigInConstructor.class).value());
+
+    }
+
+    @Test
+    void testConfigCustom() throws InstantiationException {
+        final long val = 999;
+        final Injector injector = Injector.builder()
+            .withComponent(ComponentWithConfigInConstructor.class)
+            .withParam("value", Long.toString(val))
+            .build();
+
+        assertEquals(val, injector.getOrThrow(ComponentWithConfigInConstructor.class).value());
+
+    }
+
+
+    private static final class ComponentWithConfigInConstructor {
+
+        private final long value;
+
+        public ComponentWithConfigInConstructor(@Config(name = "value", value = "1000") long value) {
+            this.value = value;
+        }
+
+        public long value() {
+            return value;
+        }
+    }
+
+
 }
