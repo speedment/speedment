@@ -16,11 +16,14 @@
  */
 package com.speedment.common.injector.internal.execution;
 
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.execution.Execution;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -36,15 +39,24 @@ abstract class AbstractExecution<T> implements Execution<T> {
     private final Class<T> type;
     private final State state;
     private final Set<Dependency> dependencies;
+    private final MissingArgumentStrategy missingArgumentStrategy;
 
     AbstractExecution(
             Class<T> type, 
             State state, 
-            Set<Dependency> dependencies) {
+            Set<Dependency> dependencies,
+            MissingArgumentStrategy missingArgumentStrategy) {
         
         this.type         = requireNonNull(type);
         this.state        = requireNonNull(state);
         this.dependencies = requireNonNull(dependencies);
+        this.missingArgumentStrategy = requireNonNull(missingArgumentStrategy);
+    }
+
+    public String getName() {
+        return "abstractExecution" + dependencies.stream()
+            .map(dep -> dep.getNode().getRepresentedType().getSimpleName())
+            .collect(joining(", ", "(", ")"));
     }
 
     @Override
@@ -60,6 +72,11 @@ abstract class AbstractExecution<T> implements Execution<T> {
     @Override
     public final Set<Dependency> getDependencies() {
         return dependencies;
+    }
+
+    @Override
+    public MissingArgumentStrategy getMissingArgumentStrategy() {
+        return missingArgumentStrategy;
     }
 
     @Override

@@ -17,6 +17,7 @@
 package com.speedment.common.injector.execution;
 
 import com.speedment.common.injector.State;
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.exception.NotInjectableException;
 import java.lang.reflect.InvocationTargetException;
@@ -70,6 +71,14 @@ public interface Execution<T> {
         }
 
     }
+
+    /**
+     * Returns the human-readable name of this execution. This is mainly used
+     * for debugging purposes.
+     *
+     * @return  the name
+     */
+    String getName();
     
     /**
      * Returns the type of the class executed on.
@@ -92,6 +101,14 @@ public interface Execution<T> {
      * @return  set of dependencies
      */
     Set<Dependency> getDependencies();
+
+    /**
+     * Returns the strategy used if an argument to this execution can't be
+     * injected.
+     *
+     * @return  the strategy used for non-injectable arguments
+     */
+    MissingArgumentStrategy getMissingArgumentStrategy();
     
     /**
      * Invokes this {@code Execution}, resolving the required dependencies by

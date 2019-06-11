@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.speedment.common.injector.MissingArgumentStrategy.SKIP_INVOCATION;
 import static com.speedment.common.injector.State.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -425,12 +426,12 @@ final class InjectorTest {
         private boolean initCalled;
         private boolean init2Called;
 
-        @ExecuteBefore(value = State.INITIALIZED, orThrow = false)
+        @ExecuteBefore(value = INITIALIZED, missingArgument = SKIP_INVOCATION)
         void init(Bar bar) {
             initCalled = true;
         }
 
-        @ExecuteBefore(value = State.INITIALIZED, orThrow = false)
+        @ExecuteBefore(value = INITIALIZED, missingArgument = SKIP_INVOCATION)
         void init2(Bar bar, Baz baz) {
             init2Called = true;
         }

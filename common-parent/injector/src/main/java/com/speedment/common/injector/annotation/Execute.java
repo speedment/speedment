@@ -16,7 +16,13 @@
  */
 package com.speedment.common.injector.annotation;
 
-import java.lang.annotation.*;
+import com.speedment.common.injector.MissingArgumentStrategy;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Annotates that the method should be executed as part of the platform
@@ -30,5 +36,14 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Execute {
-    
+
+    /**
+     * Returns the strategy to use if at least one of the arguments to the
+     * annotated method can't be injected. The default behavior is to throw an
+     * exception, but it is also possible to ignore the invocation.
+     *
+     * @return  strategy to use if argument is missing
+     */
+    MissingArgumentStrategy missingArgument() default MissingArgumentStrategy.THROW_EXCEPTION;
+
 }

@@ -17,19 +17,19 @@
 package com.speedment.common.injector.internal.execution;
 
 import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
+import com.speedment.common.injector.internal.util.ReflectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.speedment.common.injector.MissingArgumentStrategy.SKIP_INVOCATION;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -45,7 +45,6 @@ import static java.util.stream.Collectors.joining;
 public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
     private final Method method;
-    private final boolean throwExceptionIfMissingDependencies;
 
     public ReflectionExecutionImpl(
             Class<T> component,
@@ -53,11 +52,13 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
             Set<Dependency> dependencies,
             Method method) {
         
-        super(component, state, dependencies);
+        super(component, state, dependencies, ReflectionUtil.missingArgumentStrategy(method));
         this.method = requireNonNull(method);
-        this.throwExceptionIfMissingDependencies =
-            Optional.ofNullable(method.getAnnotation(ExecuteBefore.class))
-                .filter(ExecuteBefore::orThrow).isPresent();
+    }
+
+    @Override
+    public String getName() {
+        return method.toString();
     }
 
     @Override
@@ -67,7 +68,9 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
            InvocationTargetException, 
            NotInjectableException {
 
-        if (!throwExceptionIfMissingDependencies && method.getParameterCount() > 0) {
+        if (method.getParameterCount() > 0
+        &&  getMissingArgumentStrategy() == SKIP_INVOCATION) {
+
             if (Stream.of(method.getParameters())
                 .map(Parameter::getType)
                 .map(classMapper::applyOrNull)

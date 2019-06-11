@@ -354,10 +354,10 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
                         // Retrieve the instance for that node
                         final Object instance = findIn(
-                            n.getRepresentedType(), 
-                            injector, 
-                            instances, 
-                            true
+                            n.getRepresentedType(),
+                            injector,
+                            instances,
+                            false
                         );
 
                         // Execute all the executions for the next step.
@@ -384,13 +384,21 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                 
                                 try {
                                     if (!exec.invoke(instance, classMapper)) {
-                                        if (LOGGER_INSTANCE.getLevel()
-                                            .isEqualOrLowerThan(Level.DEBUG)) {
-
-                                            LOGGER_INSTANCE.debug(
-                                                "|      %-74s |",
-                                                limit("(Not invoked due to missing optional dependencies.)", 74)
-                                            );
+                                        switch (exec.getMissingArgumentStrategy()) {
+                                            case THROW_EXCEPTION: {
+                                                throw new RuntimeException(String.format(
+                                                    "The injector could not invoke the method '%s' " +
+                                                    "before state '%s' since one of the parameters is not available.",
+                                                    exec.getName(), exec.getState()));
+                                            }
+                                            case SKIP_INVOCATION:
+                                                if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                                                    LOGGER_INSTANCE.debug(
+                                                        "|      %-74s |",
+                                                        limit("(Not invoked due to missing optional dependencies.)", 74)
+                                                    );
+                                                }
+                                                break;
                                         }
                                     }
                                 } catch (final IllegalAccessException 

@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector.internal.execution;
 
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.dependency.DependencyGraph;
@@ -94,7 +95,10 @@ implements ExecutionTwoParamBuilder<T, P0, P1> {
         final Dependency dep1 = new DependencyImpl(node1, state1);
         
         return new AbstractExecution<T>(
-                getComponent(), getState(), unmodifiableSet(dep0, dep1)) {
+                getComponent(),
+                getState(),
+                unmodifiableSet(dep0, dep1),
+                MissingArgumentStrategy.THROW_EXCEPTION) {
                     
             @Override
             public boolean invoke(T component, ClassMapper classMapper)

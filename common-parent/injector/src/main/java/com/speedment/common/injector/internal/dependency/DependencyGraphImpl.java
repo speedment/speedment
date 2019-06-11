@@ -32,7 +32,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -138,11 +137,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
                     try {
                         dependencies.add(
                             new DependencyImpl(
-                                Optional.ofNullable(m.getAnnotation(ExecuteBefore.class))
-                                    .filter(execBef -> !execBef.orThrow()) // If orThrow() == false, create the node if missing
-                                    .isPresent()
-                                        ? getOrCreate(type)
-                                        : get(type),
+                                getOrCreate(type),
                                 state
                             )
                         );

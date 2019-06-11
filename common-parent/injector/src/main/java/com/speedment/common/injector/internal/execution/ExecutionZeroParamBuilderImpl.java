@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector.internal.execution;
 
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.exception.NotInjectableException;
@@ -69,7 +70,8 @@ implements ExecutionZeroParamBuilder<T> {
         requireNonNull(executeAction, "No execution has been specified.");
         
         return new AbstractExecution<T>(
-                getComponent(), getState(), emptySet()) {
+                getComponent(), getState(), emptySet(),
+                MissingArgumentStrategy.THROW_EXCEPTION) {
                     
             @Override
             public boolean invoke(T component, ClassMapper classMapper)

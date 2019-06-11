@@ -16,7 +16,10 @@
  */
 package com.speedment.common.injector.internal.util;
 
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.Execute;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 
@@ -29,9 +32,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
@@ -79,6 +85,18 @@ public final class ReflectionUtil {
                     Stream.of(clazz.getInterfaces())
                 )
             ).distinct();
+        }
+    }
+
+    public static MissingArgumentStrategy missingArgumentStrategy(Executable executable) {
+        final Execute execute = executable.getAnnotation(Execute.class);
+        final ExecuteBefore executeBefore = executable.getAnnotation(ExecuteBefore.class);
+        if (execute != null) {
+            return execute.missingArgument();
+        } else if (executeBefore != null) {
+            return executeBefore.missingArgument();
+        } else {
+            return MissingArgumentStrategy.THROW_EXCEPTION;
         }
     }
 
@@ -206,7 +224,7 @@ public final class ReflectionUtil {
                 .min(INJECT_FIRST_COMPARATOR);
     }
 
-
+    @SuppressWarnings("unchecked")
     public static <T> String errorMsg(Class<T> c, List<Object> instances) {
         return Arrays.stream(c.getDeclaredConstructors())
             .map(constructor -> (Constructor<T>) constructor)
