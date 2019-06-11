@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PersistenceTableInfo;
@@ -24,6 +23,8 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
 import com.speedment.runtime.core.manager.PersistenceProvider;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -33,14 +34,22 @@ import com.speedment.runtime.core.manager.PersistenceProvider;
  */
 public final class SqlPersistanceComponentImpl implements SqlPersistenceComponent {
 
-    @Inject
-    private ProjectComponent projectComponent;
-    @Inject
-    private DbmsHandlerComponent dbmsHandlerComponent;
-    @Inject
-    private ManagerComponent managerComponent;
-    @Inject
-    private ResultSetMapperComponent resultSetMapperComponent;
+    private final ProjectComponent projectComponent;
+    private final DbmsHandlerComponent dbmsHandlerComponent;
+    private final ManagerComponent managerComponent;
+    private final ResultSetMapperComponent resultSetMapperComponent;
+
+    public SqlPersistanceComponentImpl(
+        final ProjectComponent projectComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ManagerComponent managerComponent,
+        final ResultSetMapperComponent resultSetMapperComponent
+    ) {
+        this.projectComponent = requireNonNull(projectComponent);
+        this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
+        this.managerComponent = requireNonNull(managerComponent);
+        this.resultSetMapperComponent = requireNonNull(resultSetMapperComponent);
+    }
 
     @Override
     public <ENTITY> PersistenceProvider<ENTITY> persistenceProvider(PersistenceTableInfo<ENTITY> tableInfo) {
