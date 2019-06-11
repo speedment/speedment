@@ -23,12 +23,14 @@ import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.execution.ExecutionOneParamBuilder;
 import com.speedment.common.injector.execution.ExecutionZeroParamBuilder;
-import java.lang.reflect.InvocationTargetException;
-import static java.util.Collections.emptySet;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Consumer;
 
+import static java.util.Collections.emptySet;
+import static java.util.Objects.requireNonNull;
+
 /**
+ * Zeroth step of an {@link ExecutionBuilder}-chain.
  * 
  * @param <T>  the component to execute on
  * 
@@ -70,11 +72,11 @@ implements ExecutionZeroParamBuilder<T> {
                 getComponent(), getState(), emptySet()) {
                     
             @Override
-            public void invoke(T component, ClassMapper classMapper) 
-            throws IllegalAccessException, IllegalArgumentException, 
-                   InvocationTargetException, NotInjectableException {
+            public boolean invoke(T component, ClassMapper classMapper)
+            throws IllegalArgumentException, NotInjectableException {
                 
                 executeAction.accept(component);
+                return true;
             }
         };
     }

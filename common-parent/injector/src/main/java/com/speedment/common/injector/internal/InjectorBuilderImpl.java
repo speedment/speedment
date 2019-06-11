@@ -382,7 +382,16 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                 }
                                 
                                 try {
-                                    exec.invoke(instance, classMapper);
+                                    if (!exec.invoke(instance, classMapper)) {
+                                        if (LOGGER_INSTANCE.getLevel()
+                                            .isEqualOrLowerThan(Level.DEBUG)) {
+
+                                            LOGGER_INSTANCE.debug(
+                                                "|      %-74s |",
+                                                limit("(Ignored due to missing dependencies.)", 74)
+                                            );
+                                        }
+                                    }
                                 } catch (final IllegalAccessException 
                                              | IllegalArgumentException 
                                              | InvocationTargetException ex) {

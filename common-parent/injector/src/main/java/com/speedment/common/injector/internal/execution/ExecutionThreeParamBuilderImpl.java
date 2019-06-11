@@ -24,13 +24,13 @@ import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.execution.ExecutionThreeParamBuilder;
-import com.speedment.common.injector.execution.ExecutionThreeParamBuilder.QuadConsumer;
 import com.speedment.common.injector.internal.dependency.DependencyImpl;
+
 import static com.speedment.common.injector.internal.util.SetUtil.unmodifiableSet;
-import java.lang.reflect.InvocationTargetException;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Third step of an {@link ExecutionBuilder}-chain.
  * 
  * @param <T>   the component to withExecute on
  * @param <P0>  the first parameter type
@@ -90,14 +90,14 @@ implements ExecutionThreeParamBuilder<T, P0, P1, P2> {
                 getComponent(), getState(), unmodifiableSet(dep0, dep1, dep2)) {
                     
             @Override
-            public void invoke(T component, Execution.ClassMapper classMapper) 
-            throws IllegalAccessException, IllegalArgumentException, 
-                   InvocationTargetException, NotInjectableException {
+            public boolean invoke(T component, Execution.ClassMapper classMapper)
+            throws IllegalArgumentException, NotInjectableException {
                 
                 final P0 arg0 = classMapper.apply(param0);
                 final P1 arg1 = classMapper.apply(param1);
                 final P2 arg2 = classMapper.apply(param2);
                 executeAction.accept(component, arg0, arg1, arg2);
+                return true;
             }
         };
     }

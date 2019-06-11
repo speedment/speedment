@@ -25,13 +25,15 @@ import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.execution.ExecutionThreeParamBuilder;
 import com.speedment.common.injector.execution.ExecutionTwoParamBuilder;
-import com.speedment.common.injector.execution.ExecutionTwoParamBuilder.TriConsumer;
 import com.speedment.common.injector.internal.dependency.DependencyImpl;
-import static com.speedment.common.injector.internal.util.SetUtil.unmodifiableSet;
+
 import java.lang.reflect.InvocationTargetException;
+
+import static com.speedment.common.injector.internal.util.SetUtil.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Second step of an {@link ExecutionBuilder}-chain.
  * 
  * @param <T>   the component to withExecute on
  * @param <P0>  the first parameter type
@@ -95,13 +97,14 @@ implements ExecutionTwoParamBuilder<T, P0, P1> {
                 getComponent(), getState(), unmodifiableSet(dep0, dep1)) {
                     
             @Override
-            public void invoke(T component, ClassMapper classMapper) 
+            public boolean invoke(T component, ClassMapper classMapper)
             throws IllegalAccessException, IllegalArgumentException, 
                    InvocationTargetException, NotInjectableException {
                 
                 final P0 arg0 = classMapper.apply(param0);
                 final P1 arg1 = classMapper.apply(param1);
                 executeAction.accept(component, arg0, arg1);
+                return true;
             }
         };
     }

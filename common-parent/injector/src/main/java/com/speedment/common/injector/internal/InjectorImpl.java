@@ -32,7 +32,11 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,7 +47,6 @@ import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -210,7 +213,16 @@ public final class InjectorImpl implements Injector {
                             }
 
                             try {
-                                exec.invoke(inst, classMapper);
+                                if (!exec.invoke(inst, classMapper)) {
+                                    if (LOGGER_INSTANCE.getLevel()
+                                        .isEqualOrLowerThan(Level.DEBUG)) {
+
+                                        LOGGER_INSTANCE.debug(
+                                            "|      %-74s |",
+                                            limit("(Ignored due to missing dependencies.)", 74)
+                                        );
+                                    }
+                                }
                             } catch (final IllegalAccessException 
                                          | IllegalArgumentException 
                                          | InvocationTargetException ex) {

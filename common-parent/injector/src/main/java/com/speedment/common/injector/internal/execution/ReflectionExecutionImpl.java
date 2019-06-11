@@ -45,7 +45,7 @@ import static java.util.stream.Collectors.joining;
 public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
     private final Method method;
-    private final boolean doNotThrowIfMissingDependencies;
+    private final boolean throwExceptionIfMissingDependencies;
 
     public ReflectionExecutionImpl(
             Class<T> component,
@@ -55,26 +55,26 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
         
         super(component, state, dependencies);
         this.method = requireNonNull(method);
-        this.doNotThrowIfMissingDependencies =
+        this.throwExceptionIfMissingDependencies =
             Optional.ofNullable(method.getAnnotation(ExecuteBefore.class))
                 .filter(ExecuteBefore::orThrow).isPresent();
     }
 
     @Override
-    public void invoke(T component, ClassMapper classMapper) 
+    public boolean invoke(T component, ClassMapper classMapper)
     throws IllegalAccessException, 
            IllegalArgumentException, 
            InvocationTargetException, 
            NotInjectableException {
 
-        if (doNotThrowIfMissingDependencies && method.getParameterCount() > 0) {
+        if (!throwExceptionIfMissingDependencies && method.getParameterCount() > 0) {
             if (Stream.of(method.getParameters())
                 .map(Parameter::getType)
                 .map(classMapper::applyOrNull)
-                .allMatch(Objects::isNull)) {
+                .anyMatch(Objects::isNull)) {
                 // Do not invoke if all arguments are optional
                 // and the arguments are all null
-                return;
+                return false;
             }
         }
 
@@ -85,6 +85,8 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
         
         method.setAccessible(true);
         method.invoke(component, args);
+
+        return true;
     }
 
     @Override

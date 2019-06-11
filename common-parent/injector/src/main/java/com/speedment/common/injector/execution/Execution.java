@@ -95,10 +95,13 @@ public interface Execution<T> {
     
     /**
      * Invokes this {@code Execution}, resolving the required dependencies by
-     * passing them to the specified {@code classMapper}.
+     * passing them to the specified {@code classMapper}. If at least one
+     * dependency is missing, this method will either throw an exception or
+     * return {@code false}, depending on the implementation.
      * 
      * @param component    the component executed on
      * @param classMapper  the class mapper to use to resolve dependencies
+     * @return  {@code true} if the method was executed, otherwise {@code false}
      * 
      * @throws IllegalAccessException     passed on from {@link Method}
      * @throws IllegalArgumentException   passed on from {@link Method}
@@ -106,7 +109,7 @@ public interface Execution<T> {
      * @throws NotInjectableException     if the {@code ClassMapper} could not
      *                                    resolve a particular type
      */
-    void invoke(T component, ClassMapper classMapper) 
+    boolean invoke(T component, ClassMapper classMapper)
     throws IllegalAccessException, 
            IllegalArgumentException, 
            InvocationTargetException,
