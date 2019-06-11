@@ -33,6 +33,7 @@ import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.internal.dependency.DependencyGraphImpl;
+import com.speedment.common.injector.internal.util.ReflectionUtil;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -237,10 +238,10 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             if (injectablesLeftSize == injectablesLeft.size()) {
                 final StringBuilder msg = new StringBuilder();
                 msg.append(injectablesLeft.size());
-                msg.append("  injectables could not be instantiated. These where: [\n");
+                msg.append(" injectables could not be instantiated. These where: [\n");
                 injectablesLeft.stream()
                     .map(Injectable::get)
-                    .map(Class::getName)
+                    .map(c -> ReflectionUtil.errorMsg(c, instances))
                     .forEachOrdered(s -> msg.append("  ").append(s).append('\n'));
                 msg.append("]");
                 throw new ConstructorResolutionException(msg.toString());

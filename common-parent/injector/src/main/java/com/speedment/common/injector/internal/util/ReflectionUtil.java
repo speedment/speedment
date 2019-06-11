@@ -29,14 +29,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Some common utility methods for analyzing classes with reflection.
@@ -48,6 +47,8 @@ public final class ReflectionUtil {
 
     private final static Predicate<? super Executable> HAS_INJECT_ANNOTATION =
         exec -> exec.getAnnotation(Inject.class) != null;
+
+    private static final Comparator<Executable> INJECT_FIRST_COMPARATOR = (a, b) -> Boolean.compare(HAS_INJECT_ANNOTATION.test(b), HAS_INJECT_ANNOTATION.test(a));
 
     public static Stream<Field> traverseFields(Class<?> clazz) {
         final Class<?> parent = clazz.getSuperclass();
@@ -86,32 +87,13 @@ public final class ReflectionUtil {
         try {
             // TODO: If at least one constructor has the @Inject-annotation, only @Inject-annotated constructors should be considered.
 
-            final List<Constructor<T>> constructors = new ArrayList<>();
-            for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
-                if (canBeInvoked(constructor, properties, instances)) {
-                    @SuppressWarnings("unchecked")
-                    final Constructor<T> tConstructor = (Constructor<T>) constructor;
-                    constructors.add(tConstructor);
-                }
-            }
+            final Optional<Constructor<T>> oConstr = findConstructor(clazz, properties, instances);
 
-            if (constructors.isEmpty()) {
+            if (!oConstr.isPresent()) {
                 return Optional.empty();
             }
 
-            final Constructor<T> constr = constructors.stream()
-                .filter(HAS_INJECT_ANNOTATION)
-                .findFirst()
-                .orElseGet(() -> constructors.stream()
-                    .findFirst()
-                    .orElseThrow(() ->
-                        new NoDefaultConstructorException(
-                            "Could not find any default constructor for class '"
-                            + clazz.getName() + "'."
-                        )
-                    )
-                );
-
+            final Constructor<T> constr = oConstr.get();
             constr.setAccessible(true);
 
             final Parameter[] params = constr.getParameters();
@@ -216,14 +198,42 @@ public final class ReflectionUtil {
         }
     }
 
-    private static boolean canBeInvoked(Executable executable, Properties properties, List<Object> instances) {
-        return Stream.of(executable.getParameters())
-            .allMatch(p -> paramIsConfig(p, properties) || paramIsInjectable(p, instances));
+    @SuppressWarnings("unchecked")
+    private static <T> Optional<Constructor<T>> findConstructor(Class<T> clazz, Properties properties, List<Object> instances) {
+        return Arrays.stream(clazz.getDeclaredConstructors())
+                .filter(constructor -> canBeInvoked(constructor, instances))
+                .map(constructor -> (Constructor<T>) constructor)
+                .min(INJECT_FIRST_COMPARATOR);
     }
 
-    private static boolean paramIsConfig(Parameter param, Properties properties) {
-        final Config config = param.getAnnotation(Config.class);
-        return config != null && properties.containsKey(config.name());
+
+    public static <T> String errorMsg(Class<T> c, List<Object> instances) {
+        return Arrays.stream(c.getDeclaredConstructors())
+            .map(constructor -> (Constructor<T>) constructor)
+            .sorted(INJECT_FIRST_COMPARATOR)
+            .map(con ->
+                String.format("  %s %s %n %s ",
+                    con.getAnnotation(Inject.class) == null ? "       " : "@Inject",
+                    con.toString(),
+                    Stream.of(con.getParameters())
+                    .map(p -> {
+                        if (paramIsConfig(p)) {
+                            return String.format("      %s %s%n", Config.class.getSimpleName(), p.toString());
+                        } else {
+                            return String.format("      %s %s%n", p.toString(), paramIsInjectable(p, instances) ? "" : " <-- Missing");
+                        }
+                    }).collect(joining(String.format("%n")))
+                )
+            ).collect(joining(String.format("%n")));
+    }
+
+    private static boolean canBeInvoked(Executable executable, List<Object> instances) {
+        return Stream.of(executable.getParameters())
+            .allMatch(p -> paramIsConfig(p) || paramIsInjectable(p, instances));
+    }
+
+    private static boolean paramIsConfig(Parameter param) {
+        return param.getAnnotation(Config.class) != null;
     }
 
     private static boolean paramIsInjectable(Parameter param, List<Object> instances) {
