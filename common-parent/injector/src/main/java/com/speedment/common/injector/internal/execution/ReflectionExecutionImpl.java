@@ -61,6 +61,10 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
         return method.toString();
     }
 
+    public Method getMethod() {
+        return method;
+    }
+
     @Override
     public boolean invoke(T component, ClassMapper classMapper)
     throws IllegalAccessException, 

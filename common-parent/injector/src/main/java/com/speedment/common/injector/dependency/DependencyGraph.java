@@ -17,6 +17,8 @@
 package com.speedment.common.injector.dependency;
 
 import com.speedment.common.injector.exception.CyclicReferenceException;
+
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -52,6 +54,15 @@ public interface DependencyGraph {
      * @return       the node found or created
      */
     DependencyNode getOrCreate(Class<?> clazz);
+
+    /**
+     * Returns the {@link DependencyNode} representing the specified type in the
+     * graph if one exists, else returns an empty {@code Optional}.
+     *
+     * @param clazz  the class to look for in the graph
+     * @return       the node found or empty
+     */
+    Optional<DependencyNode> getIfPresent(Class<?> clazz);
     
     /**
      * Inject all dependency injected fields in the graph, throwing an 

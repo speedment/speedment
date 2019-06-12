@@ -33,6 +33,7 @@ import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.internal.dependency.DependencyGraphImpl;
+import com.speedment.common.injector.internal.execution.ReflectionExecutionImpl;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
@@ -40,12 +41,14 @@ import com.speedment.common.logger.LoggerManager;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
 import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
@@ -54,6 +57,7 @@ import static com.speedment.common.injector.internal.util.PropertiesUtil.loadPro
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseAncestors;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.tryToCreate;
+import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
@@ -177,8 +181,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
         final LinkedList<Object> instances = new LinkedList<>();
 
-        LOGGER_INSTANCE.debug("Creating " + injectablesSet.size() +
-            " injectable instances.");
+        LOGGER_INSTANCE.debug(String.format("Creating %d injectable instances.", injectablesSet.size()));
 
         LOGGER_INSTANCE.debug(horizontalLine());
 
@@ -203,7 +206,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     traverseFields(injectable.get())
                         .filter(f -> f.isAnnotationPresent(Config.class))
                         .map(f -> f.getAnnotation(Config.class))
-                        .map(a -> String.format(
+                        .map(a -> format(
                             "|     %-48s %26s |",
                             limit(a.name(), 48),
                             limit(properties.containsKey(a.name())
@@ -386,7 +389,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                     if (!exec.invoke(instance, classMapper)) {
                                         switch (exec.getMissingArgumentStrategy()) {
                                             case THROW_EXCEPTION: {
-                                                throw new RuntimeException(String.format(
+                                                throw new RuntimeException(format(
                                                     "The injector could not invoke the method '%s' " +
                                                     "before state '%s' since one of the parameters is not available.",
                                                     exec.getName(), exec.getState()));
@@ -404,6 +407,51 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                 } catch (final IllegalAccessException 
                                              | IllegalArgumentException 
                                              | InvocationTargetException ex) {
+
+                                    LOGGER_INSTANCE.error("Exception thrown by method invoked by Injector:");
+                                    if (ex.getCause() != null) {
+                                        LOGGER_INSTANCE.error("Exception: " + ex.getCause().getClass().getSimpleName());
+                                    }
+                                    LOGGER_INSTANCE.error("Class: " + exec.getType().getName());
+                                    LOGGER_INSTANCE.error("    @ExecuteBefore(" + exec.getState().name() + ")");
+
+                                    if (exec instanceof ReflectionExecutionImpl) {
+                                        final Method method = ((ReflectionExecutionImpl<?>) exec).getMethod();
+                                        LOGGER_INSTANCE.error(format("    %s %s%s",
+                                            method.getReturnType().getSimpleName(),
+                                            method.getName(),
+                                            method.getParameterCount() == 0 ? "()" : "("));
+
+                                        if (method.getParameterCount() > 0) {
+                                            Stream.of(method.getParameters())
+                                                .map(param -> {
+                                                    final Config config = param.getAnnotation(Config.class);
+                                                    final WithState withState = param.getAnnotation(WithState.class);
+                                                    if (config != null) {
+                                                        return format("        @Config(name=\"%s\", value=\"%s\") %s",
+                                                            config.name(),
+                                                            config.value(),
+                                                            param.getType().getSimpleName()
+                                                        );
+                                                    } else {
+
+                                                        return format("        %s%s (%s)",
+                                                            withState == null ? "" : format("@WithState(%s) ", withState.value().name()),
+                                                            param.getType().getSimpleName(),
+                                                            graph.getIfPresent(param.getType())
+                                                                .map(node -> String.format(
+                                                                    "Implemented as: %s, state: %s",
+                                                                    node.getRepresentedType().getSimpleName(),
+                                                                    node.getCurrentState().name()
+                                                                ))
+                                                                .orElse("No implementation found")
+                                                        );
+                                                    }
+                                                })
+                                                .forEachOrdered(LOGGER_INSTANCE::error);
+                                            LOGGER_INSTANCE.error("    );");
+                                        }
+                                    }
 
                                     throw new RuntimeException(ex);
                                 }
