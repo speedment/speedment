@@ -339,7 +339,7 @@
 .menu-bar,
 .menu-bar .menu,
 .menu-bar .menu .menu-item {
-    -fx-background-color: -fx-speedment-white;
+    -fx-background-color: white;
 }
 
 .menu-bar {
