@@ -30,7 +30,11 @@
     
     <artifactId>function</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.function</module-name>
+    </properties>
+
     <name>Speedment - Common - Function</name>
     <description>
         A complement to the java.util and java.util.function packages that add

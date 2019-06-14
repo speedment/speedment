@@ -31,7 +31,12 @@
     
     <artifactId>json</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.json</module-name>
+    </properties>
+
+
     <name>Speedment - Common - JSON</name>
     <description>
         A lightweight JSON serializer and deserializer made with the ambition to 

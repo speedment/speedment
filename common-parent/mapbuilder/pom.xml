@@ -31,7 +31,11 @@
     
     <artifactId>mapbuilder</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.mapbuilder</module-name>
+    </properties>
+
     <name>Speedment - Common - MapBuilder</name>
     <description>
         Easy way to construct immutable java maps using a Builder Pattern.

@@ -31,17 +31,17 @@
     
     <artifactId>rest</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.rest</module-name>
+    </properties>
+
     <name>Speedment - Common - REST</name>
     <description>
         A library for asynchronously invoking functions in a 
         public REST API.
     </description>
-    
-    <properties>
-        <json.version>1.0.3</json.version>
-    </properties>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>json</artifactId>
-            <version>${json.version}</version>
+            <version>${speedment.version}</version>
         </dependency>
         
     </dependencies>

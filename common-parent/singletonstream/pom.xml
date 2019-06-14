@@ -31,7 +31,11 @@
     
     <artifactId>singleton-stream</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.singletonstream</module-name>
+    </properties>
+
     <name>Speedment - Common - SingletonStream</name>
     <description>
         An alternative high-performance singleton stream implementation that

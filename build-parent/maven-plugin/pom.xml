@@ -123,7 +123,7 @@
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.6.0</version>
-                
+
                 <configuration>
                     <goalPrefix>speedment</goalPrefix>
                 </configuration>
@@ -149,7 +149,6 @@
             
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
                 <configuration>
                     <archive>
                         <addMavenDescriptor>true</addMavenDescriptor>
@@ -162,6 +161,7 @@
                             <Implementation-Vendor>Speedment, Inc.</Implementation-Vendor>
                             <Implementation-URL>https://github.com/speedment/speedment</Implementation-URL>
                         </manifestEntries>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
             </plugin>
