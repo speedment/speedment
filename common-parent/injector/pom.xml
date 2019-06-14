@@ -31,7 +31,11 @@
     
     <artifactId>injector</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.injector</module-name>
+    </properties>
+
     <name>Speedment - Common - Injector</name>
     <description>
         A small dependency injection library.

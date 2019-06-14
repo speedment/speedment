@@ -30,7 +30,11 @@
     
     <artifactId>invariant</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.invariant</module-name>
+    </properties>
+
     <name>Speedment - Common - Invariant</name>
     <description>
         Utility classes for making sure a methods invariant is met and otherwise 

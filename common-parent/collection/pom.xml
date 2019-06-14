@@ -30,7 +30,11 @@
     
     <artifactId>collection</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.collection</module-name>
+    </properties>
+
     <name>Speedment - Common - Collection</name>
     <description>
         Collection classes 

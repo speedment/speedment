@@ -31,7 +31,11 @@
     
     <artifactId>logger</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.logger</module-name>
+    </properties>
+
     <name>Speedment - Common - Logger</name>
     <description>A lightweight logging tool inspired by Tengil.</description>
     <url>https://github.com/speedment/speedment/wiki/Logger</url>

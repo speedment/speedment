@@ -28,9 +28,14 @@
         <artifactId>common-parent</artifactId>
         <version>3.1.19-SNAPSHOT</version>
     </parent>
+
     <artifactId>codegen</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.codegen</module-name>
+    </properties>
+
     <name>Speedment - Common - CodeGen</name>
     <description>
         An object-oriented code generator for Java that is built using the 

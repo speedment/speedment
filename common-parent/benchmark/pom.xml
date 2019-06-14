@@ -30,7 +30,11 @@
     
     <artifactId>benchmark</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.benchmark</module-name>
+    </properties>
+
     <name>Speedment - Common - Benchmark</name>
     <description>
         Lightweighted classes for benchmarking applications 

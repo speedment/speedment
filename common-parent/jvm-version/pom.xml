@@ -30,7 +30,11 @@
     
     <artifactId>jvm-version</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.jvm_version</module-name>
+    </properties>
+
     <name>Speedment - Common - JVM Version</name>
     <description>
         A module that handle the JVM version in a compatible way across different

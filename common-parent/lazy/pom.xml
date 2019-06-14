@@ -31,7 +31,11 @@
     
     <artifactId>lazy</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.lazy</module-name>
+    </properties>
+
     <name>Speedment - Common - Lazy</name>
     <description>
         A collection of Lazy classes that can be used for lazy initialization

@@ -28,7 +28,11 @@
         <artifactId>common-parent</artifactId>
         <version>3.1.19-SNAPSHOT</version>
     </parent>
-    
+
+    <properties>
+        <module-name>com.speedment.common.tuple</module-name>
+    </properties>
+
     <artifactId>tuple</artifactId>
     <packaging>bundle</packaging>
     

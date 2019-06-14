@@ -31,7 +31,11 @@
     
     <artifactId>mapstream</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.mapstream</module-name>
+    </properties>
+
     <name>Speedment - Common - MapStream</name>
     <description>
         An extension of the Java 8 Stream API to make it possible to stream over

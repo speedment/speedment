@@ -30,7 +30,11 @@
     
     <artifactId>codegenxml</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.codegenxml</module-name>
+    </properties>
+
     <name>Speedment - Common - CodeGen XML</name>
     <description>
         An XML module for CodeGen that makes it easy to generate XML-code in an

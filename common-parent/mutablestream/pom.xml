@@ -31,7 +31,11 @@
     
     <artifactId>mutable-stream</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.mutablestream</module-name>
+    </properties>
+
     <name>Speedment - Common - MutableStream</name>
     <description>
         An implementation of the Java 8 Stream API that allows the pipeline to 
