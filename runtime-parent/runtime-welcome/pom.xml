@@ -32,6 +32,10 @@
     <artifactId>runtime-welcome</artifactId>
     <packaging>bundle</packaging>
 
+    <properties>
+        <module-name>com.speedment.runtime.welcome</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Welcome</name>
     <description>
         Module that are used for welcome messages when Speedment starts
