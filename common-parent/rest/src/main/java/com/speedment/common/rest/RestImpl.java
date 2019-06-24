@@ -187,7 +187,7 @@ class RestImpl implements Rest {
             case HTTP : return "http";
             case HTTPS : return "https";
             default : throw new UnsupportedOperationException(
-                "Unknown enum constant '" + protocol + "'."
+                String.format("Unknown enum constant '%s'.", protocol)
             );
         }
     }
@@ -201,33 +201,36 @@ class RestImpl implements Rest {
     }
     
     protected final URL getUrl(String path, Param... param) {
+        final StringBuilder url = new StringBuilder()
+            .append(getProtocol())
+            .append("://")
+            .append(host);
+
+        if (port > 0) {
+            url.append(":").append(port);
+        }
+
+        url.append("/").append(path);
+
+        if (param.length > 0) {
+            url.append(
+                Stream.of(param)
+                    .map(p ->
+                        encode(p.getKey()) +
+                        "=" +
+                        encode(p.getValue())
+                    )
+                    .collect(joining("&", "?", ""))
+            );
+        }
+
+        final String urlStr = url.toString();
         try {
-            final StringBuilder url = new StringBuilder()
-                .append(getProtocol())
-                .append("://")
-                .append(host);
-            
-            if (port > 0) {
-                url.append(":").append(port);
-            }
-            
-            url.append("/").append(path);
-            
-            if (param.length > 0) {
-                url.append(
-                    Stream.of(param)
-                        .map(p -> 
-                            encode(p.getKey()) + 
-                            "=" + 
-                            encode(p.getValue())
-                        )
-                        .collect(joining("&", "?", ""))
-                );
-            }
-            
-            return new URL(url.toString());
+            return new URL(urlStr);
         } catch (final MalformedURLException ex) {
-            throw new RuntimeException("Error building URL.", ex);
+            throw new RuntimeException(String.format(
+                "Error building URL: '%s'.", urlStr
+            ), ex);
         }
     }
     
@@ -251,8 +254,17 @@ class RestImpl implements Rest {
             return send(method, path, options, StreamConsumer.IGNORE);
         } else {
             return send(method, path, options, out -> {
+                int i = 0;
                 while (iterator.hasNext()) {
-                    out.write(iterator.next().getBytes(StandardCharsets.UTF_8));
+                    final String it = iterator.next();
+                    if (it == null) {
+                        throw new NullPointerException(String.format(
+                            "Null element at position %d in iterator over strings.",
+                            i));
+                    } else {
+                        out.write(it.getBytes(StandardCharsets.UTF_8));
+                    }
+                    i++;
                 }
             });
         }
@@ -269,13 +281,14 @@ class RestImpl implements Rest {
                 conn = (HttpURLConnection) url.openConnection();
 
                 switch (method) {
-                    case POST    : conn.setRequestMethod("POST"); break;
-                    case GET     : conn.setRequestMethod("GET"); break;
-                    case DELETE  : conn.setRequestMethod("DELETE"); break;
+                    case POST    : conn.setRequestMethod("POST");    break;
+                    case GET     : conn.setRequestMethod("GET");     break;
+                    case DELETE  : conn.setRequestMethod("DELETE");  break;
                     case OPTIONS : conn.setRequestMethod("OPTIONS"); break;
-                    case PUT     : conn.setRequestMethod("PUT"); break;
+                    case PUT     : conn.setRequestMethod("PUT");     break;
+                    case HEAD    : conn.setRequestMethod("HEAD");    break;
                     default : throw new UnsupportedOperationException(
-                        "Unknown enum constant '" + method + "'."
+                        String.format("Unknown enum constant '%s'.", method)
                     );
                 }
 
