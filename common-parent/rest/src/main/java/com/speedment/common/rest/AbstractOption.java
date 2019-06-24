@@ -64,4 +64,9 @@ abstract class AbstractOption implements Option {
         return Objects.equals(this.key, other.getKey())
             && Objects.equals(this.value, other.getValue());
     }
+
+    @Override
+    public String toString() {
+        return key + '=' + value;
+    }
 }
