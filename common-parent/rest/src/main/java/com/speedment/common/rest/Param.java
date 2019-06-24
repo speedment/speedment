@@ -25,7 +25,7 @@ package com.speedment.common.rest;
 public final class Param extends AbstractOption {
     
     /**
-     * Returns a new {@code Header} option. This method is intended to be 
+     * Returns a new {@code Param} option. This method is intended to be
      * imported statically.
      * 
      * @param key    the key

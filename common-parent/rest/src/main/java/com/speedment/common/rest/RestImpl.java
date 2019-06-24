@@ -86,6 +86,11 @@ class RestImpl implements Rest {
     public CompletableFuture<Response> options(String path, Option... option) {
         return send(Method.OPTIONS, path, option);
     }
+
+    @Override
+    public CompletableFuture<Response> head(String path, Option... option) {
+        return send(Method.HEAD, path, option);
+    }
     
     @Override
     public CompletableFuture<Response> get(String path, Iterator<String> uploader, Option... option) {
@@ -110,6 +115,11 @@ class RestImpl implements Rest {
     @Override
     public CompletableFuture<Response> options(String path, Iterator<String> uploader, Option... option) {
         return send(Method.OPTIONS, path, option, uploader);
+    }
+
+    @Override
+    public CompletableFuture<Response> head(String path, Iterator<String> uploader, Option... option) {
+        return send(Method.HEAD, path, option, uploader);
     }
     
     @Override
@@ -136,6 +146,11 @@ class RestImpl implements Rest {
     public CompletableFuture<Response> options(String path, InputStream body, Option... option) {
         return send(Method.OPTIONS, path, option, stream(body));
     }
+
+    @Override
+    public CompletableFuture<Response> head(String path, InputStream body, Option... option) {
+        return send(Method.HEAD, path, option, stream(body));
+    }
     
     @Override
     public CompletableFuture<Response> get(String path, String data, Option... option) {
@@ -160,6 +175,11 @@ class RestImpl implements Rest {
     @Override
     public CompletableFuture<Response> options(String path, String data, Option... option) {
         return send(Method.OPTIONS, path, option, new SingletonIterator<>(data));
+    }
+
+    @Override
+    public CompletableFuture<Response> head(String path, String data, Option... option) {
+        return send(Method.HEAD, path, option, new SingletonIterator<>(data));
     }
     
     protected String getProtocol() {
