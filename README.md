@@ -124,7 +124,7 @@ For Enterprise database connectors see [www.speedment.com](www.speedment.com/pri
 
 ## Copyright
 
-Copyright (c) 2014-2018, Speedment, Inc. All Rights Reserved.
+Copyright (c) 2014-2019, Speedment, Inc. All Rights Reserved.
 Visit [www.speedment.com](http://www.speedment.com/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
