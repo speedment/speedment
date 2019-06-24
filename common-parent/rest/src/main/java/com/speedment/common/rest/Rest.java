@@ -45,7 +45,7 @@ public interface Rest {
     String ENCODING = "UTF-8";
     
     enum Method {
-        POST, GET, DELETE, PUT, OPTIONS
+        POST, GET, DELETE, PUT, OPTIONS, HEAD
     }
     
     enum Protocol {
@@ -57,25 +57,29 @@ public interface Rest {
     CompletableFuture<Response> delete(String path, Option... option);
     CompletableFuture<Response> put(String path, Option... option);
     CompletableFuture<Response> options(String path, Option... option);
-    
+    CompletableFuture<Response> head(String path, Option... option);
+
     CompletableFuture<Response> get(String path, InputStream body, Option... option);
     CompletableFuture<Response> post(String path, InputStream body, Option... option);
     CompletableFuture<Response> delete(String path, InputStream body, Option... option);
     CompletableFuture<Response> put(String path, InputStream body, Option... option);
     CompletableFuture<Response> options(String path, InputStream body, Option... option);
-    
+    CompletableFuture<Response> head(String path, InputStream body, Option... option);
+
     CompletableFuture<Response> get(String path, Iterator<String> uploader, Option... option);
     CompletableFuture<Response> post(String path, Iterator<String> uploader, Option... option);
     CompletableFuture<Response> delete(String path, Iterator<String> uploader, Option... option);
     CompletableFuture<Response> put(String path, Iterator<String> uploader, Option... option);
     CompletableFuture<Response> options(String path, Iterator<String> uploader, Option... option);
-    
+    CompletableFuture<Response> head(String path, Iterator<String> uploader, Option... option);
+
     CompletableFuture<Response> get(String path, String data, Option... option);
     CompletableFuture<Response> post(String path, String data, Option... option);
     CompletableFuture<Response> delete(String path, String data, Option... option);
     CompletableFuture<Response> put(String path, String data, Option... option);
     CompletableFuture<Response> options(String path, String data, Option... option);
-    
+    CompletableFuture<Response> head(String path, String data, Option... option);
+
     static Rest connect(String host) {
         return new RestImpl(Protocol.HTTP, host, 0, null, null);
     }
