@@ -19,6 +19,7 @@ package com.speedment.runtime.core.internal.db;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
@@ -72,7 +73,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     private @Inject ConnectionPoolComponent connectionPoolComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject TransactionComponent transactionComponent;
+    private @InjectOrNull TransactionComponent transactionComponent;
 
     protected AbstractDbmsOperationHandler() {
         closed = new AtomicBoolean();
