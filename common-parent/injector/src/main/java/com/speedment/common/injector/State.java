@@ -48,6 +48,19 @@ public enum State {
     STOPPED;
 
     /**
+     * Returns the previous state.
+     *
+     * @return the previous state
+     * @throws java.util.NoSuchElementException if there are no previous state
+     */
+    public State previous() {
+        if (this == STARTED) {
+            throw new NoSuchElementException();
+        }
+        return values()[ordinal() - 1];
+    }
+
+    /**
      * Returns the next state.
      *
      * @return the next state
@@ -58,5 +71,16 @@ public enum State {
             throw new NoSuchElementException();
         }
         return values()[ordinal() + 1];
+    }
+
+    /**
+     * Returns {@code true} if this state is strictly before the specified
+     * state.
+     *
+     * @param state  the state to check against
+     * @return       {@code true} if this is before, otherwise {@code false}
+     */
+    public boolean isBefore(State state) {
+        return ordinal() < state.ordinal();
     }
 }

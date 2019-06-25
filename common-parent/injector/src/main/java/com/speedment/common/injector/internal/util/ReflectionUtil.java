@@ -21,6 +21,7 @@ import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.OnlyIfMissing;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 
 import java.io.File;
@@ -33,10 +34,10 @@ import java.lang.reflect.Parameter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -50,11 +51,6 @@ import static java.util.stream.Collectors.joining;
  * @since 1.0.0
  */
 public final class ReflectionUtil {
-
-    private final static Predicate<? super Executable> HAS_INJECT_ANNOTATION =
-        exec -> exec.getAnnotation(Inject.class) != null;
-
-    private static final Comparator<Executable> INJECT_FIRST_COMPARATOR = (a, b) -> Boolean.compare(HAS_INJECT_ANNOTATION.test(b), HAS_INJECT_ANNOTATION.test(a));
 
     public static Stream<Field> traverseFields(Class<?> clazz) {
         final Class<?> parent = clazz.getSuperclass();
@@ -100,12 +96,10 @@ public final class ReflectionUtil {
         }
     }
 
-    public static <T> Optional<T> tryToCreate(Class<T> clazz, Properties properties, List<Object> instances)
+    public static <T> Optional<T> tryToCreate(Class<T> clazz, Properties properties, List<Object> instances, Set<Class<?>> allInjectableTypes)
         throws InstantiationException, NoDefaultConstructorException {
         try {
-            // TODO: If at least one constructor has the @Inject-annotation, only @Inject-annotated constructors should be considered.
-
-            final Optional<Constructor<T>> oConstr = findConstructor(clazz, properties, instances);
+            final Optional<Constructor<T>> oConstr = findConstructor(clazz, instances, allInjectableTypes);
 
             if (!oConstr.isPresent()) {
                 return Optional.empty();
@@ -217,21 +211,41 @@ public final class ReflectionUtil {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> Optional<Constructor<T>> findConstructor(Class<T> clazz, Properties properties, List<Object> instances) {
-        return Arrays.stream(clazz.getDeclaredConstructors())
+    private static <T> Optional<Constructor<T>> findConstructor(Class<T> clazz, List<Object> instances, Set<Class<?>> allInjectableTypes) {
+        // If at least one constructor has the @Inject-annotation, only
+        // @Inject-annotated constructors should be considered.
+        if (hasConstructorWithInjectAnnotation(clazz)) {
+            return Arrays.stream(clazz.getDeclaredConstructors())
+                .filter(constr -> constr.isAnnotationPresent(Inject.class))
+                .filter(constr -> isOnlyIfMissingConditionSatisfied(constr, allInjectableTypes))
+                .filter(constr -> canBeInvoked(constr, instances))
+                .map(constr -> (Constructor<T>) constr)
+                .findFirst();
+
+        } else {
+            return Arrays.stream(clazz.getDeclaredConstructors())
+                .filter(constr -> isOnlyIfMissingConditionSatisfied(constr, allInjectableTypes))
                 .filter(constructor -> canBeInvoked(constructor, instances))
                 .map(constructor -> (Constructor<T>) constructor)
-                .min(INJECT_FIRST_COMPARATOR);
+                .findFirst();
+        }
     }
 
     @SuppressWarnings("unchecked")
     public static <T> String errorMsg(Class<T> c, List<Object> instances) {
+        final Predicate<Constructor<?>> onlyInject;
+        if (hasConstructorWithInjectAnnotation(c)) {
+            onlyInject = constr -> constr.isAnnotationPresent(Inject.class);
+        } else {
+            onlyInject = constr -> true;
+        }
+
         return Arrays.stream(c.getDeclaredConstructors())
             .map(constructor -> (Constructor<T>) constructor)
-            .sorted(INJECT_FIRST_COMPARATOR)
+            .filter(onlyInject)
             .map(con ->
                 String.format("  %s %s %n %s ",
-                    con.getAnnotation(Inject.class) == null ? "       " : "@Inject",
+                    con.isAnnotationPresent(Inject.class) ? "@Inject" : "       ",
                     con.toString(),
                     Stream.of(con.getParameters())
                     .map(p -> {
@@ -251,12 +265,33 @@ public final class ReflectionUtil {
     }
 
     private static boolean paramIsConfig(Parameter param) {
-        return param.getAnnotation(Config.class) != null;
+        return param.isAnnotationPresent(Config.class);
     }
 
     private static boolean paramIsInjectable(Parameter param, List<Object> instances) {
         return instances.stream()
             .anyMatch(o -> param.getType().isAssignableFrom(o.getClass()));
+    }
+
+    private static boolean hasConstructorWithInjectAnnotation(Class<?> clazz) {
+        return Stream.of(clazz.getDeclaredConstructors())
+            .anyMatch(constr -> constr.isAnnotationPresent(Inject.class));
+    }
+
+    private static boolean isOnlyIfMissingConditionSatisfied(Constructor<?> constr, Set<Class<?>> allInjectableTypes) {
+        final OnlyIfMissing missing = constr.getAnnotation(OnlyIfMissing.class);
+
+        // If the annotation is not there then this constructor
+        // should always be considered.
+        if (missing == null) return true;
+
+            // If the annotation is present then only if none of the
+            // types listed have an implementation in the set should
+            // the constructor be considered.
+        else return Stream.of(missing.value()).noneMatch(missingType ->
+            allInjectableTypes.stream()
+                .anyMatch(missingType::isAssignableFrom)
+        );
     }
 
     private ReflectionUtil() {}

@@ -19,7 +19,13 @@ package com.speedment.common.injector.annotation;
 import java.lang.annotation.*;
 
 /**
- * Annotates a field that should be set automatically using dependency injection.
+ * Annotates a field that should be set automatically using dependency
+ * injection. If this annotation is put on a constructor, then that constructor
+ * will be used when the dependency injector instantiates the class. If multiple
+ * constructors have the {@code @Inject} annotation, then the priority between
+ * them is unspecified. You should therefore use the {@link OnlyIfMissing}
+ * annotation to indicate which constructor should have precedence if some types
+ * are missing in the dependency injector.
  * 
  * @author  Emil Forslund
  * @since   1.0.0

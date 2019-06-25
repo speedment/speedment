@@ -21,12 +21,15 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
 import com.speedment.common.injector.exception.ConstructorResolutionException;
+import com.speedment.common.injector.exception.MisusedAnnotationException;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
@@ -42,6 +45,7 @@ import com.speedment.common.logger.LoggerManager;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -56,12 +60,16 @@ import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.loadProperties;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseAncestors;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.tryToCreate;
+import static com.speedment.common.injector.internal.util.StringUtil.commaAnd;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -170,6 +178,13 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         final Properties properties = loadProperties(LOGGER_INSTANCE, configFile);
         overriddenParams.forEach(properties::setProperty);
 
+        final Set<Class<?>> allInjectableTypes = unmodifiableSet(
+            injectables.values().stream()
+                .flatMap(List::stream)
+                .map(Injectable::get)
+                .collect(toSet())
+        );
+
         final Set<Injectable<?>> injectablesSet = unmodifiableSet(
             injectables.values().stream()
                 .flatMap(List::stream)
@@ -195,37 +210,13 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             while (it.hasNext()) {
                 final Injectable<?> injectable = it.next();
 
-                // If we are currently debugging, print out every created
-                // instance and which configuration options are available for
-                // it.
-                if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                    LOGGER_INSTANCE.debug("| %-71s CREATED |",
-                        limit(injectable.get().getSimpleName(), 71)
-                    );
-
-                    traverseFields(injectable.get())
-                        .filter(f -> f.isAnnotationPresent(Config.class))
-                        .map(f -> f.getAnnotation(Config.class))
-                        .map(a -> format(
-                            "|     %-48s %26s |",
-                            limit(a.name(), 48),
-                            limit(properties.containsKey(a.name())
-                                ? properties.get(a.name()).toString()
-                                : a.value(), 26
-                            )
-                        ))
-                        .forEachOrdered(LOGGER_INSTANCE::debug);
-
-                    LOGGER_INSTANCE.debug(horizontalLine());
-                }
-
                 boolean created = false;
                 if (injectable.hasSupplier()) {
                     final Object instance = injectable.supplier().get();
                     instances.addFirst(instance);
                     created = true;
                 } else {
-                    final Optional<?> instance = tryToCreate(injectable.get(), properties, instances);
+                    final Optional<?> instance = tryToCreate(injectable.get(), properties, instances, allInjectableTypes);
                     if (instance.isPresent()) {
                         instances.addFirst(instance.get());
                         created = true;
@@ -233,7 +224,41 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 }
 
                 if (created) {
+                    // If we are currently debugging, print out every created
+                    // instance and which configuration options are available for
+                    // it.
+                    if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                        LOGGER_INSTANCE.debug("| %-71s CREATED |",
+                            limit(injectable.get().getSimpleName(), 71)
+                        );
+
+                        traverseFields(injectable.get())
+                            .filter(f -> f.isAnnotationPresent(Config.class))
+                            .map(f -> f.getAnnotation(Config.class))
+                            .map(a -> format(
+                                "|     %-48s %26s |",
+                                limit(a.name(), 48),
+                                limit(properties.containsKey(a.name())
+                                    ? properties.get(a.name()).toString()
+                                    : a.value(), 26
+                                )
+                            ))
+                            .forEachOrdered(LOGGER_INSTANCE::debug);
+
+                        LOGGER_INSTANCE.debug(horizontalLine());
+                    }
                     it.remove();
+                } else {
+
+                    // If we are currently debugging, print out every created
+                    // instance and which configuration options are available for
+                    // it.
+                    if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                        LOGGER_INSTANCE.debug("| %-71s PENDING |",
+                            limit(injectable.get().getSimpleName(), 71)
+                        );
+                        LOGGER_INSTANCE.debug(horizontalLine());
+                    }
                 }
             }
 
@@ -288,22 +313,92 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             }
         };
 
+        // Make sure annotations are used correctly
+        instances.forEach(instance -> {
+            traverseMethods(instance.getClass())
+                .filter(m -> m.isAnnotationPresent(ExecuteBefore.class))
+                .forEach(m -> {
+                    final ExecuteBefore execute = m.getAnnotation(ExecuteBefore.class);
+                    final List<Parameter> errenousParams = Stream.of(m.getParameters())
+                        .filter(p -> p.isAnnotationPresent(WithState.class))
+                        .filter(p -> {
+                            final State paramState = p.getAnnotation(WithState.class).value();
+                            return !(paramState == execute.value()
+                            || (paramState.isBefore(State.STARTED) && paramState.next() == execute.value()));
+                        })
+                        .collect(toList());
+
+                    if (!errenousParams.isEmpty()) {
+                        throw new MisusedAnnotationException(format(
+                            "The class %s has an auto-executed method %s(%s) " +
+                            "that should execute just before the instance " +
+                            "enters the %s state, so the parameters must %s " +
+                            "when the method is invoked. Yet, the " +
+                            "@WithState-annotation is present on %d " +
+                            "parameter%s with requested state%s %s.",
+                            instance.getClass().getSimpleName(),
+                            m.getName(),
+                            Stream.of(m.getParameters())
+                                .map(Parameter::getType)
+                                .map(Class::getSimpleName)
+                                .collect(joining(", ")),
+                            execute.value().name(),
+                            execute.value() == State.CREATED
+                                ? "also be in the CREATED state"
+                                : String.format(
+                                    "either be in the %s or the %s state",
+                                    execute.value().previous().name(),
+                                    execute.value().name()
+                                ),
+                            errenousParams.size(),
+                            errenousParams.size() > 1 ? "s" : "",
+                            errenousParams.size() > 1 ? "s" : "",
+                            commaAnd(errenousParams.stream()
+                                .map(p -> p.getAnnotation(WithState.class))
+                                .map(WithState::value)
+                                .map(State::name)
+                                .toArray(String[]::new))
+                        ));
+                    }
+                });
+        });
+
         // Set the auto-injected fields
         instances.forEach(instance -> traverseFields(instance.getClass())
-            .filter(f -> f.isAnnotationPresent(Inject.class))
+            .filter(f -> f.isAnnotationPresent(Inject.class)
+                      || f.isAnnotationPresent(InjectOrNull.class)
+            )
             .distinct()
             .forEachOrdered(field -> {
                 final Object value;
 
-                if (Inject.class.isAssignableFrom(field.getType())) {
+                if (Injector.class.isAssignableFrom(field.getType())) {
                     value = injector;
                 } else {
-                    value = findIn(
-                        field.getType(),
-                        injector,
-                        instances, 
-                        field.getAnnotation(WithState.class) != null
-                    );
+                    try {
+                        value = findIn(
+                            field.getType(),
+                            injector,
+                            instances,
+                            field.isAnnotationPresent(Inject.class)
+                        );
+                    } catch (final IllegalArgumentException ex) {
+                        throw new IllegalArgumentException(String.format(
+                            "The injectable class %s has a member field '%s' " +
+                            "of type %s that could not be resolved in the " +
+                            "Injector. You might be missing a required " +
+                            "InjectBundle or Component. If the field should " +
+                            "not be injected when it doesn't exist, try " +
+                            "solving the problem by removing the " +
+                            "@Inject-annotation from the field and pass it " +
+                            "through an @Inject-annotated constructor " +
+                            "instead, or change the annotation on the field " +
+                            "to @InjectOrNull.",
+                            instance.getClass().getSimpleName(),
+                            field.getName(),
+                            field.getType().getSimpleName()
+                        ), ex);
+                    }
                 }
 
                 field.setAccessible(true);

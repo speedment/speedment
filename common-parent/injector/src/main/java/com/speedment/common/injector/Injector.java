@@ -19,22 +19,22 @@ package com.speedment.common.injector;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.internal.InjectorImpl;
 import com.speedment.common.logger.Logger;
 
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * The factory used to produce instances of classes with
- * dependency injection. This interface is expected to be
- * implemented using a builder pattern.
+ * The factory used to produce instances of classes with dependency injection.
+ * This interface is expected to be implemented using a builder pattern.
  * 
  * @author  Emil Forslund
  * @since   1.0.0
  * 
  * @see Inject
+ * @see InjectOrNull
  * @see Execute
  * @see ExecuteBefore
  */
