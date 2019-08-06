@@ -54,7 +54,7 @@ public enum State {
      * @throws java.util.NoSuchElementException if there are no previous state
      */
     public State previous() {
-        if (this == STARTED) {
+        if (this == CREATED) {
             throw new NoSuchElementException();
         }
         return values()[ordinal() - 1];
