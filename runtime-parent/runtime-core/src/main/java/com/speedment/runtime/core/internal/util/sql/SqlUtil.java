@@ -20,6 +20,7 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.DbmsType;
@@ -124,21 +125,13 @@ public final class SqlUtil {
     public static String sqlPrimaryKeyColumnList(DatabaseNamingConvention naming, Table table, Function<String, String> postMapper) {
         requireNonNulls(naming, table, postMapper);
         return table.primaryKeyColumns()
-            .map(SqlUtil::findColumn)
+            .map(HasColumn::findColumnOrThrow)
             .map(Column::getName)
             .map(naming::encloseField)
             .map(postMapper)
             .collect(joining(" AND "));
     }
     
-    private static Column findColumn(PrimaryKeyColumn pkc) {
-        requireNonNull(pkc);
-        return pkc.findColumn()
-            .orElseThrow(() -> new SpeedmentException(
-                "Cannot find column for " + pkc
-            ));
-    }
-
     /**
      * Counts the number of elements in the current table by querying the
      * database.

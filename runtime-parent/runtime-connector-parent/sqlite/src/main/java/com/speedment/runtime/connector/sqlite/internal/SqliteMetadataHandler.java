@@ -355,7 +355,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                                 // If no INTEGER PRIMARY KEY exists, a rowId should be created.
                                 if (table.columns()
                                     .filter(col -> col.getAsString(ORIGINAL_TYPE).filter("INTEGER"::equalsIgnoreCase).isPresent())
-                                    .noneMatch(col -> table.primaryKeyColumns().anyMatch(pkc -> DocumentDbUtil.isSame(pkc.findColumn().get(), col)))
+                                    .noneMatch(col -> table.primaryKeyColumns().anyMatch(pkc -> DocumentDbUtil.isSame(pkc.findColumnOrThrow(), col)))
                                 &&  table.columns().map(Column::getId).noneMatch("rowid"::equalsIgnoreCase)) {
                                     final Column column = table.mutator().addNewColumn();
 
@@ -413,7 +413,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                                 } else {
                                     table.columns()
                                         .filter(col -> col.getAsString(ORIGINAL_TYPE).filter("INTEGER"::equalsIgnoreCase).isPresent())
-                                        .filter(col -> table.primaryKeyColumns().anyMatch(pkc -> DocumentDbUtil.isSame(pkc.findColumn().get(), col)))
+                                        .filter(col -> table.primaryKeyColumns().anyMatch(pkc -> DocumentDbUtil.isSame(pkc.findColumnOrThrow(), col)))
                                         .forEach(col -> col.mutator().setAutoIncrement(true));
                                 }
                             }
