@@ -17,7 +17,10 @@
 package com.speedment.common.injector.internal;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
+
+import static java.lang.String.format;
 
 class Injectable<T> {
     private final Class<T> cls;
@@ -32,8 +35,17 @@ class Injectable<T> {
         return cls;
     }
 
+    public boolean hasSupplier() {
+        return supplier != null;
+    }
+
     public Supplier<T> supplier() {
-        return supplier;
+        return Optional.ofNullable(supplier).orElseThrow(
+            () -> new UnsupportedOperationException(format(
+                "Injectable %s does not have a supplier.",
+                cls.getName()
+            ))
+        );
     }
 
     @Override

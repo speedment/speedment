@@ -16,9 +16,7 @@
  */
 package com.speedment.common.injector;
 
-import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.*;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.test_a.StringIdentityMapper;
 import com.speedment.common.injector.test_a.TypeMapperComponent;
@@ -34,6 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.speedment.common.injector.MissingArgumentStrategy.SKIP_INVOCATION;
 import static com.speedment.common.injector.State.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,7 +42,25 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since  1.0.0
  */
 final class InjectorTest {
-    
+
+    @Test
+    void testRepeatedInjection() {
+        try {
+            final Injector injector = Injector.builder()
+                .withComponent(Bar.class)
+                .withComponent(Baz.class)
+                .withComponent(Bar.class) // This is the last one injected and should "win"
+                .build();
+
+            final Foo foo = injector.getOrThrow(Foo.class);
+
+            assertEquals(Bar.class, foo.getClass());
+
+        } catch (InstantiationException ie) {
+            fail(ie);
+        }
+    }
+
     @Test
     void testSimpleInjector() {
         final Injector injector;
@@ -378,4 +395,83 @@ final class InjectorTest {
             fail("InstantiationException!");
         }
     }
+
+    @Test
+    void testOptional() throws InstantiationException {
+        final Injector injector = Injector.builder()
+            .withComponent(ComponentWithOptionals.class)
+            .build();
+
+        final ComponentWithOptionals c = injector.getOrThrow(ComponentWithOptionals.class);
+        assertFalse(c.initCalled);
+        assertFalse(c.init2Called);
+
+    }
+
+    @Test
+    void testOptionalPresent() throws InstantiationException {
+        final Injector injector = Injector.builder()
+            .withComponent(ComponentWithOptionals.class)
+            .withComponent(Bar.class)
+            .withComponent(Baz.class)
+            .build();
+
+        final ComponentWithOptionals c = injector.getOrThrow(ComponentWithOptionals.class);
+        assertTrue(c.initCalled);
+        assertTrue(c.init2Called);
+    }
+
+    private static final class ComponentWithOptionals {
+
+        private boolean initCalled;
+        private boolean init2Called;
+
+        @ExecuteBefore(value = INITIALIZED, missingArgument = SKIP_INVOCATION)
+        void init(Bar bar) {
+            initCalled = true;
+        }
+
+        @ExecuteBefore(value = INITIALIZED, missingArgument = SKIP_INVOCATION)
+        void init2(Bar bar, Baz baz) {
+            init2Called = true;
+        }
+    }
+
+    @Test
+    void testConfigDefault() throws InstantiationException {
+        final Injector injector = Injector.builder()
+            .withComponent(ComponentWithConfigInConstructor.class)
+            .build();
+
+        assertEquals(1000L, injector.getOrThrow(ComponentWithConfigInConstructor.class).value());
+
+    }
+
+    @Test
+    void testConfigCustom() throws InstantiationException {
+        final long val = 999;
+        final Injector injector = Injector.builder()
+            .withComponent(ComponentWithConfigInConstructor.class)
+            .withParam("value", Long.toString(val))
+            .build();
+
+        assertEquals(val, injector.getOrThrow(ComponentWithConfigInConstructor.class).value());
+
+    }
+
+
+    private static final class ComponentWithConfigInConstructor {
+
+        private final long value;
+
+        public ComponentWithConfigInConstructor(@Config(name = "value", value = "1000") long value) {
+            this.value = value;
+        }
+
+        public long value() {
+            return value;
+        }
+    }
+
+
 }

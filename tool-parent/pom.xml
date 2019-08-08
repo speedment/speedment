@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment-parent</artifactId>
-        <version>3.1.16</version>
+        <version>3.1.17-SNAPSHOT</version>
     </parent>
     
     <groupId>com.speedment.tool</groupId>
@@ -37,7 +37,11 @@
     <description>
         A bundle of modules that make up the Speedment Tool.
     </description>
-    
+
+    <properties>
+        <org.openjfx.version>11.0.2</org.openjfx.version>
+    </properties>
+
     <modules>
         <module>tool-config</module>
         <module>tool-actions</module>
@@ -84,12 +88,12 @@
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-controls</artifactId>
-                    <version>11</version>
+                    <version>${org.openjfx.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-fxml</artifactId>
-                    <version>11</version>
+                    <version>${org.openjfx.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -103,12 +107,12 @@
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-controls</artifactId>
-                    <version>11</version>
+                    <version>${org.openjfx.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-fxml</artifactId>
-                    <version>11</version>
+                    <version>${org.openjfx.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -121,12 +125,12 @@
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-controls</artifactId>
-                    <version>11</version>
+                    <version>${org.openjfx.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-fxml</artifactId>
-                    <version>11</version>
+                    <version>${org.openjfx.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -139,12 +143,12 @@
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-controls</artifactId>
-                    <version>11</version>
+                    <version>${org.openjfx.version}</version>
                 </dependency>
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-fxml</artifactId>
-                    <version>11</version>
+                    <version>${org.openjfx.version}</version>
                 </dependency>
             </dependencies>
         </profile>

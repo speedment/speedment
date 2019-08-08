@@ -32,11 +32,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
+import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -65,21 +67,26 @@ public final class DependencyGraphImpl implements DependencyGraph {
 
     @Override
     public DependencyNode get(Class<?> clazz) throws IllegalArgumentException {
-        for (final Class<?> impl : nodes.keySet()) {
-            if (clazz.isAssignableFrom(impl)) {
-                return nodes.get(impl);
-            }
-        }
-        
-        throw new IllegalArgumentException(
-            "There is no implementation of '" + clazz + 
-            "' in the injection dependency graph."
-        );
+        return getIfPresent(clazz).orElseThrow(() -> new IllegalArgumentException(
+            format("There is no implementation of '%s' in the injection dependency graph.", clazz)
+        ));
     }
 
     @Override
     public DependencyNode getOrCreate(Class<?> clazz) {
-        return nodes.computeIfAbsent(clazz, DependencyNodeImpl::new);
+        return getIfPresent(clazz)
+            .orElseGet(() -> nodes.computeIfAbsent(clazz, DependencyNodeImpl::new));
+    }
+
+    @Override
+    public Optional<DependencyNode> getIfPresent(Class<?> clazz) {
+        for (final Class<?> impl : nodes.keySet()) {
+            if (clazz.isAssignableFrom(impl)) {
+                return Optional.of(nodes.get(impl));
+            }
+        }
+
+        return Optional.empty();
     }
 
     @Override
@@ -129,18 +136,29 @@ public final class DependencyGraphImpl implements DependencyGraph {
             for (int i = 0; i < m.getParameterCount(); i++) {
                 final Parameter p   = m.getParameters()[i];
                 final WithState ws  = p.getAnnotation(WithState.class);
-                
+
+                // TODO: Maybe create a dependency even if WithState is missing,
+
                 if (ws != null) {
                     final Class<?> type = p.getType();
                     final State state   = ws.value();
 
                     try {
                         dependencies.add(
-                            new DependencyImpl(get(type), state)
+                            new DependencyImpl(
+                                getOrCreate(type),
+                                state
+                            )
                         );
                     } catch (final CyclicReferenceException ex) {
                         throw new CyclicReferenceException(
                             m.getDeclaringClass(), ex
+                        );
+                    } catch (final IllegalArgumentException iae) {
+                        throw new IllegalStateException(
+                            "Unable to resolve " + m.toString() + " (" + type.toString() + ") at state " + state.toString()
+                            ,
+                            iae
                         );
                     }
                 }

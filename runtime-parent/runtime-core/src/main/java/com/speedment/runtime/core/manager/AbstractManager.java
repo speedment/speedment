@@ -28,8 +28,7 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
 import java.util.stream.Stream;
 
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.STARTED;
+import static com.speedment.common.injector.State.*;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -51,12 +50,10 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
-    private @Inject StreamSupplierComponent streamSupplierComponent;
-
+    @Inject private StreamSupplierComponent streamSupplierComponent;
     private PersistenceProvider<ENTITY> persistenceProvider;
 
-    protected AbstractManager() {
-    }
+    protected AbstractManager() {}
 
     /**
      * In the {@link State#INITIALIZED}-phase, install this {@link Manager} in 
@@ -67,19 +64,14 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
      * INJECTOR. IT SHOULD THEREFORE NEVER BE CALLED DIRECTLY!
      * 
      * @param managerComponent  auto-injected managerComponent
-     * @param projectComponent  auto-injected projectComponent
      */
     @ExecuteBefore(INITIALIZED)
-    final void install(
-            @WithState(INITIALIZED) ManagerComponent managerComponent,
-            @WithState(INITIALIZED) ProjectComponent projectComponent) {
-
-        requireNonNull(projectComponent); // Must be initialized first.
+    final void install(@WithState(INITIALIZED) ManagerComponent managerComponent) {
         managerComponent.put(this);
     }
 
     @ExecuteBefore(STARTED)
-    final void resolve(@WithState(INITIALIZED) PersistenceComponent persistenceComponent) {
+    final void resolve(@WithState(RESOLVED) PersistenceComponent persistenceComponent) {
         persistenceProvider = persistenceComponent.persistenceProvider(this);
     }
 

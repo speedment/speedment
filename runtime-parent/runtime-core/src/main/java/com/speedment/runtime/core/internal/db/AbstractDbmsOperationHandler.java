@@ -19,19 +19,18 @@ package com.speedment.runtime.core.internal.db;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlUpdateStatement;
@@ -74,7 +73,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     private @Inject ConnectionPoolComponent connectionPoolComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject TransactionComponent transactionComponent;
+    private @InjectOrNull TransactionComponent transactionComponent;
 
     protected AbstractDbmsOperationHandler() {
         closed = new AtomicBoolean();

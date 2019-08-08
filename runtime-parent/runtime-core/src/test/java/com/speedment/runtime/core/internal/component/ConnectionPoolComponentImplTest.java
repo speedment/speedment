@@ -17,8 +17,11 @@
 package com.speedment.runtime.core.internal.component;
 
 
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionDecorator;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
+import com.speedment.runtime.core.db.DbmsType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -26,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.Executor;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,13 +40,20 @@ import static org.junit.jupiter.api.Assertions.*;
 final class ConnectionPoolComponentImplTest {
 
     private static final ConnectionDecorator CONNECTION_DECORATOR = connection -> {};
+    private static final int MAX_AGE = 29_000;
+    private static final int MAX_RETAIN_SIZE = 31;
 
     private ConnectionPoolComponentImpl instance;
 
     @BeforeEach
     void setUp() {
-        instance = new ConnectionPoolComponentImpl(CONNECTION_DECORATOR) {
-
+        instance = new ConnectionPoolComponentImpl(
+            CONNECTION_DECORATOR,
+            new DummyDbmsHandlerComponent(),
+            new DummyPasswordComponent(),
+            MAX_AGE,
+            MAX_RETAIN_SIZE
+        ) {
             @Override
             public Connection newConnection(String uri, String user, char[] password) {
                 return new DummyConnectionImpl(uri, user, password);
@@ -83,22 +94,19 @@ final class ConnectionPoolComponentImplTest {
     void testGetMaxAge() {
         long result = instance.getMaxAge();
         assertTrue(result >= 0);
-        instance.setMaxAge(60_000);
-        assertEquals(60_000, instance.getMaxAge());
+/*        instance.setMaxAge(60_000);*/
+        assertEquals(MAX_AGE, instance.getMaxAge());
     }
 
-    @Test
+/*    @Test
     void testSetMaxAge() {
-        instance.setMaxAge(40_000);
+        //instance.setMaxAge(40_000);
         assertEquals(40_000, instance.getMaxAge());
-    }
+    }*/
 
     @Test
     public void testGetPoolSize() {
-        final int result = instance.getMaxRetainSize();
-        assertTrue(result >= 0);
-        instance.setMaxRetainSize(10);
-        assertEquals(10, instance.getMaxRetainSize());
+        assertEquals(MAX_RETAIN_SIZE, instance.getMaxRetainSize());
     }
 
     // Leaking connections
@@ -122,8 +130,8 @@ final class ConnectionPoolComponentImplTest {
         String uri = "thecooldatabase";
         String user = "tryggve";
         char[] password = "arne".toCharArray();
-        instance.setMaxAge(60 * 60_000);
-        instance.setMaxRetainSize(10);
+        /*instance.setMaxAge(60 * 60_000);
+        instance.setMaxRetainSize(10);*/
         long maxAge = instance.getMaxAge();
         int poolSize = instance.getMaxRetainSize();
         List<PoolableConnection> connections = new ArrayList<>();
@@ -141,15 +149,26 @@ final class ConnectionPoolComponentImplTest {
             assertEquals(Math.min(poolSize, loops - i), instance.poolSize());
         }
     }
-
-    /**
+/*
+    *//**
      * Test of setPoolSize method, of class ConnectionPoolComponentImpl.
-     */
+     *//*
     @Test
     void testSetPoolSize() {
         int poolSize = 40;
         instance.setMaxRetainSize(poolSize);
         assertEquals(instance.getMaxRetainSize(), 40);
+    }*/
+
+    private static final class DummyPasswordComponent implements PasswordComponent {
+        @Override public void put(String dbmsName, char[] password) {}
+        @Override public Optional<char[]> get(String dbmsName) { return Optional.empty(); }
+    }
+
+    private static final class DummyDbmsHandlerComponent implements DbmsHandlerComponent {
+        @Override public void install(DbmsType dbmsType) {}
+        @Override public Stream<DbmsType> supportedDbmsTypes() { return Stream.empty(); }
+        @Override public Optional<DbmsType> findByName(String dbmsTypeName) { return Optional.empty(); }
     }
 
     private static final class DummyConnectionImpl implements Connection {

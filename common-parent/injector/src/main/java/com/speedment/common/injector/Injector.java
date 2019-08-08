@@ -19,22 +19,22 @@ package com.speedment.common.injector;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.internal.InjectorImpl;
 import com.speedment.common.logger.Logger;
 
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * The factory used to produce instances of classes with
- * dependency injection. This interface is expected to be
- * implemented using a builder pattern.
+ * The factory used to produce instances of classes with dependency injection.
+ * This interface is expected to be implemented using a builder pattern.
  * 
  * @author  Emil Forslund
  * @since   1.0.0
  * 
  * @see Inject
+ * @see InjectOrNull
  * @see Execute
  * @see ExecuteBefore
  */
@@ -86,7 +86,7 @@ public interface Injector {
 
     /**
      * Looks for an dependency injectable instance of the specified class token
-     * and if it exists, returns it. If it does not exist, an empty Optional
+     * and if it exists, returns it. If it does not exist, an empty NotRequired
      * is returned.
      * 
      * @param <T>   the type to look for
@@ -94,7 +94,36 @@ public interface Injector {
      * @return      the found instance
      */
     <T> Optional<T> get(Class<T> type);
-    
+
+    /**
+     * Returns the instance immediately after the provided {@code before} instance
+     * which is associated with the provided {@code type} class token, or else NotRequired.empty()
+     *
+     * This method is useful for components that delegates functionality:
+     * <pre>{@code
+     * public class HazelcastUserInterfaceComponentImpl implements UserInterfaceComponent {
+     *
+     *     private UserInterfaceComponent inner;
+     *
+     *     {@literal @}ExecuteBefore(State.INITIALIZED)
+     *     private void setup(Injector injector) {
+     *         inner = injector.getAfter(UserInterfaceComponent.class, this).orElse(null);
+     *     }
+     * }
+     * }</pre>
+     *
+     * @param <T>    the class signature of the injectable type
+     * @param type   the expected type
+     * @param before the instance before the desired component
+     * @return       the instance immediately after the provided {@code before} instance
+     *               which is associated with the provided {@code type} class token, or
+     *               else NotRequired.empty()
+     *
+     * @throws IllegalArgumentException  if it could not be found
+     */
+    <T> Optional<T> getAfter(Class<T> type, T before);
+
+
     /**
      * Returns a stream of all the instances associated with the specified class
      * token.

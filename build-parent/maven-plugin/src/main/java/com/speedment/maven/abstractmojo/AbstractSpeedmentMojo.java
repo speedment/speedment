@@ -259,10 +259,10 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         // Add mandatory components that are not included in 'runtime'
         result
             .withBundle(GeneratorBundle.class)
-            .withBundle(ToolBundle.class)
             .withComponent(CodeGenerationComponentImpl.class)
-            .withComponent(UserInterfaceComponentImpl.class)
             .withComponent(MavenPathComponent.class);
+
+        configureBuilder(result); // Add MOJO specific components (if any)
 
         // Add any extra type mappers requested by the user
         TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.
@@ -306,6 +306,8 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         // Return the resulting builder.
         return result;
     }
+
+    protected void configureBuilder( ApplicationBuilder<?, ?>  builder) {}
 
     private final static class TypeMapperInstantiationException extends RuntimeException {
 

@@ -21,6 +21,7 @@ import com.speedment.common.injector.execution.ExecutionBuilder;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Abstract base implementation for an {@link ExecutionBuilder}.
  *
  * @param <T>  the component to execute on
  * 

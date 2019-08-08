@@ -22,6 +22,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 
 import java.lang.reflect.Type;
@@ -79,7 +80,7 @@ public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterf
     private Stream<Column> columnsFromPks() {
         return primaryKeyColumns().map(pk -> {
             try {
-                return pk.findColumn().get();
+                return ((PrimaryKeyColumn) pk).findColumnOrThrow();
             } catch (final NoSuchElementException ex) {
                 throw new SpeedmentTranslatorException(
                     "Could not find any column belonging to primary key '" + pk.getId() + "'.", ex

@@ -17,8 +17,8 @@
 package com.speedment.common.injector.internal.util;
 
 import com.speedment.common.injector.annotation.Config;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import com.speedment.common.logger.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,6 +26,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
+
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 
 /**
  *

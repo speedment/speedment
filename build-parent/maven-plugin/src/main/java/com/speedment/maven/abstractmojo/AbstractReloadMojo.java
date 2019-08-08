@@ -20,6 +20,7 @@ import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
+import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 
 import java.util.function.Consumer;
@@ -69,7 +70,13 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
             throw new MojoExecutionException(err, ex);
         }
     }
-    
+
+    @Override
+    protected void configureBuilder(ApplicationBuilder<?, ?> builder) {
+            builder.
+            withBundle(ToolBundle.class); // It is sad that the reloader needs ToolBundle
+    }
+
     @Override
     protected MavenProject project() {
         return mavenProject;

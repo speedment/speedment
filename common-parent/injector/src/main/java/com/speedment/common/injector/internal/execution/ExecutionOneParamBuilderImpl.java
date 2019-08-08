@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector.internal.execution;
 
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.dependency.DependencyGraph;
@@ -26,12 +27,14 @@ import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.execution.ExecutionOneParamBuilder;
 import com.speedment.common.injector.execution.ExecutionTwoParamBuilder;
 import com.speedment.common.injector.internal.dependency.DependencyImpl;
-import java.lang.reflect.InvocationTargetException;
-import static java.util.Collections.singleton;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.BiConsumer;
 
+import static java.util.Collections.singleton;
+import static java.util.Objects.requireNonNull;
+
 /**
+ * First step of an {@link ExecutionBuilder}-chain.
  * 
  * @param <T>   the component to withExecute on
  * @param <P0>  the first parameter type
@@ -83,15 +86,16 @@ implements ExecutionOneParamBuilder<T, P0> {
         final Dependency dep0 = new DependencyImpl(node0, state0);
         
         return new AbstractExecution<T>(
-                getComponent(), getState(), singleton(dep0)) {
+                getComponent(), getState(), singleton(dep0),
+                MissingArgumentStrategy.THROW_EXCEPTION) {
                     
             @Override
-            public void invoke(T component, ClassMapper classMapper) 
-            throws IllegalAccessException, IllegalArgumentException, 
-                   InvocationTargetException, NotInjectableException {
+            public boolean invoke(T component, ClassMapper classMapper)
+            throws IllegalArgumentException, NotInjectableException {
                 
                 final P0 arg0 = classMapper.apply(param0);
                 executeAction.accept(component, arg0);
+                return true;
             }
         };
     }

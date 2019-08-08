@@ -54,7 +54,7 @@ public final class FkHolder {
         this.fk  = fk;
         this.fkc = fk.foreignKeyColumns().findFirst().orElseThrow(this::noEnabledForeignKeyException);
         
-        this.column        = fkc.findColumn().orElseThrow(this::couldNotFindLocalColumnException);
+        this.column        = fkc.findColumnOrThrow();
         this.table         = ancestor(column, Table.class).orElseThrow(NoSuchElementException::new);
         this.foreignColumn = fkc.findForeignColumn().orElseThrow(this::foreignKeyWasNullException);
         this.foreignTable  = fkc.findForeignTable().orElseThrow(this::foreignKeyWasNullException);
@@ -97,15 +97,7 @@ public final class FkHolder {
             "FK " + fk.getId() + " does not have an enabled ForeignKeyColumn"
         );
     }
-    
-    private SpeedmentException couldNotFindLocalColumnException() {
-        return new SpeedmentException(
-            "Could not find referenced local column '" + 
-            fkc.getId() + "' in table '" + 
-            fkc.getParent().flatMap(ForeignKey::getParent).get().getId() + "'."
-        );
-    }
-    
+
     private SpeedmentException foreignKeyWasNullException() {
         return new SpeedmentException(
             "Could not find referenced foreign column '" + 

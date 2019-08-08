@@ -43,8 +43,8 @@ public interface DocumentMutator<DOC extends Document> {
         return new ColumnMutator<>(column);
     }
 
-    static DbmsMutator<Dbms> of(Dbms column) {
-        return new DbmsMutator<>(column);
+    static DbmsMutator<Dbms> of(Dbms dbms) {
+        return new DbmsMutator<>(dbms);
     }
 
     static ForeignKeyColumnMutator<ForeignKeyColumn> of(ForeignKeyColumn fkcolumn) {

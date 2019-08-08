@@ -26,6 +26,7 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -118,7 +119,28 @@ final class ResultSetIteratorTest {
         }
     }
 
-    private static final class MockResultSet implements ResultSet {
+    @Test
+    void testEmpty() {
+        final ResultSet rs = new MockResultSet(0);
+        final StreamUtil.ResultSetIterator<Integer> it
+            = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
+
+        assertThrows(NoSuchElementException.class, () -> {
+            it.next();
+        });
+    }
+
+    @Test
+    void testRemove() {
+        final ResultSet rs = new MockResultSet(1);
+        final StreamUtil.ResultSetIterator<Integer> it
+            = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
+
+        assertThrows(UnsupportedOperationException.class, it::remove);
+    }
+
+
+        private static final class MockResultSet implements ResultSet {
 
         private int itemsLeft;
         private int itemsConsumed;

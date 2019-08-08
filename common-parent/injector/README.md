@@ -25,7 +25,7 @@ public class FooComponent {
 Every component is only initialized once. If multiple components depend on the same component, those instances will be set to the same instace.
 
 ##### Using Bundles
-If multiple components are typically used togather, a bundle can be created to avoid having to list them all every time they are used. Bundles are defined by implementing the `InjectBundle` interface.
+If multiple components are typically used together, a bundle can be created to avoid having to list them all every time they are used. Bundles are defined by implementing the `InjectBundle` interface.
 
 ```java
 public class FooBarBundle implements InjectBundle {
@@ -79,6 +79,48 @@ public class JsonEncoderComponent implements EncoderComponent, HasToString {}
 
 @InjectKey(value=EncoderComponent.class, overwrite=false) // <-- Both will be created.
 public class BinaryEncoderComponent implements EncoderComponent, HasToBytes {}
+```
+
+##### Control How Instances Are Constructed
+To get more control over how instances are created, a specific constructor can be specified. This is also done using the `@Inject`-annotation.
+
+```java
+public class SpecificConstructor {
+    
+    public SpecificConstructor() {
+        // This constructor will NOT be used since another constructor with the
+        // @Inject-annotation exists.
+    }
+    
+    @Inject
+    public SpecificConstructor(OtherComponent other) {
+        // This constructor will be used if `OtherComponent` is present. 
+        // Otherwise an exception will be thrown then the Injector is built.
+    }
+    
+}
+```
+
+To make the injector use the default constructor or some other constructor as a fallback, you can set the `@OnlyIfMissing`-annotation.
+
+```java
+public class SpecificConstructor {
+    
+    @Inject
+    @OnlyIfMissing(OtherComponent.class)
+    public SpecificConstructor() {
+        // This constructor will ONLY be used if no implementation of 
+        // OtherComponent is known by the Injector.
+    }
+    
+    @Inject
+    public SpecificConstructor(OtherComponent other) {
+        // This constructor will be used if `OtherComponent` is present. If the
+        // implementation is known, then the Injector will make sure that they
+        // are called in the correct order.
+    }
+    
+}
 ```
 
 ##### Execute Code During Initialization
@@ -167,6 +209,18 @@ public class ConfigurableComponent {
 }
 ```
 
+Sometimes it is desirable to only invoke a method if all the dependencies are available. To accomplish this, the `missingArgument` parameter can be set.
+
+```java
+@ExecuteBefore(value = RESOLVED, missingArgument = SKIP_INVOCATION)
+void installComponent(@WithState(RESOLVED) OtherComponent other) {
+    // This method will only be invoked if the other component is available and
+    // has the state RESOLVED. If the dependency injector doesn't know how to
+    // produce an instance of type OtherComponent, then this fact is logged and
+    // this method is ignored.
+}
+```
+
 ##### Runtime Access to Injector
 Sometimes it is not convenient to make a class injectable, but you still want to access the injectable instances it holds. To do this, the `Injector` interface contains a number of methods to access its state after it is built.
 
@@ -197,7 +251,7 @@ To use `function` in your own projects, include the following dependency in your
 <dependency>
     <groupId>com.speedment.common</groupId>
     <artifactId>injector</artifactId>
-    <version>1.1.0</version>
+    <version>3.1.17</version>
 </dependency>
 ```
 

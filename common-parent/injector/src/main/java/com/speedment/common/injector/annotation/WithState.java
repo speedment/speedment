@@ -21,7 +21,7 @@ import com.speedment.common.injector.State;
 import java.lang.annotation.*;
 
 /**
- * Annotes that the method parameter should be set to 
+ * Annotates that the method parameter should be set to
  * something with a certain state.
  * 
  * @author  Emil Forslund

@@ -25,6 +25,9 @@ import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.MainApp;
 
 import java.util.function.Consumer;
+
+import com.speedment.tool.core.ToolBundle;
+import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import javafx.application.Application;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -65,7 +68,14 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
             Application.launch(MainApp.class);
         }
     }
-    
+
+    @Override
+    protected void configureBuilder(ApplicationBuilder<?, ?> builder) {
+        // Add tool specific items, #733
+        builder.
+            withBundle(ToolBundle.class);
+    }
+
     @Override
     protected MavenProject project() {
         return mavenProject;

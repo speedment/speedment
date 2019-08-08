@@ -20,7 +20,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
 import com.speedment.common.injector.exception.NotInjectableException;
@@ -32,8 +32,13 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
@@ -110,22 +115,30 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public <T> T getAfterOrThrow(Class<T> type, T before) {
-        boolean found = false;
-        for (Iterator<T> i = stream(type).iterator();i.hasNext(); ) {
-            final T t = i.next();
-            if (found) {
-                return t;
-            }
-            if (t == before) {
-                found = true;
-            }
-        }
-        throw new IllegalArgumentException("A component after "+ before + " of type " + type.getName() + " could not be found");
+        return getAfter(type, before).orElseThrow(() ->
+            new IllegalArgumentException("A component after " + before + " of type " + type.getName() + " could not be found. Components of type: " + stream(type).map(Object::getClass).map(Class::getSimpleName).collect(Collectors.joining(", ")))
+        );
     }
 
     @Override
     public <T> Optional<T> get(Class<T> type) {
         return Optional.ofNullable(find(type, false));
+    }
+
+
+    @Override
+    public <T> Optional<T> getAfter(Class<T> type, T before) {
+        boolean found = false;
+        for (Iterator<T> i = stream(type).iterator();i.hasNext(); ) {
+            final T t = i.next();
+            if (found) {
+                return Optional.of(t);
+            }
+            if (t == before) {
+                found = true;
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -200,7 +213,16 @@ public final class InjectorImpl implements Injector {
                             }
 
                             try {
-                                exec.invoke(inst, classMapper);
+                                if (!exec.invoke(inst, classMapper)) {
+                                    if (LOGGER_INSTANCE.getLevel()
+                                        .isEqualOrLowerThan(Level.DEBUG)) {
+
+                                        LOGGER_INSTANCE.debug(
+                                            "|      %-74s |",
+                                            limit("(Ignored due to missing dependencies.)", 74)
+                                        );
+                                    }
+                                }
                             } catch (final IllegalAccessException 
                                          | IllegalArgumentException 
                                          | InvocationTargetException ex) {
@@ -258,7 +280,8 @@ public final class InjectorImpl implements Injector {
         requireNonNull(instance);
         
         traverseFields(instance.getClass())
-            .filter(f -> f.isAnnotationPresent(Inject.class))
+            .filter(f -> f.isAnnotationPresent(Inject.class)
+                      || f.isAnnotationPresent(InjectOrNull.class))
             .distinct()
             .forEachOrdered(field -> {
                 final Object value;
@@ -268,7 +291,7 @@ public final class InjectorImpl implements Injector {
                 } else {
                     value = find(
                         field.getType(), 
-                        field.getAnnotation(WithState.class) != null
+                        field.isAnnotationPresent(Inject.class)
                     );
                 }
 
@@ -276,11 +299,16 @@ public final class InjectorImpl implements Injector {
 
                 try {
                     field.set(instance, value);
+
                 } catch (final IllegalAccessException ex) {
-                    final String err = "Could not access field '" + 
-                        field.getName() +
-                        "' in class '" + value.getClass().getName() +
-                        "' of type '" + field.getType() + "'.";
+                    final String err = String.format(
+                        "Could not access field '%s' in class '%s' of " +
+                        "type '%s'.",
+                        field.getName(),
+                        value.getClass().getName(),
+                        field.getType()
+                    );
+
                     LOGGER_INSTANCE.error(ex, err);
                     throw new RuntimeException(err, ex);
                 }

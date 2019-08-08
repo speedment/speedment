@@ -56,32 +56,30 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
     protected static final Logger LOGGER_CONNECTION = LoggerManager.getLogger(ApplicationBuilder.LogType.CONNECTION.getLoggerName());
 
-    @Inject ConnectionDecorator connectionDecorator;
-
-    @Config(name = "connectionpool.maxAge", value = "30000")
-    private long maxAge;
-    @Config(name = "connectionpool.maxRetainSize", value = "32")
-    private int maxRetainSize;
-
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
+    private final ConnectionDecorator connectionDecorator;
+    private final DbmsHandlerComponent dbmsHandlerComponent;
+    private final PasswordComponent passwordComponent;
+    private final long maxAge;
+    private final int maxRetainSize;
 
     @Inject
-    private DbmsHandlerComponent dbmsHandlerComponent;
-    @Inject
-    private PasswordComponent passwordComponent;
-
-    public ConnectionPoolComponentImpl() {
-        pools = new ConcurrentHashMap<>();
-        leasedConnections = new ConcurrentHashMap<>();
+    public ConnectionPoolComponentImpl(
+        final ConnectionDecorator connectionDecorator,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final PasswordComponent passwordComponent,
+        @Config(name = "connectionpool.maxAge", value = "30000") long maxAge,
+        @Config(name = "connectionpool.maxRetainSize", value = "32") int maxRetainSize
+    ) {
+        this.pools = new ConcurrentHashMap<>();
+        this.leasedConnections = new ConcurrentHashMap<>();
+        this.connectionDecorator = requireNonNull(connectionDecorator);
+        this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
+        this.passwordComponent = requireNonNull(passwordComponent);
+        this.maxAge = maxAge;
+        this.maxRetainSize = maxRetainSize;
     }
-
-    /* For testing only */
-    ConnectionPoolComponentImpl(ConnectionDecorator  connectionDecorator) {
-        this();
-        this.connectionDecorator = connectionDecorator;
-    }
-
 
     @ExecuteBefore(State.STOPPED)
     void closeOpenConnections() {
@@ -282,19 +280,9 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         return maxAge;
     }
 
-    void setMaxAge(long maxAge) {
-        LOGGER_CONNECTION.warn("Unsafe method called. Use configuration parameters to set this value instead");
-        this.maxAge = maxAge;
-    }
-
     @Override
     public int getMaxRetainSize() {
         return maxRetainSize;
     }
 
-    
-    void setMaxRetainSize(int maxRetainSize) {
-        LOGGER_CONNECTION.warn("Unsafe method called. Use configuration parameters to set this value instead");
-        this.maxRetainSize = maxRetainSize;
-    }
 }

@@ -81,7 +81,7 @@ public interface DatabaseNamingConvention {
      * @return the full name
      */
     default String fullNameOf(PrimaryKeyColumn pkc) {
-        return fullNameOf(pkc.findColumn().orElseThrow(() -> new SpeedmentException("Cannot find column for " + pkc)));
+        return fullNameOf(pkc.findColumnOrThrow());
     }
 
     /**

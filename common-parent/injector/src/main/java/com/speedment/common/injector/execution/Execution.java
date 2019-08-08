@@ -17,6 +17,7 @@
 package com.speedment.common.injector.execution;
 
 import com.speedment.common.injector.State;
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.exception.NotInjectableException;
 import java.lang.reflect.InvocationTargetException;
@@ -51,7 +52,33 @@ public interface Execution<T> {
          * @throws NotInjectableException  if it can't be resolved
          */
         <T> T apply(Class<T> type) throws NotInjectableException;
+
+        /**
+         * Resolves the specified type into an instance, returning null
+         * if it could not be resolved.
+         *
+         * @param <T>  the type to resolve
+         *
+         * @param type  the type to resolve
+         * @return      the instance resolved or null
+         */
+        default <T> T applyOrNull(Class<T> type) {
+            try {
+                return apply(type);
+            } catch (Throwable t) {
+                return null;
+            }
+        }
+
     }
+
+    /**
+     * Returns the human-readable name of this execution. This is mainly used
+     * for debugging purposes.
+     *
+     * @return  the name
+     */
+    String getName();
     
     /**
      * Returns the type of the class executed on.
@@ -74,13 +101,24 @@ public interface Execution<T> {
      * @return  set of dependencies
      */
     Set<Dependency> getDependencies();
+
+    /**
+     * Returns the strategy used if an argument to this execution can't be
+     * injected.
+     *
+     * @return  the strategy used for non-injectable arguments
+     */
+    MissingArgumentStrategy getMissingArgumentStrategy();
     
     /**
      * Invokes this {@code Execution}, resolving the required dependencies by
-     * passing them to the specified {@code classMapper}.
+     * passing them to the specified {@code classMapper}. If at least one
+     * dependency is missing, this method will either throw an exception or
+     * return {@code false}, depending on the implementation.
      * 
      * @param component    the component executed on
      * @param classMapper  the class mapper to use to resolve dependencies
+     * @return  {@code true} if the method was executed, otherwise {@code false}
      * 
      * @throws IllegalAccessException     passed on from {@link Method}
      * @throws IllegalArgumentException   passed on from {@link Method}
@@ -88,7 +126,7 @@ public interface Execution<T> {
      * @throws NotInjectableException     if the {@code ClassMapper} could not
      *                                    resolve a particular type
      */
-    void invoke(T component, ClassMapper classMapper) 
+    boolean invoke(T component, ClassMapper classMapper)
     throws IllegalAccessException, 
            IllegalArgumentException, 
            InvocationTargetException,

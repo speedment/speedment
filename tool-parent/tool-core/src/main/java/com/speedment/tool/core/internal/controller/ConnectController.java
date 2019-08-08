@@ -38,12 +38,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
@@ -61,6 +56,7 @@ import java.util.OptionalInt;
 import java.util.OptionalLong;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -118,11 +114,11 @@ public final class ConnectController implements Initializable {
         fieldFileBtn.setGraphic(FontAwesome.FOLDER_OPEN.view());
         buttonConnect.setGraphic(FontAwesome.SIGN_IN.view());
 
-        hostRowChildren   = inRow(hostRow);
-        fileRowChildren   = inRow(fileRow);
-        userRowChildren   = inRow(userRow);
-        passRowChildren   = inRow(passRow);
-        dbmsRowChildren   = inRow(dbmsRow);
+        hostRowChildren = inRow(hostRow);
+        fileRowChildren = inRow(fileRow);
+        userRowChildren = inRow(userRow);
+        passRowChildren = inRow(passRow);
+        dbmsRowChildren = inRow(dbmsRow);
         schemaRowChildren = inRow(schemaRow);
 
         fieldType.setItems(getDbmsTypes()
@@ -131,15 +127,15 @@ public final class ConnectController implements Initializable {
 
         // Keep track of the generated values so that we don't overwrite user
         // changes with automatic ones.
-        final AtomicReference<DbmsType> dbmsType       = new AtomicReference<>();
-        final AtomicReference<String> generatedHost    = new AtomicReference<>("");
-        final AtomicReference<String> generatedPort    = new AtomicReference<>("");
-        final AtomicReference<String> generatedUser    = new AtomicReference<>("");
-        final AtomicReference<String> generatedName    = new AtomicReference<>("");
-        final AtomicReference<String> generatedSchema  = new AtomicReference<>("");
+        final AtomicReference<DbmsType> dbmsType = new AtomicReference<>();
+        final AtomicReference<String> generatedHost = new AtomicReference<>("");
+        final AtomicReference<String> generatedPort = new AtomicReference<>("");
+        final AtomicReference<String> generatedUser = new AtomicReference<>("");
+        final AtomicReference<String> generatedName = new AtomicReference<>("");
+        final AtomicReference<String> generatedSchema = new AtomicReference<>("");
         final AtomicReference<String> generatedConnUrl = new AtomicReference<>("");
 
-        // Use this method reference to recalculate any default values.
+        // Use this method reference to recalculate any default values in text fields.
         final Runnable recalculateFields = () -> {
             final DbmsType item = dbmsType.get();
 
@@ -152,7 +148,7 @@ public final class ConnectController implements Initializable {
             toggleVisibility(schemaRow, schemaRowChildren, item.hasSchemaNames());
 
             if (fieldHost.getText().isEmpty()
-            ||  fieldHost.getText().equals(generatedHost.get())) {
+                || fieldHost.getText().equals(generatedHost.get())) {
                 fieldHost.textProperty().setValue(DEFAULT_HOST);
                 generatedHost.set(DEFAULT_HOST);
             }
@@ -163,7 +159,7 @@ public final class ConnectController implements Initializable {
                 fieldPass.setDisable(false);
 
                 if (fieldUser.getText().isEmpty()
-                ||  fieldUser.getText().equals(generatedUser.get())) {
+                    || fieldUser.getText().equals(generatedUser.get())) {
                     fieldUser.textProperty().setValue(DEFAULT_USER);
                     generatedUser.set(DEFAULT_USER);
                 }
@@ -178,7 +174,7 @@ public final class ConnectController implements Initializable {
                 fieldName.setDisable(false);
 
                 if (fieldName.getText().isEmpty()
-                ||  fieldName.getText().equals(generatedName.get())) {
+                    || fieldName.getText().equals(generatedName.get())) {
                     item.getDefaultDbmsName().ifPresent(name -> {
                         fieldName.textProperty().setValue(name);
                         generatedName.set(name);
@@ -193,7 +189,7 @@ public final class ConnectController implements Initializable {
                 fieldSchema.setDisable(false);
 
                 if (fieldSchema.getText().isEmpty()
-                ||  fieldSchema.getText().equals(generatedSchema.get())) {
+                    || fieldSchema.getText().equals(generatedSchema.get())) {
                     item.getDefaultSchemaName().ifPresent(name -> {
                         fieldSchema.textProperty().setValue(name);
                         generatedSchema.set(name);
@@ -206,27 +202,33 @@ public final class ConnectController implements Initializable {
             fieldName.getTooltip().setText(item.getDbmsNameMeaning());
 
             if (fieldPort.getText().isEmpty()
-            ||  fieldPort.getText().equals(generatedPort.get())) {
+                || fieldPort.getText().equals(generatedPort.get())) {
                 final String port = Integer.toString(item.getDefaultPort());
                 fieldPort.textProperty().setValue(port);
                 generatedPort.set(port);
             }
 
+        };
+
+        // Use this method reference to recalculate the connection URL.
+        final Runnable recalculateConnUrl = () -> {
+            final DbmsType item = dbmsType.get();
+
             if (areaConnectionUrl.getText().isEmpty()
-            ||  areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
+                || areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
                 final String url = item.getConnectionUrlGenerator().from(
                     TemporaryDbms.create(
                         ui.projectProperty(),
                         fieldName.getText(),
                         fieldFile.getText(),
                         fieldHost.getText(),
-                        Integer.parseInt(fieldPort.getText())
+                        fieldPort.getText().isEmpty() ? 0 : Integer.parseInt(fieldPort.getText())
                     )
                 );
-
                 generatedConnUrl.set(url);
                 areaConnectionUrl.setText(url);
             }
+
         };
 
         // If the user changes something, recalculate default values.
@@ -235,16 +237,54 @@ public final class ConnectController implements Initializable {
                 if (!typeName.isEmpty()) {
                     dbmsType.set(findDbmsType(typeName));
                     recalculateFields.run();
+                    recalculateConnUrl.run();
                 }
             });
 
-        fieldHost.textProperty().addListener((ob, o, n) -> recalculateFields.run());
-        fieldPort.textProperty().addListener((ob, o, n) -> recalculateFields.run());
-        fieldFile.textProperty().addListener((ob, o, n) -> recalculateFields.run());
-        fieldUser.textProperty().addListener((ob, o, n) -> recalculateFields.run());
-        fieldName.textProperty().addListener((ob, o, n) -> recalculateFields.run());
-        fieldSchema.textProperty().addListener((ob, o, n) -> recalculateFields.run());
-        areaConnectionUrl.textProperty().addListener((ob, o, n) -> recalculateFields.run());
+        fieldHost.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
+        fieldPort.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
+        fieldFile.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
+        fieldName.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
+
+        fieldHost.focusedProperty().addListener((ob, o, n) -> {
+            if(o && fieldHost.getText().isEmpty()) {
+                recalculateFields.run();
+            }
+        });
+
+        UnaryOperator<TextFormatter.Change> onlyDigitsFilter = change ->
+            change.getText().matches("[0-9]*") ? change : null;
+
+        fieldPort.setTextFormatter(new TextFormatter<>(onlyDigitsFilter));
+        fieldPort.focusedProperty().addListener((ob, o, n) -> {
+            if(o && fieldPort.getText().isEmpty()) {
+                recalculateFields.run();
+            }
+        });
+
+        fieldFile.focusedProperty().addListener((ob, o, n) -> {
+            if(o && fieldFile.getText().isEmpty()) {
+                recalculateFields.run();
+            }
+        });
+
+        fieldUser.focusedProperty().addListener((ob, o, n) -> {
+            if(o && fieldUser.getText().isEmpty()) {
+                recalculateFields.run();
+            }
+        });
+
+        fieldName.focusedProperty().addListener((ob, o, n) -> {
+            if(o && fieldName.getText().isEmpty()) {
+                recalculateFields.run();
+            }
+        });
+
+        fieldSchema.focusedProperty().addListener((ob, o, n) -> {
+            if(o && fieldSchema.getText().isEmpty()) {
+                recalculateFields.run();
+            }
+        });
 
         // Disable the Connection Url field if the checkbox is not checked.
         areaConnectionUrl.disableProperty().bind(
@@ -435,7 +475,9 @@ public final class ConnectController implements Initializable {
             data.put(Dbms.ID,         name);
             data.put(Dbms.NAME,       name);
             data.put(Dbms.IP_ADDRESS, ip);
-            data.put(Dbms.PORT,       port);
+            if (port != 0) {
+                data.put(Dbms.PORT, port);
+            }
             data.put(Dbms.LOCAL_PATH, file);
             return new TemporaryDbms(project, data);
         }

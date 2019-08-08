@@ -16,6 +16,8 @@
  */
 package com.speedment.common.injector;
 
+import java.util.NoSuchElementException;
+
 /**
  * The state of an injectable instance.
  *
@@ -43,5 +45,42 @@ public enum State {
     /**
      * The Injectable has been initialized, resolved, started and stopped.
      */
-    STOPPED
+    STOPPED;
+
+    /**
+     * Returns the previous state.
+     *
+     * @return the previous state
+     * @throws java.util.NoSuchElementException if there are no previous state
+     */
+    public State previous() {
+        if (this == CREATED) {
+            throw new NoSuchElementException();
+        }
+        return values()[ordinal() - 1];
+    }
+
+    /**
+     * Returns the next state.
+     *
+     * @return the next state
+     * @throws java.util.NoSuchElementException if there are no next state
+     */
+    public State next() {
+        if (this == STOPPED) {
+            throw new NoSuchElementException();
+        }
+        return values()[ordinal() + 1];
+    }
+
+    /**
+     * Returns {@code true} if this state is strictly before the specified
+     * state.
+     *
+     * @param state  the state to check against
+     * @return       {@code true} if this is before, otherwise {@code false}
+     */
+    public boolean isBefore(State state) {
+        return ordinal() < state.ordinal();
+    }
 }

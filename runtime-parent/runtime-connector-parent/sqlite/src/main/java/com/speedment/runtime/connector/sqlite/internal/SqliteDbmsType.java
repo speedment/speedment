@@ -18,6 +18,7 @@ package com.speedment.runtime.connector.sqlite.internal;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.OnlyIfMissing;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.*;
@@ -30,6 +31,7 @@ import java.util.Set;
 import static com.speedment.common.injector.State.CREATED;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static java.util.Collections.emptySet;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Implementation of {@link DbmsType} for the SQLite database type.
@@ -41,9 +43,27 @@ public final class SqliteDbmsType implements DbmsType {
 
     public final static String SQLITE = "SQLite";
 
-    private @Inject DriverComponent drivers;
-    private @Inject SqliteMetadataHandler metadataHandler;
-    private @Inject SqliteOperationHandler operationHandler;
+    private final DriverComponent drivers; // Nullable
+    private final SqliteMetadataHandler metadataHandler;
+    private final SqliteOperationHandler operationHandler;
+
+    @Inject
+    @OnlyIfMissing(DriverComponent.class)
+    SqliteDbmsType(SqliteMetadataHandler metadataHandler,
+                   SqliteOperationHandler operationHandler) {
+        this.drivers          = null; // Nullable
+        this.metadataHandler  = requireNonNull(metadataHandler);
+        this.operationHandler = requireNonNull(operationHandler);
+    }
+
+    @Inject
+    SqliteDbmsType(DriverComponent drivers,
+                   SqliteMetadataHandler metadataHandler,
+                   SqliteOperationHandler operationHandler) {
+        this.drivers          = requireNonNull(drivers);
+        this.metadataHandler  = requireNonNull(metadataHandler);
+        this.operationHandler = requireNonNull(operationHandler);
+    }
 
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {

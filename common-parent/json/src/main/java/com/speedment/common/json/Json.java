@@ -37,8 +37,6 @@ public final class Json {
 
     private Json() {}
 
-
-    
     /**
      * Parses the specified object to a JSON string. The following
      * objects are supported:
@@ -63,6 +61,39 @@ public final class Json {
     public static String toJson(Object object) throws IllegalArgumentException {
         try (final ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             toJson(object, out);
+            return new String(out.toByteArray(), StandardCharsets.UTF_8);
+        } catch (final IOException ex) {
+            throw new RuntimeException(
+                "Error in internal toString()-stream.", ex
+            );
+        }
+    }
+
+    /**
+     * Parses the specified object to JSON and prints it to the specified
+     * stream. The following objects are supported:
+     * <ul>
+     *      <li>{@code Map<String, Object>}
+     *      <li>{@code List<Object>}
+     *      <li>{@code String}
+     *      <li>{@code Double}
+     *      <li>{@code Long}
+     *      <li>{@code null}
+     * </ul>
+     * <p>
+     * This method will output a nicely formatted JSON string (with spaces and
+     * new-lines).
+     *
+     * @param object  the object to parse
+     * @param pretty  if the result should be formatted in a pretty way
+     *
+     * @throws IllegalArgumentException  if the inputed object is of or contains
+     *                                   unsupported types
+     */
+    public static String toJson(Object object, boolean pretty)
+    throws IllegalArgumentException {
+        try (final ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            toJson(object, out, pretty);
             return new String(out.toByteArray(), StandardCharsets.UTF_8);
         } catch (final IOException ex) {
             throw new RuntimeException(
@@ -141,8 +172,6 @@ public final class Json {
      * 
      * @param json  the json to parse
      * @return      the created object
-     * 
-     * @throws JsonSyntaxException  if the specified json is malformed
      */
     public static Object fromJson(String json) throws JsonSyntaxException {
         try (final InputStream stream = 
@@ -169,8 +198,7 @@ public final class Json {
      * @param in  the json to parse
      * @return    the created object
      * 
-     * @throws IOException          if the stream can not be read 
-     * @throws JsonSyntaxException  if the specified json is malformed
+     * @throws IOException  if the stream can not be read
      */
     public static Object fromJson(InputStream in) 
     throws IOException, JsonSyntaxException {

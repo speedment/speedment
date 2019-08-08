@@ -17,16 +17,18 @@
 package com.speedment.common.injector.execution;
 
 import com.speedment.common.injector.State;
+import com.speedment.common.injector.dependency.DependencyGraph;
+import com.speedment.common.injector.internal.execution.ExecutionZeroParamBuilderImpl;
+
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.common.injector.State.STARTED;
 import static com.speedment.common.injector.State.STOPPED;
-import com.speedment.common.injector.dependency.DependencyGraph;
-import com.speedment.common.injector.internal.execution.ExecutionZeroParamBuilderImpl;
 
 /**
  * Builder for a {@link Execution} that can be applied for a particular 
- * injectable component in a specific {@link State}.
+ * injectable component in a specific {@link State}. The returned execution will
+ * always execute the method or throw an exception.
  * 
  * @param <T>  the component to execute on
  * 

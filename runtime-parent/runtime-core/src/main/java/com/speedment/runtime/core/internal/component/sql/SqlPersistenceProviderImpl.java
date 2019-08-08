@@ -19,6 +19,7 @@ package com.speedment.runtime.core.internal.component.sql;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -265,7 +266,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         requireNonNull(postMapper);
         return table.primaryKeyColumns()
             .sorted(comparing(PrimaryKeyColumn::getOrdinalPosition))
-            .map(this::findColumn)
+            .map(HasColumn::findColumnOrThrow)
             .map(Column::getName)
             .map(naming::encloseField)
             .map(postMapper)
@@ -282,14 +283,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
             .map(postMapper)
             .collect(joining(","));
     }
-    
-    private Column findColumn(PrimaryKeyColumn pkc) {
-        return pkc.findColumn()
-            .orElseThrow(() -> new SpeedmentException(
-                "Cannot find column for " + pkc
-            ));
-    }
-    
+
     private void assertHasPrimaryKeyColumns() {
         if (!hasPrimaryKeyColumns) {
             throw new SpeedmentException(

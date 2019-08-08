@@ -70,10 +70,10 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
     private final static Class<?> DEFAULT_MAPPING = Object.class;
     
-    @Inject private ConnectionPoolComponent connectionPoolComponent;
-    @Inject private DbmsHandlerComponent dbmsHandlerComponent;
-    @Inject private ProjectComponent projectComponent;
-    @Inject private JavaTypeMap javaTypeMap;
+    private @Inject ConnectionPoolComponent connectionPoolComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject ProjectComponent projectComponent;
+    private JavaTypeMap javaTypeMap;
 
     private Map<Class<? extends Document>, AtomicLong> timers;
 
