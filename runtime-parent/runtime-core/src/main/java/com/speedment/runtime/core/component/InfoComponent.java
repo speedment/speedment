@@ -38,7 +38,7 @@ public interface InfoComponent  {
     String getVendor();
 
     /**
-     * Returns the title of the Speedment product.  This is primarily used to 
+     * Returns the title of the Speedment product. This is primarily used to
      * show meaningful information to the user.
      *
      * @return the title
@@ -46,7 +46,7 @@ public interface InfoComponent  {
     String getTitle();
 
     /**
-     * Returns the subtitle of the Speedment product.  This is primarily used to 
+     * Returns the subtitle of the Speedment product. This is primarily used to
      * show meaningful information to the user.
      *
      * @return the subtitle
@@ -75,7 +75,7 @@ public interface InfoComponent  {
     /**
      * Returns the non-null version number of the specification that this
      * Speedment implements. This version string must be a sequence of
-     * nonnegative decimal integers separated by "."'s and may have leading
+     * non-negative decimal integers separated by "."'s and may have leading
      * zeros. When version strings are compared the most significant numbers are
      * compared.
      *
@@ -107,4 +107,18 @@ public interface InfoComponent  {
     default String getEditionAndVersionString() {
         return getTitle() + ":" + getImplementationVersion();
     }
+
+    // Almost: http://patorjk.com/software/taag/#p=display&f=Big&t=Type%20Something%20
+
+    default String getBanner() {
+        return String.format(
+              "   ____                   _                     _     %n"+
+              "  / ___'_ __  __  __   __| |_ __ __    __ _ __ | |    %n"
+            + "  \\___ | '_ |/  \\/  \\ / _  | '_ \\ _ \\ /  \\ '_ \\| |_   %n"
+            + "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  %n"
+            + "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   %n"
+            + "=======|_|======================================\\__|==");
+    };
+
+
 }
