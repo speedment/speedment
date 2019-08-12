@@ -55,10 +55,10 @@ public final class Json {
      * @param object  the object to parse
      * @return        the parsed string
      * 
-     * @throws IllegalArgumentException  if the inputed object is a or contains
+     * @throws IllegalArgumentException  if the input object is a or contains
      *                                   unsupported types
      */
-    public static String toJson(Object object) throws IllegalArgumentException {
+    public static String toJson(Object object) {
         try (final ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             toJson(object, out);
             return new String(out.toByteArray(), StandardCharsets.UTF_8);
@@ -87,11 +87,10 @@ public final class Json {
      * @param object  the object to parse
      * @param pretty  if the result should be formatted in a pretty way
      *
-     * @throws IllegalArgumentException  if the inputed object is of or contains
+     * @throws IllegalArgumentException  if the input object is of or contains
      *                                   unsupported types
      */
-    public static String toJson(Object object, boolean pretty)
-    throws IllegalArgumentException {
+    public static String toJson(Object object, boolean pretty) {
         try (final ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             toJson(object, out, pretty);
             return new String(out.toByteArray(), StandardCharsets.UTF_8);
@@ -124,11 +123,9 @@ public final class Json {
      *                                   unsupported types
      * @throws IOException               if the stream could not be written to
      */
-    public static void toJson(Object object, OutputStream out) 
-    throws IllegalArgumentException, IOException {
+    public static void toJson(Object object, OutputStream out) throws IOException {
         toJson(object, out, true);
     }
-
 
     /**
      * Parses the specified object to JSON and prints it to the specified
@@ -153,8 +150,7 @@ public final class Json {
      *                                   unsupported types
      * @throws IOException               if the stream could not be written to
      */
-    public static void toJson(Object object, OutputStream out, boolean pretty)
-        throws IllegalArgumentException, IOException {
+    public static void toJson(Object object, OutputStream out, boolean pretty) throws  IOException {
         new JsonSerializer(out, pretty).print(object);
     }
     
@@ -172,8 +168,9 @@ public final class Json {
      * 
      * @param json  the json to parse
      * @return      the created object
+     * @throws JsonSyntaxException if there is a syntax error
      */
-    public static Object fromJson(String json) throws JsonSyntaxException {
+    public static Object fromJson(String json) {
         try (final InputStream stream = 
             new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))) {
             
@@ -199,9 +196,9 @@ public final class Json {
      * @return    the created object
      * 
      * @throws IOException  if the stream can not be read
+     * @throws JsonSyntaxException if there is a syntax error
      */
-    public static Object fromJson(InputStream in) 
-    throws IOException, JsonSyntaxException {
+    public static Object fromJson(InputStream in) throws IOException {
         try (final JsonDeserializer parser = new JsonDeserializer(in)) {
             return parser.get();
         }

@@ -48,7 +48,7 @@ public final class TimeToPrimitiveIntMapper implements TypeMapper<Time, Integer>
 
     @Override
     public Time toDatabaseType(Integer value) {
-        return value == null ? null : new Time(value * 1000);
+        return value == null ? null : new Time(value * 1000L);
     }
     
     @Override

@@ -165,7 +165,7 @@ public final class InjectorImpl implements Injector {
         // Create ClassMapper
         final ClassMapper classMapper = new ClassMapper() {
             @Override
-            public <T> T apply(Class<T> type) throws NotInjectableException {
+            public <T> T apply(Class<T> type) {
                 return find(type, true);
             }
         };

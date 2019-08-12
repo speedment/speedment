@@ -47,7 +47,7 @@ public final class TimestampToIntMapper implements TypeMapper<Timestamp, Integer
 
     @Override
     public Timestamp toDatabaseType(Integer value) {
-        return value == null ? null : new Timestamp(value * 1000);
+        return value == null ? null : new Timestamp(value * 1000L);
     }
     
     @Override

@@ -19,7 +19,6 @@ package com.speedment.example.basic_example;
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.actor.Actor;
 import com.company.sakila.db0.sakila.actor.ActorManager;
-import com.company.sakila.db0.sakila.category.Category;
 import com.company.sakila.db0.sakila.city.City;
 import com.company.sakila.db0.sakila.city.CityManager;
 import com.company.sakila.db0.sakila.country.Country;
@@ -27,7 +26,6 @@ import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.company.sakila.db0.sakila.film_actor.FilmActor;
 import com.company.sakila.db0.sakila.film_actor.FilmActorManager;
-import com.company.sakila.db0.sakila.film_category.FilmCategory;
 import com.company.sakila.db0.sakila.language.Language;
 import com.company.sakila.db0.sakila.language.LanguageManager;
 import com.speedment.common.tuple.Tuple2;
@@ -38,13 +36,11 @@ import com.speedment.example.basic_example.util.ExampleUtil;
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import static java.util.stream.Collectors.*;
 
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  *
@@ -266,16 +262,11 @@ public class JoinExamples {
             .build(Tuples::of);
 
         Comparator<Tuple3<FilmActor, Film, Actor>> byLength =Film.LENGTH.asInt().compose(Tuple3.getter1());
-        Comparator<Tuple3<FilmActor, Film, Actor>> byActorName =Actor.LAST_NAME.compose(Tuple3.getter2());
 
         join.stream()
             .sorted(byLength.reversed())
             .limit(100)
             .forEach(System.out::println);
-
-        /*join.stream()
-            .sorted(Comparator.comparing(Tuple3.<FilmActor, Film, Actor>getter1().andThen(Film.LENGTH.getter())))
-            .forEach(System.out::println);*/
 
     }
 

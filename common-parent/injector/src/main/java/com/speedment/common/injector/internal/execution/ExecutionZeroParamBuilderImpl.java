@@ -39,8 +39,8 @@ import static java.util.Objects.requireNonNull;
  * @since  1.2.0
  */
 public final class ExecutionZeroParamBuilderImpl<T> 
-extends AbstractExecutionBuilder<T>
-implements ExecutionZeroParamBuilder<T> {
+    extends AbstractExecutionBuilder<T>
+    implements ExecutionZeroParamBuilder<T> {
 
     private Consumer<T> executeAction;
     
@@ -74,9 +74,7 @@ implements ExecutionZeroParamBuilder<T> {
                 MissingArgumentStrategy.THROW_EXCEPTION) {
                     
             @Override
-            public boolean invoke(T component, ClassMapper classMapper)
-            throws IllegalArgumentException, NotInjectableException {
-                
+            public boolean invoke(T component, ClassMapper classMapper) {
                 executeAction.accept(component);
                 return true;
             }

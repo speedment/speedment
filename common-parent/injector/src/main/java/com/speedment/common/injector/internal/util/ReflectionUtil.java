@@ -22,6 +22,7 @@ import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.OnlyIfMissing;
+import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 
 import java.io.File;
@@ -51,6 +52,8 @@ import static java.util.stream.Collectors.joining;
  * @since 1.0.0
  */
 public final class ReflectionUtil {
+
+    private ReflectionUtil() {}
 
     public static Stream<Field> traverseFields(Class<?> clazz) {
         final Class<?> parent = clazz.getSuperclass();
@@ -97,7 +100,7 @@ public final class ReflectionUtil {
     }
 
     public static <T> Optional<T> tryToCreate(Class<T> clazz, Properties properties, List<Object> instances, Set<Class<?>> allInjectableTypes)
-        throws InstantiationException, NoDefaultConstructorException {
+        throws InstantiationException {
         try {
             final Optional<Constructor<T>> oConstr = findConstructor(clazz, instances, allInjectableTypes);
 
@@ -204,7 +207,7 @@ public final class ReflectionUtil {
             | IllegalArgumentException
             | InvocationTargetException ex) {
 
-            throw new RuntimeException(String.format(
+            throw new InjectorException(String.format(
                 "Unable to create class '%s'.", clazz.getName()
             ), ex);
         }
@@ -294,5 +297,4 @@ public final class ReflectionUtil {
         );
     }
 
-    private ReflectionUtil() {}
 }

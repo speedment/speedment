@@ -27,7 +27,6 @@ import java.sql.Timestamp;
  *
  * @author  Emil Forslund
  */
-
 public final class TimestampToPrimitiveIntMapper implements TypeMapper<Timestamp, Integer> {
 
     @Override
@@ -47,7 +46,7 @@ public final class TimestampToPrimitiveIntMapper implements TypeMapper<Timestamp
 
     @Override
     public Timestamp toDatabaseType(Integer value) {
-        return value == null ? null : new Timestamp(value * 1000);
+        return value == null ? null : new Timestamp(value * 1000L);
     }
     
     @Override

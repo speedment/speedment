@@ -10,6 +10,8 @@ import java.util.StringJoiner;
  */
 public final class StringUtil {
 
+    private StringUtil() {}
+
     /**
      * Returns the specified words separated with commas and the word 'and' as
      * appropriate.
@@ -31,6 +33,4 @@ public final class StringUtil {
             }
         }
     }
-
-    private StringUtil() {}
 }

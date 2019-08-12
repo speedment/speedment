@@ -119,7 +119,7 @@ final class JoinSqlUtil {
 
         // Check if this stage renders an on-field to be nullable
         if (stage.joinType().isPresent()) {
-            if (stage.joinType().get().isNullableSelf()) {
+            if (stage.joinType().orElseThrow(() -> newNoSuchElementException(stage)).isNullableSelf()) {
                 nullOffset = findNullOffset(table, stage, stage.field().orElseThrow(() -> new NoSuchElementException("field is missing in stage" + stage)));
             }
         }
@@ -135,7 +135,7 @@ final class JoinSqlUtil {
                 }
                 final Stage<?> otherStage = stages.get(i);
                 if (otherStage.joinType().isPresent()) {
-                    if (otherStage.joinType().get().isNullableOther()) {
+                    if (otherStage.joinType().orElseThrow(() -> newNoSuchElementException(otherStage)).isNullableOther()) {
                         final HasComparableOperators<?, ?> otherStageForeignField = otherStage.foreignField().orElseThrow(() -> new NoSuchElementException("Foreign fiels is missing in other stage " + otherStage));
                         final TableIdentifier<?> referencedId = otherStageForeignField.identifier().asTableIdentifier();
                         if (thisId.equals(referencedId)) {
@@ -392,7 +392,8 @@ final class JoinSqlUtil {
         requireNonNull(naming);
         requireNonNull(sqlStages);
         requireNonNegative(stageIndex);
-        return renderJoin(naming, sqlStages, stages, stageIndex, stages.get(stageIndex).joinType().get());
+        final Stage<?> stage = stages.get(stageIndex);
+        return renderJoin(naming, sqlStages, stages, stageIndex, stage.joinType().orElseThrow(() -> newNoSuchElementException(stage)));
     }
 
     private static String renderJoin(
@@ -563,6 +564,10 @@ final class JoinSqlUtil {
 //            .collect(joining(", ", "[", "]"));
 //    }
 
+
+    private static NoSuchElementException newNoSuchElementException(Stage<?> stage) {
+        return new NoSuchElementException("Stage " + stage + " did not have a join type");
+    }
 
 
 }

@@ -62,9 +62,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 import java.util.function.Predicate;
 
 import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
@@ -160,15 +158,15 @@ public final class ConfigFileHelper {
                 .readSchemaMetadata(dbms, new ProgressMeasurerImpl(), schemaFilter);
         }).forEachOrdered(fut -> {
             try {
-                final Project newProject = fut.get();
+                final Project newProject = fut.join();
                 synchronized (project) {
                     setTypeMappersFrom(newProject, projectCopy);
                     project.merge(documentPropertyComponent, newProject);
                 }
-            } catch (final ExecutionException ex) {
-                throw new SpeedmentToolException("Error in execution of reload sequence.", ex);
-            } catch (final InterruptedException ex) {
-                throw new SpeedmentToolException("Reload sequence was interrupted.", ex);
+            } catch (final CancellationException ex) {
+                throw new SpeedmentToolException("Cancellation in execution of reload sequence.", ex);
+            } catch (final CompletionException ex) {
+                throw new SpeedmentToolException("Reload sequence completed with exception.", ex);
             }
         });
 
@@ -254,7 +252,7 @@ public final class ConfigFileHelper {
 
             userInterfaceComponent.showProgressDialog("Loading Database Metadata", progress, future);
 
-            final boolean status = future.get();
+            final boolean status = future.join();
 
             if (status) {
                 userInterfaceComponent.showNotification(
@@ -268,7 +266,7 @@ public final class ConfigFileHelper {
 
             return status;
 
-        } catch (final InterruptedException | ExecutionException ex) {
+        } catch (final CancellationException | CompletionException ex) {
             restore.run();
             userInterfaceComponent.showError("Error Executing Connection Task",
                 "The execution of certain tasks could not be completed.", ex
