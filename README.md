@@ -115,7 +115,7 @@ Speedment Open Source comes with support for the following databases out-of-the-
 * PostgreSQL
 * SQLite
 
-For Enterprise database connectors see [www.speedment.com](www.speedment.com/pricing). 
+For Enterprise database connectors see [Speedment Licensing and Pricing](www.speedment.com/pricing). 
 
 ## Licenses
 * **Speedment Open Source** - This site covers the Speedment Open Source project available under the 
