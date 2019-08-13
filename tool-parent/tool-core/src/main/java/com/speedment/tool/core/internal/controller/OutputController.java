@@ -18,9 +18,13 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.UserInterfaceComponent;
+import com.speedment.tool.core.resource.MaterialIcon;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
@@ -34,6 +38,8 @@ public final class OutputController implements Initializable {
     
     private @Inject UserInterfaceComponent ui;
     private @FXML VBox log;
+    private @FXML ToggleButton wrapTextBtn;
+    private @FXML ScrollPane logPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,5 +47,10 @@ public final class OutputController implements Initializable {
             log.getChildren(),
             ui.outputMessages()
         );
+
+        logPane.fitToWidthProperty().bind(wrapTextBtn.selectedProperty());
+
+        wrapTextBtn.setGraphic(MaterialIcon.WRAP_TEXT.view());
+        wrapTextBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
 }
