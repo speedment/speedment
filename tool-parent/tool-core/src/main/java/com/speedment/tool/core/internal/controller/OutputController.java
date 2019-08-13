@@ -18,10 +18,14 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.UserInterfaceComponent;
+import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.MaterialIcon;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
@@ -35,11 +39,12 @@ import java.util.ResourceBundle;
  * @author Emil Forslund
  */
 public final class OutputController implements Initializable {
-    
+
     private @Inject UserInterfaceComponent ui;
     private @FXML VBox log;
-    private @FXML ToggleButton wrapTextBtn;
     private @FXML ScrollPane logPane;
+    private @FXML ToggleButton wrapTextBtn;
+    private @FXML Button clearLogBtn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,8 +54,14 @@ public final class OutputController implements Initializable {
         );
 
         logPane.fitToWidthProperty().bind(wrapTextBtn.selectedProperty());
+        clearLogBtn.setOnAction(ev -> ui.outputMessages().clear());
 
-        wrapTextBtn.setGraphic(MaterialIcon.WRAP_TEXT.view());
-        wrapTextBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        styleToolbarButton(wrapTextBtn, MaterialIcon.WRAP_TEXT.view());
+        styleToolbarButton(clearLogBtn, FontAwesome.TRASH.view());
+    }
+
+    private void styleToolbarButton(ButtonBase btn, Node icon) {
+        wrapTextBtn.setGraphic(icon);
+        btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
     }
 }

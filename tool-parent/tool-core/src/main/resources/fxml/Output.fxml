@@ -20,6 +20,7 @@
 -->
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleButton?>
@@ -28,36 +29,49 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<TitledPane id="output" fx:id="output" animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" text="Output" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.tool.core.internal.controller.OutputController">
-    <content>
-      <BorderPane>
-         <center>
-              <ScrollPane fx:id="logPane" fitToWidth="true" maxWidth="1.7976931348623157E308" style="-fx-background: white;">
-                  <content>
-                      <VBox fx:id="log" maxWidth="1.7976931348623157E308" minHeight="-Infinity" style="-fx-background-color: white;">
-                          <padding>
-                              <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                          </padding>
-                      </VBox>
-                  </content>
-              </ScrollPane>
-         </center>
-         <left>
-            <ToolBar orientation="VERTICAL" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
-               <items>
-                  <ToggleButton fx:id="wrapTextBtn" mnemonicParsing="false" styleClass="toolbarBtn" text="Wrap">
-                     <tooltip>
-                        <Tooltip text="Use Soft Wraps" />
-                     </tooltip></ToggleButton>
-               </items>
-               <padding>
-                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-               </padding>
+<TitledPane id="output" fx:id="output" animated="false" collapsible="false"
+            maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            prefHeight="200.0" text="Output"
+            xmlns="http://javafx.com/javafx/10.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.speedment.tool.core.internal.controller.OutputController">
+    <BorderPane>
+        <center>
+            <ScrollPane fx:id="logPane" fitToWidth="true"
+                        maxWidth="1.7976931348623157E308"
+                        style="-fx-background: white;">
+                <VBox fx:id="log" maxWidth="1.7976931348623157E308"
+                      minHeight="-Infinity"
+                      style="-fx-background-color: white;">
+                    <padding>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                    </padding>
+                </VBox>
+            </ScrollPane>
+        </center>
+        <left>
+            <ToolBar orientation="VERTICAL"
+                     style="-fx-background-color: transparent;"
+                     BorderPane.alignment="CENTER">
+                <padding>
+                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                </padding>
+                <ToggleButton fx:id="wrapTextBtn" mnemonicParsing="false"
+                              styleClass="toolbarBtn" text="Wrap">
+                  <tooltip>
+                      <Tooltip text="Use Soft Wraps"/>
+                  </tooltip>
+                </ToggleButton>
+                <Button fx:id="clearLogBtn" mnemonicParsing="false"
+                        styleClass="toolbarBtn" text="Clear">
+                    <tooltip>
+                        <Tooltip text="Removes all log messages"/>
+                    </tooltip>
+                </Button>
             </ToolBar>
-         </left>
-         <padding>
-            <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
-         </padding>
-      </BorderPane>
-    </content>
+        </left>
+        <padding>
+          <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0"/>
+        </padding>
+    </BorderPane>
 </TitledPane>
