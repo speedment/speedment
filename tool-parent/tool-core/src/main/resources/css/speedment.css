@@ -35,6 +35,7 @@
     -fx-speedment-lightgray:     #CDD5DC;
 
     /*Blue*/
+    -fx-speedment-blackblue:     #1B3747;
     -fx-speedment-darkblue:      #155d89;
     -fx-speedment-blue:          #2171ad;
     -fx-speedment-mediumblue:    #5a98c8;
@@ -74,7 +75,7 @@
     -fx-background-radius: 0px;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
-    -fx-font-family: 'Titillium Web';
+    -fx-font-family: 'Source Sans Pro';
 }
 
 /*** Border Panes ***/
@@ -113,6 +114,10 @@
     -fx-font-style: italic;
 }
 
+.tree-view .track-background {
+    -fx-background-color: white;
+}
+
 /*** Label ***/
 .label {
     -fx-font-family: 'Source Sans Pro';
@@ -122,21 +127,21 @@
 }
 
 .form-label {
-    -fx-font-family: 'Titillium Web';
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
 /*** Headers ***/
 .header {
-    -fx-font-family: 'Titillium Web';
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-weight: normal;
     -fx-font-size: 2em;
     -fx-text-fill: -fx-speedment-darkgray;
 }
 
 .header-pane {
-    -fx-font-family: 'Titillium Web';
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-weight: normal;
     -fx-font-size: 1.7em;
     -fx-text-fill: -fx-speedment-darkgray;
@@ -161,7 +166,7 @@
 .text-field:hover,
 .text-area:focused,
 .text-area:hover {
-    -fx-border-color: -fx-speedment-green;
+    -fx-border-color: -fx-speedment-blue;
 }
 
 /*** List Views ***/
@@ -179,24 +184,24 @@
 .list-view:hover,
 .list-view:focused,
 .list-view:hover {
-    -fx-border-color: -fx-speedment-green;
+    -fx-border-color: -fx-speedment-darkblue;
 }
 
 /*** Buttons ***/
 .button {
-    -fx-background-color: -fx-speedment-darkgreen;
-    -fx-background-radius: 5px;
+    -fx-background-color: -fx-speedment-blackblue;
+    -fx-background-radius: 30px;
     -fx-border-width: 0px;
     -fx-text-fill: white;
     -fx-font-weight: normal;
-    -fx-font-family: 'Titillium Web';
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.0em;
     -fx-cursor: hand;
     -fx-graphic-text-gap: 0.7em;
 }
 
 .button:hover {
-    -fx-background-color: -fx-speedment-mediumgreen;
+    -fx-background-color: -fx-speedment-darkblue;
 }
 
 .button .glyph-icon {
@@ -226,12 +231,12 @@
 .choice-box:hover,
 .combo-box:focused,
 .combo-box:hover {
-    -fx-border-color: -fx-speedment-green;
+    -fx-border-color: -fx-speedment-darkblue;
 }
 
 .combo-box .list-cell:hover,
 .combo-box .list-cell:focused {
-    -fx-background-color: -fx-speedment-green;
+    -fx-background-color: -fx-speedment-darkblue;
     -fx-text-fill: white;
 }
 
@@ -273,7 +278,7 @@
 }
 
 .check-box:selected .box {
-    -fx-background-color: -fx-speedment-green;
+    -fx-background-color: -fx-speedment-darkblue;
 }
 
 /*** Split Panes ***/
@@ -394,7 +399,7 @@
 
 .header-panel > .label,
 .header-panel > .label > .text {
-    -fx-font-family: 'Titillium Web';
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-weight: normal;
     -fx-font-size: 1.7em;
     -fx-text-fill: -fx-speedment-darkgray;
@@ -442,7 +447,7 @@
 }
 
 .h2 {
-    -fx-font-family: "Titillium Web";
+    -fx-font-family: "Source Sans Pro";
     -fx-font-size: 1.4em;
 }
 
@@ -540,7 +545,7 @@
 
 /*** Properties layout : left ***/
 .property-label {
-    -fx-font-family: 'Titillium Web';
+    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.2em;
     -fx-alignment: top-left;
     -fx-padding: 5px 0px 5px 0px;
@@ -582,7 +587,7 @@
 }
 
 .btn-secondary {
-    -fx-background-color: -fx-speedment-green;
+    -fx-background-color: -fx-speedment-blue;
     -fx-text-fill: white;
 }
 
@@ -602,7 +607,7 @@
 }
 
 .table-view .column-header-background .label {
-    -fx-font-family: 'Titillium Web';
+    -fx-font-family: 'Source Sans Pro';
     -fx-text-fill: -fx-speedment-lightgray;
 }
 
