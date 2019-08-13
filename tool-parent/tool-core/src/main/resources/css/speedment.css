@@ -87,7 +87,7 @@
     -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
-    -fx-background-color: -fx-speedment-gray;
+    /*-fx-background-color: -fx-speedment-gray;*/
     -fx-text-fill: -fx-speedment-lightgray;
 }
 
@@ -291,49 +291,6 @@
 .split-pane-divider:active {
     -fx-border-color: transparent;
     -fx-background-color: transparent;
-}
-
-/*** Scroll Bars ***/
-.scroll-bar:horizontal,
-.scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-border-width: 0px;
-    -fx-width: 1em;
-}
-
-.increment-button,
-.decrement-button {
-    -fx-background-color: transparent;
-    -fx-border-color: -fx-speedment-lightgray;
-    -fx-border-width: 0px;
-}
-
-.scroll-bar:horizontal .track,
-.scroll-bar:vertical .track {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-background-radius: 0px;
-    -fx-border-width: 0px;
-}
-
-.scroll-bar:horizontal .thumb,
-.scroll-bar:vertical .thumb {
-    -fx-background-color: -fx-speedment-lightgray;
-    -fx-background-insets: 0, 0, 0;
-    -fx-background-radius: 8px;
-    -fx-border-width: 0px;
-}
-
-.scroll-bar:horizontal:hover .track,
-.scroll-bar:horizontal:pressed .track,
-.scroll-bar:vertical:hover .track,
-.scroll-bar:vertical:pressed .track{
-    -fx-background-color: transparent;
-}
-
-.scroll-bar .thumb:hover,
-.scroll-bar .thumb:pressed {
-    -fx-background-color: -fx-speedment-lightgray;
 }
 
 /*** Menus ***/
@@ -677,4 +634,59 @@
     -fx-background-color: -fx-speedment-mediumblue;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
+}
+
+
+/*** Scroll Bars ***/
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-border-width: 0px;
+    -fx-width: 1em;
+}
+
+.increment-button,
+.decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-speedment-lightgray;
+    -fx-border-width: 0px;
+}
+
+.tree-view .scroll-bar:horizontal,
+.tree-view .scroll-bar:vertical,
+.tree-view .scroll-bar:horizontal:hover,
+.tree-view .scroll-bar:vertical:hover,
+.tree-view .scroll-bar:horizontal:pressed,
+.tree-view .scroll-bar:vertical:pressed,
+.tree-view .scroll-bar:horizontal .track,
+.tree-view .scroll-bar:vertical .track,
+.tree-view .scroll-bar:horizontal .track-background,
+.tree-view .scroll-bar:vertical .track-background,
+.tree-view .track-background,
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0px;
+    -fx-border-width: 0px;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-speedment-lightgray;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 8px;
+    -fx-border-width: 0px;
+}
+
+.scroll-bar:horizontal:hover .track,
+.scroll-bar:horizontal:pressed .track,
+.scroll-bar:vertical:hover .track,
+.scroll-bar:vertical:pressed .track{
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb:hover,
+.scroll-bar .thumb:pressed {
+    -fx-background-color: -fx-speedment-lightgray;
 }
