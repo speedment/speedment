@@ -36,6 +36,8 @@ import static com.speedment.common.injector.internal.util.ReflectionUtil.travers
  */
 public final class PropertiesUtil {
 
+    private PropertiesUtil() {}
+
     public static Properties loadProperties(Logger logger, File configFile) {
         final Properties properties = new Properties();
         if (configFile.exists() && configFile.canRead()) {
@@ -71,36 +73,35 @@ public final class PropertiesUtil {
                     serialized = config.value();
                 }
 
-                f.setAccessible(true);
-
+                final Object object;
                 try {
                     if (boolean.class == f.getType() 
                     || Boolean.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, Boolean.parseBoolean(serialized));
-                    } else if (byte.class == f.getType() 
+                        object = Boolean.parseBoolean(serialized);
+                    } else if (byte.class == f.getType()
                     || Byte.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, Byte.parseByte(serialized));
-                    } else if (short.class == f.getType() 
+                        object = Byte.parseByte(serialized);
+                    } else if (short.class == f.getType()
                     || Short.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, Short.parseShort(serialized));
-                    } else if (int.class == f.getType() 
+                        object = Short.parseShort(serialized);
+                    } else if (int.class == f.getType()
                     || Integer.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, Integer.parseInt(serialized));
-                    } else if (long.class == f.getType() 
+                        object = Integer.parseInt(serialized);
+                    } else if (long.class == f.getType()
                     || Long.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, Long.parseLong(serialized));
-                    } else if (float.class == f.getType() 
+                        object = Long.parseLong(serialized);
+                    } else if (float.class == f.getType()
                     || Float.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, Float.parseFloat(serialized));
-                    } else if (double.class == f.getType() 
+                        object = Float.parseFloat(serialized);
+                    } else if (double.class == f.getType()
                     || Double.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, Double.parseDouble(serialized));
+                        object = Double.parseDouble(serialized);
                     } else if (String.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, serialized);
-                    } else if (char.class == f.getType() 
+                        object = serialized;
+                    } else if (char.class == f.getType()
                     || Character.class.isAssignableFrom(f.getType())) {
                         if (serialized.length() == 1) {
-                            f.set(instance, serialized.charAt(0));
+                            object = serialized.charAt(0);
                         } else {
                             throw new IllegalArgumentException(
                                 "Value '" + serialized + "' is to long to be " + 
@@ -109,20 +110,23 @@ public final class PropertiesUtil {
                             );
                         }
                     } else if (File.class.isAssignableFrom(f.getType())) {
-                        f.set(instance, new File(serialized));
+                        object = new File(serialized);
                     } else if (URL.class.isAssignableFrom(f.getType())) {
                         try {
-                            f.set(instance, new URL(serialized));
+                            object = new URL(serialized);
                         } catch (final MalformedURLException ex) {
                             throw new IllegalArgumentException(
                                 "Specified URL '" + serialized + "' is " + 
                                 "malformed.", ex
                             );
                         }
+                    } else {
+                        // No op
+                        return;
                     }
-                } catch (final IllegalAccessException 
-                             | IllegalArgumentException ex) {
-                    
+                    f.setAccessible(true);
+                    f.set(instance, object);
+                } catch (final ReflectiveOperationException ex) {
                     throw new RuntimeException(
                         "Failed to set config parameter '" + config.name() +
                         "' in class '" + instance.getClass().getName() + 
@@ -132,5 +136,4 @@ public final class PropertiesUtil {
             });
     }
     
-    private PropertiesUtil() {}
 }
