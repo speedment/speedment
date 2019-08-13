@@ -17,6 +17,7 @@
 
 /*** Load Custom Fonts ***/
 @font-face { src: url("../fonts/fontawesome-webfont.ttf"); }
+@font-face { src: url("../fonts/MaterialIcons-Regular.ttf"); }
 
 @font-face {src: url("../fonts/TitilliumWeb-Regular.ttf"); }
 
@@ -604,6 +605,10 @@
 /*** FontAwesome Icons ***/
 .glyph-icon {
     -fx-font-family: 'FontAwesome';
+}
+
+.material-icon {
+    -fx-font-family: 'Material Icons';
 }
 
 /*** Field Validation ***/
