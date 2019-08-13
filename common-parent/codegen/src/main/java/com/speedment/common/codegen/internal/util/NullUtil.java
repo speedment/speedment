@@ -19,7 +19,6 @@ package com.speedment.common.codegen.internal.util;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -29,7 +28,9 @@ import static java.util.Objects.requireNonNull;
  * @since   2.1
  */
 public final class NullUtil {
-    
+
+    private NullUtil() {}
+
     /**
      * Checks if this set is non null and also that all members are non-null.
      * If a null is detected a NullPointerException is thrown.
@@ -88,7 +89,7 @@ public final class NullUtil {
      * @throws NullPointerException  if a null is found in the parameters
      */
     public static <T> void requireNonNulls(T t0) {
-        requireNonNull(t0, "Parameter 0 is null.");
+        requireNonNull(t0, paramIsNullText(0));
     }
     
     /**
@@ -102,8 +103,8 @@ public final class NullUtil {
      * @throws NullPointerException  if a null is found in the parameters
      */
     public static <T> void requireNonNulls(T t0, T t1) {
-        requireNonNull(t0, "Parameter 0 is null.");
-        requireNonNull(t1, "Parameter 1 is null.");
+        requireNonNull(t0, paramIsNullText(0));
+        requireNonNull(t1, paramIsNullText(1));
     }
     
     /**
@@ -118,13 +119,13 @@ public final class NullUtil {
      * @throws NullPointerException  if a null is found in the parameters
      */
     public static <T> void requireNonNulls(T t0, T t1, T t2) {
-        requireNonNull(t0, "Parameter 0 is null.");
-        requireNonNull(t1, "Parameter 1 is null.");
-        requireNonNull(t2, "Parameter 2 is null.");
+        requireNonNull(t0, paramIsNullText(0));
+        requireNonNull(t1, paramIsNullText(1));
+        requireNonNull(t2, paramIsNullText(2));
     }
-    
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private NullUtil() { instanceNotAllowed(getClass()); }
+
+    private static String paramIsNullText(int x) {
+        return "Parameter " + x + " is null.";
+    }
+
 }
