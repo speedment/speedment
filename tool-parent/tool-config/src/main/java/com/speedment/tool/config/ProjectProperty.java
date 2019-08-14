@@ -17,7 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.core.internal.util.ImmutableListUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ProjectPropertyMutator;
@@ -32,12 +32,12 @@ import javafx.util.StringConverter;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
+import static com.speedment.runtime.config.ProjectUtil.*;
 
 /**
  *
@@ -63,7 +63,7 @@ implements Project,
     @Override
     public String getName() {
         // Must implement getName because Project does not have any parent.
-        return getAsString(NAME)
+        return getAsString(HasNameUtil.NAME)
             .orElse(DEFAULT_PROJECT_NAME);
     }
 

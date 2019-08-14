@@ -19,6 +19,8 @@ package com.speedment.runtime.core.internal.util.document;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.*;
+import com.speedment.runtime.config.trait.HasEnableUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.AbstractMap;
@@ -47,128 +49,128 @@ public abstract class AbstractDocumentTest {
     @BeforeEach
     public void setUp() {
         final Map<String, Object> data = map(
-            entry(Project.NAME, "Project"),
-            entry(Project.ENABLED, true),
-            entry(Project.DBMSES, map(
-                entry(Dbms.NAME, "Dbms A"),
-                entry(Dbms.ENABLED, true),
+            entry(HasNameUtil.NAME, "Project"),
+            entry(HasEnableUtil.ENABLED, true),
+            entry(ProjectUtil.DBMSES, map(
+                entry(HasNameUtil.NAME, "Dbms A"),
+                entry(HasEnableUtil.ENABLED, true),
                 entry(Dbms.SCHEMAS, map(
-                    entry(Schema.NAME, "Schema A"),
+                    entry(HasNameUtil.NAME, "Schema A"),
                     entry(Schema.ALIAS, "Custom Schema A"),
-                    entry(Schema.ENABLED, true),
+                    entry(HasEnableUtil.ENABLED, true),
                     entry(Schema.TABLES, map(
-                        entry(Table.NAME, "Table A"),
+                        entry(HasNameUtil.NAME, "Table A"),
                         entry(Schema.ALIAS, "Custom Table A"),
-                        entry(Table.ENABLED, true),
+                        entry(HasEnableUtil.ENABLED, true),
                         entry(Table.COLUMNS, map(
-                            entry(Column.NAME, "Column A1"),
+                            entry(HasNameUtil.NAME, "Column A1"),
                             entry(Schema.ALIAS, "Custom Column A1"),
-                            entry(Column.ENABLED, true),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Column.DATABASE_TYPE, Long.class.getName())
                         ), map(
-                            entry(Column.NAME, "Column A2"),
+                            entry(HasNameUtil.NAME, "Column A2"),
                             entry(Schema.ALIAS, "Custom Column A2"),
-                            entry(Column.ENABLED, true),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Column.DATABASE_TYPE, Integer.class.getName())
                         )),
                         entry(Table.PRIMARY_KEY_COLUMNS, map(
-                            entry(PrimaryKeyColumn.NAME, "Column A1")
+                            entry(HasNameUtil.NAME, "Column A1")
                         )),
                         entry(Table.INDEXES, map(
-                            entry(Index.NAME, "Index A2"),
-                            entry(Index.ENABLED, true),
+                            entry(HasNameUtil.NAME, "Index A2"),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Index.INDEX_COLUMNS, map(
-                                entry(IndexColumn.NAME, "Column A2")
+                                entry(HasNameUtil.NAME, "Column A2")
                             ))
                         )),
                         entry(Table.FOREIGN_KEYS, map(
-                            entry(ForeignKey.NAME, "ForeignKey A2 to C1"),
-                            entry(ForeignKey.ENABLED, true),
+                            entry(HasNameUtil.NAME, "ForeignKey A2 to C1"),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(ForeignKey.FOREIGN_KEY_COLUMNS, map(
-                                entry(ForeignKeyColumn.NAME, "Column A2"),
+                                entry(HasNameUtil.NAME, "Column A2"),
                                 entry(ForeignKeyColumn.FOREIGN_TABLE_NAME, "Table C"),
                                 entry(ForeignKeyColumn.FOREIGN_COLUMN_NAME, "Column C1")
                             ))
                         ))
                     ), map(
-                        entry(Table.NAME, "Table C"),
+                        entry(HasNameUtil.NAME, "Table C"),
                         entry(Schema.ALIAS, "Custom Table C"),
-                        entry(Table.ENABLED, true),
+                        entry(HasEnableUtil.ENABLED, true),
                         entry(Table.COLUMNS, map(
-                            entry(Column.NAME, "Column C1"),
+                            entry(HasNameUtil.NAME, "Column C1"),
                             entry(Schema.ALIAS, "Custom Column C1"),
-                            entry(Column.ENABLED, true),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Column.DATABASE_TYPE, Integer.class.getName())
                         ), map(
-                            entry(Column.NAME, "Column C2"),
+                            entry(HasNameUtil.NAME, "Column C2"),
                             entry(Schema.ALIAS, "Custom Column C2"),
-                            entry(Column.ENABLED, true),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Column.DATABASE_TYPE, String.class.getName())
                         )),
                         entry(Table.PRIMARY_KEY_COLUMNS, map(
-                            entry(PrimaryKeyColumn.NAME, "Column C1")
+                            entry(HasNameUtil.NAME, "Column C1")
                         ))
                     ))
                 ))
             ), map(
-                entry(Dbms.NAME, "Dbms B"),
-                entry(Dbms.ENABLED, true),
+                entry(HasNameUtil.NAME, "Dbms B"),
+                entry(HasEnableUtil.ENABLED, true),
                 entry(Dbms.SCHEMAS, map(
-                    entry(Schema.NAME, "Schema B"),
+                    entry(HasNameUtil.NAME, "Schema B"),
                     entry(Schema.ALIAS, "Custom Schema B"),
-                    entry(Schema.ENABLED, true),
+                    entry(HasEnableUtil.ENABLED, true),
                     entry(Schema.TABLES, map(
-                        entry(Table.NAME, "Table B"),
+                        entry(HasNameUtil.NAME, "Table B"),
                         entry(Schema.ALIAS, "Custom Table B"),
-                        entry(Table.ENABLED, true),
+                        entry(HasEnableUtil.ENABLED, true),
                         entry(Table.COLUMNS, map(
-                            entry(Column.NAME, "Column B1"),
+                            entry(HasNameUtil.NAME, "Column B1"),
                             entry(Schema.ALIAS, "Custom Column B1"),
-                            entry(Column.ENABLED, true),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Column.DATABASE_TYPE, Long.class.getName())
                         ), map(
-                            entry(Column.NAME, "Column B2"),
+                            entry(HasNameUtil.NAME, "Column B2"),
                             entry(Schema.ALIAS, "Custom Column B2"),
-                            entry(Column.ENABLED, true),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Column.DATABASE_TYPE, Integer.class.getName())
                         )),
                         entry(Table.PRIMARY_KEY_COLUMNS, map(
-                            entry(PrimaryKeyColumn.NAME, "Column B1")
+                            entry(HasNameUtil.NAME, "Column B1")
                         )),
                         entry(Table.INDEXES, map(
-                            entry(Index.NAME, "Index B2"),
-                            entry(Index.ENABLED, true),
+                            entry(HasNameUtil.NAME, "Index B2"),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Index.UNIQUE, true),
                             entry(Index.INDEX_COLUMNS, map(
-                                entry(IndexColumn.NAME, "Column B2")
+                                entry(HasNameUtil.NAME, "Column B2")
                             ))
                         )),
                         entry(Table.FOREIGN_KEYS, map(
-                            entry(ForeignKey.NAME, "ForeignKey B2 to D1"),
-                            entry(ForeignKey.ENABLED, true),
+                            entry(HasNameUtil.NAME, "ForeignKey B2 to D1"),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(ForeignKey.FOREIGN_KEY_COLUMNS, map(
-                                entry(ForeignKeyColumn.NAME, "Column B2"),
+                                entry(HasNameUtil.NAME, "Column B2"),
                                 entry(ForeignKeyColumn.FOREIGN_TABLE_NAME, "Table D"),
                                 entry(ForeignKeyColumn.FOREIGN_COLUMN_NAME, "Column D1")
                             ))
                         ))
                     ), map(
-                        entry(Table.NAME, "Table D"),
+                        entry(HasNameUtil.NAME, "Table D"),
                         entry(Schema.ALIAS, "Custom Table D"),
-                        entry(Table.ENABLED, true),
+                        entry(HasEnableUtil.ENABLED, true),
                         entry(Table.COLUMNS, map(
-                            entry(Column.NAME, "Column D1"),
+                            entry(HasNameUtil.NAME, "Column D1"),
                             entry(Schema.ALIAS, "Custom Column D1"),
-                            entry(Column.ENABLED, true),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Column.DATABASE_TYPE, Integer.class.getName())
                         ), map(
-                            entry(Column.NAME, "Column D2"),
+                            entry(HasNameUtil.NAME, "Column D2"),
                             entry(Schema.ALIAS, "Custom Column D2"),
-                            entry(Column.ENABLED, true),
+                            entry(HasEnableUtil.ENABLED, true),
                             entry(Column.DATABASE_TYPE, String.class.getName())
                         )),
                         entry(Table.PRIMARY_KEY_COLUMNS, map(
-                            entry(PrimaryKeyColumn.NAME, "Column D1")
+                            entry(HasNameUtil.NAME, "Column D1")
                         ))
                     ))
                 ))
@@ -177,8 +179,8 @@ public abstract class AbstractDocumentTest {
 
         project = new ProjectImpl(data);
 
-        dbmsA = project.children(Project.DBMSES, DbmsImpl::new).findFirst().get();
-        dbmsB = project.children(Project.DBMSES, DbmsImpl::new).skip(1).findFirst().get();
+        dbmsA = project.children(ProjectUtil.DBMSES, DbmsImpl::new).findFirst().get();
+        dbmsB = project.children(ProjectUtil.DBMSES, DbmsImpl::new).skip(1).findFirst().get();
         schemaA = dbmsA.children(Dbms.SCHEMAS, SchemaImpl::new).findFirst().get();
         schemaB = dbmsB.children(Dbms.SCHEMAS, SchemaImpl::new).findFirst().get();
         tableA = schemaA.children(Schema.TABLES, TableImpl::new).findFirst().get();

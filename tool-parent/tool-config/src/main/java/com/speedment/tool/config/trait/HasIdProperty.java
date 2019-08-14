@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.config.trait.HasId;
+import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.StringProperty;
 
@@ -28,7 +28,7 @@ import javafx.beans.property.StringProperty;
 public interface HasIdProperty extends DocumentProperty {
 
     default StringProperty idProperty() {
-        return stringPropertyOf(HasId.ID, DocumentProperty.super::getId);
+        return stringPropertyOf(HasIdUtil.ID, DocumentProperty.super::getId);
     }
 
     @Override

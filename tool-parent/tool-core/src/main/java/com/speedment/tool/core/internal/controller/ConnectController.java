@@ -23,6 +23,8 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.trait.HasIdUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.db.DbmsType;
@@ -472,8 +474,8 @@ public final class ConnectController implements Initializable {
 
         public static TemporaryDbms create(Project project, String name, String file, String ip, int port) {
             final Map<String, Object> data = new LinkedHashMap<>();
-            data.put(Dbms.ID,         name);
-            data.put(Dbms.NAME,       name);
+            data.put(HasIdUtil.ID,         name);
+            data.put(HasNameUtil.NAME,       name);
             data.put(Dbms.IP_ADDRESS, ip);
             if (port != 0) {
                 data.put(Dbms.PORT, port);

@@ -52,8 +52,8 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
     
     @ExecuteBefore(INITIALIZED)
     void installEditors() {
-        install(HasEnabledProperty.class,    HasEnabled.ENABLED,    EnabledPropertyEditor::new);
-        install(HasNameProperty.class,       HasName.NAME,          NamePropertyEditor::new);
+        install(HasEnabledProperty.class,    HasEnableUtil.ENABLED,    EnabledPropertyEditor::new);
+        install(HasNameProperty.class,       HasNameUtil.NAME,          NamePropertyEditor::new);
         install(HasAliasProperty.class,      HasAlias.ALIAS,        AliasPropertyEditor::new);
         install(HasNullableProperty.class,   HasNullable.NULLABLE,  NullablePropertyEditor::new);
         install(HasOrderTypeProperty.class,  HasOrderType.ORDER_TYPE, OrderTypePropertyEditor::new);
@@ -65,9 +65,9 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
         install(DbmsProperty.class,          Dbms.USERNAME,         UsernamePropertyEditor::new);
         install(DbmsProperty.class,          Dbms.CONNECTION_URL,   ConnectionUrlPropertyEditor::new);
         install(IndexProperty.class,         Index.UNIQUE,          UniquePropertyEditor::new);
-        install(ProjectProperty.class,       Project.COMPANY_NAME,           CompanyNamePropertyEditor::new);
-        install(ProjectProperty.class,       Project.PACKAGE_LOCATION,       PackageLocationPropertyEditor::new);
-        install(HasPackageNameProperty.class,   HasPackageName.PACKAGE_NAME,          PackageNameEditor::new);
+        install(ProjectProperty.class,       ProjectUtil.COMPANY_NAME,           CompanyNamePropertyEditor::new);
+        install(ProjectProperty.class,       ProjectUtil.PACKAGE_LOCATION,       PackageLocationPropertyEditor::new);
+        install(HasPackageNameProperty.class,   HasPackageNameUtil.PACKAGE_NAME,          PackageNameEditor::new);
         install(ForeignKeyColumnProperty.class, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumnEditor::new);
     }
     

@@ -18,14 +18,13 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.BaseDocument;
 import com.speedment.runtime.config.internal.SchemaImpl;
 import com.speedment.runtime.config.trait.HasId;
+import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasNameUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 final class AbstractJavaClassTranslatorTest {
-
 
     private static final String MY_PROJECT_NAME = "myProject";
 
@@ -127,7 +125,7 @@ final class AbstractJavaClassTranslatorTest {
 
     private void testWitOneDbms(UnaryOperator<Translator.Builder<Class>> operator, Runnable assertor) {
         Map<String, Object> doc = new HashMap<>();
-        doc.put(HasId.ID, MY_PROJECT_NAME);
+        doc.put(HasIdUtil.ID, MY_PROJECT_NAME);
         addDbms(doc, "dbms0");
         MyProject project = new MyProject(doc);
         MyTranslator translator = new MyTranslator(project, operator);
@@ -138,7 +136,7 @@ final class AbstractJavaClassTranslatorTest {
 
     private void testWitTwoDbms(UnaryOperator<Translator.Builder<Class>> operator, Runnable assertor) {
         Map<String, Object> doc = new HashMap<>();
-        doc.put(HasId.ID, MY_PROJECT_NAME);
+        doc.put(HasIdUtil.ID, MY_PROJECT_NAME);
         addDbms(doc, "dbms0");
         addDbms(doc, "dbms1");
         MyProject project = new MyProject(doc);
@@ -151,10 +149,10 @@ final class AbstractJavaClassTranslatorTest {
 
     private void addDbms(Map<String, Object> map, String dbmsId) {
         @SuppressWarnings("unchecked")
-        List<Map<String, Object>> list = (List<Map<String, Object>>)map.get(Project.DBMSES);
+        List<Map<String, Object>> list = (List<Map<String, Object>>)map.get(ProjectUtil.DBMSES);
         if (list == null) {
             list = new ArrayList<>();
-            map.put(Project.DBMSES, list);
+            map.put(ProjectUtil.DBMSES, list);
         }
         list.add(mapWithId(dbmsId));
     }
@@ -205,7 +203,7 @@ final class AbstractJavaClassTranslatorTest {
         @Override
         public String getName() {
             // Must implement getName because Project does not have any parent.
-            return getAsString(NAME).orElse(DEFAULT_PROJECT_NAME);
+            return getAsString(HasNameUtil.NAME).orElse(ProjectUtil.DEFAULT_PROJECT_NAME);
         }
 
         @Override
@@ -220,7 +218,7 @@ final class AbstractJavaClassTranslatorTest {
 
         @Override
         public Stream<? extends Dbms> dbmses() {
-            return children(DBMSES, MyDbmsImpl::new);
+            return children(ProjectUtil.DBMSES, MyDbmsImpl::new);
         }
     }
 
@@ -309,7 +307,7 @@ final class AbstractJavaClassTranslatorTest {
 
     private static Map<String, Object> mapWithId(String id) {
         return Stream.<Map.Entry<String, Object>>of(
-            new AbstractMap.SimpleEntry<>(HasId.ID, requireNonNull(id))
+            new AbstractMap.SimpleEntry<>(HasIdUtil.ID, requireNonNull(id))
         ).collect(
             toMap(
                 Map.Entry::getKey,

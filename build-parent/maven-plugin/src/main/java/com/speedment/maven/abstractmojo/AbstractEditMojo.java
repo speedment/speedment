@@ -76,7 +76,7 @@ public abstract class AbstractEditMojo extends AbstractMojo {
                     doc.getParent().ifPresent(parent -> {
                         final Collection<? extends Map<String, Object>> coll;
                         if (doc instanceof Dbms) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Project.DBMSES);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ProjectUtil.DBMSES);
                         } else if (doc instanceof Schema) {
                             coll =(Collection<? extends Map<String, Object>>) parent.getData().get(Dbms.SCHEMAS);
                         } else if (doc instanceof Table) {

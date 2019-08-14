@@ -16,15 +16,16 @@
  */
 package com.speedment.runtime.config.mutator;
 
-
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
-import static com.speedment.runtime.config.Project.*;
+import static com.speedment.runtime.config.ProjectUtil.*;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
+import com.speedment.runtime.config.trait.HasPackageNameUtil;
+
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
 /**
@@ -51,7 +52,7 @@ public class ProjectMutator<DOC extends Project> extends DocumentMutatorImpl<DOC
     }
     
     public void setPackageName(String packageName) {
-        put(PACKAGE_NAME, packageName);
+        put(HasPackageNameUtil.PACKAGE_NAME, packageName);
     }
 
     public void setPackageLocation(String packageLocation) {

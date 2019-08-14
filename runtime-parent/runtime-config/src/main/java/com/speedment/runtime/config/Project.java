@@ -30,10 +30,11 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasPackageName;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import static com.speedment.runtime.config.ProjectUtil.*;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -54,18 +55,6 @@ extends Document,
         HasChildren,
         HasMainInterface,
         HasMutator<ProjectMutator<? extends Project>> {
-
-    String  COMPANY_NAME      = "companyName",
-            PACKAGE_LOCATION  = "packageLocation",
-            SPEEDMENT_VERSION = "speedmentVersion",
-            CONFIG_PATH       = "configPath",
-            DBMSES            = "dbmses",
-            APP_ID            = "appId";
-    
-    String  DEFAULT_COMPANY_NAME     = "company",
-            DEFAULT_PACKAGE_NAME     = "com.",
-            DEFAULT_PACKAGE_LOCATION = "src/main/java/",
-            DEFAULT_PROJECT_NAME     = Project.class.getSimpleName();
 
     /**
      * Creates and returns a mutable deep-copy of the specified project.
@@ -161,8 +150,6 @@ extends Document,
         return DocumentMutator.of(this);
     }
 
-    Pattern SPLIT_PATTERN = Pattern.compile("\\."); // Pattern is immutable and therefor thread safe
-    
     /**
      * Locates the table with the specified full name in this project. The name
      * should be separated by dots (.) and have exactly three parts; the name of

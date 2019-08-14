@@ -21,7 +21,7 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.core.translator.AbstractTranslatorManager;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
@@ -101,7 +101,7 @@ public abstract class SimpleModel {
         }
 
         private String name(String s) {
-            return quote(HasName.NAME) + " : " + quote(s);
+            return quote(HasNameUtil.NAME) + " : " + quote(s);
         }
 
         private String dbTypeName(String dbmsTypeName) {
@@ -134,7 +134,7 @@ public abstract class SimpleModel {
             return Optional.of("{"
                 + objectWithKey("config",
                     name("myProject"),
-                    array(Project.DBMSES,
+                    array(ProjectUtil.DBMSES,
                         object(name("myDbms"),
                             dbTypeName("MySQL"),
                             array(Dbms.SCHEMAS,

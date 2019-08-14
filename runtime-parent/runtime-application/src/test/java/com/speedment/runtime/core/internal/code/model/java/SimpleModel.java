@@ -16,13 +16,8 @@
  */
 package com.speedment.runtime.core.internal.code.model.java;
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
@@ -81,7 +76,7 @@ public abstract class SimpleModel {
         }
 
         private String name(String s) {
-            return quote(HasName.NAME) + " : " + quote(s);
+            return quote(HasNameUtil.NAME) + " : " + quote(s);
         }
 
         private String dbmsTypeName(String dbmsTypeName) {
@@ -114,7 +109,7 @@ public abstract class SimpleModel {
             return Optional.of("{"
                 + objectWithKey("config",
                     name("myProject"),
-                    array(Project.DBMSES,
+                    array(ProjectUtil.DBMSES,
                         object(name("myDbms"),
                             dbmsTypeName("MySQL"),
                             array(Dbms.SCHEMAS,

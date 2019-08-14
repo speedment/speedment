@@ -19,9 +19,12 @@ package com.speedment.maven.abstractmojo;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.internal.ProjectImpl;
+import com.speedment.runtime.config.trait.HasEnableUtil;
+import com.speedment.runtime.config.trait.HasIdUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
+import com.speedment.runtime.config.trait.HasPackageNameUtil;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.config.ProjectProperty;
@@ -141,14 +144,14 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         ProjectProperty projectProperty = new ProjectProperty();
 
         Map<String, Object> projectData = new HashMap<>();
-        addStringToMap(Project.COMPANY_NAME, companyName, getCompanyNameFromMavenProject(), projectData);
-        addStringToMap(Project.NAME, appName, mavenProject.getArtifactId(), projectData);
-        addStringToMap(Project.APP_ID, UUID.randomUUID().toString(), null, projectData);
-        addStringToMap(Project.PACKAGE_NAME, packageName, (mavenProject.getGroupId() + "." + mavenProject.getArtifactId() + ".db").toLowerCase(), projectData);
-        addStringToMap(Project.PACKAGE_LOCATION, packageLocation, null, projectData);
-        addStringToMap(Project.ID, appName, mavenProject.getArtifactId(), projectData);
-        addBooleanToMap(Project.ENABLED, Boolean.TRUE, projectData);
-        addListToMap(Project.DBMSES, createDbmses(), projectData);
+        addStringToMap(ProjectUtil.COMPANY_NAME, companyName, getCompanyNameFromMavenProject(), projectData);
+        addStringToMap(HasNameUtil.NAME, appName, mavenProject.getArtifactId(), projectData);
+        addStringToMap(ProjectUtil.APP_ID, UUID.randomUUID().toString(), null, projectData);
+        addStringToMap(HasPackageNameUtil.PACKAGE_NAME, packageName, (mavenProject.getGroupId() + "." + mavenProject.getArtifactId() + ".db").toLowerCase(), projectData);
+        addStringToMap(ProjectUtil.PACKAGE_LOCATION, packageLocation, null, projectData);
+        addStringToMap(HasIdUtil.ID, appName, mavenProject.getArtifactId(), projectData);
+        addBooleanToMap(HasEnableUtil.ENABLED, Boolean.TRUE, projectData);
+        addListToMap(ProjectUtil.DBMSES, createDbmses(), projectData);
 
         projectProperty.merge(new DocumentPropertyComponentImpl(), new ProjectImpl(projectData));
 
@@ -171,14 +174,14 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
 
     private Map<String, Object> createDbms() {
         Map<String, Object> dbmsData = new HashMap<>();
-        addStringToMap(Dbms.NAME, appName, mavenProject.getArtifactId(), dbmsData);
+        addStringToMap(HasNameUtil.NAME, appName, mavenProject.getArtifactId(), dbmsData);
         addStringToMap(Dbms.TYPE_NAME, dbmsType, "MySQL", dbmsData);
-        addStringToMap(Dbms.ID, appName, mavenProject.getArtifactId(), dbmsData);
+        addStringToMap(HasIdUtil.ID, appName, mavenProject.getArtifactId(), dbmsData);
         addIntegerToMap(Dbms.PORT, dbmsPort, null, dbmsData);
         addStringToMap(Dbms.IP_ADDRESS, dbmsHost, null, dbmsData);
         addStringToMap(Dbms.CONNECTION_URL, dbmsConnectionUrl(), null, dbmsData);
         addStringToMap(Dbms.USERNAME, dbmsUsername, null, dbmsData);
-        addBooleanToMap(Dbms.ENABLED, Boolean.TRUE, dbmsData);
+        addBooleanToMap(HasEnableUtil.ENABLED, Boolean.TRUE, dbmsData);
         addListToMap(Dbms.SCHEMAS, createSchemas(), dbmsData);
         return dbmsData;
     }
@@ -203,9 +206,9 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         String schemaName = schema.trim();
         Map<String, Object> schemaData = new HashMap<>();
         if (StringUtils.isNotBlank(schemaName)) {
-            addStringToMap(Schema.NAME, schemaName, null, schemaData);
-            addStringToMap(Schema.ID, schemaName, null, schemaData);
-            addBooleanToMap(Schema.ENABLED, Boolean.TRUE, schemaData);
+            addStringToMap(HasNameUtil.NAME, schemaName, null, schemaData);
+            addStringToMap(HasIdUtil.ID, schemaName, null, schemaData);
+            addBooleanToMap(HasEnableUtil.ENABLED, Boolean.TRUE, schemaData);
         }
         return schemaData;
     }

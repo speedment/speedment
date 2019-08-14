@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.common.codegen.util.Formatting.ucfirst;
-import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
+import static com.speedment.runtime.config.ProjectUtil.DEFAULT_PACKAGE_NAME;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.JAVA_NAME;
 import static java.util.Objects.requireNonNull;
 

@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.config.ProjectUtil.*;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;

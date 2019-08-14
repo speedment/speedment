@@ -184,7 +184,7 @@ public final class ConfigFileHelper {
             passwordComponent.put(dbms, null); // Clear password
 
             userInterfaceComponent.projectProperty()
-                .observableListOf(Project.DBMSES)
+                .observableListOf(ProjectUtil.DBMSES)
                 .remove(dbms); // Remove dbms from observable model
         };
 
@@ -474,7 +474,7 @@ public final class ConfigFileHelper {
             }
 
             // Set the Speedment version used to generate the code
-            project.stringPropertyOf(Project.SPEEDMENT_VERSION, () -> null)
+            project.stringPropertyOf(ProjectUtil.SPEEDMENT_VERSION, () -> null)
                 .setValue(infoComponent.getEditionAndVersionString());
 
             DocumentTranscoder.save(project, path, Json::toJson);

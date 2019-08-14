@@ -18,6 +18,7 @@ package com.speedment.runtime.config.mutator.trait;
 
 
 import com.speedment.runtime.config.mutator.DocumentMutator;
+import com.speedment.runtime.config.trait.HasEnableUtil;
 import com.speedment.runtime.config.trait.HasEnabled;
 
 /**
@@ -29,6 +30,6 @@ import com.speedment.runtime.config.trait.HasEnabled;
 public interface HasEnabledMutator<DOC extends HasEnabled> extends DocumentMutator<DOC> {
     
     default void setEnabled(Boolean enabled) {
-        put(HasEnabled.ENABLED, enabled);
+        put(HasEnableUtil.ENABLED, enabled);
     }
 }

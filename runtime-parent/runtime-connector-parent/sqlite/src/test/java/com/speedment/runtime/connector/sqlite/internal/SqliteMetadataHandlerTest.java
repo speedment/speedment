@@ -19,7 +19,10 @@ package com.speedment.runtime.connector.sqlite.internal;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.internal.ProjectImpl;
+import com.speedment.runtime.config.trait.HasIdUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.connector.sqlite.MockConnectionPoolComponent;
 import com.speedment.runtime.connector.sqlite.MockDbmsHandlerComponent;
 import com.speedment.runtime.connector.sqlite.MockProgress;
@@ -89,11 +92,11 @@ class SqliteMetadataHandlerTest {
                     .beforeInitialized(MockProjectComponent.class,
                         projects -> projects.setProject(new ProjectImpl(
                             mapBuilderTyped(String.class, Object.class)
-                                .key(Project.ID).value("test_project")
-                                .key(Project.NAME).value("test_project")
-                                .key(Project.DBMSES).value(singletonList(mapBuilderTyped(String.class, Object.class)
-                                    .key(Dbms.ID).value("test_dbms")
-                                    .key(Dbms.NAME).value("test_dbms")
+                                .key(HasIdUtil.ID).value("test_project")
+                                .key(HasNameUtil.NAME).value("test_project")
+                                .key(ProjectUtil.DBMSES).value(singletonList(mapBuilderTyped(String.class, Object.class)
+                                    .key(HasIdUtil.ID).value("test_dbms")
+                                    .key(HasNameUtil.NAME).value("test_dbms")
                                     .key(Dbms.CONNECTION_URL).value(URL)
                                     .key(Dbms.TYPE_NAME).value(SqliteDbmsType.SQLITE)
                                     .build()

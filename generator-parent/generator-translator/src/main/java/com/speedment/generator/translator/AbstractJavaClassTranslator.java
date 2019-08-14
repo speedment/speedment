@@ -227,7 +227,7 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         @Override
         public Builder<T> forEveryDbms(Phase phase, BiConsumer<T, Dbms> consumer) {
-            aquireListAndAdd(phase, Project.DBMSES, wrap(consumer, DbmsImpl::new));
+            aquireListAndAdd(phase, ProjectUtil.DBMSES, wrap(consumer, DbmsImpl::new));
             return this;
         }
 
@@ -300,7 +300,7 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
             for (Phase phase : Phase.values()) {
                 project().ifPresent(p -> act(phase, PROJECTS, model, p));
-                dbms().ifPresent(d -> act(phase, Project.DBMSES, model, d));
+                dbms().ifPresent(d -> act(phase, ProjectUtil.DBMSES, model, d));
                 schema().ifPresent(s -> act(phase, Dbms.SCHEMAS, model, s));
                 table().ifPresent(t -> act(phase, Schema.TABLES, model, t));
 
@@ -392,7 +392,7 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
         }
 
         private final Set<String> aboveTable = Stream.of(
-            Project.DBMSES,
+            ProjectUtil.DBMSES,
             Dbms.SCHEMAS,
             Schema.TABLES
         )

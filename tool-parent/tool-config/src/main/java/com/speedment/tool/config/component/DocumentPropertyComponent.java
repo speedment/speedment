@@ -46,7 +46,7 @@ public interface DocumentPropertyComponent {
 
     List<String>
         PROJECTS            = emptyList(),
-        DBMSES              = singletonList(Project.DBMSES),
+        DBMSES              = singletonList(ProjectUtil.DBMSES),
         SCHEMAS             = Stream.concat(DBMSES.stream(), Stream.of(Dbms.SCHEMAS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
         TABLES              = Stream.concat(SCHEMAS.stream(), Stream.of(Schema.TABLES)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
         COLUMNS             = Stream.concat(TABLES.stream(), Stream.of(Table.COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),

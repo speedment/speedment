@@ -28,9 +28,7 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
  * @author Simon
  */
 public interface HasPackageName extends Document{
-    
-    String PACKAGE_NAME = "packageName";
-    
+
     /**
      * Returns the name of the generated package where this document will be
      * located.
@@ -38,7 +36,7 @@ public interface HasPackageName extends Document{
      * @return the name of the generated package or {@code empty}
      */
     default Optional<String> getPackageName() {
-        return getAsString(PACKAGE_NAME);
+        return getAsString(HasPackageNameUtil.PACKAGE_NAME);
     }
     
         /**

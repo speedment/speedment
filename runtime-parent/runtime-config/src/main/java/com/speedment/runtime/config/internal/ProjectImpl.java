@@ -19,6 +19,8 @@ package com.speedment.runtime.config.internal;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.ProjectUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
 
 import java.util.Map;
 import java.util.Optional;
@@ -41,7 +43,7 @@ public final class ProjectImpl extends BaseDocument implements Project {
     @Override
     public String getName() {
         // Must implement getName because Project does not have any parent.
-        return getAsString(NAME).orElse(DEFAULT_PROJECT_NAME);
+        return getAsString(HasNameUtil.NAME).orElse(ProjectUtil.DEFAULT_PROJECT_NAME);
     }
 
     @Override
@@ -56,6 +58,6 @@ public final class ProjectImpl extends BaseDocument implements Project {
 
     @Override
     public Stream<? extends Dbms> dbmses() {
-        return children(DBMSES, DbmsImpl::new);
+        return children(ProjectUtil.DBMSES, DbmsImpl::new);
     }
 }

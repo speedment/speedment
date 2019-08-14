@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.StringProperty;
 
@@ -28,7 +28,7 @@ import javafx.beans.property.StringProperty;
 public interface HasNameProperty extends DocumentProperty {
 
     default StringProperty nameProperty() {
-        return stringPropertyOf(HasName.NAME, DocumentProperty.super::getName);
+        return stringPropertyOf(HasNameUtil.NAME, DocumentProperty.super::getName);
     }
 
     @Override
