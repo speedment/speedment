@@ -42,8 +42,6 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface Rest {
     
-    String ENCODING = "UTF-8";
-    
     enum Method {
         POST, GET, DELETE, PUT, OPTIONS, HEAD
     }
@@ -114,7 +112,7 @@ public interface Rest {
     
     static String encode(String value) {
         try {
-            return URLEncoder.encode(value, ENCODING);
+            return URLEncoder.encode(value, "UTF-8");
         } catch (final UnsupportedEncodingException ex) {
             throw new RuntimeException("Error encoding value '" + value + "'.");
         }

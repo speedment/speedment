@@ -53,5 +53,5 @@ public final class DefaultApplicationBuilder extends
     }
 
     @Override
-    protected void printWelcomeMessage(Injector injector) {}
+    protected void printWelcomeMessage(Injector injector) { /* Do Nothing */}
 }

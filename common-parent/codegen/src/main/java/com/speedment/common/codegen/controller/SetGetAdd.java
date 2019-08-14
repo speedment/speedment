@@ -38,7 +38,10 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class SetGetAdd implements Consumer<File> {
-    
+
+	private static final String RETURN = "return";
+	private static final String THIS = "this";
+
 	private final BiPredicate<Field, Method> onlyInclude;
 	
     /**
@@ -112,11 +115,11 @@ public final class SetGetAdd implements Consumer<File> {
 					.set(Javadoc.of()
 						.setText("Adds the specified " + lcfirst(shortName(param.getType().getTypeName())) + " to this " + shortName(model.getName()) + ".")
 						.add(JavadocTag.of("param", param.getName(), "the new value"))
-						.add(JavadocTag.of("return", "a reference to this object"))
+						.add(JavadocTag.of(RETURN, "a reference to this object"))
 					).public_()
 					.add(param)
-					.add("this." + f.getName() + ".add(" + param.getName() + ");")
-					.add("return this;");
+					.add(THIS + "." + f.getName() + ".add(" + param.getName() + ");")
+					.add(RETURN + " " + THIS + ";");
 				
 				if (onlyInclude.test(f, add)) {
 					model.add(add);
@@ -126,7 +129,7 @@ public final class SetGetAdd implements Consumer<File> {
 					.set(Javadoc.of()
 						.setText("Sets the " + f.getName() + " of this " + shortName(model.getName()) + ".")
 						.add(JavadocTag.of("param", f.getName(), "the new value"))
-						.add(JavadocTag.of("return", "a reference to this object"))
+						.add(JavadocTag.of(RETURN, "a reference to this object"))
 					).public_();
                 
 				if (isOptional(f.getType())) {
@@ -134,12 +137,12 @@ public final class SetGetAdd implements Consumer<File> {
                     final ParameterizedType paramType = (ParameterizedType) f.getType();
                     
 					set.add(Field.of(f.getName(), paramType.getActualTypeArguments()[0]))
-						.add("this." + f.getName() + " = Optional.of(" + f.getName() + ");")
-						.add("return this;");
+						.add(THIS + "." + f.getName() + " = Optional.of(" + f.getName() + ");")
+						.add(RETURN + " this;");
 				} else {
 					set.add(Field.of(f.getName(), f.getType()))
-						.add("this." + f.getName() + " = " + f.getName() + ";")
-						.add("return this;");
+						.add(THIS + "." + f.getName() + " = " + f.getName() + ";")
+						.add(RETURN + " " + THIS + ";");
 				}
 				
 				if (onlyInclude.test(f, set)) {
@@ -150,9 +153,9 @@ public final class SetGetAdd implements Consumer<File> {
 			final Method get = Method.of("get" + ucfirst(f.getName()), f.getType())
 				.set(Javadoc.of()
 					.setText("Gets the " + f.getName() + " of this " + shortName(model.getName()) + ".")
-					.add(JavadocTag.of("return", "the " + f.getName()))
+					.add(JavadocTag.of(RETURN, "the " + f.getName()))
 				).public_()
-				.add("return this." + f.getName() + ";");
+				.add(RETURN + " " + THIS + "." + f.getName() + ";");
 			
 			if (onlyInclude.test(f, get)) {
 				model.add(get);

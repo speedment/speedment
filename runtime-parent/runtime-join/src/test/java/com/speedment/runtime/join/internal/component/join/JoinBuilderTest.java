@@ -205,10 +205,6 @@ final class JoinBuilderTest {
 //            .build();
 //    }
 
-    @Test
-    void testOnColumnMustComeFromPreviousTable() {
-
-    }
 
     private <T> Consumer<T> noOp() {
         return (T t) -> {

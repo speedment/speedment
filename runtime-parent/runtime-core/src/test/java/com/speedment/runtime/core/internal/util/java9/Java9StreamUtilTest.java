@@ -24,8 +24,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.Stream;
 
@@ -40,7 +39,9 @@ final class Java9StreamUtilTest {
 
     @Test
     void testPredicate() {
-        STREAM_SUPPLIER.get().filter(LESS_THAN_C).forEach(System.out::println);
+        assertDoesNotThrow(() ->
+            STREAM_SUPPLIER.get().filter(LESS_THAN_C).forEach(System.out::println)
+        );
     }
 
     @Test

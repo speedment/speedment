@@ -29,6 +29,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class NullUtil {
 
+    private static final String IS_NULL = "is null";
     private static final String FIRST_ARG_IS_NULL = "First argument is null";
     private static final String SECOND_ARG_IS_NULL = "Second argument is null";
     private static final String THIRD_ARG_IS_NULL = "Third argument is null";
@@ -49,11 +50,11 @@ public final class NullUtil {
      * array itself is null
      */
     public static <T> T[] requireNonNullElements(T[] array) {
-        requireNonNull(array, "The provided array is null.");
+        requireNonNull(array, "The provided array " + IS_NULL + ".");
         int len = array.length;
         for (int i = 0; i < len; i++) {
             if (array[i] == null) {
-                throw new NullPointerException("Item " + i + " in the array " + Arrays.toString(array) + " is null");
+                throw new NullPointerException("Item " + i + " in the array " + Arrays.toString(array) + " " + IS_NULL);
             }
         }
         return array;
@@ -71,11 +72,11 @@ public final class NullUtil {
      * the array itself is null
      */
     public static <E, T extends Collection<E>> T requireNonNullElements(T collection) {
-        requireNonNull(collection, "The provided collection is null.");
+        requireNonNull(collection, "The provided collection " + IS_NULL + ".");
         int i = 0;
         for (E item : collection) {
             if (item == null) {
-                throw new NullPointerException("Element " + i + " in the collection " + collection + " is null");
+                throw new NullPointerException("Element " + i + " in the collection " + collection + " " + IS_NULL);
             }
             i++;
         }
@@ -98,7 +99,7 @@ public final class NullUtil {
         int len = array.length;
         for (int i = 0; i < len; i++) {
             if (array[i] == null) {
-                throw new NullPointerException(msg + ", item " + i + " in the array " + Arrays.toString(array) + " is null");
+                throw new NullPointerException(msg + ", item " + i + " in the array " + Arrays.toString(array) + " " + IS_NULL);
             }
         }
         return array;

@@ -42,6 +42,7 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -49,6 +50,7 @@ import java.util.concurrent.TimeoutException;
 
 import static com.speedment.common.mapbuilder.MapBuilder.mapBuilderTyped;
 import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
  * @author Emil Forslund
@@ -130,22 +132,15 @@ class SqliteMetadataHandlerTest {
 
     @Test
     void readSchemaMetadata() {
-        final SqliteMetadataHandler metadataHandler =
-            injector.getOrThrow(SqliteMetadataHandler.class);
+        final SqliteMetadataHandler metadataHandler = injector.getOrThrow(SqliteMetadataHandler.class);
+        final ProjectComponent projects = injector.getOrThrow(ProjectComponent.class);
+        final Dbms dbms = projects.getProject().dbmses().findFirst().orElseThrow(NoSuchElementException::new);
+        final CompletableFuture<Project> task = metadataHandler.readSchemaMetadata(dbms, new MockProgress(), s -> true);
 
-        final ProjectComponent projects =
-            injector.getOrThrow(ProjectComponent.class);
+        assertDoesNotThrow(() -> {
+                final Project loaded = task.get(10, TimeUnit.SECONDS);
+            }
+        );
 
-        final Dbms dbms = projects.getProject().dbmses().findFirst().get();
-
-        final CompletableFuture<Project> task =
-            metadataHandler.readSchemaMetadata(dbms, new MockProgress(), s -> true);
-
-        try {
-            final Project loaded = task.get(10, TimeUnit.SECONDS);
-            //System.out.println(Json.toJson(loaded.getData(), true));
-        } catch (final InterruptedException | ExecutionException | TimeoutException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 }

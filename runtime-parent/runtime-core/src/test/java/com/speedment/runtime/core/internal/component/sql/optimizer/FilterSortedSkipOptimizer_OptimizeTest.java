@@ -40,11 +40,13 @@ import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 /**
  *
  * @author Per Minborg
  */
-public class FilterSortedSkipOptimizer_OptimizeTest {
+class FilterSortedSkipOptimizer_OptimizeTest {
 
     private static final DbmsType DBMS_TYPE = new MockDbmsType();
     private static final Supplier<BaseStream<?, ?>> STREAM_SUPPLIER = () -> MockEntityUtil.stream(2);
@@ -60,7 +62,7 @@ public class FilterSortedSkipOptimizer_OptimizeTest {
     private SqlStreamOptimizerInfo<MockEntity> sqlStreamOptimizerInfo;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         instance = new FilterSortedSkipOptimizer<>();
         asynchronousQueryResult = new AsynchronousQueryResultImpl<>(
             "SELECT id, name from mock_entity",
@@ -88,11 +90,13 @@ public class FilterSortedSkipOptimizer_OptimizeTest {
     }
 
     @Test
-    public void testFilter1Order1Skip1() {
-        final Pipeline pipeline = pipelineOf(FILTER_ACTION, SORTED_ACTION, SKIP_ACTION);
-        printInfo("Before", pipeline, asynchronousQueryResult);
-        Pipeline newPipeline = instance.optimize(pipeline, sqlStreamOptimizerInfo, asynchronousQueryResult);
-        printInfo("After", newPipeline, asynchronousQueryResult);
+    void testFilter1Order1Skip1() {
+        assertDoesNotThrow(() -> {
+            final Pipeline pipeline = pipelineOf(FILTER_ACTION, SORTED_ACTION, SKIP_ACTION);
+            printInfo("Before", pipeline, asynchronousQueryResult);
+            Pipeline newPipeline = instance.optimize(pipeline, sqlStreamOptimizerInfo, asynchronousQueryResult);
+            printInfo("After", newPipeline, asynchronousQueryResult);
+        });
     }
 
     private Pipeline pipelineOf(Action<?, ?>... actions) {

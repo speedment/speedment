@@ -47,7 +47,9 @@ import static java.util.stream.Collectors.joining;
  * @since   1.0.0
  */
 final class RestImpl implements Rest {
-    
+
+    private static final StreamConsumer IGNORE = o -> {};
+
     private final Protocol protocol;
     private final String host;
     private final int port;
@@ -251,7 +253,7 @@ final class RestImpl implements Rest {
     
     private CompletableFuture<Response> send(Method method, String path, Option[] options, Iterator<String> iterator) {
         if (iterator == NO_ITERATOR) {
-            return send(method, path, options, StreamConsumer.IGNORE);
+            return send(method, path, options, IGNORE);
         } else {
             return send(method, path, options, out -> {
                 int i = 0;
@@ -307,7 +309,7 @@ final class RestImpl implements Rest {
                 conn.setUseCaches(false);
                 conn.setAllowUserInteraction(false);
 
-                final boolean doOutput = outStreamConsumer != StreamConsumer.IGNORE;
+                final boolean doOutput = outStreamConsumer != IGNORE;
                 conn.setDoOutput(doOutput);
 
                 conn.connect();
@@ -411,7 +413,7 @@ final class RestImpl implements Rest {
     
     @FunctionalInterface
     private interface StreamConsumer {
-        StreamConsumer IGNORE = o -> {};
+
         void writeTo(OutputStream out) throws IOException;
     }
 }

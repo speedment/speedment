@@ -543,42 +543,42 @@ extends AbstractLabelTooltipItem {
 
         @Override
         public final String persist(String entity) throws SpeedmentException {
-            throw new UnsupportedOperationException("This manager is read-only.");
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override
         public Persister<String> persister() {
-            throw new UnsupportedOperationException("This manager is read-only.");
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override
         public Persister<String> persister(HasLabelSet<String> fields) {
-            throw new UnsupportedOperationException("This manager is read-only.");
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override
         public final String update(String entity) throws SpeedmentException {
-            throw new UnsupportedOperationException("This manager is read-only.");
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override
         public Updater<String> updater() {
-            throw new UnsupportedOperationException("This manager is read-only.");
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override
         public Updater<String> updater(HasLabelSet<String> fields) {
-            throw new UnsupportedOperationException("This manager is read-only.");
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override
         public final String remove(String entity) throws SpeedmentException {
-            throw new UnsupportedOperationException("This manager is read-only.");
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override
         public Remover<String> remover() {
-            throw new UnsupportedOperationException("This manager is read-only.");
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override
@@ -648,5 +648,9 @@ extends AbstractLabelTooltipItem {
                 }
             };
         }
+    }
+
+    private static UnsupportedOperationException newUnsupportedOperationExceptionReadOnly() {
+        return new UnsupportedOperationException("This manager is read-only.");
     }
 }

@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -111,6 +110,7 @@ final class Tuple2NullableTest {
     @Test
     void testToString() {
         final Tuple2OfNullables<Integer, Integer> newInstance = TuplesOfNullables.ofNullables(null, null);
+        assertNotNull(newInstance);
     }
 
     @Test

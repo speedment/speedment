@@ -45,7 +45,9 @@ final class NullUtilTest {
 
     @Test
     void testRequireNonNullElements_array_no_nulls() {
-        NullUtil.requireNonNullElements(ARRAY_WITHOUT_NULL);
+        assertDoesNotThrow(() ->
+            NullUtil.requireNonNullElements(ARRAY_WITHOUT_NULL)
+        );
     }
 
     @Test
@@ -109,8 +111,10 @@ final class NullUtilTest {
 
     @Test
     void testRequireNonNulls_Object_NotNull() {
-        final String o0 = "A";
-        NullUtil.requireNonNulls(o0);
+        assertDoesNotThrow(() -> {
+            final String o0 = "A";
+            NullUtil.requireNonNulls(o0);
+        });
     }
 
     @Test
@@ -227,7 +231,9 @@ final class NullUtilTest {
 
     @Test
     void testRequireKeys_2args_1_NotNull() {
-        NullUtil.requireKeys(new HashMap<String, String>());
+        assertDoesNotThrow(() ->
+            NullUtil.requireKeys(new HashMap<String, String>())
+        );
     }
 
     @Test

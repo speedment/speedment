@@ -56,10 +56,10 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class GeneratedApplicationBuilderTranslator extends AbstractJavaClassTranslator<Project, Class> {
 
-    private @Inject
-    InfoComponent infoComponent;
-    private @Inject
-    Injector injector;
+    private static final String CLASS = "class";
+
+    @Inject private InfoComponent infoComponent;
+    @Inject private Injector injector;
 
     public GeneratedApplicationBuilderTranslator(Project doc) {
         super(doc, Class::of);
@@ -113,20 +113,20 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                 final Method build = Method.of("build", applicationType())
                     .public_().add(OVERRIDE)
                     .add(Field.of("injector", Injector.class))
-                    .add("return injector.getOrThrow(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application.class);");
+                    .add("return injector.getOrThrow(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application."+ CLASS +");");
 
                 final Constructor constr = Constructor.of().protected_();
 
                 final StringBuilder constructorBody = new StringBuilder("super(");
-                constructorBody.append(getSupport().typeName(getSupport().projectOrThrow())).append("ApplicationImpl.class, ");
-                constructorBody.append("Generated").append(getSupport().typeName(getSupport().projectOrThrow())).append(METADATA).append(".class);").append(nl());
+                constructorBody.append(getSupport().typeName(getSupport().projectOrThrow())).append("ApplicationImpl." + CLASS + ", ");
+                constructorBody.append("Generated").append(getSupport().typeName(getSupport().projectOrThrow())).append(METADATA).append("." + CLASS + ");").append(nl());
 
                 final String separator = nl();
                 if (!managerImpls.isEmpty()) {
 
                     constructorBody.append(
                         managerImpls.stream()
-                        .map(s -> "withManager(" + s + ".class);")
+                        .map(s -> "withManager(" + s + "." + CLASS + ");")
                         .collect(joining(separator, "", separator))
                     );
                     
@@ -136,7 +136,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
 
                     constructorBody.append(
                         sqlAdapters.stream()
-                        .map(s -> "withComponent(" + s + ".class);")
+                        .map(s -> "withComponent(" + s + "." + CLASS + ");")
                         .collect(joining(separator))
                     );
                 }

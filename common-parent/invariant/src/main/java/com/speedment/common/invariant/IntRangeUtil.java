@@ -26,7 +26,7 @@ import static com.speedment.common.invariant.ConstantUtil.*;
  */
 public final class IntRangeUtil {
 
-    public IntRangeUtil() {}
+    private IntRangeUtil() {}
 
     /**
      * Returns the given value if it is positive.

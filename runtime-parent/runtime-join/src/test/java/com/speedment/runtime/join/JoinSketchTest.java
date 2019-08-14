@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.internal.component.join.JoinComponentImpl;
@@ -80,9 +81,11 @@ final class JoinSketchTest {
 
     @Test
     void simpleProblemTest() {
-        jc.from(PictureManager.IDENTIFIER)
-            .innerJoinOn(User.USER_ID).equal(Picture.USER_ID)
-            .build(Tuples::of);
+        assertDoesNotThrow(() ->
+            jc.from(PictureManager.IDENTIFIER)
+                .innerJoinOn(User.USER_ID).equal(Picture.USER_ID)
+                .build(Tuples::of)
+        );
     }
 
 

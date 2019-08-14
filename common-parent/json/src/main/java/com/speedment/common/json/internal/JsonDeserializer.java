@@ -43,7 +43,8 @@ import java.util.function.Consumer;
  * @since  1.0.0
  */
 public final class JsonDeserializer implements AutoCloseable {
-    
+
+    private final static String UNKNOWN_ENUM_CONSTANT = "Unknown enum constant '";
     private final static String ENCODING = "UTF-8";
     private final static int TAB_SIZE = 4;
 
@@ -66,7 +67,8 @@ public final class JsonDeserializer implements AutoCloseable {
     }
     
     public Object get() throws IOException {
-        switch (nextNonBlankspace()) {
+        final int nextNonBlankspace = nextNonBlankspace();
+        switch (nextNonBlankspace) {
             case 0x7B : // { (begin parsing object)
                 return parseObject();
             case 0x5B : // [ (begin parsing array)
@@ -89,9 +91,9 @@ public final class JsonDeserializer implements AutoCloseable {
                 if (parseNumber(number::set) == CloseMethod.NOT_DECIDED) {
                     return number.get();
                 }
+            default:
+                throw unexpectedCharacterException();
         }
-        
-        throw unexpectedCharacterException();
     }
     
     private Map<String, Object> parseObject() throws IOException {
@@ -128,7 +130,7 @@ public final class JsonDeserializer implements AutoCloseable {
                         }
                     default :
                         throw new IllegalStateException(
-                            "Unknown enum constant '" + close + "'."
+                            UNKNOWN_ENUM_CONSTANT + close + "'."
                         );
                 }
                 
@@ -164,7 +166,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     }
                 default:
                     throw new IllegalStateException(
-                        "Unknown enum constant '" + close + "'."
+                        UNKNOWN_ENUM_CONSTANT + close + "'."
                     );
             }
         }
@@ -370,7 +372,7 @@ public final class JsonDeserializer implements AutoCloseable {
                         
                     default :
                         throw new IllegalStateException(
-                            "Unknown enum constant '" + method + "'."
+                            UNKNOWN_ENUM_CONSTANT + method + "'."
                         );
                 }
                 
@@ -434,7 +436,7 @@ public final class JsonDeserializer implements AutoCloseable {
 
                         default:
                             throw new IllegalStateException(
-                                "Unknown enum constant '" + method + "'."
+                                UNKNOWN_ENUM_CONSTANT + method + "'."
                             );
                     }
 

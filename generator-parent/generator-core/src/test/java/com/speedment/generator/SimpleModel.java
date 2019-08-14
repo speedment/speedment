@@ -30,6 +30,7 @@ import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.nio.file.Path;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
@@ -85,14 +86,14 @@ public abstract class SimpleModel {
             .build();
         
         project  = speedment.getOrThrow(ProjectComponent.class).getProject();
-        dbms     = project.dbmses().findAny().get();
-        schema   = dbms.schemas().findAny().get();
-        table    = schema.tables().filter(t -> TABLE_NAME.equals(t.getId())).findAny().get();
-        column   = table.columns().findAny().get();
-        pkColumn = table.primaryKeyColumns().findAny().get();
+        dbms     = project.dbmses().findAny().orElseThrow(NoSuchElementException::new);
+        schema   = dbms.schemas().findAny().orElseThrow(NoSuchElementException::new);
+        table    = schema.tables().filter(t -> TABLE_NAME.equals(t.getId())).findAny().orElseThrow(NoSuchElementException::new);
+        column   = table.columns().findAny().orElseThrow(NoSuchElementException::new);
+        pkColumn = table.primaryKeyColumns().findAny().orElseThrow(NoSuchElementException::new);
 
-        table2  = schema.tables().filter(t -> TABLE_NAME2.equals(t.getId())).findAny().get();
-        column2 = table2.columns().findAny().get();
+        table2  = schema.tables().filter(t -> TABLE_NAME2.equals(t.getId())).findAny().orElseThrow(NoSuchElementException::new);
+        column2 = table2.columns().findAny().orElseThrow(NoSuchElementException::new);
     }
     
     private final static class SimpleMetadata extends AbstractApplicationMetadata {

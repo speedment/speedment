@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.oracle_java_magazine.util;
+package com.speedment.example.basic_example.util;
 
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.actor.ActorManager;
@@ -26,12 +26,12 @@ import com.company.sakila.db0.sakila.city.CityManager;
  *
  * @author Per Minborg
  */
-public class ManagerHolder {
+public final class ManagerHolder {
 
-    protected final ActorManager actors;
-    protected final AddressManager addresses;
-    protected final CategoryManager categories;
-    protected final CityManager cities;
+    private final ActorManager actors;
+    private final AddressManager addresses;
+    private final CategoryManager categories;
+    private final CityManager cities;
 
     public ManagerHolder(final SakilaApplication app) {
         this.actors = app.getOrThrow(ActorManager.class);

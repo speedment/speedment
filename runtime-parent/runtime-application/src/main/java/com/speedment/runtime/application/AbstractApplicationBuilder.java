@@ -373,7 +373,7 @@ public abstract class AbstractApplicationBuilder<
             throw new SpeedmentException("Error in dependency injection.", ex);
         }
         
-        printWelcomeMessage(inj);
+            printWelcomeMessage(inj);
 
         if (!skipValidateRuntimeConfig) {
             validateRuntimeConfig(inj);

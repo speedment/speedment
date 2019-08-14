@@ -21,6 +21,8 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  *
  * @author Per Minborg
@@ -35,6 +37,7 @@ final class LoggerTest {
     @Test
     void test() {
         LOGGER.setLevel(Level.TRACE);
+        assertEquals(LOGGER.getLevel(), Level.TRACE);
 
         LOGGER.trace(MESSAGE_1);
         LOGGER.debug(MESSAGE_1);

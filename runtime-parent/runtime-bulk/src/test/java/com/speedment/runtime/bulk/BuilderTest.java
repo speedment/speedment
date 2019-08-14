@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 /**
  *
  * @author Per Minborg
@@ -39,28 +41,37 @@ final class BuilderTest {
 
     @Test
     void testRemoveAll() {
-        final BulkOperation bo = BulkOperation.builder()
-            .remove(mgr)
-            .build();
+        assertDoesNotThrow(() -> {
+                final BulkOperation bo = BulkOperation.builder()
+                    .remove(mgr)
+                    .build();
 
-        printInfo(bo);
+                printInfo(bo);
+            }
+        );
     }
 
     @Test
     void testRemoveOnePredicate() {
-        final BulkOperation bo = BulkOperation.builder()
-            .remove(mgr).where(Point::isOrigo)
-            .build();
-        bo.operations().forEachOrdered(System.out::println);
+        assertDoesNotThrow(() -> {
+                final BulkOperation bo = BulkOperation.builder()
+                    .remove(mgr).where(Point::isOrigo)
+                    .build();
+
+                bo.operations().forEachOrdered(System.out::println);
+            }
+        );
     }
 
     @Test
     void testRemoveTwoPredicates() {
-        final BulkOperation bo = BulkOperation.builder()
-            .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
-            .build();
+        assertDoesNotThrow(() -> {
+            final BulkOperation bo = BulkOperation.builder()
+                .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
+                .build();
 
-        printInfo(bo);
+            printInfo(bo);
+        });
     }
 
     /*
@@ -112,23 +123,25 @@ final class BuilderTest {
     
     @Test
     void testMixed() {
-        final BulkOperation bo = BulkOperation.builder()
-            .remove(mgr)
-            .remove(mgr).where(Point::isOrigo)
-            .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
-            .update(mgr).set(p -> p.setX(p.getX() + 1)) // Consumer
+        assertDoesNotThrow(() -> {
+            final BulkOperation bo = BulkOperation.builder()
+                .remove(mgr)
+                .remove(mgr).where(Point::isOrigo)
+                .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
+                .update(mgr).set(p -> p.setX(p.getX() + 1)) // Consumer
 
-            .update(mgr).compute(
-            p -> {
-                p.setX(0);
-                return p;
-            }) // Function
-            .update(mgr).where(Point::isOrigo).set(s -> s.setX(s.getX()))
-            .update(mgr).where(Point::isOrigo).where(Point::isFirstQuadrant).set(Point::increaseX).set(Point::increaseX)
-            .persist(mgr).values(() -> Stream.of(new Point(1, 1), new Point(2, 2)))
-            .build();
+                .update(mgr).compute(
+                    p -> {
+                        p.setX(0);
+                        return p;
+                    }) // Function
+                .update(mgr).where(Point::isOrigo).set(s -> s.setX(s.getX()))
+                .update(mgr).where(Point::isOrigo).where(Point::isFirstQuadrant).set(Point::increaseX).set(Point::increaseX)
+                .persist(mgr).values(() -> Stream.of(new Point(1, 1), new Point(2, 2)))
+                .build();
 
-        printInfo(bo);
+            printInfo(bo);
+        });
     }
 
     private void printInfo(BulkOperation bo) {
