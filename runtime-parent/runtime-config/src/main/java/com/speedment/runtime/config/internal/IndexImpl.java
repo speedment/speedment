@@ -35,7 +35,7 @@ public final class IndexImpl extends AbstractChildDocument<Table> implements Ind
     }
 
     @Override
-    public Stream<? extends IndexColumn> indexColumns() {
+    public Stream<IndexColumn> indexColumns() {
         return children(IndexUtil.INDEX_COLUMNS, IndexColumnImpl::new);
     }
 }

@@ -551,7 +551,7 @@ public final class ConnectController implements Initializable {
         }
 
         @Override
-        public Stream<? extends Schema> schemas() {
+        public Stream<Schema> schemas() {
             return Stream.empty();
         }
 

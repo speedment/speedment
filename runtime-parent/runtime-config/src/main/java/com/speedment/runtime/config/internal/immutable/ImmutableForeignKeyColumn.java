@@ -34,15 +34,15 @@ import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
  */
 public final class ImmutableForeignKeyColumn extends ImmutableDocument implements ForeignKeyColumn {
 
-    private final transient String id;
-    private final transient String name;
-    private final transient int ordinalPosition;
-    private final transient String foreignColumnName;
-    private final transient String foreignTableName;
+    private final String id;
+    private final String name;
+    private final int ordinalPosition;
+    private final String foreignColumnName;
+    private final String foreignTableName;
     
-    private final transient LazyReference<Optional<ImmutableColumn>> foreignColumn;
-    private final transient LazyReference<Optional<ImmutableTable>> foreignTable;
-    private final transient LazyReference<Optional<ImmutableColumn>> column;
+    private final LazyReference<Optional<ImmutableColumn>> foreignColumn;
+    private final LazyReference<Optional<ImmutableTable>> foreignTable;
+    private final LazyReference<Optional<ImmutableColumn>> column;
   
     ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
         super(parent, requireKeys(fkc, ForeignKeyColumnUtil.FOREIGN_COLUMN_NAME, ForeignKeyColumnUtil.FOREIGN_TABLE_NAME));

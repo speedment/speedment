@@ -19,6 +19,7 @@ package com.speedment.runtime.config.internal.immutable;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.internal.DbmsImpl;
 
 import java.util.List;
@@ -38,31 +39,27 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
-    private final transient boolean enabled;
-    private final transient String id;
-    private final transient String name;
-    private final transient Optional<String> alias;
-    private final transient String typeName;
-    private final transient Optional<String> ipAddress;
-    private final transient OptionalInt port;
-    private final transient Optional<String> username;
-    
-    private final transient List<ImmutableSchema> schemas;
+    private final boolean enabled;
+    private final String id;
+    private final String name;
+    private final String alias;
+    private final String typeName;
+    private final String ipAddress;
+    private final OptionalInt port;
+    private final String username;
+    private final List<Schema> schemas;
 
     ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
         super(parent, requireKeys(dbms, DbmsUtil.TYPE_NAME));
-
         final Dbms prototype = new DbmsImpl(parent, dbms);
-        
         this.enabled   = prototype.isEnabled();
         this.id        = prototype.getId();
         this.name      = prototype.getName();
-        this.alias     = prototype.getAlias();
+        this.alias     = prototype.getAlias().orElse(null);
         this.typeName  = prototype.getTypeName();
-        this.ipAddress = prototype.getIpAddress();
+        this.ipAddress = prototype.getIpAddress().orElse(null);
         this.port      = prototype.getPort();
-        this.username  = prototype.getUsername();
-        
+        this.username  = prototype.getUsername().orElse(null);
         this.schemas   = unmodifiableList(super.children(DbmsUtil.SCHEMAS, ImmutableSchema::new).collect(toList()));
     }
 
@@ -82,7 +79,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
     @Override
     public Optional<String> getAlias() {
-        return alias;
+        return Optional.ofNullable(alias);
     }
 
     @Override
@@ -92,7 +89,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
     @Override
     public Optional<String> getIpAddress() {
-        return ipAddress;
+        return Optional.ofNullable(ipAddress);
     }
 
     @Override
@@ -102,11 +99,11 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
     @Override
     public Optional<String> getUsername() {
-        return username;
+        return Optional.ofNullable(username);
     }
 
     @Override
-    public Stream<ImmutableSchema> schemas() {
+    public Stream<Schema> schemas() {
         return schemas.stream();
     }
 

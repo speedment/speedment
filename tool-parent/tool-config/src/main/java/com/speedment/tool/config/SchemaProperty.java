@@ -19,6 +19,7 @@ package com.speedment.tool.config;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.SchemaUtil;
+import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.SchemaPropertyMutator;
@@ -70,8 +71,8 @@ implements Schema,
     }
 
     @Override
-    public Stream<TableProperty> tables() {
-        return tablesProperty().stream();
+    public Stream<Table> tables() {
+        return tablesProperty().stream().map(Table.class::cast);
     }
 
     @Override

@@ -217,7 +217,7 @@ final class AbstractJavaClassTranslatorTest {
         }
 
         @Override
-        public Stream<? extends Dbms> dbmses() {
+        public Stream<Dbms> dbmses() {
             return children(ProjectUtil.DBMSES, MyDbmsImpl::new);
         }
     }
@@ -229,7 +229,7 @@ final class AbstractJavaClassTranslatorTest {
         }
 
         @Override
-        public Stream<? extends Schema> schemas() {
+        public Stream<Schema> schemas() {
             return children(DbmsUtil.SCHEMAS, SchemaImpl::new);
         }
 

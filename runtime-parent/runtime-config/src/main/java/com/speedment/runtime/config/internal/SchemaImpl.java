@@ -35,7 +35,7 @@ public final class SchemaImpl extends AbstractChildDocument<Dbms> implements Sch
     }
 
     @Override
-    public Stream<? extends Table> tables() {
+    public Stream<Table> tables() {
         return children(SchemaUtil.TABLES, TableImpl::new);
     }
 }

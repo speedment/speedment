@@ -16,9 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.TableUtil;
+import com.speedment.runtime.config.*;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.TablePropertyMutator;
@@ -73,23 +71,23 @@ implements Table,
     }
 
     @Override
-    public Stream<? extends ColumnProperty> columns() {
-        return columnsProperty().stream();
+    public Stream<Column> columns() {
+        return columnsProperty().stream().map(Column.class::cast);
     }
 
     @Override
-    public Stream<? extends IndexProperty> indexes() {
-        return indexesProperty().stream();
+    public Stream<Index> indexes() {
+        return indexesProperty().stream().map(Index.class::cast);
     }
 
     @Override
-    public Stream<? extends ForeignKeyProperty> foreignKeys() {
-        return foreignKeysProperty().stream();
+    public Stream<ForeignKey> foreignKeys() {
+        return foreignKeysProperty().stream().map(ForeignKey.class::cast);
     }
 
     @Override
-    public Stream<? extends PrimaryKeyColumnProperty> primaryKeyColumns() {
-        return primaryKeyColumnsProperty().stream();
+    public Stream<PrimaryKeyColumn> primaryKeyColumns() {
+        return primaryKeyColumnsProperty().stream().map(PrimaryKeyColumn.class::cast);
     }
 
     @Override

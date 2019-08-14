@@ -35,7 +35,7 @@ public final class DbmsImpl extends AbstractChildDocument<Project> implements Db
     }
 
     @Override
-    public Stream<? extends Schema> schemas() {
+    public Stream<Schema> schemas() {
         return children(DbmsUtil.SCHEMAS, SchemaImpl::new);
     }
 }

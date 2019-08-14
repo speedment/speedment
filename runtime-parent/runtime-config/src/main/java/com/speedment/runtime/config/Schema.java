@@ -68,7 +68,7 @@ public interface Schema extends
      * 
      * @return  tables
      */
-    Stream<? extends Table> tables();
+    Stream<Table> tables();
 //
 //    default Stream<? extends Table> tables() {
 //        return children(TABLES, tableConstructor());

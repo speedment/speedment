@@ -130,7 +130,7 @@ public interface Dbms extends
      * 
      * @return  schemas
      */
-    Stream<? extends Schema> schemas();
+    Stream<Schema> schemas();
 
     @Override
     default Class<Dbms> mainInterface() {

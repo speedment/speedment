@@ -67,7 +67,7 @@ public interface Index extends
      * 
      * @return  index columns
      */
-    Stream<? extends IndexColumn> indexColumns();
+    Stream<IndexColumn> indexColumns();
 
     @Override
     default Class<Index> mainInterface() {

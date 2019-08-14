@@ -17,6 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.ForeignKeyUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
@@ -52,8 +53,8 @@ implements ForeignKey,
     }
     
     @Override
-    public Stream<ForeignKeyColumnProperty> foreignKeyColumns() {
-        return foreignKeyColumnsProperty().stream();
+    public Stream<ForeignKeyColumn> foreignKeyColumns() {
+        return foreignKeyColumnsProperty().stream().map(ForeignKeyColumn.class::cast);
     }
 
     @Override

@@ -65,28 +65,28 @@ public interface Table extends
      * 
      * @return  columns
      */
-    Stream<? extends Column> columns();
+    Stream<Column> columns();
     
     /**
      * Creates a stream of indexes located in this document.
      * 
      * @return  indexes
      */
-    Stream<? extends Index> indexes();
+    Stream<Index> indexes();
     
     /**
      * Creates a stream of foreign keys located in this document.
      * 
      * @return  foreign keys
      */
-    Stream<? extends ForeignKey> foreignKeys();
+    Stream<ForeignKey> foreignKeys();
     
     /**
      * Creates a stream of primary key columns located in this document.
      * 
      * @return  primary key columns
      */
-    Stream<? extends PrimaryKeyColumn> primaryKeyColumns();
+    Stream<PrimaryKeyColumn> primaryKeyColumns();
 
     /**
      * Locate the {@link Column} child with the specified id if it exists, else

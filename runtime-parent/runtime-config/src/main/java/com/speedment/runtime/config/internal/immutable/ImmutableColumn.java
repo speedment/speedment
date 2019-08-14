@@ -33,20 +33,20 @@ import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
  */
 public final class ImmutableColumn extends ImmutableDocument implements Column {
 
-    private final transient boolean enabled;
-    private final transient String id;
-    private final transient String name;
-    private final transient Optional<String> alias;
-    private final transient boolean nullable;
-    private final transient int ordinalPosition;
-    private final transient HasNullable.ImplementAs nullableImplementation;
-    private final transient boolean autoincrement;
-    private final transient Optional<String> typeMapper;
-    private final transient String databaseType;
-    private final transient Class<?> databaseTypeObject;
-    private final transient Optional<String> enumConstants;
-    private final transient OptionalInt decimalDigits;
-    private final transient OptionalInt columnSize;
+    private final boolean enabled;
+    private final String id;
+    private final String name;
+    private final String alias;
+    private final boolean nullable;
+    private final int ordinalPosition;
+    private final HasNullable.ImplementAs nullableImplementation;
+    private final boolean autoincrement;
+    private final String typeMapper;
+    private final String databaseType;
+    private final Class<?> databaseTypeObject;
+    private final String enumConstants;
+    private final OptionalInt decimalDigits;
+    private final OptionalInt columnSize;
 
     ImmutableColumn(ImmutableTable parent, Map<String, Object> data) {
         super(parent, data);
@@ -56,14 +56,14 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
         this.enabled                = prototype.isEnabled();
         this.id                     = prototype.getId();
         this.name                   = prototype.getName();
-        this.alias                  = prototype.getAlias();
+        this.alias                  = prototype.getAlias().orElse(null);
         this.nullable               = prototype.isNullable();
         this.nullableImplementation = prototype.getNullableImplementation();
         this.autoincrement          = prototype.isAutoIncrement();
-        this.typeMapper             = prototype.getTypeMapper();
+        this.typeMapper             = prototype.getTypeMapper().orElse(null);
         this.databaseType           = prototype.getDatabaseType();
         this.databaseTypeObject     = prototype.findDatabaseType();
-        this.enumConstants          = prototype.getEnumConstants();
+        this.enumConstants          = prototype.getEnumConstants().orElse(null);
         this.decimalDigits          = prototype.getDecimalDigits();
         this.columnSize             = prototype.getColumnSize();
         this.ordinalPosition        = prototype.getOrdinalPosition();
@@ -86,7 +86,7 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
 
     @Override
     public Optional<String> getAlias() {
-        return alias;
+        return Optional.ofNullable(alias);
     }
 
     @Override
@@ -111,7 +111,7 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
 
     @Override
     public Optional<String> getTypeMapper() {
-        return typeMapper;
+        return Optional.ofNullable(typeMapper);
     }
 
     @Override
@@ -126,7 +126,7 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     
     @Override
     public Optional<String> getEnumConstants() {
-        return enumConstants;
+        return Optional.ofNullable(enumConstants);
     }
 
     @Override

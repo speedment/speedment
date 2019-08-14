@@ -138,7 +138,7 @@ extends Document,
      *
      * @return all dbmses
      */
-    Stream<? extends Dbms> dbmses();
+    Stream<Dbms> dbmses();
 
     @Override
     default Class<Project> mainInterface() {

@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.config;
 
+import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
@@ -112,8 +113,8 @@ implements Project,
     }
 
     @Override
-    public Stream<DbmsProperty> dbmses() {
-        return dbmsesProperty().stream();
+    public Stream<Dbms> dbmses() {
+        return dbmsesProperty().stream().map(Dbms.class::cast);
     }
 
     @Override

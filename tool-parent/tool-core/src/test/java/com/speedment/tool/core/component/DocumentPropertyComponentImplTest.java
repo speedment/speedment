@@ -143,7 +143,7 @@ final class DocumentPropertyComponentImplTest {
         }
 
         @Override
-        public Stream<? extends Schema> schemas() {
+        public Stream<Schema> schemas() {
             throw new UnsupportedOperationException("Not required by test.");
         }
     }

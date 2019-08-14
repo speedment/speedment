@@ -35,7 +35,7 @@ public final class ForeignKeyImpl extends AbstractChildDocument<Table> implement
     }
 
     @Override
-    public Stream<? extends ForeignKeyColumn> foreignKeyColumns() {
+    public Stream<ForeignKeyColumn> foreignKeyColumns() {
         return children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ForeignKeyColumnImpl::new);
     }
 }

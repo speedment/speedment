@@ -17,6 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.IndexColumn;
 import com.speedment.runtime.config.IndexUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
@@ -59,8 +60,8 @@ implements Index,
     }
 
     @Override
-    public Stream<IndexColumnProperty> indexColumns() {
-        return indexColumnsProperty().stream();
+    public Stream<IndexColumn> indexColumns() {
+        return indexColumnsProperty().stream().map(IndexColumn.class::cast);
     }
 
     public ObservableList<IndexColumnProperty> indexColumnsProperty() {

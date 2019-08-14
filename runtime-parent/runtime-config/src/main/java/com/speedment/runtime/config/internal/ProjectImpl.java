@@ -57,7 +57,7 @@ public final class ProjectImpl extends BaseDocument implements Project {
     }
 
     @Override
-    public Stream<? extends Dbms> dbmses() {
+    public Stream<Dbms> dbmses() {
         return children(ProjectUtil.DBMSES, DbmsImpl::new);
     }
 }

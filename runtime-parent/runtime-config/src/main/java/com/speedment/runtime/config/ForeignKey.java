@@ -56,7 +56,7 @@ public interface ForeignKey extends
      * 
      * @return  foreign key columns
      */
-    Stream<? extends ForeignKeyColumn> foreignKeyColumns();
+    Stream<ForeignKeyColumn> foreignKeyColumns();
 
     @Override
     default Class<ForeignKey> mainInterface() {

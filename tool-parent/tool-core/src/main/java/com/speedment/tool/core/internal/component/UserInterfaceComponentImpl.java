@@ -293,6 +293,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
             project.dbmses()
                 .filter(dbms -> NO_PASSWORD_SPECIFIED.test(passwordComponent.get(dbms)))
+                .map(DbmsProperty.class::cast)
                 .forEach(this::showPasswordDialog);
 
             final Optional<String> schemaName = project

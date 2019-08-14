@@ -19,6 +19,7 @@ package com.speedment.tool.config;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.core.util.OptionalUtil;
@@ -134,8 +135,8 @@ implements Dbms,
     }
 
     @Override
-    public Stream<SchemaProperty> schemas() {
-        return schemasProperty().stream();
+    public Stream<Schema> schemas() {
+        return schemasProperty().stream().map(Schema.class::cast);
     }
     
     @Override
