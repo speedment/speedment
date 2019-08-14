@@ -18,12 +18,12 @@ package com.speedment.runtime.config.mutator;
 
 
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.internal.SchemaImpl;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
-import static com.speedment.runtime.config.Dbms.*;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
@@ -43,28 +43,28 @@ public class DbmsMutator<DOC extends Dbms> extends DocumentMutatorImpl<DOC> impl
     }
     
     public void setTypeName(String typeName) {
-        put(TYPE_NAME, typeName);
+        put(DbmsUtil.TYPE_NAME, typeName);
     }
     
     public void setIpAddress(String ipAddress) {
-        put(IP_ADDRESS, ipAddress);
+        put(DbmsUtil.IP_ADDRESS, ipAddress);
     }
     
     public void setPort(Integer port) {
-        put(PORT, port);
+        put(DbmsUtil.PORT, port);
     }
 
-    public void setLocalPath(String localPath) { put(LOCAL_PATH, localPath); }
+    public void setLocalPath(String localPath) { put(DbmsUtil.LOCAL_PATH, localPath); }
     
     public void setUsername(String username) {
-        put(USERNAME, username);
+        put(DbmsUtil.USERNAME, username);
     }
     
     public void setConnectionUrl(String connectionUrl) {
-        put(CONNECTION_URL, connectionUrl);
+        put(DbmsUtil.CONNECTION_URL, connectionUrl);
     }
     
     public Schema addNewSchema() {
-        return new SchemaImpl(document(), newDocument(document(), SCHEMAS));
+        return new SchemaImpl(document(), newDocument(document(), DbmsUtil.SCHEMAS));
     }
 }

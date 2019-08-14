@@ -17,6 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.ColumnUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
@@ -58,7 +59,7 @@ implements Column,
     }
 
     public BooleanProperty autoIncrementProperty() {
-        return booleanPropertyOf(AUTO_INCREMENT, Column.super::isAutoIncrement);
+        return booleanPropertyOf(ColumnUtil.AUTO_INCREMENT, Column.super::isAutoIncrement);
     }
 
     @Override

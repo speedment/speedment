@@ -18,10 +18,8 @@ package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.config.Document;
 
-import java.util.Comparator;
 import java.util.Map;
 
-import static com.speedment.common.mapstream.MapStream.comparing;
 import static com.speedment.runtime.config.util.TraitUtil.viewOf;
 
 /**
@@ -34,26 +32,12 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
 public interface HasOrdinalPosition extends Document {
 
     /**
-     * The key of the {@code ordinalPosition} property.
-     */
-    String ORDINAL_POSITION = "ordinalPosition";
-    
-    /**
-     * The default {@link Comparator} used for documents that implement the 
-     * {@link HasOrdinalPosition} trait. This will simply order the elements
-     * based on the natural ordering of their {@link #getOrdinalPosition()}
-     * result.
-     */
-    Comparator<HasOrdinalPosition> COMPARATOR =
-        comparing(HasOrdinalPosition::getOrdinalPosition);
-    
-    /**
      * Returns the position to use when ordering this node.
      * 
      * @return the ordinal position.
      */
     default int getOrdinalPosition() {
-        return getAsInt(ORDINAL_POSITION).orElse(0);
+        return getAsInt(HasOrdinalPositionUtil.ORDINAL_POSITION).orElse(0);
     }
     
     /**

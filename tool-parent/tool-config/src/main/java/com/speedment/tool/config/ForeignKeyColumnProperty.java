@@ -18,6 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.ForeignKeyColumnUtil;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyColumnPropertyMutator;
@@ -46,7 +47,7 @@ implements ForeignKeyColumn,
            HasNameProtectedProperty {
 	
     public final StringProperty foreignDatabaseNameProperty() {
-    	return stringPropertyOf(FOREIGN_DATABASE_NAME, ForeignKeyColumn.super::getForeignDatabaseName);
+    	return stringPropertyOf(ForeignKeyColumnUtil.FOREIGN_DATABASE_NAME, ForeignKeyColumn.super::getForeignDatabaseName);
     }
     
     @Override
@@ -55,7 +56,7 @@ implements ForeignKeyColumn,
     }
     
     public final StringProperty foreignSchemaNameProperty() {
-    	return stringPropertyOf(FOREIGN_SCHEMA_NAME, ForeignKeyColumn.super::getForeignSchemaName);
+    	return stringPropertyOf(ForeignKeyColumnUtil.FOREIGN_SCHEMA_NAME, ForeignKeyColumn.super::getForeignSchemaName);
     }
     
     @Override
@@ -69,7 +70,7 @@ implements ForeignKeyColumn,
     }
 
     public final StringProperty foreignTableNameProperty() {
-        return stringPropertyOf(FOREIGN_TABLE_NAME, ForeignKeyColumn.super::getForeignTableName);
+        return stringPropertyOf(ForeignKeyColumnUtil.FOREIGN_TABLE_NAME, ForeignKeyColumn.super::getForeignTableName);
     }
 
     @Override
@@ -78,7 +79,7 @@ implements ForeignKeyColumn,
     }
 
     public final StringProperty foreignColumnNameProperty() {
-        return stringPropertyOf(FOREIGN_COLUMN_NAME, ForeignKeyColumn.super::getForeignColumnName);
+        return stringPropertyOf(ForeignKeyColumnUtil.FOREIGN_COLUMN_NAME, ForeignKeyColumn.super::getForeignColumnName);
     }
 
     @Override

@@ -25,13 +25,12 @@ import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
+import com.speedment.runtime.config.trait.HasEnumConstantsUtil;
+import com.speedment.runtime.config.trait.HasTypeMapperUtil;
 import com.speedment.runtime.config.util.ClassUtil;
 
-import static com.speedment.runtime.config.Column.AUTO_INCREMENT;
-import static com.speedment.runtime.config.Column.DATABASE_TYPE;
-import static com.speedment.runtime.config.Column.ENUM_CONSTANTS;
-import static com.speedment.runtime.config.Column.TYPE_MAPPER;
-import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
+import static com.speedment.runtime.config.ColumnUtil.AUTO_INCREMENT;
+import static com.speedment.runtime.config.trait.HasNullableUtil.NULLABLE;
 
 /**
  *
@@ -61,14 +60,14 @@ public class ColumnMutator<DOC extends Column> extends DocumentMutatorImpl<DOC> 
     }
 
     public void setTypeMapper(Class<?> typeMapperClass) {
-        put(TYPE_MAPPER, ClassUtil.classToString(typeMapperClass));
+        put(HasTypeMapperUtil.TYPE_MAPPER, ClassUtil.classToString(typeMapperClass));
     }
 
     public void setDatabaseType(Class<?> databaseType) {
-        put(DATABASE_TYPE, ClassUtil.classToString(databaseType));
+        put(HasTypeMapperUtil.DATABASE_TYPE, ClassUtil.classToString(databaseType));
     }
     
     public void setEnumConstants(String enumConstants) {
-        put(ENUM_CONSTANTS, enumConstants);
+        put(HasEnumConstantsUtil.ENUM_CONSTANTS, enumConstants);
     }
 }

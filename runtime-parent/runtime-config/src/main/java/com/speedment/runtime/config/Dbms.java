@@ -56,16 +56,7 @@ public interface Dbms extends
         HasAlias,
         HasMainInterface,
         HasMutator<DbmsMutator<? extends Dbms>> {
-    
-    String
-        TYPE_NAME      = "typeName",
-        IP_ADDRESS     = "ipAddress",
-        PORT           = "port",
-        LOCAL_PATH     = "localPath",
-        CONNECTION_URL = "connectionUrl",
-        USERNAME       = "username",
-        SCHEMAS        = "schemas";
-        
+
     /**
      * Returns the type name of the {@code DbmsType} of this {@code Dbms}. This
      * will be the fully qualified class name of the {@code DbmsType} 
@@ -74,10 +65,10 @@ public interface Dbms extends
      * @return  the type name
      */
     default String getTypeName() {
-        return getAsString(TYPE_NAME).orElseThrow(() -> new SpeedmentConfigException(
+        return getAsString(DbmsUtil.TYPE_NAME).orElseThrow(() -> new SpeedmentConfigException(
             "Every " + Dbms.class.getSimpleName() + 
             " document is required to have the '" + 
-            TYPE_NAME + "' attribute."
+            DbmsUtil.TYPE_NAME + "' attribute."
         ));
     }
     
@@ -89,7 +80,7 @@ public interface Dbms extends
      * @return the address of the host or {@code empty}
      */
     default Optional<String> getIpAddress() {
-        return getAsString(IP_ADDRESS);
+        return getAsString(DbmsUtil.IP_ADDRESS);
     }
     
     /**
@@ -99,7 +90,7 @@ public interface Dbms extends
      * @return the port of the database or {@code empty}
      */
     default OptionalInt getPort() {
-        return getAsInt(PORT);
+        return getAsInt(DbmsUtil.PORT);
     }
 
     /**
@@ -110,7 +101,7 @@ public interface Dbms extends
      * @return the local path to the data file
      */
     default Optional<String> getLocalPath() {
-        return getAsString(LOCAL_PATH);
+        return getAsString(DbmsUtil.LOCAL_PATH);
     }
     
     /**
@@ -121,7 +112,7 @@ public interface Dbms extends
      * @return  the explicit connection URL to use for this {@code Dbms}
      */
     default Optional<String> getConnectionUrl() {
-        return getAsString(CONNECTION_URL);
+        return getAsString(DbmsUtil.CONNECTION_URL);
     }
     
     /**
@@ -131,7 +122,7 @@ public interface Dbms extends
      * @return the database username or {@code empty}
      */
     default Optional<String> getUsername() {
-        return getAsString(USERNAME);
+        return getAsString(DbmsUtil.USERNAME);
     }
     
     /**

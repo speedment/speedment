@@ -18,7 +18,7 @@ package com.speedment.maven.abstractmojo;
 
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
-import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasEnableUtil;
@@ -175,14 +175,14 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
     private Map<String, Object> createDbms() {
         Map<String, Object> dbmsData = new HashMap<>();
         addStringToMap(HasNameUtil.NAME, appName, mavenProject.getArtifactId(), dbmsData);
-        addStringToMap(Dbms.TYPE_NAME, dbmsType, "MySQL", dbmsData);
+        addStringToMap(DbmsUtil.TYPE_NAME, dbmsType, "MySQL", dbmsData);
         addStringToMap(HasIdUtil.ID, appName, mavenProject.getArtifactId(), dbmsData);
-        addIntegerToMap(Dbms.PORT, dbmsPort, null, dbmsData);
-        addStringToMap(Dbms.IP_ADDRESS, dbmsHost, null, dbmsData);
-        addStringToMap(Dbms.CONNECTION_URL, dbmsConnectionUrl(), null, dbmsData);
-        addStringToMap(Dbms.USERNAME, dbmsUsername, null, dbmsData);
+        addIntegerToMap(DbmsUtil.PORT, dbmsPort, null, dbmsData);
+        addStringToMap(DbmsUtil.IP_ADDRESS, dbmsHost, null, dbmsData);
+        addStringToMap(DbmsUtil.CONNECTION_URL, dbmsConnectionUrl(), null, dbmsData);
+        addStringToMap(DbmsUtil.USERNAME, dbmsUsername, null, dbmsData);
         addBooleanToMap(HasEnableUtil.ENABLED, Boolean.TRUE, dbmsData);
-        addListToMap(Dbms.SCHEMAS, createSchemas(), dbmsData);
+        addListToMap(DbmsUtil.SCHEMAS, createSchemas(), dbmsData);
         return dbmsData;
     }
 

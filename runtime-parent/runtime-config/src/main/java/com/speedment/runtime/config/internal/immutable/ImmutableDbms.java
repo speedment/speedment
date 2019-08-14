@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.internal.DbmsImpl;
 
@@ -49,7 +50,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     private final transient List<ImmutableSchema> schemas;
 
     ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
-        super(parent, requireKeys(dbms, Dbms.TYPE_NAME));
+        super(parent, requireKeys(dbms, DbmsUtil.TYPE_NAME));
 
         final Dbms prototype = new DbmsImpl(parent, dbms);
         
@@ -62,7 +63,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
         this.port      = prototype.getPort();
         this.username  = prototype.getUsername();
         
-        this.schemas   = unmodifiableList(super.children(SCHEMAS, ImmutableSchema::new).collect(toList()));
+        this.schemas   = unmodifiableList(super.children(DbmsUtil.SCHEMAS, ImmutableSchema::new).collect(toList()));
     }
 
     @Override

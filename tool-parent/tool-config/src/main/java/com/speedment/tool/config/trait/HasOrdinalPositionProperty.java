@@ -18,6 +18,7 @@ package com.speedment.tool.config.trait;
 
 
 import com.speedment.runtime.config.trait.HasOrdinalPosition;
+import com.speedment.runtime.config.trait.HasOrdinalPositionUtil;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.IntegerProperty;
 
@@ -30,7 +31,7 @@ import javafx.beans.property.IntegerProperty;
 public interface HasOrdinalPositionProperty extends DocumentProperty, HasOrdinalPosition {
     
     default IntegerProperty ordinalPositionProperty() {
-        return integerPropertyOf(HasOrdinalPosition.ORDINAL_POSITION, HasOrdinalPosition.super::getOrdinalPosition);
+        return integerPropertyOf(HasOrdinalPositionUtil.ORDINAL_POSITION, HasOrdinalPosition.super::getOrdinalPosition);
     }
 
     @Override

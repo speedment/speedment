@@ -46,12 +46,6 @@ public interface Table extends
         HasMainInterface,
         HasMutator<TableMutator<? extends Table>> {
 
-    String COLUMNS             = "columns",
-           INDEXES             = "indexes",
-           FOREIGN_KEYS        = "foreignKeys",
-           PRIMARY_KEY_COLUMNS = "primaryKeyColumns",
-           IS_VIEW             = "isView";
-
     /**
      * Returns {@code true} if this {@code Table} represents a VIEW in the
      * database. VIEW Tables are not necessarily writable and might not have
@@ -63,7 +57,7 @@ public interface Table extends
      * @since   3.0.11
      */
     default boolean isView() {
-        return getAsBoolean(IS_VIEW).orElse(false);
+        return getAsBoolean(TableUtil.IS_VIEW).orElse(false);
     }
 
     /**

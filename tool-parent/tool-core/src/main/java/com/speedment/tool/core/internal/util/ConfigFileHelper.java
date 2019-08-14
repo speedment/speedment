@@ -209,7 +209,7 @@ public final class ConfigFileHelper {
             final Map<String, Object> dbmsData
                 = new ConcurrentSkipListMap<>(dbms.getData());
 
-            dbmsData.remove(Dbms.SCHEMAS);
+            dbmsData.remove(DbmsUtil.SCHEMAS);
             final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
 
             // Find the DbmsHandler to use when loading the metadata

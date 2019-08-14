@@ -19,6 +19,7 @@ package com.speedment.runtime.config.mutator.trait;
 
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasAlias;
+import com.speedment.runtime.config.trait.HasAliasUtil;
 
 /**
  *
@@ -29,6 +30,6 @@ import com.speedment.runtime.config.trait.HasAlias;
 public interface HasAliasMutator<DOC extends HasAlias> extends DocumentMutator<DOC>, HasNameMutator<DOC> {
     
     default void setAlias(String alias) {
-        put(HasAlias.ALIAS, alias);
+        put(HasAliasUtil.ALIAS, alias);
     }
 }

@@ -17,6 +17,7 @@
 package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.config.trait.HasColumnSize;
+import com.speedment.runtime.config.trait.HasColumnSizeUtil;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.OptionalInt;
 import javafx.beans.property.IntegerProperty;
@@ -32,7 +33,7 @@ public interface HasColumnSizeProperty extends HasColumnSize, DocumentProperty {
 
     default IntegerProperty columnSizeProperty() {
         return integerPropertyOf(
-            HasColumnSize.COLUMN_SIZE, 
+            HasColumnSizeUtil.COLUMN_SIZE,
             () -> HasColumnSize.super.getColumnSize()
                 .orElse(DEFAULT_COLUMN_SIZE)
         );

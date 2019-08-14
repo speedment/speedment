@@ -31,20 +31,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExc
  * @since  3.0.2
  */
 public interface HasTypeMapper extends Document {
-    
-    /**
-     * The attribute under which the name of the {@code TypeMapper} is stored in
-     * the configuration file.
-     */
-    String TYPE_MAPPER = "typeMapper";
-    
-    /**
-     * The attribute under which the database type is stored in the 
-     * configuration file. This is used initially to determine the default 
-     * {@code TypeMapper} to use.
-     */
-    String DATABASE_TYPE  = "databaseType";
-    
+
     /**
      * Returns the name of the mapper class that will be used to generate a java
      * representation of the database types.
@@ -52,7 +39,7 @@ public interface HasTypeMapper extends Document {
      * @return the mapper class
      */
     default Optional<String> getTypeMapper() {
-        return getAsString(TYPE_MAPPER);
+        return getAsString(HasTypeMapperUtil.TYPE_MAPPER);
     }
     
     /**
@@ -61,8 +48,8 @@ public interface HasTypeMapper extends Document {
      * @return the database type class
      */
     default String getDatabaseType() {
-        return getAsString(DATABASE_TYPE)
-            .orElseThrow(newNoSuchElementExceptionFor(this, DATABASE_TYPE));
+        return getAsString(HasTypeMapperUtil.DATABASE_TYPE)
+            .orElseThrow(newNoSuchElementExceptionFor(this, HasTypeMapperUtil.DATABASE_TYPE));
     }
     
     /**

@@ -54,21 +54,21 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
     void installEditors() {
         install(HasEnabledProperty.class,    HasEnableUtil.ENABLED,    EnabledPropertyEditor::new);
         install(HasNameProperty.class,       HasNameUtil.NAME,          NamePropertyEditor::new);
-        install(HasAliasProperty.class,      HasAlias.ALIAS,        AliasPropertyEditor::new);
-        install(HasNullableProperty.class,   HasNullable.NULLABLE,  NullablePropertyEditor::new);
-        install(HasOrderTypeProperty.class,  HasOrderType.ORDER_TYPE, OrderTypePropertyEditor::new);
-        install(ColumnProperty.class,        Column.AUTO_INCREMENT, AutoIncrementPropertyEditor::new);
-        install(HasTypeMapperProperty.class, HasTypeMapperProperty.TYPE_MAPPER, TypeMapperPropertyEditor::new);
-        install(DbmsProperty.class,          Dbms.TYPE_NAME,        DbmsTypePropertyEditor::new);
-        install(DbmsProperty.class,          Dbms.IP_ADDRESS,       IpAdressPropertyEditor::new);
-        install(DbmsProperty.class,          Dbms.PORT,             PortNumberEditor::new);
-        install(DbmsProperty.class,          Dbms.USERNAME,         UsernamePropertyEditor::new);
-        install(DbmsProperty.class,          Dbms.CONNECTION_URL,   ConnectionUrlPropertyEditor::new);
-        install(IndexProperty.class,         Index.UNIQUE,          UniquePropertyEditor::new);
+        install(HasAliasProperty.class,      HasAliasUtil.ALIAS,        AliasPropertyEditor::new);
+        install(HasNullableProperty.class,   HasNullableUtil.NULLABLE,  NullablePropertyEditor::new);
+        install(HasOrderTypeProperty.class,  HasOrderTypeUtil.ORDER_TYPE, OrderTypePropertyEditor::new);
+        install(ColumnProperty.class,        ColumnUtil.AUTO_INCREMENT, AutoIncrementPropertyEditor::new);
+        install(HasTypeMapperProperty.class, HasTypeMapperUtil.TYPE_MAPPER, TypeMapperPropertyEditor::new);
+        install(DbmsProperty.class,          DbmsUtil.TYPE_NAME,        DbmsTypePropertyEditor::new);
+        install(DbmsProperty.class,          DbmsUtil.IP_ADDRESS,       IpAdressPropertyEditor::new);
+        install(DbmsProperty.class,          DbmsUtil.PORT,             PortNumberEditor::new);
+        install(DbmsProperty.class,          DbmsUtil.USERNAME,         UsernamePropertyEditor::new);
+        install(DbmsProperty.class,          DbmsUtil.CONNECTION_URL,   ConnectionUrlPropertyEditor::new);
+        install(IndexProperty.class,         IndexUtil.UNIQUE,          UniquePropertyEditor::new);
         install(ProjectProperty.class,       ProjectUtil.COMPANY_NAME,           CompanyNamePropertyEditor::new);
         install(ProjectProperty.class,       ProjectUtil.PACKAGE_LOCATION,       PackageLocationPropertyEditor::new);
         install(HasPackageNameProperty.class,   HasPackageNameUtil.PACKAGE_NAME,          PackageNameEditor::new);
-        install(ForeignKeyColumnProperty.class, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumnEditor::new);
+        install(ForeignKeyColumnProperty.class, ForeignKeyColumnUtil.FOREIGN_COLUMN_NAME, ForeignKeyColumnEditor::new);
     }
     
     @Override

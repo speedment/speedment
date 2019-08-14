@@ -18,6 +18,7 @@ package com.speedment.runtime.connector.sqlite.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.internal.ProjectImpl;
@@ -97,8 +98,8 @@ class SqliteMetadataHandlerTest {
                                 .key(ProjectUtil.DBMSES).value(singletonList(mapBuilderTyped(String.class, Object.class)
                                     .key(HasIdUtil.ID).value("test_dbms")
                                     .key(HasNameUtil.NAME).value("test_dbms")
-                                    .key(Dbms.CONNECTION_URL).value(URL)
-                                    .key(Dbms.TYPE_NAME).value(SqliteDbmsType.SQLITE)
+                                    .key(DbmsUtil.CONNECTION_URL).value(URL)
+                                    .key(DbmsUtil.TYPE_NAME).value(SqliteDbmsType.SQLITE)
                                     .build()
                                 ))
                                 .build()

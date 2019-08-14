@@ -33,21 +33,21 @@ public final class TableImpl extends AbstractChildDocument<Schema> implements Ta
 
     @Override
     public Stream<? extends Column> columns() {
-        return children(COLUMNS, ColumnImpl::new);
+        return children(TableUtil.COLUMNS, ColumnImpl::new);
     }
 
     @Override
     public Stream<? extends Index> indexes() {
-        return children(INDEXES, IndexImpl::new);
+        return children(TableUtil.INDEXES, IndexImpl::new);
     }
 
     @Override
     public Stream<? extends ForeignKey> foreignKeys() {
-        return children(FOREIGN_KEYS, ForeignKeyImpl::new);
+        return children(TableUtil.FOREIGN_KEYS, ForeignKeyImpl::new);
     }
 
     @Override
     public Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
-        return children(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new);
+        return children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new);
     }
 }

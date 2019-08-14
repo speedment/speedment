@@ -30,12 +30,6 @@ import java.util.Optional;
 public interface HasEnumConstants extends Document {
 
     /**
-     * The attribute for the 'enumConstants' field in the JSON Configuration
-     * file.
-     */
-    String ENUM_CONSTANTS = "enumConstants";
-
-    /**
      * Returns a comma separated string of the possible values that this column
      * may have. If the list of potential values are not constrained, an empty
      * optional is returned.
@@ -43,7 +37,7 @@ public interface HasEnumConstants extends Document {
      * @return  list of constant values separated by commas or empty
      */
     default Optional<String> getEnumConstants() {
-        return getAsString(ENUM_CONSTANTS);
+        return getAsString(HasEnumConstantsUtil.ENUM_CONSTANTS);
     }
 
 }

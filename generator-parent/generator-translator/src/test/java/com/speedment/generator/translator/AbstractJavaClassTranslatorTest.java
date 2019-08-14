@@ -230,7 +230,7 @@ final class AbstractJavaClassTranslatorTest {
 
         @Override
         public Stream<? extends Schema> schemas() {
-            return children(SCHEMAS, SchemaImpl::new);
+            return children(DbmsUtil.SCHEMAS, SchemaImpl::new);
         }
 
         @Override

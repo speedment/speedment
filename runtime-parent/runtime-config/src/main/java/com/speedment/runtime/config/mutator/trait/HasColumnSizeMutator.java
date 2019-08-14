@@ -19,6 +19,7 @@ package com.speedment.runtime.config.mutator.trait;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasColumnSize;
+import com.speedment.runtime.config.trait.HasColumnSizeUtil;
 
 /**
  * Trait for {@link DocumentMutator} that have a
@@ -39,6 +40,6 @@ public interface HasColumnSizeMutator<DOC extends Document>
      * @param columnSize  the new column size (or {@code null}).
      */
     default void setColumnSize(Integer columnSize) {
-        put(HasColumnSize.COLUMN_SIZE, columnSize);
+        put(HasColumnSizeUtil.COLUMN_SIZE, columnSize);
     }
 }

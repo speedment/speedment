@@ -18,6 +18,7 @@ package com.speedment.runtime.config.internal;
 
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.ForeignKeyUtil;
 import com.speedment.runtime.config.Table;
 
 import java.util.Map;
@@ -35,6 +36,6 @@ public final class ForeignKeyImpl extends AbstractChildDocument<Table> implement
 
     @Override
     public Stream<? extends ForeignKeyColumn> foreignKeyColumns() {
-        return children(FOREIGN_KEY_COLUMNS, ForeignKeyColumnImpl::new);
+        return children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ForeignKeyColumnImpl::new);
     }
 }

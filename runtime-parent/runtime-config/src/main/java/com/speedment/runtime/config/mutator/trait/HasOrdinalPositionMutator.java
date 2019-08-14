@@ -19,6 +19,7 @@ package com.speedment.runtime.config.mutator.trait;
 
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasOrdinalPosition;
+import com.speedment.runtime.config.trait.HasOrdinalPositionUtil;
 
 /**
  *
@@ -29,6 +30,6 @@ import com.speedment.runtime.config.trait.HasOrdinalPosition;
 public interface HasOrdinalPositionMutator<DOC extends HasOrdinalPosition> extends DocumentMutator<DOC> {
     
     default void setOrdinalPosition(Integer ordinalPosition) {
-        put(HasOrdinalPosition.ORDINAL_POSITION, ordinalPosition);
+        put(HasOrdinalPositionUtil.ORDINAL_POSITION, ordinalPosition);
     }
 }

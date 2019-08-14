@@ -18,6 +18,7 @@ package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.TableUtil;
 import com.speedment.runtime.config.internal.TableImpl;
 
 import java.util.List;
@@ -58,10 +59,10 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
         this.packageName = prototype.getPackageName();
         this.view        = prototype.isView();
         
-        this.columns           = unmodifiableList(super.children(COLUMNS, ImmutableColumn::new).collect(toList()));
-        this.indexes           = unmodifiableList(super.children(INDEXES, ImmutableIndex::new).collect(toList()));
-        this.foreignKeys       = unmodifiableList(super.children(FOREIGN_KEYS, ImmutableForeignKey::new).collect(toList()));
-        this.primaryKeyColumns = unmodifiableList(super.children(PRIMARY_KEY_COLUMNS, ImmutablePrimaryKeyColumn::new).collect(toList()));
+        this.columns           = unmodifiableList(super.children(TableUtil.COLUMNS, ImmutableColumn::new).collect(toList()));
+        this.indexes           = unmodifiableList(super.children(TableUtil.INDEXES, ImmutableIndex::new).collect(toList()));
+        this.foreignKeys       = unmodifiableList(super.children(TableUtil.FOREIGN_KEYS, ImmutableForeignKey::new).collect(toList()));
+        this.primaryKeyColumns = unmodifiableList(super.children(TableUtil.PRIMARY_KEY_COLUMNS, ImmutablePrimaryKeyColumn::new).collect(toList()));
     }
 
     @Override

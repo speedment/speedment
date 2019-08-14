@@ -19,6 +19,7 @@ package com.speedment.runtime.config.mutator.trait;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasDecimalDigits;
+import com.speedment.runtime.config.trait.HasDecimalDigitsUtil;
 
 /**
  * Trait for {@link DocumentMutator} that have a
@@ -39,6 +40,6 @@ public interface HasDecimalDigitsMutator<DOC extends Document>
      * @param digits  the new decimal digits count (or {@code null}).
      */
     default void setDecimalDigits(Integer digits) {
-        put(HasDecimalDigits.DECIMAL_DIGITS, digits);
+        put(HasDecimalDigitsUtil.DECIMAL_DIGITS, digits);
     }
 }

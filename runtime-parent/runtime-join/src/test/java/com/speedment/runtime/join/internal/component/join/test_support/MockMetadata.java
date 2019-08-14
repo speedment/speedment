@@ -18,6 +18,7 @@ package com.speedment.runtime.join.internal.component.join.test_support;
 
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasNameUtil;
+import com.speedment.runtime.config.trait.HasTypeMapperUtil;
 import com.speedment.runtime.core.testsupport.AbstractTestApplicationMetadata;
 
 import java.util.Optional;
@@ -64,11 +65,11 @@ public final class MockMetadata extends AbstractTestApplicationMetadata {
     }
 
     private String dbmsTypeName(String dbmsTypeName) {
-        return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
+        return quote(DbmsUtil.TYPE_NAME) + " : " + quote(dbmsTypeName);
     }
 
     private String columnDatabaseType(String typeName) {
-        return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
+        return quote(HasTypeMapperUtil.DATABASE_TYPE) + " : " + quote(typeName);
     }
 
     private String array(String name, String... s) {
@@ -96,119 +97,119 @@ public final class MockMetadata extends AbstractTestApplicationMetadata {
                 array(ProjectUtil.DBMSES,
                     object(name(DBMS_NAME),
                         dbmsTypeName("MySQL"),
-                        array(Dbms.SCHEMAS,
+                        array(DbmsUtil.SCHEMAS,
                             object(name(SCHEMA_NAME),
-                                array(Schema.TABLES,
+                                array(SchemaUtil.TABLES,
                                     object(name(T0_NAME),
-                                        array(Table.COLUMNS,
+                                        array(TableUtil.COLUMNS,
                                             object(name(T0_ID_NAME),
                                                 columnDatabaseType(Integer.class.getName())
                                             )
                                         ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                        array(TableUtil.PRIMARY_KEY_COLUMNS,
                                             object(name(T0_ID_NAME)
                                             )
                                         )
                                     ),
                                     object(name(T1_NAME),
-                                        array(Table.COLUMNS,
+                                        array(TableUtil.COLUMNS,
                                             object(name(T1_ID_NAME),
                                                 columnDatabaseType(Integer.class.getName())
                                             )
                                         ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                        array(TableUtil.PRIMARY_KEY_COLUMNS,
                                             object(name(T1_ID_NAME)
                                             )
                                         )
                                     ),
                                     object(name(T2_NAME),
-                                        array(Table.COLUMNS,
+                                        array(TableUtil.COLUMNS,
                                             object(name(T2_ID_NAME),
                                                 columnDatabaseType(Integer.class.getName())
                                             )
                                         ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                        array(TableUtil.PRIMARY_KEY_COLUMNS,
                                             object(name(T2_ID_NAME)
                                             )
                                         )
                                     ),
                                     object(name(T3_NAME),
-                                        array(Table.COLUMNS,
+                                        array(TableUtil.COLUMNS,
                                             object(name(T3_ID_NAME),
                                                 columnDatabaseType(Integer.class.getName())
                                             )
                                         ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                        array(TableUtil.PRIMARY_KEY_COLUMNS,
                                             object(name(T3_ID_NAME)
                                             )
                                         )
                                     ),
                                     object(name(T4_NAME),
-                                        array(Table.COLUMNS,
+                                        array(TableUtil.COLUMNS,
                                             object(name(T4_ID_NAME),
                                                 columnDatabaseType(Integer.class.getName())
                                             )
                                         ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                        array(TableUtil.PRIMARY_KEY_COLUMNS,
                                             object(name(T4_ID_NAME)
                                             )
                                         )
                                     ),
                                     object(name(T5_NAME),
-                                        array(Table.COLUMNS,
+                                        array(TableUtil.COLUMNS,
                                             object(name(T5_ID_NAME),
                                                 columnDatabaseType(Integer.class.getName())
                                             )
                                         ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                        array(TableUtil.PRIMARY_KEY_COLUMNS,
                                             object(name(T5_ID_NAME)
                                             )
                                         )
                                     )
                                         ,
                                         object(name(T6_NAME),
-                                                array(Table.COLUMNS,
+                                                array(TableUtil.COLUMNS,
                                                         object(name(T6_ID_NAME),
                                                                 columnDatabaseType(Integer.class.getName())
                                                         )
                                                 ),
-                                                array(Table.PRIMARY_KEY_COLUMNS,
+                                                array(TableUtil.PRIMARY_KEY_COLUMNS,
                                                         object(name(T6_ID_NAME)
                                                         )
                                                 )
                                         )
                                         ,
                                         object(name(T7_NAME),
-                                                array(Table.COLUMNS,
+                                                array(TableUtil.COLUMNS,
                                                         object(name(T7_ID_NAME),
                                                                 columnDatabaseType(Integer.class.getName())
                                                         )
                                                 ),
-                                                array(Table.PRIMARY_KEY_COLUMNS,
+                                                array(TableUtil.PRIMARY_KEY_COLUMNS,
                                                         object(name(T7_ID_NAME)
                                                         )
                                                 )
                                         )
                                         ,
                                         object(name(T8_NAME),
-                                                array(Table.COLUMNS,
+                                                array(TableUtil.COLUMNS,
                                                         object(name(T8_ID_NAME),
                                                                 columnDatabaseType(Integer.class.getName())
                                                         )
                                                 ),
-                                                array(Table.PRIMARY_KEY_COLUMNS,
+                                                array(TableUtil.PRIMARY_KEY_COLUMNS,
                                                         object(name(T8_ID_NAME)
                                                         )
                                                 )
                                         )
                                         ,
                                         object(name(T9_NAME),
-                                                array(Table.COLUMNS,
+                                                array(TableUtil.COLUMNS,
                                                         object(name(T9_ID_NAME),
                                                                 columnDatabaseType(Integer.class.getName())
                                                         )
                                                 ),
-                                                array(Table.PRIMARY_KEY_COLUMNS,
+                                                array(TableUtil.PRIMARY_KEY_COLUMNS,
                                                         object(name(T9_ID_NAME)
                                                         )
                                                 )

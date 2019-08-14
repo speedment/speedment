@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.IndexUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.internal.IndexImpl;
 
@@ -51,7 +52,7 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
         this.name    = prototype.getName();
         this.unique  = prototype.isUnique();
         
-        this.indexColumns = unmodifiableList(super.children(INDEX_COLUMNS, ImmutableIndexColumn::new).collect(toList()));
+        this.indexColumns = unmodifiableList(super.children(IndexUtil.INDEX_COLUMNS, ImmutableIndexColumn::new).collect(toList()));
     }
 
     @Override

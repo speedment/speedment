@@ -403,7 +403,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                                         // Remove the existing primary key since the rowid is
                                         // the only value that should be considered part of
                                         // the primary key
-                                        table.getData().remove(Table.PRIMARY_KEY_COLUMNS);
+                                        table.getData().remove(TableUtil.PRIMARY_KEY_COLUMNS);
                                     }
 
                                     final PrimaryKeyColumn pkc = table.mutator().addNewPrimaryKeyColumn();

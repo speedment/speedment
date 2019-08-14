@@ -46,8 +46,6 @@ public interface Column extends
         HasEnumConstants,
         HasMutator<ColumnMutator<? extends Column>> {
 
-    String AUTO_INCREMENT = "autoIncrement";
-
     /**
      * Returns whether or not this column will auto increment when new values
      * are added to the table.
@@ -55,7 +53,7 @@ public interface Column extends
      * @return  {@code true} if the column auto increments, else {@code false}
      */
     default boolean isAutoIncrement() {
-        return getAsBoolean(AUTO_INCREMENT).orElse(false);
+        return getAsBoolean(ColumnUtil.AUTO_INCREMENT).orElse(false);
     }
 
     @Override

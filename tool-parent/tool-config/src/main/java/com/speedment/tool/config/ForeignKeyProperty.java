@@ -17,6 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
@@ -47,7 +48,7 @@ implements ForeignKey,
     }
     
     public ObservableList<ForeignKeyColumnProperty> foreignKeyColumnsProperty() {
-        return observableListOf(FOREIGN_KEY_COLUMNS);
+        return observableListOf(ForeignKeyUtil.FOREIGN_KEY_COLUMNS);
     }
     
     @Override

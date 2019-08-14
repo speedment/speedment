@@ -233,31 +233,31 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         @Override
         public Builder<T> forEverySchema(Phase phase, BiConsumer<T, Schema> consumer) {
-            aquireListAndAdd(phase, Dbms.SCHEMAS, wrap(consumer, SchemaImpl::new));
+            aquireListAndAdd(phase, DbmsUtil.SCHEMAS, wrap(consumer, SchemaImpl::new));
             return this;
         }
 
         @Override
         public Builder<T> forEveryTable(Phase phase, BiConsumer<T, Table> consumer) {
-            aquireListAndAdd(phase, Schema.TABLES, wrap(consumer, TableImpl::new));
+            aquireListAndAdd(phase, SchemaUtil.TABLES, wrap(consumer, TableImpl::new));
             return this;
         }
 
         @Override
         public Builder<T> forEveryColumn(Phase phase, BiConsumer<T, Column> consumer) {
-            aquireListAndAdd(phase, Table.COLUMNS, wrap(consumer, ColumnImpl::new));
+            aquireListAndAdd(phase, TableUtil.COLUMNS, wrap(consumer, ColumnImpl::new));
             return this;
         }
 
         @Override
         public Builder<T> forEveryIndex(Phase phase, BiConsumer<T, Index> consumer) {
-            aquireListAndAdd(phase, Table.INDEXES, wrap(consumer, IndexImpl::new));
+            aquireListAndAdd(phase, TableUtil.INDEXES, wrap(consumer, IndexImpl::new));
             return this;
         }
 
         @Override
         public Builder<T> forEveryForeignKey(Phase phase, BiConsumer<T, ForeignKey> consumer) {
-            aquireListAndAdd(phase, Table.FOREIGN_KEYS, wrap(consumer, ForeignKeyImpl::new));
+            aquireListAndAdd(phase, TableUtil.FOREIGN_KEYS, wrap(consumer, ForeignKeyImpl::new));
             return this;
         }
 
@@ -301,8 +301,8 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
             for (Phase phase : Phase.values()) {
                 project().ifPresent(p -> act(phase, PROJECTS, model, p));
                 dbms().ifPresent(d -> act(phase, ProjectUtil.DBMSES, model, d));
-                schema().ifPresent(s -> act(phase, Dbms.SCHEMAS, model, s));
-                table().ifPresent(t -> act(phase, Schema.TABLES, model, t));
+                schema().ifPresent(s -> act(phase, DbmsUtil.SCHEMAS, model, s));
+                table().ifPresent(t -> act(phase, SchemaUtil.TABLES, model, t));
 
                 MapStream.of(map.get(phase))
                     .flatMapValue(List::stream)
@@ -325,7 +325,7 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
                             // keys that reference enabled and existing table
                             // and columns are to be included.
                             .filter((k, v) -> {
-                                if (Table.FOREIGN_KEYS.equals(k)) {
+                                if (TableUtil.FOREIGN_KEYS.equals(k)) {
                                     return new ForeignKeyImpl(table, v)
                                         .foreignKeyColumns()
                                         .map(ForeignKeyColumn::findColumn)
@@ -393,8 +393,8 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         private final Set<String> aboveTable = Stream.of(
             ProjectUtil.DBMSES,
-            Dbms.SCHEMAS,
-            Schema.TABLES
+            DbmsUtil.SCHEMAS,
+            SchemaUtil.TABLES
         )
         .collect(toSet());
 

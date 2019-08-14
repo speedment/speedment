@@ -19,10 +19,7 @@ package com.speedment.tool.core.internal.controller;
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -476,11 +473,11 @@ public final class ConnectController implements Initializable {
             final Map<String, Object> data = new LinkedHashMap<>();
             data.put(HasIdUtil.ID,         name);
             data.put(HasNameUtil.NAME,       name);
-            data.put(Dbms.IP_ADDRESS, ip);
+            data.put(DbmsUtil.IP_ADDRESS, ip);
             if (port != 0) {
-                data.put(Dbms.PORT, port);
+                data.put(DbmsUtil.PORT, port);
             }
-            data.put(Dbms.LOCAL_PATH, file);
+            data.put(DbmsUtil.LOCAL_PATH, file);
             return new TemporaryDbms(project, data);
         }
 

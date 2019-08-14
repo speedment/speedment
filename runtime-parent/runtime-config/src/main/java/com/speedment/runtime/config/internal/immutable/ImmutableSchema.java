@@ -18,6 +18,7 @@ package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.SchemaUtil;
 import com.speedment.runtime.config.internal.SchemaImpl;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
         this.alias         = prototype.getAlias();
         this.defaultSchema = prototype.isDefaultSchema();
         
-        this.tables = unmodifiableList(super.children(TABLES, ImmutableTable::new).collect(toList()));
+        this.tables = unmodifiableList(super.children(SchemaUtil.TABLES, ImmutableTable::new).collect(toList()));
     }
 
     @Override

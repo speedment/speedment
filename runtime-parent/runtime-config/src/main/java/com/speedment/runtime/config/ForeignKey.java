@@ -51,8 +51,6 @@ public interface ForeignKey extends
         HasMainInterface,
         HasMutator<ForeignKeyMutator<? extends ForeignKey>> {
 
-    String FOREIGN_KEY_COLUMNS = "foreignKeyColumns";
-    
     /**
      * Creates a stream of foreign key columns located in this document.
      * 

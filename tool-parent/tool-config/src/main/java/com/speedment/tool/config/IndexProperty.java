@@ -17,6 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.IndexUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
@@ -49,7 +50,7 @@ implements Index,
     }
 
     public BooleanProperty uniqueProperty() {
-        return booleanPropertyOf(UNIQUE, Index.super::isUnique);
+        return booleanPropertyOf(IndexUtil.UNIQUE, Index.super::isUnique);
     }
 
     @Override
@@ -63,7 +64,7 @@ implements Index,
     }
 
     public ObservableList<IndexColumnProperty> indexColumnsProperty() {
-        return observableListOf(INDEX_COLUMNS);
+        return observableListOf(IndexUtil.INDEX_COLUMNS);
     }
 
     @Override

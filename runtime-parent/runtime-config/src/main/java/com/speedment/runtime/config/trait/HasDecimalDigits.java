@@ -31,11 +31,6 @@ import java.util.OptionalInt;
 public interface HasDecimalDigits extends Document {
 
     /**
-     * The key of the {@code decimalDigits} property.
-     */
-    String DECIMAL_DIGITS = "decimalDigits";
-    
-    /**
      * Gets the decimal digits of this {@link Document}. If no decimal digits 
      * value is present, this method will return an empty {@code OptionalInt}. 
      * This should be interpreted as no decisions can be made regarding the 
@@ -44,6 +39,6 @@ public interface HasDecimalDigits extends Document {
      * @return the decimal digits of this {@link Document}
      */
     default OptionalInt getDecimalDigits() {
-        return getAsInt(DECIMAL_DIGITS);
+        return getAsInt(HasDecimalDigitsUtil.DECIMAL_DIGITS);
     }
 }

@@ -18,6 +18,7 @@ package com.speedment.tool.config.trait;
 
 
 import com.speedment.runtime.config.trait.HasAlias;
+import com.speedment.runtime.config.trait.HasAliasUtil;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.StringProperty;
 
@@ -34,7 +35,7 @@ public interface HasAliasProperty extends DocumentProperty, HasAlias {
     StringProperty nameProperty();
     
     default StringProperty aliasProperty() {
-        return stringPropertyOf(HasAlias.ALIAS, () -> null);
+        return stringPropertyOf(HasAliasUtil.ALIAS, () -> null);
     }
     
     @Override

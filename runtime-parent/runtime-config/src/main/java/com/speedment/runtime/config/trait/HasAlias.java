@@ -32,20 +32,15 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
  * @since   2.3.0
  */
 public interface HasAlias extends Document, HasName {
-    
-    /**
-     * The key of the {@code alias} property.
-     */
-    String ALIAS = "alias";
-    
+
     /**
      * Returns the alias of the specified document. The alias is an optional
-     * string value located under the {@link #ALIAS} key.
+     * string value located under the {@link HasAliasUtil#ALIAS} key.
      * 
      * @return  the alias or an empty {@code Optional} if none was specified
      */
     default Optional<String> getAlias() {
-        return getAsString(ALIAS);
+        return getAsString(HasAliasUtil.ALIAS);
     }
     
     /**

@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.internal.ForeignKeyImpl;
 
@@ -49,7 +50,7 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
         this.name    = prototype.getName();
         this.enabled = prototype.isEnabled();
         
-        this.foreignKeyColumns = unmodifiableList(super.children(FOREIGN_KEY_COLUMNS, ImmutableForeignKeyColumn::new).collect(toList()));
+        this.foreignKeyColumns = unmodifiableList(super.children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ImmutableForeignKeyColumn::new).collect(toList()));
     }
 
     @Override

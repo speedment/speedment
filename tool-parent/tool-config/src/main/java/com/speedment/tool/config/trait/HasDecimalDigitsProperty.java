@@ -17,6 +17,7 @@
 package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.config.trait.HasDecimalDigits;
+import com.speedment.runtime.config.trait.HasDecimalDigitsUtil;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.OptionalInt;
 import javafx.beans.property.IntegerProperty;
@@ -32,7 +33,7 @@ extends HasDecimalDigits, DocumentProperty {
     int DEFAULT_DECIMAL_DIGITS = -1;
 
     default IntegerProperty decimalDigitsProperty() {
-        return integerPropertyOf(HasDecimalDigits.DECIMAL_DIGITS, 
+        return integerPropertyOf(HasDecimalDigitsUtil.DECIMAL_DIGITS,
             () -> HasDecimalDigits.super.getDecimalDigits()
                 .orElse(DEFAULT_DECIMAL_DIGITS)
         );

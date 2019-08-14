@@ -19,6 +19,7 @@ package com.speedment.runtime.config.internal.immutable;
 import com.speedment.common.lazy.LazyReference;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.ForeignKeyColumnUtil;
 import com.speedment.runtime.config.internal.ForeignKeyColumnImpl;
 
 import java.util.Map;
@@ -44,7 +45,7 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     private final transient LazyReference<Optional<ImmutableColumn>> column;
   
     ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
-        super(parent, requireKeys(fkc, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumn.FOREIGN_TABLE_NAME));
+        super(parent, requireKeys(fkc, ForeignKeyColumnUtil.FOREIGN_COLUMN_NAME, ForeignKeyColumnUtil.FOREIGN_TABLE_NAME));
         
         final ForeignKeyColumn prototype = new ForeignKeyColumnImpl(parent, fkc);
     

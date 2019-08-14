@@ -18,6 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.TableUtil;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.TablePropertyMutator;
@@ -51,19 +52,19 @@ implements Table,
     }
 
     public ObservableList<ColumnProperty> columnsProperty() {
-        return observableListOf(COLUMNS);
+        return observableListOf(TableUtil.COLUMNS);
     }
 
     public ObservableList<IndexProperty> indexesProperty() {
-        return observableListOf(INDEXES);
+        return observableListOf(TableUtil.INDEXES);
     }
 
     public ObservableList<ForeignKeyProperty> foreignKeysProperty() {
-        return observableListOf(FOREIGN_KEYS);
+        return observableListOf(TableUtil.FOREIGN_KEYS);
     }
 
     public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
-        return observableListOf(PRIMARY_KEY_COLUMNS);
+        return observableListOf(TableUtil.PRIMARY_KEY_COLUMNS);
     }
 
     @Override
