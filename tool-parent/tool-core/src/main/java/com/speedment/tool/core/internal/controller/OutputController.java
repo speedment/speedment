@@ -21,6 +21,8 @@ import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.MaterialIcon;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -44,6 +46,7 @@ public final class OutputController implements Initializable {
     private @FXML VBox log;
     private @FXML ScrollPane logPane;
     private @FXML ToggleButton wrapTextBtn;
+    private @FXML ToggleButton scrollToEndBtn;
     private @FXML Button clearLogBtn;
 
     @Override
@@ -53,15 +56,34 @@ public final class OutputController implements Initializable {
             ui.outputMessages()
         );
 
+        log.heightProperty().addListener(e -> {
+            if (scrollToEndBtn.isSelected()) {
+                scrollLogToEnd();
+            }
+        });
+
         logPane.fitToWidthProperty().bind(wrapTextBtn.selectedProperty());
+
+        scrollToEndBtn.setSelected(true);
+        scrollToEndBtn.setOnAction(e -> {
+            if (scrollToEndBtn.isSelected()) {
+                scrollLogToEnd();
+            }
+        });
+
         clearLogBtn.setOnAction(ev -> ui.outputMessages().clear());
 
         styleToolbarButton(wrapTextBtn, MaterialIcon.WRAP_TEXT.view());
         styleToolbarButton(clearLogBtn, FontAwesome.TRASH.view());
+        styleToolbarButton(scrollToEndBtn, MaterialIcon.SCROLL_TEXT.view());
     }
 
     private void styleToolbarButton(ButtonBase btn, Node icon) {
-        wrapTextBtn.setGraphic(icon);
+        btn.setGraphic(icon);
         btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+    }
+
+    private void scrollLogToEnd() {
+        logPane.setVvalue(1.0);
     }
 }

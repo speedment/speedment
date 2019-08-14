@@ -28,7 +28,8 @@ import javafx.scene.control.Label;
  */
 public enum MaterialIcon implements Icon {
 
-    WRAP_TEXT('\ue25b');
+    WRAP_TEXT('\ue25b'),
+    SCROLL_TEXT('\ue258');
 
     private final char character;
 

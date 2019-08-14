@@ -19,12 +19,12 @@
 @font-face { src: url("../fonts/fontawesome-webfont.ttf"); }
 @font-face { src: url("../fonts/MaterialIcons-Regular.ttf"); }
 
-@font-face {src: url("../fonts/TitilliumWeb-Regular.ttf"); }
-
-@font-face { src: url("../fonts/SourceSansPro-Bold.ttf"); }
-@font-face { src: url("../fonts/SourceSansPro-Regular.ttf"); }
-
-@font-face { src: url("../fonts/SourceCodePro-Regular.otf"); }
+@font-face { src: url("../fonts/Roboto-Bold.ttf"); }
+@font-face { src: url("../fonts/Roboto-BoldItalic.ttf"); }
+@font-face { src: url("../fonts/Roboto-Medium.ttf"); }
+@font-face { src: url("../fonts/Roboto-MediumItalic.ttf"); }
+@font-face { src: url("../fonts/Roboto-Regular.ttf"); }
+@font-face { src: url("../fonts/Roboto-RegularItalic.ttf"); }
 
 /*** Constants ***/
 * {
@@ -64,18 +64,24 @@
 
 }
 
+.root {
+    -font-font-family: 'Roboto';
+}
+
 /*** Titles Pane ***/
 .titled-pane {
-    -fx-background-color: -fx-speedment-gray;
-    -fx-text-fill: white;
+    -fx-background-color: -fx-speedment-lightgray;
+    -fx-text-fill: black;
+    -fx-border-color: -fx-speedment-mediumgray;
+    -fx-border-top: 1px;
+    -fx-border-bottom: 1px;
 }
 
 .titled-pane > .title {
-    -fx-background-color: -fx-speedment-darkgray;
+    -fx-background-color: -fx-speedment-lightgray;
     -fx-background-radius: 0px;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
-    -fx-font-family: 'Source Sans Pro';
 }
 
 /*** Border Panes ***/
@@ -85,15 +91,15 @@
 
 /*** Tree View ***/
 .tree-view {
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.1em;
+
+    -fx-font-size: 1em;
     -fx-font-weight: normal;
     /*-fx-background-color: -fx-speedment-gray;*/
     -fx-text-fill: -fx-speedment-lightgray;
 }
 
 .tree-view .tree-cell:selected {
-    -fx-background-color: -fx-speedment-mediumblue;
+    -fx-background-color: -fx-speedment-blue;
     -fx-background-radius: 0px;
     -fx-border-width: 0px;
     -fx-text-fill: white;
@@ -109,9 +115,7 @@
 
 .tree-view .gui-disabled,
 .tree-view .gui-disabled .tree-cell {
-    -fx-text-fill: -fx-speedment-mediumgray;
-    -fx-font-weight: bold;
-    -fx-font-style: italic;
+    -fx-text-fill: -fx-speedment-lightgray;
 }
 
 .tree-view .track-background {
@@ -120,32 +124,31 @@
 
 /*** Label ***/
 .label {
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
     -fx-font-weight: normal;
     -fx-text-fill: -fx-speedment-darkgray;
 }
 
 .form-label {
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.1em;
+    -fx-font-family: 'Roboto';
+    -fx-font-size: 1em;
     -fx-font-weight: normal;
+    -fx-text-alignment: right;
 }
 
 /*** Headers ***/
 .header {
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-weight: normal;
     -fx-font-size: 2em;
     -fx-text-fill: -fx-speedment-darkgray;
 }
 
 .header-pane {
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-weight: normal;
     -fx-font-size: 1.7em;
+    -fx-font-family:"Titillium Web";
+    -fx-background-color: -fx-speedment-lightgray;
     -fx-text-fill: -fx-speedment-darkgray;
-    -fx-background-color: #a7b2b92e;
 }
 
 /*** Text Fields and Areas ***/
@@ -156,9 +159,8 @@
     -fx-border-style: solid;
     -fx-border-radius: 2px;
     -fx-border-color: -fx-speedment-mediumgray;
-    -fx-font-family: 'Source Sans Pro';
     -fx-text-fill: -fx-speedment-darkgray;
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
     -fx-font-weight: normal;
 }
 
@@ -175,8 +177,7 @@
     /*   -fx-border-width: 2px;
        -fx-border-style: solid;
        -fx-border-color: -fx-speedment-darkgray; */
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
     -fx-font-weight: normal;
 }
 
@@ -194,7 +195,6 @@
     -fx-border-width: 0px;
     -fx-text-fill: white;
     -fx-font-weight: normal;
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-size: 1.0em;
     -fx-cursor: hand;
     -fx-graphic-text-gap: 0.7em;
@@ -222,8 +222,7 @@
     -fx-border-style: solid;
     -fx-border-color: -fx-speedment-mediumgray;
     -fx-border-radius: 2px;
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
     -fx-font-weight: normal;
 }
 
@@ -234,8 +233,7 @@
     -fx-border-color: -fx-speedment-darkblue;
 }
 
-.combo-box .list-cell:hover,
-.combo-box .list-cell:focused {
+.combo-box .list-cell:hover {
     -fx-background-color: -fx-speedment-darkblue;
     -fx-text-fill: white;
 }
@@ -248,8 +246,7 @@
       -fx-border-style: solid;
       -fx-border-color: -fx-speedment-darkgray; */
     -fx-text-fill: black;
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
     -fx-font-weight: normal;
 }
 
@@ -259,22 +256,32 @@
 }
 
 /*** Checkboxes ***/
-.check-box {
-    -fx-font-family: 'Source Sans Pro';
-}
 
 .check-box *.box {
-    -fx-background-color: -fx-speedment-mediumgray;
-    -fx-border-radius: 5px;
+    -fx-background-color: white;
+    -fx-border-radius: 3px;
+    -fx-border-color: -fx-speedment-gray;
+    -fx-border-width: 1px;
+    -fx-pref-width: 16px;
+    -fx-pref-height: 16px;
 }
 
 .check-box *.box:hover,
 .check-box *.box:active {
-    -fx-background-color: -fx-speedment-lightgray;
+    -fx-background-color: white;
 }
 
 .check-box:selected .mark {
     -fx-background-color: white;
+}
+
+.check-box *.box:disabled {
+    -fx-background-color: white;
+    -fx-border-color: -fx-speedment-lightgray;
+}
+
+.check-box:disabled .mark {
+    -fx-background-color: -fx-speedment-darkgray;
 }
 
 .check-box:selected .box {
@@ -298,6 +305,10 @@
     -fx-background-color: transparent;
 }
 
+.split-pane > .split-pane-divider {
+    -fx-padding: 0;
+}
+
 /*** Menus ***/
 .menu-bar,
 .menu-bar .menu,
@@ -318,8 +329,7 @@
      -fx-border-color: -fx-speedment-green;
      -fx-text-fill: black; */
     -fx-padding: 0px;
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
     -fx-font-weight: normal;
     -fx-text-fill: white;
 }
@@ -347,7 +357,7 @@
 .menu-bar .menu .menu-item:focused *,
 .context-menu .menu-item:hover *,
 .context-menu .menu-item:focused * {
-    -fx-background-color: -fx-speedment-green;
+    -fx-background-color: -fx-speedment-blue;
     -fx-fill: white;
     -fx-text-fill: white;
     -fx-focus-color:white;
@@ -399,7 +409,6 @@
 
 .header-panel > .label,
 .header-panel > .label > .text {
-    -fx-font-family: 'Source Sans Pro';
     -fx-font-weight: normal;
     -fx-font-size: 1.7em;
     -fx-text-fill: -fx-speedment-darkgray;
@@ -425,49 +434,52 @@
 }
 
 .info .header-panel > .graphic-container .glyph-icon {
-    -fx-text-fill: -fx-speedment-green;
-    -fx-fill: -fx-speedment-green;}
+    -fx-text-fill: -fx-speedment-darkgreen;
+    -fx-fill: -fx-speedment-darkgreen;}
 
 .authentication .header-panel > .graphic-container .glyph-icon {
     -fx-text-fill: -fx-speedment-darkgray;
     -fx-fill: -fx-speedment-darkgray;}
 
 .progress .header-panel > .graphic-container .glyph-icon {
-    -fx-text-fill: -fx-speedment-green;
-    -fx-fill: -fx-speedment-green;}
+    -fx-text-fill: -fx-speedment-darkgray;
+    -fx-fill: -fx-speedment-darkgray;}
 
 .progress-bar > .track {
-    -fx-text-box-border: -fx-speedment-green;
-    -fx-control-inner-background: transparent;
+    -fx-text-box-border: lightgray;
+    -fx-control-inner-background: lightgray;
 }
 
 .progress-bar .bar {
-    -fx-padding: 4px;
+    -fx-padding: 3;
     -fx-background-insets: 0;
 }
 
 .h2 {
-    -fx-font-family: "Source Sans Pro";
     -fx-font-size: 1.4em;
 }
 
 /*** Output messages ***/
+#output .tool-bar {
+    -fx-background-color: -fx-speedment-lightgray;
+}
+
 .label.msg {
-    -fx-font-family: 'Source Code Pro';
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1.2em;
     -fx-text-fill: black;
+    -fx-font-family: "Source Code Pro";
 }
 
 .label.msg.error {
-    -fx-background-color: -fx-speedment-mediumred;
+    -fx-text-fill: -fx-speedment-mediumred;
 }
 
 .label.msg.warning {
-    -fx-background-color: -fx-speedment-yellow;
+    -fx-text-fill: -fx-speedment-yellow;
 }
 
 .label.msg.success {
-    -fx-background-color: -fx-speedment-green;
+    -fx-text-fill: -fx-speedment-darkgreen;
 }
 
 /*** Notifications ***/
@@ -492,12 +504,12 @@
 }
 
 .notification.success {
-    -fx-border-color: -fx-speedment-green;
+    -fx-border-color: -fx-speedment-darkgreen;
 }
 
 .notification.success .glyph-icon {
-    -fx-fill: -fx-speedment-green;
-    -fx-text-fill: -fx-speedment-green;
+    -fx-fill: -fx-speedment-darkgreen;
+    -fx-text-fill: -fx-speedment-darkgreen;
 }
 
 .notification.warning {
@@ -545,10 +557,10 @@
 
 /*** Properties layout : left ***/
 .property-label {
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-alignment: top-left;
     -fx-padding: 5px 0px 5px 0px;
+    -fx-margin: 0 8px 0 0;
 }
 
 /*** Properties layout : right ***/
@@ -592,8 +604,7 @@
 }
 
 .hyperlink {
-    -fx-font-family: 'Source Sans Pro';
-    -fx-font-size: 1.1em;
+    -fx-font-size: 1em;
     -fx-text-fill: -fx-speedment-mediumblue;
 }
 
@@ -607,7 +618,6 @@
 }
 
 .table-view .column-header-background .label {
-    -fx-font-family: 'Source Sans Pro';
     -fx-text-fill: -fx-speedment-lightgray;
 }
 
@@ -645,7 +655,7 @@
 /*** Scroll Bars ***/
 .scroll-bar,
 .tree-view .scroll-bar {
-    -fx-font-size: 10px;
+    -fx-font-size: 8px;
 }
 
 .scroll-bar:horizontal,
@@ -683,7 +693,7 @@
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color: -fx-speedment-gray;
+    -fx-background-color: -fx-speedment-mediumgray;
     -fx-background-insets: 0, 0, 0;
     -fx-background-radius: 8px;
     -fx-border-width: 0px;
@@ -698,14 +708,29 @@
 
 .scroll-bar .thumb:hover,
 .scroll-bar .thumb:pressed {
-    -fx-background-color: -fx-speedment-lightgray;
+    -fx-background-color: -fx-speedment-gray;
 }
 
+/* Settings toolbar  */
 .toolbarBtn {
     -fx-padding: 0px;
     -fx-background-color: transparent;
     -fx-border-width: 1px;
+    -fx-border-radius: 2px;
     -fx-border-color: transparent;
+    -fx-background-radius: 2px;
+}
+
+.toolbarBtn .material-icon {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-speedment-darkgray;
+    -fx-padding: 0 2px;
+}
+
+.toolbarBtn .glyph-icon {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-speedment-darkgray;
+    -fx-padding: 1 4px;
 }
 
 .toolbarBtn:selected,
@@ -713,8 +738,7 @@
     -fx-background-color: -fx-speedment-lightgray;
     -fx-border-color: -fx-speedment-mediumgray;
     -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
 }
 
-#output .tool-bar {
-    -fx-background-color: -fx-speedment-lightgray;
-}
