@@ -166,10 +166,11 @@ public interface DbmsType {
 
     /**
      * Returns if this {@code DbmsType} is supported by Speedment in the current
-     * implementation.
+     * implementation and with the current state of class path. Currently, this method
+     * returns true iff the needed third party dependencies are available.
      *
      * @return if this {@code DbmsType} is supported by Speedment in the current
-     * implementation
+     * implementation and with the current state of class path
      */
     boolean isSupported();
 
