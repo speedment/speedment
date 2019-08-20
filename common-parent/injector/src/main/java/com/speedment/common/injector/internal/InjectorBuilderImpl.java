@@ -97,7 +97,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         this(defaultClassLoader(), injectables);
     }
 
-    InjectorBuilderImpl(ClassLoader classLoader, Set<Class<?>> injectables) {
+    private InjectorBuilderImpl(ClassLoader classLoader, Set<Class<?>> injectables) {
         requireNonNull(injectables);
 
         this.classLoader        = requireNonNull(classLoader);
@@ -185,11 +185,10 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         final Set<Injectable<?>> injectablesSet = unmodifiableSet(
             injectables.values().stream()
                 .flatMap(List::stream)
-                .collect(toCollection(() -> new LinkedHashSet<>()))
+                .collect(toCollection((Supplier<Set<Injectable<?>>>) LinkedHashSet::new))
         );
 
-        final DependencyGraph graph = 
-            DependencyGraphImpl.create(injectablesSet.stream().map(Injectable::get));
+        final DependencyGraph graph = DependencyGraph.create(injectablesSet.stream().map(Injectable::get));
 
         final LinkedList<Object> instances = new LinkedList<>();
 
