@@ -32,7 +32,6 @@ import com.speedment.common.injector.exception.*;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.execution.ExecutionBuilder;
-import com.speedment.common.injector.internal.dependency.DependencyGraphImpl;
 import com.speedment.common.injector.internal.execution.ReflectionExecutionImpl;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
 import com.speedment.common.logger.Level;

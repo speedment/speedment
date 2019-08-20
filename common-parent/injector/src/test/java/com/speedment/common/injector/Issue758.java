@@ -36,6 +36,8 @@ final class Issue758 {
         final Buzz buzz = injector.getOrThrow(Buzz.class);
 
         assertEquals(Bazz.class, buzz.foo.getClass());
+
+        injector.stop();
     }
 
 

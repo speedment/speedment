@@ -187,7 +187,7 @@ public final class InjectorImpl implements Injector {
 
                     LOGGER_INSTANCE.debug(horizontalLine());
 
-                    // Retreive the instance for that node
+                    // Retrieve the instance for that node
                     final Object inst = find(n.getRepresentedType(), true);
 
                     // Execute all the executions for the next step.
