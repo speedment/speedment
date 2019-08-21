@@ -17,7 +17,6 @@
 package com.speedment.runtime.connector.mysql.internal;
 
 import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.db.*;
@@ -32,6 +31,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -45,17 +45,26 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     private static final String OLD_DRIVER = "com.mysql.jdbc.Driver";
     private static final String NEW_DRIVER = "com.mysql.cj.jdbc.Driver";
 
+    private final MySqlDbmsMetadataHandler metadataHandler;
+    private final MySqlDbmsOperationHandler operationHandler;
+    private final MySqlSpeedmentPredicateView fieldPredicateView;
+    private final String binaryCollationName;
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;
 
-    @Inject private MySqlDbmsMetadataHandler metadataHandler;
-    @Inject private MySqlDbmsOperationHandler operationHandler;
-    @Inject private MySqlSpeedmentPredicateView fieldPredicateView;
-
-    @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
-    private String binaryCollationName;
-
-    private MySqlDbmsType() {
+    private MySqlDbmsType(
+        final DriverComponent driverComponent,
+        final MySqlDbmsMetadataHandler metadataHandler,
+        final MySqlDbmsOperationHandler operationHandler,
+        final MySqlSpeedmentPredicateView fieldPredicateView,
+        @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
+        final String binaryCollationName
+    ) {
+        super(driverComponent);
+        this.metadataHandler = requireNonNull(metadataHandler);
+        this.operationHandler = requireNonNull(operationHandler);
+        this.fieldPredicateView = requireNonNull(fieldPredicateView);
+        this.binaryCollationName = requireNonNull(binaryCollationName);
         namingConvention = new MySqlNamingConvention();
         connectionUrlGenerator = new MySqlConnectionUrlGenerator();
     }

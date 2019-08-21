@@ -30,10 +30,8 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
  */
 public final class MariaDbComponentImpl implements MariaDbComponent {
 
-    protected MariaDbComponentImpl() {}
-
     @ExecuteBefore(INITIALIZED)
-    void onInitialize(
+    public void onInitialize(
         final @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent,
         final @WithState(INITIALIZED) MariaDbDbmsType mariaDbDbmsType
     ) {

@@ -98,8 +98,11 @@ public interface InfoComponent  {
      *
      * @return if this version is intended for production use
      */
-    boolean isProductionMode();
-    
+    default boolean isProductionMode() {
+        return !getImplementationVersion().toUpperCase().contains("EA")
+            && !getImplementationVersion().toUpperCase().contains("SNAPSHOT");
+    }
+
     default String getLicenseName() {
         return "Apache-2.0";
     }

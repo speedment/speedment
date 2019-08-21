@@ -28,12 +28,12 @@ public final class InfoComponentImpl implements InfoComponent {
     
     @Override
     public String getTitle() {
-        return "Speedment Stream";
+        return "Speedment";
     }
 
     @Override
     public String getSubtitle() {
-        return "Standard Java Streams from DB, Open Source";
+        return "Open Source";
     }
 
     @Override
@@ -59,21 +59,4 @@ public final class InfoComponentImpl implements InfoComponent {
     @Override
     public String getSpecificationNickname() { return "Homer"; }
 
-    @Override
-    public boolean isProductionMode() {
-        return !getImplementationVersion().toUpperCase().contains("EA") 
-            && !getImplementationVersion().toUpperCase().contains("SNAPSHOT");
-    }
-
-    @Override
-    public String getBanner() {
-        return
-            "   _____                     _                      _      _____ _                            \n" +
-            "  / ____|                   | |                    | |    / ____| |                           \n" +
-            " | (___  _ __   ___  ___  __| |_ __ ___   ___ _ __ | |_  | (___ | |_ _ __ ___  __ _ _ __ ___  \n" +
-            "  \\___ \\| '_ \\ / _ \\/ _ \\/ _` | '_ ` _ \\ / _ \\ '_ \\| __|  \\___ \\| __| '__/ _ \\/ _` | '_ ` _ \\ \n" +
-            "  ____) | |_) |  __/  __/ (_| | | | | | |  __/ | | | |_   ____) | |_| | |  __/ (_| | | | | | |\n" +
-            " |_____/| .__/ \\___|\\___|\\__,_|_| |_| |_|\\___|_| |_|\\__| |_____/ \\__|_|  \\___|\\__,_|_| |_| |_|\n" +
-            "  ======| |===================================================================================";
-    }
 }
