@@ -14,7 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.function.collector;
+package com.speedment.common.function.internal.collector;
+
+import com.speedment.common.function.collector.LongCollector;
 
 import java.util.Set;
 import java.util.function.BinaryOperator;
@@ -31,8 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  1.0.5
  */
-final class LongCollectorImpl<A, R>
-implements LongCollector<A, R> {
+public final class LongCollectorImpl<A, R> implements LongCollector<A, R> {
 
     private final Supplier<A> supplier;
     private final ObjLongConsumer<A> accumulator;
