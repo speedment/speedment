@@ -41,7 +41,7 @@ public final class LongCollectorImpl<A, R> implements LongCollector<A, R> {
     private final Function<A, R> finisher;
     private final Set<Collector.Characteristics> characteristics;
 
-    LongCollectorImpl(
+    public LongCollectorImpl(
             final Supplier<A> supplier,
             final ObjLongConsumer<A> accumulator,
             final BinaryOperator<A> combiner,
