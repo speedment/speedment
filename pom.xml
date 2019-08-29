@@ -67,6 +67,7 @@
         <junit.jupiter.version>5.4.0</junit.jupiter.version>
         <junit.platform.provider.version>1.4.0</junit.platform.provider.version>
         <mockito.version>2.23.4</mockito.version>
+        <archunit.version>0.11.0</archunit.version>
         <speedment.version>${project.version}</speedment.version>
         <common.version>${project.version}</common.version>
 
@@ -902,6 +903,27 @@
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-launcher</artifactId>
                 <version>${junit.platform.provider.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit</artifactId>
+                <version>${archunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit-junit5-api</artifactId>
+                <version>${archunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit-junit5-engine</artifactId>
+                <version>${archunit.version}</version>
                 <scope>test</scope>
             </dependency>
 

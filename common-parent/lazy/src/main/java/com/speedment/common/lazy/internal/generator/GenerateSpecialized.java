@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.lazy.generator;
+package com.speedment.common.lazy.internal.generator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
