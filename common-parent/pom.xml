@@ -60,6 +60,7 @@
         <module>benchmark</module>
         <module>combinatorics</module>
         <module>collection</module>
+        <module>archtest</module>
     </modules>
     
 </project>

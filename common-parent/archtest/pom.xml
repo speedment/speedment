@@ -28,16 +28,14 @@
         <version>3.1.18-SNAPSHOT</version>
     </parent>
     
-    <artifactId>function</artifactId>
+    <artifactId>archtest</artifactId>
     <packaging>bundle</packaging>
     
-    <name>Speedment - Common - Function</name>
+    <name>Speedment - Common - Archtest</name>
     <description>
-        A complement to the java.util and java.util.function packages that add
-        missing primitive specializations of common interfaces.
+        Support Classes for ArchUnit tests
     </description>
-    <url>https://www.github.com/speedment/speedment/wiki/Function/</url>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -46,15 +44,14 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.common.function,
-                            com.speedment.common.function.collector
+                            com.speedment.common.archtest
                         </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>                            
         </plugins>
     </build>
-
+    
     <profiles>
         <profile>
             <id>release</id>
@@ -65,7 +62,7 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven-javadoc-plugin-version}</version>
                     </plugin>
-
+                    
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
@@ -78,14 +75,35 @@
 
     <dependencies>
         <!--Test Dependencies-->
+
         <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>archtest</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-api</artifactId>
+            <scope>compile</scope>
+
+        </dependency>
+
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-engine</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>
