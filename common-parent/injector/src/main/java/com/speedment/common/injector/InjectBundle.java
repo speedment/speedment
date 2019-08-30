@@ -35,7 +35,7 @@ public interface InjectBundle {
     Stream<Class<?>> injectables();
 
     static InjectBundle empty() {
-        return () -> Stream.empty();
+        return Stream::empty;
     }
 
     static InjectBundle of(Class<?>... classes) {
