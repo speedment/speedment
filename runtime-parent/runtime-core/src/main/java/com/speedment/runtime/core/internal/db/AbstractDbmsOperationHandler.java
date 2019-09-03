@@ -66,6 +66,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     protected static final Logger LOGGER_PERSIST = LoggerManager.getLogger(LogType.PERSIST.getLoggerName());
     protected static final Logger LOGGER_UPDATE = LoggerManager.getLogger(LogType.UPDATE.getLoggerName());
     protected static final Logger LOGGER_REMOVE = LoggerManager.getLogger(LogType.REMOVE.getLoggerName());
+    private static final Logger LOGGER_SQL_RETRY = LoggerManager.getLogger(LogType.SQL_RETRY.getLoggerName());
 
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
@@ -181,7 +182,8 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         requireNonNull(sqlStatementList);
 
         assertNotClosed();
-        int retryCount = 5;
+        final int initialRetryCount = 5;
+        int retryCount = initialRetryCount;
         boolean transactionCompleted = false;
 
         do {
@@ -194,9 +196,12 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                 transactionCompleted = true;
                 conn = null;
             } catch (SQLException sqlEx) {
-                LOGGER.error("SqlStatementList: " + sqlStatementList);
-                LOGGER.error("SQL: " + lastSqlStatement.get());
-                LOGGER.error(sqlEx, sqlEx.getMessage());
+                if (retryCount < initialRetryCount) {
+                    LOGGER_SQL_RETRY.error("SqlStatementList: " + sqlStatementList);
+                    LOGGER_SQL_RETRY.error("SQL: " + lastSqlStatement.get());
+                    LOGGER_SQL_RETRY.error(sqlEx, sqlEx.getMessage());
+                }
+
                 final String sqlState = sqlEx.getSQLState();
 
                 if ("08S01".equals(sqlState) || "40001".equals(sqlState)) {
@@ -241,15 +246,8 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
         assertNotClosed();
         final AtomicReference<SqlStatement> lastSqlStatement = new AtomicReference<>();
-        try {
-            executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
-            postSuccessfulTransaction(sqlStatementList);
-        } catch (SQLException sqlEx) {
-            LOGGER.error("SqlStatementList: " + sqlStatementList);
-            LOGGER.error("SQL: " + lastSqlStatement);
-            LOGGER.error(sqlEx, sqlEx.getMessage());
-            throw sqlEx;
-        }
+        executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
+        postSuccessfulTransaction(sqlStatementList);
     }
 
     private void executeSqlStatementList(List<? extends SqlStatement> sqlStatementList, AtomicReference<SqlStatement> lastSqlStatement, Dbms dbms, Connection conn) throws SQLException {
