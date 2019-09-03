@@ -666,7 +666,11 @@ public interface ApplicationBuilder<
         /**
          *  Logging related to JOINs.
          */
-        JOIN;
+        JOIN,
+        /**
+         * Logging related to SQL retries
+         */
+        SQL_RETRY;
 
         private final String loggerName;
 
