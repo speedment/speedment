@@ -24,12 +24,7 @@ import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
-import com.speedment.runtime.connector.sqlite.MockConnectionPoolComponent;
-import com.speedment.runtime.connector.sqlite.MockDbmsHandlerComponent;
-import com.speedment.runtime.connector.sqlite.MockProgress;
-import com.speedment.runtime.connector.sqlite.MockProjectComponent;
-import com.speedment.runtime.connector.sqlite.ScriptRunner;
-import com.speedment.runtime.connector.sqlite.SqliteBundle;
+import com.speedment.runtime.connector.sqlite.*;
 import com.speedment.runtime.core.component.ProjectComponent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -89,6 +84,7 @@ class SqliteMetadataHandlerTest {
                     .withComponent(MockProjectComponent.class)
                     .withComponent(MockDbmsHandlerComponent.class)
                     .withComponent(MockConnectionPoolComponent.class)
+                    .withComponent(MockTransactionComponent.class)
                     .beforeInitialized(MockConnectionPoolComponent.class,
                         pool -> pool.setConnection(conn, URL)
                     )

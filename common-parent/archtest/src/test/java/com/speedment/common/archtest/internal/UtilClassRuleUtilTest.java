@@ -36,5 +36,19 @@ final class UtilClassRuleUtilTest {
         });
     }
 
+    @ArchTest
+    static void methodIsStatic(JavaClasses classes) {
+        assertThrows(AssertionError.class, () -> {
+            UtilClassRuleUtil.methodIsStatic(classes);
+        });
+    }
+
+    @ArchTest
+    static void classHasPrivateConstructor(JavaClasses classes) {
+        assertThrows(AssertionError.class, () -> {
+            UtilClassRuleUtil.classHasPrivateConstructor(classes);
+        });
+    }
+
 
 }

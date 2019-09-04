@@ -16,7 +16,11 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -26,6 +30,14 @@ import java.sql.SQLException;
  * @since 3.0.0
  */
 public final class MySqlDbmsOperationHandler extends AbstractDbmsOperationHandler {
+
+    protected MySqlDbmsOperationHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final TransactionComponent transactionComponent
+    ) {
+        super(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+    }
 
     @Override
     public void configureSelect(PreparedStatement statement) throws SQLException {

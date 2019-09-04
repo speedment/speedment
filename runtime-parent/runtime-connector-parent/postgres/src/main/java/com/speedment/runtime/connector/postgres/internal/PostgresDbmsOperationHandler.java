@@ -16,8 +16,10 @@
  */
 package com.speedment.runtime.connector.postgres.internal;
 
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
-import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,6 +47,14 @@ public final class PostgresDbmsOperationHandler extends AbstractDbmsOperationHan
         Types.BIGINT,
         Types.NUMERIC
     );
+
+    protected PostgresDbmsOperationHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final TransactionComponent transactionComponent
+    ) {
+        super(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+    }
 
     @Override
     public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {

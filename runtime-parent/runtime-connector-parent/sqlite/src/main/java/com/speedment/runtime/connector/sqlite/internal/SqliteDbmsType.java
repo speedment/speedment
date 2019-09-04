@@ -122,7 +122,7 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public boolean isSupported() {
-        return drivers.driver(getDriverName()).isPresent();
+        return drivers != null && drivers.driver(getDriverName()).isPresent();
     }
 
     @Override
