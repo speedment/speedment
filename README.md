@@ -115,12 +115,13 @@ Speedment Open Source comes with support for the following databases out-of-the-
 * PostgreSQL
 * SQLite
 
-For Enterprise database connectors see [www.speedment.com](www.speedment.com/pricing). 
+For Enterprise database connectors see [Speedment Licensing and Pricing](www.speedment.com/pricing). 
 
 ## Licenses
 * **Speedment Open Source** - This site covers the Speedment Open Source project available under the 
 [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). 
-* **Speedment Enterprise** - The enterprise product with support for commercial databases (i.e. Oracle, MS SQL Server, DB2, AS400) and in-JVM-memory acceleration can be found at [www.speedment.com](http://speedment.com/).
+* **Speedment Stream** - The same great features as Speedment OSS with support for commercial databases (i.e. Oracle, MS SQL Server, DB2, AS400). Learn more at [speedment.com/stream](http://speedment.com/stream).
+* **Speedment HyperStream** - An extension av Speedment Stream which also includes hypersonic query performance enabled by a unique in-JVM-memory management model. Learn more at [speedment.com/hyperStream](http://speedment.com/hyperstream).
 
 ## Copyright
 

@@ -283,10 +283,10 @@ public final class ConfigFileHelper {
      * @param from the project defining the type mappers
      */
     private void setTypeMappersFrom(Project to, Project from) {
-        from.dbmses().map(d -> (Dbms) d).forEach(dbms -> {
-            dbms.schemas().map(s -> (Schema) s).forEach(schema -> {
-                schema.tables().map(t -> (Table) t).forEach(table -> {
-                    table.columns().map(c -> (Column) c).filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
+        from.dbmses().forEach(dbms -> {
+            dbms.schemas().forEach(schema -> {
+                schema.tables().forEach(table -> {
+                    table.columns().filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
                         String mapperName = column.getTypeMapper().get();
                         try {
                             //noinspection unchecked
@@ -319,7 +319,6 @@ public final class ConfigFileHelper {
     private void setTypeMapper(Project to, Dbms dbms, Schema schema, Table table, Column column, Class<? extends TypeMapper<?, ?>> typeMapperClass) {
         to.dbmses()
             .filter(d -> d.getId().equals(dbms.getId()))
-            .map(d -> (Dbms) d)
             .flatMap(Dbms::schemas)
             .filter(s -> s.getId().equals(schema.getId()))
             .flatMap(Schema::tables)
@@ -342,10 +341,10 @@ public final class ConfigFileHelper {
      */
     private void printTypeMappers(String heading, Project p) {
         System.out.println(heading);
-        p.dbmses().map(d -> (Dbms) d).forEach(dbms -> {
-            dbms.schemas().map(s -> (Schema) s).forEach(schema -> {
-                schema.tables().map(t -> (Table) t).forEach(table -> {
-                    table.columns().map(c -> (Column) c).filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
+        p.dbmses().forEach(dbms -> {
+            dbms.schemas().forEach(schema -> {
+                schema.tables().forEach(table -> {
+                    table.columns().filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
                         String mapperName = column.getTypeMapper().get();
                         if (mapperName.endsWith("PrimitiveTypeMapper")) {
                             mapperName = "Primitive";

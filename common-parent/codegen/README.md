@@ -9,7 +9,7 @@ To use CodeGen in your projects, add the following dependency to your `pom.xml`-
 <dependency>
     <groupId>com.speedment.common</groupId>
     <artifactId>codegen</artifactId>
-    <version>2.4.3</version>
+    <version>3.1.17</version>
 </dependency>
 ```
 
