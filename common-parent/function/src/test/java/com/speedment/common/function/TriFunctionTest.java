@@ -14,6 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.archtest.negative.internal;
+package com.speedment.common.function;
 
-public class Foo {}
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class TriFunctionTest {
+
+    @Test
+    void apply() {
+        final TriFunction<Integer, Integer, Integer, Integer> tf = (a, b, c) -> a + b + c;
+        final Integer actual = tf.apply(1,2,3);
+        assertEquals(6, actual);
+    }
+
+}

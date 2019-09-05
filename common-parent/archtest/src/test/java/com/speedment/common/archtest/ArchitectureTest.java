@@ -16,8 +16,6 @@
  */
 package com.speedment.common.archtest;
 
-import com.speedment.common.archtest.ArchitectureRules;
-import com.speedment.common.archtest.ArchitectureRules.RuleType;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests;
 import com.tngtech.archunit.junit.AnalyzeClasses;

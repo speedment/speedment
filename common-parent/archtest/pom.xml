@@ -58,13 +58,13 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin-version}</version>
+                        <configuration>
+                            <excludePackageNames>*.internal.*,*.archunit.*</excludePackageNames>
+                        </configuration>
                     </plugin>
                     
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                         <version>${maven-source-plugin-version}</version>
                     </plugin>
@@ -95,14 +95,11 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
-            <scope>compile</scope>
-
         </dependency>
 
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-engine</artifactId>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

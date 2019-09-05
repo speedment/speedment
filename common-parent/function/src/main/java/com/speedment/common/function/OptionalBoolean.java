@@ -16,7 +16,10 @@
  */
 package com.speedment.common.function;
 
+import java.util.NoSuchElementException;
 import java.util.function.Supplier;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An {@code Optional} specialized for primitive boolean values.
@@ -43,13 +46,24 @@ public enum OptionalBoolean {
             return of(bool);
         }
     }
-    
+
+    /**
+     * If a value is present, and the value matches the given predicate,
+     * return a {@code BooleanOptional} describing the value, otherwise return an
+     * empty {@code BooleanOptional}.
+     *
+     * @param predicate a predicate to apply to the value, if present
+     * @return a {@code BooleanOptional} describing the value of this {@code BooleanOptional}
+     * if a value is present and the value matches the given predicate,
+     * otherwise an empty {@code BooleanOptional}
+     * @throws NullPointerException if the predicate is null
+     */
     public OptionalBoolean filter(BooleanPredicate predicate) {
-        if (this == EMPTY || predicate.test(getAsBoolean())) {
+        requireNonNull(predicate);
+        if (!isPresent())
             return this;
-        } else {
-            return EMPTY;
-        }
+        else
+            return predicate.test(this == TRUE) ? this : empty();
     }
     
     public boolean getAsBoolean() {
@@ -57,7 +71,7 @@ public enum OptionalBoolean {
             case FALSE : return false;
             case TRUE  : return true;
             default :
-                throw new NullPointerException(
+                throw new NoSuchElementException(
                     "Attempted to get value from empty OptionalBoolean."
                 );
         }

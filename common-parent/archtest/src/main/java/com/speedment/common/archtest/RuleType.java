@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -14,6 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.archtest.negative.internal;
+package com.speedment.common.archtest;
 
-public class Foo {}
+public enum RuleType {
+    /**
+     * Represents rules that relates to non-instantiable classes (i.e. "Util" classes).
+     */
+    UTIL,
+    /**
+     * Represents rules that involves classes that are <em>internal</em> and not a part
+     * of the public API.
+     */
+    INTERNAL;
+}
