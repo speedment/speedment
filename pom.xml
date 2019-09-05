@@ -666,6 +666,9 @@
                             <properties>
                                 <currentYear>2019</currentYear>
                             </properties>
+                            <headerDefinitions>
+                                <headerDefinition>license_header_def.xml</headerDefinition>
+                            </headerDefinitions>
                             <excludes>
                                 <exclude>**/README</exclude>
                                 <exclude>**/README.md</exclude>
