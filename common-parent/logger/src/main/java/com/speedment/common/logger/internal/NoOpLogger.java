@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -29,5 +29,5 @@ public final class NoOpLogger extends AbstractLogger {
     }
 
     @Override
-    protected void output(String message) {}
+    protected void output(String message) { /* Do Nothing */ }
 }

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -15,6 +15,8 @@
  * the License.
  */
 package com.speedment.common.function.collector;
+
+import com.speedment.common.function.internal.collector.LongCollectorImpl;
 
 import java.util.Set;
 import java.util.function.BinaryOperator;

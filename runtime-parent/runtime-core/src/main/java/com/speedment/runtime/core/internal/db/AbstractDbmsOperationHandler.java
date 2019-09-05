@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -42,7 +42,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -62,20 +61,33 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandler {
 
+    private static final int INITIAL_RETRY_COUNT = 5;
     private static final Logger LOGGER = LoggerManager.getLogger(AbstractDbmsOperationHandler.class);
-    protected static final Logger LOGGER_PERSIST = LoggerManager.getLogger(LogType.PERSIST.getLoggerName());
-    protected static final Logger LOGGER_UPDATE = LoggerManager.getLogger(LogType.UPDATE.getLoggerName());
-    protected static final Logger LOGGER_REMOVE = LoggerManager.getLogger(LogType.REMOVE.getLoggerName());
+    private static final Logger LOGGER_PERSIST = LoggerManager.getLogger(LogType.PERSIST.getLoggerName());
+    private static final Logger LOGGER_UPDATE = LoggerManager.getLogger(LogType.UPDATE.getLoggerName());
+    private static final Logger LOGGER_REMOVE = LoggerManager.getLogger(LogType.REMOVE.getLoggerName());
+    private static final Logger LOGGER_SQL_RETRY = LoggerManager.getLogger(LogType.SQL_RETRY.getLoggerName());
 
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private final AtomicBoolean closed;
 
-    private @Inject ConnectionPoolComponent connectionPoolComponent;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @InjectOrNull TransactionComponent transactionComponent;
+    private final ConnectionPoolComponent connectionPoolComponent;
+    private final DbmsHandlerComponent dbmsHandlerComponent;
+    private final TransactionComponent transactionComponent;
 
-    protected AbstractDbmsOperationHandler() {
+    // @Inject private ConnectionPoolComponent connectionPoolComponent;
+    // @Inject private DbmsHandlerComponent dbmsHandlerComponent;
+    // @InjectOrNull private TransactionComponent transactionComponent;
+
+    protected AbstractDbmsOperationHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final TransactionComponent transactionComponent
+    ) {
+        this.connectionPoolComponent = requireNonNull(connectionPoolComponent);
+        this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
+        this.transactionComponent = requireNonNull(transactionComponent);
         closed = new AtomicBoolean();
     }
 
@@ -125,9 +137,9 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     ) {
         assertNotClosed();
         return new AsynchronousQueryResultImpl<>(
-            Objects.requireNonNull(sql),
-            Objects.requireNonNull(values),
-            Objects.requireNonNull(rsMapper),
+            sql,
+            values,
+            rsMapper,
             () -> new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent), 
             parallelStrategy,
             this::configureSelect,
@@ -156,7 +168,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         execute(dbms, singletonList(sqlDeleteStatement));
     }
 
-    protected void logOperation(Logger logger, final String sql, final List<?> values) {
+    private void logOperation(Logger logger, final String sql, final List<?> values) {
         logger.debug("%s, values:%s", sql, values);
     }
 
@@ -173,7 +185,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     protected void executeNotInTransaction(
         final Dbms dbms,
-        Connection conn,
+        final Connection conn,
         final List<? extends SqlStatement> sqlStatementList
     ) throws SQLException {
         requireNonNull(dbms);
@@ -181,9 +193,8 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         requireNonNull(sqlStatementList);
 
         assertNotClosed();
-        int retryCount = 5;
+        int retryCount = INITIAL_RETRY_COUNT;
         boolean transactionCompleted = false;
-
         do {
             final AtomicReference<SqlStatement> lastSqlStatement = new AtomicReference<>();
             try {
@@ -192,11 +203,13 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                 conn.commit();
                 conn.close();
                 transactionCompleted = true;
-                conn = null;
             } catch (SQLException sqlEx) {
-                LOGGER.error("SqlStatementList: " + sqlStatementList);
-                LOGGER.error("SQL: " + lastSqlStatement.get());
-                LOGGER.error(sqlEx, sqlEx.getMessage());
+                if (retryCount < INITIAL_RETRY_COUNT) {
+                    LOGGER_SQL_RETRY.error("SqlStatementList: " + sqlStatementList);
+                    LOGGER_SQL_RETRY.error("SQL: " + lastSqlStatement.get());
+                    LOGGER_SQL_RETRY.error(sqlEx, sqlEx.getMessage());
+                }
+
                 final String sqlState = sqlEx.getSQLState();
 
                 if ("08S01".equals(sqlState) || "40001".equals(sqlState)) {
@@ -208,11 +221,9 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
                 if (!transactionCompleted) {
                     try {
-                        // If we got here, and conn is not null, the
-                        // transaction should be rolled back, as not
+                        // If we got here the transaction should be rolled back, as not
                         // all work has been done
                        conn.rollback();
-
                     } catch (SQLException sqlEx) {
                         // If we got an exception here, something
                         // pretty serious is going on
@@ -241,15 +252,8 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
         assertNotClosed();
         final AtomicReference<SqlStatement> lastSqlStatement = new AtomicReference<>();
-        try {
-            executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
-            postSuccessfulTransaction(sqlStatementList);
-        } catch (SQLException sqlEx) {
-            LOGGER.error("SqlStatementList: " + sqlStatementList);
-            LOGGER.error("SQL: " + lastSqlStatement);
-            LOGGER.error(sqlEx, sqlEx.getMessage());
-            throw sqlEx;
-        }
+        executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
+        postSuccessfulTransaction(sqlStatementList);
     }
 
     private void executeSqlStatementList(List<? extends SqlStatement> sqlStatementList, AtomicReference<SqlStatement> lastSqlStatement, Dbms dbms, Connection conn) throws SQLException {

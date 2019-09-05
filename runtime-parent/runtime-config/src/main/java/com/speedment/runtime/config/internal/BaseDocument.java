@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  */
 public class BaseDocument implements Document {
     
-    private final transient Document parent; // Nullable
+    private final Document parent; // Nullable
     private final Map<String, Object> config;
 
     public BaseDocument(Document parent, Map<String, Object> data) {

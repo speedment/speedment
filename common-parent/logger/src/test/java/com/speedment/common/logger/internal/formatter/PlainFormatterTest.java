@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -22,8 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -31,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 final class PlainFormatterTest {
 
-    PlainFormatter instance;
+    private PlainFormatter instance;
 
     @BeforeEach
     void setUp() {
@@ -40,8 +39,10 @@ final class PlainFormatterTest {
 
     @Test
     void Java9TestInstantNowToString() {
+        final String s = Instant.now().toString();
         // Java 9 test
-        System.out.println("Instant.now().toString():" + Instant.now().toString());
+        System.out.println("Instant.now().toString():" + s);
+        assertNotNull(s);
     }
 
     @Test
@@ -60,6 +61,7 @@ final class PlainFormatterTest {
     void testHighResolutionTime() {
         final String actual = instance.formatInstance("2017-03-30T02:02:42.988290Z");
         System.out.println("Hi resolution:" + actual);
+        assertNotNull(actual);
     }
 
     @Test

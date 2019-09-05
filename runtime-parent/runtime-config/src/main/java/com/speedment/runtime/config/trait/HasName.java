@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -39,11 +39,6 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
 public interface HasName extends Document, HasMainInterface {
 
     /**
-     * The key of the {@code name} property.
-     */
-    String NAME = "name";
-
-    /**
      * Gets the name of this Document. If no name is present, this method might
      * create a name if the parent implements the {@link HasChildren} interface.
      * If it does not and this document is unnamed, an
@@ -54,7 +49,7 @@ public interface HasName extends Document, HasMainInterface {
      * generate one
      */
     default String getName() throws SpeedmentConfigException {
-        final Optional<String> name = getAsString(NAME);
+        final Optional<String> name = getAsString(HasNameUtil.NAME);
 
         if (name.isPresent()) {
             return name.get();
@@ -68,7 +63,7 @@ public interface HasName extends Document, HasMainInterface {
                     .map(parent -> parent.defaultNameFor(this))
                     .orElseThrow(NoSuchElementException::new);
 
-            getData().put(NAME, defaultName);
+            getData().put(HasNameUtil.NAME, defaultName);
             return defaultName;
         } else if (this instanceof Project) {
             return Project.class.getSimpleName();

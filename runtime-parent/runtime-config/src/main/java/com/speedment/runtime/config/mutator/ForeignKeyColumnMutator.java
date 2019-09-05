@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -18,10 +18,10 @@ package com.speedment.runtime.config.mutator;
 
 
 import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.ForeignKeyColumnUtil;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
 
-import static com.speedment.runtime.config.ForeignKeyColumn.*;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 
 /**
@@ -40,19 +40,19 @@ public class ForeignKeyColumnMutator<DOC extends ForeignKeyColumn> extends Docum
     }
     
     public void setForeignTableName(String foreignTableName) {
-        put(FOREIGN_TABLE_NAME, foreignTableName);
+        put(ForeignKeyColumnUtil.FOREIGN_TABLE_NAME, foreignTableName);
     }
     
     public void setForeignColumnName(String foreignColumnName) {
-        put(FOREIGN_COLUMN_NAME, foreignColumnName);
+        put(ForeignKeyColumnUtil.FOREIGN_COLUMN_NAME, foreignColumnName);
     }
     
     public void setForeignDatabaseName(String foreignDatabaseName){
-    	put(FOREIGN_DATABASE_NAME, foreignDatabaseName);
+    	put(ForeignKeyColumnUtil.FOREIGN_DATABASE_NAME, foreignDatabaseName);
     }
     
     public void setForeignSchemaName(String foreignSchemaName) {
-    	put(FOREIGN_SCHEMA_NAME, foreignSchemaName);
+    	put(ForeignKeyColumnUtil.FOREIGN_SCHEMA_NAME, foreignSchemaName);
     }
 
     

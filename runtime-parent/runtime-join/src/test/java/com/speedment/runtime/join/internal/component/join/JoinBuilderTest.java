@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -205,10 +205,6 @@ final class JoinBuilderTest {
 //            .build();
 //    }
 
-    @Test
-    void testOnColumnMustComeFromPreviousTable() {
-
-    }
 
     private <T> Consumer<T> noOp() {
         return (T t) -> {

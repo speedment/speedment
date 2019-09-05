@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.util;
 
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import java.io.IOException;
@@ -144,8 +145,8 @@ public final class DocumentTranscoder {
             final Map<String, Object> data = 
                 (Map<String, Object>) root.get(ROOT);
 
-            if (!data.containsKey(Project.APP_ID)) {
-                data.put(Project.APP_ID, UUID.randomUUID().toString());
+            if (!data.containsKey(ProjectUtil.APP_ID)) {
+                data.put(ProjectUtil.APP_ID, UUID.randomUUID().toString());
             }
             
             return new ProjectImpl(data);

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -18,6 +18,7 @@ package com.speedment.tool.config.trait;
 
 
 import com.speedment.runtime.config.trait.HasNullable;
+import com.speedment.runtime.config.trait.HasNullableUtil;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -44,7 +45,7 @@ public interface HasNullableProperty extends DocumentProperty, HasNullable {
      *          {@link HasNullable#isNullable()}-state of this column
      */
     default BooleanProperty nullableProperty() {
-        return booleanPropertyOf(NULLABLE, HasNullable.super::isNullable);
+        return booleanPropertyOf(HasNullableUtil.NULLABLE, HasNullable.super::isNullable);
     }
 
     @Override
@@ -63,7 +64,7 @@ public interface HasNullableProperty extends DocumentProperty, HasNullable {
      */
     default ObjectProperty<ImplementAs> nullableImplementationProperty() {
         final ImplementAs initial = HasNullable.super.getNullableImplementation();
-        final StringProperty implName = stringPropertyOf(NULLABLE_IMPLEMENTATION, () -> initial.name());
+        final StringProperty implName = stringPropertyOf(HasNullableUtil.NULLABLE_IMPLEMENTATION, () -> initial.name());
         final ObjectProperty<ImplementAs> property = new SimpleObjectProperty<>(initial);
         
         Bindings.bindBidirectional(implName, property, new StringConverter<ImplementAs>() {

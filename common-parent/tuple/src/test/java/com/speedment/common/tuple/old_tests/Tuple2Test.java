@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -32,6 +32,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
@@ -103,6 +104,7 @@ public class Tuple2Test {
     void testToString() {
         final Tuple2<Integer, Integer> newInstance = Tuples.of(FIRST, SECOND);
         final String result = newInstance.toString();
+        assertNotNull(result);
     }
 
     @Test

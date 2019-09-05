@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -24,11 +24,9 @@ package com.speedment.common.singletonstream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -50,7 +48,9 @@ final class SingletonStreamTest {
 
     @Test
     void testSome() {
-        instance.map("A"::indexOf).distinct().unordered().forEach(blackHole());
+        final List<Integer> expected = Collections.singletonList(0);
+        final List<Integer> actual = instance.map("A"::indexOf).distinct().unordered().collect(toList());
+        assertEquals(expected, actual);
     }
 
     private <T> Consumer<T> blackHole() {

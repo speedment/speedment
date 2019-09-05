@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -16,7 +16,9 @@
  */
 package com.speedment.runtime.connector.sqlite.internal;
 
-import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
 
@@ -26,6 +28,14 @@ import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
  * @author Emil Forslund
  * @since  3.1.10
  */
-@InjectKey(DbmsOperationHandler.class)
-public final class SqliteOperationHandler
-extends AbstractDbmsOperationHandler {}
+public final class SqliteOperationHandler extends AbstractDbmsOperationHandler {
+
+    protected SqliteOperationHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final TransactionComponent transactionComponent
+    ) {
+        super(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+    }
+
+}

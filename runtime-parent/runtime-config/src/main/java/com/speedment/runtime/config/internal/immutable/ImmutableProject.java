@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.config.ProjectUtil.*;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
@@ -40,32 +41,28 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ImmutableProject extends ImmutableDocument implements Project {
 
-    private final transient boolean enabled;
-    private final transient String id;
-    private final transient String name;
-    private final transient String companyName;
-    private final transient Optional<String> packageName;
-    private final transient String packageLocation;
-    private final transient Optional<Path> configPath;
+    private final boolean enabled;
+    private final String id;
+    private final String name;
+    private final String companyName;
+    private final String packageName;
+    private final String packageLocation;
+    private final Path configPath;
     
-    private final transient List<ImmutableDbms> dbmses;
-    private final transient Map<String, ImmutableTable> tablesByName;
+    private final List<Dbms> dbmses;
+    private final Map<String, ImmutableTable> tablesByName;
 
     ImmutableProject(Map<String, Object> project) {
         super(project);
-        
         final Project prototype = new ProjectImpl(project);
-
         this.enabled         = prototype.isEnabled();
         this.id              = prototype.getId();
         this.name            = prototype.getName();
         this.companyName     = prototype.getCompanyName();
-        this.packageName     = prototype.getPackageName();
+        this.packageName     = prototype.getPackageName().orElse(null);
         this.packageLocation = prototype.getPackageLocation();
-        this.configPath      = prototype.getConfigPath();
-        
+        this.configPath      = prototype.getConfigPath().orElse(null);
         this.dbmses = unmodifiableList(super.children(DBMSES, ImmutableDbms::new).collect(toList()));
-        
         this.tablesByName = MapStream.fromValues(
             DocumentDbUtil.traverseOver(this, ImmutableTable.class),
             table -> DocumentUtil.relativeName(table, Dbms.class, DATABASE_NAME)
@@ -94,7 +91,7 @@ public final class ImmutableProject extends ImmutableDocument implements Project
 
     @Override
     public Optional<String> getPackageName() {
-        return packageName;
+        return Optional.ofNullable(packageName);
     }
 
     @Override
@@ -104,11 +101,11 @@ public final class ImmutableProject extends ImmutableDocument implements Project
 
     @Override
     public Optional<Path> getConfigPath() {
-        return configPath;
+        return Optional.ofNullable(configPath);
     }
 
     @Override
-    public Stream<ImmutableDbms> dbmses() {
+    public Stream<Dbms> dbmses() {
         return dbmses.stream();
     }
 

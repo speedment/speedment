@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -14,22 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.test_support;
+package com.speedment.runtime.config.trait;
 
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+public final class HasDecimalDigitsUtil {
 
-/**
- *
- * @author Per Minborg
- */
-public final class MockEntityUtil {
+    private HasDecimalDigitsUtil() {}
 
-    public static Stream<MockEntity> stream(int elements) {
-        return IntStream.range(0, elements).mapToObj(MockEntity::new);
-    }
-
-    private MockEntityUtil() {
-    }
+    /**
+     * The key of the {@code decimalDigits} property.
+     */
+    public static final String DECIMAL_DIGITS = "decimalDigits";
 
 }

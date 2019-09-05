@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -469,10 +469,12 @@ public final class Formatting {
     public static String nameFromExternal(final String externalName) {
         requireNonNull(externalName);
         String result = unQuote(externalName.trim()); // Trim if there are initial spaces or trailing spaces...
-        // CamelCase
-        // http://stackoverflow.com/questions/4050381/regular-expression-for-checking-if-capital-letters-are-found-consecutively-in-a
-        // [A-Z] -> \p{Lu}
-        // [^A-Za-z0-9] -> [^\pL0-90-9]
+        /*
+         CamelCase
+           http://stackoverflow.com/questions/4050381/regular-expression-for-checking-if-capital-letters-are-found-consecutively-in-a
+           [A-Z] -> \p{Lu}
+           [^A-Za-z0-9] -> [^\pL0-90-9]
+        */
         result = Stream.of(result.replaceAll("([\\p{Lu}]+)", "_$1").split("[^\\pL0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
         return result;
     }
@@ -516,13 +518,13 @@ public final class Formatting {
 
         }
         return sb.toString();
-
-        // We need to replace regardless of case because we do not know how the retuned string is to be used
-        //if (JAVA_USED_WORDS_LOWER_CASE.contains(word.toLowerCase())) {
-        // If it is a java reseved/literal/class, add a "_" at the end to avoid naming conflics
-        //    return word + "_";
-        //}
-        //return word;
+        /*
+           We need to replace regardless of case because we do not know how the retuned string is to be used
+           if (JAVA_USED_WORDS_LOWER_CASE.contains(word.toLowerCase())) {
+           If it is a java reseved/literal/class, add a "_" at the end to avoid naming conflics
+              return word + "_";
+          }
+          return word; */
     }
 
     private static String 
@@ -532,9 +534,11 @@ public final class Formatting {
 
     private final static Character REPLACEMENT_CHARACTER = '_';
 
-    // From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
-    //
-    // Literals
+    /*
+       From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
+
+       Literals
+    */
     final static Set<String> JAVA_LITERAL_WORDS = unmodifiableSet(Stream.of(
         "true", "false", "null"
     ).collect(toSet()));

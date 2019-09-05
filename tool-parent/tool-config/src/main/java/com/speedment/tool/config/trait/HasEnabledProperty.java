@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,6 +17,7 @@
 package com.speedment.tool.config.trait;
 
 
+import com.speedment.runtime.config.trait.HasEnableUtil;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.BooleanProperty;
@@ -30,7 +31,7 @@ import javafx.beans.property.BooleanProperty;
 public interface HasEnabledProperty extends DocumentProperty, HasEnabled {
     
     default BooleanProperty enabledProperty() {
-        return booleanPropertyOf(HasEnabled.ENABLED, HasEnabled.super::isEnabled);
+        return booleanPropertyOf(HasEnableUtil.ENABLED, HasEnabled.super::isEnabled);
     }
     
     @Override

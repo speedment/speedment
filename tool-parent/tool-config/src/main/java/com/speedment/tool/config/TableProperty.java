@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -16,8 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.TablePropertyMutator;
@@ -51,19 +50,19 @@ implements Table,
     }
 
     public ObservableList<ColumnProperty> columnsProperty() {
-        return observableListOf(COLUMNS);
+        return observableListOf(TableUtil.COLUMNS);
     }
 
     public ObservableList<IndexProperty> indexesProperty() {
-        return observableListOf(INDEXES);
+        return observableListOf(TableUtil.INDEXES);
     }
 
     public ObservableList<ForeignKeyProperty> foreignKeysProperty() {
-        return observableListOf(FOREIGN_KEYS);
+        return observableListOf(TableUtil.FOREIGN_KEYS);
     }
 
     public ObservableList<PrimaryKeyColumnProperty> primaryKeyColumnsProperty() {
-        return observableListOf(PRIMARY_KEY_COLUMNS);
+        return observableListOf(TableUtil.PRIMARY_KEY_COLUMNS);
     }
 
     @Override
@@ -72,23 +71,23 @@ implements Table,
     }
 
     @Override
-    public Stream<? extends ColumnProperty> columns() {
-        return columnsProperty().stream();
+    public Stream<Column> columns() {
+        return columnsProperty().stream().map(Column.class::cast);
     }
 
     @Override
-    public Stream<? extends IndexProperty> indexes() {
-        return indexesProperty().stream();
+    public Stream<Index> indexes() {
+        return indexesProperty().stream().map(Index.class::cast);
     }
 
     @Override
-    public Stream<? extends ForeignKeyProperty> foreignKeys() {
-        return foreignKeysProperty().stream();
+    public Stream<ForeignKey> foreignKeys() {
+        return foreignKeysProperty().stream().map(ForeignKey.class::cast);
     }
 
     @Override
-    public Stream<? extends PrimaryKeyColumnProperty> primaryKeyColumns() {
-        return primaryKeyColumnsProperty().stream();
+    public Stream<PrimaryKeyColumn> primaryKeyColumns() {
+        return primaryKeyColumnsProperty().stream().map(PrimaryKeyColumn.class::cast);
     }
 
     @Override

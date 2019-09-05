@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-connector-parent</artifactId>
-        <version>3.1.17</version>
+        <version>3.1.18-SNAPSHOT</version>
     </parent>
     
     <artifactId>connector-postgres</artifactId>

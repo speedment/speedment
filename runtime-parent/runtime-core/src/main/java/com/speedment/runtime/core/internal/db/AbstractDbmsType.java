@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -37,6 +37,7 @@ import java.util.function.Predicate;
 import static com.speedment.common.injector.State.CREATED;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.LongRangeUtil.requireNonNegative;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -57,7 +58,11 @@ public abstract class AbstractDbmsType implements DbmsType {
         }
     };
 
-    @Inject private DriverComponent drivers;
+    private final DriverComponent drivers;
+
+    public AbstractDbmsType(DriverComponent drivers) {
+        this.drivers = requireNonNull(drivers);
+    }
 
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {

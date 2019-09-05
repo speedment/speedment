@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -19,6 +19,7 @@ package com.speedment.runtime.config.mutator.trait;
 
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasId;
+import com.speedment.runtime.config.trait.HasIdUtil;
 
 /**
  *
@@ -30,6 +31,6 @@ import com.speedment.runtime.config.trait.HasId;
 public interface HasIdMutator<DOC extends HasId> extends DocumentMutator<DOC> {
     
     default void setId(String name) {
-        put(HasId.ID, name);
+        put(HasIdUtil.ID, name);
     }
 }

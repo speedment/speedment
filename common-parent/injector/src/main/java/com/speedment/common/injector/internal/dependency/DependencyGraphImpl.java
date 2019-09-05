@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -50,17 +50,8 @@ import static java.util.stream.Collectors.joining;
 public final class DependencyGraphImpl implements DependencyGraph {
     
     private final Map<Class<?>, DependencyNode> nodes;
-    
-    public static DependencyGraph create(Stream<Class<?>> injectables)
-            throws CyclicReferenceException {
-        
-        final DependencyGraphImpl graph = new DependencyGraphImpl();
-        injectables.forEach(graph::getOrCreate);
-        graph.inject();
-        return graph;
-    }
-    
-    private DependencyGraphImpl() {
+
+    public DependencyGraphImpl() {
         nodes = new ConcurrentHashMap<>();
         nodes.put(InjectorImpl.class, new InjectorDependencyNode());
     }

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -18,6 +18,7 @@ package com.speedment.runtime.config.internal;
 
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.SchemaUtil;
 import com.speedment.runtime.config.Table;
 
 import java.util.Map;
@@ -34,7 +35,7 @@ public final class SchemaImpl extends AbstractChildDocument<Dbms> implements Sch
     }
 
     @Override
-    public Stream<? extends Table> tables() {
-        return children(TABLES, TableImpl::new);
+    public Stream<Table> tables() {
+        return children(SchemaUtil.TABLES, TableImpl::new);
     }
 }

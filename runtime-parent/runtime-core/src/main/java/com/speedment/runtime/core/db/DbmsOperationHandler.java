@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -19,6 +19,7 @@ package com.speedment.runtime.core.db;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
+
 import java.sql.*;
 import java.util.Collection;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  */
 public class ImmutableDocument extends BaseDocument {
 
-    private final transient Map<String, List<Document>> children;
+    private final Map<String, List<Document>> children;
 
     protected ImmutableDocument(Map<String, Object> data) {
         super(null, Collections.unmodifiableMap(data));
@@ -55,7 +55,7 @@ public class ImmutableDocument extends BaseDocument {
 
     @Override
     public final void put(String key, Object value) {
-        throw new UnsupportedOperationException("Atempted to modify an immutable class.");
+        throw new UnsupportedOperationException("Attempted to modify an immutable class.");
     }
 
     @Override

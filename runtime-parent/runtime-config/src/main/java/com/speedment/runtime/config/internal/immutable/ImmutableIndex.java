@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,6 +17,8 @@
 package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.IndexColumn;
+import com.speedment.runtime.config.IndexUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.internal.IndexImpl;
 
@@ -34,12 +36,12 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ImmutableIndex extends ImmutableDocument implements Index {
     
-    private final transient boolean enabled;
-    private final transient String id;
-    private final transient String name;
-    private final transient boolean unique;
+    private final boolean enabled;
+    private final String id;
+    private final String name;
+    private final boolean unique;
     
-    private final transient List<ImmutableIndexColumn> indexColumns;
+    private final List<IndexColumn> indexColumns;
     
     ImmutableIndex(ImmutableTable parent, Map<String, Object> index) {
         super(parent, index);
@@ -51,7 +53,7 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
         this.name    = prototype.getName();
         this.unique  = prototype.isUnique();
         
-        this.indexColumns = unmodifiableList(super.children(INDEX_COLUMNS, ImmutableIndexColumn::new).collect(toList()));
+        this.indexColumns = unmodifiableList(super.children(IndexUtil.INDEX_COLUMNS, ImmutableIndexColumn::new).collect(toList()));
     }
 
     @Override
@@ -75,7 +77,7 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
     }
 
     @Override
-    public Stream<ImmutableIndexColumn> indexColumns() {
+    public Stream<IndexColumn> indexColumns() {
         return indexColumns.stream();
     }
 

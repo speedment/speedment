@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -373,7 +373,7 @@ public abstract class AbstractApplicationBuilder<
             throw new SpeedmentException("Error in dependency injection.", ex);
         }
         
-        printWelcomeMessage(inj);
+            printWelcomeMessage(inj);
 
         if (!skipValidateRuntimeConfig) {
             validateRuntimeConfig(inj);
@@ -462,17 +462,13 @@ public abstract class AbstractApplicationBuilder<
         final InfoComponentImpl upstreamInfo = injector.getOrThrow(InfoComponentImpl.class);
         final String title = info.getTitle();
         final String version = info.getImplementationVersion();
-        
+
         if (!skipLogoPrintout) {
-            final String speedmentMsg = "\n"
-                + "   ____                   _                     _     \n"
-                + "  / ___'_ __  __  __   __| |_ __ __    __ _ __ | |    \n"
-                + "  \\___ | '_ |/  \\/  \\ / _  | '_ \\ _ \\ /  \\ '_ \\| |_   \n"
-                + "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  \n"
-                + "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   \n"
-                + "=======|_|======================================\\__|==\n"
+            final String speedmentMsg = String.format("%n"+
+                info.getBanner() + "%n"
                 + "   :: " + title + " by " + info.getVendor()
-                + ":: (v" + version + ") \n";
+                + ":: (v" + version + ") %n")
+                ;
 
             LOGGER.info(speedmentMsg);
         }

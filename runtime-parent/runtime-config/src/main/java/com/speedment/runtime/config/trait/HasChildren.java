@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -19,7 +19,7 @@ package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.config.Document;
 
-import static com.speedment.runtime.config.trait.HasName.NAME;
+import static com.speedment.runtime.config.trait.HasNameUtil.NAME;
 
 /**
  * Trait for {@link Document} implementations that has named children and 

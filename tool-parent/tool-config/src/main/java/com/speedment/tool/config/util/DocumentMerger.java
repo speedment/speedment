@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -21,6 +21,7 @@ import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.BaseDocument;
 import com.speedment.runtime.config.trait.HasId;
+import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.tool.config.DocumentProperty;
@@ -447,7 +448,7 @@ public final class DocumentMerger {
             final DocumentProperty inst = constructor.create(parent, key);
             
             // Name needs to be set manually before the two documents are merged
-            inst.stringPropertyOf(HasId.ID, () -> null)
+            inst.stringPropertyOf(HasIdUtil.ID, () -> null)
                 .setValue(HasId.of(document).getId());
             
             return inst;

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -18,14 +18,13 @@ package com.speedment.runtime.connector.sqlite.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.internal.ProjectImpl;
-import com.speedment.runtime.connector.sqlite.MockConnectionPoolComponent;
-import com.speedment.runtime.connector.sqlite.MockDbmsHandlerComponent;
-import com.speedment.runtime.connector.sqlite.MockProgress;
-import com.speedment.runtime.connector.sqlite.MockProjectComponent;
-import com.speedment.runtime.connector.sqlite.ScriptRunner;
-import com.speedment.runtime.connector.sqlite.SqliteBundle;
+import com.speedment.runtime.config.trait.HasIdUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
+import com.speedment.runtime.connector.sqlite.*;
 import com.speedment.runtime.core.component.ProjectComponent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +37,7 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +45,7 @@ import java.util.concurrent.TimeoutException;
 
 import static com.speedment.common.mapbuilder.MapBuilder.mapBuilderTyped;
 import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
  * @author Emil Forslund
@@ -83,19 +84,20 @@ class SqliteMetadataHandlerTest {
                     .withComponent(MockProjectComponent.class)
                     .withComponent(MockDbmsHandlerComponent.class)
                     .withComponent(MockConnectionPoolComponent.class)
+                    .withComponent(MockTransactionComponent.class)
                     .beforeInitialized(MockConnectionPoolComponent.class,
                         pool -> pool.setConnection(conn, URL)
                     )
                     .beforeInitialized(MockProjectComponent.class,
                         projects -> projects.setProject(new ProjectImpl(
                             mapBuilderTyped(String.class, Object.class)
-                                .key(Project.ID).value("test_project")
-                                .key(Project.NAME).value("test_project")
-                                .key(Project.DBMSES).value(singletonList(mapBuilderTyped(String.class, Object.class)
-                                    .key(Dbms.ID).value("test_dbms")
-                                    .key(Dbms.NAME).value("test_dbms")
-                                    .key(Dbms.CONNECTION_URL).value(URL)
-                                    .key(Dbms.TYPE_NAME).value(SqliteDbmsType.SQLITE)
+                                .key(HasIdUtil.ID).value("test_project")
+                                .key(HasNameUtil.NAME).value("test_project")
+                                .key(ProjectUtil.DBMSES).value(singletonList(mapBuilderTyped(String.class, Object.class)
+                                    .key(HasIdUtil.ID).value("test_dbms")
+                                    .key(HasNameUtil.NAME).value("test_dbms")
+                                    .key(DbmsUtil.CONNECTION_URL).value(URL)
+                                    .key(DbmsUtil.TYPE_NAME).value(SqliteDbmsType.SQLITE)
                                     .build()
                                 ))
                                 .build()
@@ -126,22 +128,15 @@ class SqliteMetadataHandlerTest {
 
     @Test
     void readSchemaMetadata() {
-        final SqliteMetadataHandler metadataHandler =
-            injector.getOrThrow(SqliteMetadataHandler.class);
+        final SqliteMetadataHandler metadataHandler = injector.getOrThrow(SqliteMetadataHandler.class);
+        final ProjectComponent projects = injector.getOrThrow(ProjectComponent.class);
+        final Dbms dbms = projects.getProject().dbmses().findFirst().orElseThrow(NoSuchElementException::new);
+        final CompletableFuture<Project> task = metadataHandler.readSchemaMetadata(dbms, new MockProgress(), s -> true);
 
-        final ProjectComponent projects =
-            injector.getOrThrow(ProjectComponent.class);
+        assertDoesNotThrow(() -> {
+                final Project loaded = task.get(10, TimeUnit.SECONDS);
+            }
+        );
 
-        final Dbms dbms = projects.getProject().dbmses().findFirst().get();
-
-        final CompletableFuture<Project> task =
-            metadataHandler.readSchemaMetadata(dbms, new MockProgress(), s -> true);
-
-        try {
-            final Project loaded = task.get(10, TimeUnit.SECONDS);
-            //System.out.println(Json.toJson(loaded.getData(), true));
-        } catch (final InterruptedException | ExecutionException | TimeoutException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 }

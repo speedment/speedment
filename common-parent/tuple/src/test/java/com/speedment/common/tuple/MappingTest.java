@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -30,6 +30,7 @@ import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -38,15 +39,17 @@ import java.util.stream.Stream;
  */
 final class MappingTest {
 
-    @Test
+    private static final String ARNE = "Arne";
+    private static final String TRYGGVE = "Tryggve";
+
     void testTuple2() {
 
         final List<Tuple2<String, Integer>> expected = Arrays.asList(
-            Tuples.of("Arne", "Arne".length()),
-            Tuples.of("Tryggve", "tryggve".length())
+            Tuples.of(ARNE, ARNE.length()),
+            Tuples.of(TRYGGVE, TRYGGVE.length())
         );
 
-        final List<Tuple2<String, Integer>> actual = Stream.of("Arne", "Tryggve")
+        final List<Tuple2<String, Integer>> actual = Stream.of(ARNE, TRYGGVE)
             .map(Tuples.toTuple(Function.identity(), String::length))
             .collect(toList());
 
@@ -55,37 +58,50 @@ final class MappingTest {
 
     @Test
     void testTuple4() {
-        Tuple4<Integer, Integer, Integer, Integer> t4 = Tuples.of(1, 2, 3, 4);
-        consume(t4);
+        final Tuple4<Integer, Integer, Integer, Integer> t4 = Tuples.of(1, 2, 3, 4);
+        assertEquals(1, t4.get0());
+        assertEquals(2, t4.get1());
+        assertEquals(3, t4.get2());
+        assertEquals(4, t4.get3());
     }
 
     @Test
     void testTuple1() {
-        Stream.of("Arne", "Tryggve")
+        final List<Integer> actual = Stream.of(ARNE, TRYGGVE)
             .map(Tuples.toTuple(String::length))
-            .forEach(MappingTest::consume);
+            .map(Tuple1::get0)
+            .collect(toList());
+        assertEquals(Arrays.asList(ARNE.length(), TRYGGVE.length()), actual);
     }
 
     @Test
     void testTuple2b() {
-        Stream.of("Arne", "Tryggve")
+        final List<Tuple2<String, Integer>> actual = Stream.of(ARNE, TRYGGVE)
             .map(Tuples.toTuple(Function.identity(), String::length))
-            .forEach(MappingTest::consume);
+            .collect(toList());
+
+        final List<Tuple2<String, Integer>> expected = Arrays.asList(
+            Tuples.of(ARNE, ARNE.length()),
+            Tuples.of(TRYGGVE, TRYGGVE.length())
+        );
+
+        assertEquals(expected, actual);
     }
 
     @Test
     void testTuple2Variant() {
-        Stream.of("Arne", "Tryggve")
+        final List<Tuple2<String, Integer>> actual = Stream.of(ARNE, TRYGGVE)
             .map(Tuples.toTuple(Function.identity(), String::length))
             .map(Tuples.toTuple(Tuple2::get0, t2 -> t2.get1() + 10))
-            .forEach(MappingTest::consume);
+            .collect(toList());
 
+        assertEquals(2, actual.size());
     }
 
     @Test
     void testTuple2Nulls() {
         assertThrows(NullPointerException.class, () -> {
-            Stream.of("Arne", "Tryggve")
+            Stream.of(ARNE, TRYGGVE)
                 .map(Tuples.toTuple(Function.identity(), s -> null))
                 .forEach(MappingTest::consume);
         });
@@ -93,9 +109,11 @@ final class MappingTest {
 
     @Test()
     void testTuple2OfNullablesNulls() {
-        Stream.of("Arne", "Tryggve")
+        final List<?> actual = Stream.of(ARNE,  TRYGGVE)
             .map(TuplesOfNullables.toTupleOfNullables(Function.identity(), s -> null))
-            .forEach(MappingTest::consume);
+            .collect(toList());
+
+        assertEquals(2, actual.size());
     }
 
     private static <T> void consume(T t) {

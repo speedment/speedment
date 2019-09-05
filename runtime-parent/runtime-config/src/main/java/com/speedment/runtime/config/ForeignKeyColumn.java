@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -52,19 +52,14 @@ public interface ForeignKeyColumn extends
     HasMainInterface,
     HasMutator<ForeignKeyColumnMutator<? extends ForeignKeyColumn>> {
 
-    String FOREIGN_TABLE_NAME = "foreignTableName",
-        FOREIGN_COLUMN_NAME = "foreignColumnName",
-        FOREIGN_DATABASE_NAME = "foreignDatabaseName",
-        FOREIGN_SCHEMA_NAME = "foreignSchemaName";
-    
     /**
      * Returns the name of the foreign database referenced by this column.
      * 
      * @return the name of the foreign database
      */
     default String getForeignDatabaseName() {
-    	return getAsString(FOREIGN_DATABASE_NAME)
-    			.orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_DATABASE_NAME));
+    	return getAsString(ForeignKeyColumnUtil.FOREIGN_DATABASE_NAME)
+    			.orElseThrow(newNoSuchElementExceptionFor(this, ForeignKeyColumnUtil.FOREIGN_DATABASE_NAME));
     }
     
     /**
@@ -73,8 +68,8 @@ public interface ForeignKeyColumn extends
      * @return the name of the foreign schema
      */
     default String getForeignSchemaName() {
-    	return getAsString(FOREIGN_SCHEMA_NAME)
-    			.orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_SCHEMA_NAME));
+    	return getAsString(ForeignKeyColumnUtil.FOREIGN_SCHEMA_NAME)
+    			.orElseThrow(newNoSuchElementExceptionFor(this, ForeignKeyColumnUtil.FOREIGN_SCHEMA_NAME));
     }
     
     /**
@@ -83,8 +78,8 @@ public interface ForeignKeyColumn extends
      * @return the name of the foreign column
      */
     default String getForeignTableName() {
-        return getAsString(FOREIGN_TABLE_NAME)
-            .orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_TABLE_NAME));
+        return getAsString(ForeignKeyColumnUtil.FOREIGN_TABLE_NAME)
+            .orElseThrow(newNoSuchElementExceptionFor(this, ForeignKeyColumnUtil.FOREIGN_TABLE_NAME));
     }
 
     /**
@@ -93,8 +88,8 @@ public interface ForeignKeyColumn extends
      * @return the name of the foreign table
      */
     default String getForeignColumnName() {
-        return getAsString(FOREIGN_COLUMN_NAME)
-            .orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_COLUMN_NAME));
+        return getAsString(ForeignKeyColumnUtil.FOREIGN_COLUMN_NAME)
+            .orElseThrow(newNoSuchElementExceptionFor(this, ForeignKeyColumnUtil.FOREIGN_COLUMN_NAME));
     }
 
     /**

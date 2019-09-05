@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -88,6 +88,7 @@ public final class MainApp extends Application {
         if (EmailUtil.hasEmail()) {
             if (projects.getProject().dbmses().noneMatch(dbms -> true)) {
                 loader.loadAndShow("Connect");
+                stage.setTitle("Connect to database");
             } else {
                 loader.loadAndShow("Scene");
                 events.notify(UIEvent.OPEN_MAIN_WINDOW);

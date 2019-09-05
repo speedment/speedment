@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -16,11 +16,7 @@
  */
 package com.speedment.runtime.config.mutator;
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.ColumnImpl;
 import com.speedment.runtime.config.internal.ForeignKeyImpl;
 import com.speedment.runtime.config.internal.IndexImpl;
@@ -30,7 +26,6 @@ import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
-import static com.speedment.runtime.config.Table.*;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
 /**
@@ -49,22 +44,22 @@ public class TableMutator<DOC extends Table> extends DocumentMutatorImpl<DOC> im
     }
 
     public void setView(boolean isView) {
-        put(IS_VIEW, isView);
+        put(TableUtil.IS_VIEW, isView);
     }
 
     public Column addNewColumn() {
-        return new ColumnImpl(document(), newDocument(document(), COLUMNS));
+        return new ColumnImpl(document(), newDocument(document(), TableUtil.COLUMNS));
     }
     
     public Index addNewIndex() {
-        return new IndexImpl(document(), newDocument(document(), INDEXES));
+        return new IndexImpl(document(), newDocument(document(), TableUtil.INDEXES));
     }
     
     public ForeignKey addNewForeignKey() {
-        return new ForeignKeyImpl(document(), newDocument(document(), FOREIGN_KEYS));
+        return new ForeignKeyImpl(document(), newDocument(document(), TableUtil.FOREIGN_KEYS));
     }
     
     public PrimaryKeyColumn addNewPrimaryKeyColumn() {
-        return new PrimaryKeyColumnImpl(document(), newDocument(document(), PRIMARY_KEY_COLUMNS));
+        return new PrimaryKeyColumnImpl(document(), newDocument(document(), TableUtil.PRIMARY_KEY_COLUMNS));
     }
 }

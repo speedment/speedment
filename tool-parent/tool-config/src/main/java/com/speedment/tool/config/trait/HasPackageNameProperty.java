@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -19,6 +19,7 @@ package com.speedment.tool.config.trait;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.trait.HasPackageName;
+import com.speedment.runtime.config.trait.HasPackageNameUtil;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
 import javafx.beans.property.StringProperty;
@@ -37,7 +38,7 @@ import static javafx.beans.binding.Bindings.createStringBinding;
 public interface HasPackageNameProperty extends DocumentProperty, HasPackageName, HasNameProperty {
     
     default StringProperty packageNameProperty(){
-        return stringPropertyOf(HasPackageName.PACKAGE_NAME, () -> null);
+        return stringPropertyOf(HasPackageNameUtil.PACKAGE_NAME, () -> null);
     }
     
     @Override

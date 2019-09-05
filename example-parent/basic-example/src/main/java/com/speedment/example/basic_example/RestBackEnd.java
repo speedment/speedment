@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -30,6 +30,8 @@ import java.util.stream.Stream;
  */
 public class RestBackEnd {
 
+    private static final String PG_13 = "PG-13";
+
     private final SakilaApplication app;
     private final FilmManager films;
 
@@ -43,9 +45,9 @@ public class RestBackEnd {
     }
 
     private void run() {
-        serveFilms("PG-13", 0).forEach(System.out::println);
-        serveFilms("PG-13", 1).forEach(System.out::println);
-        serveFilms("PG-13", 3).forEach(System.out::println);
+        serveFilms(PG_13, 0).forEach(System.out::println);
+        serveFilms(PG_13, 1).forEach(System.out::println);
+        serveFilms(PG_13, 3).forEach(System.out::println);
     }
 
     private static final long PAGE_SIZE = 50;

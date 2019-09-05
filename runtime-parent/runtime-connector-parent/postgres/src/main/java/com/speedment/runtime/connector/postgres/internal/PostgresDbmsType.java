@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -43,15 +44,19 @@ public final class PostgresDbmsType extends AbstractDbmsType {
 
     private final static FieldPredicateView PREDICATE_VIEW = new PostgresSpeedmentPredicateView();
 
+    private final PostgresDbmsMetadataHandler metadataHandler;
+    private final PostgresDbmsOperationHandler operationHandler;
     private final PostgresNamingConvention namingConvention;
     private final PostgresConnectionUrlGenerator connectionUrlGenerator;
 
-    private @Inject
-    PostgresDbmsMetadataHandler metadataHandler;
-    private @Inject
-    PostgresDbmsOperationHandler operationHandler;
-
-    private PostgresDbmsType() {
+    private PostgresDbmsType(
+        final DriverComponent driverComponent,
+        final PostgresDbmsMetadataHandler metadataHandler,
+        final PostgresDbmsOperationHandler operationHandler
+    ) {
+        super(driverComponent);
+        this.metadataHandler = requireNonNull(metadataHandler);
+        this.operationHandler = requireNonNull(operationHandler);
         namingConvention = new PostgresNamingConvention();
         connectionUrlGenerator = new PostgresConnectionUrlGenerator();
     }

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -30,6 +30,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 /**
  * Tests the default {@link VersionComponent} to make sure it can query the
  * public GitHub API.
@@ -47,28 +49,30 @@ final class VersionComponentImplTest {
      */
     @Test
     void testLatestVersion() {
-        LOGGER.info("Determining the latest version of Speedment.");
-        final Speedment speedment = ApplicationBuilders.empty()
-            .withBundle(GeneratorBundle.class)
-            .withBundle(ToolBundle.class)
-            .withSkipCheckDatabaseConnectivity()
-            .withSkipValidateRuntimeConfig()
-            .build();
-        
-        final VersionComponent version = speedment.getOrThrow(VersionComponent.class);
-        
-        try {
-            final String latest = version.latestVersion().get(2, TimeUnit.SECONDS);
-            LOGGER.info("The latest released version of Speedment is " + latest + ".");
-        } catch (final ExecutionException | InterruptedException ex) {
-            if (hasCause(ex, UnknownHostException.class)) {
-                LOGGER.warn(ex, "Not connected to the Internet?");
-            } else {
-                LOGGER.error(ex);
+        assertDoesNotThrow(() -> {
+            LOGGER.info("Determining the latest version of Speedment.");
+            final Speedment speedment = ApplicationBuilders.empty()
+                .withBundle(GeneratorBundle.class)
+                .withBundle(ToolBundle.class)
+                .withSkipCheckDatabaseConnectivity()
+                .withSkipValidateRuntimeConfig()
+                .build();
+
+            final VersionComponent version = speedment.getOrThrow(VersionComponent.class);
+
+            try {
+                final String latest = version.latestVersion().get(2, TimeUnit.SECONDS);
+                LOGGER.info("The latest released version of Speedment is " + latest + ".");
+            } catch (final ExecutionException | InterruptedException ex) {
+                if (hasCause(ex, UnknownHostException.class)) {
+                    LOGGER.warn(ex, "Not connected to the Internet?");
+                } else {
+                    LOGGER.error(ex);
+                }
+            } catch (final TimeoutException ex) {
+                LOGGER.error(ex, "Connection timed out before a version could be established.");
             }
-        } catch (final TimeoutException ex ) {
-            LOGGER.error(ex, "Connection timed out before a version could be established.");
-        }
+        });
     }
 
     private static boolean hasCause(Exception ex, Class<? extends Throwable> c) {

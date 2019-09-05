@@ -25,7 +25,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.17</version>
+        <version>3.1.18-SNAPSHOT</version>
     </parent>
     
     <artifactId>function</artifactId>
@@ -75,5 +75,39 @@
             </build>
         </profile>
     </profiles>
+
+    <dependencies>
+        <!--Test Dependencies-->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>archtest</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-engine</artifactId>
+        </dependency>
+
+    </dependencies>
+
 
 </project>

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -28,14 +28,10 @@ import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
-import com.speedment.common.injector.exception.ConstructorResolutionException;
-import com.speedment.common.injector.exception.MisusedAnnotationException;
-import com.speedment.common.injector.exception.NoDefaultConstructorException;
-import com.speedment.common.injector.exception.NotInjectableException;
+import com.speedment.common.injector.exception.*;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.execution.ExecutionBuilder;
-import com.speedment.common.injector.internal.dependency.DependencyGraphImpl;
 import com.speedment.common.injector.internal.execution.ReflectionExecutionImpl;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
 import com.speedment.common.logger.Level;
@@ -80,7 +76,7 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class InjectorBuilderImpl implements InjectorBuilder {
 
-    public final static Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorBuilderImpl.class);
+    public static final Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorBuilderImpl.class);
 
     private final ClassLoader classLoader;
     private final Map<String, List<Injectable<?>>> injectables;
@@ -100,7 +96,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         this(defaultClassLoader(), injectables);
     }
 
-    InjectorBuilderImpl(ClassLoader classLoader, Set<Class<?>> injectables) {
+    private InjectorBuilderImpl(ClassLoader classLoader, Set<Class<?>> injectables) {
         requireNonNull(injectables);
 
         this.classLoader        = requireNonNull(classLoader);
@@ -171,7 +167,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     }
 
     @Override
-    public Injector build() throws InstantiationException, NoDefaultConstructorException {
+    public Injector build() throws InstantiationException {
 
         // Load settings
         final File configFile = configFileLocation.toFile();
@@ -188,11 +184,10 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         final Set<Injectable<?>> injectablesSet = unmodifiableSet(
             injectables.values().stream()
                 .flatMap(List::stream)
-                .collect(toCollection(() -> new LinkedHashSet<>()))
+                .collect(toCollection((Supplier<Set<Injectable<?>>>) LinkedHashSet::new))
         );
 
-        final DependencyGraph graph = 
-            DependencyGraphImpl.create(injectablesSet.stream().map(Injectable::get));
+        final DependencyGraph graph = DependencyGraph.create(injectablesSet.stream().map(Injectable::get));
 
         final LinkedList<Object> instances = new LinkedList<>();
 
@@ -292,8 +287,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         // Create ClassMapper
         final ClassMapper classMapper = new ClassMapper() {
             @Override
-            public <T> T apply(Class<T> type) 
-                throws NotInjectableException {
+            public <T> T apply(Class<T> type) {
                 return findIn(
                     type, 
                     injector, 
@@ -314,7 +308,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         };
 
         // Make sure annotations are used correctly
-        instances.forEach(instance -> {
+        instances.forEach(instance ->
             traverseMethods(instance.getClass())
                 .filter(m -> m.isAnnotationPresent(ExecuteBefore.class))
                 .forEach(m -> {
@@ -360,8 +354,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                 .toArray(String[]::new))
                         ));
                     }
-                });
-        });
+                })
+        );
 
         // Set the auto-injected fields
         instances.forEach(instance -> traverseFields(instance.getClass())
@@ -406,7 +400,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 try {
                     field.set(instance, value);
                 } catch (final IllegalAccessException ex) {
-                    throw new RuntimeException(
+                    throw new InjectorException(
                         "Could not access field '" + field.getName()
                             + "' in class '" + value.getClass().getName()
                             + "' of type '" + field.getType()
@@ -484,7 +478,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                     if (!exec.invoke(instance, classMapper)) {
                                         switch (exec.getMissingArgumentStrategy()) {
                                             case THROW_EXCEPTION: {
-                                                throw new RuntimeException(format(
+                                                throw new InjectorException(format(
                                                     "The injector could not invoke the method '%s' " +
                                                     "before state '%s' since one of the parameters is not available.",
                                                     exec.getName(), exec.getState()));
@@ -548,7 +542,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                         }
                                     }
 
-                                    throw new RuntimeException(ex);
+                                    throw new InjectorException(ex);
                                 }
                             });
 

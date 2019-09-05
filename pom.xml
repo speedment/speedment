@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.1.17</version>
+    <version>3.1.18-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -64,9 +64,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <junit.jupiter.version>5.4.0</junit.jupiter.version>
-        <junit.platform.provider.version>1.4.0</junit.platform.provider.version>
-        <mockito.version>2.23.4</mockito.version>
+        <junit.jupiter.version>5.5.1</junit.jupiter.version>
+        <junit.platform.provider.version>1.5.1</junit.platform.provider.version>
+        <mockito.version>3.0.0</mockito.version>
+        <archunit.version>0.11.0</archunit.version>
         <speedment.version>${project.version}</speedment.version>
         <common.version>${project.version}</common.version>
 
@@ -494,16 +495,6 @@
 
     <profiles>
         <profile>
-            <id>java11</id>
-            <activation>
-                <jdk>11</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>11</maven.compiler.source>
-                <maven.compiler.target>11</maven.compiler.target>
-            </properties>
-        </profile>
-        <profile> 
             <id>release</id>
             
             <reporting>
@@ -665,7 +656,7 @@
                     
                     <!--The license-maven-plugin plugin MUST BE COMMENTED OUT DURING DEPLOYMENT, otherwise nexus-staging-maven-plugin will fail (sic!)-->
 
-                    <!--<plugin>
+<!--                    <plugin>
                         <groupId>com.mycila</groupId>
                         <artifactId>license-maven-plugin</artifactId>
                         <version>3.0</version>
@@ -675,6 +666,9 @@
                             <properties>
                                 <currentYear>2019</currentYear>
                             </properties>
+                            <headerDefinitions>
+                                <headerDefinition>license_header_def.xml</headerDefinition>
+                            </headerDefinitions>
                             <excludes>
                                 <exclude>**/README</exclude>
                                 <exclude>**/README.md</exclude>
@@ -912,6 +906,27 @@
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-launcher</artifactId>
                 <version>${junit.platform.provider.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit</artifactId>
+                <version>${archunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit-junit5-api</artifactId>
+                <version>${archunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit-junit5-engine</artifactId>
+                <version>${archunit.version}</version>
                 <scope>test</scope>
             </dependency>
 

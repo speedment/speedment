@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -28,8 +28,8 @@ import com.speedment.generator.translator.internal.component.CodeGenerationCompo
 import com.speedment.generator.translator.internal.component.TypeMapperComponentImpl;
 import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasEnumConstantsUtil;
 import com.speedment.tool.config.trait.HasEnumConstantsProperty;
 import com.speedment.tool.propertyeditor.component.PropertyEditorComponent;
 import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
@@ -77,7 +77,7 @@ public final class EnumGeneratorComponent {
 
         editors.install(
             HasEnumConstantsProperty.class,
-            Column.ENUM_CONSTANTS,
+            HasEnumConstantsUtil.ENUM_CONSTANTS,
             CommaSeparatedStringEditor::new
         );
     }

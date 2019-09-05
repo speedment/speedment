@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,6 +17,7 @@
 package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.config.trait.HasEnumConstants;
+import com.speedment.runtime.config.trait.HasEnumConstantsUtil;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.StringProperty;
 
@@ -39,7 +40,7 @@ extends DocumentProperty, HasEnumConstants {
      * @return  the observable property for enum constants
      */
     default StringProperty enumConstantsProperty() {
-        return stringPropertyOf(ENUM_CONSTANTS,
+        return stringPropertyOf(HasEnumConstantsUtil.ENUM_CONSTANTS,
             () -> HasEnumConstants.super.getEnumConstants().orElse(null)
         );
     }

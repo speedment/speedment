@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -21,21 +21,22 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
-class Injectable<T> {
+final class Injectable<T> {
     private final Class<T> cls;
     private final Supplier<T> supplier;
 
     Injectable(Class<T> cls, Supplier<T> supplier) {
-        this.cls = cls;
-        this.supplier = supplier;
+        this.cls = requireNonNull(cls);
+        this.supplier = supplier; // Nullable
     }
 
     public Class<T> get() {
         return cls;
     }
 
-    public boolean hasSupplier() {
+    boolean hasSupplier() {
         return supplier != null;
     }
 

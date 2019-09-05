@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -77,7 +77,9 @@ final class ConnectionPoolComponentImplTest {
         String user = "tryggve";
         char[] password = "arne".toCharArray();
         final PoolableConnection connection = instance.getConnection(uri, user, password);
-        instance.returnConnection(connection);
+        assertDoesNotThrow(() -> {
+            instance.returnConnection(connection);
+        });
     }
 
     @Test
@@ -105,11 +107,11 @@ final class ConnectionPoolComponentImplTest {
     }*/
 
     @Test
-    public void testGetPoolSize() {
+    void testGetPoolSize() {
         assertEquals(MAX_RETAIN_SIZE, instance.getMaxRetainSize());
     }
 
-    // Leaking connections
+/*    // Leaking connections
     @Test
     @Disabled
     void testLeak() throws Exception {
@@ -123,7 +125,7 @@ final class ConnectionPoolComponentImplTest {
             log(instance.leaseSize() + ", " + instance.poolSize());
             Thread.sleep(10_000);
         }
-    }
+    }*/
 
     @Test
     void testMaxOutAndReturn() throws Exception {

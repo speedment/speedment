@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,7 +17,6 @@
 package com.speedment.runtime.connector.mariadb.internal;
 
 import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.connector.mysql.internal.MySqlDbmsMetadataHandler;
@@ -33,6 +32,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -43,20 +43,26 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class MariaDbDbmsType extends AbstractDbmsType {
 
+    private final MySqlDbmsMetadataHandler metadataHandler;
+    private final MySqlDbmsOperationHandler operationHandler;
+    private final MySqlSpeedmentPredicateView fieldPredicateView;
+    private final String binaryCollationName;
     private final MariaDbNamingConvention namingConvention;
     private final MariaDbConnectionUrlGenerator connectionUrlGenerator;
 
-    @Inject
-    private MySqlDbmsMetadataHandler metadataHandler;
-    @Inject
-    private MySqlDbmsOperationHandler operationHandler;
-    @Inject
-    private MySqlSpeedmentPredicateView fieldPredicateView;
-
-    @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
-    private String binaryCollationName;
-
-    private MariaDbDbmsType() {
+    private MariaDbDbmsType(
+        final DriverComponent driverComponent,
+        final MySqlDbmsMetadataHandler metadataHandler,
+        final MySqlDbmsOperationHandler operationHandler,
+        final MySqlSpeedmentPredicateView fieldPredicateView,
+        @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
+        final String binaryCollationName
+    ) {
+        super(driverComponent);
+        this.metadataHandler = requireNonNull(metadataHandler);
+        this.operationHandler = requireNonNull(operationHandler);
+        this.fieldPredicateView = requireNonNull(fieldPredicateView);
+        this.binaryCollationName = requireNonNull(binaryCollationName);
         namingConvention = new MariaDbNamingConvention();
         connectionUrlGenerator = new MariaDbConnectionUrlGenerator();
     }
@@ -144,8 +150,8 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
     private final static class MariaDbNamingConvention extends AbstractDatabaseNamingConvention {
 
-        private final static String ENCLOSER = "`",
-            QUOTE = "'";
+        private final static String ENCLOSER = "`";
+        private final static String QUOTE = "'";
 
         private final static Set<String> EXCLUDE_SET = Stream.of(
             "information_schema"

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -32,11 +32,6 @@ import java.util.OptionalInt;
 public interface HasColumnSize extends Document {
 
     /**
-     * The key of the {@code columnSize} property.
-     */
-    String COLUMN_SIZE = "columnSize";
-    
-    /**
      * Gets the column size of this {@link Document}. If no size is present, 
      * this method will return an empty {@code OptionalInt}. This should be 
      * interpreted as no decisions can be made regarding the size of the data.
@@ -44,6 +39,6 @@ public interface HasColumnSize extends Document {
      * @return the column size of this {@link Document}
      */
     default OptionalInt getColumnSize() {
-        return getAsInt(COLUMN_SIZE);
+        return getAsInt(HasColumnSizeUtil.COLUMN_SIZE);
     }
 }

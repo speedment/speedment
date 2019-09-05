@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,6 +17,7 @@
 package com.speedment.common.injector.dependency;
 
 import com.speedment.common.injector.exception.CyclicReferenceException;
+import com.speedment.common.injector.internal.dependency.DependencyGraphImpl;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -43,8 +44,7 @@ public interface DependencyGraph {
      * @throws CyclicReferenceException  if the class is in a cyclic dependency
      * @throws IllegalArgumentException  the specified class is not in graph
      */
-    DependencyNode get(Class<?> clazz) 
-    throws CyclicReferenceException, IllegalArgumentException;
+    DependencyNode get(Class<?> clazz);
     
     /**
      * Returns the {@link DependencyNode} representing the specified type in the 
@@ -72,7 +72,7 @@ public interface DependencyGraph {
      * 
      * @throws CyclicReferenceException  if cyclic reference was detected
      */
-    DependencyGraph inject() throws CyclicReferenceException;
+    DependencyGraph inject();
     
     /**
      * Streams over all the nodes in the graph.
@@ -80,5 +80,19 @@ public interface DependencyGraph {
      * @return  stream of nodes
      */
     Stream<DependencyNode> nodes();
+
+
+    /**
+     * Creates and returns a new DependencyGraph.
+     * @param injectables to use
+     * @return a new DependencyGraph
+     * @throws CyclicReferenceException if there is a cyclic dependency
+     */
+    static DependencyGraph create(Stream<Class<?>> injectables) {
+        final DependencyGraph graph = new DependencyGraphImpl();
+        injectables.forEachOrdered(graph::getOrCreate);
+        graph.inject();
+        return graph;
+    }
     
 }

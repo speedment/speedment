@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -31,21 +31,16 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
  * @version  2.3.0
  */
 public interface HasOrderType extends Document {
-    
-    /**
-     * The key of the {@code orderType} property.
-     */
-    String ORDER_TYPE = "orderType";
 
     /**
      * Returns the type of the ordering used in this {@link Document}. The 
-     * {@code orderType} is an enum value located under the {@link #ORDER_TYPE} 
+     * {@code orderType} is an enum value located under the {@link HasOrderTypeUtil#ORDER_TYPE}
      * key.
      * 
      * @return  the order type
      */
     default OrderType getOrderType() {
-        return getAsString(ORDER_TYPE)
+        return getAsString(HasOrderTypeUtil.ORDER_TYPE)
             .map(OrderType::valueOf)
             .orElse(OrderType.ASC);
     }

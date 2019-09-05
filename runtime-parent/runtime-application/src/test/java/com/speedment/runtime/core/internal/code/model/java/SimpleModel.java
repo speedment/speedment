@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -16,13 +16,9 @@
  */
 package com.speedment.runtime.core.internal.code.model.java;
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.trait.HasNameUtil;
+import com.speedment.runtime.config.trait.HasTypeMapperUtil;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
@@ -81,15 +77,15 @@ public abstract class SimpleModel {
         }
 
         private String name(String s) {
-            return quote(HasName.NAME) + " : " + quote(s);
+            return quote(HasNameUtil.NAME) + " : " + quote(s);
         }
 
         private String dbmsTypeName(String dbmsTypeName) {
-            return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
+            return quote(DbmsUtil.TYPE_NAME) + " : " + quote(dbmsTypeName);
         }
 
         private String columnDatabaseType(String typeName) {
-            return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
+            return quote(HasTypeMapperUtil.DATABASE_TYPE) + " : " + quote(typeName);
         }
 
         private String array(String name, String... s) {
@@ -114,22 +110,22 @@ public abstract class SimpleModel {
             return Optional.of("{"
                 + objectWithKey("config",
                     name("myProject"),
-                    array(Project.DBMSES,
+                    array(ProjectUtil.DBMSES,
                         object(name("myDbms"),
                             dbmsTypeName("MySQL"),
-                            array(Dbms.SCHEMAS,
+                            array(DbmsUtil.SCHEMAS,
                                 object(
                                     name(SCHEMA_NAME),
-                                    array(Schema.TABLES,
+                                    array(SchemaUtil.TABLES,
                                         object(
                                             name(TABLE_NAME),
-                                            array(Table.COLUMNS,
+                                            array(TableUtil.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME),
                                                     columnDatabaseType(String.class.getName())
                                                 )
                                             ),
-                                            array(Table.PRIMARY_KEY_COLUMNS,
+                                            array(TableUtil.PRIMARY_KEY_COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME)
                                                 )
@@ -137,13 +133,13 @@ public abstract class SimpleModel {
                                         ),
                                         object(
                                             name(TABLE_NAME2),
-                                            array(Table.COLUMNS,
+                                            array(TableUtil.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME2),
                                                     columnDatabaseType(String.class.getName())
                                                 )
                                             ),
-                                            array(Table.PRIMARY_KEY_COLUMNS,
+                                            array(TableUtil.PRIMARY_KEY_COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME2)
                                                 )

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -34,6 +34,8 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -82,27 +84,31 @@ final class JoinTest {
             .build();
 
         jc = injector.getOrThrow(JoinComponent.class);
+        jssc = injector.getOrThrow(JoinStreamSupplierComponent.class);
     }
 
     @Test
     void crossJoin2() {
-        final Join<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> join = jc
-            .from(JoinTestUtil.E0Manager.IDENTIFIER)
-            .crossJoin(JoinTestUtil.E1Manager.IDENTIFIER)
-            .build();
+        assertDoesNotThrow(() -> {
+            final Join<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> join = jc
+                .from(JoinTestUtil.E0Manager.IDENTIFIER)
+                .crossJoin(JoinTestUtil.E1Manager.IDENTIFIER)
+                .build();
 
-
-        final Set<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> set = join.stream().collect(toSet());
+            final Set<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> set = join.stream().collect(toSet());
+        });
     }
 
     @Test
     void innerJoin2() {
-        final Join<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> join = jc
-            .from(JoinTestUtil.E0Manager.IDENTIFIER)
-            .leftJoinOn(JoinTestUtil.E1.ID1).equal(JoinTestUtil.E0.ID0)
-            .build();
+        assertDoesNotThrow(() -> {
+            final Join<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> join = jc
+                .from(JoinTestUtil.E0Manager.IDENTIFIER)
+                .leftJoinOn(JoinTestUtil.E1.ID1).equal(JoinTestUtil.E0.ID0)
+                .build();
 
-        final Set<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> set = join.stream().collect(toSet());
+            final Set<Tuple2OfNullables<JoinTestUtil.E0, JoinTestUtil.E1>> set = join.stream().collect(toSet());
+        });
     }
 
 

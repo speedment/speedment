@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -50,13 +50,8 @@ final class ComputeIntensityParallelStrategyTest {
     }
 
 
-    protected void printTestName() {
-        //System.out.println(name.getMethodName());
-    }
-
     @Test
     void testSpliteratorUnknownSize() {
-        printTestName();
         strategies().forEach(strategy -> {
 
             final Spliterator<Integer> spliterator = strategy.spliteratorUnknownSize(list.iterator(), 0);
@@ -83,7 +78,6 @@ final class ComputeIntensityParallelStrategyTest {
 
     @Test
     void testAll() {
-        printTestName();
         for (int i = 2; i < 18; i++) {
             final int size = 1 << i;
             final List<Stat> stats = strategies()

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -62,9 +62,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 import java.util.function.Predicate;
 
 import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
@@ -160,15 +158,15 @@ public final class ConfigFileHelper {
                 .readSchemaMetadata(dbms, new ProgressMeasurerImpl(), schemaFilter);
         }).forEachOrdered(fut -> {
             try {
-                final Project newProject = fut.get();
+                final Project newProject = fut.join();
                 synchronized (project) {
                     setTypeMappersFrom(newProject, projectCopy);
                     project.merge(documentPropertyComponent, newProject);
                 }
-            } catch (final ExecutionException ex) {
-                throw new SpeedmentToolException("Error in execution of reload sequence.", ex);
-            } catch (final InterruptedException ex) {
-                throw new SpeedmentToolException("Reload sequence was interrupted.", ex);
+            } catch (final CancellationException ex) {
+                throw new SpeedmentToolException("Cancellation in execution of reload sequence.", ex);
+            } catch (final CompletionException ex) {
+                throw new SpeedmentToolException("Reload sequence completed with exception.", ex);
             }
         });
 
@@ -186,7 +184,7 @@ public final class ConfigFileHelper {
             passwordComponent.put(dbms, null); // Clear password
 
             userInterfaceComponent.projectProperty()
-                .observableListOf(Project.DBMSES)
+                .observableListOf(ProjectUtil.DBMSES)
                 .remove(dbms); // Remove dbms from observable model
         };
 
@@ -211,7 +209,7 @@ public final class ConfigFileHelper {
             final Map<String, Object> dbmsData
                 = new ConcurrentSkipListMap<>(dbms.getData());
 
-            dbmsData.remove(Dbms.SCHEMAS);
+            dbmsData.remove(DbmsUtil.SCHEMAS);
             final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
 
             // Find the DbmsHandler to use when loading the metadata
@@ -254,7 +252,7 @@ public final class ConfigFileHelper {
 
             userInterfaceComponent.showProgressDialog("Loading Database Metadata", progress, future);
 
-            final boolean status = future.get();
+            final boolean status = future.join();
 
             if (status) {
                 userInterfaceComponent.showNotification(
@@ -268,7 +266,7 @@ public final class ConfigFileHelper {
 
             return status;
 
-        } catch (final InterruptedException | ExecutionException ex) {
+        } catch (final CancellationException | CompletionException ex) {
             restore.run();
             userInterfaceComponent.showError("Error Executing Connection Task",
                 "The execution of certain tasks could not be completed.", ex
@@ -476,7 +474,7 @@ public final class ConfigFileHelper {
             }
 
             // Set the Speedment version used to generate the code
-            project.stringPropertyOf(Project.SPEEDMENT_VERSION, () -> null)
+            project.stringPropertyOf(ProjectUtil.SPEEDMENT_VERSION, () -> null)
                 .setValue(infoComponent.getEditionAndVersionString());
 
             DocumentTranscoder.save(project, path, Json::toJson);

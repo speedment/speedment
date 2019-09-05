@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -45,6 +45,7 @@ public final class OutputUtil {
     
     private static Label log(String message, String type) {
         final Label label = new Label(message);
+        label.setWrapText(true);
         label.getStyleClass().addAll("msg", type);
         return label;
     }

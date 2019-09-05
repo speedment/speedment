@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -51,9 +51,6 @@ public interface Index extends
         HasMainInterface,
         HasMutator<IndexMutator<? extends Index>> {
 
-    String UNIQUE = "unique",
-        INDEX_COLUMNS = "indexColumns";
-
     /**
      * Returns whether or not this index is an {@code UNIQUE} index.
      * <p>
@@ -62,7 +59,7 @@ public interface Index extends
      * @return {@code true} if this index is {@code UNIQUE}
      */
     default boolean isUnique() {
-        return getAsBoolean(UNIQUE).orElse(false);
+        return getAsBoolean(IndexUtil.UNIQUE).orElse(false);
     }
     
     /**
@@ -70,7 +67,7 @@ public interface Index extends
      * 
      * @return  index columns
      */
-    Stream<? extends IndexColumn> indexColumns();
+    Stream<IndexColumn> indexColumns();
 
     @Override
     default Class<Index> mainInterface() {

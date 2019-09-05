@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -52,24 +52,14 @@ public interface HasNullable extends Document {
          */
         WRAPPER
     }
-    
-    /**
-     * The key of the {@code nullable} property.
-     */
-    String NULLABLE = "nullable";
-    
-    /**
-     * The key of the {@code nullableImplementation} property.
-     */
-    String NULLABLE_IMPLEMENTATION = "nullableImplementation";
-    
+
     /**
      * Returns whether or not this column can hold {@code null} values.
      *
      * @return  {@code true} if null values are tolerated, else {@code false}
      */
     default boolean isNullable() {
-        return getAsBoolean(NULLABLE).orElse(true);
+        return getAsBoolean(HasNullableUtil.NULLABLE).orElse(true);
     }
     
     /**
@@ -85,7 +75,7 @@ public interface HasNullable extends Document {
      *          it is not specified
      */
     default ImplementAs getNullableImplementation() {
-        final String impl = getAsString(NULLABLE_IMPLEMENTATION).orElse(null);
+        final String impl = getAsString(HasNullableUtil.NULLABLE_IMPLEMENTATION).orElse(null);
         if (impl == null) {
             return ImplementAs.OPTIONAL;
         } else {

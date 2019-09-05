@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -19,6 +19,7 @@ package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.config.trait.HasOrderType;
+import com.speedment.runtime.config.trait.HasOrderTypeUtil;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -35,7 +36,7 @@ import javafx.util.StringConverter;
 public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
 
     default ObjectProperty<OrderType> orderTypeProperty() {
-        final StringProperty orderType = stringPropertyOf(HasOrderType.ORDER_TYPE, () -> null);    
+        final StringProperty orderType = stringPropertyOf(HasOrderTypeUtil.ORDER_TYPE, () -> null);
         final StringConverter<OrderType> converter = new StringConverter<OrderType>() {
             @Override
             public String toString(OrderType object) {

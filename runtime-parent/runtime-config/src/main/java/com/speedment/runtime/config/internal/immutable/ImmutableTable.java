@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.config.internal.immutable;
 
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.TableImpl;
 
 import java.util.List;
@@ -34,83 +33,68 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ImmutableTable extends ImmutableDocument implements Table {
 
-    private final transient boolean enabled;
-    private final transient String id;
-    private final transient String name;
-    private final transient Optional<String> alias;
-    private final transient Optional<String> packageName;
-    private final transient boolean view;
+    private final boolean enabled;
+    private final String id;
+    private final String name;
+    private final String alias;
+    private final String packageName;
+    private final boolean view;
     
-    private final transient List<ImmutableColumn> columns;
-    private final transient List<ImmutableIndex> indexes;
-    private final transient List<ImmutableForeignKey> foreignKeys;
-    private final transient List<ImmutablePrimaryKeyColumn> primaryKeyColumns;
+    private final List<Column> columns;
+    private final List<Index> indexes;
+    private final List<ForeignKey> foreignKeys;
+    private final List<PrimaryKeyColumn> primaryKeyColumns;
 
     ImmutableTable(ImmutableSchema parent, Map<String, Object> table) {
         super(parent, table);
-        
         final Table prototype = new TableImpl(parent, table);
-        
         this.enabled     = prototype.isEnabled();
         this.id          = prototype.getId();
         this.name        = prototype.getName();
-        this.alias       = prototype.getAlias();
-        this.packageName = prototype.getPackageName();
+        this.alias       = prototype.getAlias().orElse(null);
+        this.packageName = prototype.getPackageName().orElse(null);
         this.view        = prototype.isView();
-        
-        this.columns           = unmodifiableList(super.children(COLUMNS, ImmutableColumn::new).collect(toList()));
-        this.indexes           = unmodifiableList(super.children(INDEXES, ImmutableIndex::new).collect(toList()));
-        this.foreignKeys       = unmodifiableList(super.children(FOREIGN_KEYS, ImmutableForeignKey::new).collect(toList()));
-        this.primaryKeyColumns = unmodifiableList(super.children(PRIMARY_KEY_COLUMNS, ImmutablePrimaryKeyColumn::new).collect(toList()));
+        this.columns           = unmodifiableList(super.children(TableUtil.COLUMNS, ImmutableColumn::new).collect(toList()));
+        this.indexes           = unmodifiableList(super.children(TableUtil.INDEXES, ImmutableIndex::new).collect(toList()));
+        this.foreignKeys       = unmodifiableList(super.children(TableUtil.FOREIGN_KEYS, ImmutableForeignKey::new).collect(toList()));
+        this.primaryKeyColumns = unmodifiableList(super.children(TableUtil.PRIMARY_KEY_COLUMNS, ImmutablePrimaryKeyColumn::new).collect(toList()));
     }
 
     @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
+    public boolean isEnabled() { return enabled; }
    
     @Override
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
     @Override
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     @Override
-    public Optional<String> getAlias() {
-        return alias;
-    }
+    public Optional<String> getAlias() { return Optional.ofNullable(alias); }
 
     @Override
-    public Optional<String> getPackageName() {
-        return packageName;
-    }
+    public Optional<String> getPackageName() { return Optional.ofNullable(packageName); }
 
     @Override
-    public boolean isView() {
-        return view;
-    }
+    public boolean isView() { return view; }
 
     @Override
-    public Stream<ImmutableColumn> columns() {
+    public Stream<Column> columns() {
         return columns.stream();
     }
 
     @Override
-    public Stream<ImmutableIndex> indexes() {
+    public Stream<Index> indexes() {
         return indexes.stream();
     }
 
     @Override
-    public Stream<ImmutableForeignKey> foreignKeys() {
+    public Stream<ForeignKey> foreignKeys() {
         return foreignKeys.stream();
     }
 
     @Override
-    public Stream<ImmutablePrimaryKeyColumn> primaryKeyColumns() {
+    public Stream<PrimaryKeyColumn> primaryKeyColumns() {
         return primaryKeyColumns.stream();
     }
 

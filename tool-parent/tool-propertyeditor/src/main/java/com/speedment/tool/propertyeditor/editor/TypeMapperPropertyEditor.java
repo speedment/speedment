@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -19,9 +19,12 @@ package com.speedment.tool.propertyeditor.editor;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.config.trait.HasTypeMapperProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.item.ChoiceBoxItem;
+
+import java.util.ArrayList;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
@@ -46,42 +49,37 @@ public class TypeMapperPropertyEditor<T extends HasTypeMapperProperty> implement
     private final StringProperty outputValue;
     
     private @Inject TypeMapperComponent typeMappers;
-    
-    private StringBinding binding;
-    
+
     public TypeMapperPropertyEditor() {
         this.outputValue = new SimpleStringProperty();
     }
     
     @Override
     public Stream<Item> fieldsFor(T document) {
-        final String currentValue = 
-            document.getTypeMapper().isPresent() 
-            ? document.getTypeMapper().get() 
-            : null;
-        final Class<?> type = document.findDatabaseType();   
+        final String currentValue = document.getTypeMapper().orElse(null);
+        final Class<?> type = document.findDatabaseType();
         
         final Map<String, String> mapping = MapStream.fromStream(
             typeMappers.mapFrom(type),
-            tm -> tm.getLabel(),
+            TypeMapper::getLabel,
             tm -> tm.getClass().getName()
         ).toSortedMap();
         
         final ObservableList<String> alternatives = FXCollections.observableList(
-            mapping.keySet().stream().collect(toList())
+            new ArrayList<>(mapping.keySet())
         );
         alternatives.add(0, IDENTITY_MAPPER);
         
         //Create a binding that will convert the ChoiceBox's value to a valid
         //value for the document.typeMapperProperty()
-        binding = Bindings.createStringBinding(() -> {
-            if( outputValue.isEmpty().get() || outputValue.get().equals(IDENTITY_MAPPER) ){
+        StringBinding binding = Bindings.createStringBinding(() -> {
+            if (outputValue.isEmpty().get() || outputValue.get().equals(IDENTITY_MAPPER)) {
                 return null;
             } else {
-                return mapping.get( outputValue.get() );
+                return mapping.get(outputValue.get());
             }
         }, outputValue);
-        document.typeMapperProperty().bind( binding );
+        document.typeMapperProperty().bind(binding);
         
         outputValue.set( 
             currentValue != null

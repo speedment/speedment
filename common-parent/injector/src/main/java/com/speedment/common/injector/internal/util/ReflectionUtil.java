@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,11 +17,8 @@
 package com.speedment.common.injector.internal.util;
 
 import com.speedment.common.injector.MissingArgumentStrategy;
-import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.Execute;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.OnlyIfMissing;
+import com.speedment.common.injector.annotation.*;
+import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 
 import java.io.File;
@@ -33,16 +30,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Some common utility methods for analyzing classes with reflection.
@@ -51,6 +45,8 @@ import static java.util.stream.Collectors.joining;
  * @since 1.0.0
  */
 public final class ReflectionUtil {
+
+    private ReflectionUtil() {}
 
     public static Stream<Field> traverseFields(Class<?> clazz) {
         final Class<?> parent = clazz.getSuperclass();
@@ -97,7 +93,7 @@ public final class ReflectionUtil {
     }
 
     public static <T> Optional<T> tryToCreate(Class<T> clazz, Properties properties, List<Object> instances, Set<Class<?>> allInjectableTypes)
-        throws InstantiationException, NoDefaultConstructorException {
+        throws InstantiationException {
         try {
             final Optional<Constructor<T>> oConstr = findConstructor(clazz, instances, allInjectableTypes);
 
@@ -112,7 +108,7 @@ public final class ReflectionUtil {
             final Object[] args = new Object[params.length];
             for (int i = 0; i < params.length; i++) {
                 final Parameter param = params[i];
-                final Config config = params[i].getAnnotation(Config.class);
+                final Config config = param.getAnnotation(Config.class);
                 if (config != null) {
                     final String serialized;
                     if (properties.containsKey(config.name())) {
@@ -178,8 +174,40 @@ public final class ReflectionUtil {
                     args[i] = value;
 
                 } else { // Not a @Config-field
+                    final Class<?> paramType = param.getType();
+                    final Optional<? extends Class<?>> injectKeyClass = traverseAncestors(paramType)
+                        .filter(c -> c.isAnnotationPresent(InjectKey.class))
+                        .map(c -> c.getAnnotation(InjectKey.class).value())
+                        .findFirst();
+                    if (injectKeyClass.isPresent()) {
+                        // Make sure that there are no other pending instances that
+                        // may implement this type, see #758
+                        //
+                        // This set contains all classes that we need to be instantiated
+                        // before we know which one to select
+                        final Set<Class<?>> needed = allInjectableTypes.stream()
+                            .filter(c -> traverseAncestors(c)
+                                .anyMatch(a ->
+                                    a.isAnnotationPresent(InjectKey.class) &&
+                                        a.getAnnotation(InjectKey.class).value().equals(injectKeyClass.get())
+                                )
+                            )
+                            .collect(toSet());
+
+                        // Remove the existing classes
+                        instances.stream()
+                            .map(Object::getClass)
+                            .forEach(needed::remove);
+
+                        if (!needed.isEmpty()) {
+                            // We do not know all instances yet so we have to wait for
+                            // their creation
+                            return Optional.empty();
+                        }
+                    }
+
                     final Optional<Object> value = instances.stream()
-                        .filter(o -> param.getType().isAssignableFrom(o.getClass()))
+                        .filter(o -> paramType.isAssignableFrom(o.getClass()))
                         .findFirst();
 
                     if (value.isPresent()) {
@@ -204,7 +232,7 @@ public final class ReflectionUtil {
             | IllegalArgumentException
             | InvocationTargetException ex) {
 
-            throw new RuntimeException(String.format(
+            throw new InjectorException(String.format(
                 "Unable to create class '%s'.", clazz.getName()
             ), ex);
         }
@@ -214,21 +242,12 @@ public final class ReflectionUtil {
     private static <T> Optional<Constructor<T>> findConstructor(Class<T> clazz, List<Object> instances, Set<Class<?>> allInjectableTypes) {
         // If at least one constructor has the @Inject-annotation, only
         // @Inject-annotated constructors should be considered.
-        if (hasConstructorWithInjectAnnotation(clazz)) {
-            return Arrays.stream(clazz.getDeclaredConstructors())
-                .filter(constr -> constr.isAnnotationPresent(Inject.class))
-                .filter(constr -> isOnlyIfMissingConditionSatisfied(constr, allInjectableTypes))
-                .filter(constr -> canBeInvoked(constr, instances))
-                .map(constr -> (Constructor<T>) constr)
-                .findFirst();
-
-        } else {
-            return Arrays.stream(clazz.getDeclaredConstructors())
-                .filter(constr -> isOnlyIfMissingConditionSatisfied(constr, allInjectableTypes))
-                .filter(constructor -> canBeInvoked(constructor, instances))
-                .map(constructor -> (Constructor<T>) constructor)
-                .findFirst();
-        }
+        return Arrays.stream(clazz.getDeclaredConstructors())
+            .sorted(Comparator.comparing(constr -> constr.isAnnotationPresent(Inject.class) ? 1 : 0))
+            .filter(constr -> isOnlyIfMissingConditionSatisfied(constr, allInjectableTypes))
+            .filter(constr -> canBeInvoked(constr, instances))
+            .map(constr -> (Constructor<T>) constr)
+            .findFirst();
     }
 
     @SuppressWarnings("unchecked")
@@ -294,5 +313,4 @@ public final class ReflectionUtil {
         );
     }
 
-    private ReflectionUtil() {}
 }

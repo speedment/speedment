@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -23,7 +23,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_LOCATION;
+import static com.speedment.runtime.config.ProjectUtil.DEFAULT_PACKAGE_LOCATION;
 
 /**
  *

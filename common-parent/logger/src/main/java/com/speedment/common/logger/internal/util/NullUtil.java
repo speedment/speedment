@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -29,7 +29,11 @@ import static java.util.Objects.requireNonNull;
  * @since   2.1
  */
 public final class NullUtil {
-    
+
+    private static final String PARAMETER_0_IS_NULL = "Parameter 0 is null.";
+
+    private NullUtil() {}
+
     /**
      * Checks if this set is non null and also that all members are non-null.
      * If a null is detected a NullPointerException is thrown.
@@ -88,7 +92,7 @@ public final class NullUtil {
      * @throws NullPointerException  if a null is found in the parameters
      */
     public static <T> void requireNonNulls(T t0) {
-        requireNonNull(t0, "Parameter 0 is null.");
+        requireNonNull(t0, PARAMETER_0_IS_NULL);
     }
     
     /**
@@ -102,7 +106,7 @@ public final class NullUtil {
      * @throws NullPointerException  if a null is found in the parameters
      */
     public static <T> void requireNonNulls(T t0, T t1) {
-        requireNonNull(t0, "Parameter 0 is null.");
+        requireNonNull(t0, PARAMETER_0_IS_NULL);
         requireNonNull(t1, "Parameter 1 is null.");
     }
     
@@ -118,13 +122,9 @@ public final class NullUtil {
      * @throws NullPointerException  if a null is found in the parameters
      */
     public static <T> void requireNonNulls(T t0, T t1, T t2) {
-        requireNonNull(t0, "Parameter 0 is null.");
+        requireNonNull(t0, PARAMETER_0_IS_NULL);
         requireNonNull(t1, "Parameter 1 is null.");
         requireNonNull(t2, "Parameter 2 is null.");
     }
-    
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private NullUtil() { instanceNotAllowed(getClass()); }
+
 }

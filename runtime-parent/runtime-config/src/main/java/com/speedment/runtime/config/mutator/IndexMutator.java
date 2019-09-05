@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -23,8 +23,8 @@ import com.speedment.runtime.config.internal.IndexColumnImpl;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
-import static com.speedment.runtime.config.Index.INDEX_COLUMNS;
-import static com.speedment.runtime.config.Index.UNIQUE;
+import static com.speedment.runtime.config.IndexUtil.INDEX_COLUMNS;
+import static com.speedment.runtime.config.IndexUtil.UNIQUE;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 

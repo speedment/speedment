@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -37,7 +37,9 @@ final class TranslatorManagerTest extends SimpleModel {
     @Test
     void testAccept() {
         final TranslatorManager instance = speedment.getOrThrow(TranslatorManager.class);
-        instance.accept(project);
+        assertDoesNotThrow(() ->
+            instance.accept(project)
+        );
     }
 
     @Test

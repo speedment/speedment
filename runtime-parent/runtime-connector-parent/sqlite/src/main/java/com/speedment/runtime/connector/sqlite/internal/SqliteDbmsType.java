@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -122,7 +122,7 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Override
     public boolean isSupported() {
-        return drivers.driver(getDriverName()).isPresent();
+        return drivers != null && drivers.driver(getDriverName()).isPresent();
     }
 
     @Override

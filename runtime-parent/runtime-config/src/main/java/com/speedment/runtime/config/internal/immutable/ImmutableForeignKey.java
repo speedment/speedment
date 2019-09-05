@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,6 +17,8 @@
 package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.ForeignKeyUtil;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.internal.ForeignKeyImpl;
 
@@ -34,22 +36,18 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ImmutableForeignKey extends ImmutableDocument implements ForeignKey {
 
-    private final transient String id;
-    private final transient String name;
-    private final transient boolean enabled;
-    
-    private final transient List<ImmutableForeignKeyColumn> foreignKeyColumns;
+    private final String id;
+    private final String name;
+    private final boolean enabled;
+    private final List<ForeignKeyColumn> foreignKeyColumns;
 
     ImmutableForeignKey(ImmutableTable parent, Map<String, Object> data) {
         super(parent, data);
-        
         final ForeignKey prototype = new ForeignKeyImpl(parent, data);
-        
         this.id      = prototype.getId();
         this.name    = prototype.getName();
         this.enabled = prototype.isEnabled();
-        
-        this.foreignKeyColumns = unmodifiableList(super.children(FOREIGN_KEY_COLUMNS, ImmutableForeignKeyColumn::new).collect(toList()));
+        this.foreignKeyColumns = unmodifiableList(super.children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ImmutableForeignKeyColumn::new).collect(toList()));
     }
 
     @Override
@@ -68,7 +66,7 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
     }
 
     @Override
-    public Stream<ImmutableForeignKeyColumn> foreignKeyColumns() {
+    public Stream<ForeignKeyColumn> foreignKeyColumns() {
         return foreignKeyColumns.stream();
     }
     

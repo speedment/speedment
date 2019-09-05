@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -69,14 +69,16 @@ implements TranslatorDecorator<Table, Interface> {
             IntegerToEnumTypeMapper.class.getName()
         )));
 
-    public final static String
-        FROM_DATABASE_METHOD         = "fromDatabase",
-        FROM_DATABASE_ORDINAL_METHOD = "fromDatabaseOrdinal",
-        TO_DATABASE_METHOD           = "toDatabase",
-        TO_DATABASE_ORDINAL_METHOD   = "toDatabaseOrdinal",
-        DATABASE_NAME                = "databaseName",
-        DATABASE_ORDINAL             = "databaseOrdinal";
-    
+    public final static String FROM_DATABASE_METHOD         = "fromDatabase";
+    public final static String FROM_DATABASE_ORDINAL_METHOD = "fromDatabaseOrdinal";
+    public final static String TO_DATABASE_METHOD           = "toDatabase";
+    public final static String TO_DATABASE_ORDINAL_METHOD   = "toDatabaseOrdinal";
+    public final static String DATABASE_NAME                = "databaseName";
+    public final static String DATABASE_ORDINAL             = "databaseOrdinal";
+
+    private  static final String COLUMN = "column";
+    private static final String RETURN = "return ";
+
     private final Injector injector;
     
     public GeneratedEntityDecorator(Injector injector) {
@@ -189,12 +191,12 @@ implements TranslatorDecorator<Table, Interface> {
                         
                         // Generate toDatabase()-method
                         colEnum.add(Method.of(TO_DATABASE_METHOD, String.class)
-                            .public_().add("return " + DATABASE_NAME + ";")
+                            .public_().add(RETURN + DATABASE_NAME + ";")
                         );
 
                         // Generate toDatabaseOrdinal()-method
                         colEnum.add(Method.of(TO_DATABASE_ORDINAL_METHOD, int.class)
-                            .public_().add("return " + DATABASE_ORDINAL + ";")
+                            .public_().add(RETURN + DATABASE_ORDINAL + ";")
                         );
                         
                         // Add it to the interface.
@@ -239,23 +241,23 @@ implements TranslatorDecorator<Table, Interface> {
                                 )
                                 .add(Method.of("getOrdering", TypeMapper.Ordering.class)
                                     .public_().add(OVERRIDE)
-                                    .add("return " + TypeMapper.Ordering.class.getSimpleName() +
+                                    .add(RETURN + TypeMapper.Ordering.class.getSimpleName() +
                                         "." + TypeMapper.Ordering.RETAIN.name() + ";")
                                 )
                                 .add(Method.of("getJavaTypeCategory", TypeMapper.Category.class)
                                     .public_().add(OVERRIDE)
-                                    .add(Field.of("column", Column.class))
-                                    .add("return " + TypeMapper.Category.class.getSimpleName() +
+                                    .add(Field.of(COLUMN, Column.class))
+                                    .add(RETURN + TypeMapper.Category.class.getSimpleName() +
                                         "." + TypeMapper.Category.ENUM.name() + ";")
                                 )
                                 .add(Method.of("getJavaType", Type.class)
                                     .public_().add(OVERRIDE)
-                                    .add(Field.of("column", Column.class))
-                                    .add("return " + enumShortName + ".class;")
+                                    .add(Field.of(COLUMN, Column.class))
+                                    .add(RETURN + enumShortName + ".class;")
                                 )
                                 .add(Method.of("toJavaType", enumType)
                                     .public_().add(OVERRIDE)
-                                    .add(Field.of("column", Column.class))
+                                    .add(Field.of(COLUMN, Column.class))
                                     .add(Field.of("clazz", classOf(WILDCARD)))
                                     .add(Field.of("value", wrapIfPrimitive(dbType)))
                                     .add("return value == null ? null : " +
@@ -268,7 +270,7 @@ implements TranslatorDecorator<Table, Interface> {
                                 .add(Method.of("toDatabaseType", wrapIfPrimitive(dbType))
                                     .public_().add(OVERRIDE)
                                     .add(Field.of(enumVarName, enumType))
-                                    .add("return " + enumVarName + " == null ? null : " +
+                                    .add(RETURN + enumVarName + " == null ? null : " +
                                         enumVarName + "." + ((dbType == String.class)
                                             ? TO_DATABASE_METHOD
                                             : TO_DATABASE_ORDINAL_METHOD

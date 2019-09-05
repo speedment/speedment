@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -18,9 +18,19 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.UserInterfaceComponent;
+import com.speedment.tool.core.resource.FontAwesome;
+import com.speedment.tool.core.resource.MaterialIcon;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
@@ -31,9 +41,13 @@ import java.util.ResourceBundle;
  * @author Emil Forslund
  */
 public final class OutputController implements Initializable {
-    
+
     private @Inject UserInterfaceComponent ui;
     private @FXML VBox log;
+    private @FXML ScrollPane logPane;
+    private @FXML ToggleButton wrapTextBtn;
+    private @FXML ToggleButton scrollToEndBtn;
+    private @FXML Button clearLogBtn;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,5 +55,35 @@ public final class OutputController implements Initializable {
             log.getChildren(),
             ui.outputMessages()
         );
+
+        log.heightProperty().addListener(e -> {
+            if (scrollToEndBtn.isSelected()) {
+                scrollLogToEnd();
+            }
+        });
+
+        logPane.fitToWidthProperty().bind(wrapTextBtn.selectedProperty());
+
+        scrollToEndBtn.setSelected(true);
+        scrollToEndBtn.setOnAction(e -> {
+            if (scrollToEndBtn.isSelected()) {
+                scrollLogToEnd();
+            }
+        });
+
+        clearLogBtn.setOnAction(ev -> ui.outputMessages().clear());
+
+        styleToolbarButton(wrapTextBtn, MaterialIcon.WRAP_TEXT.view());
+        styleToolbarButton(clearLogBtn, FontAwesome.TRASH.view());
+        styleToolbarButton(scrollToEndBtn, MaterialIcon.SCROLL_TEXT.view());
+    }
+
+    private void styleToolbarButton(ButtonBase btn, Node icon) {
+        btn.setGraphic(icon);
+        btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+    }
+
+    private void scrollLogToEnd() {
+        logPane.setVvalue(1.0);
     }
 }

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -18,8 +18,8 @@ package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasTypeMapper;
-import static com.speedment.runtime.config.trait.HasTypeMapper.DATABASE_TYPE;
-import static com.speedment.runtime.config.trait.HasTypeMapper.TYPE_MAPPER;
+import static com.speedment.runtime.config.trait.HasTypeMapperUtil.DATABASE_TYPE;
+import static com.speedment.runtime.config.trait.HasTypeMapperUtil.TYPE_MAPPER;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.Optional;
 import static javafx.beans.binding.Bindings.createObjectBinding;

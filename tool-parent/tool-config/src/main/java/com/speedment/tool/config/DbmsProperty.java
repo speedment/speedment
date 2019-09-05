@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,7 +17,9 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.core.util.OptionalUtil;
@@ -58,7 +60,7 @@ implements Dbms,
     }
     
     public StringProperty typeNameProperty() {
-        return stringPropertyOf(TYPE_NAME, () -> getAsString(TYPE_NAME).orElse(null));
+        return stringPropertyOf(DbmsUtil.TYPE_NAME, () -> getAsString(DbmsUtil.TYPE_NAME).orElse(null));
     }
 
     @Override
@@ -67,7 +69,7 @@ implements Dbms,
     }
 
     public StringProperty ipAddressProperty() {
-        return stringPropertyOf(IP_ADDRESS,  () -> Dbms.super.getIpAddress().orElse(null));
+        return stringPropertyOf(DbmsUtil.IP_ADDRESS,  () -> Dbms.super.getIpAddress().orElse(null));
     }
 
     @Override
@@ -76,7 +78,7 @@ implements Dbms,
     }
 
     public IntegerProperty portProperty() {
-        return integerPropertyOf(PORT, () -> Dbms.super.getPort().orElse(0));
+        return integerPropertyOf(DbmsUtil.PORT, () -> Dbms.super.getPort().orElse(0));
     }
     
     protected IntegerBinding defaultPortProperty(DbmsHandlerComponent dbmsHandlerComponent) {
@@ -92,7 +94,7 @@ implements Dbms,
     }
 
     public StringProperty localPathProperty() {
-        return stringPropertyOf(LOCAL_PATH,  () -> Dbms.super.getLocalPath().orElse(null));
+        return stringPropertyOf(DbmsUtil.LOCAL_PATH,  () -> Dbms.super.getLocalPath().orElse(null));
     }
 
     @Override
@@ -101,7 +103,7 @@ implements Dbms,
     }
     
     public StringProperty connectionUrlProperty() {
-        return stringPropertyOf(CONNECTION_URL,  () -> Dbms.super.getConnectionUrl().orElse(null));
+        return stringPropertyOf(DbmsUtil.CONNECTION_URL,  () -> Dbms.super.getConnectionUrl().orElse(null));
     }
 
     @Override
@@ -120,7 +122,7 @@ implements Dbms,
     }
 
     public StringProperty usernameProperty() {
-        return stringPropertyOf(USERNAME, () -> Dbms.super.getUsername().orElse(null));
+        return stringPropertyOf(DbmsUtil.USERNAME, () -> Dbms.super.getUsername().orElse(null));
     }
 
     @Override
@@ -129,12 +131,12 @@ implements Dbms,
     }
     
     public ObservableList<SchemaProperty> schemasProperty() {
-        return observableListOf(SCHEMAS);
+        return observableListOf(DbmsUtil.SCHEMAS);
     }
 
     @Override
-    public Stream<SchemaProperty> schemas() {
-        return schemasProperty().stream();
+    public Stream<Schema> schemas() {
+        return schemasProperty().stream().map(Schema.class::cast);
     }
     
     @Override

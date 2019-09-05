@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -53,5 +53,5 @@ public final class DefaultApplicationBuilder extends
     }
 
     @Override
-    protected void printWelcomeMessage(Injector injector) {}
+    protected void printWelcomeMessage(Injector injector) { /* Do Nothing */}
 }

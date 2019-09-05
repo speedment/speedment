@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -20,6 +20,7 @@ package com.speedment.runtime.config.mutator.trait;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.config.trait.HasOrderType;
+import com.speedment.runtime.config.trait.HasOrderTypeUtil;
 
 /**
  *
@@ -30,6 +31,6 @@ import com.speedment.runtime.config.trait.HasOrderType;
 public interface HasOrderTypeMutator<DOC extends HasOrderType> extends DocumentMutator<DOC> {
     
     default void setOrderType(OrderType orderType) {
-         put(HasOrderType.ORDER_TYPE, orderType.name());
+         put(HasOrderTypeUtil.ORDER_TYPE, orderType.name());
     }
 }

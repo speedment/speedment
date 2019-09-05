@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -24,8 +24,8 @@ import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
-import static com.speedment.runtime.config.Schema.DEFAULT_SCHEMA;
-import static com.speedment.runtime.config.Schema.TABLES;
+import static com.speedment.runtime.config.SchemaUtil.DEFAULT_SCHEMA;
+import static com.speedment.runtime.config.SchemaUtil.TABLES;
 import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 

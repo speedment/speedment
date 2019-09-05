@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -16,12 +16,11 @@
  */
 package com.speedment.runtime.test_support;
 
-import com.speedment.runtime.core.db.ConnectionUrlGenerator;
-import com.speedment.runtime.core.db.DbmsMetadataHandler;
-import com.speedment.runtime.core.db.DbmsOperationHandler;
-import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.db.FieldPredicateView;
+import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
+
+import java.sql.Driver;
+import java.util.Optional;
 
 
 /**
@@ -29,6 +28,10 @@ import com.speedment.runtime.core.internal.db.AbstractDbmsType;
  * @author Per Minborg
  */
 public class MockDbmsType extends AbstractDbmsType implements DbmsType {
+
+    public MockDbmsType() {
+        super(className -> Optional.empty());
+    }
 
     @Override
     public String getName() {

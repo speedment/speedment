@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -19,6 +19,7 @@ package com.speedment.runtime.config.mutator.trait;
 
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasNameUtil;
 
 /**
  *
@@ -29,6 +30,6 @@ import com.speedment.runtime.config.trait.HasName;
 public interface HasNameMutator<DOC extends HasName> extends DocumentMutator<DOC> {
     
     default void setName(String name) {
-        put(HasName.NAME, name);
+        put(HasNameUtil.NAME, name);
     }
 }

@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment-parent</artifactId>
-        <version>3.1.17</version>
+        <version>3.1.18-SNAPSHOT</version>
     </parent>
     
     <groupId>com.speedment.common</groupId>
@@ -60,6 +60,7 @@
         <module>benchmark</module>
         <module>combinatorics</module>
         <module>collection</module>
+        <module>archtest</module>
     </modules>
     
 </project>

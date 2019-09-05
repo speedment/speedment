@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -32,22 +32,22 @@ public final class TableImpl extends AbstractChildDocument<Schema> implements Ta
     }
 
     @Override
-    public Stream<? extends Column> columns() {
-        return children(COLUMNS, ColumnImpl::new);
+    public Stream<Column> columns() {
+        return children(TableUtil.COLUMNS, ColumnImpl::new);
     }
 
     @Override
-    public Stream<? extends Index> indexes() {
-        return children(INDEXES, IndexImpl::new);
+    public Stream<Index> indexes() {
+        return children(TableUtil.INDEXES, IndexImpl::new);
     }
 
     @Override
-    public Stream<? extends ForeignKey> foreignKeys() {
-        return children(FOREIGN_KEYS, ForeignKeyImpl::new);
+    public Stream<ForeignKey> foreignKeys() {
+        return children(TableUtil.FOREIGN_KEYS, ForeignKeyImpl::new);
     }
 
     @Override
-    public Stream<? extends PrimaryKeyColumn> primaryKeyColumns() {
-        return children(PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new);
+    public Stream<PrimaryKeyColumn> primaryKeyColumns() {
+        return children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new);
     }
 }

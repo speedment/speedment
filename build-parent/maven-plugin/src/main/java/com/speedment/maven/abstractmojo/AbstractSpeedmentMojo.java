@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -69,6 +69,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
+    private static final String SPECIFIED_CLASS = "Specified class ";
     private static final Path DEFAULT_CONFIG = Paths.get(DEFAULT_CONFIG_LOCATION);
     private static final Consumer<ApplicationBuilder<?, ?>> NOTHING = builder -> {};
 
@@ -287,7 +288,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
                 } catch (final ClassNotFoundException ex) {
                     throw new MojoExecutionException(
-                        "Specified class '" + component + "' could not be "
+                        SPECIFIED_CLASS + "'" + component + "' could not be "
                         + "found on class path. Has the dependency been "
                         + "configured properly?", ex
                     );
@@ -339,11 +340,11 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                         throw new MojoExecutionException(
                             "Specified database type '" + mapping.getDatabaseType() + "' "
                             + "could not be found on class path. Make sure it is a "
-                            + "valid JDBC type for the choosen connector.", ex
+                            + "valid JDBC type for the chosen connector.", ex
                         );
                     } catch (final ClassCastException ex) {
                         throw new MojoExecutionException(
-                            "An unexpected ClassCastException occured.", ex
+                            "An unexpected ClassCastException occurred.", ex
                         );
                     }
 
@@ -372,13 +373,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                         typeMappers.install(databaseType, supplier);
                     } catch (final ClassNotFoundException ex) {
                         throw new MojoExecutionException(
-                            "Specified class '" + mapping.getImplementation()
+                            SPECIFIED_CLASS + "'" + mapping.getImplementation()
                             + "' could not be found on class path. Has the "
                             + "dependency been configured properly?", ex
                         );
                     } catch (final ClassCastException ex) {
                         throw new MojoExecutionException(
-                            "Specified class '" + mapping.getImplementation()
+                            SPECIFIED_CLASS + "'" + mapping.getImplementation()
                             + "' does not implement the '"
                             + TypeMapper.class.getSimpleName() + "'-interface.",
                             ex
@@ -386,7 +387,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                     } catch (final NoSuchMethodException
                         | TypeMapperInstantiationException ex) {
                         throw new MojoExecutionException(
-                            "Specified class '" + mapping.getImplementation()
+                            SPECIFIED_CLASS + "'" + mapping.getImplementation()
                             + "' could not be instantiated. Does it have a "
                             + "default constructor?", ex
                         );

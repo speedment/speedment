@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -21,7 +21,8 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.core.translator.AbstractTranslatorManager;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasNameUtil;
+import com.speedment.runtime.config.trait.HasTypeMapperUtil;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
@@ -29,6 +30,7 @@ import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.nio.file.Path;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
@@ -84,14 +86,14 @@ public abstract class SimpleModel {
             .build();
         
         project  = speedment.getOrThrow(ProjectComponent.class).getProject();
-        dbms     = project.dbmses().findAny().get();
-        schema   = dbms.schemas().findAny().get();
-        table    = schema.tables().filter(t -> TABLE_NAME.equals(t.getId())).findAny().get();
-        column   = table.columns().findAny().get();
-        pkColumn = table.primaryKeyColumns().findAny().get();
+        dbms     = project.dbmses().findAny().orElseThrow(NoSuchElementException::new);
+        schema   = dbms.schemas().findAny().orElseThrow(NoSuchElementException::new);
+        table    = schema.tables().filter(t -> TABLE_NAME.equals(t.getId())).findAny().orElseThrow(NoSuchElementException::new);
+        column   = table.columns().findAny().orElseThrow(NoSuchElementException::new);
+        pkColumn = table.primaryKeyColumns().findAny().orElseThrow(NoSuchElementException::new);
 
-        table2  = schema.tables().filter(t -> TABLE_NAME2.equals(t.getId())).findAny().get();
-        column2 = table2.columns().findAny().get();
+        table2  = schema.tables().filter(t -> TABLE_NAME2.equals(t.getId())).findAny().orElseThrow(NoSuchElementException::new);
+        column2 = table2.columns().findAny().orElseThrow(NoSuchElementException::new);
     }
     
     private final static class SimpleMetadata extends AbstractApplicationMetadata {
@@ -101,15 +103,15 @@ public abstract class SimpleModel {
         }
 
         private String name(String s) {
-            return quote(HasName.NAME) + " : " + quote(s);
+            return quote(HasNameUtil.NAME) + " : " + quote(s);
         }
 
         private String dbTypeName(String dbmsTypeName) {
-            return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
+            return quote(DbmsUtil.TYPE_NAME) + " : " + quote(dbmsTypeName);
         }
 
         private String columnDatabaseType(String typeName) {
-            return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
+            return quote(HasTypeMapperUtil.DATABASE_TYPE) + " : " + quote(typeName);
         }
 
         private String array(String name, String... s) {
@@ -134,22 +136,22 @@ public abstract class SimpleModel {
             return Optional.of("{"
                 + objectWithKey("config",
                     name("myProject"),
-                    array(Project.DBMSES,
+                    array(ProjectUtil.DBMSES,
                         object(name("myDbms"),
                             dbTypeName("MySQL"),
-                            array(Dbms.SCHEMAS,
+                            array(DbmsUtil.SCHEMAS,
                                 object(
                                     name(SCHEMA_NAME),
-                                    array(Schema.TABLES,
+                                    array(SchemaUtil.TABLES,
                                         object(
                                             name(TABLE_NAME),
-                                            array(Table.COLUMNS,
+                                            array(TableUtil.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME),
                                                     columnDatabaseType(String.class.getName())
                                                 )
                                             ),
-                                            array(Table.PRIMARY_KEY_COLUMNS,
+                                            array(TableUtil.PRIMARY_KEY_COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME)
                                                 )
@@ -157,13 +159,13 @@ public abstract class SimpleModel {
                                         ),
                                         object(
                                             name(TABLE_NAME2),
-                                            array(Table.COLUMNS,
+                                            array(TableUtil.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME2),
                                                     columnDatabaseType(String.class.getName())
                                                 )
                                             ),
-                                            array(Table.PRIMARY_KEY_COLUMNS,
+                                            array(TableUtil.PRIMARY_KEY_COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME2)
                                                 )

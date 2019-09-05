@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -51,14 +51,12 @@ public interface ForeignKey extends
         HasMainInterface,
         HasMutator<ForeignKeyMutator<? extends ForeignKey>> {
 
-    String FOREIGN_KEY_COLUMNS = "foreignKeyColumns";
-    
     /**
      * Creates a stream of foreign key columns located in this document.
      * 
      * @return  foreign key columns
      */
-    Stream<? extends ForeignKeyColumn> foreignKeyColumns();
+    Stream<ForeignKeyColumn> foreignKeyColumns();
 
     @Override
     default Class<ForeignKey> mainInterface() {

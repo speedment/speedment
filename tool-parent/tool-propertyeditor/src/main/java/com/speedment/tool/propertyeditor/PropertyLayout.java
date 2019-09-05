@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -68,6 +68,7 @@ final class PropertyLayout extends GridPane {
         final Node label = item.createLabel();        
         label.getStyleClass().add("property-label");
         GridPane.setValignment(label, VPos.TOP);
+        GridPane.setHalignment(label, HPos.RIGHT);
         
         final Node editor = item.createEditor();
         editor.getStyleClass().add("property-editor");

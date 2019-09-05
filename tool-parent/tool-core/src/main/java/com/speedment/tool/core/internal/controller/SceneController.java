@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -79,7 +79,7 @@ public final class SceneController implements Initializable {
         ui.prepareWorkspace(vertical, workspace);
         ui.prepareOutput(vertical, output);
 
-        horizontal.setDividerPositions(0.2, 0.7);
+        horizontal.setDividerPositions(0.3, 0.7);
         vertical.setDividerPositions(0.7, 0.3);
 
         Statistics.report(info, projects, GUI_PROJECT_LOADED);

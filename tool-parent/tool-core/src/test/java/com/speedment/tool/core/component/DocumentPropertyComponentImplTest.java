@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -64,29 +64,32 @@ final class DocumentPropertyComponentImplTest {
     @Test
     @Disabled
     void testStructure() {
-        final Field root;
-        try {
-            root = DocumentPropertyComponentImpl.class.getDeclaredField("root");
-            root.setAccessible(true);
+        assertDoesNotThrow(() -> {
+            final Field root;
+            try {
+                root = DocumentPropertyComponentImpl.class.getDeclaredField("root");
+                root.setAccessible(true);
 
-            final Method toString = root.getType().getMethod("toString");
-            final Object rootObj = root.get(component);
+                final Method toString = root.getType().getMethod("toString");
+                final Object rootObj = root.get(component);
 
-            if (rootObj == null) {
-                throw new NullPointerException("Root is null.");
+                if (rootObj == null) {
+                    throw new NullPointerException("Root is null.");
+                }
+
+                final Object o = toString.invoke(rootObj);
+                //System.out.println(o);
+
+            } catch (final NoSuchFieldException
+                | NoSuchMethodException
+                | SecurityException
+                | IllegalAccessException
+                | InvocationTargetException ex) {
+
+                throw new RuntimeException("Could not call toString on component", ex);
             }
+        });
 
-            final Object o = toString.invoke(rootObj);
-            //System.out.println(o);
-
-        } catch (final NoSuchFieldException 
-            | NoSuchMethodException 
-            | SecurityException 
-            | IllegalAccessException 
-            | InvocationTargetException ex) {
-            
-            throw new RuntimeException("Could not call toString on component", ex);
-        }
     }
 
     @Test
@@ -143,7 +146,7 @@ final class DocumentPropertyComponentImplTest {
         }
 
         @Override
-        public Stream<? extends Schema> schemas() {
+        public Stream<Schema> schemas() {
             throw new UnsupportedOperationException("Not required by test.");
         }
     }

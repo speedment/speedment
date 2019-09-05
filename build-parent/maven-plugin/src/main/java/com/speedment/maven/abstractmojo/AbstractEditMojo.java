@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -76,23 +76,23 @@ public abstract class AbstractEditMojo extends AbstractMojo {
                     doc.getParent().ifPresent(parent -> {
                         final Collection<? extends Map<String, Object>> coll;
                         if (doc instanceof Dbms) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Project.DBMSES);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ProjectUtil.DBMSES);
                         } else if (doc instanceof Schema) {
-                            coll =(Collection<? extends Map<String, Object>>) parent.getData().get(Dbms.SCHEMAS);
+                            coll =(Collection<? extends Map<String, Object>>) parent.getData().get(DbmsUtil.SCHEMAS);
                         } else if (doc instanceof Table) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Schema.TABLES);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(SchemaUtil.TABLES);
                         } else if (doc instanceof Column) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Table.COLUMNS);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.COLUMNS);
                         } else if (doc instanceof PrimaryKeyColumn) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Table.PRIMARY_KEY_COLUMNS);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.PRIMARY_KEY_COLUMNS);
                         } else if (doc instanceof IndexColumn) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Index.INDEX_COLUMNS);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(IndexUtil.INDEX_COLUMNS);
                         } else if (doc instanceof ForeignKeyColumn) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKey.FOREIGN_KEY_COLUMNS);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKeyUtil.FOREIGN_KEY_COLUMNS);
                         } else if (doc instanceof ForeignKey) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKey.FOREIGN_KEY_COLUMNS);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKeyUtil.FOREIGN_KEY_COLUMNS);
                         } else if (doc instanceof Index) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(Table.INDEXES);
+                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.INDEXES);
                         } else {
                             getLog().error("Doc was of type " + doc.getClass());
                             return;

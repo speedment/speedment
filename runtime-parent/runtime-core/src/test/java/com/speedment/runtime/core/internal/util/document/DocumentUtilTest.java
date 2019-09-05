@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -109,18 +109,6 @@ final class DocumentUtilTest extends AbstractDocumentTest {
 
     @Test
     @Disabled
-    void testChildrenOf() {
-        // Todo: implement
-    }
-
-    @Test
-    @Disabled
-    void testNewDocument() {
-        // Todo: implement
-    }
-
-    @Test
-    @Disabled
     void testRelativeName3Arg() {
         {
             final String expected = "Dbms A.Schema A.Table A.Column A";
@@ -150,29 +138,6 @@ final class DocumentUtilTest extends AbstractDocumentTest {
         assertEquals(expected, result);
     }
 
-    @Test
-    @Disabled
-    void testDeepCopy2Arg() {
-        // Todo: implement
-    }
-
-    @Test
-    @Disabled
-    void testDeepCopy3Arg() {
-        // Todo: implement
-    }
-
-    @Test
-    @Disabled
-    void testNewNoSuchElementExceptionFor() {
-        // Todo: implement
-    }
-
-    @Test
-    @Disabled
-    void testToStringHelper() {
-        // Todo: implement
-    }
 
     @Test
     void createInstance() {

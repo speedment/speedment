@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -18,6 +18,8 @@ package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.SchemaUtil;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.internal.SchemaImpl;
 
 import java.util.List;
@@ -34,26 +36,23 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ImmutableSchema extends ImmutableDocument implements Schema {
 
-    private final transient boolean enabled;
-    private final transient String id;
-    private final transient String name;
-    private final transient Optional<String> alias;
-    private final transient boolean defaultSchema;
+    private final boolean enabled;
+    private final String id;
+    private final String name;
+    private final String alias;
+    private final boolean defaultSchema;
     
-    private final transient List<ImmutableTable> tables;
+    private final List<Table> tables;
 
     ImmutableSchema(ImmutableDbms parent, Map<String, Object> schema) {
         super(parent, schema);
-        
         final Schema prototype = new SchemaImpl(parent, schema);
-        
         this.enabled       = prototype.isEnabled();
         this.id            = prototype.getId();
         this.name          = prototype.getName();
-        this.alias         = prototype.getAlias();
+        this.alias         = prototype.getAlias().orElse(null);
         this.defaultSchema = prototype.isDefaultSchema();
-        
-        this.tables = unmodifiableList(super.children(TABLES, ImmutableTable::new).collect(toList()));
+        this.tables = unmodifiableList(super.children(SchemaUtil.TABLES, ImmutableTable::new).collect(toList()));
     }
 
     @Override
@@ -73,7 +72,7 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
 
     @Override
     public Optional<String> getAlias() {
-        return alias;
+        return Optional.ofNullable(alias);
     }
 
     @Override
@@ -87,7 +86,7 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
     }
 
     @Override
-    public Stream<ImmutableTable> tables() {
+    public Stream<Table> tables() {
         return tables.stream();
     }
 }

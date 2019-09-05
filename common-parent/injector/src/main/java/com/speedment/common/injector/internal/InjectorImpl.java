@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -165,7 +165,7 @@ public final class InjectorImpl implements Injector {
         // Create ClassMapper
         final ClassMapper classMapper = new ClassMapper() {
             @Override
-            public <T> T apply(Class<T> type) throws NotInjectableException {
+            public <T> T apply(Class<T> type) {
                 return find(type, true);
             }
         };
@@ -187,7 +187,7 @@ public final class InjectorImpl implements Injector {
 
                     LOGGER_INSTANCE.debug(horizontalLine());
 
-                    // Retreive the instance for that node
+                    // Retrieve the instance for that node
                     final Object inst = find(n.getRepresentedType(), true);
 
                     // Execute all the executions for the next step.

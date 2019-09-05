@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -18,6 +18,7 @@ package com.speedment.runtime.config.internal;
 
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
+import com.speedment.runtime.config.IndexUtil;
 import com.speedment.runtime.config.Table;
 
 import java.util.Map;
@@ -34,7 +35,7 @@ public final class IndexImpl extends AbstractChildDocument<Table> implements Ind
     }
 
     @Override
-    public Stream<? extends IndexColumn> indexColumns() {
-        return children(INDEX_COLUMNS, IndexColumnImpl::new);
+    public Stream<IndexColumn> indexColumns() {
+        return children(IndexUtil.INDEX_COLUMNS, IndexColumnImpl::new);
     }
 }

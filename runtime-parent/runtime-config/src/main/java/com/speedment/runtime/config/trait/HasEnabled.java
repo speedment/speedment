@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -31,26 +31,15 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
  */
 
 public interface HasEnabled extends Document {
-    
-    /**
-     * The key of the {@code enabled} property.
-     */
-    String ENABLED = "enabled";
-    
-    /**
-     * If a {@link Document} should be considered {@code true} if it is not
-     * specified in the map.
-     */
-    boolean ENABLED_DEFAULT = true;
-    
+
     /**
      * Returns if this document is enabled. The alias is a boolean value located 
-     * under the {@link #ENABLED} key.
+     * under the {@link HasEnableUtil#ENABLED} key.
      * 
      * @return  {@code true} if enabled, else {@code false}
      */
     default boolean isEnabled() {
-        return getAsBoolean(ENABLED).orElse(ENABLED_DEFAULT);
+        return getAsBoolean(HasEnableUtil.ENABLED).orElse(HasEnableUtil.ENABLED_DEFAULT);
     }
     
     /**

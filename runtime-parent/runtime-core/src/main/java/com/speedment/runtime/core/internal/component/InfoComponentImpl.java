@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -43,7 +43,7 @@ public final class InfoComponentImpl implements InfoComponent {
 
     @Override
     public String getImplementationVersion() {
-        return "3.1.17";
+        return "3.1.18-SNAPSHOT";
     }
 
     @Override
@@ -59,9 +59,4 @@ public final class InfoComponentImpl implements InfoComponent {
     @Override
     public String getSpecificationNickname() { return "Homer"; }
 
-    @Override
-    public boolean isProductionMode() {
-        return !getImplementationVersion().toUpperCase().contains("EA") 
-            && !getImplementationVersion().toUpperCase().contains("SNAPSHOT");
-    }
 }

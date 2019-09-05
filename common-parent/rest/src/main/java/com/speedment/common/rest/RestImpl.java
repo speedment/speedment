@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -46,8 +46,10 @@ import static java.util.stream.Collectors.joining;
  * @author  Emil Forslund
  * @since   1.0.0
  */
-class RestImpl implements Rest {
-    
+final class RestImpl implements Rest {
+
+    private static final StreamConsumer IGNORE = o -> {};
+
     private final Protocol protocol;
     private final String host;
     private final int port;
@@ -234,7 +236,7 @@ class RestImpl implements Rest {
         }
     }
     
-    private final static int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 1024;
     private StreamConsumer stream(InputStream in) {
         return out -> {
             final byte[] buffer = new byte[BUFFER_SIZE];
@@ -251,7 +253,7 @@ class RestImpl implements Rest {
     
     private CompletableFuture<Response> send(Method method, String path, Option[] options, Iterator<String> iterator) {
         if (iterator == NO_ITERATOR) {
-            return send(method, path, options, StreamConsumer.IGNORE);
+            return send(method, path, options, IGNORE);
         } else {
             return send(method, path, options, out -> {
                 int i = 0;
@@ -307,7 +309,7 @@ class RestImpl implements Rest {
                 conn.setUseCaches(false);
                 conn.setAllowUserInteraction(false);
 
-                final boolean doOutput = outStreamConsumer != StreamConsumer.IGNORE;
+                final boolean doOutput = outStreamConsumer != IGNORE;
                 conn.setDoOutput(doOutput);
 
                 conn.connect();
@@ -336,7 +338,7 @@ class RestImpl implements Rest {
                 }
 
                 return new Response(status, text, conn.getHeaderFields());
-            } catch (final Throwable ex) {
+            } catch (final Exception ex) {
                 throw new RestException(ex, protocol, method, username, host, port, path, options);
             } finally {
                 if (conn != null) {
@@ -364,7 +366,7 @@ class RestImpl implements Rest {
         }
     }
     
-    private final static Iterator<String> NO_ITERATOR = new Iterator<String>() {
+    private static final Iterator<String> NO_ITERATOR = new Iterator<String>() {
         @Override
         public boolean hasNext() {
             return false;
@@ -378,7 +380,7 @@ class RestImpl implements Rest {
         }
     };
 
-    private final static class SingletonIterator<E> implements Iterator<E> {
+    private static final class SingletonIterator<E> implements Iterator<E> {
 
         private final E e;
         private boolean hasNext = true;
@@ -411,7 +413,7 @@ class RestImpl implements Rest {
     
     @FunctionalInterface
     private interface StreamConsumer {
-        StreamConsumer IGNORE = o -> {};
+
         void writeTo(OutputStream out) throws IOException;
     }
 }

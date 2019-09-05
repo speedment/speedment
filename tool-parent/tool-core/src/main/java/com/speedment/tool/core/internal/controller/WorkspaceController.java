@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -35,6 +35,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 
@@ -55,6 +56,7 @@ public final class WorkspaceController implements Initializable {
     @Inject private PropertyEditorComponent editors;
 
     @FXML  private TitledPane workspace;
+    @FXML private ScrollPane scrollpane;
 
     public WorkspaceController() {
         this.properties = FXCollections.observableArrayList();
@@ -83,7 +85,7 @@ public final class WorkspaceController implements Initializable {
                         
                         workspace.textProperty().bind(
                             Bindings.createStringBinding(() -> String.format(
-                                "Settings for db %s '%s' %s",
+                                "Settings for database %s '%s' %s",
                                 withName instanceof Table
                                     ? ((Table) withName).isView()
                                         ? "view" : "table"
@@ -101,7 +103,7 @@ public final class WorkspaceController implements Initializable {
                 events.notify(new TreeSelectionChange(change, properties));
             });
         
-        workspace.setContent(sheet);
+        scrollpane.setContent(sheet);
         
         Bindings.bindContentBidirectional(ui.getProperties(), properties);
     }

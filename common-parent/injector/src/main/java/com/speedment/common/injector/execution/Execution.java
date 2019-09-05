@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -51,7 +51,7 @@ public interface Execution<T> {
          * 
          * @throws NotInjectableException  if it can't be resolved
          */
-        <T> T apply(Class<T> type) throws NotInjectableException;
+        <T> T apply(Class<T> type);
 
         /**
          * Resolves the specified type into an instance, returning null
@@ -65,7 +65,7 @@ public interface Execution<T> {
         default <T> T applyOrNull(Class<T> type) {
             try {
                 return apply(type);
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 return null;
             }
         }
@@ -127,9 +127,7 @@ public interface Execution<T> {
      *                                    resolve a particular type
      */
     boolean invoke(T component, ClassMapper classMapper)
-    throws IllegalAccessException, 
-           IllegalArgumentException, 
-           InvocationTargetException,
-           NotInjectableException;
+    throws IllegalAccessException,
+           InvocationTargetException;
     
 }

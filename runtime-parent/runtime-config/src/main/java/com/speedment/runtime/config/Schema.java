@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -53,9 +53,6 @@ public interface Schema extends
         HasMainInterface,
         HasMutator<SchemaMutator<? extends Schema>> {
 
-    String DEFAULT_SCHEMA = "defaultSchema",
-            TABLES = "tables";
-
     /**
      * Returns {@code true} if this schema is the default one, else
      * {@code false}. Default value is {@code true}.
@@ -63,7 +60,7 @@ public interface Schema extends
      * @return {@code true} if default, else {@code false}
      */
     default boolean isDefaultSchema() {
-        return getAsBoolean(DEFAULT_SCHEMA).orElse(true);
+        return getAsBoolean(SchemaUtil.DEFAULT_SCHEMA).orElse(true);
     }
     
     /**
@@ -71,7 +68,7 @@ public interface Schema extends
      * 
      * @return  tables
      */
-    Stream<? extends Table> tables();
+    Stream<Table> tables();
 //
 //    default Stream<? extends Table> tables() {
 //        return children(TABLES, tableConstructor());

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -32,11 +32,6 @@ import java.util.Map;
 public interface HasId extends Document, HasName {
 
     /**
-     * The key of the {@code id} property.
-     */
-    String ID = "id";
-
-    /**
      * Gets the id of this Document. If no id is present, this method defaults
      * to the name of the Document as described in the {@link HasName}
      * interface.
@@ -47,7 +42,7 @@ public interface HasId extends Document, HasName {
      * available
      */
     default String getId() throws SpeedmentConfigException {
-        return getAsString(ID).orElse(getName());
+        return getAsString(HasIdUtil.ID).orElse(getName());
     }
 
     /**

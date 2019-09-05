@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -21,7 +21,6 @@ import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
-import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.execution.ExecutionOneParamBuilder;
@@ -42,16 +41,16 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  1.2.0
  */
-public final class ExecutionOneParamBuilderImpl<T, P0> 
-extends AbstractExecutionBuilder<T>
-implements ExecutionOneParamBuilder<T, P0> {
+public final class ExecutionOneParamBuilderImpl<T, P0>
+    extends AbstractExecutionBuilder<T>
+    implements ExecutionOneParamBuilder<T, P0> {
     
     private final Class<P0> param0;
     private final State state0;
 
     private BiConsumer<T, P0> executeAction;
     
-    public ExecutionOneParamBuilderImpl(
+    ExecutionOneParamBuilderImpl(
             Class<T> component, State state,
             Class<P0> param0, State state0) {
         
@@ -90,9 +89,7 @@ implements ExecutionOneParamBuilder<T, P0> {
                 MissingArgumentStrategy.THROW_EXCEPTION) {
                     
             @Override
-            public boolean invoke(T component, ClassMapper classMapper)
-            throws IllegalArgumentException, NotInjectableException {
-                
+            public boolean invoke(T component, ClassMapper classMapper) {
                 final P0 arg0 = classMapper.apply(param0);
                 executeAction.accept(component, arg0);
                 return true;

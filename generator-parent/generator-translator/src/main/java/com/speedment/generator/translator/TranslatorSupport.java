@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.common.codegen.util.Formatting.ucfirst;
-import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
+import static com.speedment.runtime.config.ProjectUtil.DEFAULT_PACKAGE_NAME;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.JAVA_NAME;
 import static java.util.Objects.requireNonNull;
 
@@ -52,13 +52,15 @@ import static java.util.Objects.requireNonNull;
  */
 public final class TranslatorSupport<DOC extends Document & HasName & HasMainInterface> {
     
-    public final static String 
-        IMPL_SUFFIX       = "Impl",
-        MANAGER_SUFFIX    = "Manager",
-        GENERATED_PACKAGE = "generated",
-        GENERATED_PREFIX  = "Generated",
-        SQL_ADAPTER_SUFFIX= "SqlAdapter";
-    
+    public final static String IMPL_SUFFIX       = "Impl";
+    public final static String MANAGER_SUFFIX    = "Manager";
+    public final static String GENERATED_PACKAGE = "generated";
+    public final static String GENERATED_PREFIX  = "Generated";
+    public final static String SQL_ADAPTER_SUFFIX= "SqlAdapter";
+
+    private  static final String MUST_HAVE_A = " must have a ";
+    private static final String DOCUMENT_TEXT = " document.";
+
     private final DOC document;
     private final Injector injector;
     
@@ -280,7 +282,7 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
      * @return     the document alias as a manager type
      */
     public String managerTypeName(HasAlias doc) {
-        return typeName(doc) + "Manager";
+        return typeName(doc) + MANAGER_SUFFIX;
     }
     
     /**
@@ -503,8 +505,8 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
      */
     public Project projectOrThrow() {
         return project().orElseThrow(() -> new IllegalStateException(
-                getClass().getSimpleName() + " must have a "
-                + Project.class.getSimpleName() + " document."
+                getClass().getSimpleName() + MUST_HAVE_A
+                + Project.class.getSimpleName() + DOCUMENT_TEXT
         ));
     }
     
@@ -517,8 +519,8 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
      */
     public Dbms dbmsOrThrow() {
         return dbms().orElseThrow(() -> new IllegalStateException(
-                getClass().getSimpleName() + " must have a "
-                + Dbms.class.getSimpleName() + " document."
+                getClass().getSimpleName() + MUST_HAVE_A
+                + Dbms.class.getSimpleName() + DOCUMENT_TEXT
         ));
     }
     
@@ -531,8 +533,8 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
      */
     public Schema schemaOrThrow() {
         return schema().orElseThrow(() -> new IllegalStateException(
-                getClass().getSimpleName() + " must have a "
-                + Schema.class.getSimpleName() + " document."
+                getClass().getSimpleName() + MUST_HAVE_A
+                + Schema.class.getSimpleName() + DOCUMENT_TEXT
         ));
     }
     
@@ -545,8 +547,8 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
      */
     public Table tableOrThrow() {
         return table().orElseThrow(() -> new IllegalStateException(
-                getClass().getSimpleName() + " must have a "
-                + Table.class.getSimpleName() + " document."
+                getClass().getSimpleName() + MUST_HAVE_A
+                + Table.class.getSimpleName() + DOCUMENT_TEXT
         ));
     }
 
@@ -559,8 +561,8 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
      */
     public Column columnOrThrow() {
         return column().orElseThrow(() -> new IllegalStateException(
-                getClass().getSimpleName() + " must have a "
-                + Column.class.getSimpleName() + " document."
+                getClass().getSimpleName() + MUST_HAVE_A
+                + Column.class.getSimpleName() + DOCUMENT_TEXT
         ));
     }
 

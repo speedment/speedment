@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -47,8 +47,9 @@ public final class IntegerZeroOneToYesNoTypeMapper
                 return "No";
             case 1:
                 return "Yes";
+            default:
+                throw new IllegalArgumentException("Value must be either 0 or 1. Was " + value);
         }
-        throw new IllegalArgumentException("Value must be either 0 or 1. Was " + value);
     }
 
     @Override
@@ -58,8 +59,9 @@ public final class IntegerZeroOneToYesNoTypeMapper
                 return 0;
             case "Yes":
                 return 1;
+            default:
+                throw new IllegalArgumentException("Value must be either Yes or No. Was " + value);
         }
-        throw new IllegalArgumentException("Value must be either Yes or No. Was " + value);
     }
 
     @Override

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
  *
@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.internal;
 
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 
@@ -34,7 +35,7 @@ public final class DbmsImpl extends AbstractChildDocument<Project> implements Db
     }
 
     @Override
-    public Stream<? extends Schema> schemas() {
-        return children(SCHEMAS, SchemaImpl::new);
+    public Stream<Schema> schemas() {
+        return children(DbmsUtil.SCHEMAS, SchemaImpl::new);
     }
 }
