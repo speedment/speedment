@@ -66,7 +66,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <junit.jupiter.version>5.5.1</junit.jupiter.version>
         <junit.platform.provider.version>1.5.1</junit.platform.provider.version>
-        <mockito.version>3.0.6</mockito.version>
+        <mockito.version>3.0.0</mockito.version>
         <archunit.version>0.11.0</archunit.version>
         <speedment.version>${project.version}</speedment.version>
         <common.version>${project.version}</common.version>
@@ -656,7 +656,7 @@
                     
                     <!--The license-maven-plugin plugin MUST BE COMMENTED OUT DURING DEPLOYMENT, otherwise nexus-staging-maven-plugin will fail (sic!)-->
 
-                    <plugin>
+<!--                    <plugin>
                         <groupId>com.mycila</groupId>
                         <artifactId>license-maven-plugin</artifactId>
                         <version>3.0</version>
@@ -696,7 +696,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>-->
                     
                     <plugin>
                         <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
