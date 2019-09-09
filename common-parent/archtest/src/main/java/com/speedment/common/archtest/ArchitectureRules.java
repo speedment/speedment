@@ -25,6 +25,8 @@ import java.util.stream.Stream;
 
 public final class ArchitectureRules {
 
+    private ArchitectureRules(){};
+
     public static void check(JavaClasses classes, Collection<RuleType> set) {
         ArchitectureRulesUtil.rules(set).forEach(c -> c.accept(classes));
     }
