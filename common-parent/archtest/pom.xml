@@ -27,7 +27,11 @@
         <artifactId>common-parent</artifactId>
         <version>3.1.19-SNAPSHOT</version>
     </parent>
-    
+
+    <properties>
+        <module-name>com.speedment.common.archtest</module-name>
+    </properties>
+
     <artifactId>archtest</artifactId>
     <packaging>bundle</packaging>
     
