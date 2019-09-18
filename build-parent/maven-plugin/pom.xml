@@ -161,6 +161,7 @@
                             <Implementation-Vendor>Speedment, Inc.</Implementation-Vendor>
                             <Implementation-URL>https://github.com/speedment/speedment</Implementation-URL>
                         </manifestEntries>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
             </plugin>
