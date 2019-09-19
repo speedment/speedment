@@ -31,7 +31,11 @@
     
     <artifactId>enum-generator</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.plugins.enums</module-name>
+    </properties>
+
     <name>Speedment - Plugins - Enum Generator</name>
     <description>
         A plugin for Speedment that generates enum classes for every column that

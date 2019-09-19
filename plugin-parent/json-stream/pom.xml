@@ -30,8 +30,11 @@
     </parent>
     
     <artifactId>json-stream</artifactId>
-	
     <packaging>bundle</packaging>
+
+    <properties>
+        <module-name>com.speedment.plugins.json</module-name>
+    </properties>
     
     <name>Speedment - Plugins - JSON Stream</name>
     <description>
