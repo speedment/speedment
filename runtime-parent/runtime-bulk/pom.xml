@@ -31,7 +31,11 @@
     
     <artifactId>runtime-bulk</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.runtime.bulk</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Bulk</name>
     <description>
         Module with bulk operations for data sources like relational databases

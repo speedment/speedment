@@ -14,6 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.runtime.welcome {
-    exports com.speedment.runtime.welcome;
+module com.speedment.runtime.connector.sqlite {
+    exports com.speedment.runtime.connector.sqlite;
+
+    requires com.speedment.common.logger;
+    requires com.speedment.common.injector;
+    requires com.speedment.common.invariant;
+
+    requires com.speedment.runtime.core;
+    requires com.speedment.runtime.config;
+    requires com.speedment.runtime.field;
 }

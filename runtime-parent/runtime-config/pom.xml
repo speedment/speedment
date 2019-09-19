@@ -31,6 +31,10 @@
     
     <artifactId>runtime-config</artifactId>
     <packaging>bundle</packaging>
+
+    <properties>
+        <module-name>com.speedment.runtime.config</module-name>
+    </properties>
     
     <name>Speedment - Runtime - Config</name>
     <description>

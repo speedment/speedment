@@ -31,7 +31,11 @@
     
     <artifactId>runtime-join</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.runtime.join</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Join</name>
     <description>
         Module with join operations

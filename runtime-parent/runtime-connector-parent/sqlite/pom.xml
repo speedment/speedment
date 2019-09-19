@@ -30,6 +30,10 @@
     <artifactId>connector-sqlite</artifactId>
     <packaging>bundle</packaging>
 
+    <properties>
+        <module-name>com.speedment.runtime.connector.sqlite</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Connector - SQLite</name>
     <description>
         A connector for the SQLite database.

@@ -14,6 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.runtime.welcome {
-    exports com.speedment.runtime.welcome;
+module com.speedment.runtime.bulk {
+    exports com.speedment.runtime.bulk;
+    exports com.speedment.runtime.bulk.trait;
+
+    requires com.speedment.runtime.core;
 }

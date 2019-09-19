@@ -32,6 +32,10 @@
     <artifactId>runtime-application</artifactId>
     <packaging>bundle</packaging>
 
+    <properties>
+        <module-name>com.speedment.runtime.application</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Application</name>
     <description>
         The runtime bundle of Speedment that all projects must depend on to use 

@@ -14,6 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.runtime.welcome {
-    exports com.speedment.runtime.welcome;
+module com.speedment.runtime.join {
+    exports com.speedment.runtime.join;
+    exports com.speedment.runtime.join.builder;
+    exports com.speedment.runtime.join.stage;
+    exports com.speedment.runtime.join.trait;
+
+    requires com.speedment.common.invariant;
+    requires com.speedment.common.function;
+    requires com.speedment.runtime.core;
 }

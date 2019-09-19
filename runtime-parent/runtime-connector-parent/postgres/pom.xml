@@ -31,7 +31,11 @@
     
     <artifactId>connector-postgres</artifactId>
     <packaging>bundle</packaging>
- 
+
+    <properties>
+        <module-name>com.speedment.runtime.connector.postgres</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Connector - Postgres</name>
     <description>
         A connector for the Postgres database.

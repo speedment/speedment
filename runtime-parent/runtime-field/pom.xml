@@ -31,7 +31,11 @@
     
     <artifactId>runtime-field</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.runtime.field</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Field</name>
     <description>
         Partly generated model of the fields that represent columns in the 

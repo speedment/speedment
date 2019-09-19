@@ -31,7 +31,11 @@
     
     <artifactId>connector-mysql</artifactId>
     <packaging>bundle</packaging>
- 
+
+    <properties>
+        <module-name>com.speedment.runtime.connector.mysql</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Connector - MySQL</name>
     <description>
         A connector for the MySQL database.

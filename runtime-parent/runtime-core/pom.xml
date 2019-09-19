@@ -32,6 +32,10 @@
     <artifactId>runtime-core</artifactId>
     <packaging>bundle</packaging>
 
+    <properties>
+        <module-name>com.speedment.runtime.core</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Core</name>
     <description>
         The runtime bundle of Speedment that all projects must depend on to use 

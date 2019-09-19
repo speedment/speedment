@@ -31,7 +31,11 @@
     
     <artifactId>connector-mariadb</artifactId>
     <packaging>bundle</packaging>
- 
+
+    <properties>
+        <module-name>com.speedment.runtime.connector.mariadb</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Connector - MariaDB</name>
     <description>
         A connector for the MariaDB database.

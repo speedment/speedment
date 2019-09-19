@@ -14,6 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.runtime.welcome {
-    exports com.speedment.runtime.welcome;
+module com.speedment.runtime.compute {
+    exports com.speedment.runtime.compute;
+    exports com.speedment.runtime.compute.expression;
+    exports com.speedment.runtime.compute.expression.orelse;
+    exports com.speedment.runtime.compute.expression.predicate;
+    exports com.speedment.runtime.compute.trait;
+
+    requires com.speedment.common.function;
+
 }

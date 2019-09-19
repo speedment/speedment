@@ -31,7 +31,11 @@
     
     <artifactId>runtime-compute</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.runtime.compute</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Compute</name>
     <description>
         Functional interfaces and utility class used to express computations on 

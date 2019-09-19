@@ -14,6 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.runtime.welcome {
-    exports com.speedment.runtime.welcome;
+module com.speedment.runtime.application {
+    exports com.speedment.runtime.application;
+
+    requires com.speedment.runtime.core;
+    requires com.speedment.runtime.join;
+    requires com.speedment.runtime.welcome;
+    requires com.speedment.runtime.connector.mysql;
+    requires com.speedment.runtime.connector.mariadb;
+    requires com.speedment.runtime.connector.postgres;
+    requires com.speedment.runtime.connector.sqlite;
+    requires com.speedment.common.jvm_version;
 }
