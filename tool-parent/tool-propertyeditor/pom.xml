@@ -31,7 +31,11 @@
     
     <artifactId>tool-propertyeditor</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.tool.propertyeditor</module-name>
+    </properties>
+
     <name>Speedment - Tool - Property Editor</name>
     <description>
         A visual JavaFX component that makes it possible to edit the database 

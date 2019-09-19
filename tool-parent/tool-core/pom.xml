@@ -31,7 +31,11 @@
         
     <artifactId>tool-core</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.tool.core</module-name>
+    </properties>
+
     <name>Speedment - Tool - Core</name>
     <description>
         A graphical user interface that allows the user to modify the Speedment 

@@ -31,7 +31,11 @@
     
     <artifactId>tool-actions</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.tool.actions</module-name>
+    </properties>
+
     <name>Speedment - Tool - Actions</name>
     <description>
         Actions that can be performed in the Speedment Tool.

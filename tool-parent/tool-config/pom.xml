@@ -31,7 +31,11 @@
     
     <artifactId>tool-config</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.tool.config</module-name>
+    </properties>
+
     <name>Speedment - Tool - Config</name>
     <description>
         An observable configuration system that models the layout of a 
