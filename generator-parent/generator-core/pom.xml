@@ -31,7 +31,11 @@
     
     <artifactId>generator-core</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.generator.core</module-name>
+    </properties>
+
     <name>Speedment - Generator - Core</name>
     <description>
         A modular code generator that creates entity and manager classes from 
@@ -50,6 +54,7 @@
                             com.speedment.generator.core.component,
                             com.speedment.generator.core.event,
                             com.speedment.generator.core.event.trait,
+                            com.speedment.generator.core.translator,
                             com.speedment.generator.core
                         </Export-Package>
                     </instructions>

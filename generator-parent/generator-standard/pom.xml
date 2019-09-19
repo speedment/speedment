@@ -31,7 +31,11 @@
     
     <artifactId>generator-standard</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.generator.standard</module-name>
+    </properties>
+
     <name>Speedment - Generator - Standard Translator</name>
     <description>
         Standard Translators used by the Speedment ORM.

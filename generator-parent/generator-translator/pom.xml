@@ -31,7 +31,11 @@
     
     <artifactId>generator-translator</artifactId>
     <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.generator.translator</module-name>
+    </properties>
+
     <name>Speedment - Generator - Translator</name>
     <description>
         Translates between a database configuration model and a CodeGen model
