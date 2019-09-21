@@ -44,16 +44,32 @@ implements ToggleTablesEnabledAction {
             enableTables.setOnAction(ev ->
                 DocumentUtil.traverseOver(node)
                     .filter(TableProperty.class::isInstance)
-                    .forEach(doc -> ((TableProperty) doc).enabledProperty().setValue(true))
+                    .forEach(doc -> {
+                        TableProperty tableProperty = (TableProperty) doc;
+
+                        tableProperty.enabledProperty().setValue(true);
+                        setChildrenState(tableProperty, true);
+                    })
             );
 
             disableTables.setOnAction(ev ->
                 DocumentUtil.traverseOver(node)
                     .filter(TableProperty.class::isInstance)
-                    .forEach(doc -> ((TableProperty) doc).enabledProperty().setValue(false))
+                    .forEach(doc -> {
+                        TableProperty tableProperty = (TableProperty) doc;
+
+                        tableProperty.enabledProperty().setValue(false);
+                        setChildrenState(tableProperty, false);
+                    })
             );
 
             return Stream.of(enableTables, disableTables);
         });
+    }
+
+    private void setChildrenState(final TableProperty tableProperty, boolean state) {
+        tableProperty.columnsProperty().forEach(column -> column.enabledProperty().setValue(state));
+        tableProperty.primaryKeyColumnsProperty().forEach(pk -> pk.enabledProperty().setValue(state));
+        tableProperty.indexesProperty().forEach(index -> index.enabledProperty().setValue(state));
     }
 }
