@@ -53,6 +53,11 @@ implements TypeMapper<Integer, T> {
     }
 
     @Override
+    public boolean isToolApplicable() {
+        return false;
+    }
+
+    @Override
     public Type getJavaType(Column column) {
         requireNonNull(injector,
             IntegerToEnumTypeMapper.class.getSimpleName() +

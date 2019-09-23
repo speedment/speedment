@@ -188,7 +188,16 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
         // Defensively assume an unspecified order.
         return Ordering.UNSPECIFIED;
     }
-    
+
+    /**
+     * Indicates if the type mapper can be used in the Speedment tool.
+     *
+     * @return if type mapper is usable in Speedment tool
+     */
+    default boolean isToolApplicable() {
+        return true;
+    }
+
     /**
      * Returns an identity type mapper.
      *
