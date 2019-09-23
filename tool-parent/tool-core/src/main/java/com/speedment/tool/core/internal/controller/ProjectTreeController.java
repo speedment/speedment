@@ -244,6 +244,8 @@ public final class ProjectTreeController implements Initializable {
                 } else {
                     disable();
                 }
+
+                getTreeView().refresh();
             }
         }
     }
