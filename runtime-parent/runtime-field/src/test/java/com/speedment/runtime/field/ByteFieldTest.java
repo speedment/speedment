@@ -1,13 +1,13 @@
-/*
- *
+/**
+ * 
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
+ * the License at: 
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -39,8 +39,8 @@ import static java.util.Arrays.asList;
  * 
  * @see ByteField
  */
-@GeneratedCode(value = "Speedment")
-public final class ByteFieldTest {
+@GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
+final class ByteFieldTest {
     
     private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarByte();
     private ByteField<BasicEntity, Byte> field;
@@ -59,7 +59,7 @@ public final class ByteFieldTest {
     private BasicEntity l;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         field = ByteField.create(
             BasicEntity.Identifier.VAR_BYTE,
             BasicEntity::getVarByte,
@@ -85,7 +85,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testBetween() {
+    void testBetween() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.between((byte) 0, (byte) 2);
         final Predicate<BasicEntity> t1 = field.between((byte) -2, (byte) 2);
@@ -120,7 +120,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testEqual() {
+    void testEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.equal((byte) -1);
         final Predicate<BasicEntity> t1 = field.equal((byte) 0);
@@ -167,7 +167,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testGreaterOrEqual() {
+    void testGreaterOrEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.greaterOrEqual((byte) -1);
         final Predicate<BasicEntity> t1 = field.greaterOrEqual((byte) 0);
@@ -214,7 +214,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testGreaterThan() {
+    void testGreaterThan() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.greaterThan((byte) -1);
         final Predicate<BasicEntity> t1 = field.greaterThan((byte) 0);
@@ -261,7 +261,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testIn() {
+    void testIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in();
         final Predicate<BasicEntity> t1 = field.in((byte) 0);
@@ -308,7 +308,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testInSet() {
+    void testInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.in(Collections.singleton((byte) 0));
@@ -355,7 +355,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testLessThan() {
+    void testLessThan() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.lessThan((byte) -1);
         final Predicate<BasicEntity> t1 = field.lessThan((byte) 0);
@@ -402,7 +402,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testLessOrEqual() {
+    void testLessOrEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.lessOrEqual((byte) -1);
         final Predicate<BasicEntity> t1 = field.lessOrEqual((byte) 0);
@@ -449,7 +449,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testNotBetween() {
+    void testNotBetween() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notBetween((byte) 0, (byte) 2);
         final Predicate<BasicEntity> t1 = field.notBetween((byte) -2, (byte) 2);
@@ -484,7 +484,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testNotEqual() {
+    void testNotEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notEqual((byte) -1);
         final Predicate<BasicEntity> t1 = field.notEqual((byte) 0);
@@ -531,7 +531,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testNotIn() {
+    void testNotIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn();
         final Predicate<BasicEntity> t1 = field.notIn((byte) 0);
@@ -578,7 +578,7 @@ public final class ByteFieldTest {
     }
     
     @Test
-    public void testNotInSet() {
+    void testNotInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton((byte) 0));

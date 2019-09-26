@@ -1,13 +1,13 @@
-/*
- *
+/**
+ * 
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
+ * the License at: 
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -39,8 +39,8 @@ import static java.util.Arrays.asList;
  * 
  * @see DoubleField
  */
-@GeneratedCode(value = "Speedment")
-public final class DoubleFieldTest {
+@GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
+final class DoubleFieldTest {
     
     private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarDouble();
     private DoubleField<BasicEntity, Double> field;
@@ -59,7 +59,7 @@ public final class DoubleFieldTest {
     private BasicEntity l;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         field = DoubleField.create(
             BasicEntity.Identifier.VAR_DOUBLE,
             BasicEntity::getVarDouble,
@@ -85,7 +85,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testBetween() {
+    void testBetween() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.between(0d, 2d);
         final Predicate<BasicEntity> t1 = field.between(-2d, 2d);
@@ -120,7 +120,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testEqual() {
+    void testEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.equal(-1d);
         final Predicate<BasicEntity> t1 = field.equal(0d);
@@ -167,7 +167,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testGreaterOrEqual() {
+    void testGreaterOrEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.greaterOrEqual(-1d);
         final Predicate<BasicEntity> t1 = field.greaterOrEqual(0d);
@@ -214,7 +214,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testGreaterThan() {
+    void testGreaterThan() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.greaterThan(-1d);
         final Predicate<BasicEntity> t1 = field.greaterThan(0d);
@@ -261,7 +261,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testIn() {
+    void testIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in();
         final Predicate<BasicEntity> t1 = field.in(0d);
@@ -308,7 +308,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testInSet() {
+    void testInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.in(Collections.singleton(0d));
@@ -355,7 +355,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testLessThan() {
+    void testLessThan() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.lessThan(-1d);
         final Predicate<BasicEntity> t1 = field.lessThan(0d);
@@ -402,7 +402,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testLessOrEqual() {
+    void testLessOrEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.lessOrEqual(-1d);
         final Predicate<BasicEntity> t1 = field.lessOrEqual(0d);
@@ -449,7 +449,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testNotBetween() {
+    void testNotBetween() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notBetween(0d, 2d);
         final Predicate<BasicEntity> t1 = field.notBetween(-2d, 2d);
@@ -484,7 +484,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testNotEqual() {
+    void testNotEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notEqual(-1d);
         final Predicate<BasicEntity> t1 = field.notEqual(0d);
@@ -531,7 +531,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testNotIn() {
+    void testNotIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn();
         final Predicate<BasicEntity> t1 = field.notIn(0d);
@@ -578,7 +578,7 @@ public final class DoubleFieldTest {
     }
     
     @Test
-    public void testNotInSet() {
+    void testNotInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton(0d));
