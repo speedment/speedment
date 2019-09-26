@@ -88,9 +88,11 @@ public final class JsonDeserializer implements AutoCloseable {
             case 0x2E : // . (decimal sign)
             case 0x2D : // - (minus sign)
                 final AtomicReference<Number> number = new AtomicReference<>();
-                if (parseNumber(number::set) == CloseMethod.NOT_DECIDED) {
+                final CloseMethod closeMethod = parseNumber(number::set);
+                if (closeMethod == CloseMethod.NOT_DECIDED) {
                     return number.get();
                 }
+                throw new JsonSyntaxException(row, col, "parseNumber should return " + CloseMethod.NOT_DECIDED + " but actually returned: " + closeMethod);
             default:
                 throw unexpectedCharacterException();
         }
