@@ -43,10 +43,9 @@ public final class JavadocView implements Transform<Javadoc, String>,
     
     private static final int BLOCK_WIDTH = 80;
     
-	private static final String
-		JAVADOC_DELIMITER = nl() + " * ",
-		JAVADOC_PREFIX    = "/**" + nl() + " * ",
-		JAVADOC_SUFFIX    = nl() + " */";
+	private static final String JAVADOC_DELIMITER = nl() + " * ";
+    private static final String JAVADOC_PREFIX    = "/**" + nl() + " * ";
+    private static final String JAVADOC_SUFFIX    = nl() + " */";
 
 	@Override
 	public Optional<String> transform(Generator gen, Javadoc model) {
@@ -80,7 +79,7 @@ public final class JavadocView implements Transform<Javadoc, String>,
             // Determine the column width of the widest tag name and use that 
             // for padding.
             final int indentTo = rowBuilders.stream()
-                .mapToInt(sb -> sb.length())
+                .mapToInt(StringBuilder::length)
                 .map(i -> i + 1)             // Add one extra space to each row.
                 .max().orElse(0);            // If empty, do no padding.
             
@@ -105,7 +104,7 @@ public final class JavadocView implements Transform<Javadoc, String>,
                     content = Stream.of(
                         tag.getValue().orElse(null),
                         tag.getText().orElse(null)
-                    ).filter(s -> s != null).collect(joining(" "));
+                    ).filter(Objects::nonNull).collect(joining(" "));
                 }
                 
                 row.append(formatText(content, indentTo, blockWidth));
@@ -120,7 +119,7 @@ public final class JavadocView implements Transform<Javadoc, String>,
 		return Optional.of(
             JAVADOC_PREFIX + 
             Stream.of(formattedText, tagSection)
-                .filter(s -> s != null)
+                .filter(Objects::nonNull)
                 .filter(s -> !s.isEmpty())
                 .collect(joining(dnl()))
                 .replace(nl(), JAVADOC_DELIMITER) + 

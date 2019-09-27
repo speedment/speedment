@@ -70,7 +70,7 @@ public final class AnnotationImpl implements Annotation {
 		annotations = Copier.copy(prototype.getAnnotations());
 		fields      = Copier.copy(prototype.getFields());
 		imports     = Copier.copy(prototype.getImports());
-		modifiers   = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+		modifiers   = Copier.copy(prototype.getModifiers(), Modifier::copy, EnumSet.noneOf(Modifier.class));
 	}
 
 	@Override

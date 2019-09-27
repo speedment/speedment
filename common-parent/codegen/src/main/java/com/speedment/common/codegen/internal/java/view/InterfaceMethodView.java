@@ -56,7 +56,7 @@ implements Transform<InterfaceMethod, String>,
                       || model.getModifiers().contains(STATIC)
             );
 
-        final String spacing = body.map($ -> " ").orElse("");
+        final String spacing = body.map(unused -> " ").orElse("");
 
         return Optional.of(
             renderJavadoc(gen, model) +

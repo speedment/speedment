@@ -38,8 +38,7 @@ import org.apache.maven.project.MavenProject;
  */
 public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
 
-        private final static Logger LOGGER = 
-            LoggerManager.getLogger(AbstractGenerateMojo.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractGenerateMojo.class);
     
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;

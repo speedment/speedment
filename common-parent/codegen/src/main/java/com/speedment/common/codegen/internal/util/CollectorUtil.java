@@ -26,8 +26,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  * Utility methods for collecting streams in various ways.
  *
@@ -36,6 +34,8 @@ import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanc
  * @since   2.1
  */
 public final class CollectorUtil {
+
+    private CollectorUtil() { }
 
     /**
      * Similar to the 
@@ -122,10 +122,4 @@ public final class CollectorUtil {
         }
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private CollectorUtil() {
-        instanceNotAllowed(getClass());
-    }
 }

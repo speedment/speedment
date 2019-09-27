@@ -89,7 +89,7 @@ public final class JavadocTagImpl extends JavadocTagBase {
         super(prototype);
     }
 
-    public final static class JavadocTagConst extends JavadocTagBase {
+    public static final class JavadocTagConst extends JavadocTagBase {
 
         public JavadocTagConst(String name) {
             super(name);

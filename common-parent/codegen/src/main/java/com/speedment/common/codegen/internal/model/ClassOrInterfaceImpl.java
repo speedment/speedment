@@ -20,6 +20,7 @@ import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.modifier.Modifier;
 import com.speedment.common.codegen.model.trait.HasClasses;
+import com.speedment.common.codegen.model.trait.HasCopy;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -83,8 +84,8 @@ implements ClassOrInterface<T> {
 		fields		= Copier.copy(prototype.getFields());
 		methods		= Copier.copy(prototype.getMethods());
         initalizers = Copier.copy(prototype.getInitializers());
-		classes		= Copier.copy(prototype.getClasses(), c -> c.copy());
-		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+		classes		= Copier.copy(prototype.getClasses(), HasCopy::copy);
+		modifiers	= Copier.copy(prototype.getModifiers(), Modifier::copy, EnumSet.noneOf(Modifier.class));
 	}
 
     @Override

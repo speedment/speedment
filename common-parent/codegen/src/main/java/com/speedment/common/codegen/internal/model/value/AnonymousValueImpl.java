@@ -65,7 +65,7 @@ implements AnonymousValue {
         this.fields           = Copier.copy(prototype.getFields());
         this.methods          = Copier.copy(prototype.getMethods());
         this.initializers     = Copier.copy(prototype.getInitializers());
-        this.innerClasses     = Copier.copy(prototype.getClasses(), t -> t.copy());
+        this.innerClasses     = Copier.copy(prototype.getClasses(), HasCopy::copy);
         this.value            = prototype.getValue();
     }
 

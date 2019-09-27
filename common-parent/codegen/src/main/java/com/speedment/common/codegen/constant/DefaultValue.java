@@ -27,14 +27,10 @@ import static java.util.Objects.requireNonNull;
  */
 public final class DefaultValue {
     
-    /**
-     * The class should never be instantiated.
-     */
     private DefaultValue() {}
     
-    public final static Value<?>
-		NULL         = Value.ofNull(),
-		EMPTY_STRING = string("");
+    public static final Value<?> NULL         = Value.ofNull();
+    public static final Value<?> EMPTY_STRING = string("");
     
     /**
      * Creates a 'string' value with the specified content.

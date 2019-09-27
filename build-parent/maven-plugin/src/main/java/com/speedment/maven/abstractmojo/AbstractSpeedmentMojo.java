@@ -31,8 +31,6 @@ import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.typemapper.TypeMapper;
-import com.speedment.tool.core.ToolBundle;
-import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -310,7 +308,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     protected void configureBuilder( ApplicationBuilder<?, ?>  builder) {}
 
-    private final static class TypeMapperInstantiationException extends RuntimeException {
+    private static final class TypeMapperInstantiationException extends RuntimeException {
 
         private static final long serialVersionUID = -8267239306656063289L;
 
@@ -320,7 +318,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     }
 
      @InjectKey(TypeMapperInstaller.class)
-    private final static class TypeMapperInstaller {
+    private static final class TypeMapperInstaller {
 
         private static Mapping[] mappings;
 

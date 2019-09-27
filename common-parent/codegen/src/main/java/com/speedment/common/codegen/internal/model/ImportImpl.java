@@ -66,7 +66,7 @@ public final class ImportImpl implements Import {
      */
     protected ImportImpl(Import prototype) {
         type      = prototype.getType();
-        modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+        modifiers = Copier.copy(prototype.getModifiers(), Modifier::copy, EnumSet.noneOf(Modifier.class));
     }
 
     @Override

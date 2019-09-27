@@ -34,9 +34,8 @@ import java.util.function.Consumer;
  */
 public final class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
     
-	private static final String 
-			DEFAULT_TEXT = "Write some documentation here.",
-			DEFAULT_NAME = "Your Name";
+	private static final String DEFAULT_TEXT = "Write some documentation here.";
+	private static final String DEFAULT_NAME = "Your Name";
  
     /**
      * Parses the specified model recursively to find all models that implements

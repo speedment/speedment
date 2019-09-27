@@ -86,7 +86,7 @@ public final class FieldImpl implements Field {
 		value		= prototype.getValue().map(Copier::copy).orElse(null);
 		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);
 		annotations	= Copier.copy(prototype.getAnnotations());
-		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+		modifiers	= Copier.copy(prototype.getModifiers(), Modifier::copy, EnumSet.noneOf(Modifier.class));
 	}
 
     @Override

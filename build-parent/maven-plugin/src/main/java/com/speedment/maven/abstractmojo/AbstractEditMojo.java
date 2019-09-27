@@ -46,8 +46,8 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class AbstractEditMojo extends AbstractMojo {
 
-    private final static String SET_OPERATOR = ":";
-    private final static String PATH_SEPARATOR = "->";
+    private static final String SET_OPERATOR = ":";
+    private static final String PATH_SEPARATOR = "->";
 
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;

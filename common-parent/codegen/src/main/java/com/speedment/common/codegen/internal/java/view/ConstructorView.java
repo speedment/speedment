@@ -18,28 +18,17 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-
-import com.speedment.common.codegen.internal.java.view.trait.HasAnnotationUsageView;
-import com.speedment.common.codegen.internal.java.view.trait.HasCodeView;
-import com.speedment.common.codegen.internal.java.view.trait.HasFieldsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasGenericsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
-import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
-import com.speedment.common.codegen.internal.java.view.trait.HasThrowsView;
+import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.trait.HasName;
 import com.speedment.common.codegen.util.Formatting;
 
-import static com.speedment.common.codegen.model.modifier.Modifier.ABSTRACT;
-import static com.speedment.common.codegen.model.modifier.Modifier.PRIVATE;
-import static com.speedment.common.codegen.model.modifier.Modifier.PROTECTED;
-import static com.speedment.common.codegen.model.modifier.Modifier.PUBLIC;
-import static com.speedment.common.codegen.util.Formatting.*;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.common.codegen.model.modifier.Modifier.*;
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.tab;
 
 /**
  * Transforms from a {@link Constructor} to java code.

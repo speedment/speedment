@@ -30,7 +30,9 @@ import java.util.Optional;
  * @since   2.4.1
  */
 final class SimpleTypeUtil {
-    
+
+    private SimpleTypeUtil() {}
+
     /**
      * Creates a full name for the specified class in the specified file,
      * suitable to be used as a TypeName.
@@ -40,15 +42,13 @@ final class SimpleTypeUtil {
      * @return       the full name of the class
      */
     public static String nameOf(File file, ClassOrInterface<?> clazz) {
-        String name = Formatting.fileToClassName(file.getName())
+        return Formatting.fileToClassName(file.getName())
             .flatMap(Formatting::packageName)
             .orElseThrow(
                 () -> new RuntimeException(
                     "File did not have appropriate name."
                 )
             ) + "." + pathTo(file, clazz.getName());
-
-        return name;
     }
     
     private static String pathTo(HasClasses<?> parent, String needle) {
@@ -74,6 +74,5 @@ final class SimpleTypeUtil {
         
         return Optional.empty();
     }
-    
-    private SimpleTypeUtil() {}
+
 }

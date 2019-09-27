@@ -197,12 +197,12 @@ public final class AutoImports implements Consumer<File> {
         
         // Strip any generic parts from the type name
         if (name.contains("<")) {
-            name = name.substring(0, name.indexOf("<"));
+            name = name.substring(0, name.indexOf('<'));
         }
         
         // Strip any array parts from the type name
         if (name.contains("[")) {
-            name = name.substring(0, name.indexOf("["));
+            name = name.substring(0, name.indexOf('['));
         }
 
         // If the class is not a primitive type and it should be ignored, add

@@ -31,10 +31,10 @@ import java.nio.file.Paths;
  */
 public final class MavenPathComponent implements PathComponent {
 
-    public final static String MAVEN_BASE_DIR = "maven.baseDir";
+    public static final String MAVEN_BASE_DIR = "maven.baseDir";
     
-    private @Config(name=MAVEN_BASE_DIR, value="") String mavenBaseDir;
-    private @Inject ProjectComponent projectComponent;
+    @Config(name=MAVEN_BASE_DIR, value="") private String mavenBaseDir;
+    @Inject private ProjectComponent projectComponent;
     
     @Override
     public Path baseDir() {
