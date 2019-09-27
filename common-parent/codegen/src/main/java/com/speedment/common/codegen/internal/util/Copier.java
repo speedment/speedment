@@ -19,7 +19,6 @@ package com.speedment.common.codegen.internal.util;
 import com.speedment.common.codegen.model.trait.HasCopy;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 import static java.util.Objects.requireNonNull;
@@ -41,13 +40,7 @@ public final class Copier {
 	}
 	
 	public static <T> Optional<T> copy(Optional<T> prototype, UnaryOperator<T> copier) {
-		if (prototype.isPresent()) {
-			return Optional.of(
-				requireNonNull(copier).apply(prototype.get())
-			);
-		} else {
-			return Optional.empty();
-		}
+		return prototype.map(t -> requireNonNull(copier).apply(t));
 	}
 	
 	public static <T extends HasCopy<T>> List<T> copy(List<T> prototype) {

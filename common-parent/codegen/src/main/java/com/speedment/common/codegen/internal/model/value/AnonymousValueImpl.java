@@ -17,19 +17,13 @@
 package com.speedment.common.codegen.internal.model.value;
 
 import com.speedment.common.codegen.internal.util.Copier;
-import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Initializer;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.value.AnonymousValue;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 /**
  * Default implementation of the {@link AnonymousValue} interface.
