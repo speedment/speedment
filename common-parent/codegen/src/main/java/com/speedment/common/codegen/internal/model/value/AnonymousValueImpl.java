@@ -29,6 +29,7 @@ import com.speedment.common.codegen.model.value.AnonymousValue;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * Default implementation of the {@link AnonymousValue} interface.
@@ -65,7 +66,7 @@ implements AnonymousValue {
         this.fields           = Copier.copy(prototype.getFields());
         this.methods          = Copier.copy(prototype.getMethods());
         this.initializers     = Copier.copy(prototype.getInitializers());
-        this.innerClasses     = Copier.copy(prototype.getClasses(), HasCopy::copy);
+        this.innerClasses     = Copier.copy(prototype.getClasses(), ClassOrInterface::copy);
         this.value            = prototype.getValue();
     }
 

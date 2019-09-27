@@ -70,7 +70,7 @@ public final class FileImpl implements File {
         this.name = requireNonNull(prototype).getName();
         this.doc = prototype.getJavadoc().map(Copier::copy).orElse(null);
         this.imports = Copier.copy(prototype.getImports());
-        this.classes = Copier.copy(prototype.getClasses(), HasCopy::copy);
+        this.classes = Copier.copy(prototype.getClasses(), ClassOrInterface::copy);
     }
 
     @Override

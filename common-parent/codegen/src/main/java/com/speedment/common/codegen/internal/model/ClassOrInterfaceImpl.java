@@ -84,7 +84,7 @@ implements ClassOrInterface<T> {
 		fields		= Copier.copy(prototype.getFields());
 		methods		= Copier.copy(prototype.getMethods());
         initalizers = Copier.copy(prototype.getInitializers());
-		classes		= Copier.copy(prototype.getClasses(), HasCopy::copy);
+		classes		= Copier.copy(prototype.getClasses(), ClassOrInterface::copy);
 		modifiers	= Copier.copy(prototype.getModifiers(), Modifier::copy, EnumSet.noneOf(Modifier.class));
 	}
 

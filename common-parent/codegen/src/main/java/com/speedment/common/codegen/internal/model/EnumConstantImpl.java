@@ -77,7 +77,7 @@ public final class EnumConstantImpl implements EnumConstant {
 	    name	     = requireNonNull(prototype).getName();
         javadoc      = prototype.getJavadoc().orElse(null);
 		imports	     = Copier.copy(prototype.getImports());
-		classes	     = Copier.copy(prototype.getClasses(), HasCopy::copy);
+		classes	     = Copier.copy(prototype.getClasses(), ClassOrInterface::copy);
 		initializers = Copier.copy(prototype.getInitializers(), HasCopy::copy);
 		methods	     = Copier.copy(prototype.getMethods(), HasCopy::copy);
 		fields	     = Copier.copy(prototype.getFields(), HasCopy::copy);
