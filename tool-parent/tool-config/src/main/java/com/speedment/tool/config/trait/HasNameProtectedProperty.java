@@ -28,10 +28,8 @@ import javafx.beans.property.BooleanProperty;
  */
 public interface HasNameProtectedProperty extends HasNameProperty {
 
-    String NAME_PROTECTED = "nameProtected";
-
     default BooleanProperty nameProtectedProperty() {
-        return booleanPropertyOf(NAME_PROTECTED, this::isNameProtectedByDefault);
+        return booleanPropertyOf(ConstantUtil.NAME_PROTECTED, this::isNameProtectedByDefault);
     }
 
     default boolean isNameProtected() {

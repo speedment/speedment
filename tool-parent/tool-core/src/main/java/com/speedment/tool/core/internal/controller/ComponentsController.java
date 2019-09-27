@@ -216,7 +216,7 @@ public final class ComponentsController implements Initializable {
             final TypeMappersItem typeMappers = new TypeMappersItem();
             injector.get(TypeMapperComponent.class).ifPresent(tm -> {
                 tm.stream()
-                    .sorted(TypeMapper.COMPARATOR)
+                    .sorted(TypeMapper.standardComparator())
                     .map(TypeMapperItem::new)
                     .forEachOrdered(typeMappers.getChildren()::add);
             });

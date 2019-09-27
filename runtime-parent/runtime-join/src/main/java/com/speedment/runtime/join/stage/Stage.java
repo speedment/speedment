@@ -19,6 +19,7 @@ package com.speedment.runtime.join.stage;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.internal.stage.StageImpl;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;

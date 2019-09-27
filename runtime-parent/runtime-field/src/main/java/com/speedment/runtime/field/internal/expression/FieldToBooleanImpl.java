@@ -28,11 +28,13 @@ import com.speedment.runtime.field.expression.FieldToBoolean;
  * @since  3.1.0
  */
 public final class FieldToBooleanImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Boolean, ToBoolean<ENTITY>, ToBooleanFunction<V>>
-implements FieldToBoolean<ENTITY, V> {
+    extends AbstractFieldMapper<ENTITY, V, Boolean, ToBoolean<ENTITY>, ToBooleanFunction<V>>
+    implements FieldToBoolean<ENTITY, V> {
 
-    public FieldToBooleanImpl(ReferenceField<ENTITY, ?, V> field,
-                              ToBooleanFunction<V> mapper) {
+    public FieldToBooleanImpl(
+        final ReferenceField<ENTITY, ?, V> field,
+        final ToBooleanFunction<V> mapper
+    ) {
         super(field, mapper);
     }
 

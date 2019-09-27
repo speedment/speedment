@@ -41,6 +41,7 @@ import com.speedment.runtime.core.db.SqlSupplier;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.util.ProgressMeasure;
+import com.speedment.runtime.core.util.ProgressMeasureUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 
@@ -252,7 +253,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
         return readSchemaMetadata(
             projectCopy, dbmsCopy, progress
         ).whenCompleteAsync((project, ex) -> {
-            progress.setProgress(ProgressMeasure.DONE);
+            progress.setProgress(ProgressMeasureUtil.DONE);
             if (ex != null) {
                 progress.setCurrentAction("Error!");
                 throw new SpeedmentException("Unable to read schema metadata.", ex);

@@ -66,7 +66,9 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
      * comparison index and if two mappers share the same database type, it will
      * use the label in alphabetical order.
      */
-    Comparator<TypeMapper<?, ?>> COMPARATOR = comparing(TypeMapper::getLabel);
+    static Comparator<TypeMapper<?, ?>> standardComparator() {
+      return comparing(TypeMapper::getLabel);
+    }
 
     /**
      * Returns the label for this mapper that should appear to the end user.

@@ -28,14 +28,12 @@ import javafx.beans.property.IntegerProperty;
  * @since   3.0.2
  */
 public interface HasColumnSizeProperty extends HasColumnSize, DocumentProperty {
-    
-    int DEFAULT_COLUMN_SIZE = -1;
 
     default IntegerProperty columnSizeProperty() {
         return integerPropertyOf(
             HasColumnSizeUtil.COLUMN_SIZE,
             () -> HasColumnSize.super.getColumnSize()
-                .orElse(DEFAULT_COLUMN_SIZE)
+                .orElse(ConstantUtil.DEFAULT_COLUMN_SIZE)
         );
     }
 

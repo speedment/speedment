@@ -17,9 +17,9 @@
 package com.speedment.tool.config.internal.component;
 
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.core.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.*;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -46,15 +46,15 @@ public final class DocumentPropertyComponentImpl implements DocumentPropertyComp
         root = new Branch(DEFAULT_CONSTRUCTOR);
 
         root.find(emptyList()).set(parent -> new ProjectProperty());
-        root.find(DBMSES).set(parent -> new DbmsProperty((Project) parent));
-        root.find(SCHEMAS).set(parent -> new SchemaProperty((Dbms) parent));
-        root.find(TABLES).set(parent -> new TableProperty((Schema) parent));
-        root.find(COLUMNS).set(parent -> new ColumnProperty((Table) parent));
-        root.find(PRIMARY_KEY_COLUMNS).set(parent -> new PrimaryKeyColumnProperty((Table) parent));
-        root.find(INDEXES).set(parent -> new IndexProperty((Table) parent));
-        root.find(INDEX_COLUMNS).set(parent -> new IndexColumnProperty((Index) parent));
-        root.find(FOREIGN_KEYS).set(parent -> new ForeignKeyProperty((Table) parent));
-        root.find(FOREIGN_KEY_COLUMNS).set(parent -> new ForeignKeyColumnProperty((ForeignKey) parent));
+        root.find(DocumentPropertyComponentUtil.DBMSES).set(parent -> new DbmsProperty((Project) parent));
+        root.find(DocumentPropertyComponentUtil.SCHEMAS).set(parent -> new SchemaProperty((Dbms) parent));
+        root.find(DocumentPropertyComponentUtil.TABLES).set(parent -> new TableProperty((Schema) parent));
+        root.find(DocumentPropertyComponentUtil.COLUMNS).set(parent -> new ColumnProperty((Table) parent));
+        root.find(DocumentPropertyComponentUtil.PRIMARY_KEY_COLUMNS).set(parent -> new PrimaryKeyColumnProperty((Table) parent));
+        root.find(DocumentPropertyComponentUtil.INDEXES).set(parent -> new IndexProperty((Table) parent));
+        root.find(DocumentPropertyComponentUtil.INDEX_COLUMNS).set(parent -> new IndexColumnProperty((Index) parent));
+        root.find(DocumentPropertyComponentUtil.FOREIGN_KEYS).set(parent -> new ForeignKeyProperty((Table) parent));
+        root.find(DocumentPropertyComponentUtil.FOREIGN_KEY_COLUMNS).set(parent -> new ForeignKeyColumnProperty((ForeignKey) parent));
     }
     
     @Override

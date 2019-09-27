@@ -17,7 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.*;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.TablePropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -97,6 +97,6 @@ implements Table,
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.TABLES, key);
+        return concat(DocumentPropertyComponentUtil.TABLES, key);
     }
 }

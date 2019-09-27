@@ -19,6 +19,7 @@ package com.speedment.runtime.typemapper.largeobject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.exception.SpeedmentTypeMapperException;
+import com.speedment.runtime.typemapper.internal.largeobject.StringClob;
 
 import java.lang.reflect.Type;
 import java.sql.Clob;

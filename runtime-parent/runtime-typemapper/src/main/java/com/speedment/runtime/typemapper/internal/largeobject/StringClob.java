@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.typemapper.largeobject;
+package com.speedment.runtime.typemapper.internal.largeobject;
 
 
 import java.io.*;
@@ -91,32 +91,36 @@ public final class StringClob implements Clob {
     @Override
     public int setString(final long pos, final String str) throws SQLException {
         assertNotFreeNotCalled();
-        throw new SQLFeatureNotSupportedException("Not supported for an unmodifiable Clob.");
+        throw newSQLFeatureNotSupportedException();
     }
 
     @Override
     public int setString(long pos, String str, int offset, int len) throws SQLException {
         assertNotFreeNotCalled();
-        throw new SQLFeatureNotSupportedException("Not supported for an unmodifiable Clob.");
+        throw newSQLFeatureNotSupportedException();
     }
 
     @Override
     public OutputStream setAsciiStream(long pos) throws SQLException {
         assertNotFreeNotCalled();
-        throw new SQLFeatureNotSupportedException("Not supported for an unmodifiable Clob.");
+        throw newSQLFeatureNotSupportedException();
     }
 
     @Override
     public Writer setCharacterStream(long ordinalPosition) throws SQLException {
         assertNotFreeNotCalled();
         assertInRange(ordinalPosition);
-        throw new SQLFeatureNotSupportedException("Not supported for an unmodifiable Clob.");
+        throw newSQLFeatureNotSupportedException();
     }
 
     @Override
     public void truncate(long len) throws SQLException {
         assertNotFreeNotCalled();
-        throw new SQLFeatureNotSupportedException("Not supported for an unmodifiable Clob.");
+        throw newSQLFeatureNotSupportedException();
+    }
+
+    private SQLFeatureNotSupportedException newSQLFeatureNotSupportedException() {
+        return new SQLFeatureNotSupportedException("Not supported for an unmodifiable Clob.");
     }
 
     @Override

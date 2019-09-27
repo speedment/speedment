@@ -18,7 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.PrimaryKeyColumnPropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -59,6 +59,6 @@ implements PrimaryKeyColumn,
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.PRIMARY_KEY_COLUMNS, key);
+        return concat(DocumentPropertyComponentUtil.PRIMARY_KEY_COLUMNS, key);
     }
 }

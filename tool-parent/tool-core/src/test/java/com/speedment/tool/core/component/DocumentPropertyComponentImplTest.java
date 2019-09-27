@@ -26,6 +26,7 @@ import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.*;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
 import com.speedment.tool.core.ToolBundle;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,16 +96,16 @@ final class DocumentPropertyComponentImplTest {
     @Test
     void testDefaultInstallments() {
 
-        final DocumentProperty project = component.getConstructor(DocumentPropertyComponent.PROJECTS).create(null);
-        final DocumentProperty dbms = component.getConstructor(DocumentPropertyComponent.DBMSES).create(project);
-        final DocumentProperty schema = component.getConstructor(DocumentPropertyComponent.SCHEMAS).create(dbms);
-        final DocumentProperty table = component.getConstructor(DocumentPropertyComponent.TABLES).create(schema);
-        final DocumentProperty column = component.getConstructor(DocumentPropertyComponent.COLUMNS).create(table);
-        final DocumentProperty index = component.getConstructor(DocumentPropertyComponent.INDEXES).create(table);
-        final DocumentProperty indexColumn = component.getConstructor(DocumentPropertyComponent.INDEX_COLUMNS).create(index);
-        final DocumentProperty foreignKey = component.getConstructor(DocumentPropertyComponent.FOREIGN_KEYS).create(table);
-        final DocumentProperty foreignKeyColumn = component.getConstructor(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS).create(foreignKey);
-        final DocumentProperty primaryKey = component.getConstructor(DocumentPropertyComponent.PRIMARY_KEY_COLUMNS).create(table);
+        final DocumentProperty project = component.getConstructor(DocumentPropertyComponentUtil.PROJECTS).create(null);
+        final DocumentProperty dbms = component.getConstructor(DocumentPropertyComponentUtil.DBMSES).create(project);
+        final DocumentProperty schema = component.getConstructor(DocumentPropertyComponentUtil.SCHEMAS).create(dbms);
+        final DocumentProperty table = component.getConstructor(DocumentPropertyComponentUtil.TABLES).create(schema);
+        final DocumentProperty column = component.getConstructor(DocumentPropertyComponentUtil.COLUMNS).create(table);
+        final DocumentProperty index = component.getConstructor(DocumentPropertyComponentUtil.INDEXES).create(table);
+        final DocumentProperty indexColumn = component.getConstructor(DocumentPropertyComponentUtil.INDEX_COLUMNS).create(index);
+        final DocumentProperty foreignKey = component.getConstructor(DocumentPropertyComponentUtil.FOREIGN_KEYS).create(table);
+        final DocumentProperty foreignKeyColumn = component.getConstructor(DocumentPropertyComponentUtil.FOREIGN_KEY_COLUMNS).create(foreignKey);
+        final DocumentProperty primaryKey = component.getConstructor(DocumentPropertyComponentUtil.PRIMARY_KEY_COLUMNS).create(table);
 
         assertEquals(ProjectProperty.class, project.getClass(), "Make sure ProjectProperty is used by default: ");
         assertEquals(DbmsProperty.class, dbms.getClass(), "Make sure DbmsProperty is used by default: ");
@@ -120,10 +121,10 @@ final class DocumentPropertyComponentImplTest {
 
     @Test
     void testAlternateInstallments() {
-        component.setConstructor(parent -> new AlternativeDbms((Project) parent), DocumentPropertyComponent.DBMSES);
+        component.setConstructor(parent -> new AlternativeDbms((Project) parent), DocumentPropertyComponentUtil.DBMSES);
 
-        final DocumentProperty project = component.getConstructor(DocumentPropertyComponent.PROJECTS).create(null);
-        final DocumentProperty dbms = component.getConstructor(DocumentPropertyComponent.DBMSES).create(project);
+        final DocumentProperty project = component.getConstructor(DocumentPropertyComponentUtil.PROJECTS).create(null);
+        final DocumentProperty dbms = component.getConstructor(DocumentPropertyComponentUtil.DBMSES).create(project);
 
         assertEquals(ProjectProperty.class, project.getClass());
         assertEquals(AlternativeDbms.class, dbms.getClass());
@@ -137,7 +138,7 @@ final class DocumentPropertyComponentImplTest {
 
         @Override
         protected List<String> keyPathEndingWith(String key) {
-            return ImmutableListUtil.concat(DocumentPropertyComponent.DBMSES, key);
+            return ImmutableListUtil.concat(DocumentPropertyComponentUtil.DBMSES, key);
         }
 
         @Override
