@@ -27,7 +27,6 @@ final class UtilClassRuleUtil {
     private UtilClassRuleUtil() {}
 
     private static final String UTIL = "Util";
-    private static final DescribedPredicate<JavaClass> NONISTANTIABLE_CLASS = JavaClass.Predicates.simpleNameStartingWith(UTIL);
 
     static void classIsFinal(JavaClasses classes) {
         ArchRuleDefinition.classes()

@@ -98,7 +98,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
 
     @Override
     protected boolean debug() {
-        return debug == null ? false : debug;
+        return !(debug == null) && debug;
     }
 
     public String getConfigFile() {

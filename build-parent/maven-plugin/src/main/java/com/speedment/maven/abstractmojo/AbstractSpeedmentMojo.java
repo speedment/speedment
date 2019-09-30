@@ -107,9 +107,9 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         final String top = StringUtils.isBlank(getConfigFile())
             ? DEFAULT_CONFIG_LOCATION 
             : getConfigFile();
-        
-        System.out.println(project());
-        
+
+        getLog().info(project().toString());
+
         return project()
             .getBasedir()
             .toPath()
@@ -160,7 +160,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             final String msg = "The expected .json-file is null.";
             getLog().info(msg);
             return false;
-        } else if (!Files.exists(file)) {
+        } else if (!file.toFile().exists()) {
             final String msg = "The expected .json-file '"
                 + file + "' does not exist.";
             getLog().info(msg);
