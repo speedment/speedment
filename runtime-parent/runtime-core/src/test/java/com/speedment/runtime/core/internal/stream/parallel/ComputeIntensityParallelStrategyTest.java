@@ -80,7 +80,7 @@ final class ComputeIntensityParallelStrategyTest {
                         //System.out.println(res);
                     });
 
-            assertTrue(threadCount.size() >= availableProcessors - 1, "threadCount is " + threadCount.size() + " but available processors -1 is " + (availableProcessors - 1) + " for strategy" + strategy.getClass().getSimpleName());
+            assertTrue(threadCount.size() >= availableProcessors - 2, "threadCount is " + threadCount.size() + " but (available processors - 2) is " + (availableProcessors - 2) + " for strategy " + strategy.getClass().getSimpleName());
 
         });
     }
