@@ -65,4 +65,18 @@
         </profile>
     </profiles>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <!--Disable config from root parent-->
+                        <manifestFile combine.self="override"/>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
