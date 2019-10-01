@@ -80,9 +80,9 @@
 
     <profiles>
         <profile>
-            <id>java13</id>
+            <id>openjfx</id>
             <activation>
-                <jdk>13</jdk>
+                <jdk>[10</jdk>
             </activation>
             <dependencies>
                 <dependency>
@@ -98,60 +98,6 @@
             </dependencies>
         </profile>
 
-        <profile>
-            <id>java12</id>
-            <activation>
-                <jdk>12</jdk>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-controls</artifactId>
-                    <version>${org.openjfx.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-fxml</artifactId>
-                    <version>${org.openjfx.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>java11</id>
-            <activation>
-                <jdk>11</jdk>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-controls</artifactId>
-                    <version>${org.openjfx.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-fxml</artifactId>
-                    <version>${org.openjfx.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>java10</id>
-            <activation>
-                <jdk>10</jdk>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-controls</artifactId>
-                    <version>${org.openjfx.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-fxml</artifactId>
-                    <version>${org.openjfx.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
         <profile>
             <id>release</id>
             <build>
