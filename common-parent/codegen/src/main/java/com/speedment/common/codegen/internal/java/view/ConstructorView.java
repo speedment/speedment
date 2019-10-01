@@ -92,7 +92,7 @@ implements Transform<Constructor, String>,
 
         return gen.getRenderStack()
             .fromTop(HasName.class)
-            .map(HasName<?>::getName)
+            .map(HasName::getName)
             .map(Formatting::shortName)
             .findFirst();
 	}
