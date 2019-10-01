@@ -71,20 +71,20 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version>3.6.0</version>
+            <version>3.6.2</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>3.6.0</version>
+            <version>3.6.2</version>
             <type>jar</type>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.6.0</version>
+            <version>3.6.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.eclipse.sisu</groupId>
