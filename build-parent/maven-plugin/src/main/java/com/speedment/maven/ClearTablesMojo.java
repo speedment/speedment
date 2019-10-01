@@ -17,7 +17,6 @@
 package com.speedment.maven;
 
 import com.speedment.maven.abstractmojo.AbstractClearTablesMojo;
-import com.speedment.maven.abstractmojo.AbstractReloadMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;

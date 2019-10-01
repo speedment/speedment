@@ -36,7 +36,6 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -45,7 +44,9 @@ import static java.util.Objects.requireNonNull;
  * @author Per Minborg
  */
 public final class EntityTranslatorSupport {
-    
+
+    private EntityTranslatorSupport() {}
+
     public static class ReferenceFieldType {
 
         private final Type type;
@@ -343,7 +344,4 @@ public final class EntityTranslatorSupport {
             .findFirst();
     }
 
-    private EntityTranslatorSupport() {
-        instanceNotAllowed(getClass());
-    }
 }

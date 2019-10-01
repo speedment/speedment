@@ -21,6 +21,7 @@ import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.trait.HasCopy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +70,7 @@ public final class FileImpl implements File {
         this.name = requireNonNull(prototype).getName();
         this.doc = prototype.getJavadoc().map(Copier::copy).orElse(null);
         this.imports = Copier.copy(prototype.getImports());
-        this.classes = Copier.copy(prototype.getClasses(), c -> c.copy());
+        this.classes = Copier.copy(prototype.getClasses(), ClassOrInterface::copy);
     }
 
     @Override

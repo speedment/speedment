@@ -30,7 +30,7 @@ import java.util.Objects;
 abstract class AbstractSqlStatement implements SqlStatement {
 
     private final String sql;
-    private final List<?> values;
+    private final List<Object> values;
 
     AbstractSqlStatement(final String sql, final List<?> values) {
         this.sql    = Objects.requireNonNull(sql);
@@ -43,7 +43,7 @@ abstract class AbstractSqlStatement implements SqlStatement {
     }
 
     @Override
-    public final List<?> getValues() {
+    public final List<Object> getValues() {
         return values;
     }
 

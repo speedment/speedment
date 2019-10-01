@@ -63,15 +63,15 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
         if (model instanceof Constructor
         ||  model instanceof Method
         ||  model instanceof InterfaceMethod) {
-            model.getFields().forEach(field -> {
-                field.getModifiers().retainAll(singleton(Modifier.FINAL));
-            });
+            model.getFields().forEach(field ->
+                field.getModifiers().retainAll(singleton(Modifier.FINAL))
+            );
         }
 
         if (model instanceof Interface) {
-            model.getFields().forEach(field -> {
-                field.getModifiers().clear();
-            });
+            model.getFields().forEach(field ->
+                field.getModifiers().clear()
+            );
         }
 
         if (useTripleDot() && !model.getFields().isEmpty()) {

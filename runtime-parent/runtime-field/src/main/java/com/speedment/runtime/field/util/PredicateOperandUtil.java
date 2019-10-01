@@ -31,7 +31,7 @@ import java.util.Set;
  * @since   3.0.11
  */
 public final class PredicateOperandUtil {
-
+    private PredicateOperandUtil() {}
     /**
      * Returns the first operand of the specified {@link FieldPredicate},
      * throwing an exception if it doesn't exist. The operand may however be
@@ -80,8 +80,4 @@ public final class PredicateOperandUtil {
         return Cast.castOrFail(p, BetweenPredicate.class).getInclusion();
     }
 
-    /**
-     * Should not be instantiated.
-     */
-    private PredicateOperandUtil() {}
 }

@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ConfigurableIteratorSpliteratorImpl<T> implements Spliterator<T> {
 
-    static final int MAX_BATCH = 1 << 25;
+    private static final int MAX_BATCH = 1 << 25;
     private final Iterator<? extends T> iterator;
     private final int[] batchSizes;
     private final int characteristics;
@@ -73,24 +73,27 @@ public final class ConfigurableIteratorSpliteratorImpl<T> implements Spliterator
         this.batchSizes = Arrays.copyOf(batchSizes, batchSizes.length);
     }
 
-    protected int nextBatchSize() {
+    private int nextBatchSize() {
+        int batchSize;
         if (batchSizeIndex >= batchSizes.length) {
-            return batchSizes[batchSizes.length - 1];
+            batchSize = batchSizes[batchSizes.length - 1];
         } else {
-            return batchSizes[batchSizeIndex++];
+            batchSize = batchSizes[batchSizeIndex++];
         }
+
+        if (batchSize > sizeEstimate) {
+            batchSize = (int) sizeEstimate;
+        }
+        if (batchSize > MAX_BATCH) {
+            batchSize = MAX_BATCH;
+        }
+        return batchSize;
     }
 
     @Override
     public Spliterator<T> trySplit() {
         if (sizeEstimate > 1 && iterator.hasNext()) {
             int batchSize = nextBatchSize();
-            if (batchSize > sizeEstimate) {
-                batchSize = (int) sizeEstimate;
-            }
-            if (batchSize > MAX_BATCH) {
-                batchSize = MAX_BATCH;
-            }
             if (batchSize == 1) {
                 final T item = iterator.next();
                 if (sizeEstimate != Long.MAX_VALUE) {

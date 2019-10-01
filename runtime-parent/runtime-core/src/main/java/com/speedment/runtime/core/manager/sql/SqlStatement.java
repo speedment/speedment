@@ -52,5 +52,5 @@ public interface SqlStatement {
      *
      * @return  the parameters
      */
-    List<?> getValues();
+    List<Object> getValues();
 }

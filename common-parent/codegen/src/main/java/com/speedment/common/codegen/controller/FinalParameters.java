@@ -16,8 +16,11 @@
  */
 package com.speedment.common.codegen.controller;
 
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.trait.HasMethods;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
@@ -38,9 +41,8 @@ public final class FinalParameters<T extends HasMethods<T>> implements Consumer<
      */
 	@Override
 	public void accept(T model) {
-		requireNonNull(model).getMethods()
-            .forEach(m -> m.getFields()
-                .forEach(f -> f.final_())
-            );
+		requireNonNull(model).getMethods().stream()
+			.flatMap(m -> m.getFields().stream())
+			.forEach(Field::final_);
 	}
 }

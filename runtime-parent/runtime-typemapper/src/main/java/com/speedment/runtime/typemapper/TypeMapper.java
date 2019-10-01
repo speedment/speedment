@@ -66,7 +66,9 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
      * comparison index and if two mappers share the same database type, it will
      * use the label in alphabetical order.
      */
-    Comparator<TypeMapper<?, ?>> COMPARATOR = comparing(TypeMapper::getLabel);
+    static Comparator<TypeMapper<?, ?>> standardComparator() {
+      return comparing(TypeMapper::getLabel);
+    }
 
     /**
      * Returns the label for this mapper that should appear to the end user.
@@ -188,7 +190,16 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
         // Defensively assume an unspecified order.
         return Ordering.UNSPECIFIED;
     }
-    
+
+    /**
+     * Indicates if the type mapper can be used in the Speedment tool.
+     *
+     * @return if type mapper is usable in Speedment tool
+     */
+    default boolean isToolApplicable() {
+        return true;
+    }
+
     /**
      * Returns an identity type mapper.
      *

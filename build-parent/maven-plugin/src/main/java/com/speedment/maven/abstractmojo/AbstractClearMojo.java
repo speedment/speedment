@@ -30,7 +30,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-/**
+/*
  *
  * @author  Emil Forslund
  * @since   3.0.0
@@ -100,7 +100,7 @@ public abstract class AbstractClearMojo extends AbstractSpeedmentMojo {
     
     @Override
     protected boolean debug() {
-        return debug == null ? false: debug;
+        return !(debug == null) && debug;
     }
     
     @Override

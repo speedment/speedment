@@ -18,7 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.IndexColumnPropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -54,6 +54,6 @@ implements IndexColumn,
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.INDEX_COLUMNS, key);
+        return concat(DocumentPropertyComponentUtil.INDEX_COLUMNS, key);
     }
 }

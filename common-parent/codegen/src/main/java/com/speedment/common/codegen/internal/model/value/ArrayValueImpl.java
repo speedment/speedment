@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.model.value;
 import com.speedment.common.codegen.internal.model.ValueImpl;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.value.ArrayValue;
 
 import java.util.ArrayList;
@@ -40,6 +41,6 @@ public final class ArrayValueImpl extends ValueImpl<List<Value<?>>> implements A
 
     @Override
     public ArrayValueImpl copy() {
-        return new ArrayValueImpl(Copier.copy(getValue(), s -> s.copy()));
+        return new ArrayValueImpl(Copier.copy(getValue(), HasCopy::copy));
     }
 }

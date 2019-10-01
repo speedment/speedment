@@ -60,7 +60,7 @@ public class TypeMapperPropertyEditor<T extends HasTypeMapperProperty> implement
         final Class<?> type = document.findDatabaseType();
         
         final Map<String, String> mapping = MapStream.fromStream(
-            typeMappers.mapFrom(type),
+            typeMappers.mapFrom(type).filter(TypeMapper::isToolApplicable),
             TypeMapper::getLabel,
             tm -> tm.getClass().getName()
         ).toSortedMap();

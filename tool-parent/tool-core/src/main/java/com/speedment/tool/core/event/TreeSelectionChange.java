@@ -35,18 +35,18 @@ import static java.util.Objects.requireNonNull;
  */
 public final class TreeSelectionChange implements Event {
 
-    private final ListChangeListener.Change<? extends TreeItem<DocumentProperty>> changeEvent;
+    private final ListChangeListener.Change<TreeItem<DocumentProperty>> changeEvent;
     private final ObservableList<PropertyEditor.Item> properties;
 
     public TreeSelectionChange(
-            ListChangeListener.Change<? extends TreeItem<DocumentProperty>> changeEvent, 
-            ObservableList<PropertyEditor.Item> properties) {
-        
+        final ListChangeListener.Change<TreeItem<DocumentProperty>> changeEvent,
+        final ObservableList<PropertyEditor.Item> properties
+    ) {
         this.changeEvent = requireNonNull(changeEvent);
         this.properties  = requireNonNull(properties);
     }
     
-    public ListChangeListener.Change<? extends TreeItem<DocumentProperty>> changeEvent() {
+    public ListChangeListener.Change<TreeItem<DocumentProperty>> changeEvent() {
         return changeEvent;
     }
     

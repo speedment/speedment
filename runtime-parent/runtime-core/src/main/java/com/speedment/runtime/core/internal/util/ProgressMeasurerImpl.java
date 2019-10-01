@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.internal.util;
 
 import com.speedment.runtime.core.util.ProgressMeasure;
+import com.speedment.runtime.core.util.ProgressMeasureUtil;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,7 +38,7 @@ public final class ProgressMeasurerImpl implements ProgressMeasure {
 
     public ProgressMeasurerImpl() {
         listeners     = newSetFromMap(new ConcurrentHashMap<>());
-        progress      = ProgressMeasure.INDETERMINATE;
+        progress      = ProgressMeasureUtil.INDETERMINATE;
         currentAction = "";
     }
 

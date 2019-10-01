@@ -41,18 +41,6 @@ import java.util.stream.Stream;
 @InjectKey(DocumentPropertyComponent.class)
 public interface DocumentPropertyComponent {
 
-    List<String>
-        PROJECTS            = emptyList(),
-        DBMSES              = singletonList(ProjectUtil.DBMSES),
-        SCHEMAS             = Stream.concat(DBMSES.stream(), Stream.of(DbmsUtil.SCHEMAS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
-        TABLES              = Stream.concat(SCHEMAS.stream(), Stream.of(SchemaUtil.TABLES)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
-        COLUMNS             = Stream.concat(TABLES.stream(), Stream.of(TableUtil.COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
-        PRIMARY_KEY_COLUMNS = Stream.concat(TABLES.stream(), Stream.of(TableUtil.PRIMARY_KEY_COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
-        FOREIGN_KEYS        = Stream.concat(TABLES.stream(), Stream.of(TableUtil.FOREIGN_KEYS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
-        FOREIGN_KEY_COLUMNS = Stream.concat(FOREIGN_KEYS.stream(), Stream.of(ForeignKeyUtil.FOREIGN_KEY_COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
-        INDEXES             = Stream.concat(TABLES.stream(), Stream.of(TableUtil.INDEXES)).collect(collectingAndThen(toList(), Collections::unmodifiableList)),
-        INDEX_COLUMNS       = Stream.concat(INDEXES.stream(), Stream.of(IndexUtil.INDEX_COLUMNS)).collect(collectingAndThen(toList(), Collections::unmodifiableList));
-
     /**
      * Functional interface that describes a constructor for an observable 
      * document.

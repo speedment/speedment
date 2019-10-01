@@ -41,6 +41,7 @@ import com.speedment.runtime.core.db.SqlSupplier;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.util.ProgressMeasure;
+import com.speedment.runtime.core.util.ProgressMeasureUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 
@@ -89,39 +90,44 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class SqliteMetadataHandler implements DbmsMetadataHandler {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(SqliteMetadataHandler.class);
-    private final static String[] TABLES_AND_VIEWS = {"TABLE", "VIEW"};
-    private final static String ORIGINAL_TYPE = "originalDatabaseType";
+    private static final Logger LOGGER = LoggerManager.getLogger(SqliteMetadataHandler.class);
+    private static final String[] TABLES_AND_VIEWS = {"TABLE", "VIEW"};
+    private static final String ORIGINAL_TYPE = "originalDatabaseType";
+    private static final String ROW_ID = "rowid";
+    private static final String COLUMN_NAME = "COLUMN_NAME";
+    private static final String KEY_SEQ = "KEY_SEQ";
+    private static final String INDEX_NAME = "INDEX_NAME";
+    private static final String SCHEMA = "schema";
 
-    private final static Pattern BINARY_TYPES = Pattern.compile(
+    private static final Pattern BINARY_TYPES = Pattern.compile(
         "^(?:(?:TINY|MEDIUM|LONG)?\\s?BLOB|(?:VAR)?BINARY)(?:\\(\\d+\\))?$");
 
-    private final static Pattern INTEGER_BOOLEAN_TYPE = Pattern.compile(
+    private static final Pattern INTEGER_BOOLEAN_TYPE = Pattern.compile(
         "^(?:BIT|INT|INTEGER|TINYINT)\\(1\\)$");
 
-    private final static Pattern BIT_TYPES = Pattern.compile(
+    private static final Pattern BIT_TYPES = Pattern.compile(
         "^BIT\\((\\d+)\\)$");
 
-    private final static Pattern SHORT_TYPES = Pattern.compile(
+    private static final Pattern SHORT_TYPES = Pattern.compile(
         "^(?:UNSIGNED\\s+TINY\\s?INT|SHORT(?:\\s?INT)?)(?:\\((\\d+)\\))?$");
 
-    private final static Pattern INT_TYPES = Pattern.compile(
+    private static final Pattern INT_TYPES = Pattern.compile(
         "^(?:UNSIGNED (?:SHORT|MEDIUM\\s?INT)|INT(?:EGER)?|MEDIUM\\s?INT)(?:\\((\\d+)\\))?$");
 
-    private final static Pattern LONG_TYPES = Pattern.compile(
+    private static final Pattern LONG_TYPES = Pattern.compile(
         "^(?:UNSIGNED(?: INT(?:EGER)?)|(?:UNSIGNED\\s*)?(?:BIG\\s?INT|LONG))(?:\\((\\d+)\\))?$");
 
     /**
      * Fix #566: Some connectors throw an exception if getIndexInfo() is invoked
      * for a database VIEW.
      */
-    private final static boolean IGNORE_VIEW_INDEXES = false;
+    private static final boolean IGNORE_VIEW_INDEXES = false;
 
     /**
      * 'true' below might speed up metadata retrieval since approximations can
      * be used. See https://github.com/speedment/speedment-enterprise/issues/168
      */
-    private final static boolean APPROXIMATE_INDEX = true;
+    private static final boolean APPROXIMATE_INDEX = true;
 
     private @Inject ConnectionPoolComponent connectionPool;
     private @Inject ProjectComponent projects;
@@ -252,7 +258,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
         return readSchemaMetadata(
             projectCopy, dbmsCopy, progress
         ).whenCompleteAsync((project, ex) -> {
-            progress.setProgress(ProgressMeasure.DONE);
+            progress.setProgress(ProgressMeasureUtil.DONE);
             if (ex != null) {
                 progress.setCurrentAction("Error!");
                 throw new SpeedmentException("Unable to read schema metadata.", ex);
@@ -274,8 +280,8 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             = typeMappingHelper.loadFor(dbms);
 
         final Schema schema = dbms.mutator().addNewSchema();
-        schema.mutator().setId("schema");
-        schema.mutator().setName("schema");
+        schema.mutator().setId(SCHEMA);
+        schema.mutator().setName(SCHEMA);
 
         return readTableMetadata(schema, typeMappingTask, progress)
             .thenApplyAsync($ -> project);
@@ -286,54 +292,9 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             CompletableFuture<Map<String, Class<?>>> typeMappingTask,
             ProgressMeasure progress) {
 
-        final CompletableFuture<Void> tablesTask = CompletableFuture.runAsync(() -> {
-            final Dbms dbms = schema.getParentOrThrow();
-
-            try (final Connection connection = connectionPool.getConnection(dbms)) {
-                try (final ResultSet rsTable = connection.getMetaData().getTables(null, null, null, TABLES_AND_VIEWS)) {
-                    if (SHOW_METADATA) {
-                        final ResultSetMetaData rsmd = rsTable.getMetaData();
-                        final int numberOfColumns = rsmd.getColumnCount();
-                        for (int x = 1; x <= numberOfColumns; x++) {
-                            LOGGER.debug(new StringJoiner(", ")
-                                .add(rsmd.getColumnName(x))
-                                .add(rsmd.getColumnClassName(x))
-                                .add(Integer.toString(rsmd.getColumnType(x)))
-                                .toString()
-                            );
-                        }
-                    }
-
-                    while (rsTable.next()) {
-                        if (SHOW_METADATA) {
-                            final ResultSetMetaData rsmd = rsTable.getMetaData();
-                            final int numberOfColumns = rsmd.getColumnCount();
-                            for (int x = 1; x <= numberOfColumns; x++) {
-                                LOGGER.debug(rsmd.getColumnName(x) +
-                                    ":'" + rsTable.getObject(x) + "'");
-                            }
-                        }
-
-                        final Table table      = schema.mutator().addNewTable();
-                        final String tableName = rsTable.getString("TABLE_NAME");
-                        final String tableType = rsTable.getString("TABLE_TYPE");
-                        table.mutator().setId(tableName);
-                        table.mutator().setName(tableName);
-                        table.mutator().setView("VIEW".equals(tableType));
-                    }
-                } catch (final SQLException ex) {
-                    throw new SpeedmentException(format(
-                        "Error reading results from SQLite-database '%s'.",
-                        DocumentUtil.toStringHelper(dbms)
-                    ), ex);
-                }
-            } catch (final SQLException ex) {
-                throw new SpeedmentException(format(
-                    "Error getting connection to SQLite-database '%s'.",
-                    DocumentUtil.toStringHelper(dbms)
-                ), ex);
-            }
-        });
+        final CompletableFuture<Void> tablesTask = CompletableFuture.runAsync(() ->
+            tablesTask(schema)
+        );
 
         return tablesTask.thenComposeAsync($ -> typeMappingTask)
             .thenComposeAsync(sqlTypeMappings -> {
@@ -347,7 +308,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                             progress.setCurrentAction(describe(table));
                             columns(conn, sqlTypeMappings, table, progress);
                             indexes(conn, table, progress);
-                            foreignKeys(conn, table, progress);
+                            foreignKeys(conn, table);
                             primaryKeyColumns(conn, table, progress);
 
                             if (!table.isView()) {
@@ -356,60 +317,8 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                                 if (table.columns()
                                     .filter(col -> col.getAsString(ORIGINAL_TYPE).filter("INTEGER"::equalsIgnoreCase).isPresent())
                                     .noneMatch(col -> table.primaryKeyColumns().anyMatch(pkc -> DocumentDbUtil.isSame(pkc.findColumnOrThrow(), col)))
-                                &&  table.columns().map(Column::getId).noneMatch("rowid"::equalsIgnoreCase)) {
-                                    final Column column = table.mutator().addNewColumn();
-
-                                    column.mutator().setId("rowid");
-                                    column.mutator().setName("rowid");
-                                    column.mutator().setOrdinalPosition(0);
-                                    column.mutator().setDatabaseType(Long.class);
-                                    column.mutator().setAutoIncrement(true);
-                                    column.mutator().setNullable(false);
-                                    column.mutator().setTypeMapper(PrimitiveTypeMapper.class);
-
-                                    // When we introduce a new primary key, we need to
-                                    // add a UNIQUE index that represents the same set
-                                    // of columns as the old primary key.
-                                    if (table.primaryKeyColumns().anyMatch(pkc -> true)) {
-                                        final Set<String> oldPks = table.primaryKeyColumns()
-                                            .map(PrimaryKeyColumn::getId)
-                                            .collect(toCollection(LinkedHashSet::new));
-
-                                        // Make sure such an index doesn't already exist
-                                        if (table.indexes()
-                                            .filter(Index::isUnique)
-                                            .noneMatch(idx -> oldPks.equals(idx.indexColumns()
-                                                .map(IndexColumn::getId)
-                                                .collect(toCollection(LinkedHashSet::new))
-                                            ))) {
-
-                                            final Index pkReplacement = table.mutator().addNewIndex();
-                                            final String idxName = md5(oldPks.toString());
-
-                                            final IndexMutator<? extends Index> mutator = pkReplacement.mutator();
-                                            mutator.setId(idxName);
-                                            mutator.setName(idxName);
-                                            mutator.setUnique(true);
-
-                                            table.primaryKeyColumns().forEachOrdered(pkc -> {
-                                                final int ordNo = 1 + (int) pkReplacement.indexColumns().count();
-                                                final IndexColumn idxCol = mutator.addNewIndexColumn();
-                                                idxCol.mutator().setId(pkc.getId());
-                                                idxCol.mutator().setName(pkc.getName());
-                                                idxCol.mutator().setOrdinalPosition(ordNo);
-                                            });
-                                        }
-
-                                        // Remove the existing primary key since the rowid is
-                                        // the only value that should be considered part of
-                                        // the primary key
-                                        table.getData().remove(TableUtil.PRIMARY_KEY_COLUMNS);
-                                    }
-
-                                    final PrimaryKeyColumn pkc = table.mutator().addNewPrimaryKeyColumn();
-                                    pkc.mutator().setId("rowid");
-                                    pkc.mutator().setName("rowid");
-                                    pkc.mutator().setOrdinalPosition(1);
+                                &&  table.columns().map(Column::getId).noneMatch(ROW_ID::equalsIgnoreCase)) {
+                                    createRowId(table);
                                 } else {
                                     table.columns()
                                         .filter(col -> col.getAsString(ORIGINAL_TYPE).filter("INTEGER"::equalsIgnoreCase).isPresent())
@@ -418,9 +327,9 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                                 }
                             }
 
-                            table.columns().forEach(col -> {
-                                col.getData().remove(ORIGINAL_TYPE);
-                            });
+                            table.columns().forEach(col ->
+                                col.getData().remove(ORIGINAL_TYPE)
+                            );
 
                             progress.setProgress(cnt.incrementAndGet() / noTables);
                         } catch (final SQLException ex) {
@@ -429,6 +338,114 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                     })).toArray(CompletableFuture[]::new)
                 ).thenApplyAsync(v -> schema);
             });
+    }
+
+    private void tablesTask(Schema schema) {
+        final Dbms dbms = schema.getParentOrThrow();
+
+        try (final Connection connection = connectionPool.getConnection(dbms)) {
+            try (final ResultSet rsTable = connection.getMetaData().getTables(null, null, null, TABLES_AND_VIEWS)) {
+                if (SHOW_METADATA) {
+                    final ResultSetMetaData rsmd = rsTable.getMetaData();
+                    final int numberOfColumns = rsmd.getColumnCount();
+                    for (int x = 1; x <= numberOfColumns; x++) {
+                        LOGGER.debug(new StringJoiner(", ")
+                            .add(rsmd.getColumnName(x))
+                            .add(rsmd.getColumnClassName(x))
+                            .add(Integer.toString(rsmd.getColumnType(x)))
+                            .toString()
+                        );
+                    }
+                }
+
+                while (rsTable.next()) {
+                    if (SHOW_METADATA) {
+                        final ResultSetMetaData rsmd = rsTable.getMetaData();
+                        final int numberOfColumns = rsmd.getColumnCount();
+                        for (int x = 1; x <= numberOfColumns; x++) {
+                            LOGGER.debug(rsmd.getColumnName(x) +
+                                ":'" + rsTable.getObject(x) + "'");
+                        }
+                    }
+
+                    final Table table      = schema.mutator().addNewTable();
+                    final String tableName = rsTable.getString("TABLE_NAME");
+                    final String tableType = rsTable.getString("TABLE_TYPE");
+                    table.mutator().setId(tableName);
+                    table.mutator().setName(tableName);
+                    table.mutator().setView("VIEW".equals(tableType));
+                }
+            } catch (final SQLException ex) {
+                throw new SpeedmentException(format(
+                    "Error reading results from SQLite-database '%s'.",
+                    DocumentUtil.toStringHelper(dbms)
+                ), ex);
+            }
+        } catch (final SQLException ex) {
+            throw new SpeedmentException(format(
+                "Error getting connection to SQLite-database '%s'.",
+                DocumentUtil.toStringHelper(dbms)
+            ), ex);
+        }
+    }
+
+    private void createRowId(Table table) {
+        final Column column = table.mutator().addNewColumn();
+
+        column.mutator().setId(ROW_ID);
+        column.mutator().setName(ROW_ID);
+        column.mutator().setOrdinalPosition(0);
+        column.mutator().setDatabaseType(Long.class);
+        column.mutator().setAutoIncrement(true);
+        column.mutator().setNullable(false);
+        column.mutator().setTypeMapper(PrimitiveTypeMapper.class);
+
+        // When we introduce a new primary key, we need to
+        // add a UNIQUE index that represents the same set
+        // of columns as the old primary key.
+        if (table.primaryKeyColumns().anyMatch(pkc -> true)) {
+            final Set<String> oldPks = table.primaryKeyColumns()
+                .map(PrimaryKeyColumn::getId)
+                .collect(toCollection(LinkedHashSet::new));
+
+            // Make sure such an index doesn't already exist
+            if (table.indexes()
+                .filter(Index::isUnique)
+                .noneMatch(idx -> oldPks.equals(idx.indexColumns()
+                    .map(IndexColumn::getId)
+                    .collect(toCollection(LinkedHashSet::new))
+                ))) {
+                addUniqueIndex(table, oldPks);
+            }
+
+            // Remove the existing primary key since the rowid is
+            // the only value that should be considered part of
+            // the primary key
+            table.getData().remove(TableUtil.PRIMARY_KEY_COLUMNS);
+        }
+
+        final PrimaryKeyColumn pkc = table.mutator().addNewPrimaryKeyColumn();
+        pkc.mutator().setId(ROW_ID);
+        pkc.mutator().setName(ROW_ID);
+        pkc.mutator().setOrdinalPosition(1);
+    }
+
+    private void addUniqueIndex(Table table, Set<String> oldPks) {
+        final Index pkReplacement = table.mutator().addNewIndex();
+        final String idxName = md5(oldPks.toString());
+
+        final IndexMutator<? extends Index> mutator = pkReplacement.mutator();
+        mutator.setId(idxName);
+        mutator.setName(idxName);
+        mutator.setUnique(true);
+
+        table.primaryKeyColumns().forEachOrdered(pkc -> {
+            final int ordNo = 1 + (int) pkReplacement.indexColumns().count();
+            final IndexColumn idxCol = mutator.addNewIndexColumn();
+            idxCol.mutator().setId(pkc.getId());
+            idxCol.mutator().setName(pkc.getName());
+            idxCol.mutator().setOrdinalPosition(ordNo);
+        });
     }
 
     private void columns(Connection conn, Map<String, Class<?>> sqlTypeMapping, Table table, ProgressMeasure progress) {
@@ -508,10 +525,10 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             conn.getMetaData().getPrimaryKeys(null, null, table.getId());
 
         final TableChildMutator<PrimaryKeyColumn> mutator = (pkc, rs) -> {
-            final String columnName = rs.getString("COLUMN_NAME");
+            final String columnName = rs.getString(COLUMN_NAME);
             pkc.mutator().setId(columnName);
             pkc.mutator().setName(columnName);
-            pkc.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
+            pkc.mutator().setOrdinalPosition(rs.getInt(KEY_SEQ));
         };
 
         tableChilds(
@@ -519,7 +536,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             PrimaryKeyColumn.class,
             table.mutator()::addNewPrimaryKeyColumn,
             supplier,
-            rsChild -> rsChild.getString("COLUMN_NAME"),
+            rsChild -> rsChild.getString(COLUMN_NAME),
             mutator
         );
 
@@ -539,34 +556,34 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                 APPROXIMATE_INDEX);
 
         final TableChildMutator<Index> mutator = (index, rs) -> {
-            final String indexName = rs.getString("INDEX_NAME");
+            final String indexName = rs.getString(INDEX_NAME);
 
             index.mutator().setId(indexName);
             index.mutator().setName(indexName);
             index.mutator().setUnique(!rs.getBoolean("NON_UNIQUE"));
 
             final IndexColumn indexColumn = index.mutator().addNewIndexColumn();
-            final String columnName = rs.getString("COLUMN_NAME");
+            final String columnName = rs.getString(COLUMN_NAME);
             indexColumn.mutator().setId(columnName);
             indexColumn.mutator().setName(columnName);
             indexColumn.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
             indexColumn.mutator().setOrderType(getOrderType(rs));
         };
 
-        final SqlPredicate<ResultSet> filter = rs -> rs.getString("INDEX_NAME") != null;
+        final SqlPredicate<ResultSet> filter = rs -> rs.getString(INDEX_NAME) != null;
 
         tableChilds(
             table,
             Index.class,
             table.mutator()::addNewIndex,
             supplier,
-            rsChild -> rsChild.getString("INDEX_NAME"),
+            rsChild -> rsChild.getString(INDEX_NAME),
             mutator,
             filter
         );
     }
 
-    private void foreignKeys(Connection conn, Table table, ProgressMeasure progress) {
+    private void foreignKeys(Connection conn, Table table) {
         requireNonNulls(conn, table);
 
         final Schema schema = table.getParentOrThrow();
@@ -579,7 +596,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
 
             final String foreignKeyName = rs.getString("FK_NAME");
             if (foreignKeyName == null || foreignKeyName.trim().isEmpty()) {
-                if (rs.getInt("KEY_SEQ") == 1) {
+                if (rs.getInt(KEY_SEQ) == 1) {
                     final String uniqueName = UUID.randomUUID().toString();
                     foreignKey.mutator().setId(uniqueName);
                     foreignKey.mutator().setName(uniqueName);
@@ -592,17 +609,17 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
 
             final ForeignKeyColumn foreignKeyColumn = foreignKey.mutator().addNewForeignKeyColumn();
             final ForeignKeyColumnMutator<?> fkcMutator = foreignKeyColumn.mutator();
-            final String fkColumnName = rs.getString("FKCOLUMN_NAME");
+            final String fkColumnName = rs.getString("FK" + COLUMN_NAME);
             fkcMutator.setId(fkColumnName);
             fkcMutator.setName(fkColumnName);
-            fkcMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
+            fkcMutator.setOrdinalPosition(rs.getInt(KEY_SEQ));
             fkcMutator.setForeignTableName(rs.getString("PKTABLE_NAME"));
-            fkcMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
+            fkcMutator.setForeignColumnName(rs.getString("PK" + COLUMN_NAME));
 
             // FKs always point to the same DBMS but can
             // be changed to another one using the config
             fkcMutator.setForeignDatabaseName(schema.getParentOrThrow().getId());
-            fkcMutator.setForeignSchemaName("schema");
+            fkcMutator.setForeignSchemaName(SCHEMA);
         };
 
         tableChilds(
@@ -610,7 +627,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
             ForeignKey.class,
             table.mutator()::addNewForeignKey,
             supplier,
-            rsChild -> rsChild.getInt("KEY_SEQ") == 1 ? ""
+            rsChild -> rsChild.getInt(KEY_SEQ) == 1 ? ""
                 : fksThatNeedNewNames.stream()
                     .skip(fksThatNeedNewNames.size() - 1L)
                     .findFirst().orElseThrow(IllegalStateException::new),
@@ -689,6 +706,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
         requireNonNulls(childSupplier, resultSetSupplier, resultSetMutator);
 
         try (final ResultSet rsChild = resultSetSupplier.get()) {
+
             if (SHOW_METADATA) {
                 final ResultSetMetaData rsmd = rsChild.getMetaData();
                 final int numberOfColumns = rsmd.getColumnCount();

@@ -66,8 +66,8 @@ public final class AutoEquals<T extends HasFields<T> & HasMethods<T> & HasName<T
 implements Consumer<T> {
     
     protected final HasImports<?> importer;
-    protected static final String EQUALS = "equals",
-        HASHCODE = "hashCode";
+    protected static final String EQUALS = "equals";
+    protected static final String HASHCODE = "hashCode";
     
     /**
      * Instantiates the <code>AutoEquals</code> using something that imports

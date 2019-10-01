@@ -20,7 +20,7 @@ import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.ForeignKeyUtil;
 import com.speedment.runtime.config.Table;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyPropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -69,6 +69,6 @@ implements ForeignKey,
     
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.FOREIGN_KEYS, key);
+        return concat(DocumentPropertyComponentUtil.FOREIGN_KEYS, key);
     }
 }

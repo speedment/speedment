@@ -51,7 +51,8 @@ import static java.util.stream.Collectors.toList;
  * @since  3.0.2
  */
 public final class FieldCollectors {
-    
+    private FieldCollectors() {}
+
     public static <ENTITY, D> Collector<ENTITY, ?, Map<Long, List<ENTITY>>>
     groupingBy(LongField<ENTITY, D> field) {
         return groupingBy(field, field.getter()::apply, HashMap::new, toList());
@@ -195,9 +196,7 @@ public final class FieldCollectors {
             return m1;
         };
     }
-    
-    private FieldCollectors() {}
-    
+
     private static final Set<Collector.Characteristics> CH_ID = 
         unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
     

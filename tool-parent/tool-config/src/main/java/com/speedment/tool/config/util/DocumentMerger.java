@@ -62,63 +62,73 @@ public final class DocumentMerger {
         requireNonNull(constructor);
         
         // Go through the keys specified by the proposed document
-        for (final Map.Entry<String, Object> entry : proposed.getData().entrySet()) {
-            final String key           = entry.getKey();
-            final Object proposedValue = proposed.getData().get(key); // Or null
+        proposed.getData().entrySet()
+            .forEach(entry -> handleEntry(existing, proposed, constructor, entry));
+    }
 
-            // Check if the proposed value fulfills the requirements to be
-            // considered a list of child documents.
-            if (proposedValue instanceof List<?>) {
-                @SuppressWarnings("unchecked")
-                final List<Object> list = (List<Object>) proposedValue;
+    private static void handleEntry(DocumentProperty existing, Document proposed, DocumentConstructor constructor, Map.Entry<String, Object> entry) {
+        final String key           = entry.getKey();
+        final Object proposedValue = proposed.getData().get(key); // Or null
 
-                if (list.isEmpty()) {
-                    // Make sure the list is initialized.
-                    existing.observableListOf(key);
-                } else {
-                    final Object first = list.get(0);
-
-                    if (first instanceof Map<?, ?>) {
-                        @SuppressWarnings("unchecked")
-                        final List<Document> documents = list.stream()
-                            .map(data -> (Map<String, Object>) data)
-                            .map(data -> new BaseDocument(proposed, data))
-                            .collect(toList());
-
-                        // Merge the new children into the existing document.
-                        merge(
-                            existing,
-                            key,
-                            documents,
-                            constructor
-                        );
-                    } else {
-                        throw new SpeedmentConfigException(
-                            "Only Lists of Maps are supported in the " +
-                            "document model."
-                        );
-                    }
-                }
-
+        // Check if the proposed value fulfills the requirements to be
+        // considered a list of child documents.
+        if (proposedValue instanceof List<?>) {
+            @SuppressWarnings("unchecked")
+            final List<Object> list = (List<Object>) proposedValue;
+            handleList(existing, proposed, constructor, key, list);
+        } else {
             // If it wasn't a key used for child documents, consider it a
             // property.
+            handleProperty(existing, proposedValue, key);
+        }
+    }
+
+    private static void handleList(DocumentProperty existing, Document proposed, DocumentConstructor constructor, String key, List<Object> list) {
+        if (list.isEmpty()) {
+            // Make sure the list is initialized.
+            existing.observableListOf(key);
+        } else {
+            final Object first = list.get(0);
+
+            if (first instanceof Map<?, ?>) {
+                @SuppressWarnings("unchecked")
+                final List<Document> documents = list.stream()
+                    .map(data -> (Map<String, Object>) data)
+                    .map(data -> new BaseDocument(proposed, data))
+                    .collect(toList());
+
+                // Merge the new children into the existing document.
+                merge(
+                    existing,
+                    key,
+                    documents,
+                    constructor
+                );
             } else {
-                // The block of this is intentionally left empty so that the
-                // conditions are evaluated until one of them return true.
-                if (setPropertyIf(String.class,  proposedValue, casted -> existing.stringPropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
-                ||  setPropertyIf(Integer.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
-                ||  setPropertyIf(Long.class,    proposedValue, casted -> existing.longPropertyOf(key,    () -> casted))
-                ||  setPropertyIf(Float.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Byte.class,    proposedValue, casted -> existing.integerPropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.integerPropertyOf(key,  () -> casted)))
-                {} else {
-                    throw new SpeedmentConfigException(
-                        "Property was not of any known type."
-                    );
-                }
+                throw new SpeedmentConfigException(
+                    "Only Lists of Maps are supported in the " +
+                        "document model."
+                );
             }
+        }
+
+    }
+
+    private static void handleProperty(DocumentProperty existing, Object proposedValue, String key) {
+        // The block of this is intentionally left empty so that the
+        // conditions are evaluated until one of them return true.
+        if (setPropertyIf(String.class,  proposedValue, casted -> existing.stringPropertyOf(key,  () -> casted))
+            ||  setPropertyIf(Boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
+            ||  setPropertyIf(Integer.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
+            ||  setPropertyIf(Long.class,    proposedValue, casted -> existing.longPropertyOf(key,    () -> casted))
+            ||  setPropertyIf(Float.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
+            ||  setPropertyIf(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
+            ||  setPropertyIf(Byte.class,    proposedValue, casted -> existing.integerPropertyOf(key,  () -> casted))
+            ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.integerPropertyOf(key,  () -> casted)))
+        {} else {
+            throw new SpeedmentConfigException(
+                "Property was not of any known type."
+            );
         }
     }
 
@@ -170,13 +180,9 @@ public final class DocumentMerger {
                 if (i < existing.size()) {
                     final DocumentProperty first = existing.get(i);
                     tasks.add(first.getId(), new MergeIntoExistingTask(first, constructor));
-                } else if (i < proposed.size()) {
+                } else {
                     final Document second = proposed.get(i);
                     tasks.add(HasId.of(second).getId(), new MergeByMovingTask(parent, second, key, constructor));
-                } else {
-                    throw new IllegalStateException( // Not possible.
-                        "This stage should never be reached."
-                    );
                 }
             }
         }

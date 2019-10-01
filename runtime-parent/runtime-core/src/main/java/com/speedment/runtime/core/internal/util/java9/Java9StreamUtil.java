@@ -34,39 +34,46 @@ import java.util.stream.Stream;
  * @author Per Minborg
  */
 public final class Java9StreamUtil {
+    private Java9StreamUtil() {}
+
+    private static final String TAKE_WHILE = "takeWhile";
+    private static final String DROP_WHILE = "dropWhile";
+    private static final String FILTER = "filter";
 
     private static final MethodType DOUBLE_METHOD_TYPE = MethodType.methodType(DoubleStream.class, DoublePredicate.class);
     private static final MethodHandle DOUBLE_TAKE_WHILE_METHOD_HANDLE
-        = createMethodHandle("takeWhile", DoubleStream.class, DOUBLE_METHOD_TYPE);
+        = createMethodHandle(TAKE_WHILE, DoubleStream.class, DOUBLE_METHOD_TYPE);
+
     private static final MethodHandle DOUBLE_DROP_WHILE_METHOD_HANDLE
-        = createMethodHandle("dropWhile", DoubleStream.class, DOUBLE_METHOD_TYPE);
+        = createMethodHandle(DROP_WHILE, DoubleStream.class, DOUBLE_METHOD_TYPE);
+
     static final MethodHandle DOUBLE_FILTER_METHOD_HANDLE
-        = createMethodHandle("filter", DoubleStream.class, DOUBLE_METHOD_TYPE); // Just for Java 8 testing
+        = createMethodHandle(FILTER, DoubleStream.class, DOUBLE_METHOD_TYPE); // Just for Java 8 testing
 
     private static final MethodType INT_METHOD_TYPE = MethodType.methodType(IntStream.class, IntPredicate.class);
     private static final MethodHandle INT_TAKE_WHILE_METHOD_HANDLE
-        = createMethodHandle("takeWhile", IntStream.class, INT_METHOD_TYPE);
+        = createMethodHandle(TAKE_WHILE, IntStream.class, INT_METHOD_TYPE);
     private static final MethodHandle INT_DROP_WHILE_METHOD_HANDLE
-        = createMethodHandle("dropWhile", IntStream.class, INT_METHOD_TYPE);
+        = createMethodHandle(DROP_WHILE, IntStream.class, INT_METHOD_TYPE);
     static final MethodHandle INT_FILTER_METHOD_HANDLE
-        = createMethodHandle("filter", IntStream.class, INT_METHOD_TYPE); // Just for Java 8 testing
+        = createMethodHandle(FILTER, IntStream.class, INT_METHOD_TYPE); // Just for Java 8 testing
 
     private static final MethodType LONG_METHOD_TYPE = MethodType.methodType(LongStream.class, LongPredicate.class);
     private static final MethodHandle LONG_TAKE_WHILE_METHOD_HANDLE
-        = createMethodHandle("takeWhile", LongStream.class, LONG_METHOD_TYPE);
+        = createMethodHandle(TAKE_WHILE, LongStream.class, LONG_METHOD_TYPE);
     private static final MethodHandle LONG_DROP_WHILE_METHOD_HANDLE
-        = createMethodHandle("dropWhile", LongStream.class, LONG_METHOD_TYPE);
+        = createMethodHandle(DROP_WHILE, LongStream.class, LONG_METHOD_TYPE);
     static final MethodHandle LONG_FILTER_METHOD_HANDLE
-        = createMethodHandle("filter", LongStream.class, LONG_METHOD_TYPE); // Just for Java 8 testing
+        = createMethodHandle(FILTER, LongStream.class, LONG_METHOD_TYPE); // Just for Java 8 testing
 
     private static final MethodType METHOD_TYPE
         = MethodType.methodType(Stream.class, Predicate.class);
     private static final MethodHandle TAKE_WHILE_METHOD_HANDLE
-        = createMethodHandle("takeWhile", Stream.class, METHOD_TYPE);
+        = createMethodHandle(TAKE_WHILE, Stream.class, METHOD_TYPE);
     private static final MethodHandle DROP_WHILE_METHOD_HANDLE
-        = createMethodHandle("dropWhile", Stream.class, METHOD_TYPE);
+        = createMethodHandle(DROP_WHILE, Stream.class, METHOD_TYPE);
     static final MethodHandle FILTER_METHOD_HANDLE
-        = createMethodHandle("filter", Stream.class, METHOD_TYPE); // Just for Java 8 testing
+        = createMethodHandle(FILTER, Stream.class, METHOD_TYPE); // Just for Java 8 testing
 
     /**
      * Delegates a DoubleStream::takeWhile operation to the Java platforms
@@ -83,7 +90,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         if (DOUBLE_TAKE_WHILE_METHOD_HANDLE == null) {
-            throw new UnsupportedOperationException("Stream::takeWhile is not supported by this Java version. Use Java 9 or greater.");
+            throw newUnsupportedOperationException(TAKE_WHILE);
         }
         try {
             final Object obj = DOUBLE_TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
@@ -108,7 +115,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         if (DOUBLE_DROP_WHILE_METHOD_HANDLE == null) {
-            throw new UnsupportedOperationException("Stream::dropWhile is not supported by this Java version. Use Java 9 or greater.");
+            throw newUnsupportedOperationException(DROP_WHILE);
         }
         try {
             final Object obj = DOUBLE_DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
@@ -144,7 +151,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         if (INT_TAKE_WHILE_METHOD_HANDLE == null) {
-            throw new UnsupportedOperationException("Stream::takeWhile is not supported by this Java version. Use Java 9 or greater.");
+            throw newUnsupportedOperationException(TAKE_WHILE);
         }
         try {
             final Object obj = INT_TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
@@ -169,7 +176,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         if (INT_DROP_WHILE_METHOD_HANDLE == null) {
-            throw new UnsupportedOperationException("Stream::dropWhile is not supported by this Java version. Use Java 9 or greater.");
+            throw newUnsupportedOperationException(DROP_WHILE);
         }
         try {
             final Object obj = INT_DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
@@ -205,7 +212,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         if (LONG_TAKE_WHILE_METHOD_HANDLE == null) {
-            throw new UnsupportedOperationException("Stream::takeWhile is not supported by this Java version. Use Java 9 or greater.");
+            throw newUnsupportedOperationException(TAKE_WHILE);
         }
         try {
             final Object obj = LONG_TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
@@ -230,7 +237,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         if (LONG_DROP_WHILE_METHOD_HANDLE == null) {
-            throw new UnsupportedOperationException("Stream::dropWhile is not supported by this Java version. Use Java 9 or greater.");
+            throw newUnsupportedOperationException(DROP_WHILE);
         }
         try {
             final Object obj = LONG_DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
@@ -267,7 +274,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         if (TAKE_WHILE_METHOD_HANDLE == null) {
-            throw new UnsupportedOperationException("Stream::takeWhile is not supported by this Java version. Use Java 9 or greater.");
+            throw newUnsupportedOperationException(TAKE_WHILE);
         }
         try {
             final Object obj = TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
@@ -293,7 +300,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         if (DROP_WHILE_METHOD_HANDLE == null) {
-            throw new UnsupportedOperationException("Stream::dropWhile is not supported by this Java version. Use Java 9 or greater.");
+            throw newUnsupportedOperationException(DROP_WHILE);
         }
         try {
             final Object obj = DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
@@ -314,10 +321,6 @@ public final class Java9StreamUtil {
         }
     }
 
-    private Java9StreamUtil() {
-        throw new UnsupportedOperationException();
-    }
-
     private static MethodHandle createMethodHandle(String methodName, Class<?> refc, MethodType methodType) {
         final MethodHandles.Lookup lookup = MethodHandles.lookup();
         try {
@@ -326,6 +329,10 @@ public final class Java9StreamUtil {
             // We are running under Java 8
             return null;
         }
+    }
+
+    private static UnsupportedOperationException newUnsupportedOperationException(String methodName) {
+        return new UnsupportedOperationException("Stream::" + methodName + " is not supported by this Java version. Use Java 9 or greater.");
     }
 
 }

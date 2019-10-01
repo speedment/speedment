@@ -37,6 +37,7 @@ import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.util.ProgressMeasure;
+import com.speedment.runtime.core.util.ProgressMeasureUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.*;
@@ -133,7 +134,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         return readSchemaMetadata(
             projectCopy, dbmsCopy, filterCriteria, progress
         ).whenCompleteAsync((project, ex) -> {
-            progress.setProgress(ProgressMeasure.DONE);
+            progress.setProgress(ProgressMeasureUtil.DONE);
             if (ex != null) {
                 progress.setCurrentAction("Error!");
                 throw new SpeedmentException("Unable to read schema metadata.", ex);

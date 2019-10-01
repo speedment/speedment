@@ -34,6 +34,8 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -42,7 +44,12 @@ import static java.util.stream.Collectors.toList;
 final class ComputeIntensityParallelStrategyTest {
 
     private static final int SIZE = 1 << 20;
+    private final int availableProcessors;
     private List<Integer> list;
+
+    ComputeIntensityParallelStrategyTest() {
+        this.availableProcessors = Runtime.getRuntime().availableProcessors();
+    }
 
     @BeforeEach
     void setUp() {
@@ -60,7 +67,7 @@ final class ComputeIntensityParallelStrategyTest {
 
             stream.forEach(i -> {
                 threadCount
-                        .computeIfAbsent(Thread.currentThread().getName(), $ -> new AtomicInteger())
+                        .computeIfAbsent(Thread.currentThread().getName(), unused -> new AtomicInteger())
                         .incrementAndGet();
             }
             );
@@ -72,6 +79,8 @@ final class ComputeIntensityParallelStrategyTest {
                         final String res = String.format("%36s, %7d\n", e.getKey(), e.getValue().intValue());
                         //System.out.println(res);
                     });
+
+            assertTrue(threadCount.size() >= availableProcessors - 2, "threadCount is " + threadCount.size() + " but (available processors - 2) is " + (availableProcessors - 2) + " for strategy " + strategy.getClass().getSimpleName());
 
         });
     }
@@ -106,7 +115,7 @@ final class ComputeIntensityParallelStrategyTest {
         });
         final List<Integer> values = threadCount.entrySet().stream()
                 .filter(e -> !e.getKey().equals("main"))
-                .peek(e -> e.getKey())
+                //.peek(e -> e.getKey())
                 .map(Entry::getValue)
                 .map(AtomicInteger::get)
                 .collect(toList());

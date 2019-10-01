@@ -46,8 +46,8 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class AbstractEditMojo extends AbstractMojo {
 
-    private final static String SET_OPERATOR = ":";
-    private final static String PATH_SEPARATOR = "->";
+    private static final String SET_OPERATOR = ":";
+    private static final String PATH_SEPARATOR = "->";
 
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;
@@ -62,11 +62,11 @@ public abstract class AbstractEditMojo extends AbstractMojo {
     public final void execute() throws MojoExecutionException, MojoFailureException {
         if (hasConfigFile(configLocation())) {
 
-            if (!delete) {
-                if (StringUtils.isBlank(set)
-                || !set.contains(SET_OPERATOR)
-                || set.indexOf(SET_OPERATOR) <= 0)
-                    throw setNotValid();
+            if (!delete
+                    && (StringUtils.isBlank(set)
+                    || !set.contains(SET_OPERATOR)
+                    || set.indexOf(SET_OPERATOR) <= 0)) {
+                throw setNotValid();
             }
 
             final Project loaded = DocumentTranscoder.load(configLocation(), AbstractEditMojo::decodeJson);
@@ -120,8 +120,8 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             getLog().info(format("Done! %d entries modified.", edits.longValue()));
         } else {
             throw new MojoExecutionException(format(
-                "The configFile '%s' can't be loaded.",
-                configLocation().toString()));
+                    "The configFile '%s' can't be loaded.",
+                    configLocation().toString()));
         }
     }
 
@@ -135,15 +135,13 @@ public abstract class AbstractEditMojo extends AbstractMojo {
 
     protected final Path configLocation() {
         final String top = StringUtils.isBlank(configFile())
-            ? DEFAULT_CONFIG_LOCATION
-            : configFile();
-
-        System.out.println(project());
+                ? DEFAULT_CONFIG_LOCATION
+                : configFile();
 
         return project()
-            .getBasedir()
-            .toPath()
-            .resolve(top);
+                .getBasedir()
+                .toPath()
+                .resolve(top);
     }
 
     protected final boolean hasConfigFile(Path file) {
@@ -151,14 +149,14 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             final String msg = "The expected .json-file is null.";
             getLog().info(msg);
             return false;
-        } else if (!Files.exists(file)) {
+        } else if (!file.toFile().exists()) {
             final String msg = "The expected .json-file '"
-                + file + "' does not exist.";
+                    + file + "' does not exist.";
             getLog().info(msg);
             return false;
         } else if (!Files.isReadable(file)) {
             final String err = "The expected .json-file '"
-                + file + "' is not readable.";
+                    + file + "' is not readable.";
             getLog().error(err);
             return false;
         } else {
@@ -206,17 +204,16 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             final String parentIds = where.substring(0, index).trim();
             lastWhere = where.substring(index + PATH_SEPARATOR.length()).trim();
             final Optional<? extends Document> parent = document.getParent();
-            if (parent.isPresent()) {
-                if (!matches(parent.get(), parentIds)) {
-                    return false;
-                }
+            if (parent.isPresent() && !matches(parent.get(), parentIds)) {
+                return false;
             }
         } else {
             lastWhere = where.trim();
         }
 
         final int index = lastWhere.indexOf(SET_OPERATOR);
-        final String key, value;
+        final String key;
+        final String value;
         if (index == -1) {
             key   = "id";
             value = "^" + lastWhere + "$";
@@ -231,9 +228,9 @@ public abstract class AbstractEditMojo extends AbstractMojo {
     private boolean checkIf(Document doc, String param, String value) {
         final Pattern pattern = Pattern.compile(value);
         return doc.get(param)
-            .map(Object::toString)
-            .filter(pattern.asPredicate())
-            .isPresent();
+                .map(Object::toString)
+                .filter(pattern.asPredicate())
+                .isPresent();
     }
 
     private Object parse(Document doc, String param, String value) {
@@ -246,8 +243,8 @@ public abstract class AbstractEditMojo extends AbstractMojo {
                 case "java.lang.Boolean": newValue = Boolean.parseBoolean(value); break;
                 case "java.lang.String": newValue = value; break;
                 default: throw new RuntimeException(format(
-                    "Unknown type of existing value '%s' for param '%s'.",
-                    current.get(), param
+                        "Unknown type of existing value '%s' for param '%s'.",
+                        current.get(), param
                 ));
             }
         } else {
@@ -270,15 +267,15 @@ public abstract class AbstractEditMojo extends AbstractMojo {
 
     private MojoExecutionException setNotValid() {
         return new MojoExecutionException(format(
-            "Parameter 'set' with value '%s' is not valid. Should be " +
-            "specified as 'key=value'.", set));
+                "Parameter 'set' with value '%s' is not valid. Should be " +
+                        "specified as 'key=value'.", set));
     }
 
     private MojoExecutionException whatNotValid() {
         return new MojoExecutionException(format(
-            "Parameter what '%s' is not valid. Accepted values are " +
-                "'project', 'dbms', 'schema', 'table', 'column', " +
-                "'primaryKeyColumn', 'foreignKey', 'foreignKeyColumn', " +
-                "'index' and 'indexColumn'.", what));
+                "Parameter what '%s' is not valid. Accepted values are " +
+                        "'project', 'dbms', 'schema', 'table', 'column', " +
+                        "'primaryKeyColumn', 'foreignKey', 'foreignKeyColumn', " +
+                        "'index' and 'indexColumn'.", what));
     }
 }

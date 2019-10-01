@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class NullValueView implements Transform<NullValue, String> {
     
-	private final static String NULL = "null";
+	private static final String NULL = "null";
 
 	@Override
 	public Optional<String> transform(Generator gen, NullValue model) {

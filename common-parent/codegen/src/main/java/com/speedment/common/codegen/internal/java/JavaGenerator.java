@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  */
 public class JavaGenerator extends DefaultGenerator {
     
-	private final static Pattern[] IGNORED = compileAll(
+	private static final Pattern[] IGNORED = compileAll(
         "^void$",
 		"^byte$",
         "^short$",

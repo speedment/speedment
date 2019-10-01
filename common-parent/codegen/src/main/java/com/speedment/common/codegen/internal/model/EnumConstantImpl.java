@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.trait.HasCopy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,12 +77,12 @@ public final class EnumConstantImpl implements EnumConstant {
 	    name	     = requireNonNull(prototype).getName();
         javadoc      = prototype.getJavadoc().orElse(null);
 		imports	     = Copier.copy(prototype.getImports());
-		classes	     = Copier.copy(prototype.getClasses(), c -> c.copy());
-		initializers = Copier.copy(prototype.getInitializers(), c -> c.copy());
-		methods	     = Copier.copy(prototype.getMethods(), c -> c.copy());
-		fields	     = Copier.copy(prototype.getFields(), c -> c.copy());
-		values	     = Copier.copy(prototype.getValues(), c -> c.copy());
-        annotations  = Copier.copy(prototype.getAnnotations(), c -> c.copy());
+		classes	     = Copier.copy(prototype.getClasses(), ClassOrInterface::copy);
+		initializers = Copier.copy(prototype.getInitializers(), HasCopy::copy);
+		methods	     = Copier.copy(prototype.getMethods(), HasCopy::copy);
+		fields	     = Copier.copy(prototype.getFields(), HasCopy::copy);
+		values	     = Copier.copy(prototype.getValues(), HasCopy::copy);
+        annotations  = Copier.copy(prototype.getAnnotations(), HasCopy::copy);
 	}
 
     @Override

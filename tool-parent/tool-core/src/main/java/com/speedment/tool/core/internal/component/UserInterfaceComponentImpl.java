@@ -31,6 +31,7 @@ import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.util.Statistics;
 import com.speedment.runtime.core.util.ProgressMeasure;
+import com.speedment.runtime.core.util.ProgressMeasureUtil;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -627,7 +628,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
             }
             
             progress.setCurrentAction("Cancelling...");
-            progress.setProgress(ProgressMeasure.DONE);
+            progress.setProgress(ProgressMeasureUtil.DONE);
         });
 
         pane.setContent(box);

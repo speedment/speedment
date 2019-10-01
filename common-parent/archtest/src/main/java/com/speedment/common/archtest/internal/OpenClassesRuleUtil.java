@@ -26,7 +26,7 @@ final class OpenClassesRuleUtil {
     private OpenClassesRuleUtil() {}
 
     private static final String INTERNAL = "..internal..";
-    private static final DescribedPredicate<JavaClass> INTERNAL_CLASS = JavaClass.Predicates.resideInAnyPackage("..internal..");
+    private static final DescribedPredicate<JavaClass> INTERNAL_CLASS = JavaClass.Predicates.resideInAnyPackage(INTERNAL);
 
     static void openClassesShouldNotImplementInternalClasses(JavaClasses classes) {
         ArchRuleDefinition.classes()

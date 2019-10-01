@@ -86,7 +86,7 @@ public final class MethodImpl implements Method {
         generics    = Copier.copy(prototype.getGenerics());
         params      = Copier.copy(prototype.getFields());
         code        = Copier.copy(prototype.getCode(), s -> s);
-        modifiers   = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+        modifiers   = Copier.copy(prototype.getModifiers(), Modifier::copy, EnumSet.noneOf(Modifier.class));
         exceptions  = new HashSet<>(prototype.getExceptions());
     }
 

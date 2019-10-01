@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -41,7 +40,9 @@ import static java.util.stream.Collectors.toSet;
  * @author Emil Forslund
  */
 public final class Formatting {
-    
+
+    private Formatting() { }
+
     /**
      * Returns a string consisting of the specified blocks concatenated
      * and separated by the specified separator.
@@ -63,7 +64,7 @@ public final class Formatting {
      * @return The resulting text.
      */
     public static String lcfirst(String input) {
-        return withFirst(input, (first) -> String.valueOf(Character.toLowerCase(first)));
+        return withFirst(input, first -> String.valueOf(Character.toLowerCase(first)));
     }
 
     /**
@@ -73,7 +74,7 @@ public final class Formatting {
      * @return The resulting text.
      */
     public static String ucfirst(String input) {
-        return withFirst(input, (first) -> String.valueOf(Character.toUpperCase(first)));
+        return withFirst(input, first -> String.valueOf(Character.toUpperCase(first)));
     }
 
     /**
@@ -281,7 +282,7 @@ public final class Formatting {
     public static String shortName(String longName) {
         final String temp = longName.replace('$', '.');
         if (temp.contains(".")) {
-            return temp.substring(temp.lastIndexOf(".") + 1);
+            return temp.substring(temp.lastIndexOf('.') + 1);
         } else {
             return temp;
         }
@@ -297,7 +298,7 @@ public final class Formatting {
     public static Optional<String> packageName(String longName) {
 		if (longName.contains(".")) {
 			return Optional.of(longName.substring(0,
-                    longName.lastIndexOf(".")
+                    longName.lastIndexOf('.')
                 ).replace(" ", ""));
 
 		} else {
@@ -331,11 +332,11 @@ public final class Formatting {
         String name = className;
         
         if (name.contains("<")) {
-            name = name.substring(0, name.indexOf("<"));
+            name = name.substring(0, name.indexOf('<'));
         }
         
         if (name.contains("[")) {
-            name = name.substring(0, name.indexOf("["));
+            name = name.substring(0, name.indexOf('['));
         }
         
         return name;
@@ -475,7 +476,7 @@ public final class Formatting {
            [A-Z] -> \p{Lu}
            [^A-Za-z0-9] -> [^\pL0-90-9]
         */
-        result = Stream.of(result.replaceAll("([\\p{Lu}]+)", "_$1").split("[^\\pL0-9]")).map(String::toLowerCase).map(s -> ucfirst(s)).collect(Collectors.joining());
+        result = Stream.of(result.replaceAll("([\\p{Lu}]+)", "_$1").split("[^\\pL0-9]")).map(String::toLowerCase).map(Formatting::ucfirst).collect(Collectors.joining());
         return result;
     }
 
@@ -527,24 +528,23 @@ public final class Formatting {
           return word; */
     }
 
-    private static String 
-        nl     = "\n",
-        dnl    = "\n\n",
-        indent = "    ";
+    private static String nl     = "\n";
+    private static String dnl    = "\n\n";
+    private static String indent = "    ";
 
-    private final static Character REPLACEMENT_CHARACTER = '_';
+    private static final Character REPLACEMENT_CHARACTER = '_';
 
     /*
        From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
 
        Literals
     */
-    final static Set<String> JAVA_LITERAL_WORDS = unmodifiableSet(Stream.of(
+    static final Set<String> JAVA_LITERAL_WORDS = unmodifiableSet(Stream.of(
         "true", "false", "null"
     ).collect(toSet()));
 
     // Java reserved keywords
-    final static Set<String> JAVA_RESERVED_WORDS = unmodifiableSet(Stream.of(
+    static final Set<String> JAVA_RESERVED_WORDS = unmodifiableSet(Stream.of(
         // Unused
         "const", "goto",
         // The real ones...
@@ -600,7 +600,7 @@ public final class Formatting {
         "while"
     ).collect(toSet()));
 
-    final static Set<Class<?>> JAVA_BUILT_IN_CLASSES = unmodifiableSet(Stream.of(
+    static final Set<Class<?>> JAVA_BUILT_IN_CLASSES = unmodifiableSet(Stream.of(
         Boolean.class,
         Byte.class,
         Character.class,
@@ -623,21 +623,18 @@ public final class Formatting {
         short.class
     ).collect(toSet()));
 
-    private final static Set<String> JAVA_BUILT_IN_CLASS_WORDS = unmodifiableSet(JAVA_BUILT_IN_CLASSES.stream().map(Class::getSimpleName).collect(toSet()));
+    private static final Set<String> JAVA_BUILT_IN_CLASS_WORDS = unmodifiableSet(JAVA_BUILT_IN_CLASSES.stream().map(Class::getSimpleName).collect(toSet()));
 
-    private final static Set<String> JAVA_USED_WORDS = unmodifiableSet(Stream.of(
+    private static final  Set<String> JAVA_USED_WORDS = unmodifiableSet(Stream.of(
         JAVA_LITERAL_WORDS,
         JAVA_RESERVED_WORDS,
         JAVA_BUILT_IN_CLASS_WORDS
     ).flatMap(Collection::stream)
         .collect(toSet()));
 
-    private final static Set<String> JAVA_USED_WORDS_LOWER_CASE = unmodifiableSet(JAVA_USED_WORDS.stream()
+    private static final Set<String> JAVA_USED_WORDS_LOWER_CASE = unmodifiableSet(JAVA_USED_WORDS.stream()
         .map(String::toLowerCase)
         .collect(toSet()));
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private Formatting() { instanceNotAllowed(getClass()); }
+
 }

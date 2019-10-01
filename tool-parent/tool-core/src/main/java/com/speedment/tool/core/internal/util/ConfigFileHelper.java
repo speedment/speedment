@@ -40,6 +40,7 @@ import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.core.util.ProgressMeasure;
+import com.speedment.runtime.core.util.ProgressMeasureUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -80,14 +81,15 @@ import static javafx.application.Platform.runLater;
 public final class ConfigFileHelper {
 
     private static final Logger LOGGER = LoggerManager.getLogger(ConfigFileHelper.class);
-    public static final String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
+    private static final String DOT_JSON = ".json";
+    public static final String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment" + DOT_JSON;
 
     private static final Predicate<File> OPEN_FILE_CONDITIONS = file
         -> file != null
         && file.exists()
         && file.isFile()
         && file.canRead()
-        && file.getName().toLowerCase().endsWith(".json");
+        && file.getName().toLowerCase().endsWith(DOT_JSON);
 
     @Inject private DocumentPropertyComponent documentPropertyComponent;
     @Inject private UserInterfaceComponent userInterfaceComponent;
@@ -224,7 +226,7 @@ public final class ConfigFileHelper {
             final CompletableFuture<Boolean> future
                 = dh.readSchemaMetadata(dbmsCopy, progress, schemaName::equalsIgnoreCase)
                     .handleAsync((p, ex) -> {
-                        progress.setProgress(ProgressMeasure.DONE);
+                        progress.setProgress(ProgressMeasureUtil.DONE);
 
                         // If the loading was successful
                         if (ex == null && p != null) {
@@ -399,7 +401,7 @@ public final class ConfigFileHelper {
             }
         } else {
             userInterfaceComponent.showError(
-                "Could not read .json file",
+                "Could not read " + DOT_JSON + " file",
                 "The file '" + file.getAbsoluteFile().getName()
                 + "' could not be read.",
                 null
@@ -444,8 +446,8 @@ public final class ConfigFileHelper {
 
         File file = fileChooser.showSaveDialog(userInterfaceComponent.getStage());
         if (file != null) {
-            if (!file.getName().endsWith(".json")) {
-                file = new File(file.getAbsolutePath() + ".json");
+            if (!file.getName().endsWith(DOT_JSON)) {
+                file = new File(file.getAbsolutePath() + DOT_JSON);
             }
 
             saveConfigFile(file);

@@ -1,13 +1,13 @@
-/*
- *
+/**
+ * 
  * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
+ * the License at: 
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -39,8 +39,8 @@ import static java.util.Arrays.asList;
  * 
  * @see ShortField
  */
-@GeneratedCode(value = "Speedment")
-public final class ShortFieldTest {
+@GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
+final class ShortFieldTest {
     
     private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarShort();
     private ShortField<BasicEntity, Short> field;
@@ -59,7 +59,7 @@ public final class ShortFieldTest {
     private BasicEntity l;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         field = ShortField.create(
             BasicEntity.Identifier.VAR_SHORT,
             BasicEntity::getVarShort,
@@ -85,7 +85,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testBetween() {
+    void testBetween() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.between((short) 0, (short) 2);
         final Predicate<BasicEntity> t1 = field.between((short) -2, (short) 2);
@@ -120,7 +120,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testEqual() {
+    void testEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.equal((short) -1);
         final Predicate<BasicEntity> t1 = field.equal((short) 0);
@@ -167,7 +167,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testGreaterOrEqual() {
+    void testGreaterOrEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.greaterOrEqual((short) -1);
         final Predicate<BasicEntity> t1 = field.greaterOrEqual((short) 0);
@@ -214,7 +214,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testGreaterThan() {
+    void testGreaterThan() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.greaterThan((short) -1);
         final Predicate<BasicEntity> t1 = field.greaterThan((short) 0);
@@ -261,7 +261,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testIn() {
+    void testIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in();
         final Predicate<BasicEntity> t1 = field.in((short) 0);
@@ -308,7 +308,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testInSet() {
+    void testInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.in(Collections.singleton((short) 0));
@@ -355,7 +355,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testLessThan() {
+    void testLessThan() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.lessThan((short) -1);
         final Predicate<BasicEntity> t1 = field.lessThan((short) 0);
@@ -402,7 +402,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testLessOrEqual() {
+    void testLessOrEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.lessOrEqual((short) -1);
         final Predicate<BasicEntity> t1 = field.lessOrEqual((short) 0);
@@ -449,7 +449,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testNotBetween() {
+    void testNotBetween() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notBetween((short) 0, (short) 2);
         final Predicate<BasicEntity> t1 = field.notBetween((short) -2, (short) 2);
@@ -484,7 +484,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testNotEqual() {
+    void testNotEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notEqual((short) -1);
         final Predicate<BasicEntity> t1 = field.notEqual((short) 0);
@@ -531,7 +531,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testNotIn() {
+    void testNotIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn();
         final Predicate<BasicEntity> t1 = field.notIn((short) 0);
@@ -578,7 +578,7 @@ public final class ShortFieldTest {
     }
     
     @Test
-    public void testNotInSet() {
+    void testNotInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton((short) 0));

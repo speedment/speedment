@@ -54,12 +54,11 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
 	private static final Pattern EMPTY_BLOCK =
 		Pattern.compile("^\\s*\\{\\s*}\\s*$");
 
-	protected static final String
-		CLASS_STRING      = "class ",
-		INTERFACE_STRING  = "interface ",
-		ENUM_STRING       = "enum ",
-		IMPLEMENTS_STRING = "implements ",
-		EXTENDS_STRING    = "extends ";
+	protected static final String CLASS_STRING      = "class ";
+	protected static final String INTERFACE_STRING  = "interface ";
+	protected static final String ENUM_STRING       = "enum ";
+	protected static final String IMPLEMENTS_STRING = "implements ";
+	protected static final String EXTENDS_STRING    = "extends ";
 
     /**
      * A hook that is executed just before the 'fields' part of the class code.
