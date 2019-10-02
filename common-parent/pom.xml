@@ -49,7 +49,6 @@
         <module>codegenxml</module>
         <module>injector</module>
         <module>rest</module>
-        <module>lazy</module>
         <module>mapstream</module>
         <module>mapbuilder</module>
         <module>mutablestream</module>

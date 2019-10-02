@@ -19,7 +19,6 @@ module com.speedment.plugins.enums {
 
     requires com.speedment.common.injector;
     requires com.speedment.common.codegen;
-    requires com.speedment.common.lazy;
     requires com.speedment.common.logger;
     requires com.speedment.common.singletonstream;
 

@@ -136,12 +136,6 @@
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
-                <artifactId>lazy</artifactId>
-                <version>${speedment.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>com.speedment.common</groupId>
                 <artifactId>mutable-stream</artifactId>
                 <version>${speedment.version}</version>
             </dependency>

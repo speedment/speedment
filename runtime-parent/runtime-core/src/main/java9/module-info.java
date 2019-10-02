@@ -38,7 +38,7 @@ module com.speedment.runtime.core {
     requires com.speedment.common.injector;
     requires com.speedment.common.json;
     requires com.speedment.common.tuple;
-    requires com.speedment.common.lazy;
+
 
     requires com.speedment.runtime.config;
     requires com.speedment.runtime.typemapper;

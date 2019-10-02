@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.internal.immutable;
 
-import com.speedment.common.lazy.LazyReference;
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
 import com.speedment.runtime.config.internal.IndexColumnImpl;
@@ -24,6 +23,7 @@ import com.speedment.runtime.config.parameter.OrderType;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 
@@ -37,7 +37,7 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
     private final String name;
     private final int ordinalPosition;
     private final OrderType orderType;
-    private final LazyReference<Optional<ImmutableColumn>> column;
+    private final AtomicReference<ImmutableColumn> column;
 
     ImmutableIndexColumn(ImmutableIndex parent, Map<String, Object> ic) {
         super(parent, ic);
@@ -46,7 +46,7 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
         this.name            = prototype.getName();
         this.ordinalPosition = prototype.getOrdinalPosition();
         this.orderType       = prototype.getOrderType();
-        this.column          = LazyReference.create();
+        this.column          = new AtomicReference<>();
     }
 
     @Override
@@ -67,10 +67,10 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
 
     @Override
     public Optional<ImmutableColumn> findColumn() {
-        return column.getOrCompute(() ->
-            IndexColumn.super.findColumn()
-                .map(ImmutableColumn.class::cast)
-        );
+        if (column.get() == null) {
+            column.set(IndexColumn.super.findColumn().map(ImmutableColumn.class::cast).orElse(null));
+        }
+        return Optional.ofNullable(column.get());
     }
 
     @Override
