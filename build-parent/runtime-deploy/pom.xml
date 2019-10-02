@@ -76,12 +76,7 @@
             <groupId>com.speedment.common</groupId>
             <artifactId>json</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>lazy</artifactId>
-        </dependency>
-        
+
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>mapstream</artifactId>

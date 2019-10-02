@@ -17,8 +17,6 @@
 package com.speedment.runtime.core.internal.util;
 
 import com.speedment.common.json.Json;
-import com.speedment.common.lazy.LazyLong;
-import com.speedment.common.lazy.specialized.LazyString;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
@@ -53,6 +51,11 @@ import static java.util.stream.Collectors.toList;
  * @author Emil Forslund
  */
 public final class Statistics {
+
+    private static final String HOST_NAME = computerName();
+    private static final long STARTED = Instant.now(Clock.system(ZoneId.of("UTC"))).getEpochSecond();
+
+    private Statistics() {}
 
     public enum Event {
 
@@ -99,10 +102,8 @@ public final class Statistics {
             .collect(toList())
         );
         ping.put("emailAddress", InternalEmailUtil.getEmail());
-        ping.put("computerName", HOST_NAME.getOrCompute(Statistics::getComputerName));
-        ping.put("dateStarted", STARTED.getOrCompute(
-            () -> Instant.now(Clock.system(ZoneId.of("UTC"))).getEpochSecond()
-        ));
+        ping.put("computerName", HOST_NAME);
+        ping.put("dateStarted", STARTED);
 
         sendPostRequest(PING_URL, Json.toJson(ping));
     }
@@ -150,7 +151,7 @@ public final class Statistics {
         });
     }
 
-    private static String getComputerName() {
+    private static String computerName() {
         final String hostName;
 
         try {
@@ -177,13 +178,5 @@ public final class Statistics {
         }
     }
 
-    private static final LazyString HOST_NAME = LazyString.create();
-    private static final LazyLong STARTED     = LazyLong.create();
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private Statistics() {
-        throw new UnsupportedOperationException();
-    }
 }

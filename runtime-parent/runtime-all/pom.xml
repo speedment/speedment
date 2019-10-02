@@ -31,7 +31,7 @@
     
     <artifactId>runtime-all</artifactId>
     <packaging>pom</packaging>
-    
+
     <name>Speedment - Runtime - All</name>
     <description>
         A combined pom artifact to make it easier to depend on the latest 

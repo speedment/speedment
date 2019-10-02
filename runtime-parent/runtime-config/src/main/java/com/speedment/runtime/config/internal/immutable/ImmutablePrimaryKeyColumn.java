@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.config.internal.immutable;
 
-import com.speedment.common.lazy.LazyReference;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.internal.PrimaryKeyColumnImpl;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 
@@ -36,7 +36,7 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
     private final String name;
     private final int ordinalPosition;
     
-    private final LazyReference<Optional<ImmutableColumn>> column;
+    private final AtomicReference<ImmutableColumn> column;
 
     ImmutablePrimaryKeyColumn(ImmutableTable parent, Map<String, Object> pkc) {
         super(parent, pkc);
@@ -44,7 +44,7 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
         this.id              = prototype.getId();
         this.name            = prototype.getName();
         this.ordinalPosition = prototype.getOrdinalPosition();        
-        this.column          = LazyReference.create();
+        this.column          = new AtomicReference<>();
     }
 
     @Override
@@ -69,10 +69,10 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
 
     @Override
     public Optional<ImmutableColumn> findColumn() {
-        return column.getOrCompute(() ->
-            PrimaryKeyColumn.super.findColumn()
-                .map(ImmutableColumn.class::cast)
-        );
+        if (column.get() == null) {
+            column.set(PrimaryKeyColumn.super.findColumn().map(ImmutableColumn.class::cast).orElse(null));
+        }
+        return Optional.ofNullable(column.get());
     }
     
     @Override

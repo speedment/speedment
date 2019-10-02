@@ -14,34 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.lazy.specialized;
+module com.speedment.runtime.config {
+    exports com.speedment.runtime.config;
+    exports com.speedment.runtime.config.exception;
+    exports com.speedment.runtime.config.identifier;
+    exports com.speedment.runtime.config.identifier.trait;
+    exports com.speedment.runtime.config.mutator;
+    exports com.speedment.runtime.config.mutator.trait;
+    exports com.speedment.runtime.config.parameter;
+    exports com.speedment.runtime.config.trait;
+    exports com.speedment.runtime.config.util;
 
-import com.speedment.common.lazy.AbstractLazyTest;
-import com.speedment.common.lazy.Lazy;
-
-/**
- * @author pemi
- */
-public class LazyStringTest extends AbstractLazyTest<String> {
-
-    @Override
-    protected String firstValue() {
-        return "A";
-    }
-
-    @Override
-    protected String secondValue() {
-        return "B";
-    }
-
-    @Override
-    protected Lazy<String> newInstance() {
-        return LazyString.create();
-    }
-
-    @Override
-    protected String makeFromThread(Thread t) {
-        return t.getName();
-    }
-
+    requires com.speedment.common.mapstream;
+    requires com.speedment.common.function;
+    requires com.speedment.common.invariant;
 }

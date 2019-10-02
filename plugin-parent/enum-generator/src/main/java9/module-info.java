@@ -14,7 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.common.lazy {
-    exports com.speedment.common.lazy;
-    exports com.speedment.common.lazy.specialized;
+module com.speedment.plugins.enums {
+    exports com.speedment.plugins.enums;
+
+    requires com.speedment.common.injector;
+    requires com.speedment.common.codegen;
+    requires com.speedment.common.logger;
+    requires com.speedment.common.singletonstream;
+
+    requires com.speedment.runtime.config;
+    requires com.speedment.runtime.typemapper;
+
+    requires com.speedment.generator.core;
+    requires com.speedment.generator.standard;
+    requires com.speedment.generator.translator;
+
+    requires com.speedment.tool.core;
+    requires com.speedment.tool.config;
+    requires com.speedment.tool.propertyeditor;
 }

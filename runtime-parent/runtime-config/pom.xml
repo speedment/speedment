@@ -73,11 +73,6 @@
         
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>lazy</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
             <artifactId>function</artifactId>
         </dependency>
         

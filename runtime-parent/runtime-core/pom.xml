@@ -108,11 +108,6 @@
             <artifactId>tuple</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>lazy</artifactId>
-        </dependency>
-        
         <!-- Runtime Dependencies -->
         <dependency>
             <groupId>com.speedment.runtime</groupId>

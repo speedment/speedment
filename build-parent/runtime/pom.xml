@@ -106,12 +106,6 @@
         
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>lazy</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
             <artifactId>mapstream</artifactId>
             <scope>runtime</scope>
         </dependency>
