@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.common.codegen.util.Formatting.*;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -35,22 +36,22 @@ import static java.util.stream.Collectors.joining;
  */
 public final class LicenseTermView implements Transform<LicenseTerm, String> {
     
-	private static final String LICENSE_DELIMITER = nl() + " * ";
-    private static final String LICENSE = "/*" + nl() + " * ";
+	private static final String LICENSE_DELIMITER = nl() + " *";
+	private static final String LICENSE_PREFIX = "/*" + LICENSE_DELIMITER;
     private static final String LICENSE_SUFFIX = nl() + " */";
 
 	@Override
 	public Optional<String> transform(Generator gen, LicenseTerm model) {
-        requireNonNulls(gen, model);
+        requireNonNull(gen);
+        requireNonNull(model);
 
 		return Optional.of(
-            LICENSE +
-            Stream.of(model.getText().split(nl()))
-                .filter(s -> !s.isEmpty())
-                .collect(joining(dnl()))
-                .replace(nl(), LICENSE_DELIMITER) +
-                LICENSE_SUFFIX
-        );
+			Stream.of(model.getText().split(nl()))
+/*				.filter(s -> !s.isEmpty())*/
+/*				.filter(s -> !nl().equals(s))*/
+                .map(s -> s.isEmpty() ? s : " " + s)
+				.collect(joining(LICENSE_DELIMITER, LICENSE_PREFIX, LICENSE_SUFFIX))
+		);
 	}
     
 

@@ -59,6 +59,7 @@ public class JavaTransformFactory extends DefaultTransformFactory {
         install(Type.class, TypeView::new);
         install(Modifier.class, ModifierView::new);
         install(Javadoc.class, JavadocView::new);
+        install(LicenseTerm.class, LicenseTermView::new);
         install(JavadocTag.class, JavadocTagView::new);
         install(Import.class, ImportView::new);
         install(Generic.class, GenericView::new);

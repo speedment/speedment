@@ -17,7 +17,10 @@
 package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.LicenseTermImpl;
-import com.speedment.common.codegen.model.trait.*;
+import com.speedment.common.codegen.model.trait.HasCall;
+import com.speedment.common.codegen.model.trait.HasCopy;
+import com.speedment.common.codegen.model.trait.HasLicenseTerm;
+import com.speedment.common.codegen.model.trait.HasParent;
 
 /**
  * A model that represents a block of licenseterm in code.
@@ -27,7 +30,6 @@ import com.speedment.common.codegen.model.trait.*;
  */
 public interface LicenseTerm
 extends HasParent<HasLicenseTerm<?>, LicenseTerm>,
-        HasImports<LicenseTerm>,
         HasCopy<LicenseTerm>,
         HasCall<LicenseTerm> {
     

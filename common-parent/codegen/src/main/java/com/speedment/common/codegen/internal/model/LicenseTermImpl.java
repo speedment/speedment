@@ -16,13 +16,9 @@
  */
 package com.speedment.common.codegen.internal.model;
 
-import com.speedment.common.codegen.internal.util.Copier;
-import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.LicenseTerm;
 import com.speedment.common.codegen.model.trait.HasLicenseTerm;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -41,7 +37,6 @@ public final class LicenseTermImpl implements LicenseTerm {
 
     private HasLicenseTerm<?> parent;
     private String text;
-    private final List<Import> imports;
 
     /**
      * Initializes this licenseterm block.
@@ -51,7 +46,6 @@ public final class LicenseTermImpl implements LicenseTerm {
      */
     public LicenseTermImpl() {
         text    = "";
-        imports = new ArrayList<>();
     }
 
     /**
@@ -65,7 +59,6 @@ public final class LicenseTermImpl implements LicenseTerm {
      */
     public LicenseTermImpl(final String text) {
         this.text    = requireNonNull(text);
-        this.imports = new ArrayList<>();
     }
 
     /**
@@ -75,7 +68,6 @@ public final class LicenseTermImpl implements LicenseTerm {
      */
     protected LicenseTermImpl(final LicenseTerm prototype) {
         text    = requireNonNull(prototype).getText();
-        imports = Copier.copy(prototype.getImports());
     }
 
     @Override
@@ -87,11 +79,6 @@ public final class LicenseTermImpl implements LicenseTerm {
     @Override
     public Optional<HasLicenseTerm<?>> getParent() {
         return Optional.ofNullable(parent);
-    }
-
-    @Override
-    public List<Import> getImports() {
-        return imports;
     }
 
     @Override
