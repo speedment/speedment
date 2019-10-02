@@ -28,7 +28,8 @@ import com.speedment.common.codegen.model.trait.*;
 public interface File
 extends HasCopy<File>,
         HasName<File>,
-        HasJavadoc<File>, 
+        HasJavadoc<File>,
+        HasLicenseTerm<File>,
         HasImports<File>, 
         HasClasses<File>, 
         HasCall<File> {
