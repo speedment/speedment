@@ -18,7 +18,6 @@ package com.speedment.plugins.enums;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.lazy.specialized.LazyClass;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
 import com.speedment.plugins.enums.internal.GeneratedEnumType;
 import com.speedment.runtime.config.Column;
@@ -27,6 +26,8 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.FROM_DATABASE_METHOD;
@@ -43,12 +44,12 @@ import static java.util.Objects.requireNonNull;
  */
 public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapper<String, T> {
 
-    private final LazyClass cachedEnum;
+    private final AtomicReference<Class<?>> cachedEnum;
    
     private @Inject Injector injector;
     
     public StringToEnumTypeMapper() {
-        cachedEnum = LazyClass.create();
+        cachedEnum = new AtomicReference<>();
     }
 
     @Override
@@ -79,32 +80,14 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
         if (value == null) {
             return null;
         } else {
-            final Class<?> enumClass = cachedEnum.getOrCompute(
-                () -> EnumGeneratorUtil.classesIn(entityType)
-
-                    // Include only enum subclasses
-                    .filter(Enum.class::isAssignableFrom)
-                    
-                    // Include only enums with the correct name
-                    .filter(c -> c.getSimpleName().equalsIgnoreCase(
-                        column.getJavaName().replace("_", "")
-                    ))
-
-                    // Include only enums with a method called fromDatabase()
-                    // that takes the right parameters
-                    .filter(c -> Stream.of(c.getMethods())
-                        .filter(m -> m.getName().equals(FROM_DATABASE_METHOD))
-                        .anyMatch(m -> {
-                            final Class<?>[] params = m.getParameterTypes();
-                            return params.length == 1 
-                                && params[0] == column.findDatabaseType();
-                        })
-                    )
-
-                    // Return it as the enumClass or throw an exception.
-                    .findAny()
-                    .orElse(null)
-            );
+            if (cachedEnum.get() == null) {
+                synchronized (cachedEnum) {
+                    if (cachedEnum.get() == null) {
+                        cachedEnum.set(enumClass(column, entityType));
+                    }
+                }
+            }
+            final Class<?> enumClass = cachedEnum.get();
 
             final Method fromDatabase;
             try {
@@ -130,6 +113,34 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                 );
             }
         }
+    }
+
+    private Class<?> enumClass(Column column, Class<?> entityType) {
+        return EnumGeneratorUtil.classesIn(entityType)
+
+            // Include only enum subclasses
+            .filter(Enum.class::isAssignableFrom)
+
+            // Include only enums with the correct name
+            .filter(c -> c.getSimpleName().equalsIgnoreCase(
+                column.getJavaName().replace("_", "")
+            ))
+
+            // Include only enums with a method called fromDatabase()
+            // that takes the right parameters
+            .filter(c -> Stream.of(c.getMethods())
+                .filter(m -> m.getName().equals(FROM_DATABASE_METHOD))
+                .anyMatch(m -> {
+                    final Class<?>[] params = m.getParameterTypes();
+                    return params.length == 1
+                        && params[0] == column.findDatabaseType();
+                })
+            )
+
+            // Return it as the enumClass or throw an exception.
+            .findAny()
+            .orElseThrow(() -> new NoSuchElementException("No enum class found for " + column.getId() + " entityType " + entityType));
+
     }
 
     @Override

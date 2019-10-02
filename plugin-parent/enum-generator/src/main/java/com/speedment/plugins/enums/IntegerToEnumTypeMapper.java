@@ -18,8 +18,6 @@ package com.speedment.plugins.enums;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.lazy.Lazy;
-import com.speedment.common.lazy.LazyReference;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
 import com.speedment.plugins.enums.internal.GeneratedEnumType;
 import com.speedment.runtime.config.Column;
@@ -28,23 +26,25 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.speedment.plugins.enums.internal.EnumGeneratorUtil.classesIn;
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Emil Forslund
- * @since  3.0.13
+ * @since 3.0.13
  */
 public final class IntegerToEnumTypeMapper<T extends Enum<T>>
-implements TypeMapper<Integer, T> {
+    implements TypeMapper<Integer, T> {
 
-    private final Lazy<T[]> cachedConstants;
+    private final AtomicReference<T[]> cachedConstants;
 
-    private @Inject Injector injector;
+    private @Inject
+    Injector injector;
 
     public IntegerToEnumTypeMapper() {
-        cachedConstants = LazyReference.create();
+        cachedConstants = new AtomicReference<>();
     }
 
     @Override
@@ -61,8 +61,8 @@ implements TypeMapper<Integer, T> {
     public Type getJavaType(Column column) {
         requireNonNull(injector,
             IntegerToEnumTypeMapper.class.getSimpleName() +
-            ".getJavaType(Column) is not available if instantiated " +
-            "without injector."
+                ".getJavaType(Column) is not available if instantiated " +
+                "without injector."
         );
 
         return new GeneratedEnumType(
@@ -80,47 +80,53 @@ implements TypeMapper<Integer, T> {
     public T toJavaType(Column column, Class<?> entityType, Integer value) {
         if (value == null) {
             return null;
-
         } else {
-            final T[] constants = cachedConstants.getOrCompute(() -> {
-                final Class<?> enumClass = classesIn(entityType)
-                    // Include only enum subclasses
-                    .filter(Enum.class::isAssignableFrom)
-
-                    // Include only enums with the correct name
-                    .filter(c -> c.getSimpleName().equalsIgnoreCase(
-                        column.getJavaName().replace("_", "")
-                    ))
-
-                    // Return it as the enumClass or throw an exception.
-                    .findAny()
-                    .orElse(null);
-
-                final Method values;
-                try {
-                    values = enumClass.getMethod("values");
-                } catch (final NoSuchMethodException ex) {
-                    throw new RuntimeException(
-                        "Could not find 'values()'-method in enum class '" +
-                        enumClass.getName() + "'.", ex
-                    );
+            if (cachedConstants.get() == null) {
+                synchronized (cachedConstants) {
+                    if (cachedConstants.get() == null) {
+                        cachedConstants.set(constants(column, entityType));
+                    }
                 }
 
-                try {
-                    @SuppressWarnings("unchecked")
-                    final T[] result = (T[]) values.invoke(null);
-                    return result;
-                } catch (final IllegalAccessException
-                    | IllegalArgumentException
-                    | InvocationTargetException ex) {
-                    throw new RuntimeException(
-                        "Error executing 'values()' in generated enum class '" +
-                        enumClass.getName() + "'.", ex
-                    );
-                }
-            });
+            }
+            return cachedConstants.get()[value];
+        }
+    }
 
-            return constants[value];
+    private T[] constants(Column column, Class<?> entityType) {
+        final Class<?> enumClass = classesIn(entityType)
+            // Include only enum subclasses
+            .filter(Enum.class::isAssignableFrom)
+
+            // Include only enums with the correct name
+            .filter(c -> c.getSimpleName().equalsIgnoreCase(
+                column.getJavaName().replace("_", "")
+            ))
+
+            // Return it as the enumClass or throw an exception.
+            .findAny()
+            .orElse(null);
+
+        final Method values;
+        try {
+            values = enumClass.getMethod("values");
+        } catch (final NoSuchMethodException ex) {
+            throw new RuntimeException(
+                "Could not find 'values()'-method in enum class '" +
+                    enumClass.getName() + "'.", ex
+            );
+        }
+
+        try {
+            @SuppressWarnings("unchecked") final T[] result = (T[]) values.invoke(null);
+            return result;
+        } catch (final IllegalAccessException
+            | IllegalArgumentException
+            | InvocationTargetException ex) {
+            throw new RuntimeException(
+                "Error executing 'values()' in generated enum class '" +
+                    enumClass.getName() + "'.", ex
+            );
         }
     }
 
@@ -137,22 +143,21 @@ implements TypeMapper<Integer, T> {
             } catch (final NoSuchMethodException ex) {
                 throw new RuntimeException(
                     "Could not find generated 'ordinal()'-method in enum " +
-                    "class '" + constant.getClass().getName() + "'.", ex
+                        "class '" + constant.getClass().getName() + "'.", ex
                 );
             }
 
             try {
-                @SuppressWarnings("unchecked")
-                final Integer result = (Integer) ordinal.invoke(constant);
+                @SuppressWarnings("unchecked") final Integer result = (Integer) ordinal.invoke(constant);
                 return result;
 
             } catch (final IllegalAccessException
-                         | IllegalArgumentException
-                         | InvocationTargetException ex) {
+                | IllegalArgumentException
+                | InvocationTargetException ex) {
 
                 throw new RuntimeException(
                     "Error executing 'ordinal()' in generated enum class '" +
-                    constant.getClass().getName() + "'.", ex
+                        constant.getClass().getName() + "'.", ex
                 );
             }
         }
