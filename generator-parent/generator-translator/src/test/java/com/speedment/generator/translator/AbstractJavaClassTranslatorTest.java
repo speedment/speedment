@@ -272,6 +272,16 @@ final class AbstractJavaClassTranslatorTest {
         }
 
         @Override
+        public File set(LicenseTerm doc) {
+            return this;
+        }
+
+        @Override
+        public Optional<LicenseTerm> getLicenseTerm() {
+            return Optional.empty();
+        }
+
+        @Override
         public File setName(String name) {
             this.name = name;
             return this;
