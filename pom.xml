@@ -234,9 +234,9 @@
                                     <supportedProjectType>bundle</supportedProjectType>
                                 </supportedProjectTypes>
                                 <instructions>
-                                    <Export-Package>${project.groupId}.*</Export-Package>
+                                    <Export-Package>${project.groupId}.*,META-INF/versions/9;-split-package:=first</Export-Package> <!--split-package does not work-->
                                     <!-- override "internal" private package convention -->
-                                    <Private-Package>!*</Private-Package>
+                                    <_fixupmessages>"Classes found in the wrong directory"</_fixupmessages> <!--This does not work-->
                                 </instructions>
                             </configuration>
                         </execution>
