@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.sql;
+package com.speedment.runtime.core.util;
 
 import com.speedment.runtime.core.db.SqlFunction;
 
@@ -24,8 +24,6 @@ import java.net.URL;
 import java.sql.*;
 import java.util.UUID;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  * Utility methods for retrieving nullable and special values from
  * {@code ResultSet}.
@@ -33,6 +31,8 @@ import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed
  * @author Emil Forslund
  */
 public final class ResultSetUtil {
+
+    public ResultSetUtil() {}
 
     // Null safe RS getters, must have the same name as ResultSet getters
     public static Object getObject(final ResultSet resultSet, final String columnName) throws SQLException {
@@ -230,16 +230,9 @@ public final class ResultSetUtil {
 //        return getNullableFrom(resultSet, rs -> (Object) rs.getObject(ordinalPosition));
 //    }
     
-
     private static <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
         final T result = mapper.apply(rs);
         return rs.wasNull() ? null : result;
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private ResultSetUtil() {
-        instanceNotAllowed(getClass());
-    }
 }

@@ -40,7 +40,7 @@ import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
+import com.speedment.runtime.core.util.ResultSetUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.lang.reflect.Type;
