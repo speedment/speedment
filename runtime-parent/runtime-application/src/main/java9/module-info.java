@@ -17,7 +17,6 @@
 module com.speedment.runtime.application {
     exports com.speedment.runtime.application;
 
-    requires com.speedment.runtime.core;
     requires com.speedment.runtime.join;
     requires com.speedment.runtime.welcome;
     requires com.speedment.runtime.connector.mysql;
@@ -25,4 +24,8 @@ module com.speedment.runtime.application {
     requires com.speedment.runtime.connector.postgres;
     requires com.speedment.runtime.connector.sqlite;
     requires com.speedment.common.jvm_version;
+    requires com.speedment.common.logger;
+
+    requires transitive com.speedment.runtime.core;
+
 }

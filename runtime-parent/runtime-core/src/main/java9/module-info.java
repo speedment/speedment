@@ -35,11 +35,12 @@ module com.speedment.runtime.core {
     requires com.speedment.common.function;
     requires com.speedment.common.mapstream;
     requires com.speedment.common.logger;
-    requires com.speedment.common.injector;
     requires com.speedment.common.json;
     requires com.speedment.common.tuple;
 
-    requires com.speedment.runtime.config;
-    requires com.speedment.runtime.typemapper;
-    requires com.speedment.runtime.field;
+    requires transitive java.sql;
+    requires transitive com.speedment.common.injector;
+    requires transitive com.speedment.runtime.config;
+    requires transitive com.speedment.runtime.typemapper;
+    requires transitive com.speedment.runtime.field;
 }

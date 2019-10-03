@@ -20,4 +20,6 @@ module com.speedment.common.injector {
     exports com.speedment.common.injector.dependency;
     exports com.speedment.common.injector.exception;
     exports com.speedment.common.injector.execution;
+
+    requires com.speedment.common.logger;
 }
