@@ -112,6 +112,10 @@ public interface Rest {
     }
     
     static String encode(String value) {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+        try {
+            return URLEncoder.encode(value, "UTF-8");
+        } catch (final UnsupportedEncodingException ex) {
+            throw new RuntimeException("Error encoding value '" + value + "'.");
+        }
     }
 }
