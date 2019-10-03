@@ -53,7 +53,7 @@ public final class UpdateOperationBuilderImpl<ENTITY> extends AbstractOperationB
 
     @Override
     public Update<ENTITY> set(Consumer<? super ENTITY> consumer) {
-        consumers.add((Consumer<? super ENTITY>) consumer);
+        consumers.add(consumer);
         return this;
     }
 

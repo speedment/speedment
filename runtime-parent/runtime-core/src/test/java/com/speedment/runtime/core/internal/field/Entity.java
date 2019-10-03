@@ -59,18 +59,18 @@ public interface Entity {
         }
     }
 
-    public final static ComparableField<Entity, Integer, Integer> ID = new ComparableFieldImpl<>(Identifier.ID, Entity::getId, Entity::setId, new IdentityTypeMapper<>(), true);
-    public final static StringField<Entity, String> NAME = new StringFieldImpl<>(
+    ComparableField<Entity, Integer, Integer> ID = new ComparableFieldImpl<>(Identifier.ID, Entity::getId, Entity::setId, new IdentityTypeMapper<>(), true);
+    StringField<Entity, String> NAME = new StringFieldImpl<>(
         Identifier.NAME, 
         Entity::getName, 
         Entity::setName, new IdentityTypeMapper<>(), false);
 
-    public Integer getId();
+    Integer getId();
 
-    public String getName();
+    String getName();
 
-    public Entity setId(Integer id);
+    Entity setId(Integer id);
 
-    public Entity setName(String name);
+    Entity setName(String name);
 
 }

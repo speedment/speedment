@@ -80,7 +80,7 @@ public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterf
     private Stream<Column> columnsFromPks() {
         return primaryKeyColumns().map(pk -> {
             try {
-                return ((PrimaryKeyColumn) pk).findColumnOrThrow();
+                return pk.findColumnOrThrow();
             } catch (final NoSuchElementException ex) {
                 throw new SpeedmentTranslatorException(
                     "Could not find any column belonging to primary key '" + pk.getId() + "'.", ex

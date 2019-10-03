@@ -164,7 +164,7 @@ public final class StreamUtil {
             if (state == State.NOT_DETERMINED) {
                 if (!hasNext()) {
                     throw noSuchElementException();
-                };
+                }
             }
 
             if (state == State.NO_NEXT) {
@@ -185,7 +185,7 @@ public final class StreamUtil {
             if (state == State.NOT_DETERMINED) {
                 if (!hasNext()) {
                     return;
-                };
+                }
             }
 
             if (state == State.NO_NEXT) {

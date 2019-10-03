@@ -44,7 +44,7 @@ public interface ConnectionDecorator {
      */
     default void cleanup(Connection connection) throws SQLException {
         // Do nothing by default.
-    };
+    }
 
 
 }

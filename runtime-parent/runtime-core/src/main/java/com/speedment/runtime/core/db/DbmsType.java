@@ -275,7 +275,7 @@ public interface DbmsType {
     }
 
     enum SkipLimitSupport {
-        STANDARD, ONLY_AFTER_SORTED, NONE;
+        STANDARD, ONLY_AFTER_SORTED, NONE
     }
 
     /**
@@ -337,7 +337,7 @@ public interface DbmsType {
         /*
         * ORDER BY col DESC NULLS FIRST
          */
-        POST;
+        POST
 
     }
 

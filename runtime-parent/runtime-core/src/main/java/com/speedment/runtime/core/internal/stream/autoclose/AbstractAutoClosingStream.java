@@ -44,7 +44,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         this.closed = new AtomicBoolean();
     }
 
-    protected S stream(){ return stream; };
+    protected S stream(){ return stream; }
 
     @Override
     public void close() {

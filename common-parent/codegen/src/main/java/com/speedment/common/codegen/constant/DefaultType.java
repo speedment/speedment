@@ -373,7 +373,7 @@ public final class DefaultType {
      * @return      {@code true} if it is primitive, else {@code false}
      */
     public static boolean isPrimitive(Type type) {
-        return WRAPPERS.keySet().contains(type.getTypeName());
+        return WRAPPERS.containsKey(type.getTypeName());
     }
 
     /**

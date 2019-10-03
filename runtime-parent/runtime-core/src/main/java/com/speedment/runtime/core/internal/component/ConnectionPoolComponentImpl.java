@@ -253,7 +253,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         requireNonNull(uri);
         // user nullable
         // password nullable
-        return uri + Objects.toString(user) + ((password == null) ? "null" : new String(password));
+        return uri + user + ((password == null) ? "null" : new String(password));
     }
 
     private Deque<PoolableConnection> acquireDeque(String key) {

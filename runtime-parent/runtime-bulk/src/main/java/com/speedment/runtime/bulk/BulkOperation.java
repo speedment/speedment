@@ -32,7 +32,7 @@ public interface BulkOperation {
 
     Stream<? extends Operation<?>> operations();
 
-    public static Builder builder() {
+    static Builder builder() {
         return new BulkOperationBuilder();
     }
 

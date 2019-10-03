@@ -42,7 +42,7 @@ final class TuplesTest {
             array[i] = random.nextInt();
         }
 
-        final Tuple tuple = Tuples.ofArray((Object[]) array);
+        final Tuple tuple = Tuples.ofArray(array);
         assertEquals(tuple.degree(), 100);
 
         for (int i = 0; i < 100; i++) {

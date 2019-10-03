@@ -121,7 +121,7 @@ final class AutoClosingReferenceStreamTest extends AbstractAutoClosingStreamTest
 
     @Override
     Stream<NamedFunction<Stream<Integer>, Object>> terminatingOperations() {
-        return Stream.<NamedFunction<Stream<Integer>, Object>>of(
+        return Stream.of(
             NamedFunction.of("count", Stream::count),
             NamedFunction.of("forEach", (Stream<Integer> s) -> {
                 s.forEach(blackHole());

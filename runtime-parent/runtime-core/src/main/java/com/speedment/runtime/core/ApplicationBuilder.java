@@ -674,7 +674,7 @@ public interface ApplicationBuilder<
 
         private final String loggerName;
 
-        private LogType() {
+        LogType() {
             this.loggerName = "#" + name();
         }
 

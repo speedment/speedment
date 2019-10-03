@@ -49,7 +49,7 @@ final class AutoClosingIntStreamTest extends AbstractAutoClosingStreamTest<Integ
 
     @Override
     Stream<NamedUnaryOperator<IntStream>> intermediateJava8Operations() {
-        return Stream.<NamedUnaryOperator<IntStream>>of(
+        return Stream.of(
             NamedUnaryOperator.of("filter", s -> s.filter(i -> i < MAX_VALUE / 2)),
             NamedUnaryOperator.of("map", s -> s.map(i -> i + 1)),
             // mapToInt, mapToLong, mapToDouble
@@ -78,7 +78,7 @@ final class AutoClosingIntStreamTest extends AbstractAutoClosingStreamTest<Integ
 
     @Override
     Stream<NamedFunction<IntStream, Object>> terminatingOperations() {
-        return Stream.<NamedFunction<IntStream, Object>>of(
+        return Stream.of(
             NamedFunction.of("count", IntStream::count),
             NamedFunction.of("forEach", (IntStream s) -> {
                 s.forEach(intBlackHole());
