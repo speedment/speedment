@@ -332,7 +332,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             final Consumer<? super LimitAction<ENTITY>> limitConsumer
         ) {
             this.filterConsumer = requireNonNull(filterConsumer);
-            this.sortedConsumer = requireNonNull(sortedConsumer);;
+            this.sortedConsumer = requireNonNull(sortedConsumer);
             this.skipConsumer = requireNonNull(skipConsumer);
             this.limitConsumer = requireNonNull(limitConsumer);
         }

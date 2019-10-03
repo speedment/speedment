@@ -41,7 +41,7 @@ public class NamePropertyEditor<T extends HasNameProperty> implements PropertyEd
             document.nameProperty(),
             "The name of the persisted entity in the database. This should only be modified if the database has been changed!",
             editor -> document instanceof HasNameProtectedProperty ?
-                lockDecorator(editor, (HasNameProtectedProperty) document,
+                lockDecorator(editor, document,
                 "This field should ONLY be changed to reflect changes made in the underlying database. "
                 + "If you want to change the name of this entity in Java, consider editing the Alias field instead."
                 + "\nEnable editing by by right clicking on the field."

@@ -26,4 +26,4 @@ import com.speedment.common.injector.annotation.InjectKey;
  * @since   1.0.0
  */
 @InjectKey(MariaDbComponent.class)
-public interface MariaDbComponent  {};
+public interface MariaDbComponent  {}

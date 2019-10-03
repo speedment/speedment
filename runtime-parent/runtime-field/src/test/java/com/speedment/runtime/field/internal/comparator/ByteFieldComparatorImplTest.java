@@ -137,7 +137,7 @@ final class ByteFieldComparatorImplTest {
 
         ByteValue setByte(byte value);
 
-        final ColumnIdentifier<ByteValue> BYTE_IDENTIFIER = new ColumnIdentifier<ByteValue>() {
+        ColumnIdentifier<ByteValue> BYTE_IDENTIFIER = new ColumnIdentifier<ByteValue>() {
             @Override
             public String getDbmsId() {
                 return "db0";
@@ -160,7 +160,7 @@ final class ByteFieldComparatorImplTest {
 
         };
 
-        final ByteField<ByteValue, Byte> BYTE = ByteField.create(
+        ByteField<ByteValue, Byte> BYTE = ByteField.create(
             BYTE_IDENTIFIER,
             ByteValue::getByte,
             ByteValue::setByte,

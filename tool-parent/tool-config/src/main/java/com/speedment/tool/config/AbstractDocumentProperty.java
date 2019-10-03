@@ -87,7 +87,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     }
     
     @Override
-    @Deprecated
+    @Deprecated // Deprecated to use but will not be removed from the API
     public final void put(String key, Object val) {
         throw new UnsupportedOperationException(
             "Observable config documents does not support the put()-operation " +
@@ -226,7 +226,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     }
 
     @Override
-    @Deprecated
+    @Deprecated // Deprecated to use but will be retained in the API
     public final <P extends Document, T extends Document> Stream<T> 
     children(String key, BiFunction<P, Map<String, Object>, T> constructor) {
        throw new UnsupportedOperationException("children() shall not be called from a Property");

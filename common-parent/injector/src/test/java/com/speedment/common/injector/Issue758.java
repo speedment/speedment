@@ -58,10 +58,11 @@ final class Issue758 {
 
 
     @InjectKey(Foo.class)
-    public interface Foo {};
+    public interface Foo {}
 
-    public static final class Bar implements Foo {};
-    public static final class Bazz implements Foo {};
+    public static final class Bar implements Foo {}
+
+    public static final class Bazz implements Foo {}
 
     public static final class Buzz {
         private final Foo foo;
@@ -72,6 +73,6 @@ final class Issue758 {
 
         public Foo foo() { return foo; }
 
-    };
+    }
 
 }

@@ -299,7 +299,7 @@ final class JoinSketchTest {
 
         IntField<Picture, Integer> PICTURE_ID = null;
         StringField<Picture, String> NAME = null;
-        IntField<Picture, Integer> USER_ID = IntField.create(ColumnIdentifier.of("sakila", "sakila","picture","user_id"),Picture::getUserId, Picture::setUserId,TypeMapper.primitive(),false);;
+        IntField<Picture, Integer> USER_ID = IntField.create(ColumnIdentifier.of("sakila", "sakila","picture","user_id"),Picture::getUserId, Picture::setUserId,TypeMapper.primitive(),false);
         IntField<Picture, Integer> FRAME_ID = null;
         IntField<Picture, Integer> SIZE = null;
 

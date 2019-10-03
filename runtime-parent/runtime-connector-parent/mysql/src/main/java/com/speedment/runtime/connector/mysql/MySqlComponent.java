@@ -26,4 +26,4 @@ import com.speedment.common.injector.annotation.InjectKey;
  * @since   1.0.0
  */
 @InjectKey(MySqlComponent.class)
-public interface MySqlComponent  {};
+public interface MySqlComponent  {}

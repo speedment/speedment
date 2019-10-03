@@ -70,7 +70,7 @@ public enum Isolation {
 
     private final int sqlIsolationLevel;
 
-    private Isolation(int sqlIsolationlevel) {
+    Isolation(int sqlIsolationlevel) {
         this.sqlIsolationLevel = sqlIsolationlevel;
     }
 

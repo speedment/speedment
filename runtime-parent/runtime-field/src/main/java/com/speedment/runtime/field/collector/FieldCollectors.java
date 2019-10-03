@@ -167,7 +167,7 @@ public final class FieldCollectors {
             A container = m.computeIfAbsent(key, k -> downstreamSupplier.get());
             downstreamAccumulator.accept(container, t);
         };
-        BinaryOperator<Map<K, A>> merger = FieldCollectors.<K, A, Map<K, A>>mapMerger(downstream.combiner());
+        BinaryOperator<Map<K, A>> merger = FieldCollectors.mapMerger(downstream.combiner());
         @SuppressWarnings("unchecked")
         Supplier<Map<K, A>> mangledFactory = (Supplier<Map<K, A>>) mapFactory;
 

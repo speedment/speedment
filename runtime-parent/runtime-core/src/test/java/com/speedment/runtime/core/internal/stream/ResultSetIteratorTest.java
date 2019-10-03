@@ -207,7 +207,7 @@ final class ResultSetIteratorTest {
 
         @Override
         public double getDouble(int columnIndex) throws SQLException {
-            return (double) itemsConsumed;
+            return itemsConsumed;
         }
 
         @Override

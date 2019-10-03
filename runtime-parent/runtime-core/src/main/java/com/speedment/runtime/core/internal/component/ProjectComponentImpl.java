@@ -47,7 +47,7 @@ public final class ProjectComponentImpl implements ProjectComponent {
         project = requireNonNull(metadata.makeProject(),
             "Metadata has not yet been loaded! This is probably due to an "
                 + "incorrect initialization order."
-        );;
+        );
     }
 
     @ExecuteBefore(STARTED)

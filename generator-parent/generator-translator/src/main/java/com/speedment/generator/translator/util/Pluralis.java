@@ -40,7 +40,7 @@ public enum Pluralis {
     private final Set<String> uncountables;
     private final Map<String, String> irregulars;
 
-    private Pluralis() {
+    Pluralis() {
         rules = new ArrayList<>();
         uncountables = new HashSet<>();
         irregulars = new HashMap<>();

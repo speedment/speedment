@@ -310,7 +310,7 @@ final class JoinSqlUtil {
                         if (((FieldPredicate)predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
                             // Remove redundant ALWAYS_TRUE predicates
                             continue;
-                        };
+                        }
                     }
                     if (cnt++ != 0) {
                         sql.append(" AND ");

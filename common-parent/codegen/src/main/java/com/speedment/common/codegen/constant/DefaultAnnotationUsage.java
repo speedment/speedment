@@ -45,11 +45,6 @@ public enum DefaultAnnotationUsage implements AnnotationUsage {
     REPEATABLE  (Repeatable.class),
     RETENTION   (Retention.class),
     TARGET      (Target.class),
-    @Deprecated
-    /**
-     * This class is not available in Java9 by default
-     */
-    GENERATED   (SimpleType.create("javax.annotation.Generated")),
     DEPRECATED  (Deprecated.class),
     SUPPRESS_WARNINGS_UNCHECKED (
         SuppressWarnings.class, string("unchecked")

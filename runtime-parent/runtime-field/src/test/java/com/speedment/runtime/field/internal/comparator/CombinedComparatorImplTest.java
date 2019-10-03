@@ -646,7 +646,7 @@ final class CombinedComparatorImplTest {
         public int hashCode() {
             int result;
             long temp;
-            result = (int) getByteValue();
+            result = getByteValue();
             result = 31 * result + (int) getShortValue();
             result = 31 * result + getIntValue();
             result = 31 * result + (int) (getLongValue() ^ (getLongValue() >>> 32));

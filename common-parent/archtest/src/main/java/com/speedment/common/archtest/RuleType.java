@@ -25,5 +25,5 @@ public enum RuleType {
      * Represents rules that involve classes that are <em>internal</em> and not a part
      * of the public API.
      */
-    INTERNAL;
+    INTERNAL
 }

@@ -97,7 +97,7 @@ final class ArraySpliterator<T> implements Spliterator<T> {
 
     @Override
     public long estimateSize() {
-        return (long) (size - index);
+        return size - index;
     }
 
     @Override

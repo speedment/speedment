@@ -103,7 +103,7 @@ implements ConnectionPoolComponent {
         requireNonNull(uri);
         // user nullable
         // password nullable
-        return uri + Objects.toString(user) +
+        return uri + user +
             ((password == null) ? "null" : new String(password));
     }
 

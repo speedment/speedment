@@ -76,7 +76,7 @@ public final class Beans {
             value = ((TypeMapper) value).getClass().getName() + ".class";
         }
 
-        return Optional.of(beanPropertyName(method) + " = " + quote + String.valueOf(value) + quote + ";");
+        return Optional.of(beanPropertyName(method) + " = " + quote + value + quote + ";");
     }
 
     /**
