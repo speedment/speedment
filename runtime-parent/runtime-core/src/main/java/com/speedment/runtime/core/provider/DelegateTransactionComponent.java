@@ -16,6 +16,11 @@
  */
 package com.speedment.runtime.core.provider;
 
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.WithState;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.DataSourceHandler;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
@@ -24,6 +29,8 @@ import com.speedment.runtime.core.internal.component.transaction.TransactionComp
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.speedment.common.injector.State.STARTED;
+
 /**
  *
  * @author Per Minborg
@@ -31,10 +38,20 @@ import java.util.stream.Stream;
  */
 public final class DelegateTransactionComponent implements TransactionComponent {
 
-    private TransactionComponent inner;
+    private TransactionComponentImpl inner;
 
     public DelegateTransactionComponent() {
         this.inner = new TransactionComponentImpl();
+    }
+
+    @ExecuteBefore(STARTED)
+    public void setupSingleDbms(@WithState(State.RESOLVED) ProjectComponent projectComponent) {
+        inner.setupSingleDbms(projectComponent);
+    }
+
+    @ExecuteBefore(State.STARTED)
+    public void addDbmsDataSourceHandler(ConnectionPoolComponent connectionPoolComponent) {
+        inner.addDbmsDataSourceHandler(connectionPoolComponent);
     }
 
     @Override

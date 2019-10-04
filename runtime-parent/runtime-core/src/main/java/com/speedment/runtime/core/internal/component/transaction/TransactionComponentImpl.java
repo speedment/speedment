@@ -19,6 +19,8 @@ package com.speedment.runtime.core.internal.component.transaction;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
@@ -52,6 +54,8 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class TransactionComponentImpl implements TransactionComponent {
 
+    private static final Logger LOGGER = LoggerManager.getLogger(TransactionComponentImpl.class);
+
     private final Map<Class<?>, DataSourceHandler<Object, Object>> dataSourceHandlers;
     private final Map<Thread, Object> txObjects;
     private final Map<Object, Set<Thread>> threadSets;
@@ -68,12 +72,14 @@ public final class TransactionComponentImpl implements TransactionComponent {
         final Set<Dbms> dbmses = projectComponent.getProject().dbmses().collect(toSet());
         if (dbmses.size() == 1) {
             singleDbms = dbmses.iterator().next();
+        } else {
+            LOGGER.warn("There are %d dbmses in the project %s -> TransactionComponent.createTransactionHandler() cannot be used.", dbmses.size(), projectComponent.getProject().getId());
         }
     }
 
     @ExecuteBefore(State.STARTED)
     public void addDbmsDataSourceHandler(ConnectionPoolComponent connectionPoolComponent) {
-        final Function<Dbms, PoolableConnection> extractor = dbms -> connectionPoolComponent.getConnection(dbms);
+        final Function<Dbms, PoolableConnection> extractor = connectionPoolComponent::getConnection;
         final Consumer<PoolableConnection> starter = wrapSqlException(c -> c.setAutoCommit(false), "setup connection");
         final BiFunction<PoolableConnection, Isolation, Isolation> isolationConfigurator = (PoolableConnection c, Isolation newLevel) -> {
             final int previousLevel;
@@ -159,10 +165,10 @@ public final class TransactionComponentImpl implements TransactionComponent {
                 return dataSourceHandler;
             }
         }
-        for (Class<?> interf : originalClass.getInterfaces()) {
-            final DataSourceHandler<Object, Object> dataSourceHandler = dataSourceHandlers.get(interf);
+        for (Class<?> inter : originalClass.getInterfaces()) {
+            final DataSourceHandler<Object, Object> dataSourceHandler = dataSourceHandlers.get(inter);
             if (dataSourceHandler != null) {
-                dataSourceHandlers.put(interf, dataSourceHandler); // Enter this association to speed up next look-up
+                dataSourceHandlers.put(inter, dataSourceHandler); // Enter this association to speed up next look-up
                 return dataSourceHandler;
             }
         }
@@ -177,7 +183,7 @@ public final class TransactionComponentImpl implements TransactionComponent {
         }
         throw new IllegalArgumentException(
             String.format(
-                "Unable to find a mapping for the data source %s of class %s. Available class mappings: ",
+                "Unable to find a mapping for the data source %s of class %s. Available class mappings: %s",
                 dataSource,
                 originalClass,
                 dataSourceHandlers.keySet().stream().map(Object::toString).collect(joining(", "))
