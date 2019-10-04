@@ -20,6 +20,7 @@ import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.connector.postgres.PostgresComponent;
+import com.speedment.runtime.connector.postgres.PostgresDbmsType;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 
 /**
@@ -30,10 +31,10 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
  */
 public final class PostgresComponentImpl implements PostgresComponent {
 
-    protected PostgresComponentImpl() {}
+    public PostgresComponentImpl() {}
 
     @ExecuteBefore(INITIALIZED)
-    void onInitialize(
+    public void onInitialize(
         final @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent,
         final @WithState(INITIALIZED) PostgresDbmsType postgresDbmsType
     ) {

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.db;
+package com.speedment.runtime.core.abstracts;
 
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 
@@ -24,8 +24,7 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
  *
  * @author Emil Forslund
  */
-public abstract class AbstractDatabaseNamingConvention
-        implements DatabaseNamingConvention {
+public abstract class AbstractDatabaseNamingConvention implements DatabaseNamingConvention {
 
     private final static String DEFAULT_DELIMITER = ".";
     private final static String DEFAULT_QUOTE = "'";

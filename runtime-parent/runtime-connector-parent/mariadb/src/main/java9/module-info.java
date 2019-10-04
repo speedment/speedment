@@ -16,6 +16,7 @@
  */
 module com.speedment.runtime.connector.mariadb {
     exports com.speedment.runtime.connector.mariadb;
+    exports com.speedment.runtime.connector.mariadb.provider;
 
     requires com.speedment.common.injector;
     requires com.speedment.runtime.core;

@@ -20,6 +20,7 @@ import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.connector.mariadb.MariaDbComponent;
+import com.speedment.runtime.connector.mariadb.MariaDbDbmsType;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 
 /**

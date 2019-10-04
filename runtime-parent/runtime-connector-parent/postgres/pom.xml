@@ -49,7 +49,8 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.runtime.connector.postgres
+                            com.speedment.runtime.connector.postgres,
+                            com.speedment.runtime.connector.postgres.provider
                         </Export-Package>
                     </instructions>
                 </configuration>

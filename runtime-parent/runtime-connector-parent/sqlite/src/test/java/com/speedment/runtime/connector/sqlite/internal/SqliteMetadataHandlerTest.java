@@ -39,9 +39,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static com.speedment.common.mapbuilder.MapBuilder.mapBuilderTyped;
 import static java.util.Collections.singletonList;
@@ -97,7 +95,7 @@ class SqliteMetadataHandlerTest {
                                     .key(HasIdUtil.ID).value("test_dbms")
                                     .key(HasNameUtil.NAME).value("test_dbms")
                                     .key(DbmsUtil.CONNECTION_URL).value(URL)
-                                    .key(DbmsUtil.TYPE_NAME).value(SqliteDbmsType.SQLITE)
+                                    .key(DbmsUtil.TYPE_NAME).value(SqliteDbmsTypeImpl.SQLITE)
                                     .build()
                                 ))
                                 .build()

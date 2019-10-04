@@ -47,7 +47,8 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.runtime.connector.sqlite
+                            com.speedment.runtime.connector.sqlite,
+                            com.speedment.runtime.connector.sqlite.provider
                         </Export-Package>
                     </instructions>
                 </configuration>

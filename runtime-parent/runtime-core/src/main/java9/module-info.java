@@ -16,6 +16,7 @@
  */
 module com.speedment.runtime.core {
     exports com.speedment.runtime.core;
+    exports com.speedment.runtime.core.abstracts;
     exports com.speedment.runtime.core.component;
     exports com.speedment.runtime.core.component.connectionpool;
     exports com.speedment.runtime.core.component.resultset;

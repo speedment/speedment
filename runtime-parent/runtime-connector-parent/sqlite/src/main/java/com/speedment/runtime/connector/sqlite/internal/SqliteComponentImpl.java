@@ -16,10 +16,26 @@
  */
 package com.speedment.runtime.connector.sqlite.internal;
 
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.connector.sqlite.SqliteComponent;
+import com.speedment.runtime.connector.sqlite.SqliteDbmsType;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+
+import static com.speedment.common.injector.State.INITIALIZED;
 
 /**
  * @author Emil Forslund
  * @since  3.1.10
  */
-public final class SqliteComponentImpl implements SqliteComponent {}
+public final class SqliteComponentImpl implements SqliteComponent {
+
+    @ExecuteBefore(INITIALIZED)
+    public void onInitialize(
+        final @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent,
+        final @WithState(INITIALIZED) SqliteDbmsType sqliteDbmsType
+    ) {
+        dbmsHandlerComponent.install(sqliteDbmsType);
+    }
+
+}

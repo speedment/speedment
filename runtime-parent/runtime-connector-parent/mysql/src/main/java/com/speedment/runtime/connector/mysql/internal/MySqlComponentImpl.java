@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
-import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.connector.mysql.MySqlComponent;
+import com.speedment.runtime.connector.mysql.MySqlDbmsType;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+
+import static com.speedment.common.injector.State.INITIALIZED;
 
 /**
  *
@@ -30,10 +32,8 @@ import com.speedment.runtime.connector.mysql.MySqlComponent;
  */
 public final class MySqlComponentImpl implements MySqlComponent {
 
-    protected MySqlComponentImpl() {}
-
     @ExecuteBefore(INITIALIZED)
-    void onInitialize(
+    public void onInitialize(
         final @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent,
         final @WithState(INITIALIZED) MySqlDbmsType mySqlDbmsType
     ) {

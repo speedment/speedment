@@ -14,12 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.db;
+package com.speedment.runtime.core.abstracts;
 
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
@@ -31,6 +29,8 @@ import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.internal.db.AsynchronousQueryResultImpl;
+import com.speedment.runtime.core.internal.db.ConnectionInfo;
 import com.speedment.runtime.core.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlUpdateStatement;
@@ -70,15 +70,10 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
-    private final AtomicBoolean closed;
-
     private final ConnectionPoolComponent connectionPoolComponent;
     private final DbmsHandlerComponent dbmsHandlerComponent;
     private final TransactionComponent transactionComponent;
-
-    // @Inject private ConnectionPoolComponent connectionPoolComponent;
-    // @Inject private DbmsHandlerComponent dbmsHandlerComponent;
-    // @InjectOrNull private TransactionComponent transactionComponent;
+    private final AtomicBoolean closed;
 
     protected AbstractDbmsOperationHandler(
         final ConnectionPoolComponent connectionPoolComponent,

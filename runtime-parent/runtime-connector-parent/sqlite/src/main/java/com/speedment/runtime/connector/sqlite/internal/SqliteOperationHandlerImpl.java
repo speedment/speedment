@@ -20,7 +20,7 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
-import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
+import com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler;
 
 /**
  * The implementation of {@link DbmsOperationHandler} for SQLite databases.
@@ -30,7 +30,7 @@ import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
  */
 public final class SqliteOperationHandler extends AbstractDbmsOperationHandler {
 
-    protected SqliteOperationHandler(
+    public SqliteOperationHandler(
         final ConnectionPoolComponent connectionPoolComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent

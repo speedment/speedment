@@ -16,12 +16,18 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.JavaTypeMap;
-import com.speedment.runtime.core.internal.db.AbstractDbmsMetadataHandler;
+import com.speedment.runtime.core.abstracts.AbstractDbmsMetadataHandler;
 import java.sql.Blob;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Specific MySQL implementation of a {@link DbmsMetadataHandler}.
@@ -31,6 +37,14 @@ import java.util.stream.Stream;
  * @since   2.0.0
  */
 public final class MySqlDbmsMetadataHandler extends AbstractDbmsMetadataHandler {
+
+    public MySqlDbmsMetadataHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ProjectComponent projectComponent
+    ) {
+        super(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
+    }
 
     @Override
     protected JavaTypeMap newJavaTypeMap() {

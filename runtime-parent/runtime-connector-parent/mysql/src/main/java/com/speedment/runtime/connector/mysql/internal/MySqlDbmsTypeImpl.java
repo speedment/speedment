@@ -22,9 +22,12 @@ import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
+import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
 
 import java.sql.Driver;
 import java.util.Collections;
@@ -62,20 +65,23 @@ public final class MySqlDbmsType implements DbmsType {
 
     private MySqlDbmsType(
         final DriverComponent driverComponent,
-        final MySqlDbmsMetadataHandler metadataHandler,
-        final MySqlDbmsOperationHandler operationHandler,
-        final MySqlSpeedmentPredicateView fieldPredicateView,
         @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
-        final String binaryCollationName
+        final String binaryCollationName,
+        @Config(name = "db.mysql.collationName", value = "utf8_general_ci")
+        final String collationName,
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ProjectComponent projectComponent,
+        final TransactionComponent transactionComponent
     ) {
         this.driverComponent = requireNonNull(driverComponent);
-        this.metadataHandler = requireNonNull(metadataHandler);
-        this.operationHandler = requireNonNull(operationHandler);
-        this.fieldPredicateView = requireNonNull(fieldPredicateView);
         this.binaryCollationName = requireNonNull(binaryCollationName);
-        namingConvention = new MySqlNamingConvention();
-        connectionUrlGenerator = new MySqlConnectionUrlGenerator();
-        support = DbmsTypeDefault.create();
+        this.metadataHandler = new MySqlDbmsMetadataHandler(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
+        this.operationHandler = new MySqlDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        this.fieldPredicateView = new MySqlSpeedmentPredicateView(binaryCollationName, collationName);
+        this.namingConvention = new MySqlNamingConvention();
+        this.connectionUrlGenerator = new MySqlConnectionUrlGenerator();
+        this.support = DbmsTypeDefault.create();
     }
 
     @ExecuteBefore(INITIALIZED)

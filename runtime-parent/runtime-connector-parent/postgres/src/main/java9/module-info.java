@@ -16,6 +16,7 @@
  */
 module com.speedment.runtime.connector.postgres {
     exports com.speedment.runtime.connector.postgres;
+    exports com.speedment.runtime.connector.postgres.provider;
 
     requires com.speedment.common.injector;
     requires com.speedment.runtime.core;

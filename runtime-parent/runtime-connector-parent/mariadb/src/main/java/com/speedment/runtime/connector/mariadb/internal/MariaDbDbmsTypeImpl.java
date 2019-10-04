@@ -27,7 +27,7 @@ import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateVie
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
+import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
 
 import java.sql.Driver;
 import java.util.Collections;

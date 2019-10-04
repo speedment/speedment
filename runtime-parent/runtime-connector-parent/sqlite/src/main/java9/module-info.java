@@ -16,6 +16,7 @@
  */
 module com.speedment.runtime.connector.sqlite {
     exports com.speedment.runtime.connector.sqlite;
+    exports com.speedment.runtime.connector.sqlite.provider;
 
     requires com.speedment.common.logger;
     requires com.speedment.common.injector;

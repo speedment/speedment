@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.manager.sql;
+package com.speedment.runtime.core.abstracts;
 
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;

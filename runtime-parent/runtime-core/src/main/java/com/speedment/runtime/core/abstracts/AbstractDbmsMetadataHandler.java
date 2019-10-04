@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.db;
+package com.speedment.runtime.core.abstracts;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
@@ -52,7 +52,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
+import static com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Objects.nonNull;
@@ -71,14 +71,20 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
     private final static Class<?> DEFAULT_MAPPING = Object.class;
     
-    private @Inject ConnectionPoolComponent connectionPoolComponent;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject ProjectComponent projectComponent;
+    private final ConnectionPoolComponent connectionPoolComponent;
+    private final DbmsHandlerComponent dbmsHandlerComponent;
+    private final ProjectComponent projectComponent;
+    private final Map<Class<? extends Document>, AtomicLong> timers;
     private JavaTypeMap javaTypeMap;
 
-    private Map<Class<? extends Document>, AtomicLong> timers;
-
-    protected AbstractDbmsMetadataHandler() {
+    protected AbstractDbmsMetadataHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ProjectComponent projectComponent
+    ) {
+        this.connectionPoolComponent = requireNonNull(connectionPoolComponent);
+        this.dbmsHandlerComponent    = requireNonNull(dbmsHandlerComponent);
+        this.projectComponent        = requireNonNull(projectComponent);
         timers = new ConcurrentHashMap<>();
     }
     

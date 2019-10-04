@@ -19,7 +19,6 @@ package com.speedment.runtime.connector.sqlite.internal;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
@@ -32,12 +31,7 @@ import com.speedment.runtime.connector.sqlite.internal.types.SqlTypeMappingHelpe
 import com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.core.db.DatabaseNamingConvention;
-import com.speedment.runtime.core.db.DbmsMetadataHandler;
-import com.speedment.runtime.core.db.JavaTypeMap;
-import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.db.SqlPredicate;
-import com.speedment.runtime.core.db.SqlSupplier;
+import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.util.ProgressMeasure;
@@ -48,20 +42,8 @@ import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.sql.*;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -72,15 +54,10 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.connector.sqlite.internal.util.LoggingUtil.describe;
-import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.getOrderType;
-import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.isAutoIncrement;
-import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.isWrapper;
-import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
+import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.*;
+import static com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 /**
  * Implementation of {@link DbmsMetadataHandler} for SQLite databases.
@@ -129,16 +106,23 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
      */
     private static final boolean APPROXIMATE_INDEX = true;
 
-    private @Inject ConnectionPoolComponent connectionPool;
-    private @Inject ProjectComponent projects;
-    private @Inject SqliteDbmsType dbmsType;
+    private final ConnectionPoolComponent connectionPool;
+    private final ProjectComponent projects;
+    private final SqliteDbmsTypeImpl dbmsType;
+    private final JavaTypeMap javaTypeMap;
 
-    private JavaTypeMap javaTypeMap;
     private SqlTypeMappingHelper typeMappingHelper;
 
-    @ExecuteBefore(State.INITIALIZED)
-    void initJavaTypeMap() {
-        javaTypeMap = JavaTypeMap.create();
+    public SqliteMetadataHandler(
+        final ConnectionPoolComponent connectionPool,
+        final ProjectComponent projects,
+        final SqliteDbmsTypeImpl dbmsType
+    ) {
+        this.connectionPool = connectionPool;
+        this.projects = projects;
+        this.dbmsType = dbmsType;
+
+        this.javaTypeMap = JavaTypeMap.create();
         javaTypeMap.addRule((mappings, md) ->
             md.getTypeName().toUpperCase().startsWith("NUMERIC(")
                 ? Optional.of(Double.class) : Optional.empty()
@@ -183,27 +167,8 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
         );
     }
 
-    private static Optional<Class<?>> patternMapper(Pattern pattern, ColumnMetaData md, Class<?> expected) {
-        return Optional.of(md.getTypeName())
-            .map(String::toUpperCase)
-            .map(pattern::matcher)
-            .filter(Matcher::find)
-            .map(match -> {
-                final String group = match.group(1);
-                if (group == null) {
-                    return expected;
-                } else {
-                    final int digits = Integer.parseInt(group);
-                    if      (digits > 11) return Long.class;
-                    else if (digits > 4)  return Integer.class;
-                    else if (digits > 2)  return Short.class;
-                    else                  return Byte.class;
-                }
-            });
-    }
-
     @ExecuteBefore(State.RESOLVED)
-    void initSqlTypeMappingHelper(Injector injector) {
+    public void initSqlTypeMappingHelper(Injector injector) {
         typeMappingHelper = SqlTypeMappingHelper.create(injector, javaTypeMap);
     }
 
@@ -337,6 +302,25 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
                         }
                     })).toArray(CompletableFuture[]::new)
                 ).thenApplyAsync(v -> schema);
+            });
+    }
+
+    private static Optional<Class<?>> patternMapper(Pattern pattern, ColumnMetaData md, Class<?> expected) {
+        return Optional.of(md.getTypeName())
+            .map(String::toUpperCase)
+            .map(pattern::matcher)
+            .filter(Matcher::find)
+            .map(match -> {
+                final String group = match.group(1);
+                if (group == null) {
+                    return expected;
+                } else {
+                    final int digits = Integer.parseInt(group);
+                    if      (digits > 11) return Long.class;
+                    else if (digits > 4)  return Integer.class;
+                    else if (digits > 2)  return Short.class;
+                    else                  return Byte.class;
+                }
             });
     }
 
