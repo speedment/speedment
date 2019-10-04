@@ -15,7 +15,6 @@ import static com.speedment.common.invariant.LongRangeUtil.requireNonNegative;
 
 public final class DbmsTypeDefaultImpl implements DbmsTypeDefault {
 
-
     private static final DbmsColumnHandler DEFAULT_COLUMN_HANDLER = new DbmsColumnHandler() {
         @Override
         public Predicate<Column> excludedInInsertStatement() {
