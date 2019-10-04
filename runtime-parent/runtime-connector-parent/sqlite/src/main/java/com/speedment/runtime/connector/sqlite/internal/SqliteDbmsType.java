@@ -41,7 +41,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SqliteDbmsType implements DbmsType {
 
-    public final static String SQLITE = "SQLite";
+    private final static String SQLITE = "SQLite";
 
     private final DriverComponent drivers; // Nullable
     private final SqliteMetadataHandler metadataHandler;
