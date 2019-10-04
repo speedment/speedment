@@ -1,13 +1,11 @@
-package com.speedment.runtime.connector.postgres.provider;
+package com.speedment.runtime.connector.sqlite.provider;
 
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.connector.postgres.PostgresDbmsType;
-import com.speedment.runtime.connector.postgres.internal.PostgresDbmsTypeImpl;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.core.component.transaction.TransactionComponent;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.OnlyIfMissing;
+import com.speedment.runtime.connector.sqlite.SqliteDbmsType;
+import com.speedment.runtime.connector.sqlite.SqliteMetadataHandler;
+import com.speedment.runtime.connector.sqlite.SqliteOperationHandler;
+import com.speedment.runtime.connector.sqlite.internal.SqliteDbmsTypeImpl;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
@@ -15,27 +13,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
-
-public final class DelegatePostgresDbmsType implements PostgresDbmsType {
+public final class DelegateSqliteDbmsType implements SqliteDbmsType {
 
     private final DbmsType inner;
 
-    public DelegatePostgresDbmsType(
-        final DriverComponent driverComponent,
-        final ConnectionPoolComponent connectionPoolComponent,
-        final DbmsHandlerComponent dbmsHandlerComponent,
-        final ProjectComponent projectComponent,
-        final TransactionComponent transactionComponent
+    @Inject
+    @OnlyIfMissing(DriverComponent.class)
+    public DelegateSqliteDbmsType(
+        final SqliteMetadataHandler metadataHandler,
+        final SqliteOperationHandler operationHandler
     ) {
-        inner = new PostgresDbmsTypeImpl(driverComponent, connectionPoolComponent, dbmsHandlerComponent, projectComponent, transactionComponent);
+        inner = new SqliteDbmsTypeImpl(metadataHandler, operationHandler);
     }
 
-/*    @ExecuteBefore(INITIALIZED)
-    public void install(@WithState(CREATED) DbmsHandlerComponent component) {
-        component.install(this);
-    }*/
+    @Inject
+    public DelegateSqliteDbmsType(
+        final DriverComponent driverComponent,
+        final SqliteMetadataHandler metadataHandler,
+        final SqliteOperationHandler operationHandler
+    ) {
+        inner = new SqliteDbmsTypeImpl(driverComponent, metadataHandler, operationHandler);
+    }
 
     @Override
     public String getName() {
@@ -118,7 +116,7 @@ public final class DelegatePostgresDbmsType implements PostgresDbmsType {
     }
 
     @Override
-    public ConnectionType getConnectionType() {
+    public DbmsTypeDefault.ConnectionType getConnectionType() {
         return inner.getConnectionType();
     }
 
@@ -153,7 +151,7 @@ public final class DelegatePostgresDbmsType implements PostgresDbmsType {
     }
 
     @Override
-    public SkipLimitSupport getSkipLimitSupport() {
+    public DbmsTypeDefault.SkipLimitSupport getSkipLimitSupport() {
         return inner.getSkipLimitSupport();
     }
 
@@ -163,16 +161,13 @@ public final class DelegatePostgresDbmsType implements PostgresDbmsType {
     }
 
     @Override
-    public SubSelectAlias getSubSelectAlias() {
+    public DbmsTypeDefault.SubSelectAlias getSubSelectAlias() {
         return inner.getSubSelectAlias();
     }
 
     @Override
-    public SortByNullOrderInsertion getSortByNullOrderInsertion() {
+    public DbmsTypeDefault.SortByNullOrderInsertion getSortByNullOrderInsertion() {
         return inner.getSortByNullOrderInsertion();
     }
 
-    public static DbmsTypeDefault create() {
-        return DbmsTypeDefault.create();
-    }
 }

@@ -28,9 +28,9 @@ import com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler;
  * @author Emil Forslund
  * @since  3.1.10
  */
-public final class SqliteOperationHandler extends AbstractDbmsOperationHandler {
+public final class SqliteOperationHandlerImpl extends AbstractDbmsOperationHandler {
 
-    public SqliteOperationHandler(
+    public SqliteOperationHandlerImpl(
         final ConnectionPoolComponent connectionPoolComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent

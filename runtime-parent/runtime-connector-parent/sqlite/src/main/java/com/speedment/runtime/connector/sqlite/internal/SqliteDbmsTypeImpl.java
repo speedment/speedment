@@ -16,11 +16,10 @@
  */
 package com.speedment.runtime.connector.sqlite.internal;
 
-import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.OnlyIfMissing;
-import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.connector.sqlite.SqliteMetadataHandler;
+import com.speedment.runtime.connector.sqlite.SqliteOperationHandler;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
@@ -28,8 +27,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
 import static java.util.Collections.emptySet;
 import static java.util.Objects.requireNonNull;
 
@@ -39,7 +36,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.1.10
  */
-public final class SqliteDbmsType implements DbmsType {
+public final class SqliteDbmsTypeImpl implements DbmsType {
 
     final static String SQLITE = "SQLite";
 
@@ -49,25 +46,24 @@ public final class SqliteDbmsType implements DbmsType {
 
     @Inject
     @OnlyIfMissing(DriverComponent.class)
-    SqliteDbmsType(SqliteMetadataHandler metadataHandler,
-                   SqliteOperationHandler operationHandler) {
+    public SqliteDbmsTypeImpl(
+        final SqliteMetadataHandler metadataHandler,
+        final SqliteOperationHandler operationHandler
+    ) {
         this.drivers          = null; // Nullable
         this.metadataHandler  = requireNonNull(metadataHandler);
         this.operationHandler = requireNonNull(operationHandler);
     }
 
     @Inject
-    SqliteDbmsType(DriverComponent drivers,
-                   SqliteMetadataHandler metadataHandler,
-                   SqliteOperationHandler operationHandler) {
+    public SqliteDbmsTypeImpl(
+        final DriverComponent drivers,
+        final SqliteMetadataHandler metadataHandler,
+        final SqliteOperationHandler operationHandler
+    ) {
         this.drivers          = requireNonNull(drivers);
         this.metadataHandler  = requireNonNull(metadataHandler);
         this.operationHandler = requireNonNull(operationHandler);
-    }
-
-    @ExecuteBefore(INITIALIZED)
-    void install(@WithState(CREATED) DbmsHandlerComponent component) {
-        component.install(this);
     }
 
     @Override

@@ -17,6 +17,10 @@
 package com.speedment.runtime.connector.postgres.internal;
 
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
@@ -40,7 +44,7 @@ import static java.util.stream.Collectors.toSet;
  * @author Per Minborg
  * @author Emil Forslund
  */
-public final class PostgresDbmsType implements DbmsType {
+public final class PostgresDbmsTypeImpl implements DbmsType {
 
     private final static FieldPredicateView PREDICATE_VIEW = new PostgresSpeedmentPredicateView();
 
@@ -51,17 +55,19 @@ public final class PostgresDbmsType implements DbmsType {
     private final PostgresNamingConvention namingConvention;
     private final PostgresConnectionUrlGenerator connectionUrlGenerator;
 
-    private PostgresDbmsType(
+    public PostgresDbmsTypeImpl(
         final DriverComponent driverComponent,
-        final PostgresDbmsMetadataHandler metadataHandler,
-        final PostgresDbmsOperationHandler operationHandler
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ProjectComponent projectComponent,
+        final TransactionComponent transactionComponent
     ) {
         this.driverComponent = requireNonNull(driverComponent);
-        this.metadataHandler = requireNonNull(metadataHandler);
-        this.operationHandler = requireNonNull(operationHandler);
-        namingConvention = new PostgresNamingConvention();
-        connectionUrlGenerator = new PostgresConnectionUrlGenerator();
-        support = DbmsTypeDefault.create();
+        this.metadataHandler = new PostgresDbmsMetadataHandler(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
+        this.operationHandler = new PostgresDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        this.namingConvention = new PostgresNamingConvention();
+        this.connectionUrlGenerator = new PostgresConnectionUrlGenerator();
+        this.support = DbmsTypeDefault.create();
     }
 
     @Override

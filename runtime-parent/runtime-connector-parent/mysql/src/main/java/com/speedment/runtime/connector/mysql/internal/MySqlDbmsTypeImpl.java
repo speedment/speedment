@@ -49,7 +49,7 @@ import static java.util.stream.Collectors.toSet;
  * @author Per Minborg
  * @author Emil Forslund
  */
-public final class MySqlDbmsType implements DbmsType {
+public final class MySqlDbmsTypeImpl implements DbmsType {
 
     private static final String OLD_DRIVER = "com.mysql.jdbc.Driver";
     private static final String NEW_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -63,7 +63,7 @@ public final class MySqlDbmsType implements DbmsType {
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;
 
-    private MySqlDbmsType(
+    public MySqlDbmsTypeImpl(
         final DriverComponent driverComponent,
         @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
         final String binaryCollationName,
@@ -83,11 +83,11 @@ public final class MySqlDbmsType implements DbmsType {
         this.connectionUrlGenerator = new MySqlConnectionUrlGenerator();
         this.support = DbmsTypeDefault.create();
     }
-
+/*
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {
         component.install(this);
-    }
+    }*/
 
     @Override
     public String getName() {

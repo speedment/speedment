@@ -21,10 +21,14 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.connector.mariadb.MariaDbDbmsType;
 import com.speedment.runtime.connector.mysql.internal.MySqlDbmsMetadataHandler;
 import com.speedment.runtime.connector.mysql.internal.MySqlDbmsOperationHandler;
 import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateView;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
@@ -49,7 +53,7 @@ import static java.util.stream.Collectors.toSet;
  * @author Per Minborg
  * @author Emil Forslund
  */
-public final class MariaDbDbmsType implements DbmsType {
+public final class MariaDbDbmsTypeImpl implements DbmsType {
 
     private final DbmsTypeDefault support;
     private final DriverComponent driverComponent;
@@ -60,28 +64,33 @@ public final class MariaDbDbmsType implements DbmsType {
     private final MariaDbNamingConvention namingConvention;
     private final MariaDbConnectionUrlGenerator connectionUrlGenerator;
 
-    private MariaDbDbmsType(
+    public MariaDbDbmsTypeImpl(
         final DriverComponent driverComponent,
-        final MySqlDbmsMetadataHandler metadataHandler,
-        final MySqlDbmsOperationHandler operationHandler,
-        final MySqlSpeedmentPredicateView fieldPredicateView,
         @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
-        final String binaryCollationName
+        final String binaryCollationName,
+        @Config(name = "db.mysql.collationName", value = "utf8_general_ci")
+        final String collationName,
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ProjectComponent projectComponent,
+        final TransactionComponent transactionComponent
     ) {
         this.driverComponent = requireNonNull(driverComponent);
-        this.metadataHandler = requireNonNull(metadataHandler);
-        this.operationHandler = requireNonNull(operationHandler);
-        this.fieldPredicateView = requireNonNull(fieldPredicateView);
+        this.metadataHandler = new MySqlDbmsMetadataHandler(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
+        this.operationHandler = new MySqlDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        this.fieldPredicateView = new MySqlSpeedmentPredicateView(binaryCollationName, collationName);
         this.binaryCollationName = requireNonNull(binaryCollationName);
-        namingConvention = new MariaDbNamingConvention();
-        connectionUrlGenerator = new MariaDbConnectionUrlGenerator();
-        support = DbmsTypeDefault.create();
+        this.namingConvention = new MariaDbNamingConvention();
+        this.connectionUrlGenerator = new MariaDbConnectionUrlGenerator();
+        this.support = DbmsTypeDefault.create();
     }
 
+/*
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {
         component.install(this);
     }
+*/
 
     @Override
     public String getName() {

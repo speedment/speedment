@@ -27,6 +27,7 @@ import com.speedment.runtime.config.mutator.IndexMutator;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
+import com.speedment.runtime.connector.sqlite.SqliteDbmsType;
 import com.speedment.runtime.connector.sqlite.internal.types.SqlTypeMappingHelper;
 import com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -65,9 +66,9 @@ import static java.util.stream.Collectors.*;
  * @author Emil Forslund
  * @since  3.1.10
  */
-public final class SqliteMetadataHandler implements DbmsMetadataHandler {
+public final class SqliteMetadataHandlerImpl implements DbmsMetadataHandler {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(SqliteMetadataHandler.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(SqliteMetadataHandlerImpl.class);
     private static final String[] TABLES_AND_VIEWS = {"TABLE", "VIEW"};
     private static final String ORIGINAL_TYPE = "originalDatabaseType";
     private static final String ROW_ID = "rowid";
@@ -108,19 +109,16 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
 
     private final ConnectionPoolComponent connectionPool;
     private final ProjectComponent projects;
-    private final SqliteDbmsTypeImpl dbmsType;
     private final JavaTypeMap javaTypeMap;
 
     private SqlTypeMappingHelper typeMappingHelper;
 
-    public SqliteMetadataHandler(
+    public SqliteMetadataHandlerImpl(
         final ConnectionPoolComponent connectionPool,
-        final ProjectComponent projects,
-        final SqliteDbmsTypeImpl dbmsType
+        final ProjectComponent projects
     ) {
         this.connectionPool = connectionPool;
         this.projects = projects;
-        this.dbmsType = dbmsType;
 
         this.javaTypeMap = JavaTypeMap.create();
         javaTypeMap.addRule((mappings, md) ->
@@ -744,7 +742,7 @@ public final class SqliteMetadataHandler implements DbmsMetadataHandler {
      * @throws SQLException  if an error occured
      */
     private List<String> enumConstantsOf(Dbms dbms, Table table, String columnName) throws SQLException {
-        final DatabaseNamingConvention naming = dbmsType.getDatabaseNamingConvention();
+        final DatabaseNamingConvention naming = new SqliteNamingConvention(); // This should be handled via the injector
 
         final String sql = String.format(
             "show columns from %s where field=%s;",
