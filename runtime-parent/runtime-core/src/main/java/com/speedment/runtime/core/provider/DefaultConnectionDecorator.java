@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.component;
+package com.speedment.runtime.core.provider;
 
 import com.speedment.runtime.core.component.connectionpool.ConnectionDecorator;
 

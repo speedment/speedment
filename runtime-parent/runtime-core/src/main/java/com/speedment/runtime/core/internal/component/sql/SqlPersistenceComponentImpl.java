@@ -32,14 +32,14 @@ import static java.util.Objects.requireNonNull;
  * @author Dan Lawesson
  * @since 3.0.1
  */
-public final class SqlPersistanceComponentImpl implements SqlPersistenceComponent {
+public final class SqlPersistenceComponentImpl implements SqlPersistenceComponent {
 
     private final ProjectComponent projectComponent;
     private final DbmsHandlerComponent dbmsHandlerComponent;
     private final ManagerComponent managerComponent;
     private final ResultSetMapperComponent resultSetMapperComponent;
 
-    public SqlPersistanceComponentImpl(
+    public SqlPersistenceComponentImpl(
         final ProjectComponent projectComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final ManagerComponent managerComponent,

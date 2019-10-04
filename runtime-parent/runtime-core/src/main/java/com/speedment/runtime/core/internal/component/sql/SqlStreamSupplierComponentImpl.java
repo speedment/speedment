@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.component.sql;
 
 import com.speedment.common.injector.Injector;
-import static com.speedment.common.injector.State.STARTED;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.identifier.TableIdentifier;
@@ -30,11 +29,14 @@ import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
 import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+
 import java.sql.ResultSet;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+
+import static com.speedment.common.injector.State.STARTED;
+import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the
@@ -46,16 +48,18 @@ import java.util.stream.Stream;
 public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierComponent {
 
     private final Map<TableIdentifier<?>, SqlStreamSupplier<?>> supportMap;
-    @Config(name = "allowStreamIteratorAndSpliterator", value = "false")
-    private boolean allowStreamIteratorAndSpliterator;
+    private final boolean allowStreamIteratorAndSpliterator;
 
-    public SqlStreamSupplierComponentImpl() {
+    public SqlStreamSupplierComponentImpl(
+        @Config(name = "allowStreamIteratorAndSpliterator", value = "false") final boolean allowStreamIteratorAndSpliterator
+    ) {
         this.supportMap = new ConcurrentHashMap<>();
+        this.allowStreamIteratorAndSpliterator = allowStreamIteratorAndSpliterator;
     }
 
     @ExecuteBefore(STARTED)
     @SuppressWarnings("unchecked")
-    void startStreamSuppliers(
+    public void startStreamSuppliers(
         final Injector injector,
         final ProjectComponent projectComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,

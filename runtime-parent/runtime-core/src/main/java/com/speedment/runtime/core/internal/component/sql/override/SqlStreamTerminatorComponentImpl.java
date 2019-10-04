@@ -49,7 +49,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-public class SqlStreamTerminatorComponentImpl implements SqlStreamTerminatorComponent {
+public final class SqlStreamTerminatorComponentImpl implements SqlStreamTerminatorComponent {
 
     // Reference
     private ForEachTerminator<?> forEachTerminator = ForEachTerminator.defaultTerminator();

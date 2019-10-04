@@ -43,7 +43,7 @@ public final class EntityManagerImpl implements EntityManager {
     }
 
     @ExecuteBefore(RESOLVED)
-    void installManagers(ManagerComponent managerComponent) {
+    public void installManagers(ManagerComponent managerComponent) {
         managerComponent.stream()
             .forEach(m -> managers.put(m.getEntityClass(), m));
     }

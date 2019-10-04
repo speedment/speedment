@@ -20,7 +20,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 final class StatisticsReporterSchedulerComponentImplTest {
 
@@ -28,7 +29,7 @@ final class StatisticsReporterSchedulerComponentImplTest {
     void guardedCallStalled() {
 
         final AtomicBoolean called = new AtomicBoolean();
-        final StatisticsReporterSchedulerComponentImpl instance = new StatisticsReporterSchedulerComponentImpl();
+        final StatisticsReporterSchedulerComponentImpl instance = new StatisticsReporterSchedulerComponentImpl(true);
 
         final Thread t0 = new Thread(() -> { instance.guardedCall(() -> dly(1000)); });
         final Thread t1 = new Thread(() -> { called.set(true); });
@@ -45,7 +46,7 @@ final class StatisticsReporterSchedulerComponentImplTest {
     void guardedCallClean() {
 
         final AtomicBoolean called = new AtomicBoolean();
-        final StatisticsReporterSchedulerComponentImpl instance = new StatisticsReporterSchedulerComponentImpl();
+        final StatisticsReporterSchedulerComponentImpl instance = new StatisticsReporterSchedulerComponentImpl(true);
 
         instance.guardedCall(() -> {});
         instance.guardedCall(() -> called.set(true));

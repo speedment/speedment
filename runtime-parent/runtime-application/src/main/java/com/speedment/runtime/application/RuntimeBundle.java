@@ -21,14 +21,7 @@ import com.speedment.runtime.connector.mariadb.MariaDbBundle;
 import com.speedment.runtime.connector.mysql.MySqlBundle;
 import com.speedment.runtime.connector.postgres.PostgresBundle;
 import com.speedment.runtime.connector.sqlite.SqliteBundle;
-import com.speedment.runtime.core.internal.component.*;
-import com.speedment.runtime.core.internal.component.resultset.ResultSetMapperComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.SqlPersistanceComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
-import com.speedment.runtime.core.internal.component.transaction.TransactionComponentImpl;
-import com.speedment.runtime.core.internal.db.DriverComponentImpl;
+import com.speedment.runtime.core.provider.*;
 import com.speedment.runtime.join.JoinBundle;
 
 import java.util.stream.Stream;
@@ -44,22 +37,22 @@ public class RuntimeBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return InjectBundle.of(
-            InfoComponentImpl.class,
-            ConnectionPoolComponentImpl.class,
-            DbmsHandlerComponentImpl.class,
-            EntityManagerImpl.class,
-            ManagerComponentImpl.class,
-            PasswordComponentImpl.class,
-            ProjectComponentImpl.class,
-            ResultSetMapperComponentImpl.class,
-            SqlStreamSupplierComponentImpl.class,
-            SqlPersistanceComponentImpl.class,
-            StatisticsReporterComponentImpl.class,
-            StatisticsReporterSchedulerComponentImpl.class,
-            SqlStreamOptimizerComponentImpl.class,
-            SqlStreamTerminatorComponentImpl.class,
-            TransactionComponentImpl.class,
-            DriverComponentImpl.class,
+            DelegateInfoComponent.class,
+            DelegateConnectionPoolComponent.class,
+            DelegateDbmsHandlerComponent.class,
+            DelegateEntityManager.class,
+            DelegateManagerComponent.class,
+            DelegatePasswordComponent.class,
+            DelegateProjectComponent.class,
+            DelegateResultSetMapperComponent.class,
+            DelegateSqlStreamSupplierComponent.class,
+            DelegateSqlPersistenceComponent.class,
+            DelegateStatisticsReporterComponent.class,
+            DelegateStatisticsReporterSchedulerComponent.class,
+            DelegateSqlStreamOptimizerComponent.class,
+            DelegateSqlStreamTerminatorComponent.class,
+            DelegateTransactionComponent.class,
+            DelegateDriverComponent.class,
             DefaultConnectionDecorator.class
         )
             .withBundle(new MySqlBundle())

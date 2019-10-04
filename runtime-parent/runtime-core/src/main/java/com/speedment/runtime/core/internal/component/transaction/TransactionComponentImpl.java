@@ -50,15 +50,21 @@ import static java.util.stream.Collectors.toSet;
  *
  * @author Per Minborg
  */
-public class TransactionComponentImpl implements TransactionComponent {
+public final class TransactionComponentImpl implements TransactionComponent {
 
     private final Map<Class<?>, DataSourceHandler<Object, Object>> dataSourceHandlers;
     private final Map<Thread, Object> txObjects;
     private final Map<Object, Set<Thread>> threadSets;
     private Dbms singleDbms;
 
+    public TransactionComponentImpl() {
+        this.dataSourceHandlers = new ConcurrentHashMap<>();
+        this.txObjects = new ConcurrentHashMap<>();
+        this.threadSets = new ConcurrentHashMap<>();
+    }
+
     @ExecuteBefore(STARTED)
-    void setupSingleDbms(@WithState(State.RESOLVED) ProjectComponent projectComponent) {
+    public void setupSingleDbms(@WithState(State.RESOLVED) ProjectComponent projectComponent) {
         final Set<Dbms> dbmses = projectComponent.getProject().dbmses().collect(toSet());
         if (dbmses.size() == 1) {
             singleDbms = dbmses.iterator().next();
@@ -66,7 +72,7 @@ public class TransactionComponentImpl implements TransactionComponent {
     }
 
     @ExecuteBefore(State.STARTED)
-    void addDbmsDataSourceHandler(ConnectionPoolComponent connectionPoolComponent) {
+    public void addDbmsDataSourceHandler(ConnectionPoolComponent connectionPoolComponent) {
         final Function<Dbms, PoolableConnection> extractor = dbms -> connectionPoolComponent.getConnection(dbms);
         final Consumer<PoolableConnection> starter = wrapSqlException(c -> c.setAutoCommit(false), "setup connection");
         final BiFunction<PoolableConnection, Isolation, Isolation> isolationConfigurator = (PoolableConnection c, Isolation newLevel) -> {
@@ -86,12 +92,6 @@ public class TransactionComponentImpl implements TransactionComponent {
             c.close();
         }, "close connection");
         putDataSourceHandler(Dbms.class, DataSourceHandler.of(extractor, isolationConfigurator, starter, committer, rollbacker, closer));
-    }
-
-    public TransactionComponentImpl() {
-        this.dataSourceHandlers = new ConcurrentHashMap<>();
-        this.txObjects = new ConcurrentHashMap<>();
-        this.threadSets = new ConcurrentHashMap<>();
     }
 
     @Override
