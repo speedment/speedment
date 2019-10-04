@@ -166,7 +166,6 @@ public final class MariaDbDbmsType implements DbmsType {
 
     @Override
     public boolean isSupported() {
-        // make sure we touch new new driver first.
         return isSupported(getDriverName());
     }
 

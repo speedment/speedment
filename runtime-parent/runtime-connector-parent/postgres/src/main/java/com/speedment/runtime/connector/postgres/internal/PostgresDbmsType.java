@@ -16,14 +16,14 @@
  */
 package com.speedment.runtime.connector.postgres.internal;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
-import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 
+import java.sql.Driver;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -40,10 +40,12 @@ import static java.util.stream.Collectors.toSet;
  * @author Per Minborg
  * @author Emil Forslund
  */
-public final class PostgresDbmsType extends AbstractDbmsType {
+public final class PostgresDbmsType implements DbmsType {
 
     private final static FieldPredicateView PREDICATE_VIEW = new PostgresSpeedmentPredicateView();
 
+    private final DbmsTypeDefault support;
+    private final DriverComponent driverComponent;
     private final PostgresDbmsMetadataHandler metadataHandler;
     private final PostgresDbmsOperationHandler operationHandler;
     private final PostgresNamingConvention namingConvention;
@@ -54,11 +56,12 @@ public final class PostgresDbmsType extends AbstractDbmsType {
         final PostgresDbmsMetadataHandler metadataHandler,
         final PostgresDbmsOperationHandler operationHandler
     ) {
-        super(driverComponent);
+        this.driverComponent = requireNonNull(driverComponent);
         this.metadataHandler = requireNonNull(metadataHandler);
         this.operationHandler = requireNonNull(operationHandler);
         namingConvention = new PostgresNamingConvention();
         connectionUrlGenerator = new PostgresConnectionUrlGenerator();
+        support = DbmsTypeDefault.create();
     }
 
     @Override
@@ -123,10 +126,12 @@ public final class PostgresDbmsType extends AbstractDbmsType {
 
     @Override
     public Set<TypeInfoMetaData> getDataTypes() {
-        return Stream.concat(
-            super.getDataTypes().stream(),
-            dataTypes()
-        ).collect(toSet());
+        return dataTypes().collect(toSet());
+    }
+
+    @Override
+    public boolean isSupported() {
+        return isSupported(getDriverName());
     }
 
     private final static class PostgresNamingConvention extends AbstractDatabaseNamingConvention {
@@ -183,6 +188,65 @@ public final class PostgresDbmsType extends AbstractDbmsType {
             result.append("?stringtype=unspecified");  // to allow database JSON types to be written
             return result.toString();
         }
+    }
+
+
+    @Override
+    public DbmsColumnHandler getColumnHandler() {
+        return support.getColumnHandler();
+    }
+
+    @Override
+    public Optional<String> getDefaultDbmsName() {
+        return support.getDefaultDbmsName();
+    }
+
+    @Override
+    public String getSchemaTableDelimiter() {
+        return support.getSchemaTableDelimiter();
+    }
+
+    @Override
+    public boolean hasDatabaseNames() {
+        return support.hasDatabaseNames();
+    }
+
+    @Override
+    public boolean hasDatabaseUsers() {
+        return support.hasDatabaseUsers();
+    }
+
+    @Override
+    public ConnectionType getConnectionType() {
+        return support.getConnectionType();
+    }
+
+    @Override
+    public String getResultSetTableSchema() {
+        return support.getResultSetTableSchema();
+    }
+
+    @Override
+    public SkipLimitSupport getSkipLimitSupport() {
+        return support.getSkipLimitSupport();
+    }
+
+    @Override
+    public String applySkipLimit(String originalSql, List<Object> params, long skip, long limit) {
+        return support.applySkipLimit(originalSql, params, skip, limit);
+    }
+
+    @Override
+    public SubSelectAlias getSubSelectAlias() {
+        return support.getSubSelectAlias();
+    }
+
+    private boolean isSupported(String driverName) {
+        return driver(driverName).isPresent();
+    }
+
+    private Optional<Driver> driver(String driverName) {
+        return driverComponent.driver(driverName);
     }
 
     private static Stream<TypeInfoMetaData> dataTypes() {
