@@ -1,36 +1,20 @@
-package com.speedment.runtime.core.support;
+package com.speedment.runtime.core.internal.db;
 
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsColumnHandler;
-import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.db.DriverComponent;
+import com.speedment.runtime.core.db.DbmsTypeDefault;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.core.internal.db.DefaultDatabaseNamingConvention;
 
-import java.sql.Driver;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.LongRangeUtil.requireNonNegative;
-import static java.util.Objects.requireNonNull;
 
-/**
- * General support class for implementing DbmsType.
- * This class cannot be sub-classes. Us the support pattern instead.
- *
- * @author per
- * @since 3.2.0
- */
-public final class DbmsTypeSupport implements DbmsType {
+public final class DbmsTypeDefaultImpl implements DbmsTypeDefault {
+
 
     private static final DbmsColumnHandler DEFAULT_COLUMN_HANDLER = new DbmsColumnHandler() {
         @Override
@@ -44,17 +28,7 @@ public final class DbmsTypeSupport implements DbmsType {
         }
     };
 
-    private final DriverComponent drivers;
-
-    public DbmsTypeSupport(DriverComponent drivers, DbmsHandlerComponent component, DbmsType dbmsType) {
-        this.drivers = requireNonNull(drivers);
-        component.install(dbmsType); // Install the implementing dbmsType. ERROR: "this" is not available at this stage.
-    }
-
-    @ExecuteBefore(INITIALIZED)
-    void install(@WithState(CREATED) DbmsHandlerComponent component) {
-        component.install(this);
-    }
+    public DbmsTypeDefaultImpl() {}
 
     @Override
     public String getResultSetTableSchema() {
@@ -67,23 +41,9 @@ public final class DbmsTypeSupport implements DbmsType {
     }
 
     @Override
-    public boolean isSupported() {
-        return isSupported(getDriverName());
+    public String getInitialQuery() {
+        return "select 1 from dual";
     }
-
-    protected boolean isSupported(String driverName) {
-        return driver(driverName).isPresent();
-    }
-
-    protected Optional<Driver> driver(String driverName) {
-        return drivers.driver(driverName);
-    }
-
-    @Override
-    public DatabaseNamingConvention getDatabaseNamingConvention() {
-        return new DefaultDatabaseNamingConvention();
-    }
-
     @Override
     public Set<TypeInfoMetaData> getDataTypes() {
         return Collections.emptySet();
@@ -92,11 +52,6 @@ public final class DbmsTypeSupport implements DbmsType {
     @Override
     public Optional<String> getDefaultDbmsName() {
         return Optional.empty();
-    }
-
-    @Override
-    public String getInitialQuery() {
-        return "select 1 from dual";
     }
 
     @Override
@@ -144,5 +99,6 @@ public final class DbmsTypeSupport implements DbmsType {
     public SortByNullOrderInsertion getSortByNullOrderInsertion() {
         return SortByNullOrderInsertion.PRE;
     }
+
 
 }

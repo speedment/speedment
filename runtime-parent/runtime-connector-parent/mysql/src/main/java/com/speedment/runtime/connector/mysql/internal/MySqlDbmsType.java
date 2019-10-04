@@ -17,19 +17,25 @@
 package com.speedment.runtime.connector.mysql.internal;
 
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.*;
+import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
-import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 
 import java.sql.Driver;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static com.speedment.common.injector.State.CREATED;
+import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.collectingAndThen;
@@ -40,11 +46,13 @@ import static java.util.stream.Collectors.toSet;
  * @author Per Minborg
  * @author Emil Forslund
  */
-public final class MySqlDbmsType extends AbstractDbmsType {
+public final class MySqlDbmsType implements DbmsType {
 
     private static final String OLD_DRIVER = "com.mysql.jdbc.Driver";
     private static final String NEW_DRIVER = "com.mysql.cj.jdbc.Driver";
 
+    private final DbmsTypeDefault support;
+    private final DriverComponent driverComponent;
     private final MySqlDbmsMetadataHandler metadataHandler;
     private final MySqlDbmsOperationHandler operationHandler;
     private final MySqlSpeedmentPredicateView fieldPredicateView;
@@ -60,13 +68,19 @@ public final class MySqlDbmsType extends AbstractDbmsType {
         @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
         final String binaryCollationName
     ) {
-        super(driverComponent);
+        this.driverComponent = requireNonNull(driverComponent);
         this.metadataHandler = requireNonNull(metadataHandler);
         this.operationHandler = requireNonNull(operationHandler);
         this.fieldPredicateView = requireNonNull(fieldPredicateView);
         this.binaryCollationName = requireNonNull(binaryCollationName);
         namingConvention = new MySqlNamingConvention();
         connectionUrlGenerator = new MySqlConnectionUrlGenerator();
+        support = DbmsTypeDefault.create();
+    }
+
+    @ExecuteBefore(INITIALIZED)
+    void install(@WithState(CREATED) DbmsHandlerComponent component) {
+        component.install(this);
     }
 
     @Override
@@ -156,6 +170,66 @@ public final class MySqlDbmsType extends AbstractDbmsType {
         };
     }
 
+    @Override
+    public Optional<String> getDefaultDbmsName() {
+        return support.getDefaultDbmsName();
+    }
+
+    @Override
+    public Set<TypeInfoMetaData> getDataTypes() {
+        return support.getDataTypes();
+    }
+
+    @Override
+    public String getSchemaTableDelimiter() {
+        return support.getSchemaTableDelimiter();
+    }
+
+    @Override
+    public Optional<String> getDefaultSchemaName() {
+        return support.getDefaultSchemaName();
+    }
+
+    @Override
+    public boolean hasDatabaseNames() {
+        return support.hasDatabaseNames();
+    }
+
+    @Override
+    public boolean hasDatabaseUsers() {
+        return support.hasDatabaseUsers();
+    }
+
+    @Override
+    public ConnectionType getConnectionType() {
+        return support.getConnectionType();
+    }
+
+    @Override
+    public String getResultSetTableSchema() {
+        return support.getResultSetTableSchema();
+    }
+
+    @Override
+    public SkipLimitSupport getSkipLimitSupport() {
+        return support.getSkipLimitSupport();
+    }
+
+    @Override
+    public String applySkipLimit(String originalSql, List<Object> params, long skip, long limit) {
+        return support.applySkipLimit(originalSql, params, skip, limit);
+    }
+
+    @Override
+    public SubSelectAlias getSubSelectAlias() {
+        return support.getSubSelectAlias();
+    }
+
+    @Override
+    public SortByNullOrderInsertion getSortByNullOrderInsertion() {
+        return support.getSortByNullOrderInsertion();
+    }
+
     private final static class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
 
         private final static String ENCLOSER = "`",
@@ -189,6 +263,14 @@ public final class MySqlDbmsType extends AbstractDbmsType {
         protected String getFieldEncloserEnd() {
             return ENCLOSER;
         }
+    }
+
+    private boolean isSupported(String driverName) {
+        return driver(driverName).isPresent();
+    }
+
+    private Optional<Driver> driver(String driverName) {
+        return driverComponent.driver(driverName);
     }
 
     private final class MySqlConnectionUrlGenerator implements ConnectionUrlGenerator {

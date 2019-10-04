@@ -45,6 +45,7 @@ import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.welcome.HasOnWelcome;
 
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -458,8 +459,8 @@ public abstract class AbstractApplicationBuilder<
      */
     protected void printWelcomeMessage(Injector injector) {
 
-        final InfoComponent     info = injector.getOrThrow(InfoComponent.class);
-        final InfoComponentImpl upstreamInfo = injector.getOrThrow(InfoComponentImpl.class);
+        final InfoComponent info = injector.getOrThrow(InfoComponent.class);  // Get first
+        final InfoComponent upstreamInfo = injector.stream(InfoComponent.class).reduce((first, second) -> second).orElseThrow(NoSuchElementException::new); // Get last
         final String title = info.getTitle();
         final String version = info.getImplementationVersion();
 
