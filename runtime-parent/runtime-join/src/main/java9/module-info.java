@@ -19,6 +19,7 @@ module com.speedment.runtime.join {
     exports com.speedment.runtime.join.builder;
     exports com.speedment.runtime.join.stage;
     exports com.speedment.runtime.join.trait;
+    exports com.speedment.runtime.join.provider;
 
     requires com.speedment.common.invariant;
     requires com.speedment.common.function;

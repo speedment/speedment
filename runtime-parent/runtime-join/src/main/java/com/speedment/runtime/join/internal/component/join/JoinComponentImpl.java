@@ -16,20 +16,24 @@
  */
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.JoinComponent;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
 import com.speedment.runtime.join.builder.JoinBuilder1;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  *
  * @author Per Minborg
  */
-public class JoinComponentImpl implements JoinComponent {
+public final class JoinComponentImpl implements JoinComponent {
 
-    @Inject
-    private JoinStreamSupplierComponent streamSupplier;
+    private final JoinStreamSupplierComponent streamSupplier;
+
+    public JoinComponentImpl(JoinStreamSupplierComponent streamSupplier) {
+        this.streamSupplier = requireNonNull(streamSupplier);
+    }
 
     @Override
     public <T0> JoinBuilder1<T0> from(TableIdentifier<T0> firstTableIdentifier) {

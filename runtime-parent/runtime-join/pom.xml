@@ -53,6 +53,7 @@
                             com.speedment.runtime.join.builder,
                             com.speedment.runtime.join.trait,
                             com.speedment.runtime.join.stage
+                            com.speedment.runtime.join.provider
                         </Export-Package>
                     </instructions>
                 </configuration>

@@ -17,8 +17,9 @@
 package com.speedment.runtime.join;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.join.internal.component.join.JoinComponentImpl;
-import com.speedment.runtime.join.internal.component.stream.SqlJoinStreamSupplierComponent;
+import com.speedment.runtime.join.provider.DelegateJoinComponent;
+import com.speedment.runtime.join.provider.DelegateSqlJoinStreamSupplierComponent;
+
 import java.util.stream.Stream;
 
 /**
@@ -30,8 +31,8 @@ public class JoinBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return Stream.of(
-            JoinComponentImpl.class,
-            SqlJoinStreamSupplierComponent.class
+            DelegateJoinComponent.class,
+            DelegateSqlJoinStreamSupplierComponent.class
         );
     }
 
