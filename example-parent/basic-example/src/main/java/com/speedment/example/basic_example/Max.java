@@ -17,37 +17,25 @@
 package com.speedment.example.basic_example;
 
 import com.company.sakila.SakilaApplication;
-import com.company.sakila.db0.sakila.actor.Actor;
-import com.company.sakila.db0.sakila.actor.ActorManager;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
-import com.company.sakila.db0.sakila.film_actor.FilmActor;
-import com.company.sakila.db0.sakila.film_actor.FilmActorManager;
-import com.speedment.common.tuple.Tuple3;
-import com.speedment.common.tuple.Tuples;
 import com.speedment.example.basic_example.util.ExampleUtil;
 import com.speedment.runtime.core.ApplicationBuilder;
-import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.JoinComponent;
 
-import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
-import static java.util.stream.Collectors.counting;
-import static java.util.stream.Collectors.groupingBy;
 
 /**
  *
  * @author Per Minborg
  */
-public class Max {
+public final class Max {
 
     private final SakilaApplication app;
     private final FilmManager films;
 
-    public Max() {
+    private Max() {
         app = buildApplication(b -> b.withLogging(ApplicationBuilder.LogType.STREAM));
         films = app.getOrThrow(FilmManager.class);
     }

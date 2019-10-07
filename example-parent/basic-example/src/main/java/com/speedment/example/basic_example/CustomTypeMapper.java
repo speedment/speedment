@@ -18,7 +18,6 @@ package com.speedment.example.basic_example;
 
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.SakilaApplicationBuilder;
-import com.company.sakila.db0.sakila.language.LanguageManager;
 import com.company.sakila.db0.sakila.staff.StaffManager;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
 
@@ -26,7 +25,7 @@ import com.speedment.runtime.core.ApplicationBuilder.LogType;
  *
  * @author Per Minborg
  */
-public class CustomTypeMapper {
+public final class CustomTypeMapper {
 
     public static void main(String[] args) {
 

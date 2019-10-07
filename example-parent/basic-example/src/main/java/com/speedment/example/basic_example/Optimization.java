@@ -20,19 +20,21 @@ import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.speedment.example.basic_example.util.ExampleUtil;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+
 import java.util.Optional;
+
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 
 /**
  *
  * @author Per Minborg
  */
-public class Optimization {
+public final class Optimization {
 
     private final SakilaApplication app;
     private final FilmManager films;
 
-    public Optimization() {
+    private Optimization() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
     }

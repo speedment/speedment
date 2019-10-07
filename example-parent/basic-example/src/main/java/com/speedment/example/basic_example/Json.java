@@ -25,6 +25,7 @@ import com.company.sakila.db0.sakila.language.Language;
 import com.company.sakila.db0.sakila.language.LanguageManager;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.example.basic_example.util.ExampleUtil;
+
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 //import com.speedment.plugins.json.JsonBundle;
 
@@ -32,7 +33,7 @@ import static com.speedment.example.basic_example.util.ExampleUtil.buildApplicat
  *
  * @author Per Minborg
  */
-public class Json {
+public final class Json {
 
     private final SakilaApplication app;
     private final FilmManager films;
@@ -40,7 +41,7 @@ public class Json {
     private final ActorManager actors;
     private final LanguageManager languages;
 
-    public Json() {
+    private Json() {
         app = buildApplication(/*b -> b.withBundle(JsonBundle.class)*/);
         films = app.getOrThrow(FilmManager.class);
         filmActors = app.getOrThrow(FilmActorManager.class);

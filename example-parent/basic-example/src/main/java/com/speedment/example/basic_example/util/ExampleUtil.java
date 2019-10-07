@@ -29,6 +29,8 @@ import java.util.stream.Stream;
  */
 public final class ExampleUtil {
 
+    private ExampleUtil() {}
+
     private static final String DEFAULT_P = "sakila-password";
 
     @SuppressWarnings("varargs")
@@ -61,9 +63,6 @@ public final class ExampleUtil {
 
     public static void log(String testName) {
         System.out.format("*** Starting example \"%s\" ***%n", testName);
-    }
-
-    private ExampleUtil() {
     }
 
 }

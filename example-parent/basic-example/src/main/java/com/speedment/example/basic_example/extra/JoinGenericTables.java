@@ -33,7 +33,7 @@ import static com.speedment.example.basic_example.util.ExampleUtil.buildApplicat
  *
  * @author Per Minborg
  */
-public class JoinGenericTables {
+public final class JoinGenericTables {
 
     private final SakilaApplication app;
     private final JoinComponent joinComponent;

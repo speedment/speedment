@@ -24,22 +24,22 @@ import com.company.sakila.db0.sakila.language.Language;
 import com.company.sakila.db0.sakila.language.LanguageImpl;
 import com.company.sakila.db0.sakila.language.LanguageManager;
 import com.speedment.example.basic_example.util.ExampleUtil;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
 import com.speedment.runtime.core.component.transaction.Isolation;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
+
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author Per Minborg
  */
-public class Transaction {
+public final class Transaction {
 
     private final SakilaApplication app;
     private final FilmManager films;
@@ -48,7 +48,7 @@ public class Transaction {
     private final TransactionComponent transactionComponent;
     private final TransactionHandler txHandler;
 
-    public Transaction() {
+    private Transaction() {
         app = buildApplication(
             b -> b.withLogging(LogType.PERSIST),
             b -> b.withLogging(LogType.UPDATE),

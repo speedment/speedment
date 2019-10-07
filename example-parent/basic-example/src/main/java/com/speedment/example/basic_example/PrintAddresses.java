@@ -19,20 +19,22 @@ package com.speedment.example.basic_example;
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.address.AddressManager;
 import com.speedment.example.basic_example.util.ExampleUtil;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+
 import java.sql.Blob;
 import java.sql.SQLException;
+
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 
 /**
  *
  * @author Per Minborg
  */
-public class PrintAddresses {
+public final class PrintAddresses {
 
     private final SakilaApplication app;
     private final AddressManager addresses;
 
-    public PrintAddresses() {
+    private PrintAddresses() {
         app = buildApplication();
         addresses = app.getOrThrow(AddressManager.class);
     }

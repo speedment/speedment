@@ -26,20 +26,20 @@ import com.company.sakila.db0.sakila.film_actor.FilmActorManager;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.example.basic_example.util.ExampleUtil;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent;
+
 import java.util.List;
 import java.util.Map;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
+
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+import static java.util.stream.Collectors.*;
 
 /**
  *
  * @author Per Minborg
  */
-public class JoinManyToMany {
+public final class JoinManyToMany {
 
     private final SakilaApplication app;
     private final FilmManager films;
@@ -47,7 +47,7 @@ public class JoinManyToMany {
     private final FilmActorManager filmActors;
     private final JoinComponent joinComponent;
 
-    public JoinManyToMany() {
+    private JoinManyToMany() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
         actors = app.getOrThrow(ActorManager.class);
