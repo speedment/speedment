@@ -25,7 +25,7 @@ import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
-import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
+import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.internal.immutable.ImmutableProject;

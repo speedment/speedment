@@ -16,13 +16,14 @@
  */
 package com.speedment.runtime.core.internal.code.model.java;
 
+import com.speedment.runtime.TestInjectorProxy;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.config.trait.HasTypeMapperUtil;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
-import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
+import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Optional;
@@ -57,6 +58,7 @@ public abstract class SimpleModel {
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
+            .withInjectorProxy(new TestInjectorProxy())
             .build();
         
         project = speedment.getOrThrow(ProjectComponent.class).getProject();
@@ -70,7 +72,7 @@ public abstract class SimpleModel {
         column2 = table2.columns().findAny().get();
     }
     
-    private final static class SimpleMetadata extends AbstractApplicationMetadata {
+    public final static class SimpleMetadata extends AbstractApplicationMetadata {
 
         private String quote(String s) {
             return "\"" + s + "\"";

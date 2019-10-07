@@ -18,7 +18,7 @@ package com.speedment.runtime.application.internal;
 
 import com.speedment.runtime.application.AbstractSpeedment;
 
-class SpeedmentImpl extends AbstractSpeedment {
+public final class SpeedmentImpl extends AbstractSpeedment {
 
-    SpeedmentImpl() {}
+    public SpeedmentImpl() {}
 }

@@ -3,6 +3,7 @@ package com.speedment.common.injector;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Predicate;
 
 /**
  * An InjectorProxy can be used to create/manipulate
@@ -120,5 +121,9 @@ public interface InjectorProxy {
     <T> T newInstance(Constructor<T> constructor, Object ... initargs)
         throws InstantiationException, IllegalAccessException,
         IllegalArgumentException, InvocationTargetException;
+
+    static Predicate<? super Class<?>> samePackageOrBelow(Class<?> clazz) {
+        return c -> c.getName().startsWith(clazz.getPackage().getName());
+    }
 
 }

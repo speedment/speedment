@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.application;
 
-import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
+import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;

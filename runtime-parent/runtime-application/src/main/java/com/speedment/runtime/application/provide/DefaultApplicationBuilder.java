@@ -14,10 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.application.internal;
+package com.speedment.runtime.application.provide;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.runtime.application.internal.SpeedmentImpl;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.application.AbstractApplicationBuilder;

@@ -40,17 +40,19 @@ import com.speedment.runtime.core.component.*;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.component.InfoComponentImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.welcome.HasOnWelcome;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.sql.SQLException;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
@@ -507,7 +509,8 @@ public abstract class AbstractApplicationBuilder<
                 JvmVersion.getImplementationTitle(), JvmVersion.getImplementationVersion(), JvmVersion.getImplementationVendor()
             );
 
-            
+
+
 //            final Package package_ = Runtime.class.getPackage();
 //            final String javaMsg = package_.getSpecificationTitle()
 //                + " " + package_.getSpecificationVersion()
@@ -538,6 +541,13 @@ public abstract class AbstractApplicationBuilder<
             Runtime.getRuntime().availableProcessors(),
             Runtime.getRuntime().maxMemory()
         );
+
+        final List<String> moduleNames = modules().stream()
+            .map(Object::toString)
+            .map(this::removeModuleTag)
+            .sorted()
+            .collect(Collectors.toList());
+        LOGGER.info("JPMS Modules: " + moduleNames);
 
         // Invoke all HasOnWelcome methods
         injector.injectables()
@@ -599,5 +609,37 @@ public abstract class AbstractApplicationBuilder<
             .collect(StringBuilder::new, (sb, i) -> sb.append("    "), StringBuilder::append)
             .toString();
     }
+
+    private Set<Object> modules() {
+        try {
+            final MethodHandles.Lookup lookup = MethodHandles.lookup();
+            final Class<?> moduleLayerClass = Class.forName("java.lang.ModuleLayer");
+            final MethodType bootType = MethodType.methodType(moduleLayerClass);
+            final MethodHandle methodHandleBoot = lookup.findStatic(moduleLayerClass,"boot", bootType);
+            final Object boot = methodHandleBoot.invoke();
+
+            final MethodType modulesType = MethodType.methodType(Set.class);
+            final MethodHandle methodHandleModules = lookup.findVirtual(moduleLayerClass,"modules", modulesType);
+            final Object modules = methodHandleModules.invoke(boot);
+
+            @SuppressWarnings("unchecked")
+            final Set<Object> result = (Set<Object>)modules;
+            return result;
+
+        } catch (Throwable ignore) {
+
+        }
+        return Collections.emptySet();
+    }
+
+    private String removeModuleTag(String s) {
+        final String module = "module ";
+        if (s.startsWith(module)) {
+            return s.substring(module.length());
+        }
+        return s;
+    }
+
+
 
 }

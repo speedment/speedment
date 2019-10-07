@@ -53,7 +53,8 @@
                             The runtime environment of Speedment.
                         </Bundle-Description>
                         <Export-Package>
-                            com.speedment.runtime.application
+                            com.speedment.runtime.application,
+                            com.speedment.runtime.application.provide
                         </Export-Package>
                     </instructions>
                 </configuration>

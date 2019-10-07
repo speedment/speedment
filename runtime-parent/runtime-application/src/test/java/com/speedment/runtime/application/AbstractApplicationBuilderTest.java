@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.application;
 
-import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
+import com.speedment.runtime.TestInjectorProxy;
+import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.PasswordComponent;
@@ -70,6 +71,7 @@ final class AbstractApplicationBuilderTest {
     @BeforeEach
     void setUp() {
         instance = new DefaultApplicationBuilder(TestApplicationMetadata.class)
+            .withInjectorProxy(new TestInjectorProxy())
             .withSkipCheckDatabaseConnectivity()
             .withSkipLogoPrintout()
             .withSkipValidateRuntimeConfig();
@@ -147,7 +149,7 @@ final class AbstractApplicationBuilderTest {
         assertNotNull(tableRef.get());
     }
 
-    private static class TestApplicationMetadata extends AbstractApplicationMetadata {
+    public static class TestApplicationMetadata extends AbstractApplicationMetadata {
 
         @Override
         protected Optional<String> getMetadata() {

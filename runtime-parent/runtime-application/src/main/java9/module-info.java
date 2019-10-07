@@ -16,6 +16,7 @@
  */
 module com.speedment.runtime.application {
     exports com.speedment.runtime.application;
+    exports com.speedment.runtime.application.provide;
 
     requires com.speedment.runtime.join;
     requires com.speedment.runtime.welcome;
