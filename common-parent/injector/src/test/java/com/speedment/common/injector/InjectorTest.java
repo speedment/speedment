@@ -171,9 +171,9 @@ final class InjectorTest {
     }
     
     @InjectKey(Foo.class)
-    private interface Foo {}
-    private final static class Bar implements Foo {}
-    private final static class Baz implements Foo {}
+    public interface Foo {}
+    public final static class Bar implements Foo {}
+    public final static class Baz implements Foo {}
     
     @Test
     void testKeyWithoutOverwrite() {
@@ -205,9 +205,9 @@ final class InjectorTest {
     }
     
     @InjectKey(value=Foo.class, overwrite=false)
-    private final static class FooNoOverwrite implements Foo {}
+    public final static class FooNoOverwrite implements Foo {}
     
-    private final static class ClassWithConfig {
+    public final static class ClassWithConfig {
         
         private @Config(name="a", value="example") String defaultString;
         private @Config(name="b", value="-104726") int defaultInt;
@@ -253,7 +253,7 @@ final class InjectorTest {
         assertEquals(true, configTest.overridenBoolean, "Test overriden boolean param: ");
     }
     
-    private static abstract class AbstractComponent {
+    public static abstract class AbstractComponent {
         
         protected final AtomicInteger counter;
         
@@ -281,7 +281,7 @@ final class InjectorTest {
         }
     }
     
-    private static final class ImplementingComponent extends AbstractComponent {
+    public static final class ImplementingComponent extends AbstractComponent {
         @ExecuteBefore(INITIALIZED)
         void childInitialized() {
             counter.incrementAndGet();
@@ -314,7 +314,7 @@ final class InjectorTest {
         }
     }
     
-    private static final class ExecutableComponent {
+    public static final class ExecutableComponent {
         
         private final Set<String> actionsInvoked = new HashSet<>();
         private int count;
@@ -421,7 +421,7 @@ final class InjectorTest {
         assertTrue(c.init2Called);
     }
 
-    private static final class ComponentWithOptionals {
+    public static final class ComponentWithOptionals {
 
         private boolean initCalled;
         private boolean init2Called;
@@ -460,7 +460,7 @@ final class InjectorTest {
     }
 
 
-    private static final class ComponentWithConfigInConstructor {
+    public static final class ComponentWithConfigInConstructor {
 
         private final long value;
 

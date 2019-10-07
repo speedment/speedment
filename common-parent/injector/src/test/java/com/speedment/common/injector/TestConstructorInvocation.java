@@ -19,6 +19,7 @@ package com.speedment.common.injector;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Emil Forslund
@@ -26,23 +27,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 class TestConstructorInvocation {
 
-    static class ClassWithDefaultConstructor {
-        private ClassWithDefaultConstructor() {}
+    public static class ClassWithPrivateDefaultConstructor {
+        private ClassWithPrivateDefaultConstructor() {}
     }
 
-    static class ClassWithOneParameterConstructor {
+    public static class ClassWithDefaultConstructor {
+        public ClassWithDefaultConstructor() {}
+    }
+
+    public static class ClassWithOneParameterConstructor {
         private final ClassWithDefaultConstructor other;
 
-        private ClassWithOneParameterConstructor(ClassWithDefaultConstructor other) {
+        public ClassWithOneParameterConstructor(ClassWithDefaultConstructor other) {
             this.other = other;
         }
     }
 
-    static class ClassWithTwoParametersConstructor {
+    public static class ClassWithTwoParametersConstructor {
         private final ClassWithDefaultConstructor first;
         private final ClassWithOneParameterConstructor second;
 
-        private ClassWithTwoParametersConstructor(
+        public ClassWithTwoParametersConstructor(
                 ClassWithDefaultConstructor first,
                 ClassWithOneParameterConstructor second) {
             this.first  = first;
@@ -51,7 +56,19 @@ class TestConstructorInvocation {
     }
 
     @Test
-    void testPrivateDefaultConstructor() throws InstantiationException {
+    void testPrivateDefaultConstructor() {
+
+        // Private constructors are not allowed since 3.2.0
+        assertThrows(Exception.class, () -> {
+            final Injector injector = Injector.builder()
+                .withComponent(ClassWithPrivateDefaultConstructor.class)
+                .build();
+        });
+
+    }
+
+    @Test
+    void testDefaultConstructor() throws InstantiationException {
         final Injector injector = Injector.builder()
             .withComponent(ClassWithDefaultConstructor.class)
             .build();

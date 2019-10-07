@@ -104,7 +104,7 @@ public final class ReflectionUtil {
 
             final Constructor<T> constr = oConstr.get();
 
-            injectorProxy.setAccessable(constr);
+            // injectorProxy.setAccessable(constr);
 
             final Parameter[] params = constr.getParameters();
             final Object[] args = new Object[params.length];
@@ -225,7 +225,7 @@ public final class ReflectionUtil {
                 }
             }
 
-            final T instance = constr.newInstance(args);
+            final T instance = injectorProxy.newInstance(constr, args);
             configureParams(instance, properties);
 
             return Optional.of(instance);

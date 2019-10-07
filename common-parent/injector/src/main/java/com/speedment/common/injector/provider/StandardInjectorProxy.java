@@ -4,6 +4,7 @@ import com.speedment.common.injector.InjectorProxy;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Predicate;
 
 public final class StandardInjectorProxy implements InjectorProxy {
@@ -42,8 +43,15 @@ public final class StandardInjectorProxy implements InjectorProxy {
         field.set(instance, value);
     }
 
+/*
     @Override
     public void setAccessable(Constructor<?> constructor) {
         constructor.setAccessible(true);
+    }
+*/
+
+    @Override
+    public <T> T newInstance(Constructor<T> constructor, Object... initargs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        return constructor.newInstance(initargs);
     }
 }
