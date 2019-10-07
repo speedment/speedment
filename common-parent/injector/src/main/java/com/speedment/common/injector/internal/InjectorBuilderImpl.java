@@ -16,29 +16,26 @@
  */
 package com.speedment.common.injector.internal;
 
-import com.speedment.common.injector.InjectBundle;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.InjectorBuilder;
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.common.injector.annotation.InjectOrNull;
-import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.injector.*;
+import com.speedment.common.injector.annotation.*;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
-import com.speedment.common.injector.exception.*;
+import com.speedment.common.injector.exception.ConstructorResolutionException;
+import com.speedment.common.injector.exception.InjectorException;
+import com.speedment.common.injector.exception.MisusedAnnotationException;
+import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.internal.execution.ReflectionExecutionImpl;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
+import com.speedment.common.injector.provider.StandardInjectorProxy;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -54,19 +51,13 @@ import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
 import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
 import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.loadProperties;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseAncestors;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.tryToCreate;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.*;
 import static com.speedment.common.injector.internal.util.StringUtil.commaAnd;
 import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 /**
  * Default implementation of the {@link InjectorBuilder}-interface.
@@ -82,6 +73,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     private final Map<String, List<Injectable<?>>> injectables;
     private final List<ExecutionBuilder<?>> executions;
     private final Map<String, String> overriddenParams;
+    private final Deque<InjectorProxy> proxies;
+    private final Map<Class<?>, InjectorProxy> proxyCache;
     private Path configFileLocation;
 
     InjectorBuilderImpl() {
@@ -103,8 +96,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         this.injectables        = new LinkedHashMap<>();
         this.executions         = new LinkedList<>();
         this.overriddenParams   = new HashMap<>();
+        this.proxies            = new LinkedList<>();
+        this.proxyCache         = new HashMap<>();
         this.configFileLocation = Paths.get("settings.properties");
 
+        withInjectorProxy(new StandardInjectorProxy(c -> true)); // Use this as default proxy
         injectables.forEach(this::withComponent);
     }
 
@@ -140,11 +136,18 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     @Override
     public InjectorBuilder withBundle(Class<? extends InjectBundle> bundleClass) {
         try {
-            final InjectBundle bundle = bundleClass.newInstance();
+            final InjectBundle bundle = bundleClass.getConstructor().newInstance();
             bundle.injectables().forEachOrdered(this::withComponent);
-        } catch (IllegalAccessException | InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             throw new NoDefaultConstructorException(e);
         }
+        return this;
+    }
+
+    @Override
+    public InjectorBuilder withInjectorProxy(InjectorProxy injectorProxy) {
+        requireNonNull(injectorProxy);
+        proxies.addFirst(injectorProxy);
         return this;
     }
 
@@ -211,7 +214,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     instances.addFirst(instance);
                     created = true;
                 } else {
-                    final Optional<?> instance = tryToCreate(injectable.get(), properties, instances, allInjectableTypes);
+                    final Class<?> clazz = injectable.get();
+                    final Optional<?> instance = tryToCreate(clazz, properties, instances, allInjectableTypes, proxyFor(clazz));
                     if (instance.isPresent()) {
                         instances.addFirst(instance.get());
                         created = true;
@@ -395,10 +399,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     }
                 }
 
-                field.setAccessible(true);
-
                 try {
-                    field.set(instance, value);
+                    set(field, instance, value);
                 } catch (final IllegalAccessException ex) {
                     throw new InjectorException(
                         "Could not access field '" + field.getName()
@@ -594,6 +596,25 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
         list.add(clazz);
         injectables.put(key, list);
+    }
+
+    private void set(Field field, Object instance, Object value) throws IllegalArgumentException, IllegalAccessException {
+        final InjectorProxy injectorProxy = proxyFor(instance.getClass());
+        injectorProxy.set(field, instance, value);
+    }
+
+    private InjectorProxy proxyFor(Class<?> clazz) {
+        return proxyCache.computeIfAbsent(clazz, this::computeProxyFor);
+    }
+
+    private InjectorProxy computeProxyFor(Class<?> clazz) {
+        return proxies.stream()
+            .filter(p -> p.isApplicable(clazz))
+            .findFirst()
+            .orElseThrow(() -> new NoSuchElementException(
+                "Unable to find an InjectorProxy for " + clazz.getName() + ". " +
+                "Available proxies: " + proxies.stream().map(Object::toString).collect(toList()))
+            );
     }
 
     private static ClassLoader defaultClassLoader() {

@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector.internal.util;
 
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.annotation.*;
 import com.speedment.common.injector.exception.InjectorException;
@@ -92,7 +93,7 @@ public final class ReflectionUtil {
         }
     }
 
-    public static <T> Optional<T> tryToCreate(Class<T> clazz, Properties properties, List<Object> instances, Set<Class<?>> allInjectableTypes)
+    public static <T> Optional<T> tryToCreate(Class<T> clazz, Properties properties, List<Object> instances, Set<Class<?>> allInjectableTypes, InjectorProxy injectorProxy)
         throws InstantiationException {
         try {
             final Optional<Constructor<T>> oConstr = findConstructor(clazz, instances, allInjectableTypes);
@@ -102,7 +103,8 @@ public final class ReflectionUtil {
             }
 
             final Constructor<T> constr = oConstr.get();
-            constr.setAccessible(true);
+
+            injectorProxy.setAccessable(constr);
 
             final Parameter[] params = constr.getParameters();
             final Object[] args = new Object[params.length];

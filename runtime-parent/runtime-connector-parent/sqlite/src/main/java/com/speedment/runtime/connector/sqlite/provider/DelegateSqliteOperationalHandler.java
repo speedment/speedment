@@ -23,7 +23,7 @@ public final class DelegateSqliteOperationalHandler implements SqliteOperationHa
 
     private final DbmsOperationHandler inner;
 
-    protected DelegateSqliteOperationalHandler(
+    public DelegateSqliteOperationalHandler(
         final ConnectionPoolComponent connectionPoolComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent

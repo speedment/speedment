@@ -25,7 +25,7 @@ public final class DelegateMariaDbDbmsType implements MariaDbDbmsType {
 
     private final DbmsType inner;
 
-    private DelegateMariaDbDbmsType(
+    public DelegateMariaDbDbmsType(
         final DriverComponent driverComponent,
         @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
         final String binaryCollationName,

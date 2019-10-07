@@ -51,7 +51,7 @@ public final class DelegateConnectionPoolComponent implements ConnectionPoolComp
     }
 
     @ExecuteBefore(State.STOPPED)
-    void closeOpenConnections() {
+    public void closeOpenConnections() {
         inner.closeOpenConnections();
     }
 

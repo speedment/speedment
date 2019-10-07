@@ -17,6 +17,8 @@
 package com.speedment.runtime.application;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
@@ -35,9 +37,13 @@ import java.util.Optional;
  */
 public abstract class AbstractSpeedment implements Speedment {
 
-    @Inject private  Injector injector;
+    private Injector injector;
 
-    protected AbstractSpeedment() {
+    protected AbstractSpeedment() {}
+
+    @ExecuteBefore(State.INITIALIZED)
+    public final void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
     }
 
     @Override

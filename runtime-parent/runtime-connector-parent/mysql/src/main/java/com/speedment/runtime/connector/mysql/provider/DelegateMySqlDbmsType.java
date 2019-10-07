@@ -23,7 +23,7 @@ public final class DelegateMySqlDbmsType implements MySqlDbmsType {
 
     private final DbmsType inner;
 
-    private DelegateMySqlDbmsType(
+    public DelegateMySqlDbmsType(
         final DriverComponent driverComponent,
         @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
         final String binaryCollationName,

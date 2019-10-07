@@ -1,7 +1,5 @@
 package com.speedment.runtime.connector.postgres.provider;
 
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.connector.postgres.PostgresDbmsType;
 import com.speedment.runtime.connector.postgres.internal.PostgresDbmsTypeImpl;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -14,9 +12,6 @@ import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
 
 public final class DelegatePostgresDbmsType implements PostgresDbmsType {
 

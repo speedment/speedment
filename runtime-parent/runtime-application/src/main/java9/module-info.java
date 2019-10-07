@@ -25,6 +25,7 @@ module com.speedment.runtime.application {
     requires com.speedment.runtime.connector.sqlite;
     requires com.speedment.common.jvm_version;
     requires com.speedment.common.logger;
+    requires com.speedment.common.json;
 
     requires transitive com.speedment.runtime.core;
 

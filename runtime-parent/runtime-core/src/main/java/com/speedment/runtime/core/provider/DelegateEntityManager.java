@@ -38,7 +38,7 @@ public final class DelegateEntityManager implements EntityManager {
     }
 
     @ExecuteBefore(RESOLVED)
-    void installManagers(ManagerComponent managerComponent) {
+    public void installManagers(ManagerComponent managerComponent) {
         inner.installManagers(managerComponent);
     }
 

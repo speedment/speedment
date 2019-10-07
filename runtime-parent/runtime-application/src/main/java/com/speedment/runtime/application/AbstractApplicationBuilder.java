@@ -19,6 +19,7 @@ package com.speedment.runtime.application;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.common.jvm_version.JvmVersion;
 import com.speedment.common.logger.Level;
@@ -340,6 +341,13 @@ public abstract class AbstractApplicationBuilder<
     public <T> BUILDER withComponent(Class<T> injectableClass, Supplier<T> supplier) {
         requireNonNulls(injectableClass, supplier);
         injectorBuilder.withComponent(injectableClass, supplier);
+        return self();
+    }
+
+    @Override
+    public BUILDER withInjectorProxy(InjectorProxy injectorProxy) {
+        requireNonNull(injectorProxy);
+        injectorBuilder.withInjectorProxy(injectorProxy);
         return self();
     }
 

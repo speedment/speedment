@@ -41,12 +41,12 @@ public final class DelegateProjectComponent implements ProjectComponent {
     }
 
     @ExecuteBefore(INITIALIZED)
-    void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
+    public void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
         inner.loadProjectFromMetadata(metadata);
     }
 
     @ExecuteBefore(STARTED)
-    void checkSpeedmentVersion(Injector injector) {
+    public void checkSpeedmentVersion(Injector injector) {
         inner.checkSpeedmentVersion(injector);
     }
 

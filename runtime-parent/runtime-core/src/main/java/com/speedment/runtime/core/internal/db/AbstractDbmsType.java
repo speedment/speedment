@@ -17,14 +17,10 @@
 package com.speedment.runtime.core.internal.db;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.db.DatabaseNamingConvention;
-import com.speedment.runtime.core.db.DbmsColumnHandler;
-import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.db.DriverComponent;
+import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.sql.Driver;
@@ -43,7 +39,11 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Emil Forslund
  * @since 3.0.0
+ *
+ * @deprecated This class should not be used in new classes. Instead, delegate
+ * using {@link DbmsTypeDefault#create() }
  */
+@Deprecated
 public abstract class AbstractDbmsType implements DbmsType {
 
     private static final DbmsColumnHandler DEFAULT_COLUMN_HANDLER = new DbmsColumnHandler() {
