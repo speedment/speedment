@@ -28,6 +28,7 @@ import com.speedment.tool.config.*;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.core.TestInjectorProxy;
 import com.speedment.tool.core.ToolBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -57,6 +58,7 @@ final class DocumentPropertyComponentImplTest {
             .withBundle(ToolBundle.class)
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
+            .withInjectorProxy(new TestInjectorProxy())
             .build();
         
         component = speedment.getOrThrow(DocumentPropertyComponent.class);

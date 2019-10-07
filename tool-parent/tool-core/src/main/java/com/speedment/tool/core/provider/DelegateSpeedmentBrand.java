@@ -14,9 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.tool.core.internal.brand;
+package com.speedment.tool.core.provider;
 
 import com.speedment.tool.core.brand.Brand;
+import com.speedment.tool.core.internal.brand.SpeedmentBrand;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -27,27 +28,31 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-public final class SpeedmentBrand implements Brand {
+public final class DelegateSpeedmentBrand implements Brand {
 
-    public SpeedmentBrand() {}
+    private final Brand inner;
 
-    @Override
-    public final String website() {
-        return "www.speedment.com";
+    public DelegateSpeedmentBrand() {
+        inner = new SpeedmentBrand();
     }
 
     @Override
-    public final Optional<String> logoSmall() {
-        return Optional.of("/images/logo.png");
+    public String website() {
+        return inner.website();
     }
 
     @Override
-    public final Optional<String> logoLarge() {
-        return Optional.of("/images/speedment_open_source_small.png");
+    public Optional<String> logoSmall() {
+        return inner.logoSmall();
+    }
+
+    @Override
+    public Optional<String> logoLarge() {
+        return inner.logoLarge();
     }
 
     @Override
     public Stream<String> stylesheets() {
-        return Stream.of("/css/speedment.css");
+        return inner.stylesheets();
     }
 }

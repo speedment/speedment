@@ -24,6 +24,7 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.generator.core.translator.AbstractTranslatorManager;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.config.Project;
+
 import java.nio.file.Path;
 
 /**
@@ -40,16 +41,16 @@ public final class DefaultTranslatorManager implements TranslatorManager {
     
     private final TranslatorManagerHelper helper;
     
-    protected DefaultTranslatorManager() {
+    public DefaultTranslatorManager() {
         helper = new TranslatorManagerHelper();
     }
     
     @ExecuteBefore(State.INITIALIZED)
-    void init(Injector injector) {
+    public void init(Injector injector) {
         // Since we created the instance of 'helper' manually, we have to
         // invoke the injector manually. We can do this in the "INITIALIZED" 
         // phase since we don't need access to any components and we want to 
-        // simulate that this happends on construction.
+        // simulate that this happens on construction.
         injector.inject(helper);
     }
 

@@ -50,7 +50,8 @@
                     <instructions>
                         <Export-Package>
                             com.speedment.tool.actions,
-                            com.speedment.tool.actions.menues
+                            com.speedment.tool.actions.menues,
+                            com.speedment.tool.actions.provider
                         </Export-Package>
                     </instructions>
                 </configuration>

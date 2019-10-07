@@ -47,6 +47,7 @@ import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoaderImpl;
 import com.speedment.tool.core.internal.util.Throttler;
 import com.speedment.tool.core.notification.Notification;
+import com.speedment.tool.core.provider.DelegateSpeedmentBrand;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.Icon;
 import com.speedment.tool.core.util.BrandUtil;
@@ -129,7 +130,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     private Application application;
     private ProjectProperty project;
 
-    private UserInterfaceComponentImpl() {
+    public UserInterfaceComponentImpl() {
         notifications     = FXCollections.observableArrayList();
         outputMessages    = FXCollections.observableArrayList();
         selectedTreeItems = FXCollections.observableArrayList();
@@ -140,7 +141,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     public static InjectBundle include() {
         return InjectBundle.of(
             DocumentPropertyComponentImpl.class,
-            SpeedmentBrand.class,
+            DelegateSpeedmentBrand.class,
             InjectionLoaderImpl.class,
             ConfigFileHelper.class,
             PropertyEditorComponentImpl.class,

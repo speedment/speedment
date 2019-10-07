@@ -17,6 +17,7 @@
 module com.speedment.tool.actions {
     exports com.speedment.tool.actions;
     exports com.speedment.tool.actions.menues;
+    exports com.speedment.tool.actions.provider;
 
     requires com.speedment.common.injector;
     requires com.speedment.common.invariant;

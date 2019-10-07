@@ -62,12 +62,12 @@ public final class InjectionLoaderImpl implements InjectionLoader {
     private @Inject Injector injector;
     private @Inject Brand brand;
     
-    private InjectionLoaderImpl() {
+    public InjectionLoaderImpl() {
         constructors = new ConcurrentHashMap<>();
     }
     
     @ExecuteBefore(INITIALIZED)
-    void installConstructors() {
+    public void installConstructors() {
         constructors.put(AboutController.class,            AboutController::new);
         constructors.put(ComponentsController.class,       ComponentsController::new);
         constructors.put(ConnectController.class,          ConnectController::new);

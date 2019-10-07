@@ -14,32 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.tool.actions.internal.menues;
+package com.speedment.tool.actions.provider;
 
-import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.tool.actions.ProjectTreeComponent;
+import com.speedment.tool.actions.internal.menues.ToggleTablesEnabledActionImpl;
+import com.speedment.tool.actions.menues.ToggleTablesEnabledAction;
 
-import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 
 /**
- * Abstract base implementation of a tool action. The purpose of this class is
- * to standardize the dependency injection phases used in different actions.
+ * Delegate implementation of the {@link ToggleTablesEnabledAction}-interface.
  *
- * @author Emil Forslund
- * @since  3.0.17
+ * @author Per
+ * @since  3.2.0
  */
-abstract class AbstractToolAction {
+public final class DelegateTablesEnabledAction implements ToggleTablesEnabledAction {
 
-    /**
-     * This method will be invoked before the {@link State#RESOLVED}-phase, but
-     * before the {@link ProjectTreeComponent} is {@link State#INITIALIZED}.
-     *
-     * @param projectTree  the project tree component
-     */
+    private final ToggleTablesEnabledActionImpl inner;
+
+    public DelegateTablesEnabledAction() {
+        this.inner = new ToggleTablesEnabledActionImpl();
+    }
+
     @ExecuteBefore(RESOLVED)
-    public abstract void installMenuItems(ProjectTreeComponent projectTree);
-
+    public void installMenuItems(ProjectTreeComponent projectTree) {
+        inner.installMenuItems(projectTree);
+    }
 }

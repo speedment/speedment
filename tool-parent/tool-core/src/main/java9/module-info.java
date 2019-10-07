@@ -22,6 +22,7 @@ module com.speedment.tool.core {
     exports com.speedment.tool.core.exception;
     exports com.speedment.tool.core.menubar;
     exports com.speedment.tool.core.notification;
+    exports com.speedment.tool.core.provider;
     exports com.speedment.tool.core.resource;
     exports com.speedment.tool.core.rule;
     exports com.speedment.tool.core.toolbar;
