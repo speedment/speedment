@@ -57,7 +57,7 @@ public interface InjectorProxy {
      *
      * throws InaccessibleObjectException if access cannot be enabled
      */
-    void set(Field field, Object instance, Object value) throws IllegalArgumentException, IllegalAccessException;
+    void set(Field field, Object instance, Object value) throws IllegalAccessException;
 
     /**
      * Uses the constructor represented by this {@code Constructor} object to
@@ -86,7 +86,7 @@ public interface InjectorProxy {
      * @param initargs array of objects to be passed as arguments to
      * the constructor call; values of primitive types are wrapped in
      * a wrapper object of the appropriate type (e.g. a {@code float}
-     * in a {@link java.lang.Float Float})
+     * in a {@link Float Float})
      *
      * @return a new object created by calling the constructor
      * this object represents
@@ -108,9 +108,8 @@ public interface InjectorProxy {
      * @exception ExceptionInInitializerError if the initialization provoked
      *              by this method fails.
      */
-    <T> T newInstance(Constructor<T> constructor, Object ... initargs)
-        throws InstantiationException, IllegalAccessException,
-        IllegalArgumentException, InvocationTargetException;
+    <T> T newInstance(Constructor<T> constructor, Object... initargs)
+        throws InstantiationException, IllegalAccessException, InvocationTargetException;
 
     /**
      * Returns a {@code Predicate} that will evaluate to true iff

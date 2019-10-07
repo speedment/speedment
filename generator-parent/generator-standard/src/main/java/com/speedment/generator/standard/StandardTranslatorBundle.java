@@ -17,7 +17,7 @@
 package com.speedment.generator.standard;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.generator.standard.internal.StandardTranslatorComponent;
+import com.speedment.generator.standard.provider.DelegateStandardTranslatorComponent;
 
 import java.util.stream.Stream;
 
@@ -30,7 +30,7 @@ public final class StandardTranslatorBundle implements InjectBundle {
 
     @Override
     public Stream<Class<?>> injectables() {
-        return Stream.of(StandardTranslatorComponent.class);
+        return Stream.of(DelegateStandardTranslatorComponent.class);
     }
 
 }

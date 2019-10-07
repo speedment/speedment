@@ -20,7 +20,7 @@ public final class TestInjectorProxy implements InjectorProxy {
     }
 
     @Override
-    public <T> T newInstance(Constructor<T> constructor, Object... initargs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public <T> T newInstance(Constructor<T> constructor, Object... initargs) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         return constructor.newInstance(initargs);
     }
 }

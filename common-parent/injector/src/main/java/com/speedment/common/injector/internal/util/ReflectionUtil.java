@@ -20,7 +20,6 @@ import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.annotation.*;
 import com.speedment.common.injector.exception.InjectorException;
-import com.speedment.common.injector.exception.NoDefaultConstructorException;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

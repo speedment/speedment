@@ -12,17 +12,6 @@ public final class StandardInjectorProxy implements InjectorProxy {
     private final Predicate<? super Class<?>> isApplicable;
 
     /**
-     * Creates a StandardInjectorProxy that is applicable for all
-     * classes that starts with the same package name as the provided
-     * {@code fromPackageClass}.
-     *
-     * @param fromPackageClass to use as package name provider
-     */
-    public StandardInjectorProxy(Class<?> fromPackageClass) {
-        this(c -> c.getName().startsWith(fromPackageClass.getPackage().getName()));
-    }
-
-    /**
      * Creates a StandardInjectorProxy that is applicable for the
      * given {@code isApplicable} Predicate.
      *
@@ -38,20 +27,13 @@ public final class StandardInjectorProxy implements InjectorProxy {
     }
 
     @Override
-    public void set(Field field, Object instance, Object value) throws IllegalArgumentException, IllegalAccessException {
+    public void set(Field field, Object instance, Object value) throws IllegalAccessException {
         field.setAccessible(true);
         field.set(instance, value);
     }
 
-/*
     @Override
-    public void setAccessable(Constructor<?> constructor) {
-        constructor.setAccessible(true);
-    }
-*/
-
-    @Override
-    public <T> T newInstance(Constructor<T> constructor, Object... initargs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public <T> T newInstance(Constructor<T> constructor, Object... initargs) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         return constructor.newInstance(initargs);
     }
 }

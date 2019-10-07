@@ -16,16 +16,18 @@
  */
 package com.speedment.common.codegen.constant;
 
-import static com.speedment.common.codegen.constant.DefaultValue.string;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Value;
+
 import java.lang.annotation.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+
+import static com.speedment.common.codegen.constant.DefaultValue.string;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration with default constants for the {@link AnnotationUsage}

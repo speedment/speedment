@@ -81,7 +81,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                     .filter(HasEnabled::test)
                     .collect(Collectors.groupingBy(Table::getId));
 
-                final Set<String> ambigousNames = MapStream.of(nameMap)
+                final Set<String> ambiguousNames = MapStream.of(nameMap)
                     .filterValue(l -> l.size() > 1)
                     .keys()
                     .collect(toSet());
@@ -96,7 +96,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                         final Type managerImplType = support.managerImplType();
                         final Type sqlAdapterType = support.sqlAdapterType();
 
-                        if (ambigousNames.contains(t.getId())) {
+                        if (ambiguousNames.contains(t.getId())) {
                             managerImpls.add(managerImplType.getTypeName());
                             sqlAdapters.add(sqlAdapterType.getTypeName());
                         } else {
@@ -140,6 +140,10 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                         .collect(joining(separator))
                     );
                 }
+
+                final String proxyName = getSupport().typeName(getSupport().projectOrThrow()) + "InjectorProxy";
+                constructorBody.append(nl() + "withInjectorProxy(new " + proxyName + "());");
+                file.add(Import.of(SimpleType.create(getSupport().defaultPackageName()+"."+proxyName)));
 
                 constr.add(constructorBody.toString());
 

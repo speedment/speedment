@@ -14,13 +14,13 @@ public final class TestInjectorProxy implements InjectorProxy {
     }
 
     @Override
-    public void set(Field field, Object instance, Object value) throws IllegalArgumentException, IllegalAccessException {
+    public void set(Field field, Object instance, Object value) throws IllegalAccessException {
         field.setAccessible(true);
         field.set(instance, value);
     }
 
     @Override
-    public <T> T newInstance(Constructor<T> constructor, Object... initargs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public <T> T newInstance(Constructor<T> constructor, Object... initargs) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         return constructor.newInstance(initargs);
     }
 }

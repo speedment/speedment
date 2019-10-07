@@ -36,31 +36,30 @@ import java.util.stream.Stream;
  */
 
 public final class StandardTranslatorKey {
-    
-    public static final TranslatorKey<Project, Interface> 
-        APPLICATION           = TranslatorKey.of("Application", Interface.class),
-        GENERATED_APPLICATION = TranslatorKey.of("GeneratedApplication", Interface.class);
 
-    public static final TranslatorKey<Project, Class> 
-        APPLICATION_IMPL              = TranslatorKey.of("ApplicationImpl", Class.class),
-        GENERATED_APPLICATION_IMPL    = TranslatorKey.of("GeneratedApplicationImpl", Class.class),
-        APPLICATION_BUILDER           = TranslatorKey.of("ApplicationBuilder", Class.class),
-        GENERATED_APPLICATION_BUILDER = TranslatorKey.of("GeneratedApplicationBuilder", Class.class),
-        GENERATED_METADATA            = TranslatorKey.of("GeneratedMetadata", Class.class);
+    private StandardTranslatorKey() {}
+
+    public static final TranslatorKey<Project, Interface> APPLICATION           = TranslatorKey.of("Application", Interface.class);
+    public static final TranslatorKey<Project, Interface> GENERATED_APPLICATION = TranslatorKey.of("GeneratedApplication", Interface.class);
+
+    public static final TranslatorKey<Project, Class> APPLICATION_IMPL              = TranslatorKey.of("ApplicationImpl", Class.class);
+    public static final TranslatorKey<Project, Class> GENERATED_APPLICATION_IMPL    = TranslatorKey.of("GeneratedApplicationImpl", Class.class);
+    public static final TranslatorKey<Project, Class> APPLICATION_BUILDER           = TranslatorKey.of("ApplicationBuilder", Class.class);
+    public static final TranslatorKey<Project, Class> GENERATED_APPLICATION_BUILDER = TranslatorKey.of("GeneratedApplicationBuilder", Class.class);
+    public static final TranslatorKey<Project, Class> GENERATED_METADATA            = TranslatorKey.of("GeneratedMetadata", Class.class);
+    public static final TranslatorKey<Project, Class> INJECTOR_PROXY                = TranslatorKey.of("InjectorProxy", Class.class);
     
-    public static final TranslatorKey<Table, Interface> 
-        ENTITY            = TranslatorKey.of("Entity", Interface.class),
-        MANAGER           = TranslatorKey.of("Manager", Interface.class),
-        GENERATED_ENTITY  = TranslatorKey.of("GeneratedEntity", Interface.class),
-        GENERATED_MANAGER = TranslatorKey.of("GeneratedManager", Interface.class);
-    
-    public static final TranslatorKey<Table, Class>
-        ENTITY_IMPL            = TranslatorKey.of("EntityImpl", Class.class),
-        MANAGER_IMPL           = TranslatorKey.of("ManagerImpl", Class.class),
-        SQL_ADAPTER            = TranslatorKey.of("SqlAdapter", Class.class),
-        GENERATED_ENTITY_IMPL  = TranslatorKey.of("GeneratedEntityImpl", Class.class),
-        GENERATED_MANAGER_IMPL = TranslatorKey.of("GeneratedManagerImpl", Class.class),
-        GENERATED_SQL_ADAPTER  = TranslatorKey.of("GeneratedSqlAdapter", Class.class);
+    public static final TranslatorKey<Table, Interface> ENTITY = TranslatorKey.of("Entity", Interface.class);
+    public static final TranslatorKey<Table, Interface> MANAGER = TranslatorKey.of("Manager", Interface.class);
+    public static final TranslatorKey<Table, Interface> GENERATED_ENTITY  = TranslatorKey.of("GeneratedEntity", Interface.class);
+    public static final TranslatorKey<Table, Interface> GENERATED_MANAGER = TranslatorKey.of("GeneratedManager", Interface.class);
+
+    public static final TranslatorKey<Table, Class> ENTITY_IMPL = TranslatorKey.of("EntityImpl", Class.class);
+    public static final TranslatorKey<Table, Class> MANAGER_IMPL = TranslatorKey.of("ManagerImpl", Class.class);
+    public static final TranslatorKey<Table, Class> SQL_ADAPTER = TranslatorKey.of("SqlAdapter", Class.class);
+    public static final TranslatorKey<Table, Class> GENERATED_ENTITY_IMPL = TranslatorKey.of("GeneratedEntityImpl", Class.class);
+    public static final TranslatorKey<Table, Class> GENERATED_MANAGER_IMPL = TranslatorKey.of("GeneratedManagerImpl", Class.class);
+    public static final TranslatorKey<Table, Class> GENERATED_SQL_ADAPTER = TranslatorKey.of("GeneratedSqlAdapter", Class.class);
 
     /**
      * Returns a stream of the standard {@link TranslatorKey Translator Keys}
@@ -73,7 +72,7 @@ public final class StandardTranslatorKey {
             APPLICATION, GENERATED_APPLICATION, 
             APPLICATION_IMPL, GENERATED_APPLICATION_IMPL,
             APPLICATION_BUILDER, GENERATED_APPLICATION_BUILDER,
-            GENERATED_METADATA
+            GENERATED_METADATA, INJECTOR_PROXY
         );
     }
     
@@ -92,10 +91,4 @@ public final class StandardTranslatorKey {
         );
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private StandardTranslatorKey() {
-        throw new UnsupportedOperationException();
-    }
 }
