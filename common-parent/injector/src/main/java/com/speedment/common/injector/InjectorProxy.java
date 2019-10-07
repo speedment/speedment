@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Predicate;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * An InjectorProxy can be used to create/manipulate
  * instances on behalf of the actual injector. This can
@@ -56,18 +58,6 @@ public interface InjectorProxy {
      * throws InaccessibleObjectException if access cannot be enabled
      */
     void set(Field field, Object instance, Object value) throws IllegalArgumentException, IllegalAccessException;
-
-
-/*    *//**
-     * Sets the provided {@code constructor} as accessable.
-     *
-     * @param constructor to set accessable
-     *
-     * @throws SecurityException if the request is denied by the security manager
-     *
-     * throws InaccessibleObjectException if access cannot be enabled
-     *//*
-    void setAccessable(Constructor<?> constructor);*/
 
     /**
      * Uses the constructor represented by this {@code Constructor} object to
@@ -122,8 +112,38 @@ public interface InjectorProxy {
         throws InstantiationException, IllegalAccessException,
         IllegalArgumentException, InvocationTargetException;
 
-    static Predicate<? super Class<?>> samePackageOrBelow(Class<?> clazz) {
-        return c -> c.getName().startsWith(clazz.getPackage().getName());
+    /**
+     * Returns a {@code Predicate} that will evaluate to true iff
+     * tested with a class that lies in the same package as the
+     * provided {@code classInRootPackage} or a package below the
+     * provided {@code classInRootPackage}.
+     *
+     * @param classInRootPackage as a reference to the root package
+     * @return a {@code Predicate} that will evaluate to true iff
+     *         tested with a class that lies in the same package as the
+     *         provided {@code classInRootPackage} or a package below the
+     *         provided {@code classInRootPackage}
+     */
+    static Predicate<? super Class<?>> samePackageOrBelow(Class<?> classInRootPackage) {
+        requireNonNull(classInRootPackage);
+        return samePackageOrBelow(classInRootPackage.getPackage().getName());
+    }
+
+    /**
+     * Returns a {@code Predicate} that will evaluate to true iff
+     * tested with a class that lies in the same package as the
+     * provided {@code rootPackage} or a package below the
+     * provided {@code rootPackage}.
+     *
+     * @param rootPackage as a reference to the root package
+     * @return a {@code Predicate} that will evaluate to true iff
+     *         tested with a class that lies in the same package as the
+     *         provided {@code rootPackage} or a package below the
+     *         provided {@code rootPackage}
+     */
+    static Predicate<? super Class<?>> samePackageOrBelow(String rootPackage) {
+        requireNonNull(rootPackage);
+        return c -> c.getName().startsWith(rootPackage);
     }
 
 }
