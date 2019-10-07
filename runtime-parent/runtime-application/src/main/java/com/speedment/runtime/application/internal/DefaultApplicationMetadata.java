@@ -52,7 +52,7 @@ public final class DefaultApplicationMetadata implements ApplicationMetadata {
     /**
      * Should only be instantiated by the {@link Injector}.
      */
-    private DefaultApplicationMetadata() {}
+    public DefaultApplicationMetadata() {}
 
     @Override
     public Project makeProject() {
