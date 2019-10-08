@@ -21,7 +21,12 @@ module com.speedment.runtime.join {
     exports com.speedment.runtime.join.trait;
     exports com.speedment.runtime.join.provider;
 
+    requires com.speedment.common.logger;
     requires com.speedment.common.invariant;
-    requires com.speedment.common.function;
     requires com.speedment.runtime.core;
+
+    requires transitive com.speedment.common.function;
+    requires transitive com.speedment.common.tuple;
+    requires transitive com.speedment.runtime.config;
+    requires transitive com.speedment.runtime.field;
 }

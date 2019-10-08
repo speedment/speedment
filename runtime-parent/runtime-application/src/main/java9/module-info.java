@@ -18,7 +18,6 @@ module com.speedment.runtime.application {
     exports com.speedment.runtime.application;
     exports com.speedment.runtime.application.provide;
 
-    requires com.speedment.runtime.join;
     requires com.speedment.runtime.welcome;
     requires com.speedment.runtime.connector.mysql;
     requires com.speedment.runtime.connector.mariadb;
@@ -30,5 +29,6 @@ module com.speedment.runtime.application {
 
     requires transitive com.speedment.runtime.core;
     requires transitive com.speedment.common.annotation;
+    requires transitive com.speedment.runtime.join; // Needed if joins are used
 
 }
