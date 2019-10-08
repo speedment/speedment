@@ -89,7 +89,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     }
     
     @ExecuteBefore(INITIALIZED)
-    final void createJavaTypeMap() {
+    public final void createJavaTypeMap() {
         this.javaTypeMap = newJavaTypeMap();
     }
     
@@ -172,7 +172,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 "." +
                 md.getJDBCMinorVersion();
         }
-    }        
+    }
+
+    protected DbmsHandlerComponent dbmsHandlerComponent() {
+        return dbmsHandlerComponent;
+    }
 
     private CompletableFuture<Project> readSchemaMetadata(
         final Project project,
