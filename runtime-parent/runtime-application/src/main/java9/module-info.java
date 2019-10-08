@@ -29,5 +29,6 @@ module com.speedment.runtime.application {
     requires com.speedment.common.json;
 
     requires transitive com.speedment.runtime.core;
+    requires transitive com.speedment.common.annotation;
 
 }
