@@ -40,6 +40,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <mysql.version>5.1.48</mysql.version>
     </properties>
 
     <build>
@@ -52,7 +53,7 @@
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.46</version>
+                        <version>${mysql.version}</version>
                         <scope>runtime</scope>
                     </dependency>
                     <dependency>
@@ -74,8 +75,14 @@
                         </goals>
                     </execution>
                 </executions>
-
             </plugin>
+
+            <!--https://stackoverflow.com/questions/50451220/maven-dependency-module-not-found-->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
+
         </plugins>
     </build>
     <dependencies>
@@ -98,7 +105,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.46</version>
+            <version>${mysql.version}</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
