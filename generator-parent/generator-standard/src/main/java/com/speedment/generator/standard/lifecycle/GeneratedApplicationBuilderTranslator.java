@@ -141,9 +141,9 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                     );
                 }
 
-                final String proxyName = getSupport().typeName(getSupport().projectOrThrow()) + "InjectorProxy";
-                constructorBody.append(nl() + "withInjectorProxy(new " + proxyName + "());");
-                file.add(Import.of(SimpleType.create(getSupport().defaultPackageName()+"."+proxyName)));
+                final Type injectorProxyType = injectorProxyType();
+                constructorBody.append(nl()).append("withInjectorProxy(new ").append(shortName(injectorProxyType.getTypeName())).append("());");
+                file.add(Import.of(injectorProxyType()));
 
                 constr.add(constructorBody.toString());
 
@@ -199,4 +199,12 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
             + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl"
         );
     }
+
+    private Type injectorProxyType() {
+        return SimpleType.create(
+            getSupport().basePackageName() + "."
+                + getSupport().typeName(getSupport().projectOrThrow()) + "InjectorProxy"
+        );
+    }
+
 }
