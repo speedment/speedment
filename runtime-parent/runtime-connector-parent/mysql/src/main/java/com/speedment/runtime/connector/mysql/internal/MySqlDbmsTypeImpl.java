@@ -17,17 +17,15 @@
 package com.speedment.runtime.connector.mysql.internal;
 
 import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
 
 import java.sql.Driver;
 import java.util.Collections;
@@ -37,8 +35,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.collectingAndThen;
