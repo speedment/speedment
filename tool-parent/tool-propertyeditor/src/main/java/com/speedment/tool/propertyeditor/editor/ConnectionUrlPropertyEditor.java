@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  */
 public class ConnectionUrlPropertyEditor<T extends DbmsProperty> implements PropertyEditor<T> {
 
-    private @Inject Injector injector;
+    public @Inject Injector injector;
     
     @Override
     public Stream<Item> fieldsFor(T document) {

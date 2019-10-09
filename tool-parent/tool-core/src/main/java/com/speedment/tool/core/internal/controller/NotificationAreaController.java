@@ -39,7 +39,7 @@ public class NotificationAreaController implements Initializable {
     
     private final LayoutAnimator animator;
     
-    private @Inject UserInterfaceComponent userInterfaceComponent;
+    public @Inject UserInterfaceComponent userInterfaceComponent;
     private @FXML FlowPane notificationArea;
     
     public NotificationAreaController() {

@@ -52,11 +52,11 @@ public final class SceneController implements Initializable {
     private final static SemanticVersionComparator SEMANTIC_VERSION =
         new SemanticVersionComparator();
     
-    private @Inject UserInterfaceComponent ui;
-    private @Inject InfoComponent info;
-    private @Inject InjectionLoader loader;
-    private @Inject VersionComponent version;
-    private @Inject ProjectComponent projects;
+    public @Inject UserInterfaceComponent ui;
+    public @Inject InfoComponent info;
+    public @Inject InjectionLoader loader;
+    public @Inject VersionComponent version;
+    public @Inject ProjectComponent projects;
 
     private @FXML VBox top;
     private @FXML SplitPane horizontal;

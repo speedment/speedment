@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
  */
 public final class OutputController implements Initializable {
 
-    private @Inject UserInterfaceComponent ui;
+    public @Inject UserInterfaceComponent ui;
     private @FXML VBox log;
     private @FXML ScrollPane logPane;
     private @FXML ToggleButton wrapTextBtn;

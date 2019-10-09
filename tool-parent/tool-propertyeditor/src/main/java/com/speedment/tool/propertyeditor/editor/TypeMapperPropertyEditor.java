@@ -48,7 +48,7 @@ public class TypeMapperPropertyEditor<T extends HasTypeMapperProperty> implement
 
     private final StringProperty outputValue;
     
-    private @Inject TypeMapperComponent typeMappers;
+    public @Inject TypeMapperComponent typeMappers;
 
     public TypeMapperPropertyEditor() {
         this.outputValue = new SimpleStringProperty();

@@ -49,9 +49,9 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ComponentsController implements Initializable {
 
-    private @Inject InfoComponent infoComponent;
-    private @Inject Speedment speedment;
-    private @Inject Injector injector;
+    public @Inject InfoComponent infoComponent;
+    public @Inject Speedment speedment;
+    public @Inject Injector injector;
 
     private @FXML Label title;
     private @FXML Label header;

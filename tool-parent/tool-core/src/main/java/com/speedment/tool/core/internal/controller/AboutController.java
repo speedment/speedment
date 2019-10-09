@@ -37,8 +37,8 @@ import static com.speedment.tool.core.internal.util.CloseUtil.newCloseHandler;
  */
 public final class AboutController implements Initializable {
     
-    private @Inject InfoComponent infoComponent;
-    private @Inject Brand brand;
+    public @Inject InfoComponent infoComponent;
+    public @Inject Brand brand;
     
     private @FXML ImageView titleImage;
     private @FXML Button close;

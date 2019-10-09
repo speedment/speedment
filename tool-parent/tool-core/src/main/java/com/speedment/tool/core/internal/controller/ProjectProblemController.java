@@ -20,9 +20,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.rule.Issue;
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.value.ChangeListener;
@@ -40,6 +37,10 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Callback;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class ProjectProblemController implements Initializable {
     

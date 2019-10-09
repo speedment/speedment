@@ -45,8 +45,8 @@ import static java.util.Objects.requireNonNull;
  */
 public class AliasPropertyEditor<T extends HasAliasProperty> implements PropertyEditor<T> {
 
-    @Inject private JavaLanguageNamer namer;
-    @Inject private TypeMapperComponent typeMapperComponent;
+    @Inject public JavaLanguageNamer namer;
+    @Inject public TypeMapperComponent typeMapperComponent;
 
     @Override
     public Stream<PropertyEditor.Item> fieldsFor(T document) {
