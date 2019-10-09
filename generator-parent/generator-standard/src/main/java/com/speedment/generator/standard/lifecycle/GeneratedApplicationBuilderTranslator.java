@@ -58,8 +58,8 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
 
     private static final String CLASS = "class";
 
-    @Inject private InfoComponent infoComponent;
-    @Inject private Injector injector;
+    @Inject public InfoComponent infoComponent;
+    @Inject public Injector injector;
 
     public GeneratedApplicationBuilderTranslator(Project doc) {
         super(doc, Class::of);

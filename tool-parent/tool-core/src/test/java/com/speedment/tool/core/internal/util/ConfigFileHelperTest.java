@@ -17,9 +17,15 @@
 package com.speedment.tool.core.internal.util;
 
 import com.speedment.common.json.Json;
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.util.DocumentTranscoder;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.InfoComponent;
+import com.speedment.runtime.core.component.PasswordComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -37,9 +43,23 @@ final class ConfigFileHelperTest {
     @Mock
     private File mockedCurrentlyOpenFile;
 
+    @Mock
+    private DocumentPropertyComponent documentPropertyComponent;
+    @Mock
+    private DbmsHandlerComponent dbmsHandlerComponent;
+    @Mock
+    private PasswordComponent passwordComponent;
+    @Mock
+    private TranslatorManager translatorManager;
+    @Mock
+    private ProjectComponent projectComponent;
+    @Mock
+    private InfoComponent infoComponent;
+
+
     @BeforeEach
     void setup() {
-        helper = new ConfigFileHelper();
+        helper = new ConfigFileHelper(documentPropertyComponent, dbmsHandlerComponent, passwordComponent, translatorManager, projectComponent, infoComponent, mockedCurrentlyOpenFile);
         helper.setCurrentlyOpenFile(mockedCurrentlyOpenFile);
     }
 

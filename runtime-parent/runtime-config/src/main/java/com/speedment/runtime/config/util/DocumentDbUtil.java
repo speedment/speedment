@@ -218,7 +218,7 @@ public final class DocumentDbUtil {
     public static boolean isAllAncestorsEnabled(Document document) {
         return HasEnabled.test(document)
             && document.ancestors()
-                .noneMatch(doc -> !HasEnabled.test(doc));
+                .allMatch(HasEnabled::test);
     }
     
     public static Optional<? extends Column> referencedColumnIfPresent(Project project, ColumnIdentifier<?> identifier) {

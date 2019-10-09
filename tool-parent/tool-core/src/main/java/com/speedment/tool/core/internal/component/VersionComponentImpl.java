@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.core.internal.component;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.rest.Rest;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.tool.core.component.VersionComponent;
@@ -26,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the {@link VersionComponent} interface that 
@@ -36,7 +36,11 @@ import static java.lang.String.format;
  */
 public final class VersionComponentImpl implements VersionComponent {
 
-    private @Inject InfoComponent info;
+    private final InfoComponent info;
+
+    public VersionComponentImpl(InfoComponent info) {
+        this.info = requireNonNull(info);
+    }
 
     @Override
     @SuppressWarnings("unchecked")

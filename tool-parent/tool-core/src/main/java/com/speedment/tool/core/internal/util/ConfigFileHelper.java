@@ -18,8 +18,9 @@ package com.speedment.tool.core.internal.util;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
@@ -63,12 +64,16 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.*;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Predicate;
 
 import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import static com.speedment.tool.core.util.OutputUtil.error;
 import static com.speedment.tool.core.util.OutputUtil.success;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 import static javafx.application.Platform.runLater;
 
@@ -91,19 +96,44 @@ public final class ConfigFileHelper {
         && file.canRead()
         && file.getName().toLowerCase().endsWith(DOT_JSON);
 
-    @Inject private DocumentPropertyComponent documentPropertyComponent;
-    @Inject private UserInterfaceComponent userInterfaceComponent;
-    @Inject private DbmsHandlerComponent dbmsHandlerComponenet;
-    @Inject private PasswordComponent passwordComponent;
-    @Inject private TranslatorManager translatorManager;
-    @Inject private ProjectComponent projectComponent;
-    @Inject private InfoComponent infoComponent;
-    @Inject private Injector injector;
+    private final DocumentPropertyComponent documentPropertyComponent;
+    private final DbmsHandlerComponent dbmsHandlerComponent;
+    private final PasswordComponent passwordComponent;
+    private final TranslatorManager translatorManager;
+    private final ProjectComponent projectComponent;
+    private final InfoComponent infoComponent;
 
-    private @Config(
-        name=METADATA_LOCATION,
-        value=DEFAULT_CONFIG_LOCATION
-    ) File currentlyOpenFile;
+    private UserInterfaceComponent userInterfaceComponent;
+    private Injector injector;
+    private File currentlyOpenFile;
+
+    public ConfigFileHelper(
+        final DocumentPropertyComponent documentPropertyComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final PasswordComponent passwordComponent,
+        final TranslatorManager translatorManager,
+        final ProjectComponent projectComponent,
+        final InfoComponent infoComponent,
+        @Config(name = METADATA_LOCATION, value = DEFAULT_CONFIG_LOCATION) final File currentlyOpenFile
+    ) {
+        this.documentPropertyComponent = requireNonNull(documentPropertyComponent);
+        this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
+        this.passwordComponent = requireNonNull(passwordComponent);
+        this.translatorManager = requireNonNull(translatorManager);
+        this.projectComponent = requireNonNull(projectComponent);
+        this.infoComponent = requireNonNull(infoComponent);
+        this.currentlyOpenFile = requireNonNull(currentlyOpenFile);
+    }
+
+    @ExecuteBefore(State.INITIALIZED)
+    public void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
+    }
+
+    @ExecuteBefore(State.INITIALIZED)
+    public void setUserInterfaceComponent(UserInterfaceComponent userInterfaceComponent) {
+        this.userInterfaceComponent = requireNonNull(userInterfaceComponent);
+    }
 
     public boolean isFileOpen() {
         return currentlyOpenFile != null;
@@ -134,7 +164,7 @@ public final class ConfigFileHelper {
         final Project projectCopy = ImmutableProject.wrap(project);
 
         project.dbmses().map(dbms -> {
-            final DbmsType dbmsType = dbmsHandlerComponenet.findByName(dbms.getTypeName())
+            final DbmsType dbmsType = dbmsHandlerComponent.findByName(dbms.getTypeName())
                 .orElseThrow(() -> new SpeedmentToolException(
                 "Could not find dbms type with name '" + dbms.getTypeName() + "'."
             ));
@@ -215,7 +245,7 @@ public final class ConfigFileHelper {
             final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
 
             // Find the DbmsHandler to use when loading the metadata
-            final DbmsMetadataHandler dh = dbmsHandlerComponenet.findByName(dbmsCopy.getTypeName())
+            final DbmsMetadataHandler dh = dbmsHandlerComponent.findByName(dbmsCopy.getTypeName())
                 .map(DbmsType::getMetadataHandler)
                 .orElseThrow(() -> new SpeedmentToolException(
                 "Could not find metadata handler for DbmsType '" + dbmsCopy.getTypeName() + "'."

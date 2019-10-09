@@ -22,7 +22,6 @@ import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.core.component.EventComponent;
@@ -66,21 +65,35 @@ import static java.util.Objects.requireNonNull;
  */
 public final class TranslatorManagerHelper {
 
-    private static final Logger LOGGER
-        = LoggerManager.getLogger(TranslatorManagerHelper.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(TranslatorManagerHelper.class);
 
     private static final String HASH_PREFIX = ".";
     private static final String HASH_SUFFIX = ".md5";
 
+    private final InfoComponent info;
+    private final PathComponent paths;
+    private final EventComponent events;
+    private final ProjectComponent projects;
+    private final CodeGenerationComponent codeGenerationComponent;
+    private final boolean skipClear;
+
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
-    private @Inject InfoComponent info;
-    private @Inject PathComponent paths;
-    private @Inject EventComponent events;
-    private @Inject ProjectComponent projects;
-    private @Inject CodeGenerationComponent codeGenerationComponent;
-
-    private @Config(name="skipClear", value="false") boolean skipClear;
+    public TranslatorManagerHelper(
+        final InfoComponent info,
+        final PathComponent paths,
+        final EventComponent events,
+        final ProjectComponent projects,
+        final CodeGenerationComponent codeGenerationComponent,
+        final @Config(name="skipClear", value="false") boolean skipClear
+    ) {
+        this.info = requireNonNull(info);
+        this.paths = requireNonNull(paths);
+        this.events = requireNonNull(events);
+        this.projects = requireNonNull(projects);
+        this.codeGenerationComponent = requireNonNull(codeGenerationComponent);
+        this.skipClear = skipClear;
+    }
 
     public void accept(TranslatorManager delegator, Project project) {
         requireNonNull(project);

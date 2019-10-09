@@ -76,11 +76,11 @@ public final class GeneratedSqlAdapterTranslator
     public final static String OFFSET_PARAMETER_NAME = "offset";
 
     @Inject
-    private ResultSetMapperComponent resultSetMapperComponent;
+    public ResultSetMapperComponent resultSetMapperComponent;
     @Inject
-    private DbmsHandlerComponent dbmsHandlerComponent;
+    public DbmsHandlerComponent dbmsHandlerComponent;
     @Inject
-    private TypeMapperComponent typeMapperComponent;
+    public TypeMapperComponent typeMapperComponent;
 
     public GeneratedSqlAdapterTranslator(Table table) {
         super(table, Class::of);

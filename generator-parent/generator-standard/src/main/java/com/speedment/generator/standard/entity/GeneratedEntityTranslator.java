@@ -19,8 +19,8 @@ package com.speedment.generator.standard.entity;
 import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
@@ -63,8 +63,8 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
 
     public static final String IDENTIFIER_NAME = "Identifier";
 
-    @Inject private Injector injector;
-    @Inject private TypeMapperComponent typeMappers;
+    @Inject public Injector injector;
+    @Inject public TypeMapperComponent typeMappers;
 
     public GeneratedEntityTranslator(Table table) {
         super(table, Interface::of);

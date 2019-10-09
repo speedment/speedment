@@ -295,8 +295,9 @@ public final class InjectorImpl implements Injector {
                     );
                 }
 
-                field.setAccessible(true);
+                // field.setAccessible(true);
 
+                LOGGER_INSTANCE.warn("Setting fields is deprecated: " + field);
                 try {
                     field.set(instance, value);
 

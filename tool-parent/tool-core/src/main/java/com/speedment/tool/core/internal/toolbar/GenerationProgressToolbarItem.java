@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.core.internal.toolbar;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
 import com.speedment.generator.core.event.AfterGenerate;
 import com.speedment.generator.core.event.BeforeGenerate;
@@ -25,6 +24,7 @@ import com.speedment.tool.core.toolbar.ToolbarItem;
 import com.speedment.tool.core.toolbar.ToolbarSide;
 import javafx.scene.control.Label;
 
+import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
 
 /**
@@ -35,8 +35,11 @@ import static javafx.application.Platform.runLater;
  */
 public final class GenerationProgressToolbarItem implements ToolbarItem<Label> {
 
-    @Inject
-    private EventComponent events;
+    private final EventComponent events;
+
+    public GenerationProgressToolbarItem(EventComponent events) {
+        this.events = requireNonNull(events);
+    }
 
     @Override
     public Label createNode() {

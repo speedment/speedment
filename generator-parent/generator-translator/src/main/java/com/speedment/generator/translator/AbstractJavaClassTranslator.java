@@ -66,17 +66,17 @@ import java.util.stream.Stream;
 public abstract class AbstractJavaClassTranslator<D extends Document & HasId & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
     implements JavaClassTranslator<D, T> {
 
-    public static final String GETTER_METHOD_PREFIX = "get";
-    public static final String SETTER_METHOD_PREFIX = "set";
-    public static final String FINDER_METHOD_PREFIX = "find";
-    public static final String JAVADOC_MESSAGE
+    protected static final String GETTER_METHOD_PREFIX = "get";
+    protected static final String SETTER_METHOD_PREFIX = "set";
+    protected static final String FINDER_METHOD_PREFIX = "find";
+    private static final String JAVADOC_MESSAGE
         = "\n<p>\nThis file is safe to edit. It will not be overwritten by the "
         + "code generator.";
 
-    @Inject private Generator generator;
-    @Inject private InfoComponent infoComponent;
-    @Inject private TypeMapperComponent typeMappers;
-    @Inject private Injector injector;
+    @Inject public Generator generator;
+    @Inject public InfoComponent infoComponent;
+    @Inject public TypeMapperComponent typeMappers;
+    @Inject public Injector injector;
     
     private final D document;
     private final Function<String, T> mainModelConstructor;

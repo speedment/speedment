@@ -17,7 +17,6 @@
 package com.speedment.common.injector.test_c;
 
 import com.speedment.common.injector.annotation.Execute;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.test_b.A;
 
 /**
@@ -26,8 +25,12 @@ import com.speedment.common.injector.test_b.A;
  */
 public abstract class ParentType {
     
-    public @Inject A a;
-    
+    public final A a;
+
+    public ParentType(A a) {
+        this.a = a;
+    }
+
     @Execute
     private void installParent() {}
 }

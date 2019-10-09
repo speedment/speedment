@@ -18,7 +18,8 @@ package com.speedment.tool.core.internal.component;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorSupport;
@@ -41,7 +42,6 @@ import com.speedment.tool.core.MainApp;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.component.RuleComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import com.speedment.tool.core.internal.brand.SpeedmentBrand;
 import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoaderImpl;
@@ -66,12 +66,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -116,26 +111,46 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     
     private final AtomicBoolean canGenerate;
     
-    @Inject private DocumentPropertyComponent documentPropertyComponent;
-    @Inject private PasswordComponent passwordComponent;
-    @Inject private ProjectComponent projectComponent;
-    @Inject private ConfigFileHelper configFileHelper;
-    @Inject private InjectionLoader loader;
-    @Inject private RuleComponent rules;
-    @Inject private InfoComponent info;
+    private final DocumentPropertyComponent documentPropertyComponent;
+    private final PasswordComponent passwordComponent;
+    private final ProjectComponent projectComponent;
+    private final ConfigFileHelper configFileHelper;
+    private final InjectionLoader loader;
+    private final RuleComponent rules;
+    private final InfoComponent info;
     
-    @Inject private Injector injector;
+    private Injector injector;
     
     private Stage stage;
     private Application application;
     private ProjectProperty project;
 
-    public UserInterfaceComponentImpl() {
+    public UserInterfaceComponentImpl(
+        final DocumentPropertyComponent documentPropertyComponent,
+        final PasswordComponent passwordComponent,
+        final ProjectComponent projectComponent,
+        final ConfigFileHelper configFileHelper,
+        final InjectionLoader loader,
+        final RuleComponent rules,
+        final InfoComponent info
+    ) {
+        this.documentPropertyComponent = requireNonNull(documentPropertyComponent);
+        this.passwordComponent = requireNonNull(passwordComponent);
+        this.projectComponent = requireNonNull(projectComponent);
+        this.configFileHelper = requireNonNull(configFileHelper);
+        this.loader = requireNonNull(loader);
+        this.rules = requireNonNull(rules);
+        this.info = requireNonNull(info);
         notifications     = FXCollections.observableArrayList();
         outputMessages    = FXCollections.observableArrayList();
         selectedTreeItems = FXCollections.observableArrayList();
         properties        = FXCollections.observableArrayList();
         canGenerate       = new AtomicBoolean(true);
+    }
+
+    @ExecuteBefore(State.INITIALIZED)
+    public void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
     }
 
     public static InjectBundle include() {

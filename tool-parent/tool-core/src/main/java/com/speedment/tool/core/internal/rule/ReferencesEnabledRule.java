@@ -16,12 +16,10 @@
  */
 package com.speedment.tool.core.internal.rule;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.trait.HasColumn;
-import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
@@ -34,6 +32,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  *
  * @author Simon Jonasson
@@ -41,8 +41,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class ReferencesEnabledRule implements Rule {
 
-    private @Inject ProjectComponent projectComponent;
-    private @Inject IssueComponent issues;
+    private final ProjectComponent projectComponent;
+    private final IssueComponent issues;
+
+    public ReferencesEnabledRule(
+        final ProjectComponent projectComponent,
+        final IssueComponent issues
+    ) {
+        this.projectComponent = requireNonNull(projectComponent);
+        this.issues = requireNonNull(issues);
+    }
 
     @Override
     public CompletableFuture<Boolean> verify() {

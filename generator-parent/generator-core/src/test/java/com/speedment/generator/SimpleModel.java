@@ -18,14 +18,21 @@ package com.speedment.generator;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.generator.core.GeneratorBundle;
+import com.speedment.generator.core.component.EventComponent;
+import com.speedment.generator.core.component.PathComponent;
+import com.speedment.generator.core.internal.translator.TranslatorManagerHelper;
 import com.speedment.generator.core.translator.AbstractTranslatorManager;
+import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
 import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.config.trait.HasTypeMapperUtil;
 import com.speedment.runtime.core.Speedment;
+import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -59,6 +66,17 @@ public abstract class SimpleModel {
     protected Column column2;
     
     public final static class SilentTranslatorManager extends AbstractTranslatorManager {
+
+        public SilentTranslatorManager(
+            final InfoComponent info,
+            final PathComponent paths,
+            final EventComponent events,
+            final ProjectComponent projects,
+            final CodeGenerationComponent codeGenerationComponent,
+            final @Config(name="skipClear", value="false") boolean skipClear
+        ) {
+            super(info, paths, events, projects, codeGenerationComponent, skipClear);
+        }
 
         @Override
         public void clearExistingFiles(Project project) {}

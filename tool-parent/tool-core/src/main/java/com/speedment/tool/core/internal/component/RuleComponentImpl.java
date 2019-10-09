@@ -16,10 +16,8 @@
  */
 package com.speedment.tool.core.internal.component;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.component.RuleComponent;
 import com.speedment.tool.core.internal.rule.ProtectedNameRule;
 import com.speedment.tool.core.internal.rule.ReferencesEnabledRule;
@@ -29,40 +27,36 @@ import com.speedment.tool.core.rule.Rule;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 /**
- *
  * @author Simon Jonasson
  * @since 3.0.0
  */
-public class RuleComponentImpl implements RuleComponent {
-    
-    private @Inject Injector injector;
+public final class RuleComponentImpl implements RuleComponent {
+
     private final List<Rule> rules;
-    
-    public RuleComponentImpl(){
+
+    public RuleComponentImpl(
+        final ProjectComponent projectComponent,
+        final IssueComponent issues
+    ) {
         this.rules = new LinkedList<>();
+        install(new ProtectedNameRule(projectComponent, issues));
+        install(new ReferencesEnabledRule(projectComponent, issues));
     }
-    
-    @ExecuteBefore(State.RESOLVED)
-    void installRules(){
-        install(ProtectedNameRule::new);
-        install(ReferencesEnabledRule::new);
-    }
-    
+
     @Override
-    public void install(Supplier<Rule> rule){
-        rules.add(injector.inject(rule.get()));
+    public void install(Rule rule) {
+        rules.add(rule);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public CompletableFuture<Boolean> verify() {
         final CompletableFuture<Boolean>[] futures;
-        futures =  rules.stream().parallel()
-                        .map( Rule::verify )
-                        .toArray( CompletableFuture[]::new );
+        futures = rules.stream().parallel()
+            .map(Rule::verify)
+            .toArray(CompletableFuture[]::new);
 
         return CompletableFutureUtil.allOf(Boolean.TRUE, Boolean::logicalAnd, futures);
     }

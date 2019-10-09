@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterface<T>>
     extends AbstractJavaClassTranslator<Table, T> {
 
-    private @Inject TypeMapperComponent typeMappers;
+    public @Inject TypeMapperComponent typeMappers;
     
     protected AbstractEntityAndManagerTranslator(
         Table table,

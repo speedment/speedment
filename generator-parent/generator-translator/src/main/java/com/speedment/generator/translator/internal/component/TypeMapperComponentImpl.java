@@ -17,7 +17,8 @@
 package com.speedment.generator.translator.internal.component;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.trait.HasTypeMapper;
@@ -41,12 +42,14 @@ import com.speedment.runtime.typemapper.string.*;
 import com.speedment.runtime.typemapper.time.*;
 
 import java.math.BigDecimal;
-import java.sql.*;
 import java.sql.Date;
+import java.sql.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -56,7 +59,7 @@ import java.util.stream.Stream;
 public final class TypeMapperComponentImpl implements TypeMapperComponent {
 
     private final Map<String, List<Supplier<TypeMapper<?, ?>>>> mappers;
-    private @Inject Injector injector;
+    private Injector injector;
 
     /**
      * Constructs the component.
@@ -142,6 +145,11 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Object.class, BinaryToUuidMapper::new);
         install(Object.class, BinaryToByteArrayMapper::new);
         install(Object.class, BinaryToBigIntegerMapper::new);
+    }
+
+    @ExecuteBefore(State.INITIALIZED)
+    public void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
     }
 
     @Override
