@@ -44,7 +44,9 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
@@ -68,6 +70,7 @@ import static java.util.stream.Collectors.*;
 public final class InjectorBuilderImpl implements InjectorBuilder {
 
     public static final Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorBuilderImpl.class);
+    private static final Object UNINSTANTIATED = new Object(); // Used as a marker of an Object that is not yet created
 
     private final ClassLoader classLoader;
     private final Map<String, List<Injectable<?>>> injectables;
@@ -192,7 +195,16 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
         final DependencyGraph graph = DependencyGraph.create(injectablesSet.stream().map(Injectable::get));
 
-        final LinkedList<Object> instances = new LinkedList<>();
+        // Create a pre-configured map so that the instance order can
+        // be retained regardless of actual instantiation order, #788
+        final Map<Class<?>, Object> instanceMap = injectablesSet.stream()
+            .map(Injectable::get)
+            .collect(toMap(
+                Function.identity(),
+                i -> UNINSTANTIATED,
+                (a, b) -> a,
+                LinkedHashMap::new
+            ));
 
         LOGGER_INSTANCE.debug(String.format("Creating %d injectable instances.", injectablesSet.size()));
 
@@ -211,13 +223,15 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 boolean created = false;
                 if (injectable.hasSupplier()) {
                     final Object instance = injectable.supplier().get();
-                    instances.addFirst(instance);
+                    instanceMap.put(injectable.get(), instance);
+                    //instances.addFirst(instance);
                     created = true;
                 } else {
                     final Class<?> clazz = injectable.get();
-                    final Optional<?> instance = tryToCreate(clazz, properties, instances, allInjectableTypes, proxyFor(clazz));
+                    final Optional<?> instance = tryToCreate(clazz, properties, instancesSoFarInCorrectOrder(instanceMap), allInjectableTypes, proxyFor(clazz));
                     if (instance.isPresent()) {
-                        instances.addFirst(instance.get());
+                        instanceMap.put(injectable.get(), instance.get());
+                        //instances.addFirst(instance.get());
                         created = true;
                     }
                 }
@@ -266,9 +280,10 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 final StringBuilder msg = new StringBuilder();
                 msg.append(injectablesLeft.size());
                 msg.append(" injectables could not be instantiated. These where: [\n");
+                final List<Object> instancesSoFarInCorrectOrder = instancesSoFarInCorrectOrder(instanceMap);
                 injectablesLeft.stream()
                     .map(Injectable::get)
-                    .map(c -> ReflectionUtil.errorMsg(c, instances))
+                    .map(c -> ReflectionUtil.errorMsg(c, instancesSoFarInCorrectOrder))
                     .forEachOrdered(s -> msg.append("  ").append(s).append('\n'));
                 msg.append("]");
                 throw new ConstructorResolutionException(msg.toString());
@@ -277,6 +292,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             injectablesLeftSize = injectablesLeft.size();
         }
 
+        final LinkedList<Object> instances = new LinkedList<>();
+        instancesSoFarInCorrectOrder(instanceMap)
+            .forEach(instances::addFirst); // Add elements in reversed order.
+
+        instanceMap.clear(); // We are done with the map...
 
         // Build the Injector
         final Injector injector = new InjectorImpl(
@@ -583,6 +603,12 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         LOGGER_INSTANCE.debug(horizontalLine());
 
         return injector;
+    }
+
+    private LinkedList<Object> instancesSoFarInCorrectOrder(Map<Class<?>, Object> instanceMap) {
+        return instanceMap.values().stream()
+            .filter(o -> o != UNINSTANTIATED)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     private void appendInjectable(String key, Injectable<?> clazz, boolean overwrite) {
