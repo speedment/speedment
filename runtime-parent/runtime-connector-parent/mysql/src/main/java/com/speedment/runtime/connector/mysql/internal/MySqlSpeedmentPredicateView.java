@@ -16,10 +16,9 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
-import com.speedment.common.injector.annotation.Config;
+import com.speedment.runtime.core.abstracts.AbstractFieldPredicateView;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.runtime.core.abstracts.AbstractFieldPredicateView;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 

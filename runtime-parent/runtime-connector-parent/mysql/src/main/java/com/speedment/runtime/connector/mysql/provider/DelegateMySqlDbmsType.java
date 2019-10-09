@@ -1,5 +1,6 @@
 package com.speedment.runtime.connector.mysql.provider;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
@@ -21,7 +22,7 @@ import static com.speedment.common.injector.State.INITIALIZED;
 
 public final class DelegateMySqlDbmsType implements MySqlDbmsType {
 
-    private final DbmsType inner;
+    private final MySqlDbmsTypeImpl inner;
 
     public DelegateMySqlDbmsType(
         final DriverComponent driverComponent,
@@ -36,11 +37,11 @@ public final class DelegateMySqlDbmsType implements MySqlDbmsType {
     ) {
         inner = new MySqlDbmsTypeImpl(driverComponent, binaryCollationName, collationName, connectionPoolComponent, dbmsHandlerComponent, projectComponent, transactionComponent);
     }
-/*
-    @ExecuteBefore(INITIALIZED)
-    public void install(@WithState(CREATED) DbmsHandlerComponent component) {
-        component.install(this);
-    }*/
+
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        inner.close();
+    }
 
     @Override
     public String getName() {

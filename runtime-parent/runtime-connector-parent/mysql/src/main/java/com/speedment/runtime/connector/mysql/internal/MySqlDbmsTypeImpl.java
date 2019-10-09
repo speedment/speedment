@@ -16,7 +16,9 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
@@ -79,11 +81,11 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
         this.connectionUrlGenerator = new MySqlConnectionUrlGenerator();
         this.support = DbmsTypeDefault.create();
     }
-/*
-    @ExecuteBefore(INITIALIZED)
-    void install(@WithState(CREATED) DbmsHandlerComponent component) {
-        component.install(this);
-    }*/
+
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        operationHandler.close();
+    }
 
     @Override
     public String getName() {

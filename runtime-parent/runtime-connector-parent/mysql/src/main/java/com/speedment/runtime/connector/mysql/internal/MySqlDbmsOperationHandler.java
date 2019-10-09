@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
+import com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
-import com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

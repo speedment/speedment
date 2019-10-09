@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.connector.postgres.internal;
 
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -68,6 +70,11 @@ public final class PostgresDbmsTypeImpl implements DbmsType {
         this.namingConvention = new PostgresNamingConvention();
         this.connectionUrlGenerator = new PostgresConnectionUrlGenerator();
         this.support = DbmsTypeDefault.create();
+    }
+
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        operationHandler.close();
     }
 
     @Override

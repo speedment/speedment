@@ -379,7 +379,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     @ExecuteBefore(State.STOPPED)
-    void close() {
+    public void close() {
         closed.set(true);
     }
 

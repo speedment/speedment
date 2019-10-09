@@ -1,12 +1,10 @@
 package com.speedment.runtime.connector.mariadb.provider;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.connector.mariadb.MariaDbDbmsType;
 import com.speedment.runtime.connector.mariadb.internal.MariaDbDbmsTypeImpl;
-import com.speedment.runtime.connector.mysql.MySqlDbmsType;
-import com.speedment.runtime.connector.mysql.internal.MySqlDbmsTypeImpl;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
@@ -18,12 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
-
 public final class DelegateMariaDbDbmsType implements MariaDbDbmsType {
 
-    private final DbmsType inner;
+    private final MariaDbDbmsTypeImpl inner;
 
     public DelegateMariaDbDbmsType(
         final DriverComponent driverComponent,
@@ -39,12 +34,10 @@ public final class DelegateMariaDbDbmsType implements MariaDbDbmsType {
         inner = new MariaDbDbmsTypeImpl(driverComponent, binaryCollationName, collationName, connectionPoolComponent, dbmsHandlerComponent, projectComponent, transactionComponent);
     }
 
-/*
-    @ExecuteBefore(INITIALIZED)
-    public void install(@WithState(CREATED) DbmsHandlerComponent component) {
-        component.install(this);
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        inner.close();
     }
-*/
 
     @Override
     public String getName() {

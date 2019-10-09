@@ -1,5 +1,7 @@
 package com.speedment.runtime.connector.sqlite.provider;
 
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.connector.sqlite.SqliteOperationHandler;
 import com.speedment.runtime.connector.sqlite.internal.SqliteOperationHandlerImpl;
@@ -7,7 +9,6 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
-import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
@@ -21,7 +22,7 @@ import java.util.stream.Stream;
 
 public final class DelegateSqliteOperationalHandler implements SqliteOperationHandler {
 
-    private final DbmsOperationHandler inner;
+    private final SqliteOperationHandlerImpl inner;
 
     public DelegateSqliteOperationalHandler(
         final ConnectionPoolComponent connectionPoolComponent,
@@ -29,6 +30,11 @@ public final class DelegateSqliteOperationalHandler implements SqliteOperationHa
         final TransactionComponent transactionComponent
     ) {
         this.inner = new SqliteOperationHandlerImpl(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+    }
+
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        inner.close();
     }
 
     @Override

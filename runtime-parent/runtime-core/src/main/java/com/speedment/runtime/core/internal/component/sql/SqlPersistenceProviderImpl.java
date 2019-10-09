@@ -49,7 +49,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
@@ -90,18 +89,17 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
     private final Predicate<Column> updateColumnFilter;
 
     SqlPersistenceProviderImpl(
-        PersistenceTableInfo<ENTITY> tableInfo,
-        ProjectComponent projectComponent,
-        DbmsHandlerComponent dbmsHandlerComponent,
-        ManagerComponent managerComponent,
-        ResultSetMapperComponent resultSetMapperComponent) {
-        
-        requireNonNulls(tableInfo,
-            projectComponent, 
-            dbmsHandlerComponent, 
-            managerComponent, 
-            resultSetMapperComponent
-        );
+        final PersistenceTableInfo<ENTITY> tableInfo,
+        final ProjectComponent projectComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ManagerComponent managerComponent,
+        final  ResultSetMapperComponent resultSetMapperComponent
+    ) {
+        requireNonNull(tableInfo);
+        requireNonNull(projectComponent);
+        requireNonNull(dbmsHandlerComponent);
+        requireNonNull(managerComponent);
+        requireNonNull(resultSetMapperComponent);
 
         final Project project = projectComponent.getProject();
 
@@ -323,6 +321,6 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
             return mapping;
         }
     }
-    
+
     
 }

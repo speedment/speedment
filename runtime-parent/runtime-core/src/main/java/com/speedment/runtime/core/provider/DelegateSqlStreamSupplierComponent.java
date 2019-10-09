@@ -35,6 +35,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.STARTED;
+import static com.speedment.common.injector.State.STOPPED;
 
 /**
  * The default implementation of the
@@ -56,6 +57,12 @@ public final class DelegateSqlStreamSupplierComponent implements SqlStreamSuppli
     @ExecuteBefore(STARTED)
     public void startStreamSuppliers(Injector injector, ProjectComponent projectComponent, DbmsHandlerComponent dbmsHandlerComponent, ManagerComponent managerComponent, SqlStreamOptimizerComponent sqlStreamOptimizerComponent, SqlStreamTerminatorComponent sqlStreamTerminatorComponent) {
         inner.startStreamSuppliers(injector, projectComponent, dbmsHandlerComponent, managerComponent, sqlStreamOptimizerComponent, sqlStreamTerminatorComponent);
+    }
+
+    @ExecuteBefore(STOPPED)
+    @Override
+    public void stop() {
+        inner.stop();
     }
 
     @Override
@@ -81,11 +88,6 @@ public final class DelegateSqlStreamSupplierComponent implements SqlStreamSuppli
     @Override
     public void start() {
         inner.start();
-    }
-
-    @Override
-    public void stop() {
-        inner.stop();
     }
 
     @Override

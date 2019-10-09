@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.connector.sqlite.internal;
 
+import com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
-import com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler;
 
 /**
  * The implementation of {@link DbmsOperationHandler} for SQLite databases.

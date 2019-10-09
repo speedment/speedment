@@ -1,5 +1,7 @@
 package com.speedment.runtime.connector.postgres.provider;
 
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.connector.postgres.PostgresDbmsType;
 import com.speedment.runtime.connector.postgres.internal.PostgresDbmsTypeImpl;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -15,7 +17,7 @@ import java.util.Set;
 
 public final class DelegatePostgresDbmsType implements PostgresDbmsType {
 
-    private final DbmsType inner;
+    private final PostgresDbmsTypeImpl inner;
 
     public DelegatePostgresDbmsType(
         final DriverComponent driverComponent,
@@ -27,10 +29,10 @@ public final class DelegatePostgresDbmsType implements PostgresDbmsType {
         inner = new PostgresDbmsTypeImpl(driverComponent, connectionPoolComponent, dbmsHandlerComponent, projectComponent, transactionComponent);
     }
 
-/*    @ExecuteBefore(INITIALIZED)
-    public void install(@WithState(CREATED) DbmsHandlerComponent component) {
-        component.install(this);
-    }*/
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        inner.close();
+    }
 
     @Override
     public String getName() {
