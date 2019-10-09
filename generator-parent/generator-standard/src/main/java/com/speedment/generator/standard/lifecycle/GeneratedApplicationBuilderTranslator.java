@@ -22,14 +22,13 @@ import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
+import com.speedment.runtime.application.AbstractApplicationBuilder;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.core.component.InfoComponent;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
@@ -43,7 +42,6 @@ import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.util.Formatting.nl;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator.METADATA;
-import com.speedment.runtime.application.AbstractApplicationBuilder;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -57,9 +55,6 @@ import static java.util.stream.Collectors.toSet;
 public final class GeneratedApplicationBuilderTranslator extends AbstractJavaClassTranslator<Project, Class> {
 
     private static final String CLASS = "class";
-
-    @Inject public InfoComponent infoComponent;
-    @Inject public Injector injector;
 
     public GeneratedApplicationBuilderTranslator(Project doc) {
         super(doc, Class::of);
@@ -92,7 +87,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                 traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
                     .forEachOrdered(t -> {
-                        final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, t);
+                        final TranslatorSupport<Table> support = new TranslatorSupport<>(injector(), t);
                         final Type managerImplType = support.managerImplType();
                         final Type sqlAdapterType = support.sqlAdapterType();
 
@@ -162,7 +157,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
 
     @Override
     protected Javadoc getJavaDoc() {
-        final String owner = infoComponent.getTitle();
+        final String owner = infoComponent().getTitle();
         return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }

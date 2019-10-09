@@ -31,6 +31,7 @@ import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.config.trait.HasTypeMapperUtil;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -100,6 +101,7 @@ public abstract class SimpleModel {
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
             .withBundle(GeneratorBundle.class)
             .withComponent(SilentTranslatorManager.class)
+            // .withLogging(ApplicationBuilder.LogType.APPLICATION_BUILDER)
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
             .build();

@@ -83,7 +83,7 @@ public interface InjectorProxy {
      * created and initialized instance.
      *
      * @param constructor to use when creating a new instance
-     * @param initargs array of objects to be passed as arguments to
+     * @param args array of objects to be passed as arguments to
      * the constructor call; values of primitive types are wrapped in
      * a wrapper object of the appropriate type (e.g. a {@code float}
      * in a {@link Float Float})
@@ -108,7 +108,7 @@ public interface InjectorProxy {
      * @exception ExceptionInInitializerError if the initialization provoked
      *              by this method fails.
      */
-    <T> T newInstance(Constructor<T> constructor, Object... initargs)
+    <T> T newInstance(Constructor<T> constructor, Object... args)
         throws InstantiationException, IllegalAccessException, InvocationTargetException;
 
     /**

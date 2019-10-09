@@ -90,7 +90,7 @@ public final class InjectorProxyTranslator extends AbstractJavaClassTranslator<P
             .override()
             .public_()
             .add(
-                "field.setAccessible(true);",
+                /*"field.setAccessible(true);",*/ // Not required anymore
                 "field.set(instance, value);"
             );
     }
@@ -100,13 +100,13 @@ public final class InjectorProxyTranslator extends AbstractJavaClassTranslator<P
         return Method.of("newInstance", t)
             .add(Generic.of(t))
             .add(Field.of("constructor", SimpleParameterizedType.create(java.lang.reflect.Constructor.class, t)))
-            .add(Field.of("initargs", java.lang.Object[].class))
+            .add(Field.of("args", java.lang.Object[].class))
             .add(InstantiationException.class)
             .add(IllegalAccessException.class)
             .add(InvocationTargetException.class)
             .override()
             .public_()
-            .add("return constructor.newInstance(initargs);");
+            .add("return constructor.newInstance(args);");
     }
 
 }

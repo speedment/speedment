@@ -18,19 +18,11 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.codegen.Generator;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import com.speedment.common.codegen.controller.AlignTabs;
 import com.speedment.common.codegen.controller.AutoImports;
-import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
@@ -42,19 +34,20 @@ import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.component.InfoComponent;
+
 import java.lang.reflect.Type;
 import java.util.*;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toSet;
-
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toSet;
 
 /**
  *
@@ -73,19 +66,35 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
         = "\n<p>\nThis file is safe to edit. It will not be overwritten by the "
         + "code generator.";
 
+    private final D document;
+    private final Function<String, T> mainModelConstructor;
+    private final List<BiConsumer<File, Builder<T>>> listeners;
+
     @Inject public Generator generator;
     @Inject public InfoComponent infoComponent;
     @Inject public TypeMapperComponent typeMappers;
     @Inject public Injector injector;
-    
-    private final D document;
-    private final Function<String, T> mainModelConstructor;
-    private final List<BiConsumer<File, Builder<T>>> listeners;
 
     protected AbstractJavaClassTranslator(D document, Function<String, T> mainModelConstructor) {
         this.document             = requireNonNull(document);
         this.mainModelConstructor = requireNonNull(mainModelConstructor);
         this.listeners            = new CopyOnWriteArrayList<>();
+    }
+
+    protected Injector injector() {
+        return injector;
+    }
+
+    protected InfoComponent infoComponent() {
+        return infoComponent;
+    }
+
+    protected TypeMapperComponent typeMappers() {
+        return typeMappers;
+    }
+
+    protected Generator generator() {
+        return generator;
     }
 
     @Override

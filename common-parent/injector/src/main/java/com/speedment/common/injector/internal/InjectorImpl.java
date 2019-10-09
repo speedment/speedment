@@ -23,7 +23,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
-import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.internal.util.InjectorUtil;
@@ -32,11 +31,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -306,7 +301,7 @@ public final class InjectorImpl implements Injector {
                         "Could not access field '%s' in class '%s' of " +
                         "type '%s'.",
                         field.getName(),
-                        value.getClass().getName(),
+                        field.getDeclaringClass().getName(),
                         field.getType()
                     );
 
