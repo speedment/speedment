@@ -1,34 +1,21 @@
-package com.speedment.common.injector.provider;
+package com.speedment.common.injector.internal;
 
 import com.speedment.common.injector.InjectorProxy;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.Predicate;
 
-public final class StandardInjectorProxy implements InjectorProxy {
-
-    private final Predicate<? super Class<?>> isApplicable;
-
-    /**
-     * Creates a StandardInjectorProxy that is applicable for the
-     * given {@code isApplicable} Predicate.
-     *
-     * @param isApplicable Predicate to use
-     */
-    public StandardInjectorProxy(Predicate<? super Class<?>> isApplicable) {
-        this.isApplicable = isApplicable;
-    }
+final class StandardInjectorProxy implements InjectorProxy {
 
     @Override
     public boolean isApplicable(Class<?> clazz) {
-        return isApplicable.test(clazz);
+        return true;
     }
 
     @Override
     public void set(Field field, Object instance, Object value) throws IllegalAccessException {
-        field.setAccessible(true);
+        //field.setAccessible(true);
         field.set(instance, value);
     }
 

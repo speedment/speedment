@@ -32,13 +32,13 @@ final class Issue758 {
 
     @BeforeEach
     void beforeEach() {
-        defaultLevel = InjectorBuilderImpl.LOGGER_INSTANCE.getLevel();
-        InjectorBuilderImpl.LOGGER_INSTANCE.setLevel(Level.DEBUG);
+        defaultLevel = InjectorBuilderImpl.LOGGER.getLevel();
+        InjectorBuilderImpl.LOGGER.setLevel(Level.DEBUG);
     }
 
     @AfterEach
     void afterEach() {
-        InjectorBuilderImpl.LOGGER_INSTANCE.setLevel(defaultLevel);
+        InjectorBuilderImpl.LOGGER.setLevel(defaultLevel);
     }
 
     @Test

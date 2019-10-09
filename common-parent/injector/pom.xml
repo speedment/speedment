@@ -53,8 +53,7 @@
                             com.speedment.common.injector.annotation,
                             com.speedment.common.injector.dependency,
                             com.speedment.common.injector.execution,
-                            com.speedment.common.injector.exception,
-                            com.speedment.common.injector.provider
+                            com.speedment.common.injector.exception
                         </Export-Package>
                     </instructions>
                 </configuration>

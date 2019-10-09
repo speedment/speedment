@@ -29,7 +29,6 @@ import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.internal.execution.ReflectionExecutionImpl;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
-import com.speedment.common.injector.provider.StandardInjectorProxy;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -46,7 +45,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
@@ -69,7 +67,7 @@ import static java.util.stream.Collectors.*;
  */
 public final class InjectorBuilderImpl implements InjectorBuilder {
 
-    public static final Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorBuilderImpl.class);
+    public static final Logger LOGGER = LoggerManager.getLogger(InjectorBuilderImpl.class);
     private static final Object UNINSTANTIATED = new Object(); // Used as a marker of an Object that is not yet created
 
     private final ClassLoader classLoader;
@@ -103,7 +101,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         this.proxyCache         = new HashMap<>();
         this.configFileLocation = Paths.get("settings.properties");
 
-        withInjectorProxy(new StandardInjectorProxy(c -> true)); // Use this as default proxy
+        withInjectorProxy(new StandardInjectorProxy()); // Use this as default proxy
         injectables.forEach(this::withComponent);
     }
 
@@ -177,7 +175,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
         // Load settings
         final File configFile = configFileLocation.toFile();
-        final Properties properties = loadProperties(LOGGER_INSTANCE, configFile);
+        final Properties properties = loadProperties(LOGGER, configFile);
         overriddenParams.forEach(properties::setProperty);
 
         final Set<Class<?>> allInjectableTypes = unmodifiableSet(
@@ -206,9 +204,9 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 LinkedHashMap::new
             ));
 
-        LOGGER_INSTANCE.debug(String.format("Creating %d injectable instances.", injectablesSet.size()));
+        LOGGER.debug(String.format("Creating %d injectable instances.", injectablesSet.size()));
 
-        LOGGER_INSTANCE.debug(horizontalLine());
+        LOGGER.debug(horizontalLine());
 
         // Create an instance of every injectable type
 
@@ -228,7 +226,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     created = true;
                 } else {
                     final Class<?> clazz = injectable.get();
-                    final Optional<?> instance = tryToCreate(clazz, properties, instancesSoFarInCorrectOrder(instanceMap), allInjectableTypes, proxyFor(clazz));
+                    final Optional<?> instance = tryToCreate(clazz, properties, instancesSoFarInReversedOrder(instanceMap), allInjectableTypes, proxyFor(clazz));
                     if (instance.isPresent()) {
                         instanceMap.put(injectable.get(), instance.get());
                         //instances.addFirst(instance.get());
@@ -240,8 +238,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     // If we are currently debugging, print out every created
                     // instance and which configuration options are available for
                     // it.
-                    if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                        LOGGER_INSTANCE.debug("| %-71s CREATED |",
+                    if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                        LOGGER.debug("| %-71s CREATED |",
                             limit(injectable.get().getSimpleName(), 71)
                         );
 
@@ -256,9 +254,9 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                     : a.value(), 26
                                 )
                             ))
-                            .forEachOrdered(LOGGER_INSTANCE::debug);
+                            .forEachOrdered(LOGGER::debug);
 
-                        LOGGER_INSTANCE.debug(horizontalLine());
+                        LOGGER.debug(horizontalLine());
                     }
                     it.remove();
                 } else {
@@ -266,11 +264,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     // If we are currently debugging, print out every created
                     // instance and which configuration options are available for
                     // it.
-                    if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                        LOGGER_INSTANCE.debug("| %-71s PENDING |",
+                    if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                        LOGGER.debug("| %-71s PENDING |",
                             limit(injectable.get().getSimpleName(), 71)
                         );
-                        LOGGER_INSTANCE.debug(horizontalLine());
+                        LOGGER.debug(horizontalLine());
                     }
                 }
             }
@@ -280,7 +278,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 final StringBuilder msg = new StringBuilder();
                 msg.append(injectablesLeft.size());
                 msg.append(" injectables could not be instantiated. These where: [\n");
-                final List<Object> instancesSoFarInCorrectOrder = instancesSoFarInCorrectOrder(instanceMap);
+                final List<Object> instancesSoFarInCorrectOrder = instancesSoFarInReversedOrder(instanceMap);
                 injectablesLeft.stream()
                     .map(Injectable::get)
                     .map(c -> ReflectionUtil.errorMsg(c, instancesSoFarInCorrectOrder))
@@ -292,9 +290,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             injectablesLeftSize = injectablesLeft.size();
         }
 
-        final LinkedList<Object> instances = new LinkedList<>();
-        instancesSoFarInCorrectOrder(instanceMap)
-            .forEach(instances::addFirst); // Add elements in reversed order.
+        final LinkedList<Object> instances = instancesSoFarInReversedOrder(instanceMap);
 
         instanceMap.clear(); // We are done with the map...
 
@@ -420,11 +416,12 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 }
 
                 try {
+                    LOGGER.warn("Setting fields is deprecated: " + field);
                     set(field, instance, value);
                 } catch (final IllegalAccessException ex) {
                     throw new InjectorException(
                         "Could not access field '" + field.getName()
-                            + "' in class '" + value.getClass().getName()
+                            + "' in class '" + field.getDeclaringClass().getName()
                             + "' of type '" + field.getType()
                             + "'.", ex
                     );
@@ -464,7 +461,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     // Check if all its dependencies have been satisfied.
                     if (n.canBe(state)) {
 
-                        LOGGER_INSTANCE.debug(horizontalLine());
+                        LOGGER.debug(horizontalLine());
 
                         // Retrieve the instance for that node
                         final Object instance = findIn(
@@ -487,10 +484,10 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                 
                                 // We might want to log exactly which steps we
                                 // have completed.
-                                if (LOGGER_INSTANCE.getLevel()
+                                if (LOGGER.getLevel()
                                     .isEqualOrLowerThan(Level.DEBUG)) {
                                     
-                                    LOGGER_INSTANCE.debug(
+                                    LOGGER.debug(
                                         "| -> %-76s |", 
                                         limit(exec.toString(), 76)
                                     );
@@ -506,8 +503,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                                     exec.getName(), exec.getState()));
                                             }
                                             case SKIP_INVOCATION:
-                                                if (LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                                    LOGGER_INSTANCE.debug(
+                                                if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                                                    LOGGER.debug(
                                                         "|      %-74s |",
                                                         limit("(Not invoked due to missing optional dependencies.)", 74)
                                                     );
@@ -519,16 +516,16 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                              | IllegalArgumentException 
                                              | InvocationTargetException ex) {
 
-                                    LOGGER_INSTANCE.error("Exception thrown by method invoked by Injector:");
+                                    LOGGER.error("Exception thrown by method invoked by Injector:");
                                     if (ex.getCause() != null) {
-                                        LOGGER_INSTANCE.error("Exception: " + ex.getCause().getClass().getSimpleName());
+                                        LOGGER.error("Exception: " + ex.getCause().getClass().getSimpleName());
                                     }
-                                    LOGGER_INSTANCE.error("Class: " + exec.getType().getName());
-                                    LOGGER_INSTANCE.error("    @ExecuteBefore(" + exec.getState().name() + ")");
+                                    LOGGER.error("Class: " + exec.getType().getName());
+                                    LOGGER.error("    @ExecuteBefore(" + exec.getState().name() + ")");
 
                                     if (exec instanceof ReflectionExecutionImpl) {
                                         final Method method = ((ReflectionExecutionImpl<?>) exec).getMethod();
-                                        LOGGER_INSTANCE.error(format("    %s %s%s",
+                                        LOGGER.error(format("    %s %s%s",
                                             method.getReturnType().getSimpleName(),
                                             method.getName(),
                                             method.getParameterCount() == 0 ? "()" : "("));
@@ -559,8 +556,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                                         );
                                                     }
                                                 })
-                                                .forEachOrdered(LOGGER_INSTANCE::error);
-                                            LOGGER_INSTANCE.error("    );");
+                                                .forEachOrdered(LOGGER::error);
+                                            LOGGER.error("    );");
                                         }
                                     }
 
@@ -572,7 +569,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                         n.setState(state);
                         hasAnythingChanged.set(true);
 
-                        LOGGER_INSTANCE.debug(
+                        LOGGER.debug(
                             "| %-66s %12s |",
                             limit(n.getRepresentedType().getSimpleName(), 66),
                             limit(state.name(), 12)
@@ -595,20 +592,20 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             nextState.incrementAndGet();
         }
 
-        LOGGER_INSTANCE.debug(horizontalLine());
-        LOGGER_INSTANCE.debug(
+        LOGGER.debug(horizontalLine());
+        LOGGER.debug(
             "| %-79s |",
             "All " + instances.size() + " components have been configured!"
         );
-        LOGGER_INSTANCE.debug(horizontalLine());
+        LOGGER.debug(horizontalLine());
 
         return injector;
     }
 
-    private LinkedList<Object> instancesSoFarInCorrectOrder(Map<Class<?>, Object> instanceMap) {
+    private LinkedList<Object> instancesSoFarInReversedOrder(Map<Class<?>, Object> instanceMap) {
         return instanceMap.values().stream()
             .filter(o -> o != UNINSTANTIATED)
-            .collect(Collectors.toCollection(LinkedList::new));
+            .collect(LinkedList::new, LinkedList::addFirst, LinkedList::addFirst);
     }
 
     private void appendInjectable(String key, Injectable<?> clazz, boolean overwrite) {
