@@ -17,8 +17,8 @@
 package com.speedment.runtime.connector.postgres;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.connector.postgres.provider.DelegatePostgresComponent;
 import com.speedment.runtime.connector.postgres.provider.DelegatePostgresDbmsType;
+import com.speedment.runtime.connector.postgres.provider.StandardPostgresComponent;
 
 import java.util.stream.Stream;
 
@@ -32,7 +32,7 @@ public class PostgresBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return Stream.of(
-            DelegatePostgresComponent.class,
+            StandardPostgresComponent.class,
             DelegatePostgresDbmsType.class
         );
     }

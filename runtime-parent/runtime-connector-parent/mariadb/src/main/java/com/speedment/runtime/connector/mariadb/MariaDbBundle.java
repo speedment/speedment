@@ -17,13 +17,8 @@
 package com.speedment.runtime.connector.mariadb;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.connector.mariadb.internal.MariaDbDbmsTypeImpl;
-import com.speedment.runtime.connector.mariadb.provider.DelegateMariaDbComponent;
 import com.speedment.runtime.connector.mariadb.provider.DelegateMariaDbDbmsType;
-import com.speedment.runtime.connector.mysql.internal.MySqlComponentImpl;
-import com.speedment.runtime.connector.mysql.internal.MySqlDbmsMetadataHandler;
-import com.speedment.runtime.connector.mysql.internal.MySqlDbmsOperationHandler;
-import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateView;
+import com.speedment.runtime.connector.mariadb.provider.StandardMariaDbComponent;
 
 import java.util.stream.Stream;
 
@@ -37,7 +32,7 @@ public class MariaDbBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return Stream.of(
-            DelegateMariaDbComponent.class,
+            StandardMariaDbComponent.class,
             DelegateMariaDbDbmsType.class
         );
     }

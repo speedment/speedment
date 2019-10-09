@@ -17,10 +17,7 @@
 package com.speedment.runtime.connector.sqlite;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.connector.sqlite.provider.DelegateSqliteComponent;
-import com.speedment.runtime.connector.sqlite.provider.DelegateSqliteDbmsType;
-import com.speedment.runtime.connector.sqlite.provider.DelegateSqliteMetadataHandler;
-import com.speedment.runtime.connector.sqlite.provider.DelegateSqliteOperationalHandler;
+import com.speedment.runtime.connector.sqlite.provider.*;
 
 import java.util.stream.Stream;
 
@@ -35,7 +32,7 @@ public class SqliteBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return Stream.of(
-            DelegateSqliteComponent.class,
+            StandardSqliteComponent.class,
             DelegateSqliteDbmsType.class,
             DelegateSqliteMetadataHandler.class,
             DelegateSqliteOperationalHandler.class

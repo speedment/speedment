@@ -14,12 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.connector.mysql.internal;
+package com.speedment.runtime.connector.postgres.provider;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.connector.mysql.MySqlComponent;
-import com.speedment.runtime.connector.mysql.MySqlDbmsType;
+import com.speedment.runtime.connector.postgres.PostgresComponent;
+import com.speedment.runtime.connector.postgres.PostgresDbmsType;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 
 import static com.speedment.common.injector.State.INITIALIZED;
@@ -30,14 +30,16 @@ import static com.speedment.common.injector.State.INITIALIZED;
  * @author Emil Forslund
  * @since 1.0.0
  */
-public final class MySqlComponentImpl implements MySqlComponent {
+public final class StandardPostgresComponent implements PostgresComponent {
+
+    public StandardPostgresComponent() {}
 
     @ExecuteBefore(INITIALIZED)
     public void onInitialize(
         final @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent,
-        final @WithState(INITIALIZED) MySqlDbmsType mySqlDbmsType
+        final @WithState(INITIALIZED) PostgresDbmsType postgresDbmsType
     ) {
-        dbmsHandlerComponent.install(mySqlDbmsType);
+        dbmsHandlerComponent.install(postgresDbmsType);
     }
 
 }

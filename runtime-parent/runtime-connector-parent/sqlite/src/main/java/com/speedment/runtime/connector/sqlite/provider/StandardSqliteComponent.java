@@ -14,29 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.connector.mariadb.internal;
+package com.speedment.runtime.connector.sqlite.provider;
 
-import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.connector.mariadb.MariaDbComponent;
-import com.speedment.runtime.connector.mariadb.MariaDbDbmsType;
+import com.speedment.runtime.connector.sqlite.SqliteComponent;
+import com.speedment.runtime.connector.sqlite.SqliteDbmsType;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 
+import static com.speedment.common.injector.State.INITIALIZED;
+
 /**
- *
- * @author Per Minborg
  * @author Emil Forslund
- * @since 1.0.0
+ * @since  3.1.10
  */
-public final class MariaDbComponentImpl implements MariaDbComponent {
+public final class StandardSqliteComponent implements SqliteComponent {
 
     @ExecuteBefore(INITIALIZED)
     public void onInitialize(
         final @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent,
-        final @WithState(INITIALIZED) MariaDbDbmsType mariaDbDbmsType
+        final @WithState(INITIALIZED) SqliteDbmsType sqliteDbmsType
     ) {
-        dbmsHandlerComponent.install(mariaDbDbmsType);
+        dbmsHandlerComponent.install(sqliteDbmsType);
     }
 
 }
