@@ -35,7 +35,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
@@ -78,18 +77,23 @@ implements ConnectionPoolComponent {
 
     private final Map<String, SerializedConnectionManager> connectionManagers;
 
+    private final DbmsHandlerComponent dbmsHandlerComponent;
+    private final PasswordComponent passwordComponent;
     /**
      * Configuration parameter that controls if a request for a new connection
      * should be queued until one becomes available or if it should cause an
      * exception to be thrown if no connection is available.
      */
-    @Config(name="connectionpool.blocking", value="false")
-    private boolean blocking;
+    private final boolean blocking;
 
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject PasswordComponent passwordComponent;
-
-    public SingletonConnectionPoolComponent() {
+    public SingletonConnectionPoolComponent(
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final PasswordComponent passwordComponent,
+        @Config(name="connectionpool.blocking", value="false") final boolean blocking
+    ) {
+        this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
+        this.passwordComponent = requireNonNull(passwordComponent);
+        this.blocking = blocking;
         connectionManagers = new ConcurrentHashMap<>();
     }
 
