@@ -20,4 +20,9 @@ module com.speedment.common.codegen {
     exports com.speedment.common.codegen.controller;
     exports com.speedment.common.codegen.model;
     exports com.speedment.common.codegen.util;
+
+    exports com.speedment.common.codegen.internal to com.speedment.common.codegenxml;
+    exports com.speedment.common.codegen.internal.java to com.speedment.common.codegenxml;
+    exports com.speedment.common.codegen.internal.model to com.speedment.common.codegenxml;
+    exports com.speedment.common.codegen.internal.util to com.speedment.common.codegenxml;
 }
