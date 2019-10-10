@@ -378,6 +378,16 @@
                     </execution>
 
                     <execution>
+                        <id>default-testCompile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <release>9</release>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>module-testCompile</id>
                         <phase>compile</phase>
                         <goals>
