@@ -14,9 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.common.codegen {
-    opens com.speedment.common.codegen;
-    opens com.speedment.common.codegen.internal.util;
-    opens com.speedment.common.codegen.internal.java.view;
-    opens com.speedment.common.codegen.internal.java.view.trait;
+open module com.speedment.common.function {
+    exports com.speedment.common.function;
+    exports com.speedment.common.function.collector;
 }

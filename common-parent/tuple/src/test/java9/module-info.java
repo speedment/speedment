@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.common.function {
-    opens com.speedment.common.function;
-
-    requires com.speedment.common.archtest;
+open module com.speedment.common.tuple {
+    exports com.speedment.common.tuple;
+    exports com.speedment.common.tuple.getter;
+    exports com.speedment.common.tuple.mutable;
+    exports com.speedment.common.tuple.nullable;
 }

@@ -14,7 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.common.archtest {
-    opens com.speedment.common.archtest;
-    opens com.speedment.common.archtest.internal;
+open module com.speedment.common.singletonstream {
+    exports com.speedment.common.singletonstream;
 }

@@ -14,6 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.common.invariant {
-    opens com.speedment.common.invariant;
+open module com.speedment.common.combinatorics {
+    exports com.speedment.common.combinatorics;
 }
