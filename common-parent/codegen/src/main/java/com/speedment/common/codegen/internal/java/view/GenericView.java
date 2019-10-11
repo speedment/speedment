@@ -22,7 +22,7 @@ import com.speedment.common.codegen.model.Generic;
 
 import java.util.Optional;
 
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**
