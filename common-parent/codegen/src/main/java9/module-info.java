@@ -22,6 +22,6 @@ module com.speedment.common.codegen {
     exports com.speedment.common.codegen.model.modifier;
     exports com.speedment.common.codegen.model.trait;
     exports com.speedment.common.codegen.model.value;
-    exports com.speedment.common.codegen.provider
+    exports com.speedment.common.codegen.provider;
     exports com.speedment.common.codegen.util;
 }
