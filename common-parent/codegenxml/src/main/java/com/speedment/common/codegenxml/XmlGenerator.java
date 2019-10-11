@@ -16,21 +16,21 @@
  */
 package com.speedment.common.codegenxml;
 
-import com.speedment.common.codegen.internal.DefaultGenerator;
-import com.speedment.common.codegen.internal.DefaultTransformFactory;
+import com.speedment.common.codegen.provider.DelegateDefaultGenerator;
+import com.speedment.common.codegen.provider.DelegateDefaultTransformFactory;
 import com.speedment.common.codegenxml.internal.view.*;
 
 /**
  *
  * @author Per Minborg
  */
-public final class XmlGenerator extends DefaultGenerator {
+public final class XmlGenerator extends DelegateDefaultGenerator {
 
     public XmlGenerator() {
         super(new XmlTransformFactory());
     }
 
-    private static class XmlTransformFactory extends DefaultTransformFactory {
+    private static class XmlTransformFactory extends DelegateDefaultTransformFactory {
 
         private XmlTransformFactory() {
             super(XmlTransformFactory.class.getSimpleName());
