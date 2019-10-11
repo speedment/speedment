@@ -383,7 +383,7 @@
                             <goal>compile</goal>
                         </goals>
                         <configuration>
-                            <release>9</release>
+                            <release>11</release>
                         </configuration>
                     </execution>
 
@@ -570,6 +570,29 @@
                     </execution>
                 </executions>
             </plugin>
+
+<!--            <plugin>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.0.0-M2</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <banDuplicatePomDependencyVersions/>
+                                <requireJavaVersion>
+                                    <version>[11,)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+
+
         </plugins>
     </build>
 
