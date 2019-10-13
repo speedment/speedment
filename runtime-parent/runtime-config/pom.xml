@@ -58,6 +58,7 @@
                             com.speedment.runtime.config.mutator,
                             com.speedment.runtime.config.mutator.trait,
                             com.speedment.runtime.config.parameter,
+                            com.speedment.runtime.config.provider,
                             com.speedment.runtime.config.trait,
                             com.speedment.runtime.config.util
                         </Export-Package>
