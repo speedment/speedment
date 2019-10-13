@@ -53,7 +53,7 @@
                             The runtime environment of Speedment.
                         </Bundle-Description>
                         <Export-Package>
-                            com.speedment.runtime.core
+                            com.speedment.runtime.core,
                             com.speedment.runtime.core.abstracts,
                             com.speedment.runtime.core.component,
                             com.speedment.runtime.core.component.connectionpool,
