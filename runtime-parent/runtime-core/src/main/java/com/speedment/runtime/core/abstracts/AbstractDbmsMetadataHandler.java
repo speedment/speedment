@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.abstracts;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
@@ -53,7 +52,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler.SHOW_METADATA;
-import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static com.speedment.runtime.core.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;

@@ -31,7 +31,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static com.speedment.runtime.core.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
