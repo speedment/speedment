@@ -29,5 +29,7 @@ module com.speedment.runtime.typemapper {
     exports com.speedment.runtime.typemapper.string;
     exports com.speedment.runtime.typemapper.time;
 
+    requires java.sql;
+    requires java.sql.rowset;
     requires com.speedment.runtime.config;
 }
