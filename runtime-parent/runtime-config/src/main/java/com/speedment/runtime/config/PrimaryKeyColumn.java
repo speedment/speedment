@@ -31,6 +31,8 @@ import com.speedment.runtime.config.trait.HasOrdinalPosition;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import java.util.Map;
+
 /**
  * A typed {@link Document} that represents the primary key column instance in
  * the database. A {@code PrimaryKeyColumn} is located inside a {@link Table}.
@@ -65,5 +67,19 @@ public interface PrimaryKeyColumn extends
     @Override
     default PrimaryKeyColumn deepCopy() {
         return DocumentUtil.deepCopy(this, PrimaryKeyColumnImpl::new);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link PrimaryKeyColumn}
+     * with the given {@code parent} and {@code data}
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return new {@link PrimaryKeyColumn} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static PrimaryKeyColumn create(Table parent, Map<String, Object> data) {
+        return new PrimaryKeyColumnImpl(parent, data);
     }
 }
