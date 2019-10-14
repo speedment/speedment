@@ -28,7 +28,6 @@ import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;
@@ -242,7 +241,7 @@ public final class ConfigFileHelper {
                 = new ConcurrentSkipListMap<>(dbms.getData());
 
             dbmsData.remove(DbmsUtil.SCHEMAS);
-            final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
+            final Dbms dbmsCopy = Dbms.create(dbms.getParentOrThrow(), dbmsData);
 
             // Find the DbmsHandler to use when loading the metadata
             final DbmsMetadataHandler dh = dbmsHandlerComponent.findByName(dbmsCopy.getTypeName())
