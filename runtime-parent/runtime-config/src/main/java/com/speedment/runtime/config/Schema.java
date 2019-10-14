@@ -31,6 +31,7 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -93,6 +94,20 @@ public interface Schema extends
     @Override
     default Schema deepCopy() {
         return DocumentUtil.deepCopy(this, SchemaImpl::new);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link Schema}
+     * with the given {@code parent} and {@code data}
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return new {@link Schema} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static Schema create(Dbms parent, Map<String, Object> data) {
+        return new SchemaImpl(parent, data);
     }
 
 }
