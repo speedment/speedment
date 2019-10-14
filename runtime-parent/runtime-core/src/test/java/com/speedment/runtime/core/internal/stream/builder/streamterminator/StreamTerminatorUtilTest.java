@@ -22,11 +22,7 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.IntField;
-import com.speedment.runtime.field.internal.predicate.ints.IntBetweenPredicate;
-import com.speedment.runtime.field.internal.predicate.ints.IntEqualPredicate;
-import com.speedment.runtime.field.internal.predicate.ints.IntGreaterThanPredicate;
-import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.test_support.MockDbmsType;
 import com.speedment.runtime.typemapper.TypeMapper;
 import org.junit.jupiter.api.Test;
@@ -51,25 +47,25 @@ final class StreamTerminatorUtilTest {
     private static final DbmsType DBMS_TYPE = new MockDbmsType();
     private static final Function<Field<Person>, String> COLUMN_NAMER = f -> f.identifier().getColumnId();
     private static final Function<Field<Person>, Class<?>> COLUMN_TYPE_FUNCTION = f -> Integer.class;
-    private static final FieldPredicate<Person> ID_GT_0 = new IntGreaterThanPredicate<>(Person.ID, 0);
-    private static final FieldPredicate<Person> ID_GT_1 = new IntGreaterThanPredicate<>(Person.ID, 1);
-    private static final FieldPredicate<Person> ID_LE_0 = ID_GT_0.negate();
-    private static final FieldPredicate<Person> ID_LE_1 = ID_GT_1.negate();
-    private static final FieldPredicate<Person> ID_EQ_0 = new IntEqualPredicate<>(Person.ID, 0);
-    private static final FieldPredicate<Person> ID_EQ_1 = new IntEqualPredicate<>(Person.ID, 1);
+    private static final SpeedmentPredicate<Person> ID_GT_0 = Person.ID.greaterThan(0); //new IntGreaterThanPredicate<>(Person.ID, 0);
+    private static final SpeedmentPredicate<Person> ID_GT_1 = Person.ID.greaterThan(1); //new IntGreaterThanPredicate<>(Person.ID, 1);
+    private static final SpeedmentPredicate<Person> ID_LE_0 = ID_GT_0.negate();
+    private static final SpeedmentPredicate<Person> ID_LE_1 = ID_GT_1.negate();
+    private static final SpeedmentPredicate<Person> ID_EQ_0 = Person.ID.equal(0); //new IntEqualPredicate<>(Person.ID, 0);
+    private static final SpeedmentPredicate<Person> ID_EQ_1 = Person.ID.equal(1); //new IntEqualPredicate<>(Person.ID, 1);
 
-    private static final FieldPredicate<Person> AGE_GT_2 = new IntGreaterThanPredicate<>(Person.AGE, 2);
-    private static final FieldPredicate<Person> AGE_GT_3 = new IntGreaterThanPredicate<>(Person.AGE, 3);
-    private static final FieldPredicate<Person> AGE_LE_2 = AGE_GT_2.negate();
-    private static final FieldPredicate<Person> AGE_LE_3 = AGE_GT_3.negate();
-    private static final FieldPredicate<Person> AGE_EQ_2 = new IntEqualPredicate<>(Person.AGE, 2);
-    private static final FieldPredicate<Person> AGE_EQ_3 = new IntEqualPredicate<>(Person.AGE, 3);
+    private static final SpeedmentPredicate<Person> AGE_GT_2 = Person.AGE.greaterThan(2); //new IntGreaterThanPredicate<>(Person.AGE, 2);
+    private static final SpeedmentPredicate<Person> AGE_GT_3 = Person.AGE.greaterThan(3); //new IntGreaterThanPredicate<>(Person.AGE, 3);
+    private static final SpeedmentPredicate<Person> AGE_LE_2 = AGE_GT_2.negate();
+    private static final SpeedmentPredicate<Person> AGE_LE_3 = AGE_GT_3.negate();
+    private static final SpeedmentPredicate<Person> AGE_EQ_2 = Person.AGE.equal(2); //new IntEqualPredicate<>(Person.AGE, 2);
+    private static final SpeedmentPredicate<Person> AGE_EQ_3 = Person.AGE.equal(3); //new IntEqualPredicate<>(Person.AGE, 3);
 
-    private static final FieldPredicate<Person> ID_BETWEEN_4_8 = new IntBetweenPredicate<>(Person.AGE, 4, 8, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-    private static final FieldPredicate<Person> AGE_BETWEEN_10_12 = new IntBetweenPredicate<>(Person.AGE, 10, 12, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+    private static final SpeedmentPredicate<Person> ID_BETWEEN_4_8 = Person.AGE.between(4, 8); //new IntBetweenPredicate<>(Person.AGE, 4, 8, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+    private static final SpeedmentPredicate<Person> AGE_BETWEEN_10_12 = Person.AGE.between(10, 12); //new IntBetweenPredicate<>(Person.AGE, 10, 12, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
 
-    private static final Predicate<Person> ID_GT_0_AND_AGE_EQ_2 = ID_GT_0.and(AGE_EQ_2);
-    private static final Predicate<Person> ID_GT_0_OR_AGE_EQ_2 = ID_GT_0.or(AGE_EQ_2);
+    private static final SpeedmentPredicate<Person> ID_GT_0_AND_AGE_EQ_2 = ID_GT_0.and(AGE_EQ_2);
+    private static final SpeedmentPredicate<Person> ID_GT_0_OR_AGE_EQ_2 = ID_GT_0.or(AGE_EQ_2);
     private static final Predicate<Person> COMPLEX = ID_GT_0.and(AGE_EQ_2).or(ID_GT_1.and(AGE_EQ_3));
 
     @Test
