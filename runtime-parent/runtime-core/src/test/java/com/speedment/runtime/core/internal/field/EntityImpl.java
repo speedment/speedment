@@ -20,12 +20,12 @@ package com.speedment.runtime.core.internal.field;
  *
  * @author pemi
  */
-public class EntityImpl implements Entity {
+class EntityImpl implements Entity {
 
     private Integer id;
     private String name;
 
-    public EntityImpl(Integer id, String name) {
+    EntityImpl(Integer id, String name) {
         this.id = id;
         this.name = name;
     }

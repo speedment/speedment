@@ -179,10 +179,10 @@ public abstract class AbstractDocumentTest {
             ))
         );
 
-        project = new ProjectImpl(data);
+        project = Project.create(data);
 
-        dbmsA = project.children(ProjectUtil.DBMSES, DbmsImpl::new).findFirst().get();
-        dbmsB = project.children(ProjectUtil.DBMSES, DbmsImpl::new).skip(1).findFirst().get();
+        dbmsA = project.children(ProjectUtil.DBMSES, Dbms::create).findFirst().get();
+        dbmsB = project.children(ProjectUtil.DBMSES, Dbms::create).skip(1).findFirst().get();
         schemaA = dbmsA.children(DbmsUtil.SCHEMAS, SchemaImpl::new).findFirst().get();
         schemaB = dbmsB.children(DbmsUtil.SCHEMAS, SchemaImpl::new).findFirst().get();
         tableA = schemaA.children(SchemaUtil.TABLES, TableImpl::new).findFirst().get();
