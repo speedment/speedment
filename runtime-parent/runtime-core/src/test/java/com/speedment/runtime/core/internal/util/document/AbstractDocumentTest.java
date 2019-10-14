@@ -18,7 +18,6 @@ package com.speedment.runtime.core.internal.util.document;
 
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.internal.*;
 import com.speedment.runtime.config.trait.HasAliasUtil;
 import com.speedment.runtime.config.trait.HasEnableUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
@@ -183,32 +182,32 @@ public abstract class AbstractDocumentTest {
 
         dbmsA = project.children(ProjectUtil.DBMSES, Dbms::create).findFirst().get();
         dbmsB = project.children(ProjectUtil.DBMSES, Dbms::create).skip(1).findFirst().get();
-        schemaA = dbmsA.children(DbmsUtil.SCHEMAS, SchemaImpl::new).findFirst().get();
-        schemaB = dbmsB.children(DbmsUtil.SCHEMAS, SchemaImpl::new).findFirst().get();
-        tableA = schemaA.children(SchemaUtil.TABLES, TableImpl::new).findFirst().get();
-        tableB = schemaB.children(SchemaUtil.TABLES, TableImpl::new).findFirst().get();
-        tableC = schemaA.children(SchemaUtil.TABLES, TableImpl::new).skip(1).findFirst().get();
-        tableD = schemaB.children(SchemaUtil.TABLES, TableImpl::new).skip(1).findFirst().get();
-        columnA1 = tableA.children(TableUtil.COLUMNS, ColumnImpl::new).findFirst().get();
-        columnA2 = tableA.children(TableUtil.COLUMNS, ColumnImpl::new).skip(1).findFirst().get();
-        columnB1 = tableB.children(TableUtil.COLUMNS, ColumnImpl::new).findFirst().get();
-        columnB2 = tableB.children(TableUtil.COLUMNS, ColumnImpl::new).skip(1).findFirst().get();
-        columnC1 = tableC.children(TableUtil.COLUMNS, ColumnImpl::new).findFirst().get();
-        columnC2 = tableC.children(TableUtil.COLUMNS, ColumnImpl::new).skip(1).findFirst().get();
-        columnD1 = tableD.children(TableUtil.COLUMNS, ColumnImpl::new).findFirst().get();
-        columnD2 = tableD.children(TableUtil.COLUMNS, ColumnImpl::new).skip(1).findFirst().get();
-        primaryKeyColumnA1 = tableA.children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new).findFirst().get();
-        primaryKeyColumnB1 = tableB.children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new).findFirst().get();
-        primaryKeyColumnC1 = tableC.children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new).findFirst().get();
-        primaryKeyColumnD1 = tableD.children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumnImpl::new).findFirst().get();
-        indexA2 = tableA.children(TableUtil.INDEXES, IndexImpl::new).findFirst().get();
-        indexB2 = tableB.children(TableUtil.INDEXES, IndexImpl::new).findFirst().get();
-        indexColumnA2 = indexA2.children(IndexUtil.INDEX_COLUMNS, IndexColumnImpl::new).findFirst().get();
-        indexColumnB2 = indexB2.children(IndexUtil.INDEX_COLUMNS, IndexColumnImpl::new).findFirst().get();
-        foreignKeyA2_C1 = tableA.children(TableUtil.FOREIGN_KEYS, ForeignKeyImpl::new).findFirst().get();
-        foreignKeyB2_D1 = tableB.children(TableUtil.FOREIGN_KEYS, ForeignKeyImpl::new).findFirst().get();
-        foreignKeyColumnA2_C1 = foreignKeyA2_C1.children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ForeignKeyColumnImpl::new).findFirst().get();
-        foreignKeyColumnB2_D1 = foreignKeyB2_D1.children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ForeignKeyColumnImpl::new).findFirst().get();
+        schemaA = dbmsA.children(DbmsUtil.SCHEMAS, Schema::create).findFirst().get();
+        schemaB = dbmsB.children(DbmsUtil.SCHEMAS, Schema::create).findFirst().get();
+        tableA = schemaA.children(SchemaUtil.TABLES, Table::create).findFirst().get();
+        tableB = schemaB.children(SchemaUtil.TABLES, Table::create).findFirst().get();
+        tableC = schemaA.children(SchemaUtil.TABLES, Table::create).skip(1).findFirst().get();
+        tableD = schemaB.children(SchemaUtil.TABLES, Table::create).skip(1).findFirst().get();
+        columnA1 = tableA.children(TableUtil.COLUMNS, Column::create).findFirst().get();
+        columnA2 = tableA.children(TableUtil.COLUMNS, Column::create).skip(1).findFirst().get();
+        columnB1 = tableB.children(TableUtil.COLUMNS, Column::create).findFirst().get();
+        columnB2 = tableB.children(TableUtil.COLUMNS, Column::create).skip(1).findFirst().get();
+        columnC1 = tableC.children(TableUtil.COLUMNS, Column::create).findFirst().get();
+        columnC2 = tableC.children(TableUtil.COLUMNS, Column::create).skip(1).findFirst().get();
+        columnD1 = tableD.children(TableUtil.COLUMNS, Column::create).findFirst().get();
+        columnD2 = tableD.children(TableUtil.COLUMNS, Column::create).skip(1).findFirst().get();
+        primaryKeyColumnA1 = tableA.children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumn::create).findFirst().get();
+        primaryKeyColumnB1 = tableB.children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumn::create).findFirst().get();
+        primaryKeyColumnC1 = tableC.children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumn::create).findFirst().get();
+        primaryKeyColumnD1 = tableD.children(TableUtil.PRIMARY_KEY_COLUMNS, PrimaryKeyColumn::create).findFirst().get();
+        indexA2 = tableA.children(TableUtil.INDEXES, Index::create).findFirst().get();
+        indexB2 = tableB.children(TableUtil.INDEXES, Index::create).findFirst().get();
+        indexColumnA2 = indexA2.children(IndexUtil.INDEX_COLUMNS, IndexColumn::create).findFirst().get();
+        indexColumnB2 = indexB2.children(IndexUtil.INDEX_COLUMNS, IndexColumn::create).findFirst().get();
+        foreignKeyA2_C1 = tableA.children(TableUtil.FOREIGN_KEYS, ForeignKey::create).findFirst().get();
+        foreignKeyB2_D1 = tableB.children(TableUtil.FOREIGN_KEYS, ForeignKey::create).findFirst().get();
+        foreignKeyColumnA2_C1 = foreignKeyA2_C1.children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ForeignKeyColumn::create).findFirst().get();
+        foreignKeyColumnB2_D1 = foreignKeyB2_D1.children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ForeignKeyColumn::create).findFirst().get();
     }
 
     public Stream<Document> stream() {
