@@ -14,12 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field;
+package com.speedment.runtime.field;
 
 import org.junit.jupiter.api.Test;
 
-import static com.speedment.runtime.core.internal.field.Entity.ID;
-import static com.speedment.runtime.core.internal.field.Entity.NAME;
+import static com.speedment.runtime.field.TestEntity.ID;
+import static com.speedment.runtime.field.TestEntity.NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**

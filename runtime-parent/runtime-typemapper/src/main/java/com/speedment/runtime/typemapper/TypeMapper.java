@@ -201,13 +201,26 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
     }
 
     /**
+     * Returns if this TypeMapper is an <em>identity</em> TypeMapper.
+     * <p>
+     * An identity TypeMapper will always map to the
+     * same type database -> java -> database and
+     * is guaranteed to just pass elements.
+     *
+     * @return if this TypeMapper is an <em>identity</em> TypeMapper
+     */
+    default boolean isIdentity() {
+        return false;
+    }
+
+    /**
      * Returns an identity type mapper.
      *
      * @param <T>  the type of the identity type mapper
      * @return     an identity type mapper
      */
     static <T> TypeMapper<T, T> identity() {
-        return new IdentityTypeMapper<>();
+        return IdentityTypeMapper.shared();
     }
     
     /**

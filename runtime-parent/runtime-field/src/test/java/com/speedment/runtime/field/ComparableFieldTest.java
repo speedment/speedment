@@ -14,16 +14,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field;
+package com.speedment.runtime.field;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.internal.field.Entity.ID;
-import static com.speedment.runtime.core.internal.field.Entity.NAME;
+import static com.speedment.runtime.field.TestEntity.ID;
+import static com.speedment.runtime.field.TestEntity.NAME;
 import static com.speedment.runtime.field.predicate.Inclusion.*;
 import static java.util.Comparator.*;
 import static java.util.stream.Collectors.toList;
@@ -37,12 +38,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 final class ComparableFieldTest extends BaseFieldTest {
 
     @Test
-    public void testReferenceFieldComparatorNullFieldsFirst() {
-        final List<Entity> result = entities.stream().sorted(NAME.comparatorNullFieldsFirst().thenComparing(ID.comparator())).collect(toList());
-        final List<Entity> expected = entities.stream()
+    void testReferenceFieldComparatorNullFieldsFirst() {
+        final List<TestEntity> result = entities.stream().sorted(NAME.comparatorNullFieldsFirst().thenComparing(ID.comparator())).collect(toList());
+        final List<TestEntity> expected = entities.stream()
             .sorted(
-                comparing(Entity::getName, nullsFirst(String::compareTo))
-                    .thenComparing(comparing(Entity::getId, nullsFirst(Integer::compareTo)))
+                comparing(TestEntity::getName, nullsFirst(String::compareTo))
+                    .thenComparing(comparing(TestEntity::getId, nullsFirst(Integer::compareTo)))
             )
             .collect(toList());
 
@@ -51,11 +52,11 @@ final class ComparableFieldTest extends BaseFieldTest {
 
     @Test
     void testReferenceFieldComparatorNullFieldsLast() {
-        final List<Entity> result = entities.stream().sorted(NAME.comparator().thenComparing(ID.comparator())).collect(toList());
-        final List<Entity> expected = entities.stream()
+        final List<TestEntity> result = entities.stream().sorted(NAME.comparator().thenComparing(ID.comparator())).collect(toList());
+        final List<TestEntity> expected = entities.stream()
             .sorted(
-                comparing(Entity::getName, nullsLast(String::compareTo))
-                    .thenComparing(comparing(Entity::getId, nullsLast(Integer::compareTo)))
+                comparing(TestEntity::getName, nullsLast(String::compareTo))
+                    .thenComparing(comparing(TestEntity::getId, nullsLast(Integer::compareTo)))
             )
             .collect(toList());
 
@@ -129,8 +130,8 @@ final class ComparableFieldTest extends BaseFieldTest {
     @Test
     void between2Arg() {
 
-        final List<Entity> expected = collect(e -> e.getId() != null && e.getId() >= 2 && e.getId() < 6);
-        final List<Entity> result = collect(ID.between(2, 6));
+        final List<TestEntity> expected = collect(e -> e.getId() != null && e.getId() >= 2 && e.getId() < 6);
+        final List<TestEntity> result = collect(ID.between(2, 6));
 
         assertEquals(
             expected,
@@ -151,8 +152,8 @@ final class ComparableFieldTest extends BaseFieldTest {
     @Test
     void between3ArgInclIncl() {
 
-        final List<Entity> expected = collect(e -> e.getId() != null && e.getId() >= 2 && e.getId() <= 6);
-        final List<Entity> result = collect(ID.between(2, 6, START_INCLUSIVE_END_INCLUSIVE));
+        final List<TestEntity> expected = collect(e -> e.getId() != null && e.getId() >= 2 && e.getId() <= 6);
+        final List<TestEntity> result = collect(ID.between(2, 6, START_INCLUSIVE_END_INCLUSIVE));
 
         assertEquals(
             expected,
@@ -166,8 +167,8 @@ final class ComparableFieldTest extends BaseFieldTest {
     @Test
     void between3ArgExclIncl() {
 
-        final List<Entity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() <= 6);
-        final List<Entity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_INCLUSIVE));
+        final List<TestEntity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() <= 6);
+        final List<TestEntity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_INCLUSIVE));
 
         assertEquals(
             expected,
@@ -181,8 +182,8 @@ final class ComparableFieldTest extends BaseFieldTest {
     @Test
     void between3ArgExclExcl() {
 
-        final List<Entity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() < 6);
-        final List<Entity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_EXCLUSIVE));
+        final List<TestEntity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() < 6);
+        final List<TestEntity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_EXCLUSIVE));
 
         assertEquals(
             expected,
@@ -198,7 +199,7 @@ final class ComparableFieldTest extends BaseFieldTest {
 
         final Integer[] ints = {2, 3, 5, 7, 11, 13, 16};
         final Set<Integer> intSet = Stream.of(ints).collect(toSet());
-        final List<Entity> expected = collect(e -> intSet.contains(e.getId()));
+        final List<TestEntity> expected = collect(e -> intSet.contains(e.getId()));
 
         assertEquals(expected, collect(ID.in(intSet)));
         assertEquals(expected, collect(ID.in(ints)));

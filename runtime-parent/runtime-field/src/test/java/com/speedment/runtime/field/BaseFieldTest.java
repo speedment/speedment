@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field;
+package com.speedment.runtime.field;
 
 import org.junit.jupiter.api.BeforeEach;
 
@@ -23,17 +23,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.internal.field.Entity.ID;
-import static com.speedment.runtime.core.internal.field.Entity.NAME;
+import static com.speedment.runtime.field.TestEntity.ID;
+import static com.speedment.runtime.field.TestEntity.NAME;
 import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author pemi
  */
-abstract class BaseFieldTest {
+public abstract class BaseFieldTest {
 
-    List<Entity> entities;
+    List<TestEntity> entities;
 
     @BeforeEach
     void setUp() {
@@ -44,10 +44,10 @@ abstract class BaseFieldTest {
         ).collect(toList());
 
         final AtomicInteger id = new AtomicInteger();
-        entities = names.stream().map(name -> new EntityImpl(id.getAndIncrement(), name)).collect(toList());
+        entities = names.stream().map(name -> new TestEntityImpl(id.getAndIncrement(), name)).collect(toList());
     }
 
-    protected List<Entity> collect(Predicate<Entity> predicate) {
+    public List<TestEntity> collect(Predicate<TestEntity> predicate) {
         return entities.stream()
             .filter(predicate)
             .sorted(ID.comparator().thenComparing(NAME.comparatorNullFieldsFirst()))

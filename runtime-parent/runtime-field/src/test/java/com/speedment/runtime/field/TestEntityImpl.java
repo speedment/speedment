@@ -14,18 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field;
+package com.speedment.runtime.field;
 
 /**
  *
  * @author pemi
  */
-class EntityImpl implements Entity {
+public class TestEntityImpl implements TestEntity {
 
     private Integer id;
     private String name;
 
-    EntityImpl(Integer id, String name) {
+    public TestEntityImpl(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -41,20 +41,20 @@ class EntityImpl implements Entity {
     }
 
     @Override
-    public Entity setId(Integer id) {
+    public TestEntity setId(Integer id) {
         this.id = id;
         return this;
     }
 
     @Override
-    public Entity setName(String name) {
+    public TestEntity setName(String name) {
         this.name = name;
         return this;
     }
 
     @Override
     public String toString() {
-        return EntityImpl.class.getSimpleName() + " { id: " + id + ", name: \"" + name + "\"}";
+        return TestEntityImpl.class.getSimpleName() + " { id: " + id + ", name: \"" + name + "\"}";
     }
 
 }

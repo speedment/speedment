@@ -14,22 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field;
+package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.field.ComparableField;
-import com.speedment.runtime.field.StringField;
-import com.speedment.runtime.field.internal.ComparableFieldImpl;
-import com.speedment.runtime.field.internal.StringFieldImpl;
-import com.speedment.runtime.typemapper.internal.IdentityTypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  *
  * @author pemi
  */
-public interface Entity {
+public interface TestEntity {
     
-    enum Identifier implements ColumnIdentifier<Entity> {
+    enum Identifier implements ColumnIdentifier<TestEntity> {
         ID("id"), NAME("name");
         
         private final String columnName;
@@ -59,18 +55,18 @@ public interface Entity {
         }
     }
 
-    ComparableField<Entity, Integer, Integer> ID = new ComparableFieldImpl<>(Identifier.ID, Entity::getId, Entity::setId, new IdentityTypeMapper<>(), true);
-    StringField<Entity, String> NAME = new StringFieldImpl<>(
+    ComparableField<TestEntity, Integer, Integer> ID = ComparableField.create(Identifier.ID, TestEntity::getId, TestEntity::setId, TypeMapper.identity(), true);
+    StringField<TestEntity, String> NAME = StringField.create(
         Identifier.NAME, 
-        Entity::getName, 
-        Entity::setName, new IdentityTypeMapper<>(), false);
+        TestEntity::getName,
+        TestEntity::setName, TypeMapper.identity(), false);
 
     Integer getId();
 
     String getName();
 
-    Entity setId(Integer id);
+    TestEntity setId(Integer id);
 
-    Entity setName(String name);
+    TestEntity setName(String name);
 
 }

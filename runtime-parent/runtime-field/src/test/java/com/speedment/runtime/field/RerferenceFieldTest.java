@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field;
+package com.speedment.runtime.field;
 
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.speedment.runtime.core.internal.field.Entity.NAME;
+import static com.speedment.runtime.field.TestEntity.NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -33,31 +33,31 @@ final class RerferenceFieldTest extends BaseFieldTest {
 
     @Test
     void testGetter() throws Exception {
-        final ReferenceGetter<Entity, String> result = NAME.getter();
-        final ReferenceGetter<Entity, String> expected = (Entity e) -> e.getName();
-        final Entity e = new EntityImpl(45, "Arne");
+        final ReferenceGetter<TestEntity, String> result = NAME.getter();
+        final ReferenceGetter<TestEntity, String> expected = (TestEntity e) -> e.getName();
+        final TestEntity e = new TestEntityImpl(45, "Arne");
         assertEquals(expected.apply(e), result.apply(e));
     }
 
     @Test
     void testSetter() throws Exception {
-        final ReferenceSetter<Entity, String> result = NAME.setter();
-        final Entity e = new EntityImpl(45, "Arne");
+        final ReferenceSetter<TestEntity, String> result = NAME.setter();
+        final TestEntity e = new TestEntityImpl(45, "Arne");
         result.accept(e, "Tryggve");
         assertEquals("Tryggve", e.getName());
     }
 
     @Test
     void testIsNull() throws Exception {
-        final List<Entity> result = collect(NAME.isNull());
-        final List<Entity> expected = collect(e -> e.getName() == null);
+        final List<TestEntity> result = collect(NAME.isNull());
+        final List<TestEntity> expected = collect(e -> e.getName() == null);
         assertEquals(expected, result);
     }
 
     @Test
     void testIsNotNull() throws Exception {
-        final List<Entity> result = collect(NAME.isNotNull());
-        final List<Entity> expected = collect(e -> e.getName() != null);
+        final List<TestEntity> result = collect(NAME.isNotNull());
+        final List<TestEntity> expected = collect(e -> e.getName() != null);
         assertEquals(expected, result);
     }
     
@@ -65,15 +65,15 @@ final class RerferenceFieldTest extends BaseFieldTest {
     
     @Test
     void testIsNullNegated() throws Exception {
-        final List<Entity> result = collect(NAME.isNull().negate());
-        final List<Entity> expected = collect(e -> e.getName() != null);
+        final List<TestEntity> result = collect(NAME.isNull().negate());
+        final List<TestEntity> expected = collect(e -> e.getName() != null);
         assertEquals(expected, result);
     }
     
     @Test
     void testIsNotNullNegated() throws Exception {
-        final List<Entity> result = collect(NAME.isNotNull().negate());
-        final List<Entity> expected = collect(e -> e.getName() == null);
+        final List<TestEntity> result = collect(NAME.isNotNull().negate());
+        final List<TestEntity> expected = collect(e -> e.getName() == null);
         assertEquals(expected, result);
     }    
 

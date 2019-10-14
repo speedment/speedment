@@ -14,15 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field;
+package com.speedment.runtime.field;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.speedment.runtime.core.internal.field.Entity.NAME;
-import static com.speedment.runtime.core.internal.util.AssertUtil.assertThrown;
+import static com.speedment.runtime.field.TestEntity.NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -32,76 +32,87 @@ final class StringFieldTest extends BaseFieldTest {
 
     @Test
     void equalIgnoreCase() {
-        final List<Entity> expected = collect(e -> e.getName() != null && e.getName().equalsIgnoreCase("abcdef"));
-        final List<Entity> result = collect(NAME.equalIgnoreCase("abcdef"));
+        final List<TestEntity> expected = collect(e -> e.getName() != null && e.getName().equalsIgnoreCase("abcdef"));
+        final List<TestEntity> result = collect(NAME.equalIgnoreCase("abcdef"));
 
         assertEquals(expected, result);
         assertEquals(4, collect(NAME.isNull()).size());
-        assertThrown(() -> collect(NAME.equalIgnoreCase(null)));
+        assertThrows(NullPointerException.class, () ->
+            collect(NAME.equalIgnoreCase(null))
+        );
+
     }
 
     @Test
     void notEqualIgnoreCase() {
-        final List<Entity> expected = collect(e -> e.getName() != null && !e.getName().equalsIgnoreCase("abcdef"));
-        final List<Entity> result = collect(NAME.notEqualIgnoreCase("abcdef"));
+        final List<TestEntity> expected = collect(e -> e.getName() != null && !e.getName().equalsIgnoreCase("abcdef"));
+        final List<TestEntity> result = collect(NAME.notEqualIgnoreCase("abcdef"));
 
         assertEquals(expected, result);
         assertEquals(25, collect(NAME.isNotNull()).size());
-        assertThrown(() -> collect(NAME.notEqualIgnoreCase(null)));
+        assertThrows(NullPointerException.class, () ->
+            collect(NAME.notEqualIgnoreCase(null))
+        );
     }
 
     @Test
     void startsWith() {
 
         //assertTrue(STARTS_WITH_PREDICATE.test("ab", "abc"));
-        final List<Entity> expected = collect(e -> e.getName() != null && e.getName().startsWith("abc"));
+        final List<TestEntity> expected = collect(e -> e.getName() != null && e.getName().startsWith("abc"));
         //final List<Entity> result = collect(e -> e.getName() != null && STARTS_WITH_PREDICATE.test(e.getName(), "abc"));
-        final List<Entity> result = collect(NAME.startsWith("abc"));
+        final List<TestEntity> result = collect(NAME.startsWith("abc"));
 
         printList("startswith expected", expected);
         printList("startswith result", result);
 
         assertEquals(expected, result);
-        assertThrown(() -> collect(NAME.startsWith(null)));
+        assertThrows(NullPointerException.class, () ->
+                collect(NAME.startsWith(null))
+        );
     }
 
     @Test
     void endsWith() {
         
-        final List<Entity> expected = collect(e -> e.getName() != null && e.getName().endsWith("f"));
-        final List<Entity> result = collect(NAME.endsWith("f"));
+        final List<TestEntity> expected = collect(e -> e.getName() != null && e.getName().endsWith("f"));
+        final List<TestEntity> result = collect(NAME.endsWith("f"));
 
         printList("endswith expected", expected);
         printList("endswith result", result);
 
         assertEquals(expected, result);
-        assertThrown(() -> collect(NAME.endsWith(null)));
+        assertThrows(NullPointerException.class, () ->
+            collect(NAME.endsWith(null))
+        );
     }
 
     @Test
     void contains()  {
 
-        final List<Entity> expected = collect(e -> e.getName() != null && e.getName().contains("a"));
-        final List<Entity> result = collect(NAME.contains("a"));
+        final List<TestEntity> expected = collect(e -> e.getName() != null && e.getName().contains("a"));
+        final List<TestEntity> result = collect(NAME.contains("a"));
 
         printList("contains expected", expected);
         printList("contains result", result);
 
         assertEquals(expected, result);
-        assertThrown(() -> collect(NAME.contains(null)));
+        assertThrows(NullPointerException.class, () ->
+                collect(NAME.contains(null))
+        );
     }
 
     @Test
     void isEmpty() {
-        final List<Entity> expected = collect(e -> e.getName() == null || e.getName().isEmpty());
-        final List<Entity> result = collect(NAME.isEmpty());
+        final List<TestEntity> expected = collect(e -> e.getName() == null || e.getName().isEmpty());
+        final List<TestEntity> result = collect(NAME.isEmpty());
         assertEquals(expected, result);
     }
 
     @Test
     void isNotEmpty()  {
-        final List<Entity> expected = collect(e -> e.getName() != null && !e.getName().isEmpty());
-        final List<Entity> result = collect(NAME.isNotEmpty());
+        final List<TestEntity> expected = collect(e -> e.getName() != null && !e.getName().isEmpty());
+        final List<TestEntity> result = collect(NAME.isNotEmpty());
         assertEquals(expected, result);
     }
 
