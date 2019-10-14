@@ -230,13 +230,13 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         @Override
         public Builder<T> forEveryProject(Phase phase, BiConsumer<T, Project> consumer) {
-            aquireListAndAdd(phase, PROJECTS, wrap(consumer, ProjectImpl::new));
+            aquireListAndAdd(phase, PROJECTS, wrap(consumer, Project::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryDbms(Phase phase, BiConsumer<T, Dbms> consumer) {
-            aquireListAndAdd(phase, ProjectUtil.DBMSES, wrap(consumer, DbmsImpl::new));
+            aquireListAndAdd(phase, ProjectUtil.DBMSES, wrap(consumer, Dbms::create));
             return this;
         }
 

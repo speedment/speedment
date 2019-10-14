@@ -19,8 +19,8 @@ package com.speedment.maven.abstractmojo;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.DbmsUtil;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasEnableUtil;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
@@ -153,7 +153,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addBooleanToMap(HasEnableUtil.ENABLED, Boolean.TRUE, projectData);
         addListToMap(ProjectUtil.DBMSES, createDbmses(), projectData);
 
-        projectProperty.merge(new DocumentPropertyComponentImpl(), new ProjectImpl(projectData));
+        projectProperty.merge(new DocumentPropertyComponentImpl(), Project.create(projectData));
 
         return projectProperty;
     }

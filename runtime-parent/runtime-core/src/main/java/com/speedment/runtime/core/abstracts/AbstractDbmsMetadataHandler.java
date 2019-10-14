@@ -20,7 +20,6 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.config.trait.HasId;
@@ -106,7 +105,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         // Create a deep copy of the project document.
         final Project projectCopy = DocumentUtil.deepCopy(
-            projectComponent.getProject(), ProjectImpl::new
+            projectComponent.getProject(), Project::create
         );
 
         // Make sure there are not multiple dbmses with the same id

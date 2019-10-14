@@ -19,7 +19,6 @@ package com.speedment.runtime.core.testsupport;
 import com.speedment.common.json.Json;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationMetadata;
@@ -59,7 +58,7 @@ public abstract class AbstractTestApplicationMetadata implements ApplicationMeta
             final Map<String, Object> data = new ConcurrentHashMap<>();
             data.put(HasNameUtil.NAME, "Project");
             data.put(ProjectUtil.APP_ID, UUID.randomUUID().toString());
-            return new ProjectImpl(data);
+            return Project.create(data);
         });
     }
     

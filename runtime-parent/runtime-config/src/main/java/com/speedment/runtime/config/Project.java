@@ -34,6 +34,7 @@ import static com.speedment.runtime.config.ProjectUtil.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -197,4 +198,31 @@ extends Document,
     default Project deepCopy() {
         return DocumentUtil.deepCopy(this, ProjectImpl::new);
     }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link Project}
+     * with the given {@code data}.
+     *
+     * @param data   of the config document
+     * @return a new {@link Project} with the given parameters
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static Project create(Map<String, Object> data) {
+        return new ProjectImpl(data);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link Project}
+     * with the given {@code parent} and {@code data}.
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return a new {@link Project} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static Project create(Document parent, Map<String, Object> data) {
+        return new ProjectImpl(parent, data);
+    }
+
 }

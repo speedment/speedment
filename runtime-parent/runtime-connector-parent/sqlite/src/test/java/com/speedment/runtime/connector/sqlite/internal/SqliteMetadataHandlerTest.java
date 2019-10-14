@@ -21,7 +21,6 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
-import com.speedment.runtime.config.provider.DelegateProjectImpl;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.connector.sqlite.*;
@@ -87,7 +86,7 @@ class SqliteMetadataHandlerTest {
                         pool -> pool.setConnection(conn, URL)
                     )
                     .beforeInitialized(MockProjectComponent.class,
-                        projects -> projects.setProject(new DelegateProjectImpl(
+                        projects -> projects.setProject(Project.create(
                             mapBuilderTyped(String.class, Object.class)
                                 .key(HasIdUtil.ID).value("test_project")
                                 .key(HasNameUtil.NAME).value("test_project")

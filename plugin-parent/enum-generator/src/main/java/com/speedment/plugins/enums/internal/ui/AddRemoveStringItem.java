@@ -32,7 +32,6 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.core.ApplicationMetadata;
@@ -368,7 +367,7 @@ extends AbstractLabelTooltipItem {
             try {
                 @SuppressWarnings("unchecked") final Map<String, Object> data =
                     (Map<String, Object>) Json.fromJson(json);
-                return new ProjectImpl(data);
+                return Project.create(data);
             } catch (final ClassCastException ex) {
                 throw new SpeedmentToolException(
                     "Error deserializing temporary project JSON.", ex

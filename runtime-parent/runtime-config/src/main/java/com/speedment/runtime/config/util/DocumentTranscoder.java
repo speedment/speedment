@@ -19,7 +19,6 @@ package com.speedment.runtime.config.util;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -149,7 +148,7 @@ public final class DocumentTranscoder {
                 data.put(ProjectUtil.APP_ID, UUID.randomUUID().toString());
             }
             
-            return new ProjectImpl(data);
+            return Project.create(data);
         } catch (final Exception ex) {
             throw new SpeedmentConfigException(ex);
         }
