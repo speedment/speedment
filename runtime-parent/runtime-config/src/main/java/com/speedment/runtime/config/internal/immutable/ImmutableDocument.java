@@ -43,7 +43,7 @@ public class ImmutableDocument extends BaseDocument {
         children = new ConcurrentSkipListMap<>();
     }
 
-    protected ImmutableDocument(ImmutableDocument parent, Map<String, Object> data) {
+    protected ImmutableDocument(Document parent, Map<String, Object> data) {
         super(parent, Collections.unmodifiableMap(data));
         children = new ConcurrentSkipListMap<>();
     }

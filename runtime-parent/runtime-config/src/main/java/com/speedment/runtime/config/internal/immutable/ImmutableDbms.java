@@ -48,7 +48,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     private final String username;
     private final List<Schema> schemas;
 
-    ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
+    ImmutableDbms(Project parent, Map<String, Object> dbms) {
         super(parent, requireKeys(dbms, DbmsUtil.TYPE_NAME));
         final Dbms prototype = Dbms.create(parent, dbms);
         this.enabled   = prototype.isEnabled();

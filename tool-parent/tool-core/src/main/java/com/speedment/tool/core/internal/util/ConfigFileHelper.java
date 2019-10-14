@@ -28,7 +28,6 @@ import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.Speedment;
@@ -160,7 +159,7 @@ public final class ConfigFileHelper {
             );
         }
 
-        final Project projectCopy = ImmutableProject.wrap(project);
+        final Project projectCopy = Project.createImmutable(project);
 
         project.dbmses().map(dbms -> {
             final DbmsType dbmsType = dbmsHandlerComponent.findByName(dbms.getTypeName())
@@ -221,7 +220,7 @@ public final class ConfigFileHelper {
 
         try {
             // Create an immutable copy of the tree and store in the ProjectComponent
-            final Project projectCopy = ImmutableProject.wrap(userInterfaceComponent.projectProperty());
+            final Project projectCopy = Project.createImmutable(userInterfaceComponent.projectProperty());
             projectComponent.setProject(projectCopy);
 
             // TODO: This method needs to be refactored. We create multiple

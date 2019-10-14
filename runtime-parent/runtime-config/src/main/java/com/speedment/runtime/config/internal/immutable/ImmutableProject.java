@@ -51,7 +51,7 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     private final List<Dbms> dbmses;
     private final Map<String, ImmutableTable> tablesByName;
 
-    ImmutableProject(Map<String, Object> project) {
+    public ImmutableProject(Map<String, Object> project) {
         super(project);
         final Project prototype = Project.create(project);
         this.enabled         = prototype.isEnabled();
@@ -122,8 +122,5 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         
         return table;
     }
-    
-    public static ImmutableProject wrap(Project project) {
-        return new ImmutableProject(project.getData());
-    }
+
 }

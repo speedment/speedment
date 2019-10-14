@@ -18,6 +18,7 @@ package com.speedment.runtime.config;
 
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.ProjectImpl;
+import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.trait.HasChildren;
@@ -223,6 +224,10 @@ extends Document,
      */
     static Project create(Document parent, Map<String, Object> data) {
         return new ProjectImpl(parent, data);
+    }
+
+    static Project createImmutable(Project project) {
+        return new ImmutableProject(project.getData());
     }
 
 }

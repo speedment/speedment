@@ -26,7 +26,6 @@ import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -349,7 +348,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
         log(OutputUtil.info("Performing rule verifications..."));
 
-        final Project immutableProject = ImmutableProject.wrap(project);
+        final Project immutableProject = Project.createImmutable(project);
         projectComponent.setProject(immutableProject);
         
         CompletableFuture<Boolean> future = rules.verify();
