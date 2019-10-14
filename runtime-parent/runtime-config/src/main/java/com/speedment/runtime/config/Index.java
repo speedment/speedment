@@ -29,6 +29,7 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -82,5 +83,19 @@ public interface Index extends
     @Override
     default Index deepCopy() {
         return DocumentUtil.deepCopy(this, IndexImpl::new);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link Index}
+     * with the given {@code parent} and {@code data}
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return new {@link Index} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static Index create(Table parent, Map<String, Object> data) {
+        return new IndexImpl(parent, data);
     }
 }
