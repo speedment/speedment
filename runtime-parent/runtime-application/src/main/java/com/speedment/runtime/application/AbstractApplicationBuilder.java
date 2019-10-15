@@ -61,6 +61,7 @@ import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.*;
 
 /**
  * This abstract class is implemented by classes that can build a
@@ -542,12 +543,13 @@ public abstract class AbstractApplicationBuilder<
             Runtime.getRuntime().maxMemory()
         );
 
-        final List<String> moduleNames = modules().stream()
+        final Map<String, List<String>> moduleNames = modules().stream()
             .map(Object::toString)
             .map(this::removeModuleTag)
-            .sorted()
-            .collect(Collectors.toList());
-        LOGGER.info("JPMS Modules: " + moduleNames);
+            .collect(groupingBy(this::initialPath, TreeMap::new, mapping(this::restPath, toList())));
+
+        LOGGER.info("JPMS Modules: ");
+        moduleNames.forEach((key, value) -> LOGGER.info("%s %s", key, value));
 
         // Invoke all HasOnWelcome methods
         injector.injectables()
@@ -562,6 +564,26 @@ public abstract class AbstractApplicationBuilder<
         @SuppressWarnings("unchecked")
         final BUILDER builder = (BUILDER) this;
         return builder;
+    }
+
+    private String initialPath(String s) {
+        int index = s.lastIndexOf('.');
+        if (index == -1) {
+            return s;
+        } else if (index == 0) {
+            return "?";
+        } else {
+            return s.substring(0, index);
+        }
+    }
+
+    private String restPath(String s) {
+        int index = s.lastIndexOf('.');
+        if (index == -1) {
+            return "";
+        } else {
+            return s.substring(index + 1);
+        }
     }
 
     Optional<Boolean> isVersionOk() {
