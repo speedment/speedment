@@ -19,13 +19,13 @@ package com.speedment.runtime.core.internal.stream.builder;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -51,7 +51,7 @@ final class ReferenceStreamBuilderTest {
         assertDoesNotThrow((Executable) s1::count);
     }
 
-    private final class MockStreamTerminator implements StreamTerminator {
+    public final class MockStreamTerminator implements StreamTerminator {
     }
 
 }
