@@ -16,17 +16,17 @@
  */
 package com.speedment.runtime.core.internal.component;
 
+import static com.speedment.runtime.core.util.Statistics.Event.NODE_ALIVE;
+import static com.speedment.runtime.core.util.Statistics.Event.NODE_STARTED;
+import static com.speedment.runtime.core.util.Statistics.Event.NODE_STOPPED;
+
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.StatisticsReporterComponent;
-import com.speedment.runtime.core.internal.util.Statistics;
-
-import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_ALIVE;
-import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_STARTED;
-import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_STOPPED;
+import com.speedment.runtime.core.util.Statistics;
 
 /**
  * Default implementation of the {@link StatisticsReporterComponent} component.

@@ -16,12 +16,15 @@
  */
 package com.speedment.tool.core.internal.controller;
 
+import static com.speedment.runtime.core.util.Statistics.Event.GUI_PROJECT_LOADED;
+import static javafx.application.Platform.runLater;
+
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.internal.util.Statistics;
+import com.speedment.runtime.core.util.Statistics;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.component.VersionComponent;
 import com.speedment.tool.core.internal.util.SemanticVersionComparator;
@@ -38,9 +41,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_PROJECT_LOADED;
-import static javafx.application.Platform.runLater;
 
 /**
  *

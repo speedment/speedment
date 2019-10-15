@@ -29,7 +29,7 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.internal.util.Statistics;
+import com.speedment.runtime.core.util.Statistics;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.core.util.ProgressMeasureUtil;
 import com.speedment.tool.config.DbmsProperty;
@@ -78,8 +78,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
-import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_PROJECT_LOADED;
-import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_STARTED;
+import static com.speedment.runtime.core.util.Statistics.Event.GUI_PROJECT_LOADED;
+import static com.speedment.runtime.core.util.Statistics.Event.GUI_STARTED;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
 

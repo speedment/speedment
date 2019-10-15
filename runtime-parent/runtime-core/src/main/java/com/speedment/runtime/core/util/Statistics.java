@@ -14,7 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util;
+package com.speedment.runtime.core.util;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
@@ -23,6 +26,7 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.internal.util.InternalEmailUtil;
 import com.speedment.runtime.core.internal.util.testing.TestSettings;
 
 import java.io.BufferedReader;
@@ -41,9 +45,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Utility class for reporting events to the statistics manager.

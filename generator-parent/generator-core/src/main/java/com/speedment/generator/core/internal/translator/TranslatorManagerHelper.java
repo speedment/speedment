@@ -16,6 +16,11 @@
  */
 package com.speedment.generator.core.internal.translator;
 
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
+import static com.speedment.runtime.core.util.Statistics.Event.GENERATE;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
@@ -39,7 +44,7 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.util.Statistics;
+import com.speedment.runtime.core.util.Statistics;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -52,11 +57,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
-import static com.speedment.runtime.core.internal.util.Statistics.Event.GENERATE;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
