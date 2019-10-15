@@ -28,32 +28,15 @@ import java.lang.reflect.InvocationTargetException;
  * @author Mislav Milicevic
  */
 final class ModuleTest {
-
     @Test
-    void shouldAccessNonInternal() throws ClassNotFoundException {
+    void atJpms() {
         try {
-            tryAccess(Class.forName("com.speedment.runtime.core.exception.SpeedmentException"));
-        } catch (IllegalAccessException e) {
-            fail("Should be able to access non-internal class");
+            String.class.getDeclaredField("value").setAccessible(true);
+        } catch (Exception e) {
+            if ("InaccessibleObjectException".equals(e.getClass().getSimpleName())) {
+                return;
+            }
         }
+        fail("Not running under the module system");
     }
-
-    @Test
-    void shouldNotAccessInternal() throws ClassNotFoundException {
-        try {
-            tryAccess(Class.forName("com.speedment.runtime.core.internal.util.TextUtil"));
-            fail("Shouldn't be able to access internal class");
-        } catch (IllegalAccessException ignore) {
-        }
-    }
-
-    private static <T> void tryAccess(Class<T> clazz) throws IllegalAccessException {
-        try {
-            Constructor<T> constructor = clazz.getDeclaredConstructor();
-            constructor.newInstance();
-        } catch (NoSuchMethodException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
