@@ -15,19 +15,17 @@
  * the License.
  */
 
-package com.speedment.runtime.bulk;
+package com.speedment.runtime.compute;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * @author Mislav Milicevic
  */
-final class ModuleTest {
+final class AtJpmsTest {
+
     @Test
     void atJpms() {
         try {
@@ -39,4 +37,5 @@ final class ModuleTest {
         }
         fail("Not running under the module system");
     }
+
 }
