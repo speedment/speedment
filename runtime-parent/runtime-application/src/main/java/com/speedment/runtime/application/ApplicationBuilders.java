@@ -21,7 +21,7 @@ import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.application.internal.DefaultApplicationMetadata;
-import com.speedment.runtime.application.internal.EmptyApplicationMetadata;
+import com.speedment.runtime.application.provide.EmptyApplicationMetadata;
 
 /**
  * Builder class for producing new {@link Speedment} instances.

@@ -18,30 +18,28 @@ package com.speedment.runtime.application.provide;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
-import com.speedment.runtime.application.internal.SpeedmentImpl;
+import com.speedment.runtime.application.AbstractApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.application.AbstractApplicationBuilder;
 
 /**
  *
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class DefaultApplicationBuilder extends
-    AbstractApplicationBuilder<Speedment, DefaultApplicationBuilder> {
+public final class DefaultApplicationBuilder extends AbstractApplicationBuilder<Speedment, DefaultApplicationBuilder> {
 
     public DefaultApplicationBuilder(
-            ClassLoader classLoader, 
-            Class<? extends ApplicationMetadata> metadataClass) {
-        
-        super(classLoader, SpeedmentImpl.class, metadataClass);
+        final ClassLoader classLoader,
+        final Class<? extends ApplicationMetadata> metadataClass
+    ) {
+        super(classLoader, StandardSpeedment.class, metadataClass);
     }
     
     public DefaultApplicationBuilder(
-            Class<? extends ApplicationMetadata> metadataClass) {
-        
-        super(SpeedmentImpl.class, metadataClass);
+        final Class<? extends ApplicationMetadata> metadataClass
+    ) {
+        super(StandardSpeedment.class, metadataClass);
     }
 
     public DefaultApplicationBuilder(InjectorBuilder injectorBuilder) {

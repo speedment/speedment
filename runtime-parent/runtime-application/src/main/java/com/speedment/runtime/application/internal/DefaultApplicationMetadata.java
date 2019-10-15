@@ -26,6 +26,8 @@ import com.speedment.runtime.core.ApplicationMetadata;
 import java.io.File;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * The default implementation of the {@link ApplicationMetadata} interface.
  * This class will load the metadata from a .json-file. The default location
@@ -44,15 +46,13 @@ public final class DefaultApplicationMetadata implements ApplicationMetadata {
      * Specified the location of the .json-file from which the metadata
      * is loaded.
      */
-    private @Config(
-        name=METADATA_LOCATION, 
-        value="src/main/json/speedment.json"
-    ) File metadataLocation;
+    private final File metadataLocation;
     
-    /**
-     * Should only be instantiated by the {@link Injector}.
-     */
-    public DefaultApplicationMetadata() {}
+    public DefaultApplicationMetadata(
+        @Config(name=METADATA_LOCATION, value="src/main/json/speedment.json") File metadataLocation
+    ) {
+        this.metadataLocation = requireNonNull(metadataLocation);
+    }
 
     @Override
     public Project makeProject() {
