@@ -14,16 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util;
+package com.speedment.tool.config.internal.util;
 
-import com.speedment.runtime.core.util.StaticClassUtil;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
+
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 
 /**
  *
@@ -31,6 +31,8 @@ import java.util.stream.Stream;
  * @since  3.0.0
  */
 public final class ImmutableListUtil {
+
+    private ImmutableListUtil() {}
 
     public static <E> List<E> of() {
         return Collections.emptyList();
@@ -61,14 +63,8 @@ public final class ImmutableListUtil {
         ).collect(toImmutableList());
     }
 
-    public static <T> Collector<T, ?, List<T>> toImmutableList() {
+    private static <T> Collector<T, ?, List<T>> toImmutableList() {
         return collectingAndThen(toList(), Collections::unmodifiableList);
     }
 
-    /**
-     * Should not be instantiated.
-     */
-    private ImmutableListUtil() {
-        StaticClassUtil.instanceNotAllowed(ImmutableListUtil.class);
-    }
 }

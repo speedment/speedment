@@ -17,19 +17,10 @@
 package com.speedment.tool.config.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.*;
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.of;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
-
+import com.speedment.runtime.config.Document;
 import com.speedment.tool.config.DocumentProperty;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Describes which implementations the {@link Document} interface to use at

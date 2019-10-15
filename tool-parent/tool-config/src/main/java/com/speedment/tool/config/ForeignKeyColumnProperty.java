@@ -29,7 +29,7 @@ import javafx.beans.property.StringProperty;
 import java.util.List;
 import java.util.Optional;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**

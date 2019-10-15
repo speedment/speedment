@@ -25,7 +25,7 @@ import com.speedment.tool.config.trait.*;
 
 import java.util.List;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 
 /**
  *
