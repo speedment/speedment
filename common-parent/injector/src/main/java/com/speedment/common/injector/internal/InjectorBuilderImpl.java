@@ -283,7 +283,13 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     .map(Injectable::get)
                     .map(c -> ReflectionUtil.errorMsg(c, instancesSoFarInCorrectOrder))
                     .forEachOrdered(s -> msg.append("  ").append(s).append('\n'));
-                msg.append("]");
+                msg.append("]\n")
+                    .append("Available candidates were: ")
+                    .append(
+                        injectables.entrySet().stream()
+                            .map(e -> String.format("%s:%d", e.getKey(), e.getValue().size()))
+                            .collect(joining(", ", "[", "]"))
+                    );
                 throw new ConstructorResolutionException(msg.toString());
             }
 
