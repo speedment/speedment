@@ -17,7 +17,7 @@
 package com.speedment.runtime.application;
 
 import com.speedment.runtime.TestInjectorProxy;
-import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
+import com.speedment.runtime.application.provider.DefaultApplicationBuilder;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.PasswordComponent;

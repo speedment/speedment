@@ -54,7 +54,7 @@
                         </Bundle-Description>
                         <Export-Package>
                             com.speedment.runtime.application,
-                            com.speedment.runtime.application.provide
+                            com.speedment.runtime.application.provider
                         </Export-Package>
                     </instructions>
                 </configuration>

@@ -26,7 +26,7 @@ import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
-import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
+import com.speedment.runtime.application.provider.DefaultApplicationBuilder;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;

@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.application;
 
-import com.speedment.runtime.application.provide.DefaultApplicationBuilder;
+import com.speedment.runtime.application.provider.DefaultApplicationBuilder;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.application.internal.DefaultApplicationMetadata;
-import com.speedment.runtime.application.provide.EmptyApplicationMetadata;
+import com.speedment.runtime.application.provider.EmptyApplicationMetadata;
 
 /**
  * Builder class for producing new {@link Speedment} instances.

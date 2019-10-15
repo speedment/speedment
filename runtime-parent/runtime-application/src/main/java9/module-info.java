@@ -16,8 +16,9 @@
  */
 module com.speedment.runtime.application {
     exports com.speedment.runtime.application;
-    exports com.speedment.runtime.application.provide;
+    exports com.speedment.runtime.application.provider;
 
+    requires com.speedment.common.invariant;
     requires com.speedment.runtime.welcome;
     requires com.speedment.runtime.connector.mysql;
     requires com.speedment.runtime.connector.mariadb;
