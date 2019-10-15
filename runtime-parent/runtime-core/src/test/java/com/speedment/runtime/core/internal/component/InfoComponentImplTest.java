@@ -16,14 +16,9 @@
  */
 package com.speedment.runtime.core.internal.component;
 
-import com.speedment.runtime.application.ApplicationBuilders;
-import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.InfoComponent;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,9 +28,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -43,18 +36,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 final class InfoComponentImplTest {
 
-    private Speedment speedment;
     private InfoComponent instance;
 
     @BeforeEach
     void setUp() {
-        speedment = ApplicationBuilders.empty().withComponent(InfoComponentImpl.class).build();
-        instance = speedment.getOrThrow(InfoComponent.class);
-    }
-
-    @AfterEach
-    void tearDown() {
-        speedment.close();
+        instance = new InfoComponentImpl();
     }
 
     @Test
