@@ -21,12 +21,11 @@
  */
 package com.speedment.generator;
 
-import com.speedment.generator.translator.internal.namer.JavaLanguageNamerImpl;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -35,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("Test class JavaLanguageNamer")
 final class DefaultJavaLanguageNamerTest {
 
-    private final JavaLanguageNamer instance = new JavaLanguageNamerImpl();
+    private final JavaLanguageNamer instance = JavaLanguageNamer.create();
 
     @DisplayName("Test of javaTypeName method")
     @Test
