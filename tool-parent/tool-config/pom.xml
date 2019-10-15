@@ -52,6 +52,7 @@
                         <Export-Package>
                             com.speedment.tool.config.mutator.*,
                             com.speedment.tool.config.trait.*,
+                            com.speedment.tool.config.provider.*,
                             com.speedment.tool.config.*
                         </Export-Package>
                     </instructions>

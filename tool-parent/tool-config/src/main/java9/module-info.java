@@ -19,6 +19,7 @@ module com.speedment.tool.config {
     exports com.speedment.tool.config.component;
     exports com.speedment.tool.config.mutator;
     exports com.speedment.tool.config.mutator.trait;
+    exports com.speedment.tool.config.provider;
     exports com.speedment.tool.config.trait;
     exports com.speedment.tool.config.util;
 
