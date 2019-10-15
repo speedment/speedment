@@ -58,7 +58,7 @@ import com.speedment.tool.core.util.BrandUtil;
 import com.speedment.tool.core.util.InjectionLoader;
 import com.speedment.tool.core.util.OutputUtil;
 import com.speedment.tool.propertyeditor.PropertyEditor;
-import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
+import com.speedment.tool.propertyeditor.provider.DelegatePropertyEditorComponent;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -174,7 +174,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
             DelegateSpeedmentBrand.class,
             InjectionLoaderImpl.class,
             ConfigFileHelper.class,
-            PropertyEditorComponentImpl.class,
+            DelegatePropertyEditorComponent.class,
             RuleComponentImpl.class,
             IssueComponentImpl.class
         );
