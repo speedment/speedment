@@ -16,13 +16,10 @@
  */
 package com.speedment.generator.translator.namer;
 
-import static com.speedment.common.codegen.util.Formatting.ucfirst;
-
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.common.injector.annotation.InjectKey;
-import static com.speedment.runtime.core.internal.util.sql.SqlUtil.unQuote;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -150,13 +147,22 @@ public interface JavaLanguageNamer {
      * @param javaName to convert
      * @return a String that is easy to read for a human
      */
-    static String toHumanReadable(final String javaName) {
+    static String toHumanReadable(String javaName) {
         requireNonNull(javaName);
-        return Stream.of(unQuote(javaName.trim())
-            .replaceAll("([A-Z]+)", "_$1")
-            .split("[^A-Za-z0-9]"))
-            .map(String::trim).filter(s -> !s.isEmpty())
+        javaName = javaName.trim();
+        if (javaName.startsWith("\"") && javaName.endsWith("\"")) {
+            // Un-quote the name
+            javaName = javaName.substring(1, javaName.length() - 1);
+        }
+        return Stream.of(
+            javaName
+                .replaceAll("([A-Z]+)", "_$1")
+                .split("[^A-Za-z0-9]")
+        )
+            .map(String::trim)
+            .filter(s -> !s.isEmpty())
             .map(String::toLowerCase)
-            .map(s -> ucfirst(s)).collect(Collectors.joining(" "));
+            .map(Formatting::ucfirst)
+            .collect(Collectors.joining(" "));
     }
 }

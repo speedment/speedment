@@ -19,7 +19,7 @@ package com.speedment.tool.config.util;
 
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
-import com.speedment.runtime.config.internal.BaseDocument;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasName;
@@ -42,7 +42,9 @@ import static java.util.stream.Collectors.toList;
  * @since   2.3.0
  */
 public final class DocumentMerger {
-    
+
+    private DocumentMerger() {}
+
     /**
      * Merges a single document into an existing one, trying to save as much
      * information as possible. If new {@link DocumentProperty properties} need
@@ -461,5 +463,5 @@ public final class DocumentMerger {
         }
     }
     
-    private DocumentMerger() { throw new UnsupportedOperationException(); }
+
 }

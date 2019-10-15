@@ -20,6 +20,7 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasNameUtil;
 
 import java.util.Map;

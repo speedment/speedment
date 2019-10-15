@@ -17,7 +17,7 @@
 package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.internal.BaseDocument;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.util.DocumentUtil;
 import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import java.util.ArrayList;

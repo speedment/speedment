@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.config.internal;
+package com.speedment.runtime.config.provider;
 
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.runtime.config.Document;

@@ -19,7 +19,7 @@ package com.speedment.generator.translator;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.internal.BaseDocument;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.internal.SchemaImpl;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasIdUtil;

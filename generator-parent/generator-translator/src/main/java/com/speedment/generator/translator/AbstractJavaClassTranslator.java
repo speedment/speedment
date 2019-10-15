@@ -29,6 +29,7 @@ import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.*;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
