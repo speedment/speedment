@@ -16,13 +16,11 @@
  */
 package com.speedment.generator.translator.internal.namer;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
-
-import java.util.function.Function;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
