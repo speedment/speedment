@@ -19,6 +19,7 @@ module com.speedment.tool.propertyeditor {
     exports com.speedment.tool.propertyeditor.component;
     exports com.speedment.tool.propertyeditor.editor;
     exports com.speedment.tool.propertyeditor.item;
+    exports com.speedment.tool.propertyeditor.provider;
 
     requires com.speedment.common.injector;
     requires com.speedment.common.mapstream;

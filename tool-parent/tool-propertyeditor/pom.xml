@@ -54,7 +54,8 @@
                             com.speedment.tool.propertyeditor,
                             com.speedment.tool.propertyeditor.component,
                             com.speedment.tool.propertyeditor.editor,
-                            com.speedment.tool.propertyeditor.item
+                            com.speedment.tool.propertyeditor.item,
+                            com.speedment.tool.propertyeditor.provider
                         </Export-Package>
                     </instructions>
                 </configuration>
