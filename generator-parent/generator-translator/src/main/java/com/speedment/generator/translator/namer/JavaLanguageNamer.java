@@ -19,6 +19,8 @@ package com.speedment.generator.translator.namer;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.generator.translator.internal.namer.JavaLanguageNamerImpl;
+
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -164,5 +166,14 @@ public interface JavaLanguageNamer {
             .map(String::toLowerCase)
             .map(Formatting::ucfirst)
             .collect(Collectors.joining(" "));
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link JavaLanguageNamer}
+     *
+     * @return new {@link JavaLanguageNamer} with the given parameters
+     */
+    static JavaLanguageNamer create() {
+        return new JavaLanguageNamerImpl();
     }
 }
