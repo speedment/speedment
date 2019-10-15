@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.code.model.java;
+package com.speedment.runtime.application.provider;
 
 import com.speedment.runtime.TestInjectorProxy;
 import com.speedment.runtime.config.*;

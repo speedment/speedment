@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.runtime.core.internal.code.model.java;
+package com.speedment.runtime.application.provider;
 
 import org.junit.jupiter.api.Test;
 
