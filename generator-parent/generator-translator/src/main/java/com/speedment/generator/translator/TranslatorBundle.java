@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.translator;
 
-import com.speedment.common.codegen.internal.java.JavaGenerator;
+import com.speedment.common.codegen.provider.DelegateJavaGenerator;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.generator.translator.internal.component.TypeMapperComponentImpl;
@@ -37,7 +37,7 @@ public final class TranslatorBundle implements InjectBundle {
             CodeGenerationComponentImpl.class,
             TypeMapperComponentImpl.class,
             JavaLanguageNamerImpl.class,
-            JavaGenerator.class
+            DelegateJavaGenerator.class
         );
     }
 }
