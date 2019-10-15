@@ -16,6 +16,11 @@
  */
 package com.speedment.tool.core.internal.component;
 
+import static com.speedment.runtime.core.util.Statistics.Event.GUI_PROJECT_LOADED;
+import static com.speedment.runtime.core.util.Statistics.Event.GUI_STARTED;
+import static java.util.Objects.requireNonNull;
+import static javafx.application.Platform.runLater;
+
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
@@ -29,14 +34,14 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.util.Statistics;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.core.util.ProgressMeasureUtil;
+import com.speedment.runtime.core.util.Statistics;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
-import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.config.provider.DelegateDocumentPropertyComponent;
 import com.speedment.tool.core.MainApp;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.component.RuleComponent;
@@ -63,9 +68,25 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.layout.*;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -77,11 +98,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
-
-import static com.speedment.runtime.core.util.Statistics.Event.GUI_PROJECT_LOADED;
-import static com.speedment.runtime.core.util.Statistics.Event.GUI_STARTED;
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Platform.runLater;
 
 /**
  *
@@ -154,7 +170,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     public static InjectBundle include() {
         return InjectBundle.of(
-            DocumentPropertyComponentImpl.class,
+            DelegateDocumentPropertyComponent.class,
             DelegateSpeedmentBrand.class,
             InjectionLoaderImpl.class,
             ConfigFileHelper.class,
