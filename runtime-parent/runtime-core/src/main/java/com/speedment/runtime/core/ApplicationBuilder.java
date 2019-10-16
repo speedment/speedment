@@ -684,7 +684,11 @@ public interface ApplicationBuilder<
         /**
          * Logging related to SQL retries
          */
-        SQL_RETRY;
+        SQL_RETRY,
+        /**
+         * Logging related to the Java module system (JPMS)
+         */
+        MODULE_SYSTEM;
 
         private final String loggerName;
 

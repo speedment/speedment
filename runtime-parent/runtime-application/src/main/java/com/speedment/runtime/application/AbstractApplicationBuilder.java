@@ -25,6 +25,7 @@ import com.speedment.common.jvm_version.JvmVersion;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.application.internal.util.JpmsUtil;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
@@ -543,13 +544,7 @@ public abstract class AbstractApplicationBuilder<
             Runtime.getRuntime().maxMemory()
         );
 
-        final Map<String, List<String>> moduleNames = modules().stream()
-            .map(Object::toString)
-            .map(this::removeModuleTag)
-            .collect(groupingBy(this::initialPath, TreeMap::new, mapping(this::restPath, toList())));
-
-        LOGGER.info("JPMS Modules: ");
-        moduleNames.forEach((key, value) -> LOGGER.info("%s %s", key, value));
+        JpmsUtil.logModulesIfEnabled();
 
         // Invoke all HasOnWelcome methods
         injector.injectables()
@@ -564,26 +559,6 @@ public abstract class AbstractApplicationBuilder<
         @SuppressWarnings("unchecked")
         final BUILDER builder = (BUILDER) this;
         return builder;
-    }
-
-    private String initialPath(String s) {
-        int index = s.lastIndexOf('.');
-        if (index == -1) {
-            return s;
-        } else if (index == 0) {
-            return "?";
-        } else {
-            return s.substring(0, index);
-        }
-    }
-
-    private String restPath(String s) {
-        int index = s.lastIndexOf('.');
-        if (index == -1) {
-            return "";
-        } else {
-            return s.substring(index + 1);
-        }
     }
 
     Optional<Boolean> isVersionOk() {
@@ -631,37 +606,5 @@ public abstract class AbstractApplicationBuilder<
             .collect(StringBuilder::new, (sb, i) -> sb.append("    "), StringBuilder::append)
             .toString();
     }
-
-    private Set<Object> modules() {
-        try {
-            final MethodHandles.Lookup lookup = MethodHandles.lookup();
-            final Class<?> moduleLayerClass = Class.forName("java.lang.ModuleLayer");
-            final MethodType bootType = MethodType.methodType(moduleLayerClass);
-            final MethodHandle methodHandleBoot = lookup.findStatic(moduleLayerClass,"boot", bootType);
-            final Object boot = methodHandleBoot.invoke();
-
-            final MethodType modulesType = MethodType.methodType(Set.class);
-            final MethodHandle methodHandleModules = lookup.findVirtual(moduleLayerClass,"modules", modulesType);
-            final Object modules = methodHandleModules.invoke(boot);
-
-            @SuppressWarnings("unchecked")
-            final Set<Object> result = (Set<Object>)modules;
-            return result;
-
-        } catch (Throwable ignore) {
-
-        }
-        return Collections.emptySet();
-    }
-
-    private String removeModuleTag(String s) {
-        final String module = "module ";
-        if (s.startsWith(module)) {
-            return s.substring(module.length());
-        }
-        return s;
-    }
-
-
 
 }
