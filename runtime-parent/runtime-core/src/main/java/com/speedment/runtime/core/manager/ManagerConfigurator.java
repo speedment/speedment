@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.manager;
 
+import com.speedment.runtime.core.component.StreamSupplierComponent;
+import com.speedment.runtime.core.internal.manager.ManagerConfiguratorImpl;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
 /**
@@ -44,5 +46,21 @@ public interface ManagerConfigurator<ENTITY> {
      * @return  the built manager
      */
     Manager<ENTITY> build();
+
+    /**
+     * Creates and returns a new standard implementation of a ManagerConfigurator.
+     *
+     * @param streams StreamSupplierComponent to use as stream source
+     * @param manager to configure
+     * @param <ENTITY> type
+     * @return a new standard implementation of a ManagerConfigurator
+     */
+
+    static <ENTITY> ManagerConfigurator<ENTITY> create(
+        final StreamSupplierComponent streams,
+        final Manager<ENTITY> manager
+    ) {
+        return new ManagerConfiguratorImpl<>(streams, manager);
+    }
 
 }

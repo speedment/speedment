@@ -19,11 +19,9 @@ package com.speedment.runtime.application;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.manager.ManagerConfiguratorImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
 import static java.util.Objects.requireNonNull;
@@ -66,7 +64,7 @@ public abstract class AbstractSpeedment implements Speedment {
     @Override
     public <ENTITY> ManagerConfigurator<ENTITY> configure(Class<? extends Manager<ENTITY>> managerClass) {
         requireNonNull(managerClass);
-        return new ManagerConfiguratorImpl<>(getOrThrow(StreamSupplierComponent.class), getOrThrow(managerClass));
+        return ManagerConfigurator.create(getOrThrow(StreamSupplierComponent.class), getOrThrow(managerClass));
     }
 
     @Override
