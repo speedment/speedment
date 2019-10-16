@@ -111,7 +111,7 @@ public final class InjectorImpl implements Injector {
     @Override
     public <T> T getAfterOrThrow(Class<T> type, T before) {
         return getAfter(type, before).orElseThrow(() ->
-            new IllegalArgumentException("A component after " + before + " of type " + type.getName() + " could not be found. Components of type: " + stream(type).map(Object::getClass).map(Class::getSimpleName).collect(Collectors.joining(", ")))
+            new IllegalArgumentException("A component after " + before + " of type " + type.getName() + " could not be found. Components of type " + type.getSimpleName() + ": " + stream(type).map(Object::getClass).map(Class::getSimpleName).collect(Collectors.joining(", ")))
         );
     }
 
