@@ -17,27 +17,21 @@
 
 package com.speedment.common.codegen.provider;
 
-import com.speedment.common.codegen.DependencyManager;
-import com.speedment.common.codegen.Generator;
-import com.speedment.common.codegen.Meta;
-import com.speedment.common.codegen.RenderStack;
-import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.TransformFactory;
-import com.speedment.common.codegen.internal.DefaultDependencyManager;
-import com.speedment.common.codegen.internal.DefaultGenerator;
+import com.speedment.common.codegen.*;
+import com.speedment.common.codegen.internal.GeneratorImpl;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class DelegateDefaultGenerator implements Generator {
+public class StandardGenerator implements Generator {
 
-    private final DefaultGenerator defaultGenerator;
+    private final GeneratorImpl defaultGenerator;
 
-    public DelegateDefaultGenerator(
-            TransformFactory transformFactory) {
-        this.defaultGenerator = new DefaultGenerator(
-                new DelegateDefaultDependencyManager(new DefaultDependencyManager()),
-                transformFactory);
+    public StandardGenerator(
+        final DependencyManager dependencyManager,
+        final TransformFactory transformFactory
+    ) {
+        this.defaultGenerator = new GeneratorImpl(dependencyManager, transformFactory);
     }
 
     @Override

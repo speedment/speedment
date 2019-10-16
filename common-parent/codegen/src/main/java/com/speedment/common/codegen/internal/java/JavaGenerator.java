@@ -16,10 +16,10 @@
  */
 package com.speedment.common.codegen.internal.java;
 
-import com.speedment.common.codegen.TransformFactory;
-import com.speedment.common.codegen.internal.DefaultDependencyManager;
-import com.speedment.common.codegen.internal.DefaultGenerator;
+import com.speedment.common.codegen.*;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * 
  * @author Emil Forslund
  */
-public class JavaGenerator extends DefaultGenerator {
+public final class JavaGenerator implements Generator {
     
 	private static final Pattern[] IGNORED = compileAll(
         "^void$",
@@ -49,7 +49,10 @@ public class JavaGenerator extends DefaultGenerator {
         "^double$",
         "^java\\.lang\\.[^\\.]+$"
     );
-    
+
+	private final Generator inner;
+
+
     /**
      * Instantiates the JavaGenerator.
      */
@@ -67,8 +70,68 @@ public class JavaGenerator extends DefaultGenerator {
      * @param factory  the transform factory to use
      */
 	public JavaGenerator(TransformFactory factory) {
-		super(new DefaultDependencyManager(IGNORED), factory);
+	    inner = Generator.create(DependencyManager.create(IGNORED), factory);
+/*        super(DependencyManager.create(IGNORED), factory);*/
 	}
+
+    @Override
+    public DependencyManager getDependencyMgr() {
+        return inner.getDependencyMgr();
+    }
+
+    @Override
+    public RenderStack getRenderStack() {
+        return inner.getRenderStack();
+    }
+
+    @Override
+    public <A, B> Stream<Meta<A, B>> metaOn(A from, Class<B> to) {
+        return inner.metaOn(from, to);
+    }
+
+    @Override
+    public <A, B> Stream<Meta<A, B>> metaOn(A from, Class<B> to, Class<? extends Transform<A, B>> transform) {
+        return inner.metaOn(from, to, transform);
+    }
+
+    @Override
+    public <M> Stream<Meta<M, String>> metaOn(M model) {
+        return inner.metaOn(model);
+    }
+
+    @Override
+    public <A> Stream<Meta<A, String>> metaOn(Collection<A> models) {
+        return inner.metaOn(models);
+    }
+
+    @Override
+    public <A, B> Stream<Meta<A, B>> metaOn(Collection<A> models, Class<B> to) {
+        return inner.metaOn(models, to);
+    }
+
+    @Override
+    public <A, B> Stream<Meta<A, B>> metaOn(Collection<A> models, Class<B> to, Class<? extends Transform<A, B>> transform) {
+        return inner.metaOn(models, to, transform);
+    }
+
+    @Override
+    public Optional<String> on(Object model) {
+        return inner.on(model);
+    }
+
+    @Override
+    public <M> Stream<String> onEach(Collection<M> models) {
+        return inner.onEach(models);
+    }
+
+    @Override
+    public <A, B> Optional<Meta<A, B>> transform(Transform<A, B> transform, A model, TransformFactory factory) {
+        return inner.transform(transform, model, factory);
+    }
+
+    public static Generator create(DependencyManager mgr, TransformFactory factory) {
+        return Generator.create(mgr, factory);
+    }
 
     private static Pattern[] compileAll(String... regexp) {
         final Set<Pattern> patterns = Stream.of(regexp)

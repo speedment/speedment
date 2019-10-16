@@ -30,31 +30,31 @@ import static java.util.Objects.requireNonNull;
  * 
  * @author Emil Forslund
  */
-public class DefaultGenerator implements Generator {
+public final class GeneratorImpl implements Generator {
     
 	private final DependencyManager mgr;
 	private final TransformFactory factory;
 	private final DefaultRenderStack renderStack;
     private final LinkedList<RenderTree.Builder> renderTreeBuilder;
 	
-	/**
+/*	*//**
 	 * Creates a new generator. This constructor will use a 
-     * {@link DefaultDependencyManager} with no parameters to handle any 
+     * {@link DependencyManager} with no parameters to handle any
      * dependencies.
      * 
 	 * @param factory  the factory to use
-	 */
+	 *//*
 	public DefaultGenerator(TransformFactory factory) {
-		this(new DefaultDependencyManager(), factory);
+		this(DependencyManager.create(), factory);
 	}
-	
+	*/
 	/**
 	 * Creates a new generator.
      * 
 	 * @param mgr      the dependency manager to use
 	 * @param factory  the factory to use 
 	 */
-	public DefaultGenerator(DependencyManager mgr, TransformFactory factory) {
+	public GeneratorImpl(DependencyManager mgr, TransformFactory factory) {
 		this.factory           = requireNonNull(factory);
 		this.mgr               = requireNonNull(mgr);
 		this.renderStack       = new DefaultRenderStack();

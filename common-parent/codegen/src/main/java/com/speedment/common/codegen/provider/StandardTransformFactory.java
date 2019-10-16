@@ -19,19 +19,20 @@ package com.speedment.common.codegen.provider;
 
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.TransformFactory;
-import com.speedment.common.codegen.internal.DefaultTransformFactory;
+import com.speedment.common.codegen.internal.TransformFactoryImpl;
 
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public class DelegateDefaultTransformFactory implements TransformFactory {
+public final class StandardTransformFactory implements TransformFactory {
 
-    private final DefaultTransformFactory transformFactory;
+    private final TransformFactoryImpl transformFactory;
 
-    public DelegateDefaultTransformFactory(
-            String name) {
-        this.transformFactory = new DefaultTransformFactory(name);
+    public StandardTransformFactory(
+        final String name
+    ) {
+        this.transformFactory = new TransformFactoryImpl(name);
     }
 
     @Override

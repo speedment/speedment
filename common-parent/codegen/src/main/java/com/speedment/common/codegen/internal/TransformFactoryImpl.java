@@ -35,7 +35,7 @@ import static java.util.stream.Collectors.toSet;
  *
  * @author Emil Forslund
  */
-public class DefaultTransformFactory implements TransformFactory {
+public final class TransformFactoryImpl implements TransformFactory {
 
     private final Map<Class<?>, Set<Map.Entry<Class<?>, Supplier<? extends Transform<?, ?>>>>> transforms;
     private final String name;
@@ -45,7 +45,7 @@ public class DefaultTransformFactory implements TransformFactory {
      *
      * @param name the unique name to use
      */
-    public DefaultTransformFactory(String name) {
+    public TransformFactoryImpl(String name) {
         this.name = requireNonNull(name);
         this.transforms = new ConcurrentHashMap<>();
     }

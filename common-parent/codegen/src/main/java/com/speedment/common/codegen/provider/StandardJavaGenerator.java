@@ -28,16 +28,12 @@ import com.speedment.common.codegen.internal.java.JavaGenerator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public final class DelegateJavaGenerator implements Generator {
+public final class StandardJavaGenerator implements Generator {
 
     private final JavaGenerator generator;
 
-    public DelegateJavaGenerator() {
+    public StandardJavaGenerator() {
         this.generator = new JavaGenerator();
-    }
-
-    public DelegateJavaGenerator(TransformFactory factory) {
-        this.generator = new JavaGenerator(factory);
     }
 
     @Override
