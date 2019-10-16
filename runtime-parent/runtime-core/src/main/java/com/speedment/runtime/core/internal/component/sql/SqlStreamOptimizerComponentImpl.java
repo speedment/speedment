@@ -31,6 +31,7 @@ import static java.util.Comparator.comparingInt;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
 
 /**
  *
@@ -97,6 +98,11 @@ public final class SqlStreamOptimizerComponentImpl implements SqlStreamOptimizer
     public <ENTITY> void install(SqlStreamOptimizer<ENTITY> sqlStreamOptimizer) {
         requireNonNull(sqlStreamOptimizer);
         optimizers.add(sqlStreamOptimizer);
+    }
+
+    @Override
+    public Stream<SqlStreamOptimizer<?>> stream() {
+        return optimizers.stream();
     }
 
     private static class FallbackStreamOptimizer<ENTITY> implements SqlStreamOptimizer<ENTITY> {

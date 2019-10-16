@@ -22,6 +22,8 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
 import com.speedment.runtime.core.stream.Pipeline;
 
+import java.util.stream.Stream;
+
 /**
  *
  * @author Per Minborg
@@ -42,5 +44,10 @@ public final class DelegateSqlStreamOptimizerComponent implements SqlStreamOptim
     @Override
     public <ENTITY> void install(SqlStreamOptimizer<ENTITY> sqlStreamOptimizer) {
         inner.install(sqlStreamOptimizer);
+    }
+
+    @Override
+    public Stream<SqlStreamOptimizer<?>> stream() {
+        return inner.stream();
     }
 }
