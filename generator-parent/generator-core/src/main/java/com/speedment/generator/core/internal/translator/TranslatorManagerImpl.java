@@ -63,9 +63,9 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since  3.0.2
  */
-public final class TranslatorManagerHelper {
+public final class TranslatorManagerImpl {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(TranslatorManagerHelper.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(TranslatorManagerImpl.class);
 
     private static final String HASH_PREFIX = ".";
     private static final String HASH_SUFFIX = ".md5";
@@ -79,7 +79,7 @@ public final class TranslatorManagerHelper {
 
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
-    public TranslatorManagerHelper(
+    public TranslatorManagerImpl(
         final InfoComponent info,
         final PathComponent paths,
         final EventComponent events,

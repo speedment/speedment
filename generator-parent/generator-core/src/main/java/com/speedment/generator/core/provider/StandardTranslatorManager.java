@@ -14,13 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.core.internal.translator;
+package com.speedment.generator.core.provider;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.generator.core.component.EventComponent;
 import com.speedment.generator.core.component.PathComponent;
+import com.speedment.generator.core.internal.translator.TranslatorManagerImpl;
 import com.speedment.generator.core.translator.AbstractTranslatorManager;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
@@ -33,18 +34,18 @@ import java.nio.file.Path;
 /**
  * Default implementation of the {@link TranslatorManager}-interface. This is
  * the implementation used by the injector system by default. The internal logic
- * is stored in the class {@link TranslatorManagerHelper}. To override it,
+ * is stored in the class {@link TranslatorManagerImpl}. To override it,
  * use the public class {@link AbstractTranslatorManager}.
  * 
  * @author Per Minborg
  * @author Emil Forslund
  * @since  3.0.2
  */
-public final class DefaultTranslatorManager implements TranslatorManager {
+public final class StandardTranslatorManager implements TranslatorManager {
     
-    private final TranslatorManagerHelper helper;
+    private final TranslatorManagerImpl helper;
     
-    public DefaultTranslatorManager(
+    public StandardTranslatorManager(
         final InfoComponent info,
         final PathComponent paths,
         final EventComponent events,
@@ -52,18 +53,9 @@ public final class DefaultTranslatorManager implements TranslatorManager {
         final CodeGenerationComponent codeGenerationComponent,
         final @Config(name="skipClear", value="false") boolean skipClear
     ) {
-        helper = new TranslatorManagerHelper(info, paths, events, projects, codeGenerationComponent, skipClear);
+        helper = new TranslatorManagerImpl(info, paths, events, projects, codeGenerationComponent, skipClear);
     }
     
-/*    @ExecuteBefore(State.INITIALIZED)
-    public void init(Injector injector) {
-        // Since we created the instance of 'helper' manually, we have to
-        // invoke the injector manually. We can do this in the "INITIALIZED" 
-        // phase since we don't need access to any components and we want to 
-        // simulate that this happens on construction.
-        injector.inject(helper);
-    }*/
-
     @Override
     public void accept(Project project) {
         helper.accept(this, project);

@@ -55,6 +55,7 @@
                             com.speedment.generator.core.event,
                             com.speedment.generator.core.event.trait,
                             com.speedment.generator.core.translator,
+                            com.speedment.generator.core.provider,
                             com.speedment.generator.core
                         </Export-Package>
                     </instructions>

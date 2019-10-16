@@ -21,7 +21,7 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.generator.core.component.EventComponent;
 import com.speedment.generator.core.component.PathComponent;
-import com.speedment.generator.core.internal.translator.TranslatorManagerHelper;
+import com.speedment.generator.core.internal.translator.TranslatorManagerImpl;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
@@ -38,7 +38,7 @@ import java.nio.file.Path;
  */
 public abstract class AbstractTranslatorManager implements TranslatorManager {
     
-    private final TranslatorManagerHelper helper;
+    private final TranslatorManagerImpl helper;
     
     public AbstractTranslatorManager(
         final InfoComponent info,
@@ -48,18 +48,9 @@ public abstract class AbstractTranslatorManager implements TranslatorManager {
         final CodeGenerationComponent codeGenerationComponent,
         final @Config(name="skipClear", value="false") boolean skipClear
     ) {
-        helper = new TranslatorManagerHelper(info, paths, events, projects, codeGenerationComponent, skipClear);
+        helper = new TranslatorManagerImpl(info, paths, events, projects, codeGenerationComponent, skipClear);
     }
     
-/*    @ExecuteBefore(State.INITIALIZED)
-    public void init(Injector injector) {
-        // Since we created the instance of 'helper' manually, we have to
-        // invoke the injector manually. We can do this in the "INITIALIZED" 
-        // phase since we don't need access to any components and we want to 
-        // simulate that this happens on construction.
-        injector.inject(helper);
-    }*/
-
     @Override
     public void accept(Project project) {
         helper.accept(this, project);

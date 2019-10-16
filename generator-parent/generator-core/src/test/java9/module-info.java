@@ -20,6 +20,7 @@ open module com.speedment.generator.core {
     exports com.speedment.generator.core.event;
     exports com.speedment.generator.core.event.trait;
     exports com.speedment.generator.core.exception;
+    exports com.speedment.generator.core.provider;
     exports com.speedment.generator.core.translator;
 
     requires com.speedment.common.injector;
