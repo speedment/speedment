@@ -16,6 +16,10 @@
  */
 module com.speedment.generator.standard {
     exports com.speedment.generator.standard;
+    exports com.speedment.generator.standard.entity;
+    exports com.speedment.generator.standard.lifecycle;
+    exports com.speedment.generator.standard.manager;
+    exports com.speedment.generator.standard.provider;
 
     requires com.speedment.common.function;
     requires com.speedment.common.injector;

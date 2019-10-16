@@ -52,7 +52,8 @@
                             com.speedment.generator.standard,
                             com.speedment.generator.standard.entity,
                             com.speedment.generator.standard.manager,
-                            com.speedment.generator.standard.lifecycle
+                            com.speedment.generator.standard.lifecycle,
+                            com.speedment.generator.standard.provider
                         </Export-Package>
                     </instructions>
                 </configuration>
