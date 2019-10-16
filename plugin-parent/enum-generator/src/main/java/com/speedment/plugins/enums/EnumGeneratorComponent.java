@@ -35,7 +35,7 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnumConstantsUtil;
 import com.speedment.tool.config.trait.HasEnumConstantsProperty;
 import com.speedment.tool.propertyeditor.component.PropertyEditorComponent;
-import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
+import com.speedment.tool.propertyeditor.provider.DelegatePropertyEditorComponent;
 
 /**
  * A plugin for generating internal enums for columns marked as ENUM in the
@@ -56,7 +56,7 @@ public final class EnumGeneratorComponent {
         return InjectBundle.of(
             StandardTypeMapperComponent.class,
             StandardCodeGenerationComponent.class,
-            PropertyEditorComponentImpl.class
+            DelegatePropertyEditorComponent.class
         );
     }
 
