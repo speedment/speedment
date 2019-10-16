@@ -55,6 +55,7 @@
                             com.speedment.generator.translator.component.function,
                             com.speedment.generator.translator.exception,
                             com.speedment.generator.translator.namer,
+                            com.speedment.generator.translator.provider,
                             com.speedment.generator.translator.util
                         </Export-Package>
                     </instructions>

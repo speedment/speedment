@@ -16,11 +16,11 @@
  */
 package com.speedment.generator.translator;
 
-import com.speedment.common.codegen.provider.DelegateJavaGenerator;
+import com.speedment.common.codegen.provider.StandardJavaGenerator;
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
-import com.speedment.generator.translator.internal.component.TypeMapperComponentImpl;
-import com.speedment.generator.translator.internal.namer.JavaLanguageNamerImpl;
+import com.speedment.generator.translator.provider.StandardCodeGenerationComponent;
+import com.speedment.generator.translator.provider.StandardJavaLanguageNamer;
+import com.speedment.generator.translator.provider.StandardTypeMapperComponent;
 
 import java.util.stream.Stream;
 
@@ -34,10 +34,10 @@ public final class TranslatorBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return Stream.of(
-            CodeGenerationComponentImpl.class,
-            TypeMapperComponentImpl.class,
-            JavaLanguageNamerImpl.class,
-            DelegateJavaGenerator.class
+            StandardCodeGenerationComponent.class,
+            StandardTypeMapperComponent.class,
+            StandardJavaLanguageNamer.class,
+            StandardJavaGenerator.class
         );
     }
 }

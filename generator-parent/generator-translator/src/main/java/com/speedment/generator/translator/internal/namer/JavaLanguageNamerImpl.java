@@ -26,7 +26,7 @@ import com.speedment.generator.translator.namer.JavaLanguageNamer;
  *
  * @author Per Minborg
  */
-public class JavaLanguageNamerImpl implements JavaLanguageNamer {
+public final class JavaLanguageNamerImpl implements JavaLanguageNamer {
 
     @Override
     public String javaTypeName(final String externalName) {
