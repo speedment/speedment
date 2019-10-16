@@ -28,9 +28,9 @@ import com.speedment.common.codegen.internal.java.JavaGenerator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class DelegateJavaGenerator implements Generator {
+public final class DelegateJavaGenerator implements Generator {
 
-    private JavaGenerator generator;
+    private final JavaGenerator generator;
 
     public DelegateJavaGenerator() {
         this.generator = new JavaGenerator();
