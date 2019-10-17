@@ -16,6 +16,8 @@
  */
 package com.speedment.generator.translator.internal.component;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
@@ -27,30 +29,67 @@ import com.speedment.runtime.typemapper.bigdecimal.BigDecimalToDouble;
 import com.speedment.runtime.typemapper.bytes.ByteZeroOneToBooleanMapper;
 import com.speedment.runtime.typemapper.doubles.DoubleToFloatMapper;
 import com.speedment.runtime.typemapper.doubles.PrimitiveDoubleToFloatMapper;
-import com.speedment.runtime.typemapper.integer.*;
+import com.speedment.runtime.typemapper.integer.DateIntToPrimitiveShortMapper;
+import com.speedment.runtime.typemapper.integer.DateIntToShortMapper;
+import com.speedment.runtime.typemapper.integer.IntegerToByteMapper;
+import com.speedment.runtime.typemapper.integer.IntegerToShortMapper;
+import com.speedment.runtime.typemapper.integer.IntegerZeroOneToBooleanMapper;
+import com.speedment.runtime.typemapper.integer.PrimitiveIntegerToByteMapper;
+import com.speedment.runtime.typemapper.integer.PrimitiveIntegerToShortMapper;
+import com.speedment.runtime.typemapper.integer.PrimitiveIntegerZeroOneToBooleanMapper;
 import com.speedment.runtime.typemapper.largeobject.BlobToBigIntegerMapper;
 import com.speedment.runtime.typemapper.largeobject.BlobToByteArrayMapper;
 import com.speedment.runtime.typemapper.largeobject.ClobToStringMapper;
-import com.speedment.runtime.typemapper.longs.*;
+import com.speedment.runtime.typemapper.longs.LongToByteMapper;
+import com.speedment.runtime.typemapper.longs.LongToIntegerMapper;
+import com.speedment.runtime.typemapper.longs.LongToShortMapper;
+import com.speedment.runtime.typemapper.longs.PrimitiveLongToByteMapper;
+import com.speedment.runtime.typemapper.longs.PrimitiveLongToIntegerMapper;
+import com.speedment.runtime.typemapper.longs.PrimitiveLongToShortMapper;
 import com.speedment.runtime.typemapper.other.BinaryToBigIntegerMapper;
 import com.speedment.runtime.typemapper.other.BinaryToByteArrayMapper;
 import com.speedment.runtime.typemapper.other.BinaryToUuidMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.typemapper.shorts.PrimitiveShortToByteMapper;
 import com.speedment.runtime.typemapper.shorts.ShortToByteMapper;
-import com.speedment.runtime.typemapper.string.*;
-import com.speedment.runtime.typemapper.time.*;
+import com.speedment.runtime.typemapper.string.StringToBigDecimalMapper;
+import com.speedment.runtime.typemapper.string.StringToBigIntegerMapper;
+import com.speedment.runtime.typemapper.string.StringToLocaleMapper;
+import com.speedment.runtime.typemapper.string.TrueFalseStringToBooleanMapper;
+import com.speedment.runtime.typemapper.string.YNStringToBooleanMapper;
+import com.speedment.runtime.typemapper.string.YesNoStringToBooleanMapper;
+import com.speedment.runtime.typemapper.time.DateToIntMapper;
+import com.speedment.runtime.typemapper.time.DateToLocalDateMapper;
+import com.speedment.runtime.typemapper.time.DateToLongMapper;
+import com.speedment.runtime.typemapper.time.DateToPrimitiveIntMapper;
+import com.speedment.runtime.typemapper.time.DateToPrimitiveLongMapper;
+import com.speedment.runtime.typemapper.time.IntEpochDaysToLocalDateMapper;
+import com.speedment.runtime.typemapper.time.ShortEpochDaysToLocalDateMapper;
+import com.speedment.runtime.typemapper.time.TimeToIntMapper;
+import com.speedment.runtime.typemapper.time.TimeToLocalTimeMapper;
+import com.speedment.runtime.typemapper.time.TimeToLongMapper;
+import com.speedment.runtime.typemapper.time.TimeToPrimitiveIntMapper;
+import com.speedment.runtime.typemapper.time.TimeToPrimitiveLongMapper;
+import com.speedment.runtime.typemapper.time.TimestampToIntMapper;
+import com.speedment.runtime.typemapper.time.TimestampToLocalDateTimeMapper;
+import com.speedment.runtime.typemapper.time.TimestampToLongMapper;
+import com.speedment.runtime.typemapper.time.TimestampToPrimitiveIntMapper;
+import com.speedment.runtime.typemapper.time.TimestampToPrimitiveLongMapper;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Date;
-import java.sql.*;
-import java.util.*;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
