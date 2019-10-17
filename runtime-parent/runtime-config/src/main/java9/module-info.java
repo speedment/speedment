@@ -27,6 +27,6 @@ module com.speedment.runtime.config {
     exports com.speedment.runtime.config.util;
 
     requires com.speedment.common.mapstream;
-    requires com.speedment.common.function;
     requires com.speedment.common.invariant;
+    requires transitive com.speedment.common.function;
 }
