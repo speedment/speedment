@@ -1,27 +1,12 @@
-/*
- *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
-package com.speedment.runtime.core.abstracts;
+package com.speedment.runtime.core.internal.db;
 
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.core.ApplicationBuilder.LogType;
+import com.speedment.runtime.core.ApplicationBuilder;
+
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
@@ -29,8 +14,6 @@ import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.db.AsynchronousQueryResultImpl;
-import com.speedment.runtime.core.internal.db.ConnectionInfo;
 import com.speedment.runtime.core.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlUpdateStatement;
@@ -53,32 +36,22 @@ import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
-/**
- * Abstract base class for {@link DbmsOperationHandler}-implementations.
- *
- * @author Per Minborg
- * @author Emil Forslund
- *
- * @deprecated Use the StandardDbmsOperationHandler instead
- */
-@Deprecated
-public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandler {
+public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
 
     private static final int INITIAL_RETRY_COUNT = 5;
-    private static final Logger LOGGER = LoggerManager.getLogger(AbstractDbmsOperationHandler.class);
-    private static final Logger LOGGER_PERSIST = LoggerManager.getLogger(LogType.PERSIST.getLoggerName());
-    private static final Logger LOGGER_UPDATE = LoggerManager.getLogger(LogType.UPDATE.getLoggerName());
-    private static final Logger LOGGER_REMOVE = LoggerManager.getLogger(LogType.REMOVE.getLoggerName());
-    private static final Logger LOGGER_SQL_RETRY = LoggerManager.getLogger(LogType.SQL_RETRY.getLoggerName());
-
-
+    private static final Logger LOGGER = LoggerManager.getLogger(DbmsOperationHandlerImpl.class);
+    private static final Logger LOGGER_PERSIST = LoggerManager.getLogger(ApplicationBuilder.LogType.PERSIST.getLoggerName());
+    private static final Logger LOGGER_UPDATE = LoggerManager.getLogger(ApplicationBuilder.LogType.UPDATE.getLoggerName());
+    private static final Logger LOGGER_REMOVE = LoggerManager.getLogger(ApplicationBuilder.LogType.REMOVE.getLoggerName());
+    private static final Logger LOGGER_SQL_RETRY = LoggerManager.getLogger(ApplicationBuilder.LogType.SQL_RETRY.getLoggerName());
+    private static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private final ConnectionPoolComponent connectionPoolComponent;
     private final DbmsHandlerComponent dbmsHandlerComponent;
     private final TransactionComponent transactionComponent;
     private final AtomicBoolean closed;
 
-    protected AbstractDbmsOperationHandler(
+    public DbmsOperationHandlerImpl(
         final ConnectionPoolComponent connectionPoolComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent
@@ -87,6 +60,11 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
         this.transactionComponent = requireNonNull(transactionComponent);
         closed = new AtomicBoolean();
+    }
+
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        closed.set(true);
     }
 
     @Override
@@ -138,7 +116,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             sql,
             values,
             rsMapper,
-            () -> new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent), 
+            () -> new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent),
             parallelStrategy,
             this::configureSelect,
             this::configureSelect
@@ -166,9 +144,62 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         execute(dbms, singletonList(sqlDeleteStatement));
     }
 
-    private void logOperation(Logger logger, final String sql, final List<?> values) {
-        logger.debug("%s, values:%s", sql, values);
+    @Override
+    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
+        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
+            while (generatedKeys.next()) {
+                longConsumer.accept(generatedKeys.getLong(1));
+                //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+            }
+        }
     }
+
+    @Override
+    public Clob createClob(Dbms dbms) throws SQLException {
+        return applyOnConnection(dbms, Connection::createClob);
+    }
+
+    @Override
+    public Blob createBlob(Dbms dbms) throws SQLException {
+        return applyOnConnection(dbms, Connection::createBlob);
+    }
+
+    @Override
+    public NClob createNClob(Dbms dbms) throws SQLException {
+        return applyOnConnection(dbms, Connection::createNClob);
+    }
+
+    @Override
+    public SQLXML createSQLXML(Dbms dbms) throws SQLException {
+        return applyOnConnection(dbms, Connection::createSQLXML);
+    }
+
+    @Override
+    public Array createArray(Dbms dbms, String typeName, Object[] elements) throws SQLException {
+        assertNotClosed();
+        try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
+            return connection.createArrayOf(typeName, elements);
+        }
+    }
+
+    @Override
+    public Struct createStruct(Dbms dbms, String typeName, Object[] attributes) throws SQLException {
+        assertNotClosed();
+        try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
+            return connection.createStruct(typeName, attributes);
+        }
+    }
+
+
+    /////////   Extra methods
+
+    public String encloseField(Dbms dbms, String fieldName) {
+        return dbmsTypeOf(dbmsHandlerComponent, dbms).getDatabaseNamingConvention().encloseField(fieldName);
+    }
+
+    /////////////
+
+    // Todo: Rewrite the method below.
 
     private void execute(Dbms dbms, List<? extends SqlStatement> sqlStatementList) throws SQLException {
         final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
@@ -178,8 +209,6 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             executeNotInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
         }
     }
-
-    // Todo: Rewrite the method below.
 
     private void executeNotInTransaction(
         final Dbms dbms,
@@ -221,7 +250,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                     try {
                         // If we got here the transaction should be rolled back, as not
                         // all work has been done
-                       conn.rollback();
+                        conn.rollback();
                     } catch (SQLException sqlEx) {
                         // If we got an exception here, something
                         // pretty serious is going on
@@ -254,31 +283,6 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         postSuccessfulTransaction(sqlStatementList);
     }
 
-    private void executeSqlStatementList(List<? extends SqlStatement> sqlStatementList, AtomicReference<SqlStatement> lastSqlStatement, Dbms dbms, Connection conn) throws SQLException {
-        assertNotClosed();
-        for (final SqlStatement sqlStatement : sqlStatementList) {
-            lastSqlStatement.set(sqlStatement);
-            switch (sqlStatement.getType()) {
-                case INSERT: {
-                    final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
-                    handleSqlStatement(dbms, conn, s);
-                    break;
-                }
-                case UPDATE: {
-                    final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
-                    handleSqlStatement(dbms, conn, s);
-                    break;
-                }
-                case DELETE: {
-                    final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
-                    handleSqlStatement(dbms, conn, s);
-                    break;
-                }
-            }
-
-        }
-    }
-
     private void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement sqlStatement) throws SQLException {
         assertNotClosed();
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
@@ -289,16 +293,6 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             ps.executeUpdate();
 
             handleGeneratedKeys(ps, sqlStatement::addGeneratedKey);
-        }
-    }
-
-    @Override
-    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
-        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
-            while (generatedKeys.next()) {
-                longConsumer.accept(generatedKeys.getLong(1));
-                //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-            }
         }
     }
 
@@ -328,43 +322,32 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             .forEach(SqlInsertStatement::notifyGeneratedKeyListener);
     }
 
-    protected String encloseField(Dbms dbms, String fieldName) {
-        return dbmsTypeOf(dbmsHandlerComponent, dbms).getDatabaseNamingConvention().encloseField(fieldName);
+    private void logOperation(Logger logger, final String sql, final List<?> values) {
+        logger.debug("%s, values:%s", sql, values);
     }
 
-    @Override
-    public Clob createClob(Dbms dbms) throws SQLException {
-        return applyOnConnection(dbms, Connection::createClob);
-    }
-
-    @Override
-    public Blob createBlob(Dbms dbms) throws SQLException {
-        return applyOnConnection(dbms, Connection::createBlob);
-    }
-
-    @Override
-    public NClob createNClob(Dbms dbms) throws SQLException {
-        return applyOnConnection(dbms, Connection::createNClob);
-    }
-
-    @Override
-    public SQLXML createSQLXML(Dbms dbms) throws SQLException {
-        return applyOnConnection(dbms, Connection::createSQLXML);
-    }
-
-    @Override
-    public Array createArray(Dbms dbms, String typeName, Object[] elements) throws SQLException {
+    private void executeSqlStatementList(List<? extends SqlStatement> sqlStatementList, AtomicReference<SqlStatement> lastSqlStatement, Dbms dbms, Connection conn) throws SQLException {
         assertNotClosed();
-        try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
-            return connection.createArrayOf(typeName, elements);
-        }
-    }
+        for (final SqlStatement sqlStatement : sqlStatementList) {
+            lastSqlStatement.set(sqlStatement);
+            switch (sqlStatement.getType()) {
+                case INSERT: {
+                    final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
+                    handleSqlStatement(dbms, conn, s);
+                    break;
+                }
+                case UPDATE: {
+                    final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
+                    handleSqlStatement(dbms, conn, s);
+                    break;
+                }
+                case DELETE: {
+                    final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
+                    handleSqlStatement(dbms, conn, s);
+                    break;
+                }
+            }
 
-    @Override
-    public Struct createStruct(Dbms dbms, String typeName, Object[] attributes) throws SQLException {
-        assertNotClosed();
-        try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
-            return connection.createStruct(typeName, attributes);
         }
     }
 
@@ -373,11 +356,6 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         try (final Connection c = connectionPoolComponent.getConnection(dbms)) {
             return mapper.apply(c);
         }
-    }
-
-    @ExecuteBefore(State.STOPPED)
-    public void close() {
-        closed.set(true);
     }
 
     private void assertNotClosed() {
@@ -393,12 +371,13 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         void close() throws Exception;
     }
 
-    private void closeQuietly(ThrowingClosable closeable) {
+     private void closeQuietly(ThrowingClosable closeable) {
         try {
             closeable.close();
         } catch (Exception e) {
             LOGGER.warn(e);
         }
     }
+
 
 }
