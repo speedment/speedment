@@ -38,5 +38,5 @@ public interface TriConsumer<T, U, V> {
      * @param u  the second consumer argument
      * @param v  the third consumer argument
      */
-    void apply(T t, U u, V v);
+    void accept(T t, U u, V v);
 }
