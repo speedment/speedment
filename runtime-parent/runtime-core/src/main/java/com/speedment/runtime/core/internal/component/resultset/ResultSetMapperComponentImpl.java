@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.core.internal.component.resultset;
 
-import com.speedment.common.tuple.Tuple2;
-import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.core.db.DbmsType;
@@ -25,9 +23,7 @@ import com.speedment.runtime.core.db.DbmsType;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -76,16 +72,18 @@ public final class ResultSetMapperComponentImpl implements ResultSetMapperCompon
         return new ConcurrentHashMap<>();
     }
 
-    /**
-     * Returns a {@link Stream} of the current mappings that are registered with
-     * this class. Mappings that are not associated to any particular DbmsType
-     * will have their {@code Optional<DbmsType>} set to
-     * {@code Optional.empty()} whereas specific DbmsType mappings will have the
-     * {@code Optional<DbmsType>} field set accordingly.
-     *
-     * @return a {@link Stream} of the current mappings that are registered with
-     * this class
-     */
+
+//    /**
+//     * Returns a {@link Stream} of the current mappings that are registered with
+//     * this class. Mappings that are not associated to any particular DbmsType
+//     * will have their {@code Optional<DbmsType>} set to
+//     * {@code Optional.empty()} whereas specific DbmsType mappings will have the
+//     * {@code Optional<DbmsType>} field set accordingly.
+//     *
+//     * @return a {@link Stream} of the current mappings that are registered with
+//     * this class
+//     */
+    /*
     public Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> stream() {
 
         final Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> s0 = map.values().stream().map(v -> Tuples.of(Optional.empty(), v));
@@ -101,5 +99,6 @@ public final class ResultSetMapperComponentImpl implements ResultSetMapperCompon
 
         return sb.build().flatMap(Function.identity());
     }
+*/
 
 }

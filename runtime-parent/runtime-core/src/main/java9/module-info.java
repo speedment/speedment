@@ -34,12 +34,11 @@ module com.speedment.runtime.core {
     exports com.speedment.runtime.core.util;
 
     requires com.speedment.common.invariant;
-    requires com.speedment.common.function;
     requires com.speedment.common.mapstream;
     requires com.speedment.common.logger;
     requires com.speedment.common.json;
-    requires com.speedment.common.tuple;
 
+    requires transitive com.speedment.common.function;
     requires transitive java.sql;
     requires transitive com.speedment.common.injector;
     requires transitive com.speedment.runtime.config;
