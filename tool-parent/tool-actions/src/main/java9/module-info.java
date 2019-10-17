@@ -19,11 +19,11 @@ module com.speedment.tool.actions {
     exports com.speedment.tool.actions.menues;
     exports com.speedment.tool.actions.provider;
 
-    requires com.speedment.common.injector;
     requires com.speedment.common.invariant;
     requires com.speedment.common.mapstream;
 
-    requires com.speedment.runtime.config;
-
     requires com.speedment.tool.config;
+
+    requires transitive com.speedment.common.injector;
+    requires transitive com.speedment.runtime.config;
 }
