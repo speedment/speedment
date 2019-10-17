@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.connector.sqlite.internal.util.LoggingUtil.describe;
 import static com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil.*;
-import static com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler.SHOW_METADATA;
+import static com.speedment.runtime.core.abstracts.AbstractDbmsMetadataHandler.SHOW_METADATA;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.*;
 

@@ -1,20 +1,4 @@
-/*
- *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
-package com.speedment.runtime.connector.mysql.internal;
+package com.speedment.runtime.core.provider;
 
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
@@ -25,7 +9,7 @@ import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.provider.StandardDbmsOperationHandler;
+import com.speedment.runtime.core.internal.db.DbmsOperationHandlerImpl;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
@@ -36,37 +20,22 @@ import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
-/**
- *
- * @author Emil Forslund
- * @since 3.0.0
- */
-public final class MySqlDbmsOperationHandler implements DbmsOperationHandler {
 
-    private final StandardDbmsOperationHandler inner;
+public class StandardDbmsOperationHandler implements DbmsOperationHandler {
 
-    public MySqlDbmsOperationHandler(
+    private final DbmsOperationHandlerImpl inner;
+
+    public StandardDbmsOperationHandler(
         final ConnectionPoolComponent connectionPoolComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent
     ) {
-        inner = new StandardDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
-    }
-
-    // Changed from inner
-    @Override
-    public void configureSelect(PreparedStatement statement) throws SQLException {
-        statement.setFetchSize(Integer.MIN_VALUE); // Enable streaming ResultSet
+        inner = new DbmsOperationHandlerImpl(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
     }
 
     @ExecuteBefore(State.STOPPED)
     public void close() {
         inner.close();
-    }
-
-    @Override
-    public void configureSelect(ResultSet resultSet) throws SQLException {
-        inner.configureSelect(resultSet);
     }
 
     @Override
@@ -136,5 +105,15 @@ public final class MySqlDbmsOperationHandler implements DbmsOperationHandler {
     @Override
     public <T> Stream<T> executeQuery(Dbms dbms, String sql, SqlFunction<ResultSet, T> rsMapper) {
         return inner.executeQuery(dbms, sql, rsMapper);
+    }
+
+    @Override
+    public void configureSelect(PreparedStatement statement) throws SQLException {
+        inner.configureSelect(statement);
+    }
+
+    @Override
+    public void configureSelect(ResultSet resultSet) throws SQLException {
+        inner.configureSelect(resultSet);
     }
 }

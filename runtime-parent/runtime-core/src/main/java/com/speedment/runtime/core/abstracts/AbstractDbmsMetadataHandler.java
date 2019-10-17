@@ -50,7 +50,6 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.core.abstracts.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.core.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Objects.nonNull;
@@ -68,11 +67,14 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
     private final static Class<?> DEFAULT_MAPPING = Object.class;
-    
+    public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
+
     private final ConnectionPoolComponent connectionPoolComponent;
     private final DbmsHandlerComponent dbmsHandlerComponent;
     private final ProjectComponent projectComponent;
     private final Map<Class<? extends Document>, AtomicLong> timers;
+
+
     private JavaTypeMap javaTypeMap;
 
     protected AbstractDbmsMetadataHandler(
@@ -404,7 +406,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 null
             );
 
-        final AbstractDbmsOperationHandler.TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
+        final TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
 
             final ColumnMetaData md = ColumnMetaData.of(rs);
 
@@ -495,7 +497,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 metaDataTableNameForPrimaryKeys(table)
             );
 
-        final AbstractDbmsOperationHandler.TableChildMutator<PrimaryKeyColumn, ResultSet> mutator = (primaryKeyColumn, rs) -> {
+        final TableChildMutator<PrimaryKeyColumn, ResultSet> mutator = (primaryKeyColumn, rs) -> {
             final String columnName = rs.getString("COLUMN_NAME");
             primaryKeyColumn.mutator().setId(columnName);
             primaryKeyColumn.mutator().setName(columnName);
@@ -530,7 +532,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 true 
             );
 
-        final AbstractDbmsOperationHandler.TableChildMutator<Index, ResultSet> mutator = (index, rs) -> {
+        final TableChildMutator<Index, ResultSet> mutator = (index, rs) -> {
             final String indexName = rs.getString("INDEX_NAME");
             final boolean unique = !rs.getBoolean("NON_UNIQUE");
 
@@ -574,7 +576,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 metaDataTableNameForForeignKeys(table)
             );
 
-        final AbstractDbmsOperationHandler.TableChildMutator<ForeignKey, ResultSet> mutator = (foreignKey, rs) -> {
+        final TableChildMutator<ForeignKey, ResultSet> mutator = (foreignKey, rs) -> {
 
             final String foreignKeyName = rs.getString("FK_NAME");
             foreignKey.mutator().setId(foreignKeyName);
@@ -606,7 +608,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         final Class<T> type,
         final Supplier<T> childSupplier,
         final SqlSupplier<ResultSet> resultSetSupplier,
-        final AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
+        final TableChildMutator<T, ResultSet> resultSetMutator,
         final ProgressMeasure progressListener
     ) {
         tableChilds(type, childSupplier, resultSetSupplier, resultSetMutator, rs -> true, progressListener);
@@ -616,7 +618,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         final Class<T> type,
         final Supplier<T> childSupplier,
         final SqlSupplier<ResultSet> resultSetSupplier,
-        final AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
+        final TableChildMutator<T, ResultSet> resultSetMutator,
         final SqlPredicate<ResultSet> filter,
         final ProgressMeasure progressListener
     ) {
@@ -870,5 +872,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     private Connection getConnection(Dbms dbms) {
         return connectionPoolComponent.getConnection(dbms);
     }
-    
+
+    @FunctionalInterface
+    protected interface TableChildMutator<T, U> {
+
+        void mutate(T t, U u) throws SQLException;
+    }
+
 }
