@@ -41,6 +41,7 @@ import com.speedment.runtime.typemapper.shorts.ShortToByteMapper;
 import com.speedment.runtime.typemapper.string.*;
 import com.speedment.runtime.typemapper.time.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.*;
@@ -197,12 +198,11 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
                     @SuppressWarnings("unchecked")
                     final TypeMapper<Object, Object> mapper = 
                         (TypeMapper<Object, Object>) injector.classLoader()
-                            .loadClass(name).newInstance();
+                            .loadClass(name)
+                            .getConstructor()
+                            .newInstance();
                     return mapper;
-                } catch (final ClassNotFoundException 
-                             | IllegalAccessException 
-                             | InstantiationException ex) {
-                    
+                } catch (final ReflectiveOperationException ex) {
                     throw new SpeedmentTranslatorException(
                         "Could not instantiate TypeMapper: '" + name + "'.", ex
                     );
