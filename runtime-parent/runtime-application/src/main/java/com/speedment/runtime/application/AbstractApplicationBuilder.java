@@ -45,15 +45,12 @@ import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.welcome.HasOnWelcome;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
@@ -62,7 +59,6 @@ import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.*;
 
 /**
  * This abstract class is implemented by classes that can build a
