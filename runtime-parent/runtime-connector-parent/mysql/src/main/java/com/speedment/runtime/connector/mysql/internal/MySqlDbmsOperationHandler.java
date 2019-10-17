@@ -53,11 +53,14 @@ public final class MySqlDbmsOperationHandler implements DbmsOperationHandler {
         inner = new StandardDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
     }
 
-    // Changed from inner
+    // Begin: Changed from inner
+
     @Override
     public void configureSelect(PreparedStatement statement) throws SQLException {
         statement.setFetchSize(Integer.MIN_VALUE); // Enable streaming ResultSet
     }
+
+    // End: Changed from inner
 
     @ExecuteBefore(State.STOPPED)
     public void close() {
