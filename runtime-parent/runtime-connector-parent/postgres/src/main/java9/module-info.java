@@ -18,8 +18,8 @@ module com.speedment.runtime.connector.postgres {
     exports com.speedment.runtime.connector.postgres;
     exports com.speedment.runtime.connector.postgres.provider;
 
-    requires com.speedment.common.injector;
-    requires com.speedment.runtime.core;
-    requires com.speedment.runtime.config;
-    requires com.speedment.runtime.field;
+    requires transitive com.speedment.common.injector;
+    requires transitive com.speedment.runtime.core;
+    requires transitive com.speedment.runtime.config;
+    requires transitive com.speedment.runtime.field;
 }
