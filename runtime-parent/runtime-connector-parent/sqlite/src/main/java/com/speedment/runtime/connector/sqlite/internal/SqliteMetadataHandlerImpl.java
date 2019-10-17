@@ -27,7 +27,6 @@ import com.speedment.runtime.config.mutator.IndexMutator;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
-import com.speedment.runtime.connector.sqlite.SqliteDbmsType;
 import com.speedment.runtime.connector.sqlite.internal.types.SqlTypeMappingHelper;
 import com.speedment.runtime.connector.sqlite.internal.util.MetaDataUtil;
 import com.speedment.runtime.core.component.ProjectComponent;
