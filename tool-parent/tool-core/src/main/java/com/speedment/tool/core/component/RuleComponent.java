@@ -21,7 +21,6 @@ import com.speedment.tool.core.rule.Issue;
 import com.speedment.tool.core.rule.Rule;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 /**
  * A component for assigning and verifying rules, which will be checked
