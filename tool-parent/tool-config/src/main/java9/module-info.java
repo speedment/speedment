@@ -23,12 +23,11 @@ module com.speedment.tool.config {
     exports com.speedment.tool.config.trait;
     exports com.speedment.tool.config.util;
 
-    requires com.speedment.common.injector;
-    requires com.speedment.common.function;
-    requires com.speedment.common.mapstream;
-
-    requires com.speedment.runtime.core;
-    requires com.speedment.runtime.config;
-
     requires com.speedment.generator.translator;
+
+    requires transitive com.speedment.common.function;
+    requires transitive com.speedment.common.injector;
+    requires transitive com.speedment.common.mapstream;
+    requires transitive com.speedment.runtime.core;
+    requires transitive com.speedment.runtime.config;
 }
