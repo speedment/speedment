@@ -28,21 +28,21 @@ module com.speedment.tool.core {
     exports com.speedment.tool.core.toolbar;
     exports com.speedment.tool.core.util;
 
-    requires com.speedment.common.injector;
     requires com.speedment.common.rest;
     requires com.speedment.common.json;
     requires com.speedment.common.mapstream;
     requires com.speedment.common.logger;
 
-    requires com.speedment.runtime.core;
     requires com.speedment.runtime.config;
     requires com.speedment.runtime.typemapper;
     requires com.speedment.runtime.application;
 
-    requires com.speedment.generator.core;
-    requires com.speedment.generator.translator;
-
-    requires com.speedment.tool.config;
     requires com.speedment.tool.actions;
-    requires com.speedment.tool.propertyeditor;
+
+    requires transitive com.speedment.common.injector;
+    requires transitive com.speedment.runtime.core;
+    requires transitive com.speedment.generator.core;
+    requires transitive com.speedment.generator.translator;
+    requires transitive com.speedment.tool.config;
+    requires transitive com.speedment.tool.propertyeditor;
 }
