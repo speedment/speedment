@@ -18,8 +18,8 @@ package com.speedment.generator.standard.manager;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
@@ -52,6 +52,7 @@ import java.sql.SQLException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
@@ -60,8 +61,7 @@ import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 /**
  *
@@ -189,7 +189,7 @@ public final class GeneratedSqlAdapterTranslator
                                         .orElseThrow(() -> new SpeedmentTranslatorException(
                                         "Could not find appropriate "
                                         + "database type for column '" + col
-                                        + "'."
+                                        + "'. Available TypeMappers: " + availableTypeMappers()
                                     )),
                                     isPrimitive(javaType)
                                     ? wrapperFor(javaType)
@@ -321,5 +321,14 @@ public final class GeneratedSqlAdapterTranslator
     private String helperName(Column column) {
         return getSupport().namer()
             .javaVariableName(column.getJavaName()) + "Helper";
+    }
+
+    private String availableTypeMappers() {
+        return typeMapperComponent.stream()
+            .map(Object::getClass)
+            .map(java.lang.Class::getSimpleName)
+            .distinct()
+            .sorted()
+            .collect(Collectors.joining(", "));
     }
 }
