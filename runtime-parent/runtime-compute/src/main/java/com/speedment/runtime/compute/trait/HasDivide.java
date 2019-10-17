@@ -59,6 +59,7 @@ public interface HasDivide<T> {
      * @param divisor the divisor used for the division
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     ToDouble<T> divide(ToInt<T> divisor);
 
     /**
@@ -89,6 +90,7 @@ public interface HasDivide<T> {
      * @param divisor the divisor used for the division
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     ToDouble<T> divide(ToLong<T> divisor);
 
     /**
@@ -119,6 +121,7 @@ public interface HasDivide<T> {
      * @param divisor the divisor used for the division
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     ToDouble<T> divide(ToDouble<T> divisor);
 
 }
