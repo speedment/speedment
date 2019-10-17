@@ -6,12 +6,12 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.ApplicationBuilder;
-
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
+import com.speedment.runtime.core.db.SqlBiConsumer;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.manager.sql.SqlDeleteStatement;
@@ -49,6 +49,7 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     private final ConnectionPoolComponent connectionPoolComponent;
     private final DbmsHandlerComponent dbmsHandlerComponent;
     private final TransactionComponent transactionComponent;
+    private final SqlBiConsumer<PreparedStatement, LongConsumer> generatedKeysHandler;
     private final AtomicBoolean closed;
 
     public DbmsOperationHandlerImpl(
@@ -56,9 +57,19 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent
     ) {
+        this(connectionPoolComponent, dbmsHandlerComponent, transactionComponent, DbmsOperationHandlerImpl::defaultGeneratedKeys);
+    }
+
+    public DbmsOperationHandlerImpl(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final TransactionComponent transactionComponent,
+        final SqlBiConsumer<PreparedStatement, LongConsumer> generatedKeysHandler
+    ) {
         this.connectionPoolComponent = requireNonNull(connectionPoolComponent);
         this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
         this.transactionComponent = requireNonNull(transactionComponent);
+        this.generatedKeysHandler = requireNonNull(generatedKeysHandler);
         closed = new AtomicBoolean();
     }
 
@@ -146,13 +157,10 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
 
     @Override
     public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
-        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
-            while (generatedKeys.next()) {
-                longConsumer.accept(generatedKeys.getLong(1));
-                //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-            }
-        }
+        generatedKeysHandler.accept(ps, longConsumer);
     }
+
+
 
     @Override
     public Clob createClob(Dbms dbms) throws SQLException {
@@ -376,6 +384,15 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
             closeable.close();
         } catch (Exception e) {
             LOGGER.warn(e);
+        }
+    }
+
+    private static void defaultGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
+        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
+            while (generatedKeys.next()) {
+                longConsumer.accept(generatedKeys.getLong(1));
+                //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+            }
         }
     }
 

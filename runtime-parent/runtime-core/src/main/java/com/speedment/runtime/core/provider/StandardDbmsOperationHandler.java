@@ -8,6 +8,7 @@ import com.speedment.runtime.core.component.connectionpool.ConnectionPoolCompone
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
+import com.speedment.runtime.core.db.SqlBiConsumer;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.internal.db.DbmsOperationHandlerImpl;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
@@ -31,6 +32,15 @@ public class StandardDbmsOperationHandler implements DbmsOperationHandler {
         final TransactionComponent transactionComponent
     ) {
         inner = new DbmsOperationHandlerImpl(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+    }
+
+    public StandardDbmsOperationHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final TransactionComponent transactionComponent,
+        final SqlBiConsumer<PreparedStatement, LongConsumer> generatedKeysHandler
+    ) {
+        inner = new DbmsOperationHandlerImpl(connectionPoolComponent, dbmsHandlerComponent, transactionComponent, generatedKeysHandler);
     }
 
     @ExecuteBefore(State.STOPPED)

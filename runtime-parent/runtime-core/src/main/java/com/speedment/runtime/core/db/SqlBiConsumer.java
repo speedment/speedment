@@ -17,30 +17,31 @@
 package com.speedment.runtime.core.db;
 
 import java.sql.SQLException;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static java.util.Objects.requireNonNull;
 
 /**
  * A variation of the standard {@code java.util.function.Consumer} that throws a
- * {@code SQLException} if an error occurred while the supplier was getted.
+ * {@code SQLException} if an error occurred during accept
  *
- * @param <T> supplied type
+ * @param <T> supplied first type
+ * @param <U> supplied second type
  *
  * @author Per Minborg
  */
 @FunctionalInterface
-public interface SqlBiConsumer<T> {
+public interface SqlBiConsumer<T, U> {
 
     /**
-     * Performs this operation on the given argument.
+     * Performs this operation on the given arguments.
      *
-     * @param t the input argument to consume
-     * @throws SQLException on error
+     * @param t the first input argument
+     * @param u the second input argument
      */
-    void accept(T t) throws SQLException;
+    void accept(T t, U u) throws SQLException;
 
-    static <T> SqlBiConsumer<T> wrap(Consumer<T> inner) {
+    static <T, U> SqlBiConsumer<T, U> wrap(BiConsumer<T, U> inner) {
         return requireNonNull(inner)::accept;
     }
 }
