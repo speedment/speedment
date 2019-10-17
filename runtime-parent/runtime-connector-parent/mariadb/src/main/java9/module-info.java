@@ -18,8 +18,8 @@ module com.speedment.runtime.connector.mariadb {
     exports com.speedment.runtime.connector.mariadb;
     exports com.speedment.runtime.connector.mariadb.provider;
 
-    requires com.speedment.common.injector;
-    requires com.speedment.runtime.core;
-    requires com.speedment.runtime.config;
-    requires com.speedment.runtime.connector.mysql;
+    requires transitive com.speedment.common.injector;
+    requires transitive com.speedment.runtime.core;
+    requires transitive com.speedment.runtime.config;
+    requires transitive com.speedment.runtime.connector.mysql;
 }
