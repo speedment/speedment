@@ -19,13 +19,12 @@ package com.speedment.runtime.connector.postgres.internal;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
+import com.speedment.runtime.core.db.DbmsOperationalHandlerBuilder;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.provider.StandardDbmsOperationHandler;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
@@ -56,57 +55,33 @@ public final class PostgresDbmsOperationHandler implements DbmsOperationHandler 
         Types.NUMERIC
     );
 
-    private final StandardDbmsOperationHandler inner;
+    private final DbmsOperationHandler inner;
 
     PostgresDbmsOperationHandler(
         final ConnectionPoolComponent connectionPoolComponent,
-        final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent
     ) {
-        inner = new StandardDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        inner = DbmsOperationalHandlerBuilder.create(connectionPoolComponent, transactionComponent)
+            .withGeneratedKeysHandler(PostgresDbmsOperationHandler::generatedKeysHandler)
+            .withConfigureSelectPreparedStatement(ps -> ps.setFetchSize(FETCH_SIZE))
+            .withConfigureSelectResultSet(rs -> rs.setFetchSize(FETCH_SIZE))
+            .build();
     }
 
-    // Begin: Changed from inner
-
+    @ExecuteBefore(State.STOPPED)
     @Override
-    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
-        /*
-         * There does not seem to be any way to find the generated keys from a Postgres JDBC driver
-         * since getGeneratedKeys() returns the whole set of columns. This causes
-         * bug #293 "The postgresql throws an exception when the PRIMARY KEY is not type long."
-         *
-         * See http://stackoverflow.com/questions/19766816/postgresql-jdbc-getgeneratedkeys-returns-all-columns
-         *
-         * Below we instead handle auto generated fields that can be retrieved as Long. This fix clearly only
-         * works for generated fields that are also auto generated.
-         */
-
-        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
-            while (generatedKeys.next()) {
-                final int columnType = generatedKeys.getMetaData().getColumnType(1);
-                if (generatedKeys.getMetaData().isAutoIncrement(1) && LONG_GETTABLE_TYPES.contains(columnType)) {
-                    longConsumer.accept(generatedKeys.getLong(1));
-                    //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-                }
-            }
-        }
+    public void close() {
+        inner.close();
     }
 
     @Override
     public void configureSelect(PreparedStatement statement) throws SQLException {
-        statement.setFetchSize(FETCH_SIZE);
+        inner.configureSelect(statement);
     }
 
     @Override
     public void configureSelect(ResultSet resultSet) throws SQLException {
-        resultSet.setFetchSize(FETCH_SIZE);
-    }
-
-    // End: Changed from inner
-
-    @ExecuteBefore(State.STOPPED)
-    public void close() {
-        inner.close();
+        inner.configureSelect(resultSet);
     }
 
     @Override
@@ -139,10 +114,6 @@ public final class PostgresDbmsOperationHandler implements DbmsOperationHandler 
         return inner.createStruct(dbms, typeName, attributes);
     }
 
-    public String encloseField(Dbms dbms, String fieldName) {
-        return inner.encloseField(dbms, fieldName);
-    }
-
     @Override
     public <T> Stream<T> executeQuery(Dbms dbms, String sql, SqlFunction<ResultSet, T> rsMapper) {
         return inner.executeQuery(dbms, sql, rsMapper);
@@ -172,4 +143,28 @@ public final class PostgresDbmsOperationHandler implements DbmsOperationHandler 
     public void executeDelete(Dbms dbms, String sql, List<?> values) throws SQLException {
         inner.executeDelete(dbms, sql, values);
     }
+
+    private static void generatedKeysHandler(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
+        /*
+         * There does not seem to be any way to find the generated keys from a Postgres JDBC driver
+         * since getGeneratedKeys() returns the whole set of columns. This causes
+         * bug #293 "The postgresql throws an exception when the PRIMARY KEY is not type long."
+         *
+         * See http://stackoverflow.com/questions/19766816/postgresql-jdbc-getgeneratedkeys-returns-all-columns
+         *
+         * Below we instead handle auto generated fields that can be retrieved as Long. This fix clearly only
+         * works for generated fields that are also auto generated.
+         */
+
+        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
+            while (generatedKeys.next()) {
+                final int columnType = generatedKeys.getMetaData().getColumnType(1);
+                if (generatedKeys.getMetaData().isAutoIncrement(1) && LONG_GETTABLE_TYPES.contains(columnType)) {
+                    longConsumer.accept(generatedKeys.getLong(1));
+                    //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+                }
+            }
+        }
+    }
+
 }

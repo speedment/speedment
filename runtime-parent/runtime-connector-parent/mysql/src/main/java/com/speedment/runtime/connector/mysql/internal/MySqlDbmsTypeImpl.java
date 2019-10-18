@@ -75,7 +75,7 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
         this.driverComponent = requireNonNull(driverComponent);
         this.binaryCollationName = requireNonNull(binaryCollationName);
         this.metadataHandler = new MySqlDbmsMetadataHandler(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
-        this.operationHandler = new MySqlDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        this.operationHandler = new MySqlDbmsOperationHandler(connectionPoolComponent, transactionComponent);
         this.fieldPredicateView = new MySqlSpeedmentPredicateView(binaryCollationName, collationName);
         this.namingConvention = new MySqlNamingConvention();
         this.connectionUrlGenerator = new MySqlConnectionUrlGenerator();

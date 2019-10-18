@@ -6,13 +6,9 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.ApplicationBuilder;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
-import com.speedment.runtime.core.db.AsynchronousQueryResult;
-import com.speedment.runtime.core.db.DbmsOperationHandler;
-import com.speedment.runtime.core.db.SqlBiConsumer;
-import com.speedment.runtime.core.db.SqlFunction;
+import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
@@ -26,17 +22,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
-public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
+final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
 
     private static final int INITIAL_RETRY_COUNT = 5;
     private static final Logger LOGGER = LoggerManager.getLogger(DbmsOperationHandlerImpl.class);
@@ -47,29 +40,31 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     private static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private final ConnectionPoolComponent connectionPoolComponent;
-    private final DbmsHandlerComponent dbmsHandlerComponent;
     private final TransactionComponent transactionComponent;
     private final SqlBiConsumer<PreparedStatement, LongConsumer> generatedKeysHandler;
+    private final SqlConsumer<PreparedStatement> preparedStatementConfigurator;
+    private final SqlConsumer<ResultSet> resultSetConfigurator;
     private final AtomicBoolean closed;
 
-    public DbmsOperationHandlerImpl(
+/*    public DbmsOperationHandlerImpl(
         final ConnectionPoolComponent connectionPoolComponent,
-        final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent
     ) {
-        this(connectionPoolComponent, dbmsHandlerComponent, transactionComponent, DbmsOperationHandlerImpl::defaultGeneratedKeys);
-    }
+        this(connectionPoolComponent, transactionComponent, DbmsOperationHandlerImpl::defaultGeneratedKeys);
+    }*/
 
-    public DbmsOperationHandlerImpl(
+    DbmsOperationHandlerImpl(
         final ConnectionPoolComponent connectionPoolComponent,
-        final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent,
-        final SqlBiConsumer<PreparedStatement, LongConsumer> generatedKeysHandler
+        final SqlBiConsumer<PreparedStatement, LongConsumer> generatedKeysHandler,
+        final SqlConsumer<PreparedStatement> preparedStatementConfigurator,
+        final SqlConsumer<ResultSet> resultSetConfigurator
     ) {
         this.connectionPoolComponent = requireNonNull(connectionPoolComponent);
-        this.dbmsHandlerComponent = requireNonNull(dbmsHandlerComponent);
         this.transactionComponent = requireNonNull(transactionComponent);
         this.generatedKeysHandler = requireNonNull(generatedKeysHandler);
+        this.preparedStatementConfigurator = requireNonNull(preparedStatementConfigurator);
+        this.resultSetConfigurator = requireNonNull(resultSetConfigurator);
         closed = new AtomicBoolean();
     }
 
@@ -138,29 +133,22 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         logOperation(LOGGER_PERSIST, sql, values);
         final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, new ArrayList<>(generatedKeyFields), generatedKeyConsumer);
-        execute(dbms, singletonList(sqlUpdateStatement));
+        execute(dbms, sqlUpdateStatement);
     }
 
     @Override
     public void executeUpdate(Dbms dbms, String sql, List<?> values) throws SQLException {
         logOperation(LOGGER_UPDATE, sql, values);
         final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values);
-        execute(dbms, singletonList(sqlUpdateStatement));
+        execute(dbms, sqlUpdateStatement);
     }
 
     @Override
     public void executeDelete(Dbms dbms, String sql, List<?> values) throws SQLException {
         logOperation(LOGGER_REMOVE, sql, values);
         final SqlDeleteStatement sqlDeleteStatement = new SqlDeleteStatement(sql, values);
-        execute(dbms, singletonList(sqlDeleteStatement));
+        execute(dbms, sqlDeleteStatement);
     }
-
-    @Override
-    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
-        generatedKeysHandler.accept(ps, longConsumer);
-    }
-
-
 
     @Override
     public Clob createClob(Dbms dbms) throws SQLException {
@@ -198,50 +186,50 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         }
     }
 
-
-    /////////   Extra methods
-
-    public String encloseField(Dbms dbms, String fieldName) {
-        return dbmsTypeOf(dbmsHandlerComponent, dbms).getDatabaseNamingConvention().encloseField(fieldName);
+    @Override
+    public void configureSelect(ResultSet resultSet) throws SQLException {
+        resultSetConfigurator.accept(resultSet);
     }
 
-    /////////////
+    @Override
+    public void configureSelect(PreparedStatement statement) throws SQLException {
+        preparedStatementConfigurator.accept(statement);
+    }
 
     // Todo: Rewrite the method below.
 
-    private void execute(Dbms dbms, List<? extends SqlStatement> sqlStatementList) throws SQLException {
+    private void execute(Dbms dbms, SqlStatement sqlStatement) throws SQLException {
         final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
         if (connectionInfo.isInTransaction()) {
-            executeInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
+            executeInTransaction(dbms, connectionInfo.connection(), sqlStatement);
         } else {
-            executeNotInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
+            executeNotInTransaction(dbms, connectionInfo.connection(), sqlStatement);
         }
     }
 
     private void executeNotInTransaction(
         final Dbms dbms,
         final Connection conn,
-        final List<? extends SqlStatement> sqlStatementList
+        final SqlStatement sqlStatement
     ) throws SQLException {
         requireNonNull(dbms);
         requireNonNull(conn);
-        requireNonNull(sqlStatementList);
+        requireNonNull(sqlStatement);
 
         assertNotClosed();
         int retryCount = INITIAL_RETRY_COUNT;
         boolean transactionCompleted = false;
         do {
-            final AtomicReference<SqlStatement> lastSqlStatement = new AtomicReference<>();
             try {
                 conn.setAutoCommit(false);
-                executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
+                executeSqlStatement(sqlStatement, dbms, conn);
                 conn.commit();
                 conn.close();
                 transactionCompleted = true;
             } catch (SQLException sqlEx) {
                 if (retryCount < INITIAL_RETRY_COUNT) {
-                    LOGGER_SQL_RETRY.error("SqlStatementList: " + sqlStatementList);
-                    LOGGER_SQL_RETRY.error("SQL: " + lastSqlStatement.get());
+                    LOGGER_SQL_RETRY.error("SqlStatementList: " + sqlStatement);
+                    LOGGER_SQL_RETRY.error("SQL: " + sqlStatement);
                     LOGGER_SQL_RETRY.error(sqlEx, sqlEx.getMessage());
                 }
 
@@ -272,27 +260,25 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         } while (!transactionCompleted && (retryCount > 0));
 
         if (transactionCompleted) {
-            postSuccessfulTransaction(sqlStatementList);
+            postSuccessfulTransaction(sqlStatement);
         }
     }
 
     private void executeInTransaction(
         final Dbms dbms,
         final Connection conn,
-        final List<? extends SqlStatement> sqlStatementList
+        final SqlStatement sqlStatement
     ) throws SQLException {
         requireNonNull(dbms);
         requireNonNull(conn);
-        requireNonNull(sqlStatementList);
+        requireNonNull(sqlStatement);
 
         assertNotClosed();
-        final AtomicReference<SqlStatement> lastSqlStatement = new AtomicReference<>();
-        executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
-        postSuccessfulTransaction(sqlStatementList);
+        executeSqlStatement(sqlStatement, dbms, conn);
+        postSuccessfulTransaction(sqlStatement);
     }
 
-    private void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement sqlStatement) throws SQLException {
-        assertNotClosed();
+     private void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement sqlStatement) throws SQLException {
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -323,39 +309,35 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         }
     }
 
-    private void postSuccessfulTransaction(List<? extends SqlStatement> sqlStatementList) {
-        sqlStatementList.stream()
-            .filter(SqlInsertStatement.class::isInstance)
-            .map(SqlInsertStatement.class::cast)
-            .forEach(SqlInsertStatement::notifyGeneratedKeyListener);
+    private void postSuccessfulTransaction(SqlStatement sqlStatement) {
+        if (sqlStatement instanceof SqlInsertStatement) {
+            final SqlInsertStatement sqlInsertStatement = (SqlInsertStatement)sqlStatement;
+            sqlInsertStatement.notifyGeneratedKeyListener();
+        }
     }
 
     private void logOperation(Logger logger, final String sql, final List<?> values) {
         logger.debug("%s, values:%s", sql, values);
     }
 
-    private void executeSqlStatementList(List<? extends SqlStatement> sqlStatementList, AtomicReference<SqlStatement> lastSqlStatement, Dbms dbms, Connection conn) throws SQLException {
+    private void executeSqlStatement(SqlStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
         assertNotClosed();
-        for (final SqlStatement sqlStatement : sqlStatementList) {
-            lastSqlStatement.set(sqlStatement);
-            switch (sqlStatement.getType()) {
-                case INSERT: {
-                    final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
-                    handleSqlStatement(dbms, conn, s);
-                    break;
-                }
-                case UPDATE: {
-                    final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
-                    handleSqlStatement(dbms, conn, s);
-                    break;
-                }
-                case DELETE: {
-                    final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
-                    handleSqlStatement(dbms, conn, s);
-                    break;
-                }
+        switch (sqlStatement.getType()) {
+            case INSERT: {
+                final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
+                handleSqlStatement(dbms, conn, s);
+                break;
             }
-
+            case UPDATE: {
+                final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
+                handleSqlStatement(dbms, conn, s);
+                break;
+            }
+            case DELETE: {
+                final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
+                handleSqlStatement(dbms, conn, s);
+                break;
+            }
         }
     }
 
@@ -387,7 +369,11 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         }
     }
 
-    private static void defaultGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
+    private void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
+        generatedKeysHandler.accept(ps, longConsumer);
+    }
+
+    static void defaultGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
         try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
             while (generatedKeys.next()) {
                 longConsumer.accept(generatedKeys.getLong(1));
@@ -395,6 +381,5 @@ public final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
             }
         }
     }
-
 
 }

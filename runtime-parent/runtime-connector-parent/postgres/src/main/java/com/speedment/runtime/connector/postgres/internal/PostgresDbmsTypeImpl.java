@@ -66,7 +66,7 @@ public final class PostgresDbmsTypeImpl implements DbmsType {
     ) {
         this.driverComponent = requireNonNull(driverComponent);
         this.metadataHandler = new PostgresDbmsMetadataHandler(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
-        this.operationHandler = new PostgresDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        this.operationHandler = new PostgresDbmsOperationHandler(connectionPoolComponent, transactionComponent);
         this.namingConvention = new PostgresNamingConvention();
         this.connectionUrlGenerator = new PostgresConnectionUrlGenerator();
         this.support = DbmsTypeDefault.create();

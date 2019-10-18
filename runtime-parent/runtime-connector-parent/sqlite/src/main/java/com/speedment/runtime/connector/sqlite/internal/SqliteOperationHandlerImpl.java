@@ -19,13 +19,13 @@ package com.speedment.runtime.connector.sqlite.internal;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.connector.sqlite.SqliteOperationHandler;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
+import com.speedment.runtime.core.db.DbmsOperationalHandlerBuilder;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.provider.StandardDbmsOperationHandler;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
@@ -33,7 +33,6 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 /**
@@ -42,19 +41,20 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since  3.1.10
  */
-public final class SqliteOperationHandlerImpl implements DbmsOperationHandler {
+public final class SqliteOperationHandlerImpl implements SqliteOperationHandler {
 
-    private final StandardDbmsOperationHandler inner;
+    private final DbmsOperationHandler inner;
 
     public SqliteOperationHandlerImpl(
         final ConnectionPoolComponent connectionPoolComponent,
-        final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent
     ) {
-        inner = new StandardDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        inner = DbmsOperationalHandlerBuilder.create(connectionPoolComponent, transactionComponent)
+            .build();
     }
 
     @ExecuteBefore(State.STOPPED)
+    @Override
     public void close() {
         inner.close();
     }
@@ -85,11 +85,6 @@ public final class SqliteOperationHandlerImpl implements DbmsOperationHandler {
     }
 
     @Override
-    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
-        inner.handleGeneratedKeys(ps, longConsumer);
-    }
-
-    @Override
     public Clob createClob(Dbms dbms) throws SQLException {
         return inner.createClob(dbms);
     }
@@ -117,10 +112,6 @@ public final class SqliteOperationHandlerImpl implements DbmsOperationHandler {
     @Override
     public Struct createStruct(Dbms dbms, String typeName, Object[] attributes) throws SQLException {
         return inner.createStruct(dbms, typeName, attributes);
-    }
-
-    public String encloseField(Dbms dbms, String fieldName) {
-        return inner.encloseField(dbms, fieldName);
     }
 
     @Override

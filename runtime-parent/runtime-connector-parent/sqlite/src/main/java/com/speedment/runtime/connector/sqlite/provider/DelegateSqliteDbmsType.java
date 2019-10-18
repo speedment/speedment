@@ -1,11 +1,14 @@
 package com.speedment.runtime.connector.sqlite.provider;
 
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.OnlyIfMissing;
 import com.speedment.runtime.connector.sqlite.SqliteDbmsType;
 import com.speedment.runtime.connector.sqlite.SqliteMetadataHandler;
-import com.speedment.runtime.connector.sqlite.SqliteOperationHandler;
 import com.speedment.runtime.connector.sqlite.internal.SqliteDbmsTypeImpl;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
@@ -15,24 +18,31 @@ import java.util.Set;
 
 public final class DelegateSqliteDbmsType implements SqliteDbmsType {
 
-    private final DbmsType inner;
+    private final SqliteDbmsTypeImpl inner;
 
     @Inject
     @OnlyIfMissing(DriverComponent.class)
     public DelegateSqliteDbmsType(
         final SqliteMetadataHandler metadataHandler,
-        final SqliteOperationHandler operationHandler
+        final ConnectionPoolComponent connectionPoolComponent,
+        final TransactionComponent transactionComponent
     ) {
-        inner = new SqliteDbmsTypeImpl(metadataHandler, operationHandler);
+        inner = new SqliteDbmsTypeImpl(metadataHandler, connectionPoolComponent, transactionComponent);
     }
 
     @Inject
     public DelegateSqliteDbmsType(
-        final DriverComponent driverComponent,
+        final DriverComponent drivers,
         final SqliteMetadataHandler metadataHandler,
-        final SqliteOperationHandler operationHandler
+        final ConnectionPoolComponent connectionPoolComponent,
+        final TransactionComponent transactionComponent
     ) {
-        inner = new SqliteDbmsTypeImpl(driverComponent, metadataHandler, operationHandler);
+        inner = new SqliteDbmsTypeImpl(drivers, metadataHandler, connectionPoolComponent, transactionComponent);
+    }
+
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        inner.close();
     }
 
     @Override

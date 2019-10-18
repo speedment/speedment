@@ -16,10 +16,15 @@
  */
 package com.speedment.runtime.connector.sqlite.internal;
 
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.OnlyIfMissing;
 import com.speedment.runtime.connector.sqlite.SqliteMetadataHandler;
 import com.speedment.runtime.connector.sqlite.SqliteOperationHandler;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
@@ -48,22 +53,29 @@ public final class SqliteDbmsTypeImpl implements DbmsType {
     @OnlyIfMissing(DriverComponent.class)
     public SqliteDbmsTypeImpl(
         final SqliteMetadataHandler metadataHandler,
-        final SqliteOperationHandler operationHandler
+        final ConnectionPoolComponent connectionPoolComponent,
+        final TransactionComponent transactionComponent
     ) {
         this.drivers          = null; // Nullable
         this.metadataHandler  = requireNonNull(metadataHandler);
-        this.operationHandler = requireNonNull(operationHandler);
+        this.operationHandler = new SqliteOperationHandlerImpl(connectionPoolComponent, transactionComponent);
     }
 
     @Inject
     public SqliteDbmsTypeImpl(
         final DriverComponent drivers,
         final SqliteMetadataHandler metadataHandler,
-        final SqliteOperationHandler operationHandler
+        final ConnectionPoolComponent connectionPoolComponent,
+        final TransactionComponent transactionComponent
     ) {
         this.drivers          = requireNonNull(drivers);
         this.metadataHandler  = requireNonNull(metadataHandler);
-        this.operationHandler = requireNonNull(operationHandler);
+        this.operationHandler = new SqliteOperationHandlerImpl(connectionPoolComponent, transactionComponent);
+    }
+
+    @ExecuteBefore(State.STOPPED)
+    public void close() {
+        operationHandler.close();
     }
 
     @Override

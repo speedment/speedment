@@ -74,7 +74,7 @@ public final class MariaDbDbmsTypeImpl implements DbmsType {
     ) {
         this.driverComponent = requireNonNull(driverComponent);
         this.metadataHandler = new MySqlDbmsMetadataHandler(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
-        this.operationHandler = new MySqlDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        this.operationHandler = new MySqlDbmsOperationHandler(connectionPoolComponent, transactionComponent);
         this.fieldPredicateView = new MySqlSpeedmentPredicateView(binaryCollationName, collationName);
         this.binaryCollationName = requireNonNull(binaryCollationName);
         this.namingConvention = new MariaDbNamingConvention();

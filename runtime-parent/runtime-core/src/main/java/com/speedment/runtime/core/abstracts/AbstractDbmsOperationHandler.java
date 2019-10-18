@@ -292,8 +292,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         }
     }
 
-    @Override
-    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
+    private void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
         try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
             while (generatedKeys.next()) {
                 longConsumer.accept(generatedKeys.getLong(1));

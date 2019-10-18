@@ -34,8 +34,7 @@ public class SqliteBundle implements InjectBundle {
         return Stream.of(
             StandardSqliteComponent.class,
             DelegateSqliteDbmsType.class,
-            DelegateSqliteMetadataHandler.class,
-            DelegateSqliteOperationalHandler.class
+            DelegateSqliteMetadataHandler.class
         );
     }
 }

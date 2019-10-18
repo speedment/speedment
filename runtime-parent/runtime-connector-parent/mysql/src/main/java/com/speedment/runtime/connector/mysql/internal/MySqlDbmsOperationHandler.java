@@ -19,13 +19,12 @@ package com.speedment.runtime.connector.mysql.internal;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
+import com.speedment.runtime.core.db.DbmsOperationalHandlerBuilder;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.provider.StandardDbmsOperationHandler;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
@@ -33,7 +32,6 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 /**
@@ -43,24 +41,16 @@ import java.util.stream.Stream;
  */
 public final class MySqlDbmsOperationHandler implements DbmsOperationHandler {
 
-    private final StandardDbmsOperationHandler inner;
+    private final DbmsOperationHandler inner;
 
     public MySqlDbmsOperationHandler(
         final ConnectionPoolComponent connectionPoolComponent,
-        final DbmsHandlerComponent dbmsHandlerComponent,
         final TransactionComponent transactionComponent
     ) {
-        inner = new StandardDbmsOperationHandler(connectionPoolComponent, dbmsHandlerComponent, transactionComponent);
+        inner = DbmsOperationalHandlerBuilder.create(connectionPoolComponent, transactionComponent)
+            .withConfigureSelectPreparedStatement(ps -> ps.setFetchSize(Integer.MIN_VALUE)) // Enable streaming ResultSet
+            .build();
     }
-
-    // Begin: Changed from inner
-
-    @Override
-    public void configureSelect(PreparedStatement statement) throws SQLException {
-        statement.setFetchSize(Integer.MIN_VALUE); // Enable streaming ResultSet
-    }
-
-    // End: Changed from inner
 
     @ExecuteBefore(State.STOPPED)
     public void close() {
@@ -68,8 +58,8 @@ public final class MySqlDbmsOperationHandler implements DbmsOperationHandler {
     }
 
     @Override
-    public void configureSelect(ResultSet resultSet) throws SQLException {
-        inner.configureSelect(resultSet);
+    public <T> Stream<T> executeQuery(Dbms dbms, String sql, SqlFunction<ResultSet, T> rsMapper) {
+        return inner.executeQuery(dbms, sql, rsMapper);
     }
 
     @Override
@@ -95,11 +85,6 @@ public final class MySqlDbmsOperationHandler implements DbmsOperationHandler {
     @Override
     public void executeDelete(Dbms dbms, String sql, List<?> values) throws SQLException {
         inner.executeDelete(dbms, sql, values);
-    }
-
-    @Override
-    public void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
-        inner.handleGeneratedKeys(ps, longConsumer);
     }
 
     @Override
@@ -132,12 +117,13 @@ public final class MySqlDbmsOperationHandler implements DbmsOperationHandler {
         return inner.createStruct(dbms, typeName, attributes);
     }
 
-    public String encloseField(Dbms dbms, String fieldName) {
-        return inner.encloseField(dbms, fieldName);
+    @Override
+    public void configureSelect(PreparedStatement statement) throws SQLException {
+        inner.configureSelect(statement);
     }
 
     @Override
-    public <T> Stream<T> executeQuery(Dbms dbms, String sql, SqlFunction<ResultSet, T> rsMapper) {
-        return inner.executeQuery(dbms, sql, rsMapper);
+    public void configureSelect(ResultSet resultSet) throws SQLException {
+        inner.configureSelect(resultSet);
     }
 }
