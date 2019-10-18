@@ -1,7 +1,5 @@
 package com.speedment.runtime.core.internal.db;
 
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
@@ -13,6 +11,7 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.core.internal.manager.sql.SqlUpdateStatement;
+import com.speedment.runtime.core.manager.sql.HasGeneratedKeys;
 import com.speedment.runtime.core.manager.sql.SqlStatement;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
@@ -28,6 +27,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
 
 final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
 
@@ -44,31 +44,26 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     private final SqlBiConsumer<PreparedStatement, LongConsumer> generatedKeysHandler;
     private final SqlConsumer<PreparedStatement> preparedStatementConfigurator;
     private final SqlConsumer<ResultSet> resultSetConfigurator;
+    private SqlTriConsumer<Dbms, Connection, HasGeneratedKeys> insertHandler;
     private final AtomicBoolean closed;
-
-/*    public DbmsOperationHandlerImpl(
-        final ConnectionPoolComponent connectionPoolComponent,
-        final TransactionComponent transactionComponent
-    ) {
-        this(connectionPoolComponent, transactionComponent, DbmsOperationHandlerImpl::defaultGeneratedKeys);
-    }*/
 
     DbmsOperationHandlerImpl(
         final ConnectionPoolComponent connectionPoolComponent,
         final TransactionComponent transactionComponent,
         final SqlBiConsumer<PreparedStatement, LongConsumer> generatedKeysHandler,
         final SqlConsumer<PreparedStatement> preparedStatementConfigurator,
-        final SqlConsumer<ResultSet> resultSetConfigurator
+        final SqlConsumer<ResultSet> resultSetConfigurator,
+        final SqlTriConsumer<Dbms, Connection, HasGeneratedKeys> insertHandler
     ) {
         this.connectionPoolComponent = requireNonNull(connectionPoolComponent);
         this.transactionComponent = requireNonNull(transactionComponent);
-        this.generatedKeysHandler = requireNonNull(generatedKeysHandler);
-        this.preparedStatementConfigurator = requireNonNull(preparedStatementConfigurator);
-        this.resultSetConfigurator = requireNonNull(resultSetConfigurator);
+        this.generatedKeysHandler = ofNullable(generatedKeysHandler).orElse(this::defaultGeneratedKeys);
+        this.preparedStatementConfigurator = ofNullable(preparedStatementConfigurator).orElse(ps -> {});
+        this.resultSetConfigurator = ofNullable(resultSetConfigurator).orElse(rs -> {});
+        this.insertHandler = ofNullable(insertHandler).orElse(this::defaultInsertHandler);
         closed = new AtomicBoolean();
     }
 
-    @ExecuteBefore(State.STOPPED)
     public void close() {
         closed.set(true);
     }
@@ -279,15 +274,7 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     }
 
      private void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement sqlStatement) throws SQLException {
-        try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
-            int i = 1;
-            for (Object o : sqlStatement.getValues()) {
-                ps.setObject(i++, o);
-            }
-            ps.executeUpdate();
-
-            handleGeneratedKeys(ps, sqlStatement::addGeneratedKey);
-        }
+        insertHandler.accept(dbms,conn,sqlStatement);
     }
 
     private void handleSqlStatement(Dbms dbms, Connection conn, SqlUpdateStatement sqlStatement) throws SQLException {
@@ -299,7 +286,6 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     }
 
     private void handleSqlStatementHelper(Connection conn, SqlStatement sqlStatement) throws SQLException {
-        assertNotClosed();
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.NO_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -325,7 +311,7 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         switch (sqlStatement.getType()) {
             case INSERT: {
                 final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
-                handleSqlStatement(dbms, conn, s);
+                insertHandler.accept(dbms,conn,s);
                 break;
             }
             case UPDATE: {
@@ -373,12 +359,24 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         generatedKeysHandler.accept(ps, longConsumer);
     }
 
-    static void defaultGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
+    private void defaultGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException {
         try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
             while (generatedKeys.next()) {
                 longConsumer.accept(generatedKeys.getLong(1));
                 //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
             }
+        }
+    }
+
+    private void defaultInsertHandler(Dbms dbms, Connection conn, HasGeneratedKeys sqlStatement) throws SQLException {
+        try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
+            int i = 1;
+            for (Object o : sqlStatement.getValues()) {
+                ps.setObject(i++, o);
+            }
+            ps.executeUpdate();
+
+            handleGeneratedKeys(ps, sqlStatement::addGeneratedKey);
         }
     }
 

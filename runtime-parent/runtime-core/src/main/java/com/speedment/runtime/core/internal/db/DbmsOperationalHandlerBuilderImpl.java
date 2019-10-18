@@ -26,10 +26,6 @@ public final class DbmsOperationalHandlerBuilderImpl implements DbmsOperationalH
     public DbmsOperationalHandlerBuilderImpl(ConnectionPoolComponent connectionPoolComponent, TransactionComponent transactionComponent) {
         this.connectionPoolComponent = requireNonNull(connectionPoolComponent);
         this.transactionComponent = requireNonNull(transactionComponent);
-        this.generatedKeysHandler = DbmsOperationHandlerImpl::defaultGeneratedKeys;
-        this.preparedStatementConfigurator = ps -> {};
-        this.resultSetConfigurator = rs -> {};
-        this.insertHandler = null;
     }
 
     @Override
@@ -63,7 +59,8 @@ public final class DbmsOperationalHandlerBuilderImpl implements DbmsOperationalH
             transactionComponent,
             generatedKeysHandler,
             preparedStatementConfigurator,
-            resultSetConfigurator
+            resultSetConfigurator,
+            insertHandler
         );
     }
 }
