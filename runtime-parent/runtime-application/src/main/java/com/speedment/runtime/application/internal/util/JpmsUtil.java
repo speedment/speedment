@@ -25,7 +25,7 @@ public final class JpmsUtil {
             .collect(groupingBy(JpmsUtil::initialPath, TreeMap::new, mapping(JpmsUtil::restPath, toList())));
 
         LOGGER.debug("JPMS Modules: ");
-        moduleNames.forEach((key, value) -> LOGGER.debug("%s.%s", key, format(value));
+        moduleNames.forEach((key, value) -> LOGGER.debug("%s.%s", key, format(value)));
     }
 
     private static String format(List<String> value) {
