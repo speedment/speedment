@@ -8,6 +8,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -24,7 +25,15 @@ public final class JpmsUtil {
             .collect(groupingBy(JpmsUtil::initialPath, TreeMap::new, mapping(JpmsUtil::restPath, toList())));
 
         LOGGER.debug("JPMS Modules: ");
-        moduleNames.forEach((key, value) -> LOGGER.debug("%s %s", key, value));
+        moduleNames.forEach((key, value) -> LOGGER.debug("%s.%s", key, format(value));
+    }
+
+    private static String format(List<String> value) {
+        if (value.size() == 1) {
+            return value.iterator().next();
+        } else {
+            return value.stream().collect(Collectors.joining("|", "[", "]"));
+        }
     }
 
     private static Set<Object> modules() {
