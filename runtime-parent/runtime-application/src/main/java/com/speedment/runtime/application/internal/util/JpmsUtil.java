@@ -32,7 +32,7 @@ public final class JpmsUtil {
         if (value.size() == 1) {
             return value.iterator().next();
         } else {
-            return value.stream().collect(Collectors.joining("|", "[", "]"));
+            return value.stream().collect(Collectors.joining(", ", "[", "]"));
         }
     }
 
