@@ -16,11 +16,21 @@
  */
 package com.speedment.generator.standard.manager;
 
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateFields;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.joining;
+
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Constructor;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Method;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasColumn;
@@ -31,13 +41,6 @@ import com.speedment.runtime.core.manager.AbstractViewManager;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateFields;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.joining;
-
 /**
  *
  * @author Emil Forslund
@@ -46,8 +49,8 @@ import static java.util.stream.Collectors.joining;
 public final class GeneratedManagerImplTranslator
     extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String FIELDS_METHOD = "fields",
-        PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
+    private static final String FIELDS_METHOD = "fields";
+    private static final String PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
 
     public GeneratedManagerImplTranslator(Table table) {
         super(table, Class::of);
@@ -62,6 +65,7 @@ public final class GeneratedManagerImplTranslator
             ////////////////////////////////////////////////////////////////////
             .forEveryTable((clazz, table) -> {
                 file.add(Import.of(getSupport().managerType()));
+                file.add(Import.of(getSupport().entityImplType()));
 
                 clazz
                     .public_()
@@ -79,6 +83,10 @@ public final class GeneratedManagerImplTranslator
                             + Stream.of(getSupport().dbmsOrThrow().getId(), getSupport().schemaOrThrow().getId(), getSupport().tableOrThrow().getId())
                                 .map(s -> "\"" + s + "\"").collect(joining(", "))
                             + ");")
+                    )
+                    .add(Method.of("create", SimpleParameterizedType.create(getSupport().entityType()))
+                        .public_().add(OVERRIDE)
+                        .add("return new " + getSupport().entityImplName() + "();")
                     )
                     .add(Method.of("getTableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType()))
                         .public_().add(OVERRIDE)
