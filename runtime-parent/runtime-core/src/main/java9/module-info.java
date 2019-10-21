@@ -37,6 +37,7 @@ module com.speedment.runtime.core {
     requires com.speedment.common.mapstream;
     requires com.speedment.common.logger;
     requires com.speedment.common.json;
+    requires java.prefs; // InternalEmailUtil
 
     requires transitive com.speedment.common.function;
     requires transitive java.sql;

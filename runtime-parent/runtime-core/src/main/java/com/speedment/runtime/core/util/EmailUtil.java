@@ -29,6 +29,8 @@ import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed
  */
 public final class EmailUtil {
 
+    private EmailUtil() {}
+
     /**
      * Returns {@code true} if an email address has already been entered.
      * 
@@ -63,10 +65,4 @@ public final class EmailUtil {
         InternalEmailUtil.setEmail(email);
     }
 
-    /**
-     * Should not be instantiated.
-     */
-    private EmailUtil() {
-        instanceNotAllowed(getClass());
-    }
 }
