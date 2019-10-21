@@ -16,6 +16,13 @@
  */
 package com.speedment.plugins.enums.internal.ui;
 
+import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
+import static java.util.Objects.requireNonNull;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
+import static java.util.stream.Collectors.joining;
+import static javafx.application.Platform.runLater;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
+
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
@@ -35,12 +42,20 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.core.ApplicationMetadata;
-import com.speedment.runtime.core.component.*;
+import com.speedment.runtime.core.component.ManagerComponent;
+import com.speedment.runtime.core.component.PasswordComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
-import com.speedment.runtime.core.manager.*;
+import com.speedment.runtime.core.manager.HasLabelSet;
+import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.core.manager.Persister;
+import com.speedment.runtime.core.manager.Remover;
+import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.field.Field;
@@ -70,18 +85,15 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
-
-import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
-import static java.util.Objects.requireNonNull;
-import static java.util.concurrent.CompletableFuture.supplyAsync;
-import static java.util.stream.Collectors.joining;
-import static javafx.application.Platform.runLater;
-import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 /**
  * Item for generating a comma-separated string.
@@ -538,6 +550,11 @@ extends AbstractLabelTooltipItem {
                 getTableIdentifier(),
                 ParallelStrategy.computeIntensityDefault()
             );
+        }
+
+        @Override
+        public String create() {
+            throw newUnsupportedOperationExceptionReadOnly();
         }
 
         @Override

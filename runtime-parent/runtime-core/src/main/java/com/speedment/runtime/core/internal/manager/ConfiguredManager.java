@@ -16,15 +16,19 @@
  */
 package com.speedment.runtime.core.internal.manager;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
-import com.speedment.runtime.core.manager.*;
+import com.speedment.runtime.core.manager.HasLabelSet;
+import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.core.manager.Persister;
+import com.speedment.runtime.core.manager.Remover;
+import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * {@link Manager} delegator that overwrites the {@link ParallelStrategy} used
@@ -76,6 +80,11 @@ public final class ConfiguredManager<ENTITY> implements Manager<ENTITY> {
             getTableIdentifier(),
             parallelStrategy
         );
+    }
+
+    @Override
+    public ENTITY create() {
+        return manager.create();
     }
 
     @Override
