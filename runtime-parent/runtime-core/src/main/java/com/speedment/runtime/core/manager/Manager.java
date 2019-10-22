@@ -153,13 +153,13 @@ public interface Manager<ENTITY> extends PersistenceProvider<ENTITY>, Persistenc
     Stream<ENTITY> stream();
 
     /**
-     * Creates a new instance of the entity implementation.
+     * Creates and returns a new local instance of the entity implementation.
      * <p>
-     * The created entity is not persisted in the underlying database. The
-     * user is expected to provide the information required by the entity
-     * and persist it using {@link Manager#persist(ENTITY)}
+     * The created entity is not persisted to the underlying database. The
+     * user is expected to provide any piece of information required by
+     * the entity and optionally persist it e.g. using {@link Manager#persist(ENTITY)}
      *
-     * @return new local instance of the entity implementation
+     * @return a new local instance of the entity implementation
      */
     ENTITY create();
 
