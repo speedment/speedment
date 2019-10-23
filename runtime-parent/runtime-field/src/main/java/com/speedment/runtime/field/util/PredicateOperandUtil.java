@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.util;
 
 import com.speedment.common.tuple.Tuple;
-import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
+import com.speedment.runtime.field.predicate.trait.HasInclusion;
 import com.speedment.runtime.field.internal.util.Cast;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -77,7 +77,7 @@ public final class PredicateOperandUtil {
      * @return   the operand
      */
     public static Inclusion getInclusionOperand(FieldPredicate<?> p) {
-        return Cast.castOrFail(p, BetweenPredicate.class).getInclusion();
+        return Cast.castOrFail(p, HasInclusion.class).getInclusion();
     }
 
 }

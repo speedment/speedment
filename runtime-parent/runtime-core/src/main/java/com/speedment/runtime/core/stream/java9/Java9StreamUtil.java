@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.java9;
+package com.speedment.runtime.core.stream.java9;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

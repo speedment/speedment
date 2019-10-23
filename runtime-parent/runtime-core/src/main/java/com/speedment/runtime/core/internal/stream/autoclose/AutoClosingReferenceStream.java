@@ -16,11 +16,10 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import com.speedment.runtime.core.internal.util.java9.Java9StreamAdditions;
-import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+import com.speedment.runtime.core.stream.java9.Java9StreamAdditions;
+import com.speedment.runtime.core.stream.java9.Java9StreamUtil;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.*;
 import java.util.stream.*;
 

@@ -18,7 +18,7 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
+import com.speedment.runtime.field.predicate.trait.HasInclusion;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
@@ -38,7 +38,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<? super V>>
     extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
-    implements BetweenPredicate, Tuple2<V, V> {
+    implements HasInclusion, Tuple2<V, V> {
 
     private final V start;
     private final V end;

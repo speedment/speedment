@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.java9;
+package com.speedment.runtime.core.stream.java9;
 
 import com.speedment.runtime.core.internal.util.testing.JavaVersionUtil;
 import org.junit.jupiter.api.Test;

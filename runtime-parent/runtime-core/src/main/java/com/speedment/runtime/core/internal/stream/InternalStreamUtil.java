@@ -32,16 +32,17 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class StreamUtil {
-    
-    public static <T> Stream<T> streamOfOptional(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> element) {
+public final class InternalStreamUtil {
+
+    private InternalStreamUtil() {}
+
+/*    public static <T> Stream<T> streamOfOptional(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> element) {
         return Stream.of(element.orElse(null)).filter(Objects::nonNull);
     }
 
@@ -52,22 +53,23 @@ public final class StreamUtil {
         } else {
             return Stream.of(element);
         }
-    }
+    } */
 
     public static <T> Stream<T> asStream(Iterator<T> iterator) {
         requireNonNull(iterator);
         return asStream(iterator, false);
     }
 
-    public static <T> Stream<T> asStream(Iterator<T> iterator, boolean parallel) {
+    private static <T> Stream<T> asStream(Iterator<T> iterator, boolean parallel) {
         requireNonNull(iterator);
         final Iterable<T> iterable = () -> iterator;
         return StreamSupport.stream(iterable.spliterator(), parallel);
     }
 
+    /*
     public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper) {
          return asStream(resultSet, mapper, ParallelStrategy.computeIntensityDefault());
-    }
+    } */
     
     public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper, ParallelStrategy parallelStrategy) {
         requireNonNull(resultSet);
@@ -76,10 +78,11 @@ public final class StreamUtil {
         return StreamSupport.stream(parallelStrategy.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
     }
 
+/*
     public static <T> Stream<T> from(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> optional) {
         requireNonNull(optional);
         return optional.map(Stream::of).orElseGet(Stream::empty);
-    }
+    } */
 
     /**
      * Specialized read-only {@link Iterator} for consuming
@@ -88,7 +91,7 @@ public final class StreamUtil {
      *
      * @param <T>  the type of the entity
      */
-    static class ResultSetIterator<T> implements Iterator<T> {
+    final static class ResultSetIterator<T> implements Iterator<T> {
 
         /**
          * The current state of the {@code ResultSetIterator}.
@@ -215,11 +218,4 @@ public final class StreamUtil {
 
     }
 
-
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private StreamUtil() {
-        instanceNotAllowed(getClass());
-    }
 }

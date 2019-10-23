@@ -69,6 +69,7 @@
                             com.speedment.runtime.core.stream,
                             com.speedment.runtime.core.stream.action,
                             com.speedment.runtime.core.stream.parallel,
+                            com.speedment.runtime.core.stream.java9,
                             com.speedment.runtime.core.util
                         </Export-Package>
                     </instructions>

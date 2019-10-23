@@ -14,19 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.java9;
+package com.speedment.runtime.core.stream.java9;
 
-import java.util.function.LongPredicate;
-import java.util.stream.LongStream;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Per Minborg
  */
-public interface Java9LongStreamAdditions {
+public interface Java9StreamAdditions<T> {
 
-    LongStream takeWhile​(LongPredicate predicate);
+    Stream<T> takeWhile(Predicate<? super T> predicate);
 
-    LongStream dropWhile​(LongPredicate predicate);
+    Stream<T> dropWhile(Predicate<? super T> predicate);
 
 }

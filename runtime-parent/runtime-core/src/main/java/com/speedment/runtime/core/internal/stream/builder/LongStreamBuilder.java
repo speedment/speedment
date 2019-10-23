@@ -20,7 +20,7 @@ import com.speedment.runtime.core.internal.stream.builder.action.longs.*;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
-import com.speedment.runtime.core.internal.util.java9.Java9LongStreamAdditions;
+import com.speedment.runtime.core.stream.java9.Java9LongStreamAdditions;
 import java.util.*;
 import static java.util.Objects.requireNonNull;
 import java.util.function.*;

@@ -19,6 +19,7 @@ module com.speedment.runtime.field {
     exports com.speedment.runtime.field.collector;
     exports com.speedment.runtime.field.comparator;
     exports com.speedment.runtime.field.exception;
+    exports com.speedment.runtime.field.expression;
     exports com.speedment.runtime.field.method;
     exports com.speedment.runtime.field.predicate;
     exports com.speedment.runtime.field.predicate.trait;

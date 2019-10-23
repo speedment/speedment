@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.field.internal.predicate;
+package com.speedment.runtime.field.predicate.trait;
 
 import com.speedment.runtime.field.predicate.Inclusion;
 
@@ -26,7 +26,7 @@ import com.speedment.runtime.field.predicate.Inclusion;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public interface BetweenPredicate {
+public interface HasInclusion {
     
     /**
      * Returns the inclusion strategy used in the predicate.

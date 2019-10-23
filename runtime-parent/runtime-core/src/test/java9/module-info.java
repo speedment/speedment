@@ -31,6 +31,7 @@ open module com.speedment.runtime.core {
     exports com.speedment.runtime.core.stream;
     exports com.speedment.runtime.core.stream.action;
     exports com.speedment.runtime.core.stream.parallel;
+    exports com.speedment.runtime.core.stream.java9;
     exports com.speedment.runtime.core.util;
 
     requires com.speedment.common.invariant;

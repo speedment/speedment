@@ -26,7 +26,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import static java.util.Objects.requireNonNull;
-import com.speedment.runtime.core.internal.util.java9.Java9DoubleStreamAdditions;
+import com.speedment.runtime.core.stream.java9.Java9DoubleStreamAdditions;
 
 /**
  *
