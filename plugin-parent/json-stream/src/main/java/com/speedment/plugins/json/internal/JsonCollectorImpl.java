@@ -17,13 +17,18 @@
 package com.speedment.plugins.json.internal;
 
 import com.speedment.plugins.json.JsonCollector;
-import java.util.*;
-import static java.util.Objects.requireNonNull;
+
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

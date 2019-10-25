@@ -16,6 +16,7 @@
  */
 open module com.speedment.plugins.json {
     exports com.speedment.plugins.json;
+    exports com.speedment.plugins.json.provider;
 
     requires com.speedment.common.injector;
     requires com.speedment.common.invariant;

@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.json.internal;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.plugins.json.JsonComponent;
 import com.speedment.plugins.json.JsonEncoder;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
@@ -39,9 +38,11 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class JsonComponentImpl implements JsonComponent {
     
-    private @Inject ProjectComponent projectComponent;
-    
-    JsonComponentImpl() {}
+    private final ProjectComponent projectComponent;
+
+    public JsonComponentImpl(ProjectComponent projectComponent) {
+        this.projectComponent = requireNonNull(projectComponent);
+    }
 
     @Override
     public <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
