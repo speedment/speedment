@@ -37,18 +37,7 @@ public final class GeneratorImpl implements Generator {
 	private final DefaultRenderStack renderStack;
     private final LinkedList<RenderTree.Builder> renderTreeBuilder;
 	
-/*	*//**
-	 * Creates a new generator. This constructor will use a 
-     * {@link DependencyManager} with no parameters to handle any
-     * dependencies.
-     * 
-	 * @param factory  the factory to use
-	 *//*
-	public DefaultGenerator(TransformFactory factory) {
-		this(DependencyManager.create(), factory);
-	}
-	*/
-	/**
+    /**
 	 * Creates a new generator.
      * 
 	 * @param mgr      the dependency manager to use

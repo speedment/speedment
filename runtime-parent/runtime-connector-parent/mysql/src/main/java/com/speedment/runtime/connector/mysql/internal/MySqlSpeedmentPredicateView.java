@@ -37,9 +37,7 @@ public final class MySqlSpeedmentPredicateView
     extends AbstractFieldPredicateView
     implements FieldPredicateView {
 
-    //@Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
     final private String binaryCollationName;
-    //@Config(name = "db.mysql.collationName", value = "utf8_general_ci")
     final private String collationName;
 
     public MySqlSpeedmentPredicateView(String binaryCollationName, String collationName) {

@@ -27,8 +27,6 @@ public final class DbmsTypeDefaultImpl implements DbmsTypeDefault {
         }
     };
 
-    public DbmsTypeDefaultImpl() {}
-
     @Override
     public String getResultSetTableSchema() {
         return "TABLE_SCHEM";

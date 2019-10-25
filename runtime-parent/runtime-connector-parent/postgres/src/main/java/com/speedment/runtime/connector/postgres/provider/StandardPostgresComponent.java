@@ -32,8 +32,6 @@ import static com.speedment.common.injector.State.INITIALIZED;
  */
 public final class StandardPostgresComponent implements PostgresComponent {
 
-    public StandardPostgresComponent() {}
-
     @ExecuteBefore(INITIALIZED)
     public void onInitialize(
         final @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent,

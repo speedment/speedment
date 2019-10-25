@@ -52,8 +52,6 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
 
     static final String METADATA = "Metadata";
 
-    @Inject public InfoComponent infoComponent;
-
     public GeneratedMetadataTranslator(Project doc) {
         super(doc, Class::of);
     }

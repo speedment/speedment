@@ -71,7 +71,6 @@ public final class JavaGenerator implements Generator {
      */
 	public JavaGenerator(TransformFactory factory) {
 	    inner = Generator.create(DependencyManager.create(IGNORED), factory);
-/*        super(DependencyManager.create(IGNORED), factory);*/
 	}
 
     @Override

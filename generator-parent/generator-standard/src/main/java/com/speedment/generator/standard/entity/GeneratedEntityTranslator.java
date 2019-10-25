@@ -22,8 +22,6 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.function.OptionalBoolean;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.standard.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
@@ -62,9 +60,6 @@ import static java.util.Objects.requireNonNull;
 public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTranslator<Interface> {
 
     public static final String IDENTIFIER_NAME = "Identifier";
-
-    @Inject public Injector injector;
-    @Inject public TypeMapperComponent typeMappers;
 
     public GeneratedEntityTranslator(Table table) {
         super(table, Interface::of);

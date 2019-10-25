@@ -18,7 +18,4 @@ package com.speedment.runtime.application.provider;
 
 import com.speedment.runtime.application.AbstractSpeedment;
 
-public final class StandardSpeedment extends AbstractSpeedment {
-
-    public StandardSpeedment() {}
-}
+public final class StandardSpeedment extends AbstractSpeedment {}

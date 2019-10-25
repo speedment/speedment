@@ -62,7 +62,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     private final Consumer<ApplicationBuilder<?, ?>> configurer;
 
-    private @Parameter(defaultValue = "${dbms.connectionUrl}") String dbmsConnectionUrl;
+    public @Parameter(defaultValue = "${dbms.connectionUrl}") String dbmsConnectionUrl;
 
     AbstractSpeedmentMojo() {this(NOTHING);}
 

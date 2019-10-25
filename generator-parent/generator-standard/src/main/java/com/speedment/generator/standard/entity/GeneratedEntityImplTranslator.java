@@ -21,13 +21,10 @@ import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.standard.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
@@ -51,9 +48,6 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedEntityImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    @Inject public TypeMapperComponent typeMappers;
-    @Inject public Injector injector;
-    
     public GeneratedEntityImplTranslator(Table table) {
         super(table, Class::of);
     }

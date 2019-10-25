@@ -29,8 +29,6 @@ import java.util.stream.Stream;
  */
 public final class SpeedmentBrand implements Brand {
 
-    public SpeedmentBrand() {}
-
     @Override
     public final String website() {
         return "www.speedment.com";

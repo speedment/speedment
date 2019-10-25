@@ -68,8 +68,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.1.10
  */
-public final class SingletonConnectionPoolComponent
-implements ConnectionPoolComponent {
+public final class SingletonConnectionPoolComponent implements ConnectionPoolComponent {
 
     private static final Logger LOGGER_CONNECTION = LoggerManager.getLogger(
         ApplicationBuilder.LogType.CONNECTION.getLoggerName()
@@ -98,7 +97,7 @@ implements ConnectionPoolComponent {
     }
 
     @ExecuteBefore(State.STOPPED)
-    void closeOpenConnections() {
+    public void closeOpenConnections() {
         connectionManagers.values()
             .forEach(SerializedConnectionManager::close);
     }
@@ -251,7 +250,7 @@ implements ConnectionPoolComponent {
         }
 
         @Override
-        public void rawClose() {} // Do nothing.
+        public void rawClose() { /* Do nothing.*/ }
 
         @Override
         public long getCreated() {
