@@ -42,7 +42,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ProjectProblemController implements Initializable {
+public final class ProjectProblemController implements Initializable {
     
     @FXML private ListView<Issue> lstProjectProblems;
     @FXML private TextFlow txtDescription;
@@ -51,9 +51,9 @@ public class ProjectProblemController implements Initializable {
     
     private final ObservableList<Issue> issues;
     private final BooleanExpression hasErrors;
-    
-    private @Inject ConfigFileHelper configFileHelper;
-    private @Inject IssueComponent issueComponent;
+
+    @Inject public ConfigFileHelper configFileHelper;
+    @Inject public IssueComponent issueComponent;
     
     public ProjectProblemController(){
         issues = FXCollections.observableArrayList();

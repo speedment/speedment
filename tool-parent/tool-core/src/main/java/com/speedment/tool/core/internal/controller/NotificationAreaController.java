@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-public class NotificationAreaController implements Initializable {
+public final class NotificationAreaController implements Initializable {
     
     private final LayoutAnimator animator;
     

@@ -53,7 +53,7 @@ public final class WorkspaceController implements Initializable {
     @Inject public EventComponent events;
     @Inject public PropertyEditorComponent editors;
 
-    @FXML  private TitledPane workspace;
+    @FXML private TitledPane workspace;
     @FXML private ScrollPane scrollpane;
 
     public WorkspaceController() {
