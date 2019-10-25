@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -36,7 +35,8 @@ import static java.util.stream.Collectors.toList;
  */
 public final class TextUtil {
 
-    //private static final Pattern WORDS = Pattern.compile("[\\.,\\s!;?:\"]+");
+    private TextUtil() {}
+
     private static final Pattern WORDS = Pattern.compile("[\\s]+");
     private static final Pattern JAVADOC_WORDS = Pattern.compile("[\\s]+"); // Text within html tags "pre" are treated as one "word"
     private static final String NL = "\n";
@@ -50,7 +50,7 @@ public final class TextUtil {
      * @param text containing zero or more words
      * @return a Stream of the words in the given text
      */
-    public static Stream<String> wordsOf(String text) {
+    static Stream<String> wordsOf(String text) {
         requireNonNull(text);
         return WORDS.splitAsStream(text);
     }
@@ -63,7 +63,7 @@ public final class TextUtil {
      * @param width of the text box
      * @return a String formatted so it will fit in a box with the given width
      */
-    public static String formatTextBox(String text, int width) {
+    static String formatTextBox(String text, int width) {
         requireNonNull(text);
         return formatTextBox(text, width, WORDS, Collections.emptySet());
     }
@@ -79,7 +79,7 @@ public final class TextUtil {
      * @param singleRowers a Set of Strings that shall be on a separate row
      * @return a String formatted so it will fit in a box with the given width
      */
-    public static String formatTextBox(String text, int width, Pattern splitter, Set<String> singleRowers) {
+    private static String formatTextBox(String text, int width, Pattern splitter, Set<String> singleRowers) {
         requireNonNulls(text, splitter);
         requireNonNullElements(singleRowers);
 
@@ -118,7 +118,7 @@ public final class TextUtil {
      * @return a String formatted so it will fit in a box suitable for a Java
      * Doc header
      */
-    public static String formatJavaDocBox(String text) {
+    static String formatJavaDocBox(String text) {
         requireNonNull(text);
         return formatTextBox(text, JAVA_DOC_WIDTH, JAVADOC_WORDS, JAVA_DOC_SINGLE_LINE_WORDS);
     }
@@ -150,7 +150,7 @@ public final class TextUtil {
      * @param fill        the character to use for padding
      * @return            the padded string
      */
-    public static String alignCenter(String substring, int totalWidth, char fill) {
+    private static String alignCenter(String substring, int totalWidth, char fill) {
         if (substring.length() > totalWidth) {
             return substring.substring(0, totalWidth);
         } else {
@@ -186,7 +186,7 @@ public final class TextUtil {
      * @param fill        the character to use for padding
      * @return            the padded string
      */
-    public static String alignLeft(String substring, int totalWidth, char fill) {
+    private static String alignLeft(String substring, int totalWidth, char fill) {
         if (substring.length() > totalWidth) {
             return substring.substring(0, totalWidth);
         } else {
@@ -219,7 +219,7 @@ public final class TextUtil {
      * @param fill        the character to use for padding
      * @return            the padded string
      */
-    public static String alignRight(String substring, int totalWidth, char fill) {
+    private static String alignRight(String substring, int totalWidth, char fill) {
         if (substring.length() > totalWidth) {
             return substring.substring(0, totalWidth);
         } else {
@@ -234,7 +234,7 @@ public final class TextUtil {
      * @param count  the number of times to repeat it
      * @return       the new string
      */
-    public static String repeat(String str, int count) {
+    private static String repeat(String str, int count) {
         final StringBuilder result = new StringBuilder(str.length() * count);
 
         for (int i = 0; i < count; i++) {
@@ -244,8 +244,4 @@ public final class TextUtil {
         return result.toString();
     }
     
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private TextUtil() { instanceNotAllowed(getClass()); }
 }

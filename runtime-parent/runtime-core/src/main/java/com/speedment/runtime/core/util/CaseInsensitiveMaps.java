@@ -19,20 +19,17 @@ package com.speedment.runtime.core.util;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *
  * @author Per Minborg
  */
-public class CaseInsensitiveMaps {
+public final class CaseInsensitiveMaps {
+
+    private CaseInsensitiveMaps() {}
 
     public static <T> Map<String, T> newCaseInsensitiveMap() {
         return new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-    }
-
-    private CaseInsensitiveMaps() {
-        instanceNotAllowed(CaseInsensitiveMaps.class);
     }
 
 }

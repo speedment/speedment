@@ -21,8 +21,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BinaryOperator;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  *
  * @author Simon Jonasson
@@ -31,7 +29,9 @@ import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed
  * @since 3.0.0
  */
 public final class CompletableFutureUtil {
-    
+
+    private CompletableFutureUtil() {}
+
     @SafeVarargs
     public static <T> CompletableFuture<T> allOf(
         T defaultValue,
@@ -55,11 +55,5 @@ public final class CompletableFutureUtil {
         return CompletableFuture.allOf(accumulators)
             .thenApplyAsync(v -> result.get());
     }
-    
-    /**
-     * This should never be called.
-     */
-    private CompletableFutureUtil() {
-        instanceNotAllowed(getClass());
-    }
+
 }

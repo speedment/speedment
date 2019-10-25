@@ -18,17 +18,15 @@ package com.speedment.common.logger.internal.formatter;
 
 import com.speedment.common.logger.LoggerFormatter;
 
-import static com.speedment.common.logger.internal.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  *
  * @author pemi
  */
 public final class StandardFormatters {
 
+    private StandardFormatters() {}
+
     public static final LoggerFormatter PLAIN_FORMATTER = new PlainFormatter();
 
-    private StandardFormatters() {
-        instanceNotAllowed(getClass());
-    }
+
 }

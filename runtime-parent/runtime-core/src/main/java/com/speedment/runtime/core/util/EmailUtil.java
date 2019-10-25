@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.util;
 
 import com.speedment.runtime.core.internal.util.InternalEmailUtil;
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * Reads and writes to the internal file where a user's email address is stored.
