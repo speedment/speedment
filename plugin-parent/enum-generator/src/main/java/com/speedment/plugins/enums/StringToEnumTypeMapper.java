@@ -45,8 +45,8 @@ import static java.util.Objects.requireNonNull;
 public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapper<String, T> {
 
     private final AtomicReference<Class<?>> cachedEnum;
-   
-    private @Inject Injector injector;
+
+    @Inject public Injector injector;
     
     public StringToEnumTypeMapper() {
         cachedEnum = new AtomicReference<>();

@@ -20,6 +20,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.stream.Collectors.joining;
+import static javafx.application.Platform.requestNextPulse;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
@@ -125,11 +126,11 @@ extends AbstractLabelTooltipItem {
     private final double SPACING  = 10.0;
     private final int LIST_HEIGHT = 200;
 
-    private @Inject ProjectComponent projects;
-    private @Inject DbmsMetadataHandler metadata;
-    private @Inject PasswordComponent passwords;
-    private @Inject UserInterfaceComponent ui;
-    private @Inject Injector injector;
+    @Inject public ProjectComponent projects;
+    @Inject public DbmsMetadataHandler metadata;
+    @Inject public PasswordComponent passwords;
+    @Inject public UserInterfaceComponent ui;
+    @Inject public Injector injector;
 
     ////////////////////////////////////////////////////////////////////////////
     //                            Constructor                                 //
@@ -369,10 +370,13 @@ extends AbstractLabelTooltipItem {
     //                            Internal Class                              //
     ////////////////////////////////////////////////////////////////////////////
 
-    private static class TempApplicationMetadata
-    implements ApplicationMetadata {
+    private static final class TempApplicationMetadata implements ApplicationMetadata {
 
-        private @Config(name="temp.json", value="") String json;
+        private final String json;
+
+        public TempApplicationMetadata(@Config(name="temp.json", value="") String json) {
+            this.json = requireNonNull(json);
+        }
 
         @Override
         public Project makeProject() {
@@ -388,7 +392,7 @@ extends AbstractLabelTooltipItem {
         }
     }
 
-    private static class TempColumnIdentifier implements ColumnIdentifier<String> {
+    private static final class TempColumnIdentifier implements ColumnIdentifier<String> {
         private final String dbms;
         private final String schema;
         private final String table;
@@ -457,24 +461,25 @@ extends AbstractLabelTooltipItem {
         }
     }
 
-    private static class SingleColumnSqlAdapter implements SqlAdapter<String> {
+    private static final class SingleColumnSqlAdapter implements SqlAdapter<String> {
         
-        private TableIdentifier<String> tableId;
-        
-        @Config(name = "temp.dbms", value = "")
-        private String dbms;
-        @Config(name = "temp.schema", value = "")
-        private String schema;
-        @Config(name = "temp.table", value = "")
-        private String table;
-        @Config(name = "temp.column", value = "")
-        private String column;
+        private final TableIdentifier<String> tableId;
+        private final String column;
 
-        @ExecuteBefore(State.INITIALIZED)
-        void setFieldAndTableId() {
-            this.tableId = TableIdentifier.of(dbms, schema, table);
+        public SingleColumnSqlAdapter(
+            @Config(name = "temp.dbms", value = "") final String dbms,
+            @Config(name = "temp.schema", value = "") final String schema,
+            @Config(name = "temp.table", value = "") final String table,
+            @Config(name = "temp.column", value = "") final String column
+        ) {
+            this.column = requireNonNull(column);
+            this.tableId = TableIdentifier.of(
+                requireNonNull(dbms),
+                requireNonNull(schema),
+                requireNonNull(table)
+            );
         }
-                
+
         @Override
         public TableIdentifier<String> identifier() {
             return tableId;
@@ -492,21 +497,24 @@ extends AbstractLabelTooltipItem {
         
     }
     
-    private static class SingleColumnManager implements Manager<String> {
+    private static final class SingleColumnManager implements Manager<String> {
 
-        private StringField<String, String> field;
-        private TableIdentifier<String> tableId;
+        private final StreamSupplierComponent streamSupplierComponent;
+        private final StringField<String, String> field;
+        private final TableIdentifier<String> tableId;
 
-        private @Inject StreamSupplierComponent streamSupplierComponent;
-        private @Config(name="temp.dbms", value="") String dbms;
-        private @Config(name="temp.schema", value="") String schema;
-        private @Config(name="temp.table", value="") String table;
-        private @Config(name="temp.column", value="") String column;
-
-        SingleColumnManager() {}
-
-        @ExecuteBefore(State.INITIALIZED)
-        void setFieldAndTableId() {
+        SingleColumnManager(
+            final StreamSupplierComponent streamSupplierComponent,
+            @Config(name="temp.dbms", value="") final String dbms,
+            @Config(name="temp.schema", value="") final String schema,
+            @Config(name="temp.table", value="") final String table,
+            @Config(name="temp.column", value="") final String column
+        ) {
+            this.streamSupplierComponent = requireNonNull(streamSupplierComponent);
+            requireNonNull(dbms);
+            requireNonNull(schema);
+            requireNonNull(table);
+            requireNonNull(column);
             this.tableId = TableIdentifier.of(dbms, schema, table);
             this.field   = StringField.create(
                 new TempColumnIdentifier(dbms, schema, table, column),
@@ -517,10 +525,7 @@ extends AbstractLabelTooltipItem {
         }
 
         @ExecuteBefore(State.INITIALIZED)
-        void configureManagerComponent(
-                @WithState(State.INITIALIZED) ManagerComponent managerComponent,
-                @WithState(State.INITIALIZED) ProjectComponent projectComponent) {
-            Objects.requireNonNull(projectComponent);
+        public void configureManagerComponent(@WithState(State.INITIALIZED) ManagerComponent managerComponent) {
             managerComponent.put(this);
         }
 
@@ -600,12 +605,12 @@ extends AbstractLabelTooltipItem {
         @Override
         public String toString() {
             return getClass().getSimpleName() + "{tableId: " +
-                TableIdentifier.of(dbms, schema, table).toString()
+                tableId.toString()
                 + "}";
         }
     }
 
-    private final static class EnumCell extends TextFieldListCell<String> {
+    private static final class EnumCell extends TextFieldListCell<String> {
 
         private final ObservableList<String> strings;
         private String labelString;

@@ -60,8 +60,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Simon Jonasson
  * @since   3.0.0
  */
-public final class GeneratedEntityDecorator
-implements TranslatorDecorator<Table, Interface> {
+public final class GeneratedEntityDecorator implements TranslatorDecorator<Table, Interface> {
 
     private final static Set<String> ENUM_TYPE_MAPPERS =
         unmodifiableSet(new HashSet<>(asList(

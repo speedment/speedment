@@ -49,7 +49,7 @@ public class CommaSeparatedStringEditor
                & HasName>
 implements PropertyEditor<HasEnumConstantsProperty> {
 
-    private @Inject Injector injector;
+    @Inject public Injector injector;
 
     @Override
     public Stream<Item> fieldsFor(HasEnumConstantsProperty column) {

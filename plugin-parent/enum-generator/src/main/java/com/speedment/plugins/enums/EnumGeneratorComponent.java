@@ -61,11 +61,12 @@ public final class EnumGeneratorComponent {
     }
 
     @ExecuteBefore(RESOLVED)
-    void installDecorators(Injector injector,
-            @WithState(INITIALIZED) TypeMapperComponent typeMappers,
-            @WithState(INITIALIZED) CodeGenerationComponent codeGen,
-            @WithState(RESOLVED) PropertyEditorComponent editors) {
-
+    public void installDecorators(
+        final Injector injector,
+        @WithState(INITIALIZED) final TypeMapperComponent typeMappers,
+        @WithState(INITIALIZED) final CodeGenerationComponent codeGen,
+        @WithState(RESOLVED) final PropertyEditorComponent editors
+    ) {
         typeMappers.install(String.class, StringToEnumTypeMapper::new);
         typeMappers.install(Integer.class, IntegerToEnumTypeMapper::new);
 
