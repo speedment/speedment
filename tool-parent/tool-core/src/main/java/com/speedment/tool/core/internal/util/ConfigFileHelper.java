@@ -68,7 +68,7 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Predicate;
 
-import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.application.provider.DefaultApplicationMetadata.METADATA_LOCATION;
 import static com.speedment.tool.core.util.OutputUtil.error;
 import static com.speedment.tool.core.util.OutputUtil.success;
 import static java.util.Objects.requireNonNull;

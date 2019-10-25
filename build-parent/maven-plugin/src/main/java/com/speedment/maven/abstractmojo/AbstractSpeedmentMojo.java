@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
-import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.application.provider.DefaultApplicationMetadata.METADATA_LOCATION;
 import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import static java.util.Objects.requireNonNull;
 

@@ -20,7 +20,7 @@ import com.speedment.runtime.application.provider.DefaultApplicationBuilder;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.application.internal.DefaultApplicationMetadata;
+import com.speedment.runtime.application.provider.DefaultApplicationMetadata;
 import com.speedment.runtime.application.provider.EmptyApplicationMetadata;
 
 /**
