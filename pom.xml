@@ -167,6 +167,10 @@
             <name>Julia Gustafsson (GitHub:julgus)</name>
             <timezone>America/Los_Angeles</timezone>
         </contributor>
+        <contributor>
+            <name>Mislav Miličević (GitHub:dekmm)</name>
+            <timezone>Europe/Zagreb</timezone>
+        </contributor>
     </contributors>
 	
     <!-- Distribution Details -->
