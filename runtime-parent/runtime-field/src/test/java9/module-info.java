@@ -27,11 +27,11 @@ open module com.speedment.runtime.field {
     exports com.speedment.runtime.field.util;
 
     requires com.speedment.common.invariant;
-    requires com.speedment.common.tuple;
-    requires com.speedment.common.function;
-    requires com.speedment.common.annotation;
+    requires transitive com.speedment.common.tuple;
+    requires transitive com.speedment.common.function;
+    requires transitive com.speedment.common.annotation;
 
-    requires com.speedment.runtime.config;
-    requires com.speedment.runtime.compute;
-    requires com.speedment.runtime.typemapper;
+    requires transitive com.speedment.runtime.config;
+    requires transitive com.speedment.runtime.compute;
+    requires transitive com.speedment.runtime.typemapper;
 }
