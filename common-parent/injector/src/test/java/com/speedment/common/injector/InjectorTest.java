@@ -266,34 +266,34 @@ final class InjectorTest {
         }
         
         @ExecuteBefore(INITIALIZED)
-        void parentInitialized() {
+        public void parentInitialized() {
             counter.incrementAndGet();
         }
         
         @ExecuteBefore(RESOLVED)
-        void parentResolved() {
+        public void parentResolved() {
             counter.incrementAndGet();
         }
         
         @ExecuteBefore(STARTED)
-        void parentStarted() {
+        public void parentStarted() {
             counter.incrementAndGet();
         }
     }
     
     public static final class ImplementingComponent extends AbstractComponent {
         @ExecuteBefore(INITIALIZED)
-        void childInitialized() {
+        public void childInitialized() {
             counter.incrementAndGet();
         }
         
         @ExecuteBefore(RESOLVED)
-        void childResolved() {
+        public void childResolved() {
             counter.incrementAndGet();
         }
         
         @ExecuteBefore(STARTED)
-        void childStarted() {
+        public void childStarted() {
             counter.incrementAndGet();
         }
     }
@@ -427,12 +427,12 @@ final class InjectorTest {
         private boolean init2Called;
 
         @ExecuteBefore(value = INITIALIZED, missingArgument = SKIP_INVOCATION)
-        void init(Bar bar) {
+        public void init(Bar bar) {
             initCalled = true;
         }
 
         @ExecuteBefore(value = INITIALIZED, missingArgument = SKIP_INVOCATION)
-        void init2(Bar bar, Baz baz) {
+        public void init2(Bar bar, Baz baz) {
             init2Called = true;
         }
     }

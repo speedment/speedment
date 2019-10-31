@@ -55,11 +55,11 @@ public class RuntimeBundle implements InjectBundle {
             DelegateDriverComponent.class,
             DefaultConnectionDecorator.class
         )
-            .withBundle(new MySqlBundle())
+/*            .withBundle(new MySqlBundle())
             .withBundle(new MariaDbBundle())
             .withBundle(new PostgresBundle())
             .withBundle(new SqliteBundle())
-            .withBundle(new JoinBundle())
+            .withBundle(new JoinBundle())*/
             .injectables();
     }
 

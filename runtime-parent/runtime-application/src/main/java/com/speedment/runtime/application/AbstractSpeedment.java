@@ -19,13 +19,17 @@ package com.speedment.runtime.application;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.
@@ -34,6 +38,8 @@ import java.util.Optional;
  * @since 3.0.0
  */
 public abstract class AbstractSpeedment implements Speedment {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractSpeedment.class);
 
     private Injector injector;
 
@@ -50,10 +56,11 @@ public abstract class AbstractSpeedment implements Speedment {
     }
 
     @Override
-    public <T> T getOrThrow(Class<T> componentClass) throws SpeedmentException {
+    public <T> T getOrThrow(Class<T> componentClass) {
         try {
             return injector.getOrThrow(componentClass);
-        } catch (final IllegalArgumentException ex) {
+        } catch (final Exception ex) {
+            logTypicalError(componentClass);
             throw new SpeedmentException(
                 "Specified component '" + componentClass.getSimpleName()
                 + "' is not installed in the platform.", ex
@@ -68,8 +75,19 @@ public abstract class AbstractSpeedment implements Speedment {
     }
 
     @Override
-    public void close() {
+    public void stop() {
         injector.stop();
     }
+
+    private <T> void logTypicalError(Class<T> componentClass) {
+        if ("JoinComponent".equals(componentClass.getSimpleName())) {
+            LOGGER.error(
+                "Since 3.2.0, The JoinBundle (that contains the JoinComponent) is optional. " +
+                "Make sure that you have installed the JoinBundle by invoking .withBundle(JoinBundle.class) in your application builder " +
+                "and add 'requires com.speedment.runtime.join;' in your module-info.java file (if any)."
+            );
+        }
+    }
+
 
 }

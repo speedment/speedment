@@ -39,7 +39,7 @@ public final class Lifecycle {
         languages.stream()
             .forEachOrdered(System.out::println);
 
-        app.close();
+        app.stop();
     }
 
 }

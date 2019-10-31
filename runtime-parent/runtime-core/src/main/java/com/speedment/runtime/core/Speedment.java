@@ -33,7 +33,7 @@ import java.util.Optional;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-public interface Speedment extends AutoCloseable {
+public interface Speedment {
     
     /**
      * Returns the specified component from the platform, or if it does not
@@ -55,7 +55,7 @@ public interface Speedment extends AutoCloseable {
      * 
      * @throws SpeedmentException  if it was not installed
      */
-    <T> T getOrThrow(Class<T> type) throws SpeedmentException;
+    <T> T getOrThrow(Class<T> type);
     
 
     /**
@@ -70,11 +70,10 @@ public interface Speedment extends AutoCloseable {
     <ENTITY> ManagerConfigurator<ENTITY> configure(Class<? extends Manager<ENTITY>> manager);
     
    /**
-     * Closes the Speedment instance and deallocates any allocated resources.
+     * Gracefully stops the Speedment instance and de-allocates any allocated resources.
      * After close() has been called, the Speedment instance can not be called
      * any more.
      */
-    @Override
-    void close();
+    void stop();
     
 }

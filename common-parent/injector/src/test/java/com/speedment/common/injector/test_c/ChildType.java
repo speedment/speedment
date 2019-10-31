@@ -35,5 +35,5 @@ public class ChildType extends ParentType {
     }
 
     @Execute
-    private void installChild() {}
+    public void installChild() {}
 }

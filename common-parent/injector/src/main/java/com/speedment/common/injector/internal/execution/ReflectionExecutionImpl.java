@@ -89,8 +89,7 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
             .map(Parameter::getType)
             .map(classMapper::apply)
             .toArray();
-        
-        method.setAccessible(true);
+
         method.invoke(component, args);
 
         return true;

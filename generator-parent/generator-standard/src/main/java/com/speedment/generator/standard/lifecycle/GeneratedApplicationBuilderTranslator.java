@@ -21,21 +21,27 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.application.AbstractApplicationBuilder;
+import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.connector.mariadb.MariaDbBundle;
+import com.speedment.runtime.connector.mysql.MySqlBundle;
+import com.speedment.runtime.connector.postgres.PostgresBundle;
+import com.speedment.runtime.connector.sqlite.SqliteBundle;
+import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
@@ -44,8 +50,7 @@ import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator.METADATA;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 /**
  *
@@ -136,6 +141,14 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                     );
                 }
 
+                databaseBundleClassNames(project)
+                    .map(cn -> nl() + "withBundle(" + shortName(cn) + "." + CLASS + ");")
+                    .forEach(constructorBody::append);
+
+                databaseBundleClassNames(project)
+                    .map(cn -> Import.of(SimpleType.create(cn)))
+                    .forEach(file::add);
+
                 final Type injectorProxyType = injectorProxyType();
                 constructorBody.append(nl()).append("withInjectorProxy(new ").append(shortName(injectorProxyType.getTypeName())).append("());");
                 file.add(Import.of(injectorProxyType()));
@@ -201,5 +214,43 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                 + getSupport().typeName(getSupport().projectOrThrow()) + "InjectorProxy"
         );
     }
+
+    private Stream<String> databaseBundleClassNames(Project project) {
+        return traverseOver(project, Dbms.class)
+            .filter(HasEnabled::test)
+            .map(Dbms::getTypeName)
+            .map(this::toBundleClassName)
+            .filter(Optional::isPresent)
+            .map(Optional::get);
+    }
+
+    private Optional<String> toBundleClassName(String typeName) {
+        final Map<String, java.lang.Class<? extends InjectBundle>> bundles = Stream.of(
+            MySqlBundle.class,
+            MariaDbBundle.class,
+            PostgresBundle.class,
+            SqliteBundle.class
+        ).collect(toMap(
+            this::stripBundle,
+            Function.identity()
+        ));
+
+        return bundles.entrySet().stream()
+            .filter(e -> typeName.toLowerCase().contains(e.getKey().toLowerCase())) // Name magic...  :-(
+            .map(Map.Entry::getValue)
+            .map(java.lang.Class::getName)
+            .findAny();
+    }
+
+    private String stripBundle(java.lang.Class<? extends InjectBundle> clazz) {
+        final String simpleName = clazz.getSimpleName();
+        final int lastIndex = simpleName.lastIndexOf("Bundle");
+
+        if (lastIndex == -1) {
+            throw new SpeedmentException("The class " + clazz + " does not contain a substring 'Bundle'");
+        }
+        return simpleName.substring(0, lastIndex);
+    }
+
 
 }

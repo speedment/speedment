@@ -32,5 +32,5 @@ public abstract class ParentType {
     }
 
     @Execute
-    private void installParent() {}
+    public void installParent() {}
 }

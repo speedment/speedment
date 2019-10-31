@@ -23,6 +23,10 @@ import com.speedment.maven.component.MavenPathComponent;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.application.ApplicationBuilders;
+import com.speedment.runtime.connector.mariadb.MariaDbBundle;
+import com.speedment.runtime.connector.mysql.MySqlBundle;
+import com.speedment.runtime.connector.postgres.PostgresBundle;
+import com.speedment.runtime.connector.sqlite.SqliteBundle;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -249,6 +253,14 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             .withBundle(GeneratorBundle.class)
             .withComponent(CodeGenerationComponentImpl.class)
             .withComponent(MavenPathComponent.class);
+
+        // Add optional components that are no longer included in 'runtime' but
+        // are nice to have available without explicit installation
+        result
+            .withBundle(MySqlBundle.class)
+            .withBundle(MariaDbBundle.class)
+            .withBundle(PostgresBundle.class)
+            .withBundle(SqliteBundle.class);
 
         configureBuilder(result); // Add MOJO specific components (if any)
 

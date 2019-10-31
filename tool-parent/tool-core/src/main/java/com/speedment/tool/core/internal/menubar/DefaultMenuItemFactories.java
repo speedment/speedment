@@ -53,7 +53,7 @@ public final class DefaultMenuItemFactories {
      */
 
     @ExecuteBefore(State.INITIALIZED)
-    void install(@WithState(State.INITIALIZED) MenuBarComponent menuBar,
+    public void install(@WithState(State.INITIALIZED) MenuBarComponent menuBar,
                  @WithState(State.INITIALIZED) UserInterfaceComponent ui,
                  @WithState(State.INITIALIZED) InjectionLoader loader) {
         menuBar.forTab(MenuBarTab.FILE)

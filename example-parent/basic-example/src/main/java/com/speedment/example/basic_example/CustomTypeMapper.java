@@ -29,17 +29,17 @@ public final class CustomTypeMapper {
 
     public static void main(String[] args) {
 
-        try (SakilaApplication app = new SakilaApplicationBuilder()
+        SakilaApplication app = new SakilaApplicationBuilder()
             .withPassword("sakila-password")
             .withLogging(LogType.STREAM)
-            .build()) {
+            .build();
 
-            StaffManager staffs = app.getOrThrow(StaffManager.class);
+        StaffManager staffs = app.getOrThrow(StaffManager.class);
 
-            staffs.stream()
-                .forEachOrdered(System.out::println);
+        staffs.stream()
+            .forEachOrdered(System.out::println);
 
-        }
+        app.stop();
 
     }
 

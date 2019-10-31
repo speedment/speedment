@@ -35,7 +35,7 @@ import static com.speedment.common.injector.State.INITIALIZED;
 public final class DefaultToolbarItems {
 
     @ExecuteBefore(INITIALIZED)
-    void install(
+    public void install(
             @WithState(INITIALIZED) ToolbarComponent toolbar,
             @WithState(INITIALIZED) UserInterfaceComponent ui,
             @WithState(INITIALIZED) Brand brand,

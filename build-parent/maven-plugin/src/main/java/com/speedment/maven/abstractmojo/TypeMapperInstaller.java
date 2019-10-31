@@ -22,7 +22,7 @@ public final class TypeMapperInstaller { // This class must be public
    static Mapping[] mappings;
 
    @ExecuteBefore(RESOLVED)
-   void installInTypeMapper(
+   public void installInTypeMapper(
        final Injector injector,
        final @WithState(INITIALIZED) TypeMapperComponent typeMappers
    ) throws MojoExecutionException {

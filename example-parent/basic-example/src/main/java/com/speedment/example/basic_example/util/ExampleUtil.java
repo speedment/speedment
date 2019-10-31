@@ -19,6 +19,8 @@ package com.speedment.example.basic_example.util;
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.SakilaApplicationBuilder;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
+import com.speedment.runtime.join.JoinBundle;
+
 import java.util.Scanner;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
@@ -46,6 +48,7 @@ public final class ExampleUtil {
 
         final SakilaApplicationBuilder builder = new SakilaApplicationBuilder()
             .withLogging(LogType.STREAM)
+            .withBundle(JoinBundle.class)
             .withPassword(password);
 
         Stream.of(operators).reduce(

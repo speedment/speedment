@@ -20,16 +20,16 @@ module com.speedment.runtime.application {
 
     requires com.speedment.common.invariant;
     requires com.speedment.runtime.welcome;
-    requires com.speedment.runtime.connector.mysql;
+/*    requires com.speedment.runtime.connector.mysql;
     requires com.speedment.runtime.connector.mariadb;
     requires com.speedment.runtime.connector.postgres;
-    requires com.speedment.runtime.connector.sqlite;
+    requires com.speedment.runtime.connector.sqlite;*/
     requires com.speedment.common.jvm_version;
     requires com.speedment.common.logger;
     requires com.speedment.common.json;
 
     requires transitive com.speedment.runtime.core;
     requires transitive com.speedment.common.annotation;
-    requires transitive com.speedment.runtime.join; // Needed if joins are used
+/*    requires transitive com.speedment.runtime.join; // Needed if joins are used*/
 
 }
