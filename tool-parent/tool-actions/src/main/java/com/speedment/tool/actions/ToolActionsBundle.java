@@ -18,6 +18,7 @@ package com.speedment.tool.actions;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.tool.actions.provider.DelegateColumnsEnabledAction;
+import com.speedment.tool.actions.provider.DelegateExpandedAction;
 import com.speedment.tool.actions.provider.DelegateProjectTreeComponent;
 import com.speedment.tool.actions.provider.DelegateTablesEnabledAction;
 
@@ -36,6 +37,7 @@ public final class ToolActionsBundle implements InjectBundle {
     public Stream<Class<?>> injectables() {
         return Stream.of(
             DelegateProjectTreeComponent.class,
+            DelegateExpandedAction.class,
             DelegateColumnsEnabledAction.class,
             DelegateTablesEnabledAction.class
         );
