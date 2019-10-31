@@ -30,6 +30,5 @@ module com.speedment.runtime.typemapper {
     exports com.speedment.runtime.typemapper.time;
 
     requires transitive java.sql;
-    requires transitive java.sql.rowset; // SerialBlob
     requires transitive com.speedment.runtime.config;
 }

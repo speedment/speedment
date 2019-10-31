@@ -20,7 +20,6 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.exception.SpeedmentTypeMapperException;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.lang.reflect.Type;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -47,7 +46,7 @@ public final class BlobToByteArrayMapper implements TypeMapper<Blob, byte[]> {
                 return value.getBytes(1, (int) value.length());
             } else {
                 throw new SpeedmentTypeMapperException(
-                    "The provided Clob contains too many characters >" + Integer.MAX_VALUE
+                    "The provided Blob contains too many characters >" + Integer.MAX_VALUE
                 );
             }
         } catch (final SQLException sqle) {
@@ -60,11 +59,7 @@ public final class BlobToByteArrayMapper implements TypeMapper<Blob, byte[]> {
         if (value == null) {
             return null;
         }
-        try {
-            return new SerialBlob(value);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return new StandardBlob(value);
     }
 
 }

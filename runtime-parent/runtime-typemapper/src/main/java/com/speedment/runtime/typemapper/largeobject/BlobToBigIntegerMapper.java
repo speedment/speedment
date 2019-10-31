@@ -20,7 +20,6 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.exception.SpeedmentTypeMapperException;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -34,8 +33,7 @@ import java.sql.SQLException;
  * @author Emil Forslund
  * @since  3.0.23
  */
-public final class BlobToBigIntegerMapper
-implements TypeMapper<Blob, BigInteger> {
+public final class BlobToBigIntegerMapper implements TypeMapper<Blob, BigInteger> {
 
     @Override
     public String getLabel() {
@@ -67,12 +65,7 @@ implements TypeMapper<Blob, BigInteger> {
     @Override
     public Blob toDatabaseType(BigInteger value) {
         if (value == null) return null;
-        try {
-            return new SerialBlob(value.toByteArray());
-        } catch (final SQLException ex) {
-            throw new SpeedmentTypeMapperException(
-                "Error mapping BigInteger to Blob.", ex);
-        }
+        return new StandardBlob(value.toByteArray());
     }
 
     @Override
