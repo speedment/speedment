@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -103,15 +103,10 @@ class StandardBlobTest {
 
     @Test()
     void freeBlob() throws SQLException {
-        standardBlob.free();
-
-        try {
-            standardBlob.getBytes(1, (int) standardBlob.length());
-        } catch (IllegalStateException e) {
-            return;
-        }
-
-        fail("Bytes didn't get freed correctly");
+        assertThrows(IllegalStateException.class, () -> {
+            standardBlob.free();
+            standardBlob.getBytes(1, 1);
+        });
     }
 
 }
