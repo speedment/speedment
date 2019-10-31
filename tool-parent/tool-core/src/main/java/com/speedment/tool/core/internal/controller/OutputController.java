@@ -72,6 +72,7 @@ public final class OutputController implements Initializable {
         });
 
         clearLogBtn.setOnAction(ev -> ui.outputMessages().clear());
+        clearLogBtn.disableProperty().bind(Bindings.isEmpty(log.getChildren()));
 
         styleToolbarButton(wrapTextBtn, MaterialIcon.WRAP_TEXT.view());
         styleToolbarButton(clearLogBtn, FontAwesome.TRASH.view());
