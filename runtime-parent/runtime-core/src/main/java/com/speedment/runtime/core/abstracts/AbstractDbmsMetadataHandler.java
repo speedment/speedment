@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.abstracts;
 
-import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
@@ -48,7 +47,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
@@ -65,17 +63,15 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler {
     
-    private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
-    private final static Class<?> DEFAULT_MAPPING = Object.class;
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
+    private static final Class<?> DEFAULT_MAPPING = Object.class;
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private final ConnectionPoolComponent connectionPoolComponent;
     private final DbmsHandlerComponent dbmsHandlerComponent;
     private final ProjectComponent projectComponent;
     private final Map<Class<? extends Document>, AtomicLong> timers;
-
-
-    private JavaTypeMap javaTypeMap;
+    private final JavaTypeMap javaTypeMap;
 
     protected AbstractDbmsMetadataHandler(
         final ConnectionPoolComponent connectionPoolComponent,
@@ -85,12 +81,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         this.connectionPoolComponent = requireNonNull(connectionPoolComponent);
         this.dbmsHandlerComponent    = requireNonNull(dbmsHandlerComponent);
         this.projectComponent        = requireNonNull(projectComponent);
-        timers = new ConcurrentHashMap<>();
-    }
-    
-    @ExecuteBefore(INITIALIZED)
-    public final void createJavaTypeMap() {
-        this.javaTypeMap = newJavaTypeMap();
+        this.timers                  = new ConcurrentHashMap<>();
+        this.javaTypeMap             = newJavaTypeMap();
     }
     
     protected JavaTypeMap newJavaTypeMap() {
