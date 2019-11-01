@@ -99,7 +99,7 @@ public interface JavaTypeMap {
     Class<?> get(String key);
     
     /**
-     * Creates a new {@link JavaTypeMap} using the default 
+     * Creates and returns a new {@link JavaTypeMap} using the default
      * implementation.
      * 
      * @return  the created {@link JavaTypeMap}
