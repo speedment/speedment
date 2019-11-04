@@ -33,29 +33,12 @@
     </properties>
 
     <artifactId>archtest</artifactId>
-    <packaging>bundle</packaging>
-    
+
     <name>Speedment - Common - Archtest</name>
     <description>
         Support Classes for ArchUnit tests
     </description>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.common.archtest
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
-    
     <profiles>
         <profile>
             <id>release</id>
@@ -68,10 +51,6 @@
                         </configuration>
                     </plugin>
                     
-                    <plugin>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin-version}</version>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -79,16 +58,6 @@
 
     <dependencies>
         <!--Test Dependencies-->
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.tngtech.archunit</groupId>

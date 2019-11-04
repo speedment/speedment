@@ -25,6 +25,8 @@ module com.speedment.tool.propertyeditor {
 
     requires com.speedment.generator.translator;
 
+    requires transitive javafx.base;
+    requires transitive javafx.controls;
     requires transitive com.speedment.common.injector;
     requires transitive com.speedment.common.mapstream;
     requires transitive com.speedment.runtime.core;

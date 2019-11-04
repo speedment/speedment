@@ -30,7 +30,6 @@
     </parent>
     
     <artifactId>runtime-typemapper</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.runtime.typemapper</module-name>
@@ -40,51 +39,12 @@
     <description>
         Converts between the standard JDBC types and the java types.
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.runtime.typemapper.bigdecimal,
-                            com.speedment.runtime.typemapper.bytes,
-                            com.speedment.runtime.typemapper.doubles,
-                            com.speedment.runtime.typemapper.exception,
-                            com.speedment.runtime.typemapper.integer,
-                            com.speedment.runtime.typemapper.largeobject,
-                            com.speedment.runtime.typemapper.longs,
-                            com.speedment.runtime.typemapper.other,
-                            com.speedment.runtime.typemapper.primitive,
-                            com.speedment.runtime.typemapper.shorts,
-                            com.speedment.runtime.typemapper.string,
-                            com.speedment.runtime.typemapper.time,
-                            com.speedment.runtime.typemapper
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
             <version>${speedment.version}</version>
-        </dependency>
-
-        <!-- Test Dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
 
     </dependencies>

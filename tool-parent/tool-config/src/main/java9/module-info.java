@@ -25,6 +25,9 @@ module com.speedment.tool.config {
 
     requires com.speedment.generator.translator;
 
+
+    requires transitive javafx.base;
+    requires transitive javafx.controls;
     requires transitive com.speedment.common.function;
     requires transitive com.speedment.common.injector;
     requires transitive com.speedment.common.mapstream;

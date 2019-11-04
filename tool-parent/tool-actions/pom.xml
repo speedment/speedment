@@ -30,7 +30,6 @@
     </parent>
     
     <artifactId>tool-actions</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.tool.actions</module-name>
@@ -40,25 +39,7 @@
     <description>
         Actions that can be performed in the Speedment Tool.
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.tool.actions,
-                            com.speedment.tool.actions.menues,
-                            com.speedment.tool.actions.provider
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>

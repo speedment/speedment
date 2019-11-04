@@ -14,18 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.tool.actions {
-    exports com.speedment.tool.actions;
-    exports com.speedment.tool.actions.menues;
-    exports com.speedment.tool.actions.provider;
 
-    requires com.speedment.common.invariant;
-    requires com.speedment.common.mapstream;
+package com.speedment.common.collection;
 
-    requires com.speedment.tool.config;
+import org.junit.jupiter.api.Test;
 
-    requires transitive javafx.base;
-    requires transitive javafx.controls;
-    requires transitive com.speedment.common.injector;
-    requires transitive com.speedment.runtime.config;
+import static org.junit.jupiter.api.Assertions.fail;
+
+/**
+ * @author Mislav Milicevic
+ */
+final class AtJpmsTest {
+
+    @Test
+    void atJpms() {
+        try {
+            String.class.getDeclaredField("value").setAccessible(true);
+        } catch (Exception e) {
+            if ("InaccessibleObjectException".equals(e.getClass().getSimpleName())) {
+                return;
+            }
+        }
+        fail("Not running under the module system");
+    }
+
 }

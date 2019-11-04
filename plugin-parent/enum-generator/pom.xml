@@ -30,8 +30,6 @@
     </parent>
     
     <artifactId>enum-generator</artifactId>
-    <packaging>bundle</packaging>
-
     <properties>
         <module-name>com.speedment.plugins.enums</module-name>
     </properties>
@@ -42,22 +40,6 @@
         is the enum type.
     </description>
     <url>https://www.github.com/speedment/speedment-plugins/wiki/Enum-Generator/</url>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.plugins.enums
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     
     <profiles>
         <profile>

@@ -30,7 +30,6 @@
     </parent>
     
     <artifactId>tool-config</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.tool.config</module-name>
@@ -41,26 +40,7 @@
         An observable configuration system that models the layout of a 
         relational database in a JavaFX observable fashion.
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.tool.config.mutator.*,
-                            com.speedment.tool.config.trait.*,
-                            com.speedment.tool.config.provider.*,
-                            com.speedment.tool.config.*
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>

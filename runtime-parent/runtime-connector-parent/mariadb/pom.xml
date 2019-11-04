@@ -30,7 +30,6 @@
     </parent>
     
     <artifactId>connector-mariadb</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.runtime.connector.mariadb</module-name>
@@ -40,23 +39,6 @@
     <description>
         A connector for the MariaDB database.
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.runtime.connector.mariadb,
-                            com.speedment.runtime.connector.mariadb.provider
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     
     <dependencies>
         <!-- Common dependencies -->
@@ -86,20 +68,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
-
 
     </dependencies>
 </project>

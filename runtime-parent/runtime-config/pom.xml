@@ -30,7 +30,6 @@
     </parent>
     
     <artifactId>runtime-config</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.runtime.config</module-name>
@@ -43,31 +42,6 @@
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/DBModel/</url>
     
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.runtime.config,
-                            com.speedment.runtime.config.exception,
-                            com.speedment.runtime.config.identifier,
-                            com.speedment.runtime.config.identifier.trait,
-                            com.speedment.runtime.config.mutator,
-                            com.speedment.runtime.config.mutator.trait,
-                            com.speedment.runtime.config.parameter,
-                            com.speedment.runtime.config.provider,
-                            com.speedment.runtime.config.trait,
-                            com.speedment.runtime.config.util
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
-
     <dependencies>
         <!-- Common Dependencies -->
 
@@ -85,16 +59,6 @@
             <groupId>com.speedment.common</groupId>
             <artifactId>invariant</artifactId>
         </dependency>
-        
-        <!-- Test Dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
     </dependencies>
 </project>

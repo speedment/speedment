@@ -30,7 +30,6 @@
     </parent>
 
     <artifactId>codegen</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.common.codegen</module-name>
@@ -42,63 +41,5 @@
         Model-View-Controller (MVC) design philosophy.
     </description>
     <url>https://github.com/speedment/speedment/wiki/CodeGen</url>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.common.codegen,
-                            com.speedment.common.codegen.controller,
-                            com.speedment.common.codegen.constant,
-                            com.speedment.common.codegen.model,
-                            com.speedment.common.codegen.model.modifier,
-                            com.speedment.common.codegen.model.trait,
-                            com.speedment.common.codegen.model.value,
-                            com.speedment.common.codegen.provider,
-                            com.speedment.common.codegen.util
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin-version}</version>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin-version}</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    
-    <dependencies>
-        <!--Test dependencies-->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-
-    </dependencies>
 </project>

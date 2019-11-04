@@ -24,6 +24,8 @@ open module com.speedment.tool.actions {
 
     requires com.speedment.tool.config;
 
+    requires transitive javafx.base;
+    requires transitive javafx.controls;
     requires transitive com.speedment.common.injector;
     requires transitive com.speedment.runtime.config;
 }

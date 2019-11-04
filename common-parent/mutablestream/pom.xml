@@ -30,7 +30,6 @@
     </parent>
     
     <artifactId>mutable-stream</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.common.mutablestream</module-name>
@@ -42,23 +41,5 @@
         be mutated before it is executed.
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/MutableStream/</url>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.common.mutablestream,
-                            com.speedment.common.mutablestream.action,
-                            com.speedment.common.mutablestream.source,
-                            com.speedment.common.mutablestream.terminate,
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
+
 </project>

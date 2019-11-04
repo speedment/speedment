@@ -30,7 +30,6 @@
     </parent>
     
     <artifactId>tool-propertyeditor</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.tool.propertyeditor</module-name>
@@ -42,27 +41,7 @@
         configuration model in a graphical user interface.
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/PropertyEditor/</url>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.tool.propertyeditor,
-                            com.speedment.tool.propertyeditor.component,
-                            com.speedment.tool.propertyeditor.editor,
-                            com.speedment.tool.propertyeditor.item,
-                            com.speedment.tool.propertyeditor.provider
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>

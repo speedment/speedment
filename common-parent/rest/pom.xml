@@ -30,7 +30,6 @@
     </parent>
     
     <artifactId>rest</artifactId>
-    <packaging>bundle</packaging>
 
     <properties>
         <module-name>com.speedment.common.rest</module-name>
@@ -42,47 +41,11 @@
         public REST API.
     </description>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>com.speedment.common.rest</Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin-version}</version>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin-version}</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    
     <dependencies>
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>json</artifactId>
             <version>${speedment.version}</version>
         </dependency>
-        
     </dependencies>
 </project>
