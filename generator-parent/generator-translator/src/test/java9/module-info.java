@@ -20,6 +20,7 @@ open module com.speedment.generator.translator {
     exports com.speedment.generator.translator.component.function;
     exports com.speedment.generator.translator.exception;
     exports com.speedment.generator.translator.namer;
+    exports com.speedment.generator.translator.provider;
     exports com.speedment.generator.translator.util;
 
     requires com.speedment.common.annotation;

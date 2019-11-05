@@ -23,8 +23,8 @@ open module com.speedment.runtime.join {
 
     requires com.speedment.common.logger;
     requires com.speedment.common.invariant;
-    requires com.speedment.runtime.core;
 
+    requires transitive com.speedment.runtime.core;
     requires transitive com.speedment.common.function;
     requires transitive com.speedment.common.tuple;
     requires transitive com.speedment.runtime.config;

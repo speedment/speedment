@@ -21,6 +21,6 @@ open module com.speedment.runtime.compute {
     exports com.speedment.runtime.compute.expression.predicate;
     exports com.speedment.runtime.compute.trait;
 
-    requires com.speedment.common.function;
+    requires transitive com.speedment.common.function;
 
 }

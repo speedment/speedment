@@ -18,5 +18,5 @@ open module com.speedment.runtime.bulk {
     exports com.speedment.runtime.bulk;
     exports com.speedment.runtime.bulk.trait;
 
-    requires com.speedment.runtime.core;
+    requires transitive com.speedment.runtime.core;
 }

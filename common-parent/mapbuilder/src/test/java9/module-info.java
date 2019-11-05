@@ -14,12 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-open module com.speedment.common.injector {
-    exports com.speedment.common.injector;
-    exports com.speedment.common.injector.annotation;
-    exports com.speedment.common.injector.dependency;
-    exports com.speedment.common.injector.exception;
-    exports com.speedment.common.injector.execution;
-
-    requires transitive com.speedment.common.logger;
+open module com.speedment.common.mapbuilder {
+    exports com.speedment.common.mapbuilder;
 }

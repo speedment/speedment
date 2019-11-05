@@ -19,10 +19,10 @@ open module com.speedment.runtime.connector.sqlite {
     exports com.speedment.runtime.connector.sqlite.provider;
 
     requires com.speedment.common.logger;
-    requires com.speedment.common.injector;
     requires com.speedment.common.invariant;
 
-    requires com.speedment.runtime.core;
-    requires com.speedment.runtime.config;
-    requires com.speedment.runtime.field;
+    requires transitive com.speedment.common.injector;
+    requires transitive com.speedment.runtime.core;
+    requires transitive com.speedment.runtime.config;
+    requires transitive com.speedment.runtime.field;
 }
