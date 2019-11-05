@@ -45,11 +45,8 @@
             
             <modules>
                 <module>runtime</module>
-                <module>runtime-deploy</module>
                 <module>generator</module>
-                <module>generator-deploy</module>
                 <module>tool</module>
-                <module>tool-deploy</module>
                 <module>maven-plugin</module>
             </modules>
             
