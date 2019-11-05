@@ -80,7 +80,9 @@ public abstract class AbstractSpeedment implements Speedment {
     }
 
     private <T> void logTypicalError(Class<T> componentClass) {
-        if ("JoinComponent".equals(componentClass.getSimpleName())) {
+        final String componentSimpleName = componentClass.getSimpleName();
+
+        if ("JoinComponent".equals(componentSimpleName)) {
             LOGGER.error(
                 "Since 3.2.0, The JoinBundle (that contains the JoinComponent) is optional. " +
                 "Make sure that you have installed the JoinBundle by invoking .withBundle(JoinBundle.class) in your application builder " +
