@@ -87,12 +87,12 @@ implements Transform<Constructor, String>,
      * @param model  the constructor
      * @return       the rendered name
      */
-	private static Optional<String> renderName(Generator gen, Constructor model) {
+	private static <T extends HasName<T>> Optional<String> renderName(Generator gen, Constructor model) {
         requireNonNulls(gen, model);
 
         return gen.getRenderStack()
             .fromTop(HasName.class)
-            .map(HasName::getName)
+            .map(HasName<T>::getName)
             .map(Formatting::shortName)
             .findFirst();
 	}

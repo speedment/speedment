@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector.internal.dependency;
 
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
@@ -35,10 +36,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -50,8 +53,10 @@ import static java.util.stream.Collectors.joining;
 public final class DependencyGraphImpl implements DependencyGraph {
     
     private final Map<Class<?>, DependencyNode> nodes;
+    private final Function<Class<?>, InjectorProxy> proxyFunction;
 
-    public DependencyGraphImpl() {
+    public DependencyGraphImpl(Function<Class<?>, InjectorProxy> proxyFunction) {
+        this.proxyFunction = requireNonNull(proxyFunction);
         nodes = new ConcurrentHashMap<>();
         nodes.put(InjectorImpl.class, new InjectorDependencyNode());
     }
@@ -163,8 +168,11 @@ public final class DependencyGraphImpl implements DependencyGraph {
         }
 
         return new ReflectionExecutionImpl<>(
-            m.getDeclaringClass(), 
-            executeBefore, dependencies, m
+            m.getDeclaringClass(),
+            executeBefore,
+            dependencies,
+            m,
+            proxyFunction.apply(m.getDeclaringClass())
         );
     }
 }

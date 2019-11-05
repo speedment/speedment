@@ -34,10 +34,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -191,7 +188,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 .collect(toCollection((Supplier<Set<Injectable<?>>>) LinkedHashSet::new))
         );
 
-        final DependencyGraph graph = DependencyGraph.create(injectablesSet.stream().map(Injectable::get));
+        final DependencyGraph graph = DependencyGraph.create(injectablesSet.stream().map(Injectable::get), this::proxyFor);
 
         // Create a pre-configured map so that the instance order can
         // be retained regardless of actual instantiation order, #788
@@ -476,7 +473,6 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                             instances,
                             false
                         );
-
                         // Execute all the executions for the next step.
                         n.getExecutions().stream()
                             .filter(e -> e.getState() == state)
@@ -531,7 +527,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
                                     if (exec instanceof ReflectionExecutionImpl) {
                                         final Method method = ((ReflectionExecutionImpl<?>) exec).getMethod();
-                                        INTERNAL_LOGGER.error(format("    %s %s%s",
+                                        INTERNAL_LOGGER.error(format("   %s %s %s%s",
+                                            Modifier.toString(method.getModifiers()),
                                             method.getReturnType().getSimpleName(),
                                             method.getName(),
                                             method.getParameterCount() == 0 ? "()" : "("));

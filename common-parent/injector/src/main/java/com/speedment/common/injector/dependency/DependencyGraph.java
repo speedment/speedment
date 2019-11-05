@@ -16,10 +16,12 @@
  */
 package com.speedment.common.injector.dependency;
 
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.common.injector.internal.dependency.DependencyGraphImpl;
 
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -88,8 +90,8 @@ public interface DependencyGraph {
      * @return a new DependencyGraph
      * @throws CyclicReferenceException if there is a cyclic dependency
      */
-    static DependencyGraph create(Stream<Class<?>> injectables) {
-        final DependencyGraph graph = new DependencyGraphImpl();
+    static DependencyGraph create(Stream<Class<?>> injectables, Function<Class<?>, InjectorProxy> proxyFunction) {
+        final DependencyGraph graph = new DependencyGraphImpl(proxyFunction);
         injectables.forEachOrdered(graph::getOrCreate);
         graph.inject();
         return graph;

@@ -57,6 +57,7 @@ public final class InjectorProxyTranslator extends AbstractJavaClassTranslator<P
                     .add(isApplicable())
                     .add(set())
                     .add(newInstance())
+                    .add(invoke())
             ).build();
     }
 
@@ -107,6 +108,19 @@ public final class InjectorProxyTranslator extends AbstractJavaClassTranslator<P
             .override()
             .public_()
             .add("return constructor.newInstance(args);");
+    }
+
+    private Method invoke() {
+        return Method.of("invoke", Object.class)
+            .add(Field.of("method", java.lang.reflect.Method.class))
+            .add(Field.of("obj", Object.class))
+            .add(Field.of("args", java.lang.Object[].class))
+            .add(IllegalAccessException.class)
+            .add(IllegalArgumentException.class)
+            .add(InvocationTargetException.class)
+            .override()
+            .public_()
+            .add("return method.invoke(obj, args);");
     }
 
 }

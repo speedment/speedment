@@ -47,7 +47,10 @@ public final class ExampleUtil {
         final String password = inputPassword.isEmpty() ? DEFAULT_P : inputPassword;
 
         final SakilaApplicationBuilder builder = new SakilaApplicationBuilder()
+            .withParam("db.mysql.collationName", "utf8mb4_general_ci")
+            .withParam("db.mysql.binaryCollationName", "utf8mb4_bin")
             .withLogging(LogType.STREAM)
+/*            .withLogging(LogType.APPLICATION_BUILDER)*/
             .withBundle(JoinBundle.class)
             .withPassword(password);
 
