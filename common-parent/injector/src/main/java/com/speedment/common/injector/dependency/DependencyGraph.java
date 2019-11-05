@@ -86,8 +86,11 @@ public interface DependencyGraph {
 
     /**
      * Creates and returns a new DependencyGraph.
+     *
      * @param injectables to use
+     * @param proxyFunction to use when locating an InjectorProxy for future invocations
      * @return a new DependencyGraph
+     *
      * @throws CyclicReferenceException if there is a cyclic dependency
      */
     static DependencyGraph create(Stream<Class<?>> injectables, Function<Class<?>, InjectorProxy> proxyFunction) {

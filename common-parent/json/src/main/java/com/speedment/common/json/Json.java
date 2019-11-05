@@ -86,6 +86,7 @@ public final class Json {
      *
      * @param object  the object to parse
      * @param pretty  if the result should be formatted in a pretty way
+     * @return JSON String
      *
      * @throws IllegalArgumentException  if the input object is of or contains
      *                                   unsupported types

@@ -83,6 +83,7 @@ public interface InjectorProxy {
      * <p>If the constructor completes normally, returns the newly
      * created and initialized instance.
      *
+     * @param <T> type of object to create
      * @param constructor to use when creating a new instance
      * @param args array of objects to be passed as arguments to
      * the constructor call; values of primitive types are wrapped in

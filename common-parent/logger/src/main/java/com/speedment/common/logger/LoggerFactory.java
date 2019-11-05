@@ -26,26 +26,26 @@ import java.util.stream.Stream;
 public interface LoggerFactory {
 
     /**
-     * Creates a new <tt>Logger</tt> bound to the given <tt>binding</tt> type.
+     * Creates a new {@code Logger} bound to the given {@code binding} type.
      *
-     * @param binding the <tt>java.lang.Class</tt> to bind to
-     * @return the <b>new</b> <tt>Logger</tt> instance
+     * @param binding the {@code java.lang.Class} to bind to
+     * @return the <b>new</b> {@code Logger} instance
      */
     Logger create(Class<?> binding);
 
     /**
-     * Creates a new <tt>Logger</tt> bound to the given <tt>binding</tt> string.
+     * Creates a new {@code Logger} bound to the given {@code binding} string.
      *
-     * @param binding the <tt>java.lang.String</tt> to bind to
-     * @return the <b>new</b> <tt>Logger</tt> instance
+     * @param binding the {@code java.lang.String} to bind to
+     * @return the <b>new</b> {@code Logger} instance
      */
     Logger create(String binding);
 
     /**
-     * Returns the type of the <tt>Logger</tt> that is created by this factory
+     * Returns the type of the {@code Logger} that is created by this factory
      * instance.
      *
-     * @return the type of the created <tt>Logger</tt>s
+     * @return the type of the created {@code Logger}s
      */
     Class<? extends Logger> loggerClass();
 

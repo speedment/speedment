@@ -22,7 +22,7 @@ import static com.speedment.common.invariant.ConstantUtil.*;
 import static java.lang.String.format;
 
 /**
- * Utility class for checking the invariant on {@code double}-values.
+ * Utility class for checking invariants on {@code double}-values.
  *
  * @author Emil Forslund
  * @since  1.0.3
