@@ -55,7 +55,6 @@ import java.util.stream.IntStream;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
@@ -120,7 +119,9 @@ public abstract class AbstractApplicationBuilder<
         final String name,
         final BiConsumer<Injector, C> consumer
     ) {
-        requireNonNulls(type, name, consumer);
+        requireNonNull(type);
+        requireNonNull(name);
+        requireNonNull(consumer);
 
         injectorBuilder.before(resolved(ProjectComponent.class)
             .withStateInitialized(Injector.class)
@@ -142,7 +143,8 @@ public abstract class AbstractApplicationBuilder<
     public <C extends Document & HasEnabled> BUILDER with(
             Class<C> type, BiConsumer<Injector, C> consumer) {
         
-        requireNonNulls(type, consumer);
+        requireNonNull(type);
+        requireNonNull(consumer);
         
         injectorBuilder.before(resolved(ProjectComponent.class)
             .withStateInitialized(Injector.class)
@@ -171,7 +173,8 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withParam(String key, String value) {
-        requireNonNulls(key, value);
+        requireNonNull(key);
+        requireNonNull(value);
         injectorBuilder.withParam(key, value);
         return self();
     }
@@ -242,7 +245,8 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withIpAddress(String dbmsName, String ipAddress) {
-        requireNonNulls(dbmsName, ipAddress);
+        requireNonNull(dbmsName);
+        requireNonNull(ipAddress);
         with(Dbms.class, dbmsName, d -> d.mutator().setIpAddress(ipAddress));
         return self();
     }
@@ -275,7 +279,8 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withSchema(String oldSchemaName, String schemaName) {
-        requireNonNulls(oldSchemaName, schemaName);
+        requireNonNull(oldSchemaName);
+        requireNonNull(schemaName);
         with(Schema.class, oldSchemaName, s -> {
             // This makes sure that old json files with no id
             // first sets it id before the name is changed
@@ -339,7 +344,8 @@ public abstract class AbstractApplicationBuilder<
     }
 
     public <T> BUILDER withComponent(Class<T> injectableClass, Supplier<T> supplier) {
-        requireNonNulls(injectableClass, supplier);
+        requireNonNull(injectableClass);
+        requireNonNull(supplier);
         injectorBuilder.withComponent(injectableClass, supplier);
         return self();
     }
