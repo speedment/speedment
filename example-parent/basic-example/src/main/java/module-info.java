@@ -1,8 +1,7 @@
 module basic.example {
-/*    exports com.company.sakila.db0.sakila.staff.generated; // ????*/
-
-    requires com.speedment.runtime.application;
-    requires com.speedment.runtime.connector.mysql;
+    requires transitive com.speedment.runtime.application;
+    requires transitive com.speedment.runtime.connector.mysql; // Transitive required for jlink
     requires com.speedment.runtime.join;
     requires custom.typemapper;
+    requires mysql.connector.java;
 }

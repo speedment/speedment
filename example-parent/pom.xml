@@ -55,8 +55,31 @@
     <modules>
         <module>custom-typemapper</module>
         <module>basic-example</module>
-        <!--<module>spring-webshop</module>-->
+<!--        <module>mod-jlink</module>-->
     </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jlink-plugin</artifactId>
+                <version>3.0.0-alpha-1</version>
+                <extensions>true</extensions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-java</artifactId>
+                        <version>1.0.3</version>
+                    </dependency>
+
+<!--                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>7.2</version>
+                    </dependency>-->
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencyManagement>
         <dependencies>
