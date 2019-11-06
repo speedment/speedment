@@ -1,5 +1,5 @@
 /**
- * This package contains the main sqlite classes.
+ * Connector for the SQLite database
  * <p>
  * This package is part of the API. Modifications to classes here should only
  * (if ever) be done in major releases.
