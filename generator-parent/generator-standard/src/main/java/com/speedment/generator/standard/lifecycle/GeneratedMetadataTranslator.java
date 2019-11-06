@@ -17,10 +17,8 @@
 package com.speedment.generator.standard.lifecycle;
 
 import com.speedment.common.codegen.constant.DefaultType;
-import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.json.Json;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
@@ -28,7 +26,6 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationMetadata;
-import com.speedment.runtime.core.component.InfoComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +142,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
     @Override
     protected Javadoc getJavaDoc() {
         final String owner = infoComponent.getTitle();
-        return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
+        return Javadoc.of(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
 

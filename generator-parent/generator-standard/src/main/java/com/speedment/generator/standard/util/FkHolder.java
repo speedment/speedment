@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.standard.internal.util;
+package com.speedment.generator.standard.util;
 
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.injector.Injector;
@@ -48,6 +48,7 @@ public final class FkHolder {
     private final Table foreignTable;
 
     public FkHolder(Injector injector, ForeignKey fk) {
+        requireNonNull(injector);
         requireNonNull(fk);
         this.codeGenerationComponent = injector.getOrThrow(CodeGenerationComponent.class);
         

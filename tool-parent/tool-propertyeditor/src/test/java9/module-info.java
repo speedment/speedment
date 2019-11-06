@@ -22,7 +22,7 @@ open module com.speedment.tool.propertyeditor {
     exports com.speedment.tool.propertyeditor.provider;
 
     requires com.speedment.runtime.typemapper;
-
+    requires com.speedment.common.codegen;
     requires com.speedment.generator.translator;
 
     requires transitive javafx.base;

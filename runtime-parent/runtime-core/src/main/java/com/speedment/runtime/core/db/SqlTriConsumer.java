@@ -42,6 +42,7 @@ public interface SqlTriConsumer<T, U, V> {
      * @param t the first input argument
      * @param u the second input argument
      * @param v the third input argument
+     * @throws SQLException if there was an SQL error
      */
     void accept(T t, U u, V v) throws SQLException;
 

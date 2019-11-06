@@ -47,6 +47,7 @@
             <groupId>com.speedment.common</groupId>
             <artifactId>archtest</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

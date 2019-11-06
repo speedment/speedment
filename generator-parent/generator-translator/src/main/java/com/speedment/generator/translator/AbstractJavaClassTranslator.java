@@ -28,7 +28,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.internal.*;
 import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
@@ -243,31 +242,31 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         @Override
         public Builder<T> forEverySchema(Phase phase, BiConsumer<T, Schema> consumer) {
-            aquireListAndAdd(phase, DbmsUtil.SCHEMAS, wrap(consumer, SchemaImpl::new));
+            aquireListAndAdd(phase, DbmsUtil.SCHEMAS, wrap(consumer, Schema::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryTable(Phase phase, BiConsumer<T, Table> consumer) {
-            aquireListAndAdd(phase, SchemaUtil.TABLES, wrap(consumer, TableImpl::new));
+            aquireListAndAdd(phase, SchemaUtil.TABLES, wrap(consumer, Table::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryColumn(Phase phase, BiConsumer<T, Column> consumer) {
-            aquireListAndAdd(phase, TableUtil.COLUMNS, wrap(consumer, ColumnImpl::new));
+            aquireListAndAdd(phase, TableUtil.COLUMNS, wrap(consumer, Column::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryIndex(Phase phase, BiConsumer<T, Index> consumer) {
-            aquireListAndAdd(phase, TableUtil.INDEXES, wrap(consumer, IndexImpl::new));
+            aquireListAndAdd(phase, TableUtil.INDEXES, wrap(consumer, Index::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryForeignKey(Phase phase, BiConsumer<T, ForeignKey> consumer) {
-            aquireListAndAdd(phase, TableUtil.FOREIGN_KEYS, wrap(consumer, ForeignKeyImpl::new));
+            aquireListAndAdd(phase, TableUtil.FOREIGN_KEYS, wrap(consumer, ForeignKey::create));
             return this;
         }
 
@@ -336,7 +335,7 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
                             // and columns are to be included.
                             .filter((k, v) -> {
                                 if (TableUtil.FOREIGN_KEYS.equals(k)) {
-                                    return new ForeignKeyImpl(table, v)
+                                    return ForeignKey.create(table, v)
                                         .foreignKeyColumns()
                                         .map(ForeignKeyColumn::findColumn)
                                         .allMatch(c ->

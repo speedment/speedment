@@ -83,10 +83,10 @@ implements CombinedPredicate<ENTITY> {
      *
      * @param <ENTITY>  the entity type
      */
-    public static final class AndCombinedBasePredicate<ENTITY>
+    public static final class AndCombinedBasePredicateImpl<ENTITY>
     extends AbstractCombinedPredicate<ENTITY> {
 
-        public AndCombinedBasePredicate(
+        public AndCombinedBasePredicateImpl(
                 List<Predicate<? super ENTITY>> predicates) {
 
             super(Type.AND, predicates);
@@ -101,7 +101,7 @@ implements CombinedPredicate<ENTITY> {
         @Override
         public CombinedPredicate<ENTITY> and(Predicate<? super ENTITY> other) {
             requireNonNull(other);
-            return new AndCombinedBasePredicate<>(
+            return new AndCombinedBasePredicateImpl<>(
                 copyAndAdd(getPredicates(), other)
             );
         }
@@ -115,7 +115,7 @@ implements CombinedPredicate<ENTITY> {
         @Override
         @SuppressWarnings("unchecked")
         public CombinedPredicate<ENTITY> negate() {
-            return new OrCombinedBasePredicate<>(
+            return new OrCombinedBasePredicateImpl<>(
                 getPredicates().stream()
                     .map(p -> (Predicate<ENTITY>) p)
                     .map(Predicate::negate)
@@ -129,10 +129,10 @@ implements CombinedPredicate<ENTITY> {
      *
      * @param <ENTITY>  the entity type
      */
-    public static final class OrCombinedBasePredicate<ENTITY>
+    public static final class OrCombinedBasePredicateImpl<ENTITY>
     extends AbstractCombinedPredicate<ENTITY> {
 
-        public OrCombinedBasePredicate(
+        public OrCombinedBasePredicateImpl(
                 List<Predicate<? super ENTITY>> predicates) {
 
             super(Type.OR, predicates);
@@ -153,15 +153,15 @@ implements CombinedPredicate<ENTITY> {
         @Override
         public CombinedPredicate<ENTITY> or(Predicate<? super ENTITY> other) {
             requireNonNull(other);
-            return new OrCombinedBasePredicate<>(
+            return new OrCombinedBasePredicateImpl<>(
                 copyAndAdd(getPredicates(), other)
             );
         }
 
         @Override
         @SuppressWarnings("unchecked")
-        public AndCombinedBasePredicate<ENTITY> negate() {
-            return new AndCombinedBasePredicate<>(
+        public AndCombinedBasePredicateImpl<ENTITY> negate() {
+            return new AndCombinedBasePredicateImpl<>(
                 getPredicates().stream()
                     .map(p -> (Predicate<ENTITY>) p)
                     .map(Predicate::negate)

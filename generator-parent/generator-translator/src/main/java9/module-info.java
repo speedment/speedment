@@ -25,6 +25,7 @@ module com.speedment.generator.translator {
 
     requires com.speedment.common.annotation;
     requires com.speedment.common.codegen;
+    requires com.speedment.common.invariant;
     requires com.speedment.common.function;
     requires com.speedment.common.injector;
     requires com.speedment.common.mapstream;

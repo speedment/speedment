@@ -21,6 +21,11 @@ open module com.speedment.runtime.core {
     exports com.speedment.runtime.core.component.connectionpool;
     exports com.speedment.runtime.core.component.resultset;
     exports com.speedment.runtime.core.component.sql;
+    exports com.speedment.runtime.core.component.sql.override;
+    exports com.speedment.runtime.core.component.sql.override.doubles;
+    exports com.speedment.runtime.core.component.sql.override.ints;
+    exports com.speedment.runtime.core.component.sql.override.longs;
+    exports com.speedment.runtime.core.component.sql.override.reference;
     exports com.speedment.runtime.core.component.transaction;
     exports com.speedment.runtime.core.db;
     exports com.speedment.runtime.core.db.metadata;
@@ -32,6 +37,7 @@ open module com.speedment.runtime.core {
     exports com.speedment.runtime.core.stream.action;
     exports com.speedment.runtime.core.stream.parallel;
     exports com.speedment.runtime.core.stream.java9;
+    exports com.speedment.runtime.core.testsupport;
     exports com.speedment.runtime.core.util;
 
     requires com.speedment.common.invariant;

@@ -36,7 +36,11 @@
     <groupId>com.speedment</groupId>
     <artifactId>speedment-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.maven.plugin</module-name>
+    </properties>
+
     <name>Speedment - Build - Maven Plugin</name>
     <description>
         A neat plugin for using Speedment as a maven target.

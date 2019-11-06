@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-module com.speedment.common.singletonstream {
-    exports com.speedment.common.singletonstream;
+module com.speedment.common.archtest {
+    exports com.speedment.common.archtest;
 
-    requires com.speedment.common.logger;
+    requires transitive com.tngtech.archunit;
 }

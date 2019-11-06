@@ -86,7 +86,7 @@ public interface CombinedPredicate<ENTITY> extends SpeedmentPredicate<ENTITY> {
     static <ENTITY> CombinedPredicate<ENTITY> and(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
         @SuppressWarnings("unchecked")
         final Predicate<ENTITY> secondCasted = (Predicate<ENTITY>) second;
-        return new AbstractCombinedPredicate.AndCombinedBasePredicate<>(
+        return new AbstractCombinedPredicate.AndCombinedBasePredicateImpl<>(
             Arrays.asList(first, secondCasted)
         );
     }
@@ -101,7 +101,7 @@ public interface CombinedPredicate<ENTITY> extends SpeedmentPredicate<ENTITY> {
      * the given predicates
      */
     static <ENTITY> CombinedPredicate<ENTITY> and(List<Predicate<? super ENTITY>> predicates) {
-        return new AbstractCombinedPredicate.AndCombinedBasePredicate<>(predicates);
+        return new AbstractCombinedPredicate.AndCombinedBasePredicateImpl<>(predicates);
     }
 
     /**
@@ -117,7 +117,7 @@ public interface CombinedPredicate<ENTITY> extends SpeedmentPredicate<ENTITY> {
     static <ENTITY> CombinedPredicate<ENTITY> or(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
         @SuppressWarnings("unchecked")
         final Predicate<ENTITY> secondCasted = (Predicate<ENTITY>) second;
-        return new AbstractCombinedPredicate.OrCombinedBasePredicate<>(
+        return new AbstractCombinedPredicate.OrCombinedBasePredicateImpl<>(
             Arrays.asList(first, secondCasted)
         );
     }
@@ -132,6 +132,6 @@ public interface CombinedPredicate<ENTITY> extends SpeedmentPredicate<ENTITY> {
      * the given predicates
      */
     static <ENTITY> CombinedPredicate<ENTITY> or(List<Predicate<? super ENTITY>> predicates) {
-        return new AbstractCombinedPredicate.OrCombinedBasePredicate<>(predicates);
+        return new AbstractCombinedPredicate.OrCombinedBasePredicateImpl<>(predicates);
     }
 }

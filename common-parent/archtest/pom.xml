@@ -28,42 +28,26 @@
         <version>3.2.0-SNAPSHOT</version>
     </parent>
 
+    <artifactId>archtest</artifactId>
+
     <properties>
         <module-name>com.speedment.common.archtest</module-name>
     </properties>
-
-    <artifactId>archtest</artifactId>
 
     <name>Speedment - Common - Archtest</name>
     <description>
         Support Classes for ArchUnit tests
     </description>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <excludePackageNames>*.internal.*,*.archunit.*</excludePackageNames>
-                        </configuration>
-                    </plugin>
-                    
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <dependencies>
-        <!--Test Dependencies-->
 
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit</artifactId>
             <scope>compile</scope>
         </dependency>
+
+        <!--Test Dependencies-->
 
         <dependency>
             <groupId>com.tngtech.archunit</groupId>

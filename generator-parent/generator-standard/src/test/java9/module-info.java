@@ -20,6 +20,7 @@ open module com.speedment.generator.standard {
     exports com.speedment.generator.standard.lifecycle;
     exports com.speedment.generator.standard.manager;
     exports com.speedment.generator.standard.provider;
+    exports com.speedment.generator.standard.util;
 
     requires com.speedment.common.function;
     requires com.speedment.common.injector;
@@ -36,4 +37,11 @@ open module com.speedment.generator.standard {
     requires com.speedment.runtime.application;
 
     requires com.speedment.generator.translator;
+
+    // Just for finding the Bundle
+    requires com.speedment.runtime.connector.mysql;
+    requires com.speedment.runtime.connector.mariadb;
+    requires com.speedment.runtime.connector.postgres;
+    requires com.speedment.runtime.connector.sqlite;
+
 }

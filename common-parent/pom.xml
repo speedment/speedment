@@ -61,7 +61,7 @@
         <module>archtest</module>
     </modules>
 
-    <profiles>
+<!--    <profiles>
         <profile>
             <id>release</id>
             <build>
@@ -80,7 +80,7 @@
                 </plugins>
             </build>
         </profile>
-    </profiles>
+    </profiles>-->
 
     <dependencies>
         <!--Test dependencies-->

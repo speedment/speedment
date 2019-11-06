@@ -98,7 +98,7 @@
             </dependencies>
         </profile>
 
-        <profile>
+<!--        <profile>
             <id>release</id>
             <build>
 
@@ -121,6 +121,6 @@
                 </plugins>
 
             </build>
-        </profile>
+        </profile>-->
     </profiles>
 </project>

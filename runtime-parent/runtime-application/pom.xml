@@ -40,7 +40,18 @@
         The runtime bundle of Speedment that all projects must depend on to use 
         the framework.
     </description>
-    
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <excludePackageNames>*.internal:*.internal.*:com.speedment.runtime.connector.*:com.speedment.runtime.join.*</excludePackageNames>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
 
         <dependency>

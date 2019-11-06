@@ -64,7 +64,7 @@
         </dependencies>
     </dependencyManagement>
     
-    <profiles>
+<!--    <profiles>
         <profile>
             <id>release</id>
             
@@ -90,7 +90,7 @@
             </build>
 
         </profile>
-    </profiles>
+    </profiles>-->
 
     <dependencies>
         <!-- Test Dependencies -->

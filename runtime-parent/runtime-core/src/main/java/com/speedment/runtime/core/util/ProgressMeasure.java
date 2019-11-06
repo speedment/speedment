@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.util;
 
-import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
+import com.speedment.runtime.core.internal.util.ProgressMeasureImpl;
 
 import java.util.function.Consumer;
 
@@ -81,6 +81,6 @@ public interface ProgressMeasure {
     ProgressMeasure addListener(Consumer<ProgressMeasure> listener);
 
     static ProgressMeasure create() {
-        return new ProgressMeasurerImpl();
+        return new ProgressMeasureImpl();
     }
 }

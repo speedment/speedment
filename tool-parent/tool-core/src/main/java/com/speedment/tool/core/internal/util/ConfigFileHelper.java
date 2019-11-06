@@ -37,7 +37,6 @@ import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.core.util.ProgressMeasureUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -185,7 +184,7 @@ public final class ConfigFileHelper {
             }
 
             return dbmsType.getMetadataHandler()
-                .readSchemaMetadata(dbms, new ProgressMeasurerImpl(), schemaFilter);
+                .readSchemaMetadata(dbms, ProgressMeasure.create(), schemaFilter);
         }).forEachOrdered(fut -> {
             try {
                 final Project newProject = fut.join();

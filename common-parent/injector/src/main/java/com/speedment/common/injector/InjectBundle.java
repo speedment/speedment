@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * An InjectBundle can be used to represent a collection of classes to be injected.
  *
  * @author Per Minborg
  */

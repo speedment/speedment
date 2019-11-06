@@ -71,10 +71,11 @@
         <common.version>${project.version}</common.version>
 
         <!-- later maven-javadoc-plugin versions does not support aggregate? -->
-        <maven-javadoc-plugin-version>2.10.4</maven-javadoc-plugin-version>
-        <maven-source-plugin-version>3.0.1</maven-source-plugin-version>
+        <maven-javadoc-plugin-version>3.1.1</maven-javadoc-plugin-version>
+        <maven-source-plugin-version>3.2.0</maven-source-plugin-version>
         <maven-dependency-plugin-version>3.1.1</maven-dependency-plugin-version>
         <maven-shade-plugin-version>3.2.1</maven-shade-plugin-version>
+        <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     </properties>
     
     <organization>
@@ -385,6 +386,7 @@
                             <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
                             <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
                             <Implementation-Version>${project.version}</Implementation-Version>
+                            <Automatic-Module-Name>${module-name}</Automatic-Module-Name>
                             <Multi-Release>true</Multi-Release>
                         </manifestEntries>
                     </archive>
@@ -479,7 +481,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.4</version>
+                <version>${jacoco-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -494,43 +496,43 @@
                         </goals>
                     </execution>
 
-                    <execution>
-                        <id>default-check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <!---
-                                <rule implementation="org.jacoco.maven.RuleConfiguration">
-                                    <element>BUNDLE</element>
-                                    <limits>
-                                        <limit implementation="org.jacoco.report.check.Limit">
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.10</minimum>
-                                        </limit>
-                                        <limit implementation="org.jacoco.report.check.Limit">
-                                            <counter>CLASS</counter>
-                                            <value>MISSEDCOUNT</value>
-                                            <maximum>0</maximum>
-                                        </limit>
-                                    </limits>
-                                </rule>
-                                -->
-                                <rule implementation="org.jacoco.maven.RuleConfiguration">
-                                    <element>BUNDLE</element>
-                                    <limits>
-                                        <limit implementation="org.jacoco.report.check.Limit">
-                                            <counter>COMPLEXITY</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.00</minimum>
-                                        </limit>
-                                    </limits>
-                                </rule>
-                            </rules>
+                    <!--                   <execution>
+                                           <id>default-check</id>
+                                           <goals>
+                                               <goal>check</goal>
+                                           </goals>
+                                           <configuration>
+                                               <rules>
+                                                   &lt;!&ndash;-
+                                                   <rule implementation="org.jacoco.maven.RuleConfiguration">
+                                                       <element>BUNDLE</element>
+                                                       <limits>
+                                                           <limit implementation="org.jacoco.report.check.Limit">
+                                                               <counter>INSTRUCTION</counter>
+                                                               <value>COVEREDRATIO</value>
+                                                               <minimum>0.10</minimum>
+                                                           </limit>
+                                                           <limit implementation="org.jacoco.report.check.Limit">
+                                                               <counter>CLASS</counter>
+                                                               <value>MISSEDCOUNT</value>
+                                                               <maximum>0</maximum>
+                                                           </limit>
+                                                       </limits>
+                                                   </rule>
+                                                   &ndash;&gt;
+                                                   <rule implementation="org.jacoco.maven.RuleConfiguration">
+                                                       <element>BUNDLE</element>
+                                                       <limits>
+                                                           <limit implementation="org.jacoco.report.check.Limit">
+                                                               <counter>COMPLEXITY</counter>
+                                                               <value>COVEREDRATIO</value>
+                                                               <minimum>0.00</minimum>
+                                                           </limit>
+                                                       </limits>
+                                                   </rule>
+                                               </rules>
                         </configuration>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
 
@@ -565,7 +567,7 @@
     <profiles>
         <profile>
             <id>release</id>
-            
+
             <reporting>
                 <plugins>
                     <plugin>
@@ -592,121 +594,7 @@
             <build>
                 <pluginManagement>
                     <plugins>
-                        <plugin>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            <version>${maven-javadoc-plugin-version}</version>
-                            
-                            <inherited>true</inherited>
 
-                            <executions>
-                                <execution>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>jar</goal>
-                                        <goal>aggregate-jar</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-
-                            <configuration>
-                                <groups>
-                                    <group>
-                                        <title>Code Generator</title>
-                                        <packages>com.speedment.common.codegen:com.speedment.common.codegen.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Runtime Application</title>
-                                        <packages>com.speedment.runtime.application:com.speedment.runtime.application.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Runtime Database Model</title>
-                                        <packages>com.speedment.runtime.config:com.speedment.runtime.config.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Runtime Expressions</title>
-                                        <packages>com.speedment.runtime.compute:com.speedment.runtime.compute.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Runtime Type Mappers</title>
-                                        <packages>com.speedment.runtime.typemapper:com.speedment.runtime.typemapper.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Runtime Fields and Predicates</title>
-                                        <packages>com.speedment.runtime.field:com.speedment.runtime.field.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Runtime Bulk Updates</title>
-                                        <packages>com.speedment.runtime.bulk:com.speedment.runtime.bulk.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Runtime Join</title>
-                                        <packages>com.speedment.runtime.join:com.speedment.runtime.join.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Runtime Core</title>
-                                        <packages>com.speedment.runtime.core:com.speedment.runtime.core.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Generator Translator System</title>
-                                        <packages>com.speedment.generator.translator:com.speedment.generator.translator.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Generator Built-In Translators</title>
-                                        <packages>com.speedment.generator.standard:com.speedment.generator.standard.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Generator Core</title>
-                                        <packages>com.speedment.generator.core:com.speedment.generator.core.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Tool Actions</title>
-                                        <packages>com.speedment.tool.actions:com.speedment.tool.actions.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Tool Configuration</title>
-                                        <packages>com.speedment.tool.config:com.speedment.tool.config.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Tool Property Editor</title>
-                                        <packages>com.speedment.tool.propertyeditor:com.speedment.tool.propertyeditor.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Tool Core</title>
-                                        <packages>com.speedment.tool.core:com.speedment.tool.core.*</packages>
-                                    </group>
-                                    <group>
-                                        <title>Commons Library</title>
-                                        <packages>com.speedment.common.*</packages>
-                                    </group>
-                                </groups>
-                                
-                                <aggregate>true</aggregate>
-                                <keywords>true</keywords>
-                                <docfilessubdirs>true</docfilessubdirs>
-                                <excludePackageNames>*.internal.*</excludePackageNames>
-                                <includeDependencySources>true</includeDependencySources>
-
-                                <additionalJOptions>
-                                    <additionalJOption>-J-Xmx1g</additionalJOption>
-                                </additionalJOptions>
-                            </configuration>
-                        </plugin>
-
-                        <plugin>
-                            <artifactId>maven-source-plugin</artifactId>
-                            <version>${maven-source-plugin-version}</version>
-                            <inherited>true</inherited>
-                            
-                            <executions>
-                                <execution>
-                                    <id>attach-sources</id>
-                                    <goals>
-                                        <goal>jar-no-fork</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                        
                         <plugin>
                             <groupId>org.sonatype.plugins</groupId>
                             <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -717,6 +605,136 @@
                 </pluginManagement>
                 
                 <plugins>
+
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin-version}</version>
+
+                        <!--                            <inherited>true</inherited> 999 -->
+
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+<!--                                    <goal>aggregate-jar</goal>-->
+                                </goals>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <!--                                <source>8</source>-->
+                            <additionalOptions>
+                                <option>--add-modules</option>
+                                <option>${module-name}</option>
+                            </additionalOptions>
+                            <groups>
+                                <group>
+                                    <title>Code Generator</title>
+                                    <packages>com.speedment.common.codegen:com.speedment.common.codegen.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Application</title>
+                                    <packages>com.speedment.runtime.application:com.speedment.runtime.application.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Database Model</title>
+                                    <packages>com.speedment.runtime.config:com.speedment.runtime.config.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Application</title>
+                                    <packages>com.speedment.runtime.application:com.speedment.runtime.application.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Expressions</title>
+                                    <packages>com.speedment.runtime.compute:com.speedment.runtime.compute.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Type Mappers</title>
+                                    <packages>com.speedment.runtime.typemapper:com.speedment.runtime.typemapper.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Fields and Predicates</title>
+                                    <packages>com.speedment.runtime.field:com.speedment.runtime.field.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Bulk Updates</title>
+                                    <packages>com.speedment.runtime.bulk:com.speedment.runtime.bulk.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Join</title>
+                                    <packages>com.speedment.runtime.join:com.speedment.runtime.join.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Core</title>
+                                    <packages>com.speedment.runtime.core:com.speedment.runtime.core.*</packages>
+                                </group>
+                                <group>
+                                    <title>Generator Translator System</title>
+                                    <packages>com.speedment.generator.translator:com.speedment.generator.translator.*</packages>
+                                </group>
+                                <group>
+                                    <title>Generator Built-In Translators</title>
+                                    <packages>com.speedment.generator.standard:com.speedment.generator.standard.*</packages>
+                                </group>
+                                <group>
+                                    <title>Generator Core</title>
+                                    <packages>com.speedment.generator.core:com.speedment.generator.core.*</packages>
+                                </group>
+                                <group>
+                                    <title>Tool Actions</title>
+                                    <packages>com.speedment.tool.actions:com.speedment.tool.actions.*</packages>
+                                </group>
+                                <group>
+                                    <title>Tool Configuration</title>
+                                    <packages>com.speedment.tool.config:com.speedment.tool.config.*</packages>
+                                </group>
+                                <group>
+                                    <title>Tool Property Editor</title>
+                                    <packages>com.speedment.tool.propertyeditor:com.speedment.tool.propertyeditor.*</packages>
+                                </group>
+                                <group>
+                                    <title>Tool Core</title>
+                                    <packages>com.speedment.tool.core:com.speedment.tool.core.*</packages>
+                                </group>
+                                <group>
+                                    <title>Commons Library</title>
+                                    <packages>com.speedment.common.*</packages>
+                                </group>
+                                <group>
+                                    <title>Connectors</title>
+                                    <packages>com.speedment.runtime.connector:com.speedment.runtime.connector.*</packages>
+                                </group>
+
+                            </groups>
+
+                            <!--                                <aggregate>true</aggregate>-->
+                            <keywords>true</keywords>
+                            <!--                                <docfilessubdirs>true</docfilessubdirs>-->
+                            <excludePackageNames>*.internal:*.internal.*</excludePackageNames>
+                            <!--                                <includeDependencySources>true</includeDependencySources>-->
+
+                            <additionalJOptions>
+                                <additionalJOption>-J-Xmx1g</additionalJOption>
+                            </additionalJOptions>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin-version}</version>
+                        <inherited>true</inherited>
+
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <plugin>
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
@@ -771,7 +789,7 @@
                         <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.2</version>
+                        <version>${jacoco-maven-plugin.version}</version>
                         
                         <executions>
                             <execution>
@@ -799,18 +817,18 @@
                                     <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
                                 </configuration>
                             </execution>
-                            <execution>
+<!--                            <execution>
                                 <id>default-check</id>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
                                 <configuration>
                                     <rules>
-                                        <!--  implementation is needed only for Maven 2  -->
+                                        &lt;!&ndash;  implementation is needed only for Maven 2  &ndash;&gt;
                                         <rule implementation="org.jacoco.maven.RuleConfiguration">
                                             <element>BUNDLE</element>
                                             <limits>
-                                                <!--  implementation is needed only for Maven 2  -->
+                                                &lt;!&ndash;  implementation is needed only for Maven 2  &ndash;&gt;
                                                 <limit implementation="org.jacoco.report.check.Limit">
                                                     <counter>COMPLEXITY</counter>
                                                     <value>COVEREDRATIO</value>
@@ -820,7 +838,7 @@
                                         </rule>
                                     </rules>
                                 </configuration>
-                            </execution>
+                            </execution>-->
                         </executions>
                     </plugin>
 

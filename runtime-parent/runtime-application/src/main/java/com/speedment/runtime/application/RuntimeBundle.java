@@ -17,12 +17,7 @@
 package com.speedment.runtime.application;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.connector.mariadb.MariaDbBundle;
-import com.speedment.runtime.connector.mysql.MySqlBundle;
-import com.speedment.runtime.connector.postgres.PostgresBundle;
-import com.speedment.runtime.connector.sqlite.SqliteBundle;
 import com.speedment.runtime.core.provider.*;
-import com.speedment.runtime.join.JoinBundle;
 
 import java.util.stream.Stream;
 
@@ -55,11 +50,6 @@ public class RuntimeBundle implements InjectBundle {
             DelegateDriverComponent.class,
             DefaultConnectionDecorator.class
         )
-/*            .withBundle(new MySqlBundle())
-            .withBundle(new MariaDbBundle())
-            .withBundle(new PostgresBundle())
-            .withBundle(new SqliteBundle())
-            .withBundle(new JoinBundle())*/
             .injectables();
     }
 

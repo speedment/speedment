@@ -22,6 +22,7 @@ module com.speedment.generator.core {
     exports com.speedment.generator.core.exception;
     exports com.speedment.generator.core.provider;
     exports com.speedment.generator.core.translator;
+    exports com.speedment.generator.core.util;
 
     requires com.speedment.common.injector;
     requires com.speedment.common.codegen;

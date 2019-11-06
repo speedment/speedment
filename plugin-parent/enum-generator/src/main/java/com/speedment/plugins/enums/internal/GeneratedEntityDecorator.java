@@ -21,8 +21,8 @@ import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.value.InvocationValue;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.core.exception.SpeedmentGeneratorException;
-import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
-import com.speedment.generator.standard.internal.util.FkHolder;
+import com.speedment.generator.standard.util.ForeignKeyUtil;
+import com.speedment.generator.standard.util.FkHolder;
 import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorDecorator;
@@ -46,7 +46,7 @@ import static com.speedment.common.codegen.constant.DefaultType.*;
 import static com.speedment.common.codegen.model.Value.*;
 import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.shortName;
-import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
+import static com.speedment.generator.standard.util.ColumnUtil.usesOptional;
 import static com.speedment.plugins.enums.internal.EnumGeneratorUtil.enumConstantsOf;
 import static com.speedment.plugins.enums.internal.EnumGeneratorUtil.enumNameOf;
 import static java.lang.String.format;
@@ -279,7 +279,7 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
 
                         // Foreign key args
                         final Optional<FkHolder> fk =
-                            EntityTranslatorSupport.getForeignKey(
+                            ForeignKeyUtil.getForeignKey(
                                 translator.getSupport().tableOrThrow(), col
                             ).map(fkc -> new FkHolder(injector, fkc.getParentOrThrow()));
 

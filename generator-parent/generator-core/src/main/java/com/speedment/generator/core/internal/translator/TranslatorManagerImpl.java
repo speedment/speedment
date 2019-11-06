@@ -16,15 +16,14 @@
  */
 package com.speedment.generator.core.internal.translator;
 
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import static com.speedment.runtime.core.util.Statistics.Event.GENERATE;
 import static java.util.Objects.requireNonNull;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
-import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.provider.StandardJavaGenerator;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.logger.Logger;
@@ -34,7 +33,7 @@ import com.speedment.generator.core.component.PathComponent;
 import com.speedment.generator.core.event.AfterGenerate;
 import com.speedment.generator.core.event.BeforeGenerate;
 import com.speedment.generator.core.event.FileGenerated;
-import com.speedment.generator.core.internal.util.HashUtil;
+import com.speedment.generator.core.util.HashUtil;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
@@ -101,7 +100,7 @@ public final class TranslatorManagerImpl {
 
         final List<Translator<?, ?>> writeOnceTranslators = new ArrayList<>();
         final List<Translator<?, ?>> writeAlwaysTranslators = new ArrayList<>();
-        final Generator gen = new JavaGenerator();
+        final Generator gen = new StandardJavaGenerator();
 
         fileCounter.set(0);
         Formatting.tab("    ");
@@ -240,7 +239,8 @@ public final class TranslatorManagerImpl {
     }
 
     public void writeToFile(TranslatorManager delegator, Path codePath, String content, boolean overwriteExisting) {
-        requireNonNulls(codePath, content);
+        requireNonNull(codePath);
+        requireNonNull(content);
 
         try {
             if (overwriteExisting || !codePath.toFile().exists()) {

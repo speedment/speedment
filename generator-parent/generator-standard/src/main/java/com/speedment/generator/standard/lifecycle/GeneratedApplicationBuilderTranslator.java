@@ -18,7 +18,6 @@ package com.speedment.generator.standard.lifecycle;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.InjectBundle;
@@ -171,7 +170,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
     @Override
     protected Javadoc getJavaDoc() {
         final String owner = infoComponent().getTitle();
-        return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
+        return Javadoc.of(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
 

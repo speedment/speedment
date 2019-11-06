@@ -1,19 +1,3 @@
-/*
- *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.speedment.generator.standard.internal.util;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
@@ -21,6 +5,7 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.injector.Injector;
+import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
@@ -36,135 +21,121 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
-/**
- *
- * @author Per Minborg
- */
-public final class EntityTranslatorSupport {
+public final class InternalForeignKeyUtil {
 
-    private EntityTranslatorSupport() {}
+    private InternalForeignKeyUtil() {}
 
-    public static class ReferenceFieldType {
-
-        private final Type type;
-
-        private ReferenceFieldType(Type type) {
-            this.type     = requireNonNull(type);
-        }
-
-        public Type getType() {
-            return type;
-        }
-    }
-
-    public static ReferenceFieldType getReferenceFieldType(
-            File file,
-            Table table,
-            Column column,
-            Type entityType,
-            Injector injector) {
-        
-        requireNonNulls(file, table, column, entityType, injector);
+    public static ForeignKeyUtil.ReferenceFieldType getReferenceFieldType(
+        final File file,
+        final Table table,
+        final Column column,
+        final Type entityType,
+        final Injector injector
+    ) {
+        requireNonNull(file);
+        requireNonNull(table);
+        requireNonNull(column);
+        requireNonNull(entityType);
+        requireNonNull(injector);
 
         final TypeMapper<?, ?> tm = injector.getOrThrow(TypeMapperComponent.class).get(column);
         final Type javaType       = tm.getJavaType(column);
         final Type databaseType   = SimpleType.create(column.getDatabaseType());
         final TypeMapper.Category category = tm.getJavaTypeCategory(column);
 
-        return EntityTranslatorSupport.getForeignKey(table, column)
+        return ForeignKeyUtil.getForeignKey(table, column)
             // If this is a foreign key.
             .map(fkc -> {
                 final Type type;
                 final Type fkType = new TranslatorSupport<>(injector, fkc.findForeignTable().orElseThrow(
-                        () -> new SpeedmentException(
-                            "Could not find referenced foreign table '"
+                    () -> new SpeedmentException(
+                        "Could not find referenced foreign table '"
                             + fkc.getForeignTableName() + "'."
-                        ))).entityType();
+                    ))).entityType();
 
                 file.add(Import.of(fkType));
 
                 switch (category) {
                     case STRING :
                         type = SimpleParameterizedType.create(
-                            StringForeignKeyField.class, 
+                            StringForeignKeyField.class,
                             entityType,
                             databaseType,
                             fkType
                         );
-                        
+
                         break;
-                        
+
                     case BYTE :
                         type = SimpleParameterizedType.create(
-                            ByteForeignKeyField.class, 
+                            ByteForeignKeyField.class,
                             entityType,
                             databaseType,
                             fkType
                         );
-                        
+
                         break;
-                        
+
                     case SHORT :
                         type = SimpleParameterizedType.create(
-                            ShortForeignKeyField.class, 
+                            ShortForeignKeyField.class,
                             entityType,
                             databaseType,
                             fkType
                         );
-                        
+
                         break;
-                        
+
                     case INT :
                         type = SimpleParameterizedType.create(
-                            IntForeignKeyField.class, 
+                            IntForeignKeyField.class,
                             entityType,
                             databaseType,
                             fkType
                         );
-                        
+
                         break;
-                        
+
                     case LONG :
                         type = SimpleParameterizedType.create(
-                            LongForeignKeyField.class, 
+                            LongForeignKeyField.class,
                             entityType,
                             databaseType,
                             fkType
                         );
-                        
+
                         break;
-                        
+
                     case FLOAT :
                         type = SimpleParameterizedType.create(
-                            FloatForeignKeyField.class, 
+                            FloatForeignKeyField.class,
                             entityType,
                             databaseType,
                             fkType
                         );
-                        
+
                         break;
-                        
+
                     case DOUBLE :
                         type = SimpleParameterizedType.create(
-                            DoubleForeignKeyField.class, 
+                            DoubleForeignKeyField.class,
                             entityType,
                             databaseType,
                             fkType
                         );
-                        
+
                         break;
-                        
+
                     case CHAR :
                         type = SimpleParameterizedType.create(
-                            CharForeignKeyField.class, 
+                            CharForeignKeyField.class,
                             entityType,
                             databaseType,
                             fkType
                         );
-                        
+
                         break;
 
                     case ENUM :
@@ -177,12 +148,12 @@ public final class EntityTranslatorSupport {
                         );
 
                         break;
-                        
+
                     case BOOLEAN :
                         throw new UnsupportedOperationException(
                             "Boolean foreign key fields are not supported."
                         );
-                        
+
                     case COMPARABLE :
                         type = SimpleParameterizedType.create(
                             ComparableForeignKeyField.class,
@@ -191,13 +162,13 @@ public final class EntityTranslatorSupport {
                             javaType,
                             fkType
                         );
-                        
+
                         break;
-                        
+
                     case REFERENCE :
                         throw new UnsupportedOperationException(
-                            "Foreign key types that are not either primitive " + 
-                            "or comparable are not supported."
+                            "Foreign key types that are not either primitive " +
+                                "or comparable are not supported."
                         );
 
                     default : throw new UnsupportedOperationException(
@@ -205,7 +176,7 @@ public final class EntityTranslatorSupport {
                     );
                 }
 
-                return new ReferenceFieldType(type);
+                return new ForeignKeyUtil.ReferenceFieldType(type);
 
                 // If it is not a foreign key
             }).orElseGet(() -> {
@@ -213,85 +184,85 @@ public final class EntityTranslatorSupport {
 
                 switch (category) {
                     case STRING :
-                        
+
                         type = SimpleParameterizedType.create(
-                            StringField.class, 
+                            StringField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
-                        
+
                     case BYTE :
                         type = SimpleParameterizedType.create(
-                            ByteField.class, 
+                            ByteField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
-                        
+
                     case SHORT :
                         type = SimpleParameterizedType.create(
-                            ShortField.class, 
+                            ShortField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
-                        
+
                     case INT :
                         type = SimpleParameterizedType.create(
-                            IntField.class, 
+                            IntField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
-                        
+
                     case LONG :
                         type = SimpleParameterizedType.create(
-                            LongField.class, 
+                            LongField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
-                        
+
                     case FLOAT :
                         type = SimpleParameterizedType.create(
-                            FloatField.class, 
+                            FloatField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
-                        
+
                     case DOUBLE :
                         type = SimpleParameterizedType.create(
-                            DoubleField.class, 
+                            DoubleField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
-                        
+
                     case CHAR :
                         type = SimpleParameterizedType.create(
-                            CharField.class, 
+                            CharField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
-                        
+
                     case BOOLEAN :
                         type = SimpleParameterizedType.create(
-                            BooleanField.class, 
+                            BooleanField.class,
                             entityType,
                             databaseType
                         );
-                        
+
                         break;
 
                     case ENUM :
@@ -306,17 +277,17 @@ public final class EntityTranslatorSupport {
 
                     case COMPARABLE :
                         type = SimpleParameterizedType.create(
-                            ComparableField.class, 
+                            ComparableField.class,
                             entityType,
                             databaseType,
                             javaType
                         );
-                        
+
                         break;
-                        
+
                     case REFERENCE :
                         type = SimpleParameterizedType.create(
-                            ReferenceField.class, 
+                            ReferenceField.class,
                             entityType,
                             databaseType,
                             javaType
@@ -328,12 +299,13 @@ public final class EntityTranslatorSupport {
                     );
                 }
 
-                return new ReferenceFieldType(type);
+                return new ForeignKeyUtil.ReferenceFieldType(type);
             });
     }
 
     public static Optional<? extends ForeignKeyColumn> getForeignKey(Table table, Column column) {
-        requireNonNulls(table, column);
+        requireNonNull(table);
+        requireNonNull(column);
         return table.foreignKeys()
             .filter(HasEnabled::test)
             .filter(fk -> fk.foreignKeyColumns().count() == 1) // We can only handle one column FKs...
@@ -343,5 +315,6 @@ public final class EntityTranslatorSupport {
             .filter(fkc -> DocumentDbUtil.isSame(column, fkc.findColumn().orElse(null)))
             .findFirst();
     }
+
 
 }

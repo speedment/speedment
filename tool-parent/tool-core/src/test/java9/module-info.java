@@ -41,6 +41,7 @@ open module com.speedment.tool.core {
 
     requires transitive javafx.base;
     requires transitive javafx.controls;
+    requires transitive javafx.fxml;
     requires transitive com.speedment.common.injector;
     requires transitive com.speedment.runtime.core;
     requires transitive com.speedment.generator.core;

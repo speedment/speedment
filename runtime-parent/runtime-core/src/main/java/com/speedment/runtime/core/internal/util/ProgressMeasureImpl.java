@@ -30,13 +30,13 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-public final class ProgressMeasurerImpl implements ProgressMeasure {
+public final class ProgressMeasureImpl implements ProgressMeasure {
 
     private final Set<Consumer<ProgressMeasure>> listeners;
     private double progress;
     private String currentAction;
 
-    public ProgressMeasurerImpl() {
+    public ProgressMeasureImpl() {
         listeners     = newSetFromMap(new ConcurrentHashMap<>());
         progress      = ProgressMeasureUtil.INDETERMINATE;
         currentAction = "";
