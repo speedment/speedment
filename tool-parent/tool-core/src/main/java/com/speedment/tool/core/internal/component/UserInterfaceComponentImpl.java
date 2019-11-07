@@ -180,6 +180,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         );
     }
     
+    @Override
     public void start(Application application, Stage stage) {
         this.stage       = requireNonNull(stage);
         this.application = requireNonNull(application);
