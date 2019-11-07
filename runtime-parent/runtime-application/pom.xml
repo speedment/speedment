@@ -46,7 +46,7 @@
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <excludePackageNames>*.internal:*.internal.*:com.speedment.runtime.connector.*:com.speedment.runtime.join.*</excludePackageNames>
+                    <excludePackageNames>*.internal:*.internal.*:com.speedment.runtime.connector.*</excludePackageNames>
                 </configuration>
             </plugin>
         </plugins>

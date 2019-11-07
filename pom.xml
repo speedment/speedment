@@ -611,16 +611,16 @@
                         <version>${maven-javadoc-plugin-version}</version>
 
                         <!--                            <inherited>true</inherited> 999 -->
-
                         <executions>
                             <execution>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>jar</goal>
-<!--                                    <goal>aggregate-jar</goal>-->
+                                    <!--                                    <goal>aggregate-jar</goal>-->
                                 </goals>
                             </execution>
                         </executions>
+
 
                         <configuration>
                             <!--                                <source>8</source>-->
