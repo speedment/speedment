@@ -187,7 +187,29 @@ public interface InjectorProxy {
      */
     static Predicate<? super Class<?>> samePackageOrBelow(Class<?> classInRootPackage) {
         requireNonNull(classInRootPackage);
-        return samePackageOrBelow(classInRootPackage.getPackage().getName());
+        return samePackageOrBelow(classInRootPackage.getPackage().getName(), false);
+    }
+
+    /**
+     * Returns a {@code Predicate} that will evaluate to true iff
+     * tested with a class that lies in the same package as the
+     * provided {@code classInRootPackage} or a package below the
+     * provided {@code classInRootPackage}.
+     * <p>
+     * If the provided {@code excludeInternalPackages}  is true, then package
+     * names that contain the word ".internal." will not be deemed
+     * to be applicable.
+     *
+     * @param classInRootPackage as a reference to the root package
+     * @param excludeInternalPackages if internal packages shall be excluded
+     * @return a {@code Predicate} that will evaluate to true iff
+     *         tested with a class that lies in the same package as the
+     *         provided {@code classInRootPackage} or a package below the
+     *         provided {@code classInRootPackage}
+     */
+    static Predicate<? super Class<?>> samePackageOrBelow(Class<?> classInRootPackage, boolean excludeInternalPackages) {
+        requireNonNull(classInRootPackage);
+        return samePackageOrBelow(classInRootPackage.getPackage().getName(), excludeInternalPackages);
     }
 
     /**
@@ -195,16 +217,27 @@ public interface InjectorProxy {
      * tested with a class that lies in the same package as the
      * provided {@code rootPackage} or a package below the
      * provided {@code rootPackage}.
+     * <p>
+     * If the provided {@code excludeInternalPackages}  is true, then package
+     * names that contain the word ".internal." will not be deemed
+     * to be applicable.
      *
      * @param rootPackage as a reference to the root package
+     * @param excludeInternalPackages if internal packages shall be excluded
      * @return a {@code Predicate} that will evaluate to true iff
      *         tested with a class that lies in the same package as the
      *         provided {@code rootPackage} or a package below the
      *         provided {@code rootPackage}
      */
-    static Predicate<? super Class<?>> samePackageOrBelow(String rootPackage) {
+    static Predicate<? super Class<?>> samePackageOrBelow(String rootPackage, boolean excludeInternalPackages) {
         requireNonNull(rootPackage);
-        return c -> c.getName().startsWith(rootPackage);
+        return clazz -> {
+            final String className = clazz.getName();
+            if (excludeInternalPackages && className.contains(".internal.")) {
+                return false;
+            }
+            return className.startsWith(rootPackage);
+        };
     }
 
 }

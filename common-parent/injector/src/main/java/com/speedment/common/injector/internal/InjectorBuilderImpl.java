@@ -117,6 +117,18 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
     private <T> InjectorBuilder withComponentAndSupplier(Class<T> injectableType, Supplier<T> instanceSupplier) {
         requireNonNull(injectableType);
+
+        // This is the only way to inject InjectorProxies via bundles for example
+        if (InjectorProxy.class.isAssignableFrom(injectableType)) {
+            final InjectorProxy injectorProxy;
+            if (instanceSupplier != null) {
+                injectorProxy = (InjectorProxy) instanceSupplier.get();
+            } else {
+                injectorProxy = (InjectorProxy) newInstance(injectableType);
+            }
+            withInjectorProxy(injectorProxy);
+        }
+
         final Injectable<T> injectable = new Injectable<>(injectableType, instanceSupplier);
 
         // Append the class itself under its own name
@@ -133,12 +145,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
     @Override
     public InjectorBuilder withBundle(Class<? extends InjectBundle> bundleClass) {
-        try {
-            final InjectBundle bundle = bundleClass.getConstructor().newInstance();
-            bundle.injectables().forEachOrdered(this::withComponent);
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            throw new NoDefaultConstructorException(e);
-        }
+        final InjectBundle bundle = newInstance(bundleClass);
+        bundle.injectables().forEachOrdered(this::withComponent);
         return this;
     }
 
@@ -646,4 +654,15 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     private static ClassLoader defaultClassLoader() {
         return Thread.currentThread().getContextClassLoader();
     }
+
+    private <T> T newInstance(Class<T> clazz) {
+        try {
+            return clazz.getConstructor().newInstance();
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new InjectorException(e);
+        } catch (NoSuchMethodException e) {
+            throw new NoDefaultConstructorException(e);
+        }
+    }
+
 }
