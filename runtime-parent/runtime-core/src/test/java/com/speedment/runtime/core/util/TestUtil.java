@@ -42,7 +42,7 @@ public class TestUtil {
             }
             final T instance = constructor.newInstance();
             fail("The class " + clazz.getName() + " should not be instansiable");
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (Exception e) {
             // Ignore
         }
     }

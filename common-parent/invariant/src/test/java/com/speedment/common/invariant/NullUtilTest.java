@@ -14,9 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.util;
+package com.speedment.common.invariant;
 
-import com.speedment.common.invariant.NullUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -314,7 +313,9 @@ final class NullUtilTest {
 
     @Test
     void createInstance() {
-        TestUtil.assertNonInstansiable(NullUtil.class);
+        assertThrows(Exception.class, () -> {
+            NullUtil.class.getConstructor().newInstance();
+        });
     }
 
     private void requireNullPointerException(Runnable r) {
