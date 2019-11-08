@@ -22,12 +22,7 @@ import com.speedment.common.injector.annotation.*;
 import com.speedment.common.injector.exception.InjectorException;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -260,7 +255,7 @@ public final class ReflectionUtil {
             onlyInject = constr -> true;
         }
 
-        return Arrays.stream(c.getDeclaredConstructors())
+        return String.format("%s: %n", c.getSimpleName()) + Arrays.stream(c.getDeclaredConstructors())
             .map(constructor -> (Constructor<T>) constructor)
             .filter(onlyInject)
             .map(con ->
