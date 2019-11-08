@@ -2,6 +2,7 @@ package com.speedment.common.codegenxml;
 
 import com.speedment.common.codegen.internal.model.FieldImpl;
 import com.speedment.common.codegen.model.Field;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * @author Per Minborg
  */
+@Disabled("This test does not work for Jenkins, See #815")
 final class EncapsulationTest {
 
 
