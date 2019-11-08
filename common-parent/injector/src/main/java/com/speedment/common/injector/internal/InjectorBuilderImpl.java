@@ -613,6 +613,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         return injector;
     }
 
+    @Override
+    public InjectorProxy proxyFor(Class<?> clazz) {
+        return proxyCache.computeIfAbsent(clazz, this::computeProxyFor);
+    }
+
     private LinkedList<Object> instancesSoFarInReversedOrder(Map<Class<?>, Object> instanceMap) {
         return instanceMap.values().stream()
             .filter(o -> o != UNINSTANTIATED)
@@ -635,10 +640,6 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     private void set(Field field, Object instance, Object value) throws IllegalArgumentException, IllegalAccessException {
         final InjectorProxy injectorProxy = proxyFor(instance.getClass());
         injectorProxy.set(field, instance, value);
-    }
-
-    private InjectorProxy proxyFor(Class<?> clazz) {
-        return proxyCache.computeIfAbsent(clazz, this::computeProxyFor);
     }
 
     private InjectorProxy computeProxyFor(Class<?> clazz) {

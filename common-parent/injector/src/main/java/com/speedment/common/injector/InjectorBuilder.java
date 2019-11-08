@@ -219,6 +219,14 @@ public interface InjectorBuilder {
      *                                 be instantiated.
      */
     Injector build() throws InstantiationException;
+
+    /**
+     * Returns the InjectorProxy for the provided class.
+     *
+     * @param clazz to obtain InjectorProxy for
+     * @return the InjectorProxy for the provided class
+     */
+    InjectorProxy proxyFor(Class<?> clazz);
     
     /**
      * Returns the {@link Logger} object used by the default implementation of

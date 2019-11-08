@@ -18,6 +18,7 @@ package com.speedment.common.injector.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectOrNull;
@@ -83,13 +84,13 @@ public final class InjectorImpl implements Injector {
     private final InjectorBuilder builder;
 
     InjectorImpl(
-            Set<Injectable<?>> injectables,
-            List<Object> instances,
-            Properties properties,
-            ClassLoader classLoader,
-            DependencyGraph graph,
-            InjectorBuilder builder) {
-        
+        final Set<Injectable<?>> injectables,
+        final List<Object> instances,
+        final Properties properties,
+        final ClassLoader classLoader,
+        final DependencyGraph graph,
+        final InjectorBuilder builder
+    ) {
         this.injectables = requireNonNull(injectables);
         this.instances   = requireNonNull(instances);
         this.properties  = requireNonNull(properties);
@@ -289,13 +290,11 @@ public final class InjectorImpl implements Injector {
                         field.isAnnotationPresent(Inject.class)
                     );
                 }
-
                 // field.setAccessible(true);
-
                 //LOGGER_INSTANCE.warn("Setting fields is deprecated: " + field);
                 try {
-                    field.set(instance, value);
-
+                    final InjectorProxy injectorProxy = builder.proxyFor(instance.getClass());
+                    injectorProxy.set(field, instance, value);
                 } catch (final IllegalAccessException ex) {
                     final String err = String.format(
                         "Could not access field '%s' in class '%s' of " +
