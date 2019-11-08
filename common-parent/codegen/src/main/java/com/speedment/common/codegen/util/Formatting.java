@@ -476,7 +476,11 @@ public final class Formatting {
            [A-Z] -> \p{Lu}
            [^A-Za-z0-9] -> [^\pL0-90-9]
         */
-        result = Stream.of(result.replaceAll("([\\p{Lu}]+)", "_$1").split("[^\\pL0-9]")).map(String::toLowerCase).map(Formatting::ucfirst).collect(Collectors.joining());
+        result = Stream.of(result.replaceAll("([\\p{Lu}]+)", "_$1")
+            .split("[^\\pL0-9]"))
+            .map(String::toLowerCase)
+            .map(Formatting::ucfirst)
+            .collect(Collectors.joining());
         return result;
     }
 

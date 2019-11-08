@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class MavenPathComponent implements PathComponent {
 
-    public static final String MAVEN_BASE_DIR = "maven.baseDir";
+    public final static String MAVEN_BASE_DIR = "maven.baseDir";
     
     private final String mavenBaseDir;
     private final ProjectComponent projectComponent;

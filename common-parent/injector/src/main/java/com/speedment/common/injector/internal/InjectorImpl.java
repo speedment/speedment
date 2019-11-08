@@ -49,26 +49,26 @@ import static java.util.stream.Collectors.toSet;
  * The default implementation of the {@link Injector} interface.
  *
  * @author Emil Forslund
- * @since  3.0.0
+ * @since 3.0.0
  */
 public final class InjectorImpl implements Injector {
-    
+
     /**
-     * Create a new {@link InjectorBuilder} using the default implementation and 
+     * Create a new {@link InjectorBuilder} using the default implementation and
      * default {@code ClassLoader}.
-     * 
-     * @return  the injector builder
+     *
+     * @return the injector builder
      */
     public static InjectorBuilder builder() {
         return new InjectorBuilderImpl();
     }
-    
+
     /**
-     * Create a new {@link InjectorBuilder} using the default implementation but 
+     * Create a new {@link InjectorBuilder} using the default implementation but
      * with a specific {@code ClassLoader}.
-     * 
-     * @param classLoader  the class loader to use
-     * @return             the injector builder
+     *
+     * @param classLoader the class loader to use
+     * @return the injector builder
      */
     public static InjectorBuilder builder(ClassLoader classLoader) {
         return new InjectorBuilderImpl(classLoader);
@@ -92,11 +92,11 @@ public final class InjectorImpl implements Injector {
         final InjectorBuilder builder
     ) {
         this.injectables = requireNonNull(injectables);
-        this.instances   = requireNonNull(instances);
-        this.properties  = requireNonNull(properties);
+        this.instances = requireNonNull(instances);
+        this.properties = requireNonNull(properties);
         this.classLoader = requireNonNull(classLoader);
-        this.graph       = requireNonNull(graph);
-        this.builder     = requireNonNull(builder);
+        this.graph = requireNonNull(graph);
+        this.builder = requireNonNull(builder);
     }
 
     @Override
@@ -125,7 +125,7 @@ public final class InjectorImpl implements Injector {
     @Override
     public <T> Optional<T> getAfter(Class<T> type, T before) {
         boolean found = false;
-        for (Iterator<T> i = stream(type).iterator();i.hasNext(); ) {
+        for (Iterator<T> i = stream(type).iterator(); i.hasNext(); ) {
             final T t = i.next();
             if (found) {
                 return Optional.of(t);
@@ -157,7 +157,7 @@ public final class InjectorImpl implements Injector {
     @Override
     public void stop() {
         final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
-        
+
         // Create ClassMapper
         final ClassMapper classMapper = new ClassMapper() {
             @Override
@@ -190,8 +190,7 @@ public final class InjectorImpl implements Injector {
                     n.getExecutions().stream()
                         .filter(e -> e.getState() == State.STOPPED)
                         .map(exec -> {
-                            @SuppressWarnings("unchecked")
-                            final Execution<Object> casted = 
+                            @SuppressWarnings("unchecked") final Execution<Object> casted =
                                 (Execution<Object>) exec;
                             return casted;
                         })
@@ -203,25 +202,22 @@ public final class InjectorImpl implements Injector {
                                 .isEqualOrLowerThan(Level.DEBUG)) {
 
                                 LOGGER_INSTANCE.debug(
-                                    "| -> %-76s |", 
+                                    "| -> %-76s |",
                                     limit(exec.toString(), 76)
                                 );
                             }
 
                             try {
-                                if (!exec.invoke(inst, classMapper)) {
-                                    if (LOGGER_INSTANCE.getLevel()
-                                        .isEqualOrLowerThan(Level.DEBUG)) {
-
-                                        LOGGER_INSTANCE.debug(
-                                            "|      %-74s |",
-                                            limit("(Ignored due to missing dependencies.)", 74)
-                                        );
-                                    }
+                                if (!exec.invoke(inst, classMapper) &&
+                                    LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                                    LOGGER_INSTANCE.debug(
+                                        "|      %-74s |",
+                                        limit("(Ignored due to missing dependencies.)", 74)
+                                    );
                                 }
-                            } catch (final IllegalAccessException 
-                                         | IllegalArgumentException 
-                                         | InvocationTargetException ex) {
+                            } catch (final IllegalAccessException
+                                | IllegalArgumentException
+                                | InvocationTargetException ex) {
 
                                 throw new RuntimeException(ex);
                             }
@@ -241,16 +237,16 @@ public final class InjectorImpl implements Injector {
 
             if (!hasAnythingChanged.get()) {
                 throw new IllegalStateException(
-                    "Injector appears to be stuck in an infinite loop. The " + 
-                    "following components have not been stopped: " +
-                    unfinished.stream()
-                        .map(DependencyNode::getRepresentedType)
-                        .map(Class::getSimpleName)
-                        .collect(toSet())
+                    "Injector appears to be stuck in an infinite loop. The " +
+                        "following components have not been stopped: " +
+                        unfinished.stream()
+                            .map(DependencyNode::getRepresentedType)
+                            .map(Class::getSimpleName)
+                            .collect(toSet())
                 );
             }
         }
-        
+
         LOGGER_INSTANCE.debug(horizontalLine());
         LOGGER_INSTANCE.debug(
             "| %-79s |",
@@ -263,7 +259,7 @@ public final class InjectorImpl implements Injector {
     public InjectorBuilder newBuilder() {
         return builder;
     }
-    
+
     private <T> Stream<T> findAll(Class<T> type) {
         return InjectorUtil.findAll(type, this, instances);
     }
@@ -271,13 +267,13 @@ public final class InjectorImpl implements Injector {
     private <T> T find(Class<T> type, boolean required) {
         return findIn(type, this, instances, required);
     }
-  
+
     private <T> void injectFields(T instance) {
         requireNonNull(instance);
-        
+
         traverseFields(instance.getClass())
             .filter(f -> f.isAnnotationPresent(Inject.class)
-                      || f.isAnnotationPresent(InjectOrNull.class))
+                || f.isAnnotationPresent(InjectOrNull.class))
             .distinct()
             .forEachOrdered(field -> {
                 final Object value;
@@ -286,7 +282,7 @@ public final class InjectorImpl implements Injector {
                     value = this;
                 } else {
                     value = find(
-                        field.getType(), 
+                        field.getType(),
                         field.isAnnotationPresent(Inject.class)
                     );
                 }
@@ -298,7 +294,7 @@ public final class InjectorImpl implements Injector {
                 } catch (final IllegalAccessException ex) {
                     final String err = String.format(
                         "Could not access field '%s' in class '%s' of " +
-                        "type '%s'.",
+                            "type '%s'.",
                         field.getName(),
                         field.getDeclaringClass().getName(),
                         field.getType()

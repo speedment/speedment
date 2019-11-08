@@ -76,9 +76,9 @@ public final class DependencyGraphImpl implements DependencyGraph {
 
     @Override
     public Optional<DependencyNode> getIfPresent(Class<?> clazz) {
-        for (final Class<?> impl : nodes.keySet()) {
-            if (clazz.isAssignableFrom(impl)) {
-                return Optional.of(nodes.get(impl));
+        for (final Map.Entry<Class<?>, DependencyNode>impl : nodes.entrySet()) {
+            if (clazz.isAssignableFrom(impl.getKey())) {
+                return Optional.of(impl.getValue());
             }
         }
 
