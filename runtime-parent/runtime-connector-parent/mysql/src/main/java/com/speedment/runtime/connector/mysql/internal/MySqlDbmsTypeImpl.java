@@ -78,7 +78,7 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
         this.operationHandler = new MySqlDbmsOperationHandler(connectionPoolComponent, transactionComponent);
         this.fieldPredicateView = new MySqlSpeedmentPredicateView(binaryCollationName, collationName);
         this.namingConvention = new MySqlNamingConvention();
-        this.connectionUrlGenerator = new MySqlConnectionUrlGenerator();
+        this.connectionUrlGenerator = new MySqlConnectionUrlGenerator(collationName);
         this.support = DbmsTypeDefault.create();
     }
 
@@ -279,6 +279,12 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
 
     private final class MySqlConnectionUrlGenerator implements ConnectionUrlGenerator {
 
+        private final String collationName;
+
+        private MySqlConnectionUrlGenerator(String collationName) {
+            this.collationName = collationName;
+        }
+
         @Override
         public String from(Dbms dbms) {
             final StringBuilder result = new StringBuilder()
@@ -293,7 +299,8 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
                 .append("&zeroDateTimeBehavior=")
                 .append(driverVersion() >= 8 ? "CONVERT_TO_NULL" : "convertToNull")
                 .append("&nullNamePatternMatchesAll=true") // Fix #190
-                .append("&useLegacyDatetimeCode=true");    // Fix #190
+                .append("&useLegacyDatetimeCode=true")     // Fix #190
+                .append("&connectionCollation=").append(collationName); // Fix #804
 
             if (driverVersion() <= 5) {
                 result.append("&useSSL=false");

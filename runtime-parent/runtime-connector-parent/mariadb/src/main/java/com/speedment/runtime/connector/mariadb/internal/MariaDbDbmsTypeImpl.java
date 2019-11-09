@@ -78,7 +78,7 @@ public final class MariaDbDbmsTypeImpl implements DbmsType {
         this.fieldPredicateView = new MySqlSpeedmentPredicateView(binaryCollationName, collationName);
         this.binaryCollationName = requireNonNull(binaryCollationName);
         this.namingConvention = new MariaDbNamingConvention();
-        this.connectionUrlGenerator = new MariaDbConnectionUrlGenerator();
+        this.connectionUrlGenerator = new MariaDbConnectionUrlGenerator(collationName);
         this.support = DbmsTypeDefault.create();
     }
 
@@ -270,6 +270,12 @@ public final class MariaDbDbmsTypeImpl implements DbmsType {
 
     private final static class MariaDbConnectionUrlGenerator implements ConnectionUrlGenerator {
 
+        private final String collationName;
+
+        private MariaDbConnectionUrlGenerator(String collationName) {
+            this.collationName = collationName;
+        }
+
         @Override
         public String from(Dbms dbms) {
             final StringBuilder result = new StringBuilder()
@@ -281,7 +287,9 @@ public final class MariaDbDbmsTypeImpl implements DbmsType {
             result/*.append("/").append(dbms.getName()) */ // MariaDB treats this as default schema name
                 .append("?useUnicode=true&characterEncoding=UTF-8")
                 .append("&useServerPrepStmts=true&useCursorFetch=true")
-                .append("&zeroDateTimeBehavior=convertToNull");
+                .append("&zeroDateTimeBehavior=convertToNull")
+                .append("&sessionVariables=collation_connection=").append(collationName); // Fix #804
+            ;
 
             return result.toString();
         }
