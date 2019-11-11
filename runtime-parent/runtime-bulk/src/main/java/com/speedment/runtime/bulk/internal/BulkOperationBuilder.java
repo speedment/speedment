@@ -16,14 +16,16 @@
  */
 package com.speedment.runtime.bulk.internal;
 
-import com.speedment.runtime.bulk.internal.builder.RemoveOperationBuilderImpl;
 import com.speedment.runtime.bulk.BulkOperation;
 import com.speedment.runtime.bulk.Operation;
 import com.speedment.runtime.bulk.internal.builder.PersistOperationBuilderImpl;
+import com.speedment.runtime.bulk.internal.builder.RemoveOperationBuilderImpl;
 import com.speedment.runtime.bulk.internal.builder.UpdateOperationBuilderImpl;
 import com.speedment.runtime.core.manager.Manager;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static java.util.Objects.requireNonNull;
 
 /**

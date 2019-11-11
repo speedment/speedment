@@ -28,7 +28,8 @@ package com.speedment.runtime.field.predicate;
  * <p>
  * For an example, take the series {@code [1 2 3 4 5]}. If we select the range 
  * {@code (2, 4)} from this series, we will get the following results:
- * <table summary="Example of inclusion and exclusion">
+ * <table>
+ *     <caption>Inclusion</caption>
  *      <thead>
  *          <tr>
  *              <th>Enum Constant</th>

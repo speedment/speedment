@@ -31,7 +31,7 @@ import java.util.ResourceBundle;
  */
 public final class MenubarController implements Initializable {
 
-    private @Inject MenuBarComponent menuBarComponent;
+    public @Inject MenuBarComponent menuBarComponent;
     public @FXML MenuBar menuBar;
 
     @Override

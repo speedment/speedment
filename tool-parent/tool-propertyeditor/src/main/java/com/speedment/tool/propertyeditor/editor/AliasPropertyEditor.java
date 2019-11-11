@@ -31,6 +31,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.util.Formatting.shortName;
@@ -45,8 +46,8 @@ import static java.util.Objects.requireNonNull;
  */
 public class AliasPropertyEditor<T extends HasAliasProperty> implements PropertyEditor<T> {
 
-    @Inject private JavaLanguageNamer namer;
-    @Inject private TypeMapperComponent typeMapperComponent;
+    @Inject public JavaLanguageNamer namer;
+    @Inject public TypeMapperComponent typeMapperComponent;
 
     @Override
     public Stream<PropertyEditor.Item> fieldsFor(T document) {
@@ -92,8 +93,7 @@ public class AliasPropertyEditor<T extends HasAliasProperty> implements Property
                     .filter(TextInputControl.class::isInstance)
                     .map(TextInputControl.class::cast)
                     .findFirst()
-                    .get();
-
+                    .orElseThrow(() -> new NoSuchElementException("No TextInputControl found for the children of " + hBox));
 
                 final TextField code = new TextField(toCode(inputControl.getText()));
                 //code.setEditable(false);

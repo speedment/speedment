@@ -23,11 +23,11 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.core.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.*;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.core.TestInjectorProxy;
 import com.speedment.tool.core.ToolBundle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -36,10 +36,12 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -57,6 +59,7 @@ final class DocumentPropertyComponentImplTest {
             .withBundle(ToolBundle.class)
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
+            .withInjectorProxy(new TestInjectorProxy())
             .build();
         
         component = speedment.getOrThrow(DocumentPropertyComponent.class);
@@ -138,7 +141,9 @@ final class DocumentPropertyComponentImplTest {
 
         @Override
         protected List<String> keyPathEndingWith(String key) {
-            return ImmutableListUtil.concat(DocumentPropertyComponentUtil.DBMSES, key);
+            final List<String> result = new ArrayList<>(DocumentPropertyComponentUtil.DBMSES);
+            result.add(key);
+            return result;
         }
 
         @Override

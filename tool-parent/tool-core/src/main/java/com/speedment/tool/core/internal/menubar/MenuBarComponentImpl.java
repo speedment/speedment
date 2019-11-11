@@ -41,12 +41,12 @@ public final class MenuBarComponentImpl implements MenuBarComponent {
 
     private final Map<MenuBarTab, MenuBarTabHandler> handlers;
 
-    MenuBarComponentImpl() {
+    public MenuBarComponentImpl() {
         handlers = new EnumMap<>(MenuBarTab.class);
     }
 
     @ExecuteBefore(State.INITIALIZED)
-    void populateHandlers(Injector injector) {
+    public void populateHandlers(Injector injector) {
         for (final MenuBarTab tab : MenuBarTab.values()) {
             handlers.put(tab, new MenuBarTabHandlerImpl(injector));
         }

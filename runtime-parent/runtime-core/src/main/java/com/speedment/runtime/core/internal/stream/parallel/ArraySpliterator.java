@@ -41,7 +41,7 @@ final class ArraySpliterator<T> implements Spliterator<T> {
      * characteristics of this {@link Spliterator}'s source or elements beyond
      * {@code SIZED} and {@code SUBSIZED} which are are always reported
      */
-    public ArraySpliterator(Object[] array, int additionalCharacteristics) {
+    ArraySpliterator(Object[] array, int additionalCharacteristics) {
         this(array, 0, array.length, additionalCharacteristics);
     }
 
@@ -55,8 +55,8 @@ final class ArraySpliterator<T> implements Spliterator<T> {
      * characteristics of this {@link Spliterator}'s source or elements beyond
      * {@code SIZED} and {@code SUBSIZED} which are are always reported
      */
-    public ArraySpliterator(Object[] array, int origin, int size, int additionalCharacteristics) {
-        this.array = array;
+    ArraySpliterator(Object[] array, int origin, int size, int additionalCharacteristics) {
+        this.array = requireNonNull(array);
         this.index = origin;
         this.size = size;
         this.characteristics = additionalCharacteristics | Spliterator.SIZED | Spliterator.SUBSIZED;
@@ -97,7 +97,7 @@ final class ArraySpliterator<T> implements Spliterator<T> {
 
     @Override
     public long estimateSize() {
-        return size - index;
+        return (long) size - index;
     }
 
     @Override

@@ -60,6 +60,7 @@ public interface HasMinus<T> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasMinus<T> minus(ToByte<T> other);
 
     /**
@@ -90,6 +91,7 @@ public interface HasMinus<T> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasMinus<T> minus(ToInt<T> other);
 
     /**
@@ -120,6 +122,7 @@ public interface HasMinus<T> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasMinus<T> minus(ToLong<T> other);
 
     /**
@@ -150,6 +153,7 @@ public interface HasMinus<T> {
      * @param other the other term used for the subtraction
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     ToDouble<T> minus(ToDouble<T> other);
 
 }

@@ -24,10 +24,13 @@ import java.util.NoSuchElementException;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Utility class for checking invariants on {@code null}-values.
  *
- * @author pemi
+ * @author Emil Forslund
  */
 public final class NullUtil {
+
+    private NullUtil() {};
 
     private static final String IS_NULL = "is null";
     private static final String FIRST_ARG_IS_NULL = "First argument is null";
@@ -371,10 +374,6 @@ public final class NullUtil {
         requireKeys(map, requiredKeyB);
         requireKeys(map, requiredKeyC);
         return map;
-    }
-
-    private NullUtil() {
-        throw new UnsupportedOperationException();
     }
 
 }

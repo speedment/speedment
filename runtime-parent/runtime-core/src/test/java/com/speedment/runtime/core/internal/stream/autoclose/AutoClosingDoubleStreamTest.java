@@ -16,11 +16,9 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+import com.speedment.runtime.core.stream.java9.Java9StreamUtil;
 
-import java.util.HashSet;
 import java.util.concurrent.atomic.DoubleAdder;
-import java.util.stream.BaseStream;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 

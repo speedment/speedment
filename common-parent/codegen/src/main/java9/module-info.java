@@ -19,5 +19,9 @@ module com.speedment.common.codegen {
     exports com.speedment.common.codegen.constant;
     exports com.speedment.common.codegen.controller;
     exports com.speedment.common.codegen.model;
+    exports com.speedment.common.codegen.model.modifier;
+    exports com.speedment.common.codegen.model.trait;
+    exports com.speedment.common.codegen.model.value;
+    exports com.speedment.common.codegen.provider;
     exports com.speedment.common.codegen.util;
 }

@@ -19,13 +19,11 @@ package com.speedment.generator.standard.entity;
 import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.function.OptionalBoolean;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
-import com.speedment.generator.standard.internal.util.FkHolder;
+import com.speedment.generator.standard.util.ForeignKeyUtil;
+import com.speedment.generator.standard.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.component.TypeMapperComponent;
@@ -49,7 +47,7 @@ import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import static com.speedment.common.codegen.constant.DefaultType.*;
 import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.shortName;
-import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
+import static com.speedment.generator.standard.util.ColumnUtil.usesOptional;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
@@ -62,9 +60,6 @@ import static java.util.Objects.requireNonNull;
 public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTranslator<Interface> {
 
     public static final String IDENTIFIER_NAME = "Identifier";
-
-    @Inject private Injector injector;
-    @Inject private TypeMapperComponent typeMappers;
 
     public GeneratedEntityTranslator(Table table) {
         super(table, Interface::of);
@@ -158,7 +153,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
              * Finders
              */
             .forEveryColumn((intrf, col) -> 
-                EntityTranslatorSupport.getForeignKey(
+                ForeignKeyUtil.getForeignKey(
                     getSupport().tableOrThrow(), col
                 ).ifPresent(fkc -> {
                     final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
@@ -191,8 +186,8 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
              */
             .forEveryColumn((intrf, col) -> {
 
-                final EntityTranslatorSupport.ReferenceFieldType ref
-                    = EntityTranslatorSupport.getReferenceFieldType(
+                final ForeignKeyUtil.ReferenceFieldType ref
+                    = ForeignKeyUtil.getReferenceFieldType(
                         file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
                     );
 
@@ -228,7 +223,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                         getSupport().typeName(col)));
 
                 // Add the foreign key method reference
-                EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
+                ForeignKeyUtil.getForeignKey(getSupport().tableOrThrow(), col)
                     .ifPresent(fkc -> {
                         final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
                         final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();

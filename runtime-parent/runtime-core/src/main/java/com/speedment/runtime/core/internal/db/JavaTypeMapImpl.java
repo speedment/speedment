@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.internal.db.RuleUtil.DEFAULT_RULE;
-import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static com.speedment.runtime.core.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public class JavaTypeMapImpl implements JavaTypeMap {
+public final class JavaTypeMapImpl implements JavaTypeMap {
 
     private final List<Rule> rules;
     private final Map<String, Class<?>> inner;
@@ -57,7 +57,7 @@ public class JavaTypeMapImpl implements JavaTypeMap {
      * @param installer  the installer
      * @see <a href="http://docs.oracle.com/javase/1.5.0/docs/guide/jdbc/getstart/mapping.html">Official Mappings</a>
      */
-    protected JavaTypeMapImpl(Consumer<Map<String, Class<?>>> installer) {
+    private JavaTypeMapImpl(Consumer<Map<String, Class<?>>> installer) {
         rules = new CopyOnWriteArrayList<>();
         inner = newCaseInsensitiveMap();
         

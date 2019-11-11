@@ -48,10 +48,15 @@ public final class StopwatchImpl implements Stopwatch {
     public long elapsedNanos() {
         final long now = System.nanoTime();
         final long elapsedNano;
+
         if (isStopped()) {
             elapsedNano = stop - start;
         } else {
-            elapsedNano = now - start;
+            if (isStarted()) {
+                elapsedNano = now - start;
+            } else {
+                elapsedNano = 0;
+            }
         }
         return elapsedNano;
     }

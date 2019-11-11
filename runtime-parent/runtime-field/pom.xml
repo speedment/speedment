@@ -26,12 +26,15 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.19-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>runtime-field</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.runtime.field</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Field</name>
     <description>
         Partly generated model of the fields that represent columns in the 
@@ -39,28 +42,6 @@
         that contain metadata that Speedment can analyze runtime.
     </description>
     
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.runtime.field,
-                            com.speedment.runtime.field.comparator,
-                            com.speedment.runtime.field.exception,
-                            com.speedment.runtime.field.method,
-                            com.speedment.runtime.field.predicate,
-                            com.speedment.runtime.field.predicate.trait,
-                            com.speedment.runtime.field.trait
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <dependencies>
         <!-- Common Dependencies -->
         <dependency>
@@ -100,17 +81,6 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-typemapper</artifactId>
             <version>${speedment.version}</version>
-        </dependency>
-
-        <!-- Test Dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
 
     </dependencies>

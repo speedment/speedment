@@ -27,6 +27,7 @@ import com.speedment.tool.core.internal.toolbar.DefaultToolbarItems;
 import com.speedment.tool.core.internal.toolbar.ToolbarComponentImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoaderImpl;
+import com.speedment.tool.core.provider.DelegateUserInterfaceComponent;
 
 import java.util.stream.Stream;
 
@@ -39,7 +40,7 @@ public class ToolBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return InjectBundle.of(UserInterfaceComponentImpl.class)
-            .withBundle(UserInterfaceComponentImpl.include())
+            .withBundle(DelegateUserInterfaceComponent.include())
             .withBundle(new ToolActionsBundle())
             .withComponent(VersionComponentImpl.class)
             .withComponent(RuleComponentImpl.class)

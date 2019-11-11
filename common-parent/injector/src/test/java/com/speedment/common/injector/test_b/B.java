@@ -27,10 +27,10 @@ import com.speedment.common.injector.annotation.WithState;
  * @since   1.0.0
  */
 public final class B {
-    
-    public @Inject A a;
-    public @Inject C c;
+
+    @Inject public A a;
+    @Inject public C c;
 
     @ExecuteBefore(State.RESOLVED)
-    protected void beforeResolve(@WithState(State.INITIALIZED) A a, @WithState(State.RESOLVED) C c) {}
+    public void beforeResolve(@WithState(State.INITIALIZED) A a, @WithState(State.RESOLVED) C c) {}
 }

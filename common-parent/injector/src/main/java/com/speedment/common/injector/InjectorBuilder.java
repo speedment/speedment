@@ -76,7 +76,7 @@ public interface InjectorBuilder {
      */
     <T> InjectorBuilder withComponent(Class<T> injectableClass, Supplier<T> instanceSupplier);
 
-    /**EntityStoreCloseTest.testClose
+    /**
      * Puts one or multiple classes contained in an InjectBundle that can be
      * automatically dependency injected into other classes to the builder.
      * Classes can be appended in any order. The final injection order will
@@ -113,7 +113,18 @@ public interface InjectorBuilder {
      * @return            a reference to this builder
      */
     InjectorBuilder withConfigFileLocation(Path configFile);
-    
+
+    /**
+     * Adds an InjectorProxy to the InjectorBuilder.
+     * <p>
+     * An InjectorProxy can be used to create/manipulate
+     * instances on behalf of the actual injector.
+     *
+     * @param injectorProxy to add
+     * @return a reference to this builder
+     */
+    InjectorBuilder withInjectorProxy(InjectorProxy injectorProxy);
+
     /**
      * Appends an action that must be executed sometime during the configuration 
      * phase. The action will have access to the instance as it is configured. 
@@ -208,15 +219,23 @@ public interface InjectorBuilder {
      *                                 be instantiated.
      */
     Injector build() throws InstantiationException;
+
+    /**
+     * Returns the InjectorProxy for the provided class.
+     *
+     * @param clazz to obtain InjectorProxy for
+     * @return the InjectorProxy for the provided class
+     */
+    InjectorProxy proxyFor(Class<?> clazz);
     
     /**
-     * Returns the {@link logger} object used by the default implementation of 
+     * Returns the {@link Logger} object used by the default implementation of
      * the {@code InjectorBuilder}.
      * 
      * @return  the default logger
      */
     static Logger logger() {
-        return InjectorBuilderImpl.LOGGER_INSTANCE;
+        return InjectorBuilderImpl.INTERNAL_LOGGER;
     }
 
 }

@@ -48,7 +48,7 @@ final class ImmutableHasIdTest extends AbstractDocumentTest {
     @Test
     void testIdMutator() {
         dbmsA.mutator().setId(ID);
-        final Project immutableProject = ImmutableProject.wrap(project);
+        final Project immutableProject = Project.createImmutable(project);
         final Dbms immutableDbms = immutableProject.dbmses().findFirst().get();
 
         assertEquals(ID, immutableDbms.getId());
@@ -66,11 +66,11 @@ final class ImmutableHasIdTest extends AbstractDocumentTest {
     void testImmutableIdTrait() {
 
         final Set<Class<?>> hasImmutableName = immutableClasses()
-            .filter(c -> HasName.class.isAssignableFrom(c))
+            .filter(HasName.class::isAssignableFrom)
             .collect(toSet());
 
         final Set<Class<?>> hasImmutableId = immutableClasses()
-            .filter(c -> HasId.class.isAssignableFrom(c))
+            .filter(HasId.class::isAssignableFrom)
             .collect(toSet());
 
         assertEquals(hasImmutableName, hasImmutableId);

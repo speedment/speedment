@@ -37,11 +37,11 @@ import java.util.stream.Stream;
  * @since  3.0.17
  */
 public final class ToggleExpandedActionImpl
-extends AbstractToolAction
-implements ToggleExpandedAction {
+    extends AbstractToolAction
+    implements ToggleExpandedAction {
 
     @Override
-    void installMenuItems(ProjectTreeComponent projectTree) {
+    public void installMenuItems(ProjectTreeComponent projectTree) {
         projectTree.installContextMenu(DbmsProperty.class, this::installForDocumentType);
         projectTree.installContextMenu(SchemaProperty.class, this::installForDocumentType);
         projectTree.installContextMenu(TableProperty.class, this::installForDocumentType);

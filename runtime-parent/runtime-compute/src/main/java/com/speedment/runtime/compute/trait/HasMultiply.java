@@ -61,6 +61,7 @@ public interface HasMultiply<T> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasMultiply<T> multiply(ToByte<T> other);
 
     /**
@@ -91,6 +92,7 @@ public interface HasMultiply<T> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasMultiply<T> multiply(ToInt<T> other);
 
     /**
@@ -121,6 +123,7 @@ public interface HasMultiply<T> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasMultiply<T> multiply(ToLong<T> other);
 
     /**
@@ -151,6 +154,7 @@ public interface HasMultiply<T> {
      * @param other the other factor used for the multiplication
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     ToDouble<T> multiply(ToDouble<T> other);
 
 }

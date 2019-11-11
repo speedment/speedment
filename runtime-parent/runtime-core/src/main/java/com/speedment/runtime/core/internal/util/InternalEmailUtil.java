@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.prefs.Preferences;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -29,6 +28,8 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.2
  */
 public final class InternalEmailUtil {
+
+    private InternalEmailUtil() {}
 
     private static final String ID_FIELD_NAME    = "user_id";
     private static final String EMAIL_FIELD_NAME = "user_mail";
@@ -70,7 +71,4 @@ public final class InternalEmailUtil {
         }
     }
 
-    private InternalEmailUtil() {
-        instanceNotAllowed(getClass());
-    }
 }

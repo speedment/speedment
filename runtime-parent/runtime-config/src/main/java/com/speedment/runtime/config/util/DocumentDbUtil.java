@@ -47,6 +47,9 @@ import java.util.stream.Stream;
  */
 public final class DocumentDbUtil {
 
+    private static final String COULD_NOT_FIND_REFERENCED = "Could not find referenced ";
+    private static final String WITH_NAME = " with name '";
+
     public static Stream<? extends Document> traverseOver(Project project) {
         return Stream.concat(project.dbmses(), project.dbmses().flatMap(DocumentDbUtil::traverseOver));
     }
@@ -218,7 +221,7 @@ public final class DocumentDbUtil {
     public static boolean isAllAncestorsEnabled(Document document) {
         return HasEnabled.test(document)
             && document.ancestors()
-                .noneMatch(doc -> !HasEnabled.test(doc));
+                .allMatch(HasEnabled::test);
     }
     
     public static Optional<? extends Column> referencedColumnIfPresent(Project project, ColumnIdentifier<?> identifier) {
@@ -281,8 +284,8 @@ public final class DocumentDbUtil {
     public static Column referencedColumn(Project project, String dbmsName, String schemaName, String tableName, String columnName) {
         return referencedColumnIfPresent(project, dbmsName, schemaName, tableName, columnName)
             .orElseThrow(() -> new SpeedmentConfigException(
-                "Could not find referenced " + Column.class.getSimpleName() + 
-                " with name '" + columnName + "'."
+                COULD_NOT_FIND_REFERENCED + Column.class.getSimpleName() +
+                    WITH_NAME + columnName + "'."
             ));
     }
     
@@ -290,8 +293,8 @@ public final class DocumentDbUtil {
         return referencedSchema(project, dbmsId, schemaId)
             .tables().filter(table -> tableId.equals(table.getId()))
             .findAny().orElseThrow(() -> new SpeedmentConfigException(
-                "Could not find referenced " + Table.class.getSimpleName() + 
-                " with name '" + tableId + "'."
+                COULD_NOT_FIND_REFERENCED + Table.class.getSimpleName() +
+                    WITH_NAME + tableId + "'."
             ));
     }
     
@@ -299,8 +302,8 @@ public final class DocumentDbUtil {
         return referencedDbms(project, dbmsId)
             .schemas().filter(schema -> schemaId.equals(schema.getId()))
             .findAny().orElseThrow(() -> new SpeedmentConfigException(
-                "Could not find referenced " + Schema.class.getSimpleName() + 
-                " with name '" + schemaId + "'."
+                COULD_NOT_FIND_REFERENCED + Schema.class.getSimpleName() +
+                    WITH_NAME + schemaId + "'."
             ));
     }
     
@@ -308,8 +311,8 @@ public final class DocumentDbUtil {
         return project
             .dbmses().filter(dbms -> dbmsId.equals(dbms.getId()))
             .findAny().orElseThrow(() -> new SpeedmentConfigException(
-                "Could not find referenced " + Dbms.class.getSimpleName() + 
-                " with name '" + dbmsId + "'."
+                COULD_NOT_FIND_REFERENCED + Dbms.class.getSimpleName() +
+                    WITH_NAME + dbmsId + "'."
             ));
     }
     

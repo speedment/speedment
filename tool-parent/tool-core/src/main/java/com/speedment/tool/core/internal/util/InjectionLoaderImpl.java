@@ -17,8 +17,8 @@
 package com.speedment.tool.core.internal.util;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.tool.core.brand.Brand;
@@ -52,22 +52,37 @@ import static javafx.stage.Modality.APPLICATION_MODAL;
  */
 public final class InjectionLoaderImpl implements InjectionLoader {
     
-    private final static String 
-        FXML_PREFIX = "/fxml/",
-        FXML_SUFFIX = ".fxml";
+    private final static String FXML_PREFIX = "/fxml/";
+    private final static String FXML_SUFFIX = ".fxml";
     
     private final Map<Class<?>, Supplier<? extends Initializable>> constructors;
-    private @Inject UserInterfaceComponent userInterfaceComponent;
-    private @Inject InfoComponent infoComponent;
-    private @Inject Injector injector;
-    private @Inject Brand brand;
-    
-    private InjectionLoaderImpl() {
+    private final InfoComponent infoComponent;
+    private final Brand brand;
+
+    private UserInterfaceComponent userInterfaceComponent;
+    private Injector injector;
+
+    public InjectionLoaderImpl(
+        final InfoComponent infoComponent,
+        final Brand brand
+    ) {
+        this.infoComponent = requireNonNull(infoComponent);
+        this.brand = requireNonNull(brand);
         constructors = new ConcurrentHashMap<>();
     }
-    
+
+    @ExecuteBefore(value = INITIALIZED, missingArgument = MissingArgumentStrategy.SKIP_INVOCATION)
+    public void setUserInterfaceComponent(UserInterfaceComponent userInterfaceComponent) {
+        this.userInterfaceComponent = requireNonNull(userInterfaceComponent);
+    }
+
     @ExecuteBefore(INITIALIZED)
-    void installConstructors() {
+    public void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
+    }
+
+    @ExecuteBefore(INITIALIZED)
+    public void installConstructors() {
         constructors.put(AboutController.class,            AboutController::new);
         constructors.put(ComponentsController.class,       ComponentsController::new);
         constructors.put(ConnectController.class,          ConnectController::new);

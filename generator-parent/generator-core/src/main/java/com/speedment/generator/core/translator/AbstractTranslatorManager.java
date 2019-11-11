@@ -18,12 +18,16 @@ package com.speedment.generator.core.translator;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.generator.core.internal.translator.TranslatorManagerHelper;
+import com.speedment.common.injector.annotation.Config;
+import com.speedment.generator.core.component.EventComponent;
+import com.speedment.generator.core.component.PathComponent;
+import com.speedment.generator.core.internal.translator.TranslatorManagerImpl;
 import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.core.component.InfoComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+
 import java.nio.file.Path;
 
 /**
@@ -34,21 +38,19 @@ import java.nio.file.Path;
  */
 public abstract class AbstractTranslatorManager implements TranslatorManager {
     
-    private final TranslatorManagerHelper helper;
+    private final TranslatorManagerImpl helper;
     
-    protected AbstractTranslatorManager() {
-        helper = new TranslatorManagerHelper();
+    public AbstractTranslatorManager(
+        final InfoComponent info,
+        final PathComponent paths,
+        final EventComponent events,
+        final ProjectComponent projects,
+        final CodeGenerationComponent codeGenerationComponent,
+        final @Config(name="skipClear", value="false") boolean skipClear
+    ) {
+        helper = new TranslatorManagerImpl(info, paths, events, projects, codeGenerationComponent, skipClear);
     }
     
-    @ExecuteBefore(State.INITIALIZED)
-    void init(Injector injector) {
-        // Since we created the instance of 'helper' manually, we have to
-        // invoke the injector manually. We can do this in the "INITIALIZED" 
-        // phase since we don't need access to any components and we want to 
-        // simulate that this happends on construction.
-        injector.inject(helper);
-    }
-
     @Override
     public void accept(Project project) {
         helper.accept(this, project);

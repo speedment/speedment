@@ -31,7 +31,7 @@ import javafx.collections.ObservableList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 
 /**
  *

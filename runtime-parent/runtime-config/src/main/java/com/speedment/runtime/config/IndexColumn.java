@@ -30,6 +30,8 @@ import com.speedment.runtime.config.trait.HasOrdinalPosition;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import java.util.Map;
+
 /**
  * A typed {@link Document} that represents the column referenced by an index 
  * key instance in the database. An {@code IndexColumn} is located inside an
@@ -64,5 +66,19 @@ public interface IndexColumn extends
     @Override
     default IndexColumn deepCopy() {
         return DocumentUtil.deepCopy(this, IndexColumnImpl::new);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link IndexColumn}
+     * with the given {@code parent} and {@code data}
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return new {@link IndexColumn} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static IndexColumn create(Index parent, Map<String, Object> data) {
+        return new IndexColumnImpl(parent, data);
     }
 }

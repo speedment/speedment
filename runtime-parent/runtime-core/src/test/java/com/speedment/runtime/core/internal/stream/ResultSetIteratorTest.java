@@ -44,8 +44,8 @@ final class ResultSetIteratorTest {
     void testZero() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(0);
-        final StreamUtil.ResultSetIterator<?> it
-            = new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
+        final InternalStreamUtil.ResultSetIterator<?> it
+            = new InternalStreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
 
         assertFalse(it.hasNext());
         assertEquals(0, counter.get());
@@ -57,8 +57,8 @@ final class ResultSetIteratorTest {
     void testOne() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(1);
-        final StreamUtil.ResultSetIterator<?> it
-            = new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
+        final InternalStreamUtil.ResultSetIterator<?> it
+            = new InternalStreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
 
         assertTrue(it.hasNext());
         assertEquals(0, counter.get());
@@ -71,8 +71,8 @@ final class ResultSetIteratorTest {
     void testTwo() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(2);
-        final StreamUtil.ResultSetIterator<?> it
-            = new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
+        final InternalStreamUtil.ResultSetIterator<?> it
+            = new InternalStreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
 
         assertTrue(it.hasNext());
         assertEquals(0, counter.get());
@@ -87,8 +87,8 @@ final class ResultSetIteratorTest {
     @Test
     void testIterate() {
         final ResultSet rs = new MockResultSet(SIZE);
-        final StreamUtil.ResultSetIterator<Integer> it
-            = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
+        final InternalStreamUtil.ResultSetIterator<Integer> it
+            = new InternalStreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
 
         for (int i = 0; i < SIZE; i++) {
             assertTrue(it.hasNext());
@@ -101,8 +101,8 @@ final class ResultSetIteratorTest {
     void testForEachRemaining() {
         for (int initialNext = 0; initialNext < SIZE; initialNext++) {
             final ResultSet rs = new MockResultSet(SIZE);
-            final StreamUtil.ResultSetIterator<Integer> it
-                = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
+            final InternalStreamUtil.ResultSetIterator<Integer> it
+                = new InternalStreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
 
             AtomicInteger expected = new AtomicInteger(0);
             for (int i = 0; i < initialNext; i++) {
@@ -122,8 +122,8 @@ final class ResultSetIteratorTest {
     @Test
     void testEmpty() {
         final ResultSet rs = new MockResultSet(0);
-        final StreamUtil.ResultSetIterator<Integer> it
-            = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
+        final InternalStreamUtil.ResultSetIterator<Integer> it
+            = new InternalStreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
 
         assertThrows(NoSuchElementException.class, () -> {
             it.next();
@@ -133,8 +133,8 @@ final class ResultSetIteratorTest {
     @Test
     void testRemove() {
         final ResultSet rs = new MockResultSet(1);
-        final StreamUtil.ResultSetIterator<Integer> it
-            = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
+        final InternalStreamUtil.ResultSetIterator<Integer> it
+            = new InternalStreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
 
         assertThrows(UnsupportedOperationException.class, it::remove);
     }

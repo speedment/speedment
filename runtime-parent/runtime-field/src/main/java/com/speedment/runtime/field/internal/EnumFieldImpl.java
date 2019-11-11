@@ -262,9 +262,7 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
                     return e.compareTo(start) >= 0 && e.compareTo(end) <  0;
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return e.compareTo(start) >= 0 && e.compareTo(end) <= 0;
-                default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
-                );
+                default : throw newUnsupportedOperationException(inclusion);
             }
         });
     }
@@ -281,11 +279,15 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
                     return e.compareTo(start) <  0 || e.compareTo(end) >= 0;
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return e.compareTo(start) <  0 || e.compareTo(end) >  0;
-                default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
-                );
+                default : throw newUnsupportedOperationException(inclusion);
             }
         });
+    }
+
+    private UnsupportedOperationException newUnsupportedOperationException(Inclusion inclusion) {
+        return new UnsupportedOperationException(
+            "Unknown inclusion '" + inclusion + "'."
+        );
     }
 
     @Override
@@ -359,9 +361,7 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
                     return str.compareTo(start) >= 0 && str.compareTo(end) <  0;
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return str.compareTo(start) >= 0 && str.compareTo(end) <= 0;
-                default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
-                );
+                default : throw newUnsupportedOperationException(inclusion);
             }
         });
     }
@@ -381,9 +381,7 @@ public final class EnumFieldImpl<ENTITY, D, E extends Enum<E>>
                     return str.compareTo(start) <  0 || str.compareTo(end) >= 0;
                 case START_INCLUSIVE_END_INCLUSIVE:
                     return str.compareTo(start) <  0 || str.compareTo(end) >  0;
-                default : throw new UnsupportedOperationException(
-                    "Unknown inclusion '" + inclusion + "'."
-                );
+                default : throw newUnsupportedOperationException(inclusion);
             }
         });
     }

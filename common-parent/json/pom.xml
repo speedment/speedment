@@ -26,12 +26,15 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.19-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>json</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.json</module-name>
+    </properties>
+
     <name>Speedment - Common - JSON</name>
     <description>
         A lightweight JSON serializer and deserializer made with the ambition to 
@@ -39,51 +42,4 @@
     </description>
     <url>https://github.com/speedment/speedment/wiki/Json</url>
     
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>com.speedment.common.json</Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin-version}</version>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin-version}</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    
-    <dependencies>
-        <!--Test dependencies-->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-    </dependencies>
 </project>

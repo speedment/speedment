@@ -25,6 +25,4 @@ import com.speedment.runtime.core.component.StreamSupplierComponent;
  * @author  Per Minborg
  * @since   3.0.1
  */
-public interface SqlStreamSupplierComponent extends StreamSupplierComponent {
-
-}
+public interface SqlStreamSupplierComponent extends StreamSupplierComponent {}

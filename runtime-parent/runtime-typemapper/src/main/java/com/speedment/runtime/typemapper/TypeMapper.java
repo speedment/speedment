@@ -61,10 +61,13 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
     }
 
     /**
-     * The standard comparator to use for instances of the {@link TypeMapper}
+     * Returns the standard comparator to use for instances of the {@link TypeMapper}
      * interface. This comparator will use the name of the database type as
      * comparison index and if two mappers share the same database type, it will
      * use the label in alphabetical order.
+     *
+     * @return the standard comparator to use for instances of the {@link TypeMapper}
+     *         interface
      */
     static Comparator<TypeMapper<?, ?>> standardComparator() {
       return comparing(TypeMapper::getLabel);
@@ -201,13 +204,26 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
     }
 
     /**
+     * Returns if this TypeMapper is an <em>identity</em> TypeMapper.
+     * <p>
+     * An identity TypeMapper will always map to the
+     * same type database {@code ->} java {@code ->} database and
+     * is guaranteed to just pass elements.
+     *
+     * @return if this TypeMapper is an <em>identity</em> TypeMapper
+     */
+    default boolean isIdentity() {
+        return false;
+    }
+
+    /**
      * Returns an identity type mapper.
      *
      * @param <T>  the type of the identity type mapper
      * @return     an identity type mapper
      */
     static <T> TypeMapper<T, T> identity() {
-        return new IdentityTypeMapper<>();
+        return IdentityTypeMapper.shared();
     }
     
     /**

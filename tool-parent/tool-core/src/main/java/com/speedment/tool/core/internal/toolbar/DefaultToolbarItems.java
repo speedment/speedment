@@ -19,6 +19,8 @@ package com.speedment.tool.core.internal.toolbar;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.generator.core.component.EventComponent;
+import com.speedment.tool.core.brand.Brand;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.toolbar.ToolbarComponent;
@@ -33,9 +35,12 @@ import static com.speedment.common.injector.State.INITIALIZED;
 public final class DefaultToolbarItems {
 
     @ExecuteBefore(INITIALIZED)
-    void install(
+    public void install(
             @WithState(INITIALIZED) ToolbarComponent toolbar,
-            @WithState(INITIALIZED) UserInterfaceComponent ui) {
+            @WithState(INITIALIZED) UserInterfaceComponent ui,
+            @WithState(INITIALIZED) Brand brand,
+            @WithState(INITIALIZED) EventComponent events
+    ) {
 
         toolbar.install("reload", new SimpleToolbarItemImpl(
             "Reload", FontAwesome.REFRESH, ev -> ui.reload(),
@@ -49,7 +54,7 @@ public final class DefaultToolbarItems {
                 "save the configuration before generation."
         ));
 
-        toolbar.install("brand", new BrandToolbarItem());
-        toolbar.install("progress", new GenerationProgressToolbarItem());
+        toolbar.install("brand", new BrandToolbarItem(brand));
+        toolbar.install("progress", new GenerationProgressToolbarItem(events));
     }
 }

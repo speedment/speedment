@@ -46,4 +46,12 @@ public interface SqlTypeMappingHelper {
             mappings
         );
     }
+
+/*    static SqlTypeMappingHelper create(ConnectionPoolComponent connectionPoolComponent, DbmsHandlerComponent dbmsHandlerComponent, JavaTypeMap mappings) {
+        return new SqlTypeMappingHelperImpl(
+            connectionPoolComponent,
+            dbmsHandlerComponent,
+            mappings
+        );
+    }*/
 }

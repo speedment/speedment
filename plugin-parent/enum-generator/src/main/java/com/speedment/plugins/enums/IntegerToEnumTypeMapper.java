@@ -26,6 +26,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.speedment.plugins.enums.internal.EnumGeneratorUtil.classesIn;
@@ -40,8 +41,7 @@ public final class IntegerToEnumTypeMapper<T extends Enum<T>>
 
     private final AtomicReference<T[]> cachedConstants;
 
-    private @Inject
-    Injector injector;
+    @Inject public Injector injector;
 
     public IntegerToEnumTypeMapper() {
         cachedConstants = new AtomicReference<>();
@@ -105,7 +105,7 @@ public final class IntegerToEnumTypeMapper<T extends Enum<T>>
 
             // Return it as the enumClass or throw an exception.
             .findAny()
-            .orElse(null);
+            .orElseThrow(() -> new NoSuchElementException("Unable to find Enum class because entity " + entityType.getSimpleName() + " has no enum value for column " + column.getId()));
 
         final Method values;
         try {

@@ -21,7 +21,6 @@ import com.speedment.tool.core.rule.Issue;
 import com.speedment.tool.core.rule.Rule;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 /**
  * A component for assigning and verifying rules, which will be checked
@@ -44,9 +43,9 @@ public interface RuleComponent {
      * the {@link IssueComponent} in case their Rule is not fulfilled during
      * verification.
      * 
-     * @param ruleFactory  supplier for the rule
+     * @param rule  to add
      */
-    void install(Supplier<Rule> ruleFactory);
+    void install(Rule rule);
 
     /**
      * Checks the rule against the current Speedment configuration. The CompletableFuture

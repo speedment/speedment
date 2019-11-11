@@ -20,23 +20,23 @@ import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.speedment.example.basic_example.util.ExampleUtil;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
-import static java.util.stream.Collectors.counting;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+
 /**
  *
  * @author Per Minborg
  */
-public class Classifying {
+public final class Classifying {
 
     private final SakilaApplication app;
     private final FilmManager films;
 
-    public Classifying() {
+    private Classifying() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
     }

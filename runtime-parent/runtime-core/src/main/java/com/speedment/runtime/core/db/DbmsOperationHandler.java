@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 /**
@@ -290,9 +289,7 @@ public interface DbmsOperationHandler {
      * @param statement to configure
      * @throws java.sql.SQLException if the configuration fails
      */
-    default void configureSelect(PreparedStatement statement) throws SQLException {
-        // Do nothing by default
-    }
+    void configureSelect(PreparedStatement statement) throws SQLException;
 
     /**
      * Configures a ResultSet for optimum read performance.
@@ -300,10 +297,14 @@ public interface DbmsOperationHandler {
      * @param resultSet to configure
      * @throws java.sql.SQLException if the configuration fails
      */
-    default void configureSelect(ResultSet resultSet) throws SQLException {
-        // Do nothing by default
-    }
-       
-    void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException;
+    void configureSelect(ResultSet resultSet) throws SQLException;
+
+    /**
+     * Closes this DbmsOperationHandler so that no operations can
+     * be invoked.
+     */
+    void close();
+
+    // void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException;
 
 }

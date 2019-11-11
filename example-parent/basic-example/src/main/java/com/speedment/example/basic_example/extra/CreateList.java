@@ -30,12 +30,12 @@ import static java.util.stream.Collectors.toList;
  *
  * @author Per Minborg
  */
-public class CreateList {
+public final class CreateList {
 
     private final SakilaApplication app;
     private final FilmManager films;
 
-    public CreateList() {
+    private CreateList() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
     }

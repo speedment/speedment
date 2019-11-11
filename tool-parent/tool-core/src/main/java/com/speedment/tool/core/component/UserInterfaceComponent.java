@@ -363,5 +363,13 @@ public interface UserInterfaceComponent {
          */
         CREATE_A_NEW_STAGE
     }
-    
+
+    /**
+     * Starts the application
+     *
+     * @param application to start
+     * @param stage to use
+     */
+    void start(Application application, Stage stage);
+
 }

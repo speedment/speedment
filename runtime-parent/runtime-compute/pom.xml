@@ -26,54 +26,26 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.19-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>runtime-compute</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.runtime.compute</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Compute</name>
     <description>
         Functional interfaces and utility class used to express computations on 
         Speedment entities.
     </description>
     
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.runtime.compute,
-                            com.speedment.runtime.compute.expression,
-                            com.speedment.runtime.compute.expression.predicate,
-                            com.speedment.runtime.compute.expression.orelse,
-                            com.speedment.runtime.compute.trait
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <dependencies>
         <!-- Common Dependencies -->
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>function</artifactId>
-        </dependency>
-        
-        <!-- Test Dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
+       </dependency>
     </dependencies>
 </project>

@@ -17,7 +17,7 @@
 package com.speedment.runtime.connector.sqlite.internal;
 
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.runtime.core.internal.manager.sql.AbstractFieldPredicateView;
+import com.speedment.runtime.core.abstracts.AbstractFieldPredicateView;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 
 import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRaw;

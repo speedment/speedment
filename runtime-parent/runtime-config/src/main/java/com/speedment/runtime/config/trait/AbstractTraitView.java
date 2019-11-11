@@ -17,7 +17,7 @@
 package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.internal.BaseDocument;
+import com.speedment.runtime.config.provider.BaseDocument;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 

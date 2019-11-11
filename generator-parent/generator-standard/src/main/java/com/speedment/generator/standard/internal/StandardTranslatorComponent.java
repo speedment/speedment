@@ -39,7 +39,7 @@ import static com.speedment.generator.standard.StandardTranslatorKey.*;
 public final class StandardTranslatorComponent {
 
     @ExecuteBefore(INITIALIZED)
-    void installTranslators(@WithState(INITIALIZED) CodeGenerationComponent codeGen) {
+    public void installTranslators(@WithState(INITIALIZED) CodeGenerationComponent codeGen) {
         codeGen.put(Table.class, ENTITY, EntityTranslator::new);
         codeGen.put(Table.class, ENTITY_IMPL, EntityImplTranslator::new);
         codeGen.put(Table.class, MANAGER, ManagerTranslator::new);
@@ -57,5 +57,6 @@ public final class StandardTranslatorComponent {
         codeGen.put(Project.class, GENERATED_APPLICATION_IMPL, GeneratedApplicationImplTranslator::new);
         codeGen.put(Project.class, GENERATED_APPLICATION_BUILDER, GeneratedApplicationBuilderTranslator::new);
         codeGen.put(Project.class, GENERATED_METADATA, GeneratedMetadataTranslator::new);
+        codeGen.put(Project.class, INJECTOR_PROXY, InjectorProxyTranslator::new);
     }
 }

@@ -21,6 +21,7 @@ import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.Speedment;
+import com.speedment.tool.core.TestInjectorProxy;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.component.VersionComponent;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,7 @@ final class VersionComponentImplTest {
                 .withBundle(ToolBundle.class)
                 .withSkipCheckDatabaseConnectivity()
                 .withSkipValidateRuntimeConfig()
+                .withInjectorProxy(new TestInjectorProxy())
                 .build();
 
             final VersionComponent version = speedment.getOrThrow(VersionComponent.class);

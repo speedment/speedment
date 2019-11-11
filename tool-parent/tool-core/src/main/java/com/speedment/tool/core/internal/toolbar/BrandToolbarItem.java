@@ -16,12 +16,13 @@
  */
 package com.speedment.tool.core.internal.toolbar;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.brand.Brand;
 import com.speedment.tool.core.toolbar.ToolbarItem;
 import com.speedment.tool.core.toolbar.ToolbarSide;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author Emil Forslund
@@ -29,8 +30,11 @@ import javafx.scene.image.ImageView;
  */
 public final class BrandToolbarItem implements ToolbarItem<ImageView> {
 
-    @Inject
-    private Brand brand;
+    private final Brand brand;
+
+    public BrandToolbarItem(Brand brand) {
+        this.brand = requireNonNull(brand);
+    }
 
     @Override
     public ImageView createNode() {

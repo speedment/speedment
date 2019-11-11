@@ -26,22 +26,21 @@ import com.company.sakila.db0.sakila.film_actor.FilmActorManager;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.example.basic_example.util.ExampleUtil;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent;
-import java.util.List;
+
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author Per Minborg
  */
-public class Pivot {
+public final class Pivot {
 
     private final SakilaApplication app;
     private final FilmManager films;
@@ -49,7 +48,7 @@ public class Pivot {
     private final FilmActorManager filmActors;
     private final JoinComponent joinComponent;
 
-    public Pivot() {
+    private Pivot() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
         actors = app.getOrThrow(ActorManager.class);

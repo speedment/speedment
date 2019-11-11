@@ -38,8 +38,6 @@ import java.util.stream.Stream;
 public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterface<T>>
     extends AbstractJavaClassTranslator<Table, T> {
 
-    private @Inject TypeMapperComponent typeMappers;
-    
     protected AbstractEntityAndManagerTranslator(
         Table table,
         Function<String, T> modelConstructor) {
@@ -60,7 +58,7 @@ public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterf
                     "' did not contain any primary key columns."
                 ));
         
-        Type firstType = typeMappers.get(firstColumn).getJavaType(firstColumn);
+        Type firstType = typeMappers().get(firstColumn).getJavaType(firstColumn);
         if (DefaultType.isPrimitive(firstType)) {
             firstType = DefaultType.wrapperFor(firstType);
         }
@@ -68,7 +66,7 @@ public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterf
         if (pks == 1) {
             return firstType;
         } else if (columnsFromPks()
-            .map(c -> typeMappers.get(c).getJavaType(c))
+            .map(c -> typeMappers().get(c).getJavaType(c))
             .allMatch(firstType::equals)) {
             
             return DefaultType.list(firstType);

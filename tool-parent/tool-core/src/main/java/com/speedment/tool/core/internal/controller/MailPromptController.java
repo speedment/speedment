@@ -53,10 +53,10 @@ public final class MailPromptController implements Initializable {
     private final static Predicate<String> IS_INVALID_MAIL = 
         mail -> !INVALID_MAIL.matcher(mail).find();
     
-    private @Inject ProjectComponent projects;
-    private @Inject UserInterfaceComponent ui;
-    private @Inject InjectionLoader loader;
-    private @Inject EventComponent events;
+    public @Inject ProjectComponent projects;
+    public @Inject UserInterfaceComponent ui;
+    public @Inject InjectionLoader loader;
+    public @Inject EventComponent events;
     
     private @FXML TextField email;
     private @FXML TextArea terms;

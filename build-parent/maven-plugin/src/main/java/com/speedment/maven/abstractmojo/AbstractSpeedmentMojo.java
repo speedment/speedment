@@ -17,20 +17,18 @@
 package com.speedment.maven.abstractmojo;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.core.GeneratorBundle;
-import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.maven.component.MavenPathComponent;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.application.ApplicationBuilders;
+import com.speedment.runtime.connector.mariadb.MariaDbBundle;
+import com.speedment.runtime.connector.mysql.MySqlBundle;
+import com.speedment.runtime.connector.postgres.PostgresBundle;
+import com.speedment.runtime.connector.sqlite.SqliteBundle;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.typemapper.TypeMapper;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -40,8 +38,6 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -51,12 +47,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
-import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.application.provider.DefaultApplicationMetadata.METADATA_LOCATION;
 import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import static java.util.Objects.requireNonNull;
 
@@ -67,13 +60,13 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
-    private static final String SPECIFIED_CLASS = "Specified class ";
+    static final String SPECIFIED_CLASS = "Specified class ";
     private static final Path DEFAULT_CONFIG = Paths.get(DEFAULT_CONFIG_LOCATION);
     private static final Consumer<ApplicationBuilder<?, ?>> NOTHING = builder -> {};
 
     private final Consumer<ApplicationBuilder<?, ?>> configurer;
 
-    private @Parameter(defaultValue = "${dbms.connectionUrl}") String dbmsConnectionUrl;
+    public @Parameter(defaultValue = "${dbms.connectionUrl}") String dbmsConnectionUrl;
 
     AbstractSpeedmentMojo() {this(NOTHING);}
 
@@ -261,6 +254,14 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             .withComponent(CodeGenerationComponentImpl.class)
             .withComponent(MavenPathComponent.class);
 
+        // Add optional components that are no longer included in 'runtime' but
+        // are nice to have available without explicit installation
+        result
+            .withBundle(MySqlBundle.class)
+            .withBundle(MariaDbBundle.class)
+            .withBundle(PostgresBundle.class)
+            .withBundle(SqliteBundle.class);
+
         configureBuilder(result); // Add MOJO specific components (if any)
 
         // Add any extra type mappers requested by the user
@@ -308,90 +309,6 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     protected void configureBuilder( ApplicationBuilder<?, ?>  builder) {}
 
-    private static final class TypeMapperInstantiationException extends RuntimeException {
 
-        private static final long serialVersionUID = -8267239306656063289L;
 
-        private TypeMapperInstantiationException(Throwable thrw) {
-            super(thrw);
-        }
-    }
-
-     @InjectKey(TypeMapperInstaller.class)
-    private static final class TypeMapperInstaller {
-
-        private static Mapping[] mappings;
-
-        @ExecuteBefore(RESOLVED)
-        void installInTypeMapper(
-            final Injector injector,
-            final @WithState(INITIALIZED) TypeMapperComponent typeMappers
-        ) throws MojoExecutionException {
-            if (mappings != null) {
-                for (final Mapping mapping : mappings) {
-                    final Class<?> databaseType;
-                    try {
-                        databaseType = injector.classLoader()
-                            .loadClass(mapping.getDatabaseType());
-
-                    } catch (final ClassNotFoundException ex) {
-                        throw new MojoExecutionException(
-                            "Specified database type '" + mapping.getDatabaseType() + "' "
-                            + "could not be found on class path. Make sure it is a "
-                            + "valid JDBC type for the chosen connector.", ex
-                        );
-                    } catch (final ClassCastException ex) {
-                        throw new MojoExecutionException(
-                            "An unexpected ClassCastException occurred.", ex
-                        );
-                    }
-
-                    try {
-                        final Class<?> uncasted = injector.classLoader()
-                            .loadClass(mapping.getImplementation());
-
-                        @SuppressWarnings("unchecked")
-                        final Class<TypeMapper<?, ?>> casted
-                            = (Class<TypeMapper<?, ?>>) uncasted;
-                        final Constructor<TypeMapper<?, ?>> constructor
-                            = casted.getConstructor();
-
-                        final Supplier<TypeMapper<?, ?>> supplier = () -> {
-                            try {
-                                return constructor.newInstance();
-                            } catch (final IllegalAccessException
-                                | IllegalArgumentException
-                                | InstantiationException
-                                | InvocationTargetException ex) {
-
-                                throw new TypeMapperInstantiationException(ex);
-                            }
-                        };
-
-                        typeMappers.install(databaseType, supplier);
-                    } catch (final ClassNotFoundException ex) {
-                        throw new MojoExecutionException(
-                            SPECIFIED_CLASS + "'" + mapping.getImplementation()
-                            + "' could not be found on class path. Has the "
-                            + "dependency been configured properly?", ex
-                        );
-                    } catch (final ClassCastException ex) {
-                        throw new MojoExecutionException(
-                            SPECIFIED_CLASS + "'" + mapping.getImplementation()
-                            + "' does not implement the '"
-                            + TypeMapper.class.getSimpleName() + "'-interface.",
-                            ex
-                        );
-                    } catch (final NoSuchMethodException
-                        | TypeMapperInstantiationException ex) {
-                        throw new MojoExecutionException(
-                            SPECIFIED_CLASS + "'" + mapping.getImplementation()
-                            + "' could not be instantiated. Does it have a "
-                            + "default constructor?", ex
-                        );
-                    }
-                }
-            }
-        }
-    }
 }

@@ -36,10 +36,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static com.speedment.common.mapstream.MapStream.comparing;
@@ -52,9 +49,9 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ComponentsController implements Initializable {
 
-    private @Inject InfoComponent infoComponent;
-    private @Inject Speedment speedment;
-    private @Inject Injector injector;
+    public @Inject InfoComponent infoComponent;
+    public @Inject Speedment speedment;
+    public @Inject Injector injector;
 
     private @FXML Label title;
     private @FXML Label header;
@@ -202,7 +199,7 @@ public final class ComponentsController implements Initializable {
 
             injector.get(DbmsHandlerComponent.class).ifPresent(dh -> {
                 dh.supportedDbmsTypes()
-                    .sorted(DbmsType.COMPARATOR)
+                    .sorted(Comparator.comparing(DbmsType::getName))
                     .map(DbmsTypeItem::new)
                     .forEachOrdered(dbmsTypes.getChildren()::add);
             });

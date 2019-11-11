@@ -30,10 +30,19 @@ public class TestUtil {
     public static <T> void assertNonInstansiable(Class<T> clazz) {
         try {
             final Constructor<T> constructor = clazz.getDeclaredConstructor();
-            constructor.setAccessible(true);
+            try {
+                constructor.setAccessible(true);
+            } catch (RuntimeException e) {
+                /*
+                * This throws java.lang.reflect.InaccessibleObjectException.
+                * Since the exception is available in Java 9+ and our tests
+                * are still running on Java 8, catching a RuntimeException
+                * will have to suffice for the time being
+                * */
+            }
             final T instance = constructor.newInstance();
             fail("The class " + clazz.getName() + " should not be instansiable");
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (Exception e) {
             // Ignore
         }
     }

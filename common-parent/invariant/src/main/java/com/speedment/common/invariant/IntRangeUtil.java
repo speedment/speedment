@@ -21,8 +21,9 @@ import java.util.function.Function;
 import static com.speedment.common.invariant.ConstantUtil.*;
 
 /**
+ * Utility class for checking invariants on {@code int}-values.
  *
- * @author Per Minborg
+ * @author Emil Forslund
  */
 public final class IntRangeUtil {
 

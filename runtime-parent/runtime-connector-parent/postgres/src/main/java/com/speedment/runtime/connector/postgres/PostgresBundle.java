@@ -17,11 +17,9 @@
 package com.speedment.runtime.connector.postgres;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.connector.postgres.internal.PostgresComponentImpl;
-import com.speedment.runtime.connector.postgres.internal.PostgresDbmsMetadataHandler;
-import com.speedment.runtime.connector.postgres.internal.PostgresDbmsOperationHandler;
-import com.speedment.runtime.connector.postgres.internal.PostgresDbmsType;
-import com.speedment.runtime.connector.postgres.internal.PostgresSpeedmentPredicateView;
+import com.speedment.runtime.connector.postgres.provider.DelegatePostgresDbmsType;
+import com.speedment.runtime.connector.postgres.provider.StandardPostgresComponent;
+
 import java.util.stream.Stream;
 
 /**
@@ -34,11 +32,8 @@ public class PostgresBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return Stream.of(
-            PostgresComponentImpl.class,
-            PostgresDbmsType.class,
-            PostgresDbmsMetadataHandler.class,
-            PostgresDbmsOperationHandler.class,
-            PostgresSpeedmentPredicateView.class
+            StandardPostgresComponent.class,
+            DelegatePostgresDbmsType.class
         );
     }
 }

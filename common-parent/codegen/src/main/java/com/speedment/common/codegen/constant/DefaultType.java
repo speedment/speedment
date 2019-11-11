@@ -18,14 +18,7 @@ package com.speedment.common.codegen.constant;
 
 
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
 
@@ -40,7 +33,9 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class DefaultType {
-    
+
+    private DefaultType() {}
+
     public static final Type WILDCARD = SimpleType.create("?");
 
     /**
@@ -438,12 +433,5 @@ public final class DefaultType {
         WRAPPERS = Collections.unmodifiableMap(temp);
     }
     
-    /**
-     * Utility classes should never be instantiated.
-     */
-    private DefaultType() {
-        throw new UnsupportedOperationException(
-            "This class should never be instantiated."
-        );
-    }
+
 }

@@ -21,6 +21,9 @@ import com.speedment.common.logger.LoggerFormatter;
 import java.time.Instant;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.stream.IntStream;
 
 /**
@@ -29,11 +32,11 @@ import java.util.stream.IntStream;
  */
 public final class PlainFormatter implements LoggerFormatter {
 
-    // Different Java versions have different resolution. Get a dynamic reference
-    private static final String INSTANT_STAMPLE = Instant.ofEpochSecond(0, 1_000_000).toString();
+/*    // Different Java versions have different resolution. Get a dynamic reference
+    private static final String INSTANT_SAMPLE = Instant.ofEpochSecond(0, 1_000_000).toString();
     private static final int DECIMALS = decimals();
     private static String PADDING_REF = "." + IntStream.range(0, DECIMALS).mapToObj(i -> "0").collect(joining());
-    private static final int INSTANT_LENGTH = INSTANT_STAMPLE.length();
+    private static final int INSTANT_LENGTH = INSTANT_SAMPLE.length();*/
 
     @Override
     public String apply(Level level, String name, String message) {
@@ -41,7 +44,7 @@ public final class PlainFormatter implements LoggerFormatter {
         requireNonNull(name);
 
         return new StringBuilder()
-            .append(formatInstance(Instant.now().toString()))
+            .append(Instant.now().truncatedTo(ChronoUnit.MILLIS).toString())
             .append(" ")
             .append(level.toText())
             .append(" [")
@@ -53,7 +56,7 @@ public final class PlainFormatter implements LoggerFormatter {
             .toString();
     }
 
-    protected String formatInstance(final String instantString) {
+  /*  private String formatInstance(final String instantString) {
         if (instantString.length() >= INSTANT_LENGTH) {
             return instantString;
         }
@@ -67,14 +70,14 @@ public final class PlainFormatter implements LoggerFormatter {
     }
 
     private static int decimals() {
-        final int indexOfDot = INSTANT_STAMPLE.lastIndexOf(".");
-        final int indexOfZ = INSTANT_STAMPLE.lastIndexOf("Z");
+        final int indexOfDot = INSTANT_SAMPLE.lastIndexOf(".");
+        final int indexOfZ = INSTANT_SAMPLE.lastIndexOf("Z");
         if (indexOfDot > 0 && indexOfZ > 0) {
             final int decimals = indexOfZ - indexOfDot - 1;
             return decimals;
         }
 
         return 6; // Default to 6
-    }
+    }*/
 
 }

@@ -17,9 +17,12 @@
 package com.speedment.runtime.connector.postgres.internal;
 
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.core.abstracts.AbstractDbmsMetadataHandler;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.db.JavaTypeMap;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
-import com.speedment.runtime.core.internal.db.AbstractDbmsMetadataHandler;
 
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -33,6 +36,14 @@ import java.util.Optional;
  * @author Emil Forslund
  */
 public final class PostgresDbmsMetadataHandler extends AbstractDbmsMetadataHandler {
+
+    PostgresDbmsMetadataHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ProjectComponent projectComponent
+    ) {
+        super(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
+    }
 
     @Override
     protected JavaTypeMap newJavaTypeMap() {

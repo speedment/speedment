@@ -16,16 +16,16 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
-import com.speedment.common.injector.annotation.Config;
+import com.speedment.runtime.core.abstracts.AbstractFieldPredicateView;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.runtime.core.internal.manager.sql.AbstractFieldPredicateView;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 
 import java.util.Set;
 
 import static com.speedment.runtime.field.util.PredicateOperandUtil.*;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -34,13 +34,16 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  */
 public final class MySqlSpeedmentPredicateView
-extends AbstractFieldPredicateView
-implements FieldPredicateView {
+    extends AbstractFieldPredicateView
+    implements FieldPredicateView {
 
-    @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
-    private String binaryCollationName;
-    @Config(name = "db.mysql.collationName", value = "utf8_general_ci")
-    private String collationName;
+    final private String binaryCollationName;
+    final private String collationName;
+
+    public MySqlSpeedmentPredicateView(String binaryCollationName, String collationName) {
+        this.binaryCollationName = requireNonNull(binaryCollationName);
+        this.collationName = requireNonNull(collationName);
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     //                         String Operation Helpers                       //

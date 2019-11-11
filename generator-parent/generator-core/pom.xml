@@ -26,37 +26,20 @@
     <parent>
         <groupId>com.speedment.generator</groupId>
         <artifactId>generator-parent</artifactId>
-        <version>3.1.19-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>generator-core</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.generator.core</module-name>
+    </properties>
+
     <name>Speedment - Generator - Core</name>
     <description>
         A modular code generator that creates entity and manager classes from 
         database tables.
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.generator.core.exception,
-                            com.speedment.generator.core.component,
-                            com.speedment.generator.core.event,
-                            com.speedment.generator.core.event.trait,
-                            com.speedment.generator.core
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
     
     <dependencies>
         <dependency>

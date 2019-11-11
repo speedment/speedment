@@ -16,10 +16,12 @@
  */
 package com.speedment.generator.standard.manager;
 
+import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.*;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
@@ -34,6 +36,7 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
@@ -52,6 +55,7 @@ import java.sql.SQLException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
@@ -60,8 +64,7 @@ import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 /**
  *
@@ -75,12 +78,8 @@ public final class GeneratedSqlAdapterTranslator
     public final static String INSTALL_METHOD_NAME = "installMethodName";
     public final static String OFFSET_PARAMETER_NAME = "offset";
 
-    @Inject
-    private ResultSetMapperComponent resultSetMapperComponent;
-    @Inject
-    private DbmsHandlerComponent dbmsHandlerComponent;
-    @Inject
-    private TypeMapperComponent typeMapperComponent;
+    @Inject public ResultSetMapperComponent resultSetMapperComponent;
+    @Inject public DbmsHandlerComponent dbmsHandlerComponent;
 
     public GeneratedSqlAdapterTranslator(Table table) {
         super(table, Class::of);
@@ -94,6 +93,7 @@ public final class GeneratedSqlAdapterTranslator
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryTable((clazz, table) -> {
                 final Method createHelpers = Method.of(CREATE_HELPERS_METHOD_NAME, void.class)
+                    .public_()
                     .add(withExecuteBefore(file))
                     .add(Field.of("projectComponent", ProjectComponent.class))
                     .add("final Project project = projectComponent.getProject();");
@@ -179,17 +179,17 @@ public final class GeneratedSqlAdapterTranslator
                                 }
 
                                 // Append the line for this helper to the method
-                                final TypeMapper<?, ?> tm = typeMapperComponent.get(col);
+                                final TypeMapper<?, ?> tm = typeMappers().get(col);
                                 final Type javaType = tm.getJavaType(col);
 
                                 final String tmsName = helperName(col);
                                 final Type tmsType = SimpleParameterizedType.create(
                                     SqlTypeMapperHelper.class,
-                                    typeMapperComponent.findDatabaseTypeOf(tm)
+                                    typeMappers().findDatabaseTypeOf(tm)
                                         .orElseThrow(() -> new SpeedmentTranslatorException(
                                         "Could not find appropriate "
                                         + "database type for column '" + col
-                                        + "'."
+                                        + "'. Available TypeMappers: " + availableTypeMappers()
                                     )),
                                     isPrimitive(javaType)
                                     ? wrapperFor(javaType)
@@ -267,7 +267,7 @@ public final class GeneratedSqlAdapterTranslator
             c.findDatabaseType()
         );
 
-        final java.lang.Class<?> typeMapperClass = typeMapperComponent.get(c).getClass();
+        final java.lang.Class<?> typeMapperClass = typeMappers().get(c).getClass();
         final boolean isCustomTypeMapper = c.getTypeMapper().isPresent()
             && !TypeMapper.identity().getClass().isAssignableFrom(typeMapperClass)
             && !TypeMapper.primitive().getClass().isAssignableFrom(typeMapperClass);
@@ -321,5 +321,14 @@ public final class GeneratedSqlAdapterTranslator
     private String helperName(Column column) {
         return getSupport().namer()
             .javaVariableName(column.getJavaName()) + "Helper";
+    }
+
+    private String availableTypeMappers() {
+        return typeMappers().stream()
+            .map(Object::getClass)
+            .map(java.lang.Class::getSimpleName)
+            .distinct()
+            .sorted()
+            .collect(Collectors.joining(", "));
     }
 }

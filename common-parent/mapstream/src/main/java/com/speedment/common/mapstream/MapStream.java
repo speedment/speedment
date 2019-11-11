@@ -954,13 +954,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
         final Comparator<K> c = (a, b) -> {
             if (a == null && b == null) {
                 return 0;
-            } else if (a != null && b != null) {
-                if (a instanceof Comparable<?>) {
-                    @SuppressWarnings("unchecked")
-                    final Comparable<K> ac = (Comparable<K>) a;
+            } else if (b != null && a instanceof Comparable<?>) {
+                @SuppressWarnings("unchecked")
+                final Comparable<K> ac = (Comparable<K>) a;
 
-                    return ac.compareTo(b);
-                }
+                return ac.compareTo(b);
             }
 
             throw new UnsupportedOperationException("Can only sort keys that implement Comparable.");

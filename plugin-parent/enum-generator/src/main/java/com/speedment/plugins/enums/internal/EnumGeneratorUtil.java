@@ -35,6 +35,8 @@ import static java.util.stream.Collectors.toList;
  */
 public final class EnumGeneratorUtil {
 
+    private EnumGeneratorUtil() {}
+
     /**
      * Returns the full name of the enum that will be generated for 
      * the specified column.
@@ -91,11 +93,5 @@ public final class EnumGeneratorUtil {
             );
         }
     }
-    
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private EnumGeneratorUtil() {
-        throw new UnsupportedOperationException();
-    }
+
 }

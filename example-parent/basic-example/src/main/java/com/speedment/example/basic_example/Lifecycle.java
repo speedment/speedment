@@ -25,7 +25,7 @@ import com.speedment.runtime.core.ApplicationBuilder.LogType;
  *
  * @author Per Minborg
  */
-public class Lifecycle {
+public final class Lifecycle {
 
     public static void main(String[] args) {
 
@@ -39,7 +39,7 @@ public class Lifecycle {
         languages.stream()
             .forEachOrdered(System.out::println);
 
-        app.close();
+        app.stop();
     }
 
 }

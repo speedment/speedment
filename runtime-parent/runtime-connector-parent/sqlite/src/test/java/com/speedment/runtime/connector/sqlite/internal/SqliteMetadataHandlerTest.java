@@ -21,7 +21,6 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.connector.sqlite.*;
@@ -39,9 +38,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static com.speedment.common.mapbuilder.MapBuilder.mapBuilderTyped;
 import static java.util.Collections.singletonList;
@@ -89,7 +86,7 @@ class SqliteMetadataHandlerTest {
                         pool -> pool.setConnection(conn, URL)
                     )
                     .beforeInitialized(MockProjectComponent.class,
-                        projects -> projects.setProject(new ProjectImpl(
+                        projects -> projects.setProject(Project.create(
                             mapBuilderTyped(String.class, Object.class)
                                 .key(HasIdUtil.ID).value("test_project")
                                 .key(HasNameUtil.NAME).value("test_project")
@@ -97,7 +94,7 @@ class SqliteMetadataHandlerTest {
                                     .key(HasIdUtil.ID).value("test_dbms")
                                     .key(HasNameUtil.NAME).value("test_dbms")
                                     .key(DbmsUtil.CONNECTION_URL).value(URL)
-                                    .key(DbmsUtil.TYPE_NAME).value(SqliteDbmsType.SQLITE)
+                                    .key(DbmsUtil.TYPE_NAME).value(SqliteDbmsTypeImpl.SQLITE)
                                     .build()
                                 ))
                                 .build()

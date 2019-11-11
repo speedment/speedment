@@ -24,7 +24,7 @@ import com.speedment.common.codegen.model.trait.HasModifiers;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
 import static java.util.stream.Collectors.toSet;
 
 /**

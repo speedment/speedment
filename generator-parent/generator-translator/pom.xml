@@ -26,39 +26,21 @@
     <parent>
         <groupId>com.speedment.generator</groupId>
         <artifactId>generator-parent</artifactId>
-        <version>3.1.19-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>generator-translator</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.generator.translator</module-name>
+    </properties>
+
     <name>Speedment - Generator - Translator</name>
     <description>
         Translates between a database configuration model and a CodeGen model
         that can be used to produce code files.
     </description>
     
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.generator.translator,
-                            com.speedment.generator.translator.component,
-                            com.speedment.generator.translator.component.function,
-                            com.speedment.generator.translator.exception,
-                            com.speedment.generator.translator.namer,
-                            com.speedment.generator.translator.util
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>com.speedment.common</groupId>

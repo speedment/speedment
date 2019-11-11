@@ -58,9 +58,9 @@ import static javafx.scene.control.SelectionMode.SINGLE;
  */
 public final class ProjectTreeController implements Initializable {
 
-    private @Inject UserInterfaceComponent ui;
-    private @Inject ProjectTreeComponent projectTreeComponent;
-    private @Inject EventComponent events;
+    public @Inject UserInterfaceComponent ui;
+    public @Inject ProjectTreeComponent projectTreeComponent;
+    public @Inject EventComponent events;
 
     private @FXML TreeView<DocumentProperty> hierarchy;
 

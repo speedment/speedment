@@ -19,18 +19,19 @@ package com.speedment.example.basic_example.extra;
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.speedment.example.basic_example.util.ExampleUtil;
+
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 
 /**
  *
  * @author Per Minborg
  */
-public class PrintAllFilms {
+public final class PrintAllFilms {
 
     private final SakilaApplication app;
     private final FilmManager films;
 
-    public PrintAllFilms() {
+    private PrintAllFilms() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
     }

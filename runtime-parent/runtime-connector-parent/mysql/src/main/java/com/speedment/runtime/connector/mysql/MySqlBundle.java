@@ -17,11 +17,9 @@
 package com.speedment.runtime.connector.mysql;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.connector.mysql.internal.MySqlComponentImpl;
-import com.speedment.runtime.connector.mysql.internal.MySqlDbmsMetadataHandler;
-import com.speedment.runtime.connector.mysql.internal.MySqlDbmsOperationHandler;
-import com.speedment.runtime.connector.mysql.internal.MySqlDbmsType;
-import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateView;
+import com.speedment.runtime.connector.mysql.provider.DelegateMySqlDbmsType;
+import com.speedment.runtime.connector.mysql.provider.StandardMySqlComponent;
+
 import java.util.stream.Stream;
 
 /**
@@ -29,16 +27,13 @@ import java.util.stream.Stream;
  * @author Per Minborg
  * @since 3.0.0
  */
-public class MySqlBundle implements InjectBundle {
+public final class MySqlBundle implements InjectBundle {
 
     @Override
     public Stream<Class<?>> injectables() {
         return Stream.of(
-            MySqlComponentImpl.class,
-            MySqlDbmsType.class,
-            MySqlDbmsMetadataHandler.class,
-            MySqlDbmsOperationHandler.class,
-            MySqlSpeedmentPredicateView.class
+            StandardMySqlComponent.class,
+            DelegateMySqlDbmsType.class
         );
     }
 }

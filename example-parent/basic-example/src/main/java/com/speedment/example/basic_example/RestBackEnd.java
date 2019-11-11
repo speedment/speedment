@@ -19,23 +19,25 @@ package com.speedment.example.basic_example;
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
+
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
+
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 
 /**
  *
  * @author Per Minborg
  */
-public class RestBackEnd {
+public final class RestBackEnd {
 
     private static final String PG_13 = "PG-13";
 
     private final SakilaApplication app;
     private final FilmManager films;
 
-    public RestBackEnd() {
+    private RestBackEnd() {
         app = buildApplication(b -> b.withLogging(LogType.STREAM_OPTIMIZER));
         films = app.getOrThrow(FilmManager.class);
     }

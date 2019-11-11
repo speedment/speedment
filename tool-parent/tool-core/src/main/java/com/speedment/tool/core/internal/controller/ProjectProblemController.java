@@ -20,9 +20,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.rule.Issue;
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.value.ChangeListener;
@@ -41,7 +38,11 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Callback;
 
-public class ProjectProblemController implements Initializable {
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public final class ProjectProblemController implements Initializable {
     
     @FXML private ListView<Issue> lstProjectProblems;
     @FXML private TextFlow txtDescription;
@@ -50,9 +51,9 @@ public class ProjectProblemController implements Initializable {
     
     private final ObservableList<Issue> issues;
     private final BooleanExpression hasErrors;
-    
-    private @Inject ConfigFileHelper configFileHelper;
-    private @Inject IssueComponent issueComponent;
+
+    @Inject public ConfigFileHelper configFileHelper;
+    @Inject public IssueComponent issueComponent;
     
     public ProjectProblemController(){
         issues = FXCollections.observableArrayList();

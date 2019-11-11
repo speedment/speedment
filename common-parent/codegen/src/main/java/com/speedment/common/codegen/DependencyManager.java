@@ -16,7 +16,10 @@
  */
 package com.speedment.common.codegen;
 
+import com.speedment.common.codegen.internal.DefaultDependencyManager;
+
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Keeps track of which dependencies have been imported and which is not
@@ -97,4 +100,26 @@ public interface DependencyManager {
      * @return  the package
      */
     Optional<String> getCurrentPackage();
+
+    /**
+     * Creates and returns a new default DependencyManager.
+     *
+     * @return a new default DependencyManager
+     */
+    static DependencyManager create() {
+        return new DefaultDependencyManager();
+    }
+
+    /**
+     * Creates and returns a new default DependencyManager.
+     *
+     * @param ignoredPatterns to add to the ignore list
+     * @return a new default DependencyManager
+     *
+     * @throws NullPointerException if the provided {@code ignoredPattern}
+     * is {@code null}.
+     */
+    static DependencyManager create(Pattern... ignoredPatterns) {
+        return new DefaultDependencyManager(ignoredPatterns);
+    }
 }

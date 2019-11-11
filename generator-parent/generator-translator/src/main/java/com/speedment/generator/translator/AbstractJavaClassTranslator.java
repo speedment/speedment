@@ -18,43 +18,36 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.codegen.Generator;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import com.speedment.common.codegen.controller.AlignTabs;
 import com.speedment.common.codegen.controller.AutoImports;
-import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.internal.*;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.component.InfoComponent;
+
 import java.lang.reflect.Type;
 import java.util.*;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toSet;
-
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toSet;
 
 /**
  *
@@ -66,26 +59,42 @@ import java.util.stream.Stream;
 public abstract class AbstractJavaClassTranslator<D extends Document & HasId & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
     implements JavaClassTranslator<D, T> {
 
-    public static final String GETTER_METHOD_PREFIX = "get";
-    public static final String SETTER_METHOD_PREFIX = "set";
-    public static final String FINDER_METHOD_PREFIX = "find";
-    public static final String JAVADOC_MESSAGE
+    protected static final String GETTER_METHOD_PREFIX = "get";
+    protected static final String SETTER_METHOD_PREFIX = "set";
+    protected static final String FINDER_METHOD_PREFIX = "find";
+    private static final String JAVADOC_MESSAGE
         = "\n<p>\nThis file is safe to edit. It will not be overwritten by the "
         + "code generator.";
 
-    @Inject private Generator generator;
-    @Inject private InfoComponent infoComponent;
-    @Inject private TypeMapperComponent typeMappers;
-    @Inject private Injector injector;
-    
     private final D document;
     private final Function<String, T> mainModelConstructor;
     private final List<BiConsumer<File, Builder<T>>> listeners;
+
+    @Inject public Generator generator;
+    @Inject public InfoComponent infoComponent;
+    @Inject public TypeMapperComponent typeMappers;
+    @Inject public Injector injector;
 
     protected AbstractJavaClassTranslator(D document, Function<String, T> mainModelConstructor) {
         this.document             = requireNonNull(document);
         this.mainModelConstructor = requireNonNull(mainModelConstructor);
         this.listeners            = new CopyOnWriteArrayList<>();
+    }
+
+    protected Injector injector() {
+        return injector;
+    }
+
+    protected InfoComponent infoComponent() {
+        return infoComponent;
+    }
+
+    protected TypeMapperComponent typeMappers() {
+        return typeMappers;
+    }
+
+    protected Generator generator() {
+        return generator;
     }
 
     @Override
@@ -221,43 +230,43 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         @Override
         public Builder<T> forEveryProject(Phase phase, BiConsumer<T, Project> consumer) {
-            aquireListAndAdd(phase, PROJECTS, wrap(consumer, ProjectImpl::new));
+            aquireListAndAdd(phase, PROJECTS, wrap(consumer, Project::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryDbms(Phase phase, BiConsumer<T, Dbms> consumer) {
-            aquireListAndAdd(phase, ProjectUtil.DBMSES, wrap(consumer, DbmsImpl::new));
+            aquireListAndAdd(phase, ProjectUtil.DBMSES, wrap(consumer, Dbms::create));
             return this;
         }
 
         @Override
         public Builder<T> forEverySchema(Phase phase, BiConsumer<T, Schema> consumer) {
-            aquireListAndAdd(phase, DbmsUtil.SCHEMAS, wrap(consumer, SchemaImpl::new));
+            aquireListAndAdd(phase, DbmsUtil.SCHEMAS, wrap(consumer, Schema::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryTable(Phase phase, BiConsumer<T, Table> consumer) {
-            aquireListAndAdd(phase, SchemaUtil.TABLES, wrap(consumer, TableImpl::new));
+            aquireListAndAdd(phase, SchemaUtil.TABLES, wrap(consumer, Table::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryColumn(Phase phase, BiConsumer<T, Column> consumer) {
-            aquireListAndAdd(phase, TableUtil.COLUMNS, wrap(consumer, ColumnImpl::new));
+            aquireListAndAdd(phase, TableUtil.COLUMNS, wrap(consumer, Column::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryIndex(Phase phase, BiConsumer<T, Index> consumer) {
-            aquireListAndAdd(phase, TableUtil.INDEXES, wrap(consumer, IndexImpl::new));
+            aquireListAndAdd(phase, TableUtil.INDEXES, wrap(consumer, Index::create));
             return this;
         }
 
         @Override
         public Builder<T> forEveryForeignKey(Phase phase, BiConsumer<T, ForeignKey> consumer) {
-            aquireListAndAdd(phase, TableUtil.FOREIGN_KEYS, wrap(consumer, ForeignKeyImpl::new));
+            aquireListAndAdd(phase, TableUtil.FOREIGN_KEYS, wrap(consumer, ForeignKey::create));
             return this;
         }
 
@@ -326,7 +335,7 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
                             // and columns are to be included.
                             .filter((k, v) -> {
                                 if (TableUtil.FOREIGN_KEYS.equals(k)) {
-                                    return new ForeignKeyImpl(table, v)
+                                    return ForeignKey.create(table, v)
                                         .foreignKeyColumns()
                                         .map(ForeignKeyColumn::findColumn)
                                         .allMatch(c ->

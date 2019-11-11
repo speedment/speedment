@@ -20,18 +20,11 @@ import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
-import com.speedment.runtime.config.trait.HasAlias;
-import com.speedment.runtime.config.trait.HasChildren;
-import com.speedment.runtime.config.trait.HasDeepCopy;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.config.trait.HasId;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasMutator;
-import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.trait.*;
 import com.speedment.runtime.config.util.DocumentUtil;
 
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
@@ -145,5 +138,19 @@ public interface Dbms extends
     @Override
     default Dbms deepCopy() {
         return DocumentUtil.deepCopy(this, DbmsImpl::new);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link Dbms}
+     * with the given {@code parent} and {@code data}.
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return a new {@link Dbms} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static Dbms create(Project parent, Map<String, Object> data) {
+        return new DbmsImpl(parent, data);
     }
 }

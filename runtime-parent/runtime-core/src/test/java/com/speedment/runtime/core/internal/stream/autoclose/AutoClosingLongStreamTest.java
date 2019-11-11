@@ -16,11 +16,10 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+import com.speedment.runtime.core.stream.java9.Java9StreamUtil;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import java.util.HashSet;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.*;
 

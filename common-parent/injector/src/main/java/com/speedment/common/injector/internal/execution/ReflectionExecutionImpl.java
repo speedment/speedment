@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector.internal.execution;
 
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.exception.NotInjectableException;
@@ -44,16 +45,19 @@ import static java.util.stream.Collectors.joining;
  */
 public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
+    private final InjectorProxy injectorProxy;
     private final Method method;
 
     public ReflectionExecutionImpl(
-            Class<T> component,
-            State state,
-            Set<Dependency> dependencies,
-            Method method) {
-        
+        final Class<T> component,
+        final State state,
+        final Set<Dependency> dependencies,
+        final Method method,
+        final InjectorProxy injectorProxy
+    ) {
         super(component, state, dependencies, ReflectionUtil.missingArgumentStrategy(method));
         this.method = requireNonNull(method);
+        this.injectorProxy = requireNonNull(injectorProxy);
     }
 
     @Override
@@ -89,9 +93,9 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
             .map(Parameter::getType)
             .map(classMapper::apply)
             .toArray();
-        
-        method.setAccessible(true);
-        method.invoke(component, args);
+
+        injectorProxy.invoke(method, component, args);
+        //method.invoke(component, args);
 
         return true;
     }

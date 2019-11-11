@@ -17,10 +17,7 @@
 package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.internal.util.Copier;
-import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.trait.HasCopy;
 
 import java.util.ArrayList;
@@ -43,6 +40,7 @@ public final class FileImpl implements File {
 
     private String name;
     private Javadoc doc;
+    private LicenseTerm lic;
     private final List<Import> imports;
     private final List<ClassOrInterface<?>> classes;
 
@@ -91,8 +89,19 @@ public final class FileImpl implements File {
     }
 
     @Override
+    public File set(LicenseTerm doc) {
+        this.lic = doc.setParent(this);
+        return this;
+    }
+
+    @Override
     public Optional<Javadoc> getJavadoc() {
         return Optional.ofNullable(doc);
+    }
+
+    @Override
+    public Optional<LicenseTerm> getLicenseTerm() {
+        return Optional.ofNullable(lic);
     }
 
     @Override

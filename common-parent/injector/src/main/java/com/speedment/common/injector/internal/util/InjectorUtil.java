@@ -17,6 +17,7 @@
 package com.speedment.common.injector.internal.util;
 
 import com.speedment.common.injector.Injector;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -27,6 +28,8 @@ import java.util.stream.Stream;
  * @since  1.2.0
  */
 public final class InjectorUtil {
+
+    private InjectorUtil() {}
 
     public static <T> T findIn(
             Class<T> type, 
@@ -64,7 +67,5 @@ public final class InjectorUtil {
             .filter(inst -> type.isAssignableFrom(inst.getClass()))
             .map(type::cast);
     }
-    
-    private InjectorUtil() {}
     
 }

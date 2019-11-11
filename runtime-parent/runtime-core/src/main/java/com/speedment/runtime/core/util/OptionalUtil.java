@@ -23,8 +23,6 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  * A utility class for converting optional types to their boxed equivalents.
  * 
@@ -32,6 +30,8 @@ import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed
  * @author  Simon Jonasson
  */
 public final class OptionalUtil {
+
+    private OptionalUtil() {}
 
     /**
      * If the specified object is an {@code Optional}, the inner value will be
@@ -231,10 +231,4 @@ public final class OptionalUtil {
         }
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private OptionalUtil() {
-        instanceNotAllowed(getClass());
-    }
 }

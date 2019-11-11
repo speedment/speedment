@@ -70,6 +70,7 @@ public interface HasPow<T> {
      * @param power  the power to use as the exponent
      * @return       the new expression
      */
+    @SuppressWarnings("overloads")
     ToDouble<T> pow(ToInt<T> power);
 
     /**
@@ -84,6 +85,7 @@ public interface HasPow<T> {
      * @param power  the power to use as the exponent
      * @return       the new expression
      */
+    @SuppressWarnings("overloads")
     ToDouble<T> pow(ToDouble<T> power);
 
 }

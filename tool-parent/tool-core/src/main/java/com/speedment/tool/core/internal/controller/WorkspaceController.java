@@ -49,11 +49,11 @@ public final class WorkspaceController implements Initializable {
     
     private final ObservableList<PropertyEditor.Item> properties;
 
-    @Inject private UserInterfaceComponent ui;
-    @Inject private EventComponent events;
-    @Inject private PropertyEditorComponent editors;
+    @Inject public UserInterfaceComponent ui;
+    @Inject public EventComponent events;
+    @Inject public PropertyEditorComponent editors;
 
-    @FXML  private TitledPane workspace;
+    @FXML private TitledPane workspace;
     @FXML private ScrollPane scrollpane;
 
     public WorkspaceController() {

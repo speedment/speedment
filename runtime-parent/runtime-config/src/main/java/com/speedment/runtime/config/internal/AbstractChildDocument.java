@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.internal;
 
 import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasParent;
 import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import java.util.Map;

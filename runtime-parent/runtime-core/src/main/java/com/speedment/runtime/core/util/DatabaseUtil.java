@@ -21,7 +21,6 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -31,6 +30,8 @@ import static java.util.stream.Collectors.joining;
  * @since   3.0.1
  */
 public final class DatabaseUtil {
+
+    private DatabaseUtil() {}
 
     /**
      * Returns the {@link DbmsType} for the specified {@link Dbms}.
@@ -89,7 +90,4 @@ public final class DatabaseUtil {
             ));
     }
 
-    private DatabaseUtil() {
-        instanceNotAllowed(getClass());
-    }
 }

@@ -32,7 +32,7 @@ import java.util.UUID;
  */
 public final class ResultSetUtil {
 
-    public ResultSetUtil() {}
+    private ResultSetUtil() {}
 
     // Null safe RS getters, must have the same name as ResultSet getters
     public static Object getObject(final ResultSet resultSet, final String columnName) throws SQLException {

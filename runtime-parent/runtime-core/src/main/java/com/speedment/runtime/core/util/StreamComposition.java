@@ -19,7 +19,8 @@ package com.speedment.runtime.core.util;
 import com.speedment.runtime.core.stream.AutoClosingStream;
 
 import java.util.function.Function;
-import java.util.stream.*;
+import java.util.stream.BaseStream;
+import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static com.speedment.runtime.core.stream.ComposeRunnableUtil.composedClose;
@@ -30,7 +31,9 @@ import static com.speedment.runtime.core.stream.ComposeRunnableUtil.composedClos
  *
  * @author  Per Minborg
  */
-public class StreamComposition {
+public final class StreamComposition {
+
+    private StreamComposition() {}
 
     /**
      * Creates a lazily concatenated Stream whose elements are are all the
@@ -130,10 +133,6 @@ public class StreamComposition {
     public static <T> Stream<T> concat(Stream<T>... streams) {
         requireNonNullElements(streams);
         return Stream.of(streams).flatMap(Function.identity());
-    }
-
-    public StreamComposition() {
-        StaticClassUtil.instanceNotAllowed(getClass());
     }
 
 }

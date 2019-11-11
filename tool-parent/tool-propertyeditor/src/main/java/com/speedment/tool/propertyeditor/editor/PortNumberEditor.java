@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  */
 public class PortNumberEditor<T extends DbmsProperty> implements PropertyEditor<T> {
 
-    private @Inject DbmsHandlerComponent dbmsHandler;
+    public @Inject DbmsHandlerComponent dbmsHandler;
     
     @Override
     public Stream<Item> fieldsFor(T document) {                    

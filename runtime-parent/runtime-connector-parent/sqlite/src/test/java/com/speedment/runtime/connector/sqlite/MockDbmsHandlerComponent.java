@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.connector.sqlite;
 
-import com.speedment.runtime.connector.sqlite.internal.SqliteDbmsType;
+import com.speedment.runtime.connector.sqlite.internal.SqliteDbmsTypeImpl;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.DbmsType;
 

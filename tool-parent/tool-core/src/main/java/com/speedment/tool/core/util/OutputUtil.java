@@ -19,13 +19,13 @@ package com.speedment.tool.core.util;
 
 import javafx.scene.control.Label;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  *
  * @author Emil Forslund
  */
 public final class OutputUtil {
+
+    private OutputUtil() {}
 
     public static Label info(String message) {
         return log(message, "info");
@@ -50,7 +50,4 @@ public final class OutputUtil {
         return label;
     }
     
-    private OutputUtil() {
-        instanceNotAllowed(getClass());
-    }
 }

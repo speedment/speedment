@@ -18,10 +18,12 @@ package com.speedment.runtime.bulk.internal;
 
 import com.speedment.runtime.bulk.BulkOperation;
 import com.speedment.runtime.bulk.Operation;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -32,7 +34,7 @@ public class BulkOperationImpl implements BulkOperation {
     private final Collection<? extends Operation<?>> operations;
 
     public BulkOperationImpl(Collection<? extends Operation<?>> operations) {
-        this.operations = requireNonNull(new ArrayList<>(operations));
+        this.operations = new ArrayList<>(requireNonNull(operations));
     }
 
     @Override

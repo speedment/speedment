@@ -18,7 +18,7 @@ package com.speedment.runtime.core.internal.component.sql.override.optimized.uti
 
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
-import com.speedment.runtime.core.db.DbmsType.SubSelectAlias;
+import com.speedment.runtime.core.db.DbmsTypeDefault.SubSelectAlias;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;

@@ -43,7 +43,7 @@ public final class InfoComponentImpl implements InfoComponent {
 
     @Override
     public String getImplementationVersion() {
-        return "3.1.19-SNAPSHOT";
+        return "3.2.0-SNAPSHOT";
     }
 
     @Override
@@ -53,10 +53,10 @@ public final class InfoComponentImpl implements InfoComponent {
 
     @Override
     public String getSpecificationVersion() {
-        return "3.1";
+        return "3.2";
     }
 
     @Override
-    public String getSpecificationNickname() { return "Homer"; }
+    public String getSpecificationNickname() { return "Channing"; }
 
 }

@@ -26,35 +26,19 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.19-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>runtime-join</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.runtime.join</module-name>
+    </properties>
+
     <name>Speedment - Runtime - Join</name>
     <description>
         Module with join operations
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.runtime.join,
-                            com.speedment.runtime.join.builder,
-                            com.speedment.runtime.join.trait,
-                            com.speedment.runtime.join.stage
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <!-- Common Dependencies -->
@@ -72,17 +56,6 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>
             <version>${speedment.version}</version>
-        </dependency>
-
-        <!-- Test Dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
         </dependency>
 
     </dependencies>

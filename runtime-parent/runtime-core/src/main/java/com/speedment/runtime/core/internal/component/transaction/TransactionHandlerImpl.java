@@ -32,7 +32,7 @@ import java.util.function.Function;
  *
  * @author Per Minborg
  */
-public class TransactionHandlerImpl implements TransactionHandler {
+public final class TransactionHandlerImpl implements TransactionHandler {
 
     private static final Logger TRANSACTION_LOGGER = LoggerManager.getLogger(ApplicationBuilder.LogType.TRANSACTION.getLoggerName());
 
@@ -41,7 +41,7 @@ public class TransactionHandlerImpl implements TransactionHandler {
     private final DataSourceHandler<Object, Object> dataSourceHandler;
     private Isolation isolation;
 
-    public TransactionHandlerImpl(
+    TransactionHandlerImpl(
         final TransactionComponent txComponent,
         final Object dataSource,
         final DataSourceHandler<Object, Object> dataSourceHandler

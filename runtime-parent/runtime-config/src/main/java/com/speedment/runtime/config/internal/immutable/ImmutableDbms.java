@@ -20,7 +20,6 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.internal.DbmsImpl;
 
 import java.util.List;
 import java.util.Map;
@@ -49,9 +48,9 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     private final String username;
     private final List<Schema> schemas;
 
-    ImmutableDbms(ImmutableProject parent, Map<String, Object> dbms) {
+    ImmutableDbms(Project parent, Map<String, Object> dbms) {
         super(parent, requireKeys(dbms, DbmsUtil.TYPE_NAME));
-        final Dbms prototype = new DbmsImpl(parent, dbms);
+        final Dbms prototype = Dbms.create(parent, dbms);
         this.enabled   = prototype.isEnabled();
         this.id        = prototype.getId();
         this.name      = prototype.getName();

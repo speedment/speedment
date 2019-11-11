@@ -54,6 +54,7 @@ public class DefaultDependencyManager implements DependencyManager {
      * @param ignoredPatterns to add to the ignore list
      */
     public DefaultDependencyManager(Pattern... ignoredPatterns) {
+        requireNonNull(ignoredPatterns);
         ignorePatterns = Stream.of(ignoredPatterns)
             .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }

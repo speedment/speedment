@@ -55,4 +55,8 @@ final class TranslatorManagerTest extends SimpleModel {
         assertTrue(code.contains(javaLanguageNamer.javaVariableName(column.getId())));
         assertTrue(code.contains(javaLanguageNamer.javaTypeName(column.getId())));
     }
+
+
+
+
 }

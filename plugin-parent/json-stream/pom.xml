@@ -26,34 +26,20 @@
     <parent>
         <groupId>com.speedment.plugins</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>3.1.19-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>json-stream</artifactId>
-	
-    <packaging>bundle</packaging>
+
+    <properties>
+        <module-name>com.speedment.plugins.json</module-name>
+    </properties>
     
     <name>Speedment - Plugins - JSON Stream</name>
     <description>
         This plugin allows you to easily convert Speedment entities into JSON.
     </description>
     <url>https://www.github.com/speedment/speedment-plugins/wiki/JSON-Stream/</url>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.plugins.json
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
     
     <profiles>
         <profile>

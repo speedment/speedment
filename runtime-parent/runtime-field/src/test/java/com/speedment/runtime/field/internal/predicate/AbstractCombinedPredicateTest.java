@@ -106,7 +106,7 @@ final class AbstractCombinedPredicateTest {
 
     @Test
     void testGetPredicates() {
-        CombinedPredicate<Integer> p = new AbstractCombinedPredicate.AndCombinedBasePredicate<>(Arrays.asList(MOD2, MOD4));
+        CombinedPredicate<Integer> p = new AbstractCombinedPredicate.AndCombinedBasePredicateImpl<>(Arrays.asList(MOD2, MOD4));
         p = p.and(MOD8);
         final List<Predicate<Integer>> expected = Arrays.asList(MOD2, MOD4, MOD8);
         final List<Predicate<? super Integer>> actual = p.stream().collect(toList());

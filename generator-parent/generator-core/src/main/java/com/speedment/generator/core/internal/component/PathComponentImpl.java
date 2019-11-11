@@ -16,13 +16,14 @@
  */
 package com.speedment.generator.core.internal.component;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.PathComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.component.ProjectComponent;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the {@link PathComponent} interface.
@@ -32,8 +33,12 @@ import java.nio.file.Paths;
  */
 public final class PathComponentImpl implements PathComponent {
 
-    private @Inject ProjectComponent projectComponent;
-    
+    private final ProjectComponent projectComponent;
+
+    public PathComponentImpl(ProjectComponent projectComponent) {
+        this.projectComponent = requireNonNull(projectComponent);
+    }
+
     @Override
     public Path baseDir() {
         return Paths.get("");

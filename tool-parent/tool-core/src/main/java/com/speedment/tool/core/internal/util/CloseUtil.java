@@ -21,15 +21,15 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  *
  * @author Emil Forslund
  * @since  3.0.0
  */
 public final class CloseUtil {
-    
+
+    private CloseUtil() {}
+
     public static EventHandler<ActionEvent> newCloseHandler() {
         return event -> {
             final Node source = (Node) event.getSource();
@@ -37,11 +37,5 @@ public final class CloseUtil {
             stage.close();
         };
     }
-    
-    /**
-     * This should never be called.
-     */
-    private CloseUtil() {
-        instanceNotAllowed(getClass());
-    }
+
 }

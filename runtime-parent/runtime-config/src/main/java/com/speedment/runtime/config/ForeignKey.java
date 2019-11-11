@@ -29,6 +29,7 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -71,5 +72,19 @@ public interface ForeignKey extends
     @Override
     default ForeignKey deepCopy() {
         return DocumentUtil.deepCopy(this, ForeignKeyImpl::new);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link ForeignKey}
+     * with the given {@code parent} and {@code data}
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return new {@link ForeignKey} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static ForeignKey create(Table parent, Map<String, Object> data) {
+        return new ForeignKeyImpl(parent, data);
     }
 }

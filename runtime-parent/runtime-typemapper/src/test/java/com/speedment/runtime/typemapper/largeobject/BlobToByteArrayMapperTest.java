@@ -19,7 +19,6 @@ package com.speedment.runtime.typemapper.largeobject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -40,12 +39,12 @@ public class BlobToByteArrayMapperTest {
     }
 
     @Test
-    void toJavaType() throws Exception {
+    void toJavaType() {
         assertEquals(byte[].class,mapper.getJavaType(null));
     }
 
     @Test
-    void dbTypeToJavaType() throws Exception {
+    void dbTypeToJavaType() {
         byte[] array= new byte[10];
         IntStream.range(0,array.length).forEach(index -> array[index] = nextByte());
         Blob blob = mapper.toDatabaseType(array);
@@ -54,9 +53,9 @@ public class BlobToByteArrayMapperTest {
     }
 
     @Test
-    public void javaTypeToDbType() throws Exception {
+    void javaTypeToDbType() {
         byte[] array= new byte[10];
-        Blob blob = new SerialBlob(array);
+        Blob blob = new StandardBlob(array);
         byte[] actual = mapper.toJavaType(null,null,blob);
         assertArrayEquals(array,actual);
     }

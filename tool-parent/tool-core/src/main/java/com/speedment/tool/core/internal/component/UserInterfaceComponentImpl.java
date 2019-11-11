@@ -16,44 +16,49 @@
  */
 package com.speedment.tool.core.internal.component;
 
+import static com.speedment.runtime.core.util.Statistics.Event.GUI_PROJECT_LOADED;
+import static com.speedment.runtime.core.util.Statistics.Event.GUI_STARTED;
+import static java.util.Objects.requireNonNull;
+import static javafx.application.Platform.runLater;
+
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.internal.util.Statistics;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.core.util.ProgressMeasureUtil;
+import com.speedment.runtime.core.util.Statistics;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
-import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.config.provider.DelegateDocumentPropertyComponent;
 import com.speedment.tool.core.MainApp;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.component.RuleComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import com.speedment.tool.core.internal.brand.SpeedmentBrand;
 import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoaderImpl;
 import com.speedment.tool.core.internal.util.Throttler;
 import com.speedment.tool.core.notification.Notification;
+import com.speedment.tool.core.provider.DelegateSpeedmentBrand;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.Icon;
 import com.speedment.tool.core.util.BrandUtil;
 import com.speedment.tool.core.util.InjectionLoader;
 import com.speedment.tool.core.util.OutputUtil;
 import com.speedment.tool.propertyeditor.PropertyEditor;
-import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
+import com.speedment.tool.propertyeditor.provider.DelegatePropertyEditorComponent;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -63,8 +68,19 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -82,11 +98,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
-
-import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_PROJECT_LOADED;
-import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_STARTED;
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Platform.runLater;
 
 /**
  *
@@ -115,21 +126,36 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     
     private final AtomicBoolean canGenerate;
     
-    @Inject private DocumentPropertyComponent documentPropertyComponent;
-    @Inject private PasswordComponent passwordComponent;
-    @Inject private ProjectComponent projectComponent;
-    @Inject private ConfigFileHelper configFileHelper;
-    @Inject private InjectionLoader loader;
-    @Inject private RuleComponent rules;
-    @Inject private InfoComponent info;
+    private final DocumentPropertyComponent documentPropertyComponent;
+    private final PasswordComponent passwordComponent;
+    private final ProjectComponent projectComponent;
+    private final ConfigFileHelper configFileHelper;
+    private final InjectionLoader loader;
+    private final RuleComponent rules;
+    private final InfoComponent info;
     
-    @Inject private Injector injector;
+    private Injector injector;
     
     private Stage stage;
     private Application application;
     private ProjectProperty project;
 
-    private UserInterfaceComponentImpl() {
+    public UserInterfaceComponentImpl(
+        final DocumentPropertyComponent documentPropertyComponent,
+        final PasswordComponent passwordComponent,
+        final ProjectComponent projectComponent,
+        final ConfigFileHelper configFileHelper,
+        final InjectionLoader loader,
+        final RuleComponent rules,
+        final InfoComponent info
+    ) {
+        this.documentPropertyComponent = requireNonNull(documentPropertyComponent);
+        this.passwordComponent = requireNonNull(passwordComponent);
+        this.projectComponent = requireNonNull(projectComponent);
+        this.configFileHelper = requireNonNull(configFileHelper);
+        this.loader = requireNonNull(loader);
+        this.rules = requireNonNull(rules);
+        this.info = requireNonNull(info);
         notifications     = FXCollections.observableArrayList();
         outputMessages    = FXCollections.observableArrayList();
         selectedTreeItems = FXCollections.observableArrayList();
@@ -137,18 +163,24 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         canGenerate       = new AtomicBoolean(true);
     }
 
+    @ExecuteBefore(State.INITIALIZED)
+    public void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
+    }
+
     public static InjectBundle include() {
         return InjectBundle.of(
-            DocumentPropertyComponentImpl.class,
-            SpeedmentBrand.class,
+            DelegateDocumentPropertyComponent.class,
+            DelegateSpeedmentBrand.class,
             InjectionLoaderImpl.class,
             ConfigFileHelper.class,
-            PropertyEditorComponentImpl.class,
+            DelegatePropertyEditorComponent.class,
             RuleComponentImpl.class,
             IssueComponentImpl.class
         );
     }
     
+    @Override
     public void start(Application application, Stage stage) {
         this.stage       = requireNonNull(stage);
         this.application = requireNonNull(application);
@@ -333,7 +365,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
         log(OutputUtil.info("Performing rule verifications..."));
 
-        final Project immutableProject = ImmutableProject.wrap(project);
+        final Project immutableProject = Project.createImmutable(project);
         projectComponent.setProject(immutableProject);
         
         CompletableFuture<Boolean> future = rules.verify();

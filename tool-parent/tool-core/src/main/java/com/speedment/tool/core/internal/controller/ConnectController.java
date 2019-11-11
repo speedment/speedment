@@ -68,12 +68,12 @@ public final class ConnectController implements Initializable {
     private final static String DEFAULT_HOST = "127.0.0.1";
     private final static String DEFAULT_USER = "root";
     
-    @Inject private UserInterfaceComponent ui;
-    @Inject private DbmsHandlerComponent dbmsHandler;
-    @Inject private PasswordComponent passwords;
-    @Inject private ConfigFileHelper cfHelper;
-    @Inject private EventComponent events;
-    @Inject private InjectionLoader loader;
+    @Inject public UserInterfaceComponent ui;
+    @Inject public DbmsHandlerComponent dbmsHandler;
+    @Inject public PasswordComponent passwords;
+    @Inject public ConfigFileHelper cfHelper;
+    @Inject public EventComponent events;
+    @Inject public InjectionLoader loader;
 
     @FXML private TextField fieldHost;
     @FXML private TextField fieldPort;
