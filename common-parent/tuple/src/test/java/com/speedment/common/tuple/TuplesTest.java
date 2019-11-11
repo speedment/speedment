@@ -28,6 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 final class TuplesTest {
 
+    private static final int SIZE = 100;
+
     /**
      * Attempts to recreate issue #500 (initializing a very large tuple caused
      * a NullPointerException since the constructor implementation of internal
@@ -37,15 +39,15 @@ final class TuplesTest {
     @Test
     void of() {
         final Random random = new Random();
-        final Integer[] array = new Integer[100];
-        for (int i = 0; i < 100; i++) {
+        final Integer[] array = new Integer[SIZE];
+        for (int i = 0; i < SIZE; i++) {
             array[i] = random.nextInt();
         }
 
         final Tuple tuple = Tuples.ofArray((Object[]) array);
-        assertEquals(tuple.degree(), 100);
+        assertEquals(SIZE, tuple.degree());
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < SIZE; i++) {
             final Integer expected = array[i];
             final Integer actual = (Integer) tuple.get(i);
             assertEquals(expected, actual);

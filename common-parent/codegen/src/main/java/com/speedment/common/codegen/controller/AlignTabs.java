@@ -16,24 +16,20 @@
  */
 package com.speedment.common.codegen.controller;
 
-import com.speedment.common.codegen.model.trait.HasClasses;
-import com.speedment.common.codegen.model.trait.HasCode;
-import com.speedment.common.codegen.model.trait.HasConstructors;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasInitializers;
-import com.speedment.common.codegen.model.trait.HasJavadoc;
-import com.speedment.common.codegen.model.trait.HasMethods;
+import com.speedment.common.codegen.model.trait.*;
 import com.speedment.common.codegen.model.value.ReferenceValue;
 import com.speedment.common.codegen.util.Formatting;
-import static com.speedment.common.codegen.util.Formatting.nl;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 
 /**
  *
@@ -106,15 +102,16 @@ public final class AlignTabs<T> implements Consumer<T> {
     }
     
     private static <T> void alignTabs(
-            List<T> models, 
-            Function<T, String> getRow, 
-            BiConsumer<T, String> setRow) {
+        final List<T> models,
+        final Function<T, String> getRow,
+        final BiConsumer<T, String> setRow
+    ) {
         final AtomicInteger maxIndex = new AtomicInteger(-1);
         
         while (true) {
             maxIndex.set(-1);
             
-            models.stream().forEachOrdered(model -> {
+            models.forEach(model -> {
                 final String row = getRow.apply(model);
                 if (row != null) {
                     final int index  = row.indexOf('\t');
@@ -126,15 +123,14 @@ public final class AlignTabs<T> implements Consumer<T> {
             });
             
             if (maxIndex.get() > -1) {
-                for (int i = 0; i < models.size(); i++) {
-                    final T model = models.get(i);
+                for (final T model : models) {
                     final String row = getRow.apply(model);
                     if (row != null) {
                         final int index = row.indexOf('\t');
                         if (index > -1) {
-                            setRow.accept(model, 
+                            setRow.accept(model,
                                 row.replaceFirst("\t", Formatting.repeat(
-                                    " ", 
+                                    " ",
                                     maxIndex.get() - index
                                 ))
                             );

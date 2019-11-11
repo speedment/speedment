@@ -20,15 +20,14 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.rule.Issue;
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanExpression;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -37,8 +36,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Callback;
 
-public class ProjectProblemController implements Initializable {
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public final class ProjectProblemController implements Initializable {
     
     @FXML private ListView<Issue> lstProjectProblems;
     @FXML private TextFlow txtDescription;
@@ -47,14 +51,13 @@ public class ProjectProblemController implements Initializable {
     
     private final ObservableList<Issue> issues;
     private final BooleanExpression hasErrors;
-    
-    private @Inject ConfigFileHelper configFileHelper;
-    private @Inject IssueComponent issueComponent;
+
+    @Inject public ConfigFileHelper configFileHelper;
+    @Inject public IssueComponent issueComponent;
     
     public ProjectProblemController(){
         issues = FXCollections.observableArrayList();
         hasErrors = Bindings.isNotEmpty(issues.filtered(issue -> issue.getLevel() == Issue.Level.ERROR));
-        
     }
     
     @Override
@@ -62,13 +65,45 @@ public class ProjectProblemController implements Initializable {
         Bindings.bindContent(issues, issueComponent.getIssues());
         
         lstProjectProblems.setItems(issues);
-        lstProjectProblems.setCellFactory((ListView<Issue> param) -> new ListCell<Issue>() {
+        lstProjectProblems.setCellFactory(listViewListCellCallback());
+        lstProjectProblems.getSelectionModel().selectedItemProperty().addListener((ov, oldValue, newValue) -> {
+            txtDescription.getChildren().clear();
+            if( newValue != null ) {
+                txtDescription.getChildren().addAll( new Text(newValue.getDescription() ) );
+            }
+        });
+
+        btnClose.setOnAction( (ev) -> closeWindow() );
+        
+        btnProceed.setOnAction( (ev) -> closeWindowAndGenerate());
+        btnProceed.disableProperty().bind(hasErrors);
+        //We need to attach a scene listener somewhere, so this button will do
+        btnProceed.sceneProperty().addListener(sceneChangeListener());
+    }
+
+    private ChangeListener<Scene> sceneChangeListener() {
+        return (ov, oldVal, newVal) -> {
+            if (oldVal == null && newVal != null) {
+                final Window window = newVal.windowProperty().get();
+                if (window != null) {
+                    window.setOnCloseRequest((ev) -> closeWindow());
+                } else {
+                    newVal.windowProperty().addListener((ob, oldW, newW) -> {
+                        newW.setOnCloseRequest((ev) -> closeWindow());
+                    });
+                }
+            }
+        };
+    }
+
+    private Callback<ListView<Issue>, ListCell<Issue>> listViewListCellCallback() {
+        return (ListView<Issue> param) -> new ListCell<Issue>() {
             @Override
             protected void updateItem(Issue item, boolean empty) {
                 super.updateItem(item, empty);
-                if( item != null ){
-                    setText( item.getLevel() +" - "+ item.getTitle() );
-                    switch( item.getLevel() ){
+                if (item != null) {
+                    setText(item.getLevel() + " - " + item.getTitle());
+                    switch (item.getLevel()) {
                         case ERROR:
                             setTextFill(Color.RED);
                             break;
@@ -80,35 +115,9 @@ public class ProjectProblemController implements Initializable {
                     setText("");
                 }
             }
-        });
-        lstProjectProblems.getSelectionModel().selectedItemProperty().addListener((ov, oldValue, newValue) -> {
-            txtDescription.getChildren().clear();
-            if( newValue != null ) {
-                txtDescription.getChildren().addAll( new Text(newValue.getDescription() ) );
-            }
-        });
-        
-        
-        
-        btnClose.setOnAction( (ev) -> closeWindow() );
-        
-        btnProceed.setOnAction( (ev) -> closeWindowAndGenerate());
-        btnProceed.disableProperty().bind(hasErrors);
-        //We need to attach a scene listener somewhere, so this button will do
-        btnProceed.sceneProperty().addListener( (ov, oldVal, newVal) -> {
-            if( oldVal == null && newVal != null ){
-                Window window = newVal.windowProperty().get();
-                if( window != null ){
-                    window.setOnCloseRequest( (ev) -> closeWindow() );
-                } else {
-                    newVal.windowProperty().addListener( (ob, oldW, newW) -> {
-                        newW.setOnCloseRequest( (ev) -> closeWindow() );
-                    });
-                }
-            }
-        });
+        };
     }
-    
+
     private void closeWindowAndGenerate() {
         if (!configFileHelper.isFileOpen()) {
             configFileHelper.setCurrentlyOpenFile(new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION));

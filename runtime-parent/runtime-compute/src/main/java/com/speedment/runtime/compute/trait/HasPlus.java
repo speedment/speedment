@@ -60,6 +60,7 @@ public interface HasPlus<T> {
      * @param other the other term used for the addition
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasPlus<T> plus(ToByte<T> other);
 
     /**
@@ -90,6 +91,7 @@ public interface HasPlus<T> {
      * @param other the other term used for the addition
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasPlus<T> plus(ToInt<T> other);
 
     /**
@@ -120,6 +122,7 @@ public interface HasPlus<T> {
      * @param other the other term used for the addition
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     HasPlus<T> plus(ToLong<T> other);
 
     /**
@@ -150,6 +153,7 @@ public interface HasPlus<T> {
      * @param other the other term used for the addition
      * @return the new expression
      */
+    @SuppressWarnings("overloads")
     ToDouble<T> plus(ToDouble<T> other);
 
 }

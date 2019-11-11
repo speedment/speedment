@@ -27,10 +27,8 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
-import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.CombinedPredicate;
@@ -46,8 +44,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.sql.ResultSet;
 import java.util.*;
 
-import static com.speedment.runtime.join.JoinComponent.MAX_DEGREE;
-import static java.util.Collections.emptyList;
+import static com.speedment.runtime.join.JoinComponentUtil.MAX_DEGREE;
 import static java.util.Objects.requireNonNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -313,7 +310,7 @@ final class JoinSqlUtil {
                         if (((FieldPredicate)predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
                             // Remove redundant ALWAYS_TRUE predicates
                             continue;
-                        };
+                        }
                     }
                     if (cnt++ != 0) {
                         sql.append(" AND ");

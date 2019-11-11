@@ -18,13 +18,12 @@ package com.speedment.runtime.connector.postgres.internal;
 
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.runtime.core.internal.manager.sql.AbstractFieldPredicateView;
+import com.speedment.runtime.core.abstracts.AbstractFieldPredicateView;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRaw;
 import static com.speedment.runtime.field.util.PredicateOperandUtil.getInclusionOperand;
 import static com.speedment.runtime.field.util.PredicateOperandUtil.getSecondOperand;
-import static java.util.Optional.of;
 
 /**
  * Created by fdirlikl on 11/18/2015.

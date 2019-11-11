@@ -21,9 +21,7 @@ import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuples;
-import com.speedment.example.basic_example.util.ExampleUtil;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,18 +29,17 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
  * @author Per Minborg
  */
-public class UsersGuide {
+public final class UsersGuide {
 
     private final SakilaApplication app;
     private final FilmManager films;
 
-    public UsersGuide() {
+    private UsersGuide() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
     }

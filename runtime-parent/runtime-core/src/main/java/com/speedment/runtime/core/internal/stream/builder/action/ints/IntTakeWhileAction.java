@@ -22,7 +22,7 @@ import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 import static com.speedment.runtime.core.internal.stream.builder.action.StandardBasicAction.TAKE_WHILE;
-import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+import com.speedment.runtime.core.stream.java9.Java9StreamUtil;
 
 import static java.util.Objects.requireNonNull;
 

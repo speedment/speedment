@@ -18,7 +18,6 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
-import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.internal.util.Cast;
 import com.speedment.tool.config.ColumnProperty;
@@ -40,7 +39,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -51,11 +49,11 @@ public final class WorkspaceController implements Initializable {
     
     private final ObservableList<PropertyEditor.Item> properties;
 
-    @Inject private UserInterfaceComponent ui;
-    @Inject private EventComponent events;
-    @Inject private PropertyEditorComponent editors;
+    @Inject public UserInterfaceComponent ui;
+    @Inject public EventComponent events;
+    @Inject public PropertyEditorComponent editors;
 
-    @FXML  private TitledPane workspace;
+    @FXML private TitledPane workspace;
     @FXML private ScrollPane scrollpane;
 
     public WorkspaceController() {
@@ -64,47 +62,47 @@ public final class WorkspaceController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
         final PropertySheet sheet = new PropertySheet(properties);
-        ui.getSelectedTreeItems()
-            .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
-                properties.clear();
-                
-                if (!change.getList().isEmpty()) {
-                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
-                    
-                    if (treeItem != null) {
-                        final DocumentProperty property = treeItem.getValue();
-                    
-                        final HasNameProperty withName = (HasNameProperty) property;
-                        
-                        final Optional<String> extraInfo = Cast.cast(property, ColumnProperty.class)
-                            .map(ColumnProperty::findDatabaseType)
-                            .map(Class::getSimpleName)
-                            .map(s -> "(" + s + ")");
-                        
-                        workspace.textProperty().bind(
-                            Bindings.createStringBinding(() -> String.format(
-                                "Settings for database %s '%s' %s",
-                                withName instanceof Table
-                                    ? ((Table) withName).isView()
-                                        ? "view" : "table"
-                                    : withName.mainInterface().getSimpleName().toLowerCase(),
-                                withName.getName(),
-                                extraInfo.orElse("")
-                            ), withName.nameProperty())
-                        );
-                        
-                        editors.getUiVisibleProperties(treeItem.getValue())
-                            .forEachOrdered(properties::add);
-                    }
-                }
-                
-                events.notify(new TreeSelectionChange(change, properties));
-            });
-        
+        ui.getSelectedTreeItems().addListener(treeItemListChangeListener());
         scrollpane.setContent(sheet);
-        
         Bindings.bindContentBidirectional(ui.getProperties(), properties);
+    }
+
+    private ListChangeListener<TreeItem<DocumentProperty>> treeItemListChangeListener() {
+        return change -> {
+            properties.clear();
+
+            if (!change.getList().isEmpty()) {
+                final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
+
+                if (treeItem != null) {
+                    final DocumentProperty property = treeItem.getValue();
+                    final HasNameProperty withName = (HasNameProperty) property;
+
+                    final String extraInfo = Cast.cast(property, ColumnProperty.class)
+                        .map(ColumnProperty::findDatabaseType)
+                        .map(Class::getSimpleName)
+                        .map(s -> "(" + s + ")")
+                        .orElse("");
+
+                    workspace.textProperty().bind(
+                        Bindings.createStringBinding(() -> String.format(
+                            "Settings for database %s '%s' %s",
+                            withName instanceof Table
+                                ? ((Table) withName).isView()
+                                    ? "view" : "table"
+                                : withName.mainInterface().getSimpleName().toLowerCase(),
+                            withName.getName(),
+                            extraInfo
+                        ), withName.nameProperty())
+                    );
+
+                    editors.getUiVisibleProperties(treeItem.getValue())
+                        .forEachOrdered(properties::add);
+                }
+            }
+
+            events.notify(new TreeSelectionChange((ListChangeListener.Change<TreeItem<DocumentProperty>>) change, properties));
+        };
     }
 }

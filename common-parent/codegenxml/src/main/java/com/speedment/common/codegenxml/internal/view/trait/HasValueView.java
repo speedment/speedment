@@ -29,10 +29,10 @@ public interface HasValueView<T extends HasValue<T>> {
 
     default Optional<String> transformValue(T model) {
         return model.getValue().map(s -> s
-            .replaceAll("&", "&amp;")
-            .replaceAll(">", "&gt;")
-            .replaceAll("<", "&lt;")
-            .replaceAll("\"", "&quot;"));
+            .replace("&", "&amp;")
+            .replace(">", "&gt;")
+            .replace("<", "&lt;")
+            .replace("\"", "&quot;"));
     }
 
 }

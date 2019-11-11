@@ -17,6 +17,7 @@
 package com.speedment.tool.core.internal.toolbar;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.toolbar.ToolbarComponent;
 import com.speedment.tool.core.toolbar.ToolbarItem;
@@ -33,7 +34,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import static com.speedment.common.injector.State.INITIALIZED;
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Default implementation of the {@link ToolbarComponent}-interface.
@@ -46,12 +49,17 @@ public final class ToolbarComponentImpl implements ToolbarComponent {
     private final Map<String, ToolbarItem<?>> byKey;
     private final List<ToolbarItem<?>> leftSide;
     private final List<ToolbarItem<?>> rightSide;
-    private @Inject Injector injector;
+    private Injector injector;
 
     public ToolbarComponentImpl() {
         this.byKey     = new HashMap<>();
         this.leftSide  = new ArrayList<>();
         this.rightSide = new ArrayList<>();
+    }
+
+    @ExecuteBefore(INITIALIZED)
+    public void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
     }
 
     @Override

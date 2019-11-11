@@ -29,7 +29,7 @@ import static java.util.Collections.emptySet;
  * @author Emil Forslund
  * @since  3.1.10
  */
-public class SqliteNamingConvention implements DatabaseNamingConvention {
+final class SqliteNamingConvention implements DatabaseNamingConvention {
 
     @Override
     public String fullNameOf(String schemaName, String tableName, String columnName) {

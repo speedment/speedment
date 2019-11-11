@@ -20,7 +20,6 @@ import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
 
@@ -52,9 +51,9 @@ public final class ImmutableProject extends ImmutableDocument implements Project
     private final List<Dbms> dbmses;
     private final Map<String, ImmutableTable> tablesByName;
 
-    ImmutableProject(Map<String, Object> project) {
+    public ImmutableProject(Map<String, Object> project) {
         super(project);
-        final Project prototype = new ProjectImpl(project);
+        final Project prototype = Project.create(project);
         this.enabled         = prototype.isEnabled();
         this.id              = prototype.getId();
         this.name            = prototype.getName();
@@ -123,8 +122,5 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         
         return table;
     }
-    
-    public static ImmutableProject wrap(Project project) {
-        return new ImmutableProject(project.getData());
-    }
+
 }

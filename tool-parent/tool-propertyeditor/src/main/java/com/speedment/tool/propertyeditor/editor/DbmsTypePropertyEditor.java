@@ -38,7 +38,7 @@ import static javafx.collections.FXCollections.observableList;
  */
 public class DbmsTypePropertyEditor<T extends DbmsProperty> implements PropertyEditor<T> {
 
-    private @Inject DbmsHandlerComponent dbmsHandler;
+    public @Inject DbmsHandlerComponent dbmsHandler;
     
     @Override
     public Stream<Item> fieldsFor(T document) {

@@ -38,22 +38,22 @@ public interface LoggerManager {
     }
 
     /**
-     * Creates and returns a new <tt>Logger</tt> bound to the given
-     * <tt>binding</tt> type using
+     * Creates and returns a new {@code }Logger} bound to the given
+     * {@code }binding} type using
      *
-     * @param binding the <tt>java.lang.Class</tt> to bind to
-     * @return the <b>new</b> <tt>Logger</tt> instance
+     * @param binding the {@code }java.lang.Class} to bind to
+     * @return the <b>new</b> {@code }Logger} instance
      */
     static Logger getLogger(Class<?> binding) {
         return Holder.INST.defaultFactory.create(binding);
     }
 
     /**
-     * Creates and returns a new <tt>Logger</tt> bound to the given
-     * <tt>binding</tt> string using Platform's LoggerFactoryComponent.
+     * Creates and returns a new {@code }Logger} bound to the given
+     * {@code }binding} string using Platform's LoggerFactoryComponent.
      *
-     * @param binding the <tt>java.lang.String</tt> to bind to
-     * @return the <b>new</b> <tt>Logger</tt> instance
+     * @param binding the {@code }java.lang.String} to bind to
+     * @return the <b>new</b> {@code }Logger} instance
      */
     static Logger getLogger(String binding) {
         return Holder.INST.defaultFactory.create(binding);

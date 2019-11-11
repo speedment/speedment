@@ -43,15 +43,15 @@ public final class ProjectComponentImpl implements ProjectComponent {
     private Project project;
 
     @ExecuteBefore(INITIALIZED)
-    void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
+    public void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
         project = requireNonNull(metadata.makeProject(),
             "Metadata has not yet been loaded! This is probably due to an "
                 + "incorrect initialization order."
-        );;
+        );
     }
 
     @ExecuteBefore(STARTED)
-    void checkSpeedmentVersion(Injector injector) {
+    public void checkSpeedmentVersion(Injector injector) {
         injector.get(InfoComponent.class).ifPresent(ic -> {
             final String expected = ic.getEditionAndVersionString();
             final String actual = project.getSpeedmentVersion().orElse(null);

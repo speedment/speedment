@@ -20,7 +20,7 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasGenerics;
 
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
 
 /**
  * A trait with the functionality to render models with the trait 

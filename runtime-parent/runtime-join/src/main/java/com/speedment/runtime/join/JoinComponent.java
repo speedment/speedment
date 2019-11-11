@@ -43,11 +43,6 @@ import com.speedment.runtime.join.builder.JoinBuilder1;
 public interface JoinComponent {
 
     /**
-     * The maximum number of tables than can be joined.
-     */
-    int MAX_DEGREE = 10;
-    
-    /**
      * Adds a provided {@code firstTableIdentifier} to the collection of joined
      * managers. Rows are joined from the provided {@code firstTableIdentifier}
      * depending on how subsequent managers are added to the builder.

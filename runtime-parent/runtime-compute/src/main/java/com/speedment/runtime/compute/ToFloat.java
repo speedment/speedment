@@ -156,7 +156,7 @@ extends Expression<T>,
 
     @Override
     default ToFloat<T> plus(byte other) {
-        return Expressions.plus(this, (int) other);
+        return Expressions.plus(this, other);
     }
 
     @Override

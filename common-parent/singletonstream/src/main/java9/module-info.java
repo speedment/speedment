@@ -16,4 +16,6 @@
  */
 module com.speedment.common.singletonstream {
     exports com.speedment.common.singletonstream;
+
+    requires com.speedment.common.logger;
 }

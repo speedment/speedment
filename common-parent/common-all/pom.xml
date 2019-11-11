@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>common-all</artifactId>
@@ -134,18 +134,6 @@
                 <version>${speedment.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.speedment.common</groupId>
-                <artifactId>lazy</artifactId>
-                <version>${speedment.version}</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>com.speedment.common</groupId>
-                <artifactId>mutable-stream</artifactId>
-                <version>${speedment.version}</version>
-            </dependency>
-            
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>singleton-stream</artifactId>

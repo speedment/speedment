@@ -21,14 +21,15 @@ import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public class LongUtil {
+public final class LongUtil {
+
+    private LongUtil() {}
 
     @SuppressWarnings("unchecked")
     public static <T extends Number> T cast(Long l, Class<T> targetClass) {
@@ -65,7 +66,7 @@ public class LongUtil {
         throw new IllegalArgumentException("Unable to cast Long to " + targetClass);
     }
 
-    public static void checkRange(Long value, long min, long max) {
+    private static void checkRange(Long value, long min, long max) {
         // value is nullable
         if (value == null) {
             return; // No check
@@ -75,8 +76,4 @@ public class LongUtil {
         }
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private LongUtil() { instanceNotAllowed(getClass()); }
 }

@@ -17,7 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.*;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.TablePropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -27,7 +27,7 @@ import javafx.collections.ObservableList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 
 /**
  *
@@ -97,6 +97,6 @@ implements Table,
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.TABLES, key);
+        return concat(DocumentPropertyComponentUtil.TABLES, key);
     }
 }

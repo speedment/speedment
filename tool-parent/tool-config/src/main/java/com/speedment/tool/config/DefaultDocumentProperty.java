@@ -17,14 +17,13 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.core.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 

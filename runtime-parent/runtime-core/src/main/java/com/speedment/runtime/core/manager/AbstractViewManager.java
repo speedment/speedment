@@ -18,7 +18,6 @@ package com.speedment.runtime.core.manager;
 
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -43,9 +42,14 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractViewManager<ENTITY> implements Manager<ENTITY> {
 
-    private @Inject StreamSupplierComponent streamSupplierComponent;
+    private StreamSupplierComponent streamSupplierComponent;
 
     protected AbstractViewManager() {}
+
+    @ExecuteBefore(State.INITIALIZED)
+    public final void setStreamSupplierComponent(StreamSupplierComponent streamSupplierComponent) {
+        this.streamSupplierComponent = requireNonNull(streamSupplierComponent);
+    }
 
     /**
      * In the {@link State#INITIALIZED}-phase, install this {@link Manager} in
@@ -59,7 +63,7 @@ public abstract class AbstractViewManager<ENTITY> implements Manager<ENTITY> {
      * @param projectComponent  auto-injected projectComponent
      */
     @ExecuteBefore(INITIALIZED)
-    final void install(
+    public final void install(
             @WithState(INITIALIZED) ManagerComponent managerComponent,
             @WithState(INITIALIZED) ProjectComponent projectComponent) {
 

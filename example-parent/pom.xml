@@ -17,52 +17,103 @@
     the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    
+
     <modelVersion>4.0.0</modelVersion>
-    
-    <parent>
-        <groupId>com.speedment</groupId>
-        <artifactId>speedment-parent</artifactId>
-        <version>3.1.18</version>
-    </parent>
-    
+
+    <!--
+        <parent>
+            <groupId>com.speedment</groupId>
+            <artifactId>speedment-parent</artifactId>
+            <version>3.2.0-SNAPSHOT</version>
+        </parent>
+    -->
+
     <groupId>com.speedment.example</groupId>
     <artifactId>example-parent</artifactId>
-    <packaging>pom</packaging> 
-    
+    <version>3.2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <!--<mysql.version>5.1.48</mysql.version>-->
+        <mysql.version>8.0.13</mysql.version>
+        <speedment.version>3.2.0-SNAPSHOT</speedment.version>
+        <junit.jupiter.version>5.5.2</junit.jupiter.version>
+        <junit.platform.provider.version>1.5.2</junit.platform.provider.version>
+    </properties>
+
     <name>Speedment - Example</name>
     <description>
         A bundle of modules contains Speedment examples.
     </description>
-    
+
     <modules>
         <module>custom-typemapper</module>
         <module>basic-example</module>
-        <!--<module>spring-webshop</module>-->
+<!--        <module>mod-jlink</module>-->
     </modules>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin-version}</version>
-                    </plugin>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jlink-plugin</artifactId>
+                <version>3.0.0-alpha-1</version>
+                <extensions>true</extensions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-java</artifactId>
+                        <version>1.0.3</version>
+                    </dependency>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin-version}</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+<!--                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>7.2</version>
+                    </dependency>-->
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Test Dependencies -->
+
+            <!--JUnit5-->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-engine</artifactId>
+                <version>${junit.platform.provider.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.platform</groupId>
+                <artifactId>junit-platform-launcher</artifactId>
+                <version>${junit.platform.provider.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

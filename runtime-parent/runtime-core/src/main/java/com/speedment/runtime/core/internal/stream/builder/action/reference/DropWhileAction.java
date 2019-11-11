@@ -18,7 +18,7 @@ package com.speedment.runtime.core.internal.stream.builder.action.reference;
 
 import static com.speedment.runtime.core.internal.stream.builder.action.StandardBasicAction.DROP_WHILE;
 import com.speedment.runtime.core.internal.stream.builder.action.trait.HasPredicate;
-import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+import com.speedment.runtime.core.stream.java9.Java9StreamUtil;
 import com.speedment.runtime.core.stream.action.Action;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;

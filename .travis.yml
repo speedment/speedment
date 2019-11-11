@@ -1,9 +1,9 @@
 language: java
 
 jdk:
-  - oraclejdk8
-  - oraclejdk9
-  - openjdk10
+  #- oraclejdk8
+  #- oraclejdk9
+  #- openjdk10
   - openjdk11
   #- openjdk12
   #- openjdk-ea
@@ -11,8 +11,8 @@ jdk:
 addons:
   apt:
     packages:
-      - oracle-java8-installer
-      - oracle-java9-installer
+      #- oracle-java8-installer
+      #- oracle-java9-installer
 
 dist: trusty
 sudo: false

@@ -19,9 +19,8 @@ package com.speedment.common.codegen.internal.util;
 import com.speedment.common.codegen.model.trait.HasCopy;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -29,48 +28,40 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class Copier {
-    
+
+	private Copier() { }
+
 	public static <T extends HasCopy<T>> T copy(T prototype) {
         return prototype == null ? null : prototype.copy();
     }
     
     public static <T extends HasCopy<T>> Optional<T> copy(Optional<T> prototype) {
-		return Copier.copy(prototype, c -> c.copy());
+		return Copier.copy(prototype, HasCopy::copy);
 	}
 	
-	public static <T> Optional<T> copy(Optional<T> prototype, Function<T, T> copier) {
-		if (prototype.isPresent()) {
-			return Optional.of(
-				requireNonNull(copier).apply(prototype.get())
-			);
-		} else {
-			return Optional.empty();
-		}
+	public static <T> Optional<T> copy(Optional<T> prototype, UnaryOperator<T> copier) {
+		return prototype.map(t -> requireNonNull(copier).apply(t));
 	}
 	
 	public static <T extends HasCopy<T>> List<T> copy(List<T> prototype) {
-		return Copier.copy(requireNonNull(prototype), c -> c.copy());
+		return Copier.copy(requireNonNull(prototype), HasCopy::copy);
 	}
 	
-	public static <T> List<T> copy(List<T> prototype, Function<T, T> copier) {
+	public static <T> List<T> copy(List<T> prototype, UnaryOperator<T> copier) {
 		return copy(requireNonNull(prototype), copier, new ArrayList<>());
 	}
 	
 	public static <T extends HasCopy<T>> Set<T> copy(Set<T> prototype) {
-		return Copier.copy(requireNonNull(prototype), c -> c.copy());
+		return Copier.copy(requireNonNull(prototype), HasCopy::copy);
 	}
 
-	public static <T> Set<T> copy(Set<T> prototype, Function<T, T> copier) {
+	public static <T> Set<T> copy(Set<T> prototype, UnaryOperator<T> copier) {
 		return copy(requireNonNull(prototype), copier, new HashSet<>());
 	}
 	
-	public static <T, L extends Collection<T>> L copy(Collection<T> prototype, Function<T, T> copier, L empty) {
+	public static <T, L extends Collection<T>> L copy(Collection<T> prototype, UnaryOperator<T> copier, L empty) {
 		requireNonNull(prototype).forEach(e -> empty.add(copier.apply(e)));
 		return empty;
 	}
-    
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private Copier() { instanceNotAllowed(getClass()); }
+
 }

@@ -17,17 +17,15 @@
 package com.speedment.generator.standard.lifecycle;
 
 import com.speedment.common.codegen.constant.DefaultType;
-import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.json.Json;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
+import com.speedment.runtime.application.AbstractApplicationMetadata;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationMetadata;
-import com.speedment.runtime.core.component.InfoComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +34,6 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.util.Formatting.indent;
-import com.speedment.runtime.application.AbstractApplicationMetadata;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -50,9 +47,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
     private static final String INIT_PART_METHOD_NAME = "initPart";
     private static final String STRING_BUILDER_NAME = "sb";
 
-    public static final String METADATA = "Metadata";
-
-    private @Inject InfoComponent infoComponent;
+    static final String METADATA = "Metadata";
 
     public GeneratedMetadataTranslator(Project doc) {
         super(doc, Class::of);
@@ -147,7 +142,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
     @Override
     protected Javadoc getJavaDoc() {
         final String owner = infoComponent.getTitle();
-        return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
+        return Javadoc.of(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
 

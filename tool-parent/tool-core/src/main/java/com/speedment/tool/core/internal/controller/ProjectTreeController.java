@@ -21,7 +21,10 @@ import com.speedment.generator.core.component.EventComponent;
 import com.speedment.generator.core.event.ProjectLoaded;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.tool.actions.ProjectTreeComponent;
+import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.config.IndexProperty;
+import com.speedment.tool.config.PrimaryKeyColumnProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
@@ -55,9 +58,9 @@ import static javafx.scene.control.SelectionMode.SINGLE;
  */
 public final class ProjectTreeController implements Initializable {
 
-    private @Inject UserInterfaceComponent ui;
-    private @Inject ProjectTreeComponent projectTreeComponent;
-    private @Inject EventComponent events;
+    public @Inject UserInterfaceComponent ui;
+    public @Inject ProjectTreeComponent projectTreeComponent;
+    public @Inject EventComponent events;
 
     private @FXML TreeView<DocumentProperty> hierarchy;
 
@@ -226,11 +229,23 @@ public final class ProjectTreeController implements Initializable {
                 projectTreeComponent.createContextMenu(this, item)
                     .ifPresent(this::setContextMenu);
 
-                if (HasEnabled.test(item)) {
+                boolean indicateEnabled = HasEnabled.test(item);
+
+                if (item instanceof ColumnProperty) {
+                    indicateEnabled &= ((ColumnProperty) item).getParentOrThrow().isEnabled();
+                } else if (item instanceof IndexProperty) {
+                    indicateEnabled &= ((IndexProperty) item).getParentOrThrow().isEnabled();
+                } else if (item instanceof PrimaryKeyColumnProperty) {
+                    indicateEnabled &= ((PrimaryKeyColumnProperty) item).getParentOrThrow().isEnabled();
+                }
+
+                if (indicateEnabled) {
                     enable();
                 } else {
                     disable();
                 }
+
+                getTreeView().refresh();
             }
         }
     }

@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.internal.db;
 
+import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
+
 import java.util.Collections;
 import java.util.Set;
 

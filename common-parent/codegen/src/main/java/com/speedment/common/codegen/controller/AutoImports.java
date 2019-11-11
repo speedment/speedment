@@ -93,11 +93,11 @@ public final class AutoImports implements Consumer<File> {
         requireNonNull(model);
         requireNonNull(types);
 
-		if (HasSupertype.class.isInstance(model)) {
+		if (model instanceof HasSupertype) {
 			((HasSupertype<?>) model).getSupertype().ifPresent(t -> addType(t, types));
 		}
 		
-		if (HasAnnotationUsage.class.isInstance(model)) {
+		if (model instanceof HasAnnotationUsage) {
 			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> {
 				addType(a.getType(), types);
 				a.getValue().ifPresent(v -> findTypesIn(v, types));
@@ -107,26 +107,26 @@ public final class AutoImports implements Consumer<File> {
 			});
 		}
 		
-		if (HasClasses.class.isInstance(model)) {
+		if (model instanceof HasClasses) {
 			((HasClasses<?>) model).getClasses().forEach(c -> 
 				findTypesIn(c, types)
 			);
 		}
 		
-		if (HasConstructors.class.isInstance(model)) {
+		if (model instanceof HasConstructors) {
 			((HasConstructors<?>) model).getConstructors().forEach(c -> 
 				findTypesIn(c, types)
 			);
 		}
 		
-		if (HasFields.class.isInstance(model)) {
+		if (model instanceof HasFields) {
 			((HasFields<?>) model).getFields().forEach(f -> {
 				addType(f.getType(), types);
 				findTypesIn(f, types);
 			});
 		}
 		
-		if (HasGenerics.class.isInstance(model)) {
+		if (model instanceof HasGenerics) {
 			((HasGenerics<?>) model).getGenerics().forEach(g -> 
 				g.getUpperBounds().forEach(ub -> 
 					addType(ub, types)
@@ -134,47 +134,47 @@ public final class AutoImports implements Consumer<File> {
 			);
 		}
 		
-		if (HasImplements.class.isInstance(model)) {
+		if (model instanceof HasImplements) {
 			((HasImplements<?>) model).getInterfaces().forEach(i -> 
 				addType(i, types)
 			);
 		}
 		
-		if (HasMethods.class.isInstance(model)) {
+		if (model instanceof HasMethods) {
 			((HasMethods<?>) model).getMethods().forEach(m -> {
 				addType(m.getType(), types);
 				findTypesIn(m, types);
 			});
 		}
         
-        if (HasThrows.class.isInstance(model)) {
+        if (model instanceof HasThrows) {
 			((HasThrows<?>) model).getExceptions().forEach(e -> 
 				addType(e, types)
 			);
 		}
 		
-		if (HasType.class.isInstance(model)) {
+		if (model instanceof HasType) {
 			addType(((HasType<?>) model).getType(), types);
 		}
 
-		if (AnonymousValue.class.isInstance(model)) {
+		if (model instanceof AnonymousValue) {
 			((AnonymousValue) model).getTypeParameters().forEach(e ->
 				addType(e, types)
 			);
 		}
 
-        if (HasValues.class.isInstance(model)) {
+        if (model instanceof HasValues) {
             ((HasValues<?>) model).getValues().forEach(v ->
                 findTypesIn(v, types)
             );
         }
 
-		if (HasValue.class.isInstance(model)) {
+		if (model instanceof HasValue) {
             ((HasValue<?>) model).getValue()
                 .ifPresent(val -> findTypesIn(val, types));
         }
 
-        if (Enum.class.isInstance(model)) {
+        if (model instanceof Enum) {
 			((Enum) model).getConstants()
 				.forEach(ec -> findTypesIn(ec, types));
 		}
@@ -197,12 +197,12 @@ public final class AutoImports implements Consumer<File> {
         
         // Strip any generic parts from the type name
         if (name.contains("<")) {
-            name = name.substring(0, name.indexOf("<"));
+            name = name.substring(0, name.indexOf('<'));
         }
         
         // Strip any array parts from the type name
         if (name.contains("[")) {
-            name = name.substring(0, name.indexOf("["));
+            name = name.substring(0, name.indexOf('['));
         }
 
         // If the class is not a primitive type and it should be ignored, add

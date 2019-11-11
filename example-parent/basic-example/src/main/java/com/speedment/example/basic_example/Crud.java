@@ -21,19 +21,20 @@ import com.company.sakila.db0.sakila.language.Language;
 import com.company.sakila.db0.sakila.language.LanguageImpl;
 import com.company.sakila.db0.sakila.language.LanguageManager;
 import com.speedment.example.basic_example.util.ExampleUtil;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
+
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 
 /**
  *
  * @author Per Minborg
  */
-public class Crud {
+public final class Crud {
 
     private final SakilaApplication app;
     private final LanguageManager languages;
 
-    public Crud() {
+    private Crud() {
         app = buildApplication(
             b -> b.withLogging(LogType.PERSIST),
             b -> b.withLogging(LogType.UPDATE),

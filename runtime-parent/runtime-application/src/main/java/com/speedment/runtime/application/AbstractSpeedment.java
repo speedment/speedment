@@ -17,15 +17,19 @@
 package com.speedment.runtime.application;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.manager.ManagerConfiguratorImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.
@@ -35,9 +39,15 @@ import java.util.Optional;
  */
 public abstract class AbstractSpeedment implements Speedment {
 
-    @Inject private  Injector injector;
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractSpeedment.class);
 
-    protected AbstractSpeedment() {
+    private Injector injector;
+
+    protected AbstractSpeedment() {}
+
+    @ExecuteBefore(State.INITIALIZED)
+    public final void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
     }
 
     @Override
@@ -46,10 +56,11 @@ public abstract class AbstractSpeedment implements Speedment {
     }
 
     @Override
-    public <T> T getOrThrow(Class<T> componentClass) throws SpeedmentException {
+    public <T> T getOrThrow(Class<T> componentClass) {
         try {
             return injector.getOrThrow(componentClass);
-        } catch (final IllegalArgumentException ex) {
+        } catch (final Exception ex) {
+            logTypicalError(componentClass);
             throw new SpeedmentException(
                 "Specified component '" + componentClass.getSimpleName()
                 + "' is not installed in the platform.", ex
@@ -60,12 +71,25 @@ public abstract class AbstractSpeedment implements Speedment {
     @Override
     public <ENTITY> ManagerConfigurator<ENTITY> configure(Class<? extends Manager<ENTITY>> managerClass) {
         requireNonNull(managerClass);
-        return new ManagerConfiguratorImpl<>(getOrThrow(StreamSupplierComponent.class), getOrThrow(managerClass));
+        return ManagerConfigurator.create(getOrThrow(StreamSupplierComponent.class), getOrThrow(managerClass));
     }
 
     @Override
-    public void close() {
+    public void stop() {
         injector.stop();
     }
+
+    private <T> void logTypicalError(Class<T> componentClass) {
+        final String componentSimpleName = componentClass.getSimpleName();
+
+        if ("JoinComponent".equals(componentSimpleName)) {
+            LOGGER.error(
+                "Since 3.2.0, The JoinBundle (that contains the JoinComponent) is optional. " +
+                "Make sure that you have installed the JoinBundle by invoking .withBundle(JoinBundle.class) in your application builder " +
+                "and add 'requires com.speedment.runtime.join;' in your module-info.java file (if any)."
+            );
+        }
+    }
+
 
 }

@@ -19,7 +19,7 @@ package com.speedment.tool.config;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.ColumnUtil;
 import com.speedment.runtime.config.Table;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -28,7 +28,7 @@ import javafx.beans.property.StringProperty;
 
 import java.util.List;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 
 /**
  *
@@ -74,7 +74,7 @@ implements Column,
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.COLUMNS, key);
+        return concat(DocumentPropertyComponentUtil.COLUMNS, key);
     }
 
     @Override

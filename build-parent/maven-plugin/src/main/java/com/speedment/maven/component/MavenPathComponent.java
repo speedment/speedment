@@ -17,12 +17,14 @@
 package com.speedment.maven.component;
 
 import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.PathComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.component.ProjectComponent;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -33,9 +35,17 @@ public final class MavenPathComponent implements PathComponent {
 
     public final static String MAVEN_BASE_DIR = "maven.baseDir";
     
-    private @Config(name=MAVEN_BASE_DIR, value="") String mavenBaseDir;
-    private @Inject ProjectComponent projectComponent;
-    
+    private final String mavenBaseDir;
+    private final ProjectComponent projectComponent;
+
+    public MavenPathComponent(
+        @Config(name=MAVEN_BASE_DIR, value="") final String mavenBaseDir,
+        final ProjectComponent projectComponent
+    ) {
+        this.mavenBaseDir = requireNonNull(mavenBaseDir);
+        this.projectComponent = requireNonNull(projectComponent);
+    }
+
     @Override
     public Path baseDir() {
         if (mavenBaseDir.isEmpty()) {

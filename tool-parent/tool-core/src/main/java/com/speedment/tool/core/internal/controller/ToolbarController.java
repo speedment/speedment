@@ -31,7 +31,7 @@ import java.util.ResourceBundle;
  */
 public final class ToolbarController implements Initializable {
 
-    private @Inject ToolbarComponent toolbar;
+    public @Inject ToolbarComponent toolbar;
     private @FXML HBox hBox;
 
     @Override

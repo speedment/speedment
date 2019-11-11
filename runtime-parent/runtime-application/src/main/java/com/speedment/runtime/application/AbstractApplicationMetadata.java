@@ -19,7 +19,6 @@ package com.speedment.runtime.application;
 import com.speedment.common.json.Json;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationMetadata;
@@ -50,18 +49,21 @@ public abstract class AbstractApplicationMetadata implements ApplicationMetadata
     @Override
     public Project makeProject() {
         return getMetadata()
-            .map(json -> DocumentTranscoder.load(json, this::fromJson)).orElseGet(() -> {
-            final Map<String, Object> data = new ConcurrentHashMap<>();
-            data.put(HasNameUtil.NAME, "Project");
-            data.put(ProjectUtil.APP_ID, UUID.randomUUID().toString());
-            return new ProjectImpl(data);
-        });
+            .map(json -> DocumentTranscoder.load(json, this::fromJson))
+            .orElseGet(this::createEmptyProject);
     }
-    
+
     private Map<String, Object> fromJson(String json) {
         @SuppressWarnings("unchecked")
-        final Map<String, Object> parsed =
-            (Map<String, Object>) Json.fromJson(json);
+        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
         return parsed;
     }
+
+    private Project createEmptyProject() {
+        final Map<String, Object> data = new ConcurrentHashMap<>();
+        data.put(HasNameUtil.NAME, "Project");
+        data.put(ProjectUtil.APP_ID, UUID.randomUUID().toString());
+        return Project.create(data);
+    }
+
 }

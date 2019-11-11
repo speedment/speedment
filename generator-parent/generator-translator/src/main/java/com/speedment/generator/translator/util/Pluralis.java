@@ -16,8 +16,7 @@
  */
 package com.speedment.generator.translator.util;
 
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import java.util.*;
 import static java.util.Objects.requireNonNull;
@@ -40,7 +39,7 @@ public enum Pluralis {
     private final Set<String> uncountables;
     private final Map<String, String> irregulars;
 
-    private Pluralis() {
+    Pluralis() {
         rules = new ArrayList<>();
         uncountables = new HashSet<>();
         irregulars = new HashMap<>();
@@ -135,12 +134,14 @@ public enum Pluralis {
     }
 
     protected void addRule(String rule, String replacement) {
-        requireNonNulls(rule, replacement);
+        requireNonNull(rule);
+        requireNonNull(replacement);
         rules.add(new Rule(rule, replacement));
     }
 
     protected void addIrregular(String singular, String plural) {
-        requireNonNulls(singular, plural);
+        requireNonNull(singular);
+        requireNonNull(plural);
         irregulars.put(normalize(singular), normalize(plural));
     }
 

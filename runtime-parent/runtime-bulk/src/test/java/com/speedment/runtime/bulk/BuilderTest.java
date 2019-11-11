@@ -16,15 +16,19 @@
  */
 package com.speedment.runtime.bulk;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.manager.*;
+import com.speedment.runtime.core.manager.HasLabelSet;
+import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.core.manager.Persister;
+import com.speedment.runtime.core.manager.Remover;
+import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.field.Field;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
  *
@@ -265,6 +269,11 @@ final class BuilderTest {
 
         @Override
         public Stream<Point> stream() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Point create() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

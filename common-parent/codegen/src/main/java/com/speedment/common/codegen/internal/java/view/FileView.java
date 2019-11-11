@@ -22,7 +22,9 @@ import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.HasClassesView;
 import com.speedment.common.codegen.internal.java.view.trait.HasImportsView;
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
+import com.speedment.common.codegen.internal.java.view.trait.HasLicenseTermView;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.trait.HasLicenseTerm;
 import com.speedment.common.codegen.util.Formatting;
 
 import java.util.Optional;
@@ -35,9 +37,10 @@ import static com.speedment.common.codegen.util.Formatting.*;
  * 
  * @author Emil Forslund
  */
-public final class FileView implements Transform<File, String>, 
-        HasImportsView<File>,    
-        HasJavadocView<File>, 
+public final class FileView implements Transform<File, String>,
+		HasLicenseTermView<File>,
+		HasImportsView<File>,
+        HasJavadocView<File>,
         HasClassesView<File> {
 
 	@Override
@@ -54,6 +57,7 @@ public final class FileView implements Transform<File, String>,
         mgr.setCurrentPackage(pack);
 
 		final Optional<String> view = Optional.of(
+			renderLicenseTerm(gen, model) +
 			renderJavadoc(gen, model) +
 			renderPackage(model) +
             renderImports(gen, model) +

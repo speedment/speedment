@@ -23,7 +23,6 @@ import com.speedment.runtime.core.component.connectionpool.ConnectionDecorator;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.core.db.DbmsType;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
@@ -47,6 +46,9 @@ final class ConnectionPoolComponentImplTest {
 
     @BeforeEach
     void setUp() {
+
+        // if ConnectionPoolComponentImpl is final, we could test with Mock or Proxy
+
         instance = new ConnectionPoolComponentImpl(
             CONNECTION_DECORATOR,
             new DummyDbmsHandlerComponent(),

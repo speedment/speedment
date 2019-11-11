@@ -26,11 +26,14 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
-    
+
+    <properties>
+        <module-name>com.speedment.common.tuple</module-name>
+    </properties>
+
     <artifactId>tuple</artifactId>
-    <packaging>bundle</packaging>
     
     <name>Speedment - Common - Tuple</name>
     <description>
@@ -38,57 +41,5 @@
         where every element has a specific type.
     </description>
     <url>https://github.com/speedment/speedment/wiki/Tuple</url>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.common.tuple,
-                            com.speedment.common.tuple.getter,
-                            com.speedment.common.tuple.nullable,
-                            com.speedment.common.tuple.mutable
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin-version}</version>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin-version}</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-    <dependencies>
-        <!--Test dependencies-->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-    </dependencies>
 </project>

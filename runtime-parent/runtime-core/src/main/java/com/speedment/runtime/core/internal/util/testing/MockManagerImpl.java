@@ -148,6 +148,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         return streamer.get();
     }
 
+    @Override
+    public ENTITY create() {
+        throw new UnsupportedOperationException();
+    }
+
 //    @Override
 //    public UnaryOperator<ENTITY> entityCopier() {
 //        return inner.entityCopier();

@@ -17,7 +17,7 @@
 package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.internal.BaseDocument;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.util.DocumentUtil;
 import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class ImmutableDocument extends BaseDocument {
         children = new ConcurrentSkipListMap<>();
     }
 
-    protected ImmutableDocument(ImmutableDocument parent, Map<String, Object> data) {
+    protected ImmutableDocument(Document parent, Map<String, Object> data) {
         super(parent, Collections.unmodifiableMap(data));
         children = new ConcurrentSkipListMap<>();
     }

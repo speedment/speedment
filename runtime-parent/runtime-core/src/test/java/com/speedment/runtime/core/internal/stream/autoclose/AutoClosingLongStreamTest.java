@@ -16,11 +16,10 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+import com.speedment.runtime.core.stream.java9.Java9StreamUtil;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import java.util.HashSet;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.*;
 
@@ -48,7 +47,7 @@ final class AutoClosingLongStreamTest extends AbstractAutoClosingStreamTest<Long
 
     @Override
     Stream<NamedUnaryOperator<LongStream>> intermediateJava8Operations() {
-        return Stream.<NamedUnaryOperator<LongStream>>of(
+        return Stream.of(
             NamedUnaryOperator.of("filter", s -> s.filter(i -> i < MAX_VALUE / 2)),
             NamedUnaryOperator.of("map", s -> s.map(i -> i + 1)),
             // mapToInt, mapToLong, mapToDouble
@@ -77,7 +76,7 @@ final class AutoClosingLongStreamTest extends AbstractAutoClosingStreamTest<Long
 
     @Override
     Stream<NamedFunction<LongStream, Object>> terminatingOperations() {
-        return Stream.<NamedFunction<LongStream, Object>>of(
+        return Stream.of(
             NamedFunction.of("count", LongStream::count),
             NamedFunction.of("forEach", (LongStream s) -> {
                 s.forEach(longBlackHole());

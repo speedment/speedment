@@ -23,7 +23,7 @@ import com.speedment.runtime.core.db.ConnectionUrlGenerator;
  * @author Emil Forslund
  * @since  3.1.10
  */
-public final class SqliteConnectionUrlGenerator implements ConnectionUrlGenerator {
+final class SqliteConnectionUrlGenerator implements ConnectionUrlGenerator {
 
     @Override
     public String from(Dbms dbms) {

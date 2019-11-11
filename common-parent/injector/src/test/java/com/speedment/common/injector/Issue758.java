@@ -32,13 +32,13 @@ final class Issue758 {
 
     @BeforeEach
     void beforeEach() {
-        defaultLevel = InjectorBuilderImpl.LOGGER_INSTANCE.getLevel();
-        InjectorBuilderImpl.LOGGER_INSTANCE.setLevel(Level.DEBUG);
+        defaultLevel = InjectorBuilderImpl.INTERNAL_LOGGER.getLevel();
+        InjectorBuilderImpl.INTERNAL_LOGGER.setLevel(Level.DEBUG);
     }
 
     @AfterEach
     void afterEach() {
-        InjectorBuilderImpl.LOGGER_INSTANCE.setLevel(defaultLevel);
+        InjectorBuilderImpl.INTERNAL_LOGGER.setLevel(defaultLevel);
     }
 
     @Test
@@ -58,10 +58,11 @@ final class Issue758 {
 
 
     @InjectKey(Foo.class)
-    public interface Foo {};
+    public interface Foo {}
 
-    public static final class Bar implements Foo {};
-    public static final class Bazz implements Foo {};
+    public static final class Bar implements Foo {}
+
+    public static final class Bazz implements Foo {}
 
     public static final class Buzz {
         private final Foo foo;
@@ -72,6 +73,6 @@ final class Issue758 {
 
         public Foo foo() { return foo; }
 
-    };
+    }
 
 }

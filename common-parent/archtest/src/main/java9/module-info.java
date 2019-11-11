@@ -16,4 +16,6 @@
  */
 module com.speedment.common.archtest {
     exports com.speedment.common.archtest;
+
+    requires transitive com.tngtech.archunit;
 }

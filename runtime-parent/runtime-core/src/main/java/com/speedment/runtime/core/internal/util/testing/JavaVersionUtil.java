@@ -25,7 +25,7 @@ import static com.speedment.runtime.core.internal.util.testing.JavaVersionUtil.J
 public final class JavaVersionUtil {
 
     public enum JavaVersion {
-        UNKNOWN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN;
+        UNKNOWN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN
     }
 
     public static boolean is8() {

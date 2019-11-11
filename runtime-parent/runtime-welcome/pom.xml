@@ -26,34 +26,18 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>runtime-welcome</artifactId>
-    <packaging>bundle</packaging>
+
+    <properties>
+        <module-name>com.speedment.runtime.welcome</module-name>
+    </properties>
 
     <name>Speedment - Runtime - Welcome</name>
     <description>
         Module that are used for welcome messages when Speedment starts
     </description>
-    
-    <build>
-        <plugins>                        
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Bundle-Description>
-                            Welcome classes used when Speedment starts
-                        </Bundle-Description>
-                        <Export-Package>
-                            com.speedment.runtime.welcome
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

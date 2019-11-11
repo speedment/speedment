@@ -23,16 +23,14 @@ import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.MainApp;
-
-import java.util.function.Consumer;
-
 import com.speedment.tool.core.ToolBundle;
-import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import javafx.application.Application;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+
+import java.util.function.Consumer;
 
 /**
  *
@@ -102,7 +100,7 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
     
     @Override
     protected boolean debug() {
-        return debug == null ? false: debug;
+        return !(debug == null) && debug;
     }
 
     @Override

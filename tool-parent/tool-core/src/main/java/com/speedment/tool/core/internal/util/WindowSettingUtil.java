@@ -23,8 +23,6 @@ import javafx.stage.Stage;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  * Utility class for method related to window settings, such as size, position 
  * and whether the window was maximized or not.
@@ -32,7 +30,8 @@ import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed
  * @author Simon Jonasson
  * @since 3.0.0
  */
-public class WindowSettingUtil {    
+final class WindowSettingUtil {
+
     private final static Logger LOGGER = LoggerManager.getLogger(WindowSettingUtil.class);
     private final static Preferences PREFERENCES = Preferences.userNodeForPackage(WindowSettingUtil.class);
     
@@ -47,7 +46,9 @@ public class WindowSettingUtil {
     private final static double DEFUALT_HEIHGT = 720;
     private final static double DEFUALT_X = 0;
     private final static double DEFUALT_Y = 0;
-    
+
+    private WindowSettingUtil() {}
+
     /**
      * Retrieves data about he window settings from the previous session and applies 
      * them to the stage. These settings include window size, position and if
@@ -56,7 +57,7 @@ public class WindowSettingUtil {
      * @param stage  the stage to apply these settings to
      * @param name   the name under which we stored the settings
      */
-    public static void applyStoredDisplaySettings(Stage stage, String name){
+    static void applyStoredDisplaySettings(Stage stage, String name){
         try {
             if( PREFERENCES.nodeExists(name) ){
                 Preferences stagePreferences = PREFERENCES.node(name);
@@ -82,7 +83,7 @@ public class WindowSettingUtil {
      * @param stage  the stage to read settings from
      * @param name   the name under which we store the settings
      */
-    public static void applySaveOnCloseMethod(Stage stage, String name){
+    static void applySaveOnCloseMethod(Stage stage, String name){
         stage.setOnCloseRequest( ev -> {
             try {
                 Preferences stagePreferences = PREFERENCES.node(name);
@@ -101,8 +102,5 @@ public class WindowSettingUtil {
             } 
         });
     }
-    
-    private WindowSettingUtil(){
-        instanceNotAllowed(getClass());
-    }    
+
 }

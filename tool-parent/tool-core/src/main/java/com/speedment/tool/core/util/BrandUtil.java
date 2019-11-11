@@ -24,15 +24,15 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  *
  * @author  Emil Forslund
  * @since   2.3.0
  */
 public final class BrandUtil {
-    
+
+    public BrandUtil() {}
+
     public static void applyBrand(Injector injector, Stage stage) {
         applyBrand(injector, stage, stage.getScene());
     }
@@ -89,11 +89,5 @@ public final class BrandUtil {
 
         brand.stylesheets().forEachOrdered(scene.getStylesheets()::add);
     }
-    
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private BrandUtil() {
-        instanceNotAllowed(getClass());
-    }
+
 }

@@ -70,59 +70,59 @@ public final class JoinTestUtil {
 
     public interface E0Manager {
 
-        static TableIdentifier<E0> IDENTIFIER = id(MockMetadata.T0_NAME);
+        TableIdentifier<E0> IDENTIFIER = id(MockMetadata.T0_NAME);
     }
 
     public interface E1Manager {
 
-        static TableIdentifier<E1> IDENTIFIER = id(MockMetadata.T1_NAME);
+        TableIdentifier<E1> IDENTIFIER = id(MockMetadata.T1_NAME);
     }
 
     public interface E2Manager {
 
-        static TableIdentifier<E2> IDENTIFIER = id(MockMetadata.T2_NAME);
+        TableIdentifier<E2> IDENTIFIER = id(MockMetadata.T2_NAME);
     }
 
     public interface E3Manager {
 
-        static TableIdentifier<E3> IDENTIFIER = id(MockMetadata.T3_NAME);
+        TableIdentifier<E3> IDENTIFIER = id(MockMetadata.T3_NAME);
     }
 
     public interface E4Manager {
 
-        static TableIdentifier<E4> IDENTIFIER = id(MockMetadata.T4_NAME);
+        TableIdentifier<E4> IDENTIFIER = id(MockMetadata.T4_NAME);
     }
 
     public interface E5Manager {
 
-        static TableIdentifier<E5> IDENTIFIER = id(MockMetadata.T5_NAME);
+        TableIdentifier<E5> IDENTIFIER = id(MockMetadata.T5_NAME);
     }
 
     public interface E6Manager {
 
-        static TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T6_NAME);
+        TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T6_NAME);
     }
 
     public interface E7Manager {
 
-        static TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T7_NAME);
+        TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T7_NAME);
     }
 
     public interface E8Manager {
 
-        static TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T8_NAME);
+        TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T8_NAME);
     }
 
     public interface E9Manager {
 
-        static TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T9_NAME);
+        TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T9_NAME);
     }
 
 
 
     public interface EXManager {
 
-        static TableIdentifier<E5> IDENTIFIER = id("tx");
+        TableIdentifier<E5> IDENTIFIER = id("tx");
     }
 
     public interface E0 extends HasId<E0> {
@@ -250,10 +250,7 @@ public final class JoinTestUtil {
                 return false;
             }
             final HasIdImpl<?> other = (HasIdImpl<?>) obj;
-            if (this.id != other.id) {
-                return false;
-            }
-            return true;
+            return this.id == other.id;
         }
 
         @Override

@@ -24,8 +24,8 @@ import com.speedment.common.injector.annotation.Inject;
  * @since   1.0.0
  */
 public final class C {
-    
-    public @Inject A a;
-    public @Inject B b;
+
+    @Inject public A a;
+    @Inject public B b;
     
 }

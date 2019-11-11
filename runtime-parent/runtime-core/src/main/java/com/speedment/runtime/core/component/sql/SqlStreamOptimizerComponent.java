@@ -16,17 +16,32 @@
  */
 package com.speedment.runtime.core.component.sql;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.stream.Pipeline;
+
+import java.util.stream.Stream;
 
 /**
  *
  * @author Per Minborg
  */
+@InjectKey(SqlStreamOptimizerComponent.class)
 public interface SqlStreamOptimizerComponent {
 
     <ENTITY> SqlStreamOptimizer<ENTITY> get(Pipeline initialPipeline, DbmsType dbmsType);
 
     <ENTITY> void install(SqlStreamOptimizer<ENTITY> sqlStreamOptimizer);
+
+    /**
+     * Create and return a new Stream of all the installed
+     * SqlStreamOptimizer objects.
+     * <p>
+     * This is mainly for testing.
+     *
+     * @return a new Stream of all the installed
+     *         SqlStreamOptimizer objects
+     */
+    Stream<SqlStreamOptimizer<?>> stream();
 
 }

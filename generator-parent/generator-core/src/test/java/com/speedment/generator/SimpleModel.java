@@ -18,22 +18,28 @@ package com.speedment.generator;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.generator.core.GeneratorBundle;
+import com.speedment.generator.core.component.EventComponent;
+import com.speedment.generator.core.component.PathComponent;
 import com.speedment.generator.core.translator.AbstractTranslatorManager;
+import com.speedment.generator.translator.component.CodeGenerationComponent;
+import com.speedment.runtime.application.AbstractApplicationMetadata;
+import com.speedment.runtime.application.provider.DefaultApplicationBuilder;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.config.trait.HasTypeMapperUtil;
 import com.speedment.runtime.core.Speedment;
+import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.application.AbstractApplicationMetadata;
-import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.nio.file.Path;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -57,7 +63,18 @@ public abstract class SimpleModel {
     protected Table table2;
     protected Column column2;
     
-    private final static class SilentTranslatorManager extends AbstractTranslatorManager {
+    public final static class SilentTranslatorManager extends AbstractTranslatorManager {
+
+        public SilentTranslatorManager(
+            final InfoComponent info,
+            final PathComponent paths,
+            final EventComponent events,
+            final ProjectComponent projects,
+            final CodeGenerationComponent codeGenerationComponent,
+            final @Config(name="skipClear", value="false") boolean skipClear
+        ) {
+            super(info, paths, events, projects, codeGenerationComponent, skipClear);
+        }
 
         @Override
         public void clearExistingFiles(Project project) {}
@@ -81,6 +98,7 @@ public abstract class SimpleModel {
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
             .withBundle(GeneratorBundle.class)
             .withComponent(SilentTranslatorManager.class)
+            // .withLogging(ApplicationBuilder.LogType.APPLICATION_BUILDER)
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
             .build();
@@ -96,7 +114,7 @@ public abstract class SimpleModel {
         column2 = table2.columns().findAny().orElseThrow(NoSuchElementException::new);
     }
     
-    private final static class SimpleMetadata extends AbstractApplicationMetadata {
+    public final static class SimpleMetadata extends AbstractApplicationMetadata {
 
         private String quote(String s) {
             return "\"" + s + "\"";

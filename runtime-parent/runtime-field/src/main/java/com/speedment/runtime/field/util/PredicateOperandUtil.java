@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.util;
 
 import com.speedment.common.tuple.Tuple;
-import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
+import com.speedment.runtime.field.predicate.trait.HasInclusion;
 import com.speedment.runtime.field.internal.util.Cast;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -31,7 +31,7 @@ import java.util.Set;
  * @since   3.0.11
  */
 public final class PredicateOperandUtil {
-
+    private PredicateOperandUtil() {}
     /**
      * Returns the first operand of the specified {@link FieldPredicate},
      * throwing an exception if it doesn't exist. The operand may however be
@@ -77,11 +77,7 @@ public final class PredicateOperandUtil {
      * @return   the operand
      */
     public static Inclusion getInclusionOperand(FieldPredicate<?> p) {
-        return Cast.castOrFail(p, BetweenPredicate.class).getInclusion();
+        return Cast.castOrFail(p, HasInclusion.class).getInclusion();
     }
 
-    /**
-     * Should not be instantiated.
-     */
-    private PredicateOperandUtil() {}
 }

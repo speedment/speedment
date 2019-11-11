@@ -38,6 +38,8 @@ import static java.util.Objects.requireNonNull;
  */
 abstract class AbstractLogger implements Logger {
 
+    private static final String NO_EXCEPTION_TEXT = "";
+
     private final String name;
     private Level level;
     private LoggerFormatter formatter;

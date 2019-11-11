@@ -40,7 +40,6 @@ abstract class AbstractToolAction {
      * @param projectTree  the project tree component
      */
     @ExecuteBefore(RESOLVED)
-    abstract void installMenuItems(
-            @WithState(INITIALIZED) ProjectTreeComponent projectTree);
+    public abstract void installMenuItems(ProjectTreeComponent projectTree);
 
 }

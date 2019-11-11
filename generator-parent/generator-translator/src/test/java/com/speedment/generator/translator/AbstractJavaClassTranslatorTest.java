@@ -19,8 +19,7 @@ package com.speedment.generator.translator;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.internal.BaseDocument;
-import com.speedment.runtime.config.internal.SchemaImpl;
+import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasMainInterface;
@@ -230,7 +229,7 @@ final class AbstractJavaClassTranslatorTest {
 
         @Override
         public Stream<Schema> schemas() {
-            return children(DbmsUtil.SCHEMAS, SchemaImpl::new);
+            return children(DbmsUtil.SCHEMAS, Schema::create);
         }
 
         @Override
@@ -268,6 +267,16 @@ final class AbstractJavaClassTranslatorTest {
 
         @Override
         public Optional<Javadoc> getJavadoc() {
+            return Optional.empty();
+        }
+
+        @Override
+        public File set(LicenseTerm doc) {
+            return this;
+        }
+
+        @Override
+        public Optional<LicenseTerm> getLicenseTerm() {
             return Optional.empty();
         }
 

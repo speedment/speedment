@@ -17,9 +17,12 @@
 package com.speedment.runtime.connector.postgres.internal;
 
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.core.abstracts.AbstractDbmsMetadataHandler;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.db.JavaTypeMap;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
-import com.speedment.runtime.core.internal.db.AbstractDbmsMetadataHandler;
 
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -33,6 +36,14 @@ import java.util.Optional;
  * @author Emil Forslund
  */
 public final class PostgresDbmsMetadataHandler extends AbstractDbmsMetadataHandler {
+
+    PostgresDbmsMetadataHandler(
+        final ConnectionPoolComponent connectionPoolComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ProjectComponent projectComponent
+    ) {
+        super(connectionPoolComponent, dbmsHandlerComponent, projectComponent);
+    }
 
     @Override
     protected JavaTypeMap newJavaTypeMap() {
@@ -50,34 +61,42 @@ public final class PostgresDbmsMetadataHandler extends AbstractDbmsMetadataHandl
         javaTypeMap.put("json", String.class);
         javaTypeMap.put("jsonb", String.class);
 
-        javaTypeMap.addRule((sqlTypeMapping, md) -> {
+        javaTypeMap.addRule(bitRule());
+
+        javaTypeMap.addRule(yearRule());
+
+        javaTypeMap.addRule(stringRule("_text", 2003));
+
+        javaTypeMap.addRule(stringRule("tsvector", 1111));
+
+        return javaTypeMap;
+    }
+
+    private JavaTypeMap.Rule stringRule(String text, int i) {
+        return (sqlTypeMapping, md) -> {
+            if (text.equalsIgnoreCase(md.getTypeName()) && md.getDataType() == i) {
+                return Optional.of(String.class);
+            } else return Optional.empty();
+        };
+    }
+
+    private JavaTypeMap.Rule yearRule() {
+        return (sqlTypeMapping, md) -> {
+            if ("year".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 2001) {
+                return Optional.of(Integer.class);
+            } else return Optional.empty();
+        };
+    }
+
+    private JavaTypeMap.Rule bitRule() {
+        return (sqlTypeMapping, md) -> {
             // Map a BIT(1) to boolean
             if ("BIT".equalsIgnoreCase(md.getTypeName()) && md.getColumnSize() == 1) {
                 return Optional.of(Boolean.class);
             } else return Optional.empty();
-        });
-
-        javaTypeMap.addRule((sqlTypeMapping, md) -> {
-            if ("year".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 2001) {
-                return Optional.of(Integer.class);
-            } else return Optional.empty();
-        });
-
-        javaTypeMap.addRule((sqlTypeMapping, md) -> {
-            if ("_text".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 2003) {
-                return Optional.of(String.class);
-            } else return Optional.empty();
-        });
-
-        javaTypeMap.addRule((sqlTypeMapping, md) -> {
-            if ("tsvector".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 1111) {
-                return Optional.of(String.class);
-            } else return Optional.empty();
-        });
-
-        return javaTypeMap;
+        };
     }
-    
+
     @Override
     protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
         super.setAutoIncrement(column, md);
@@ -86,4 +105,5 @@ public final class PostgresDbmsMetadataHandler extends AbstractDbmsMetadataHandl
             column.mutator().setAutoIncrement(true);
         }
     }
+
 }

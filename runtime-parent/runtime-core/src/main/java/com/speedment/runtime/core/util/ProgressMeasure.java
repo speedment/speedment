@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.util;
 
-import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
+import com.speedment.runtime.core.internal.util.ProgressMeasureImpl;
 
 import java.util.function.Consumer;
 
@@ -27,11 +27,6 @@ import java.util.function.Consumer;
  * @since   2.3.0
  */
 public interface ProgressMeasure {
-    
-    double
-        INDETERMINATE = -1.0,
-        INITIAL       = 0.0,
-        DONE          = 1.0;
 
     /**
      * Sets the progress ratio. A negative value for progress indicates that the
@@ -59,7 +54,7 @@ public interface ProgressMeasure {
      * @return  {@code true} if done, else {@code false}
      */
     default boolean isDone() {
-        return getProgress() >= DONE;
+        return getProgress() >= ProgressMeasureUtil.DONE;
     }
 
     /**
@@ -86,6 +81,6 @@ public interface ProgressMeasure {
     ProgressMeasure addListener(Consumer<ProgressMeasure> listener);
 
     static ProgressMeasure create() {
-        return new ProgressMeasurerImpl();
+        return new ProgressMeasureImpl();
     }
 }

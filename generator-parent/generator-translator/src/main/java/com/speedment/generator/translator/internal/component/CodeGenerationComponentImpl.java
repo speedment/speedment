@@ -20,13 +20,10 @@ import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.generator.translator.JavaClassTranslator;
-import com.speedment.generator.translator.Translator;
-import com.speedment.generator.translator.TranslatorConstructor;
-import com.speedment.generator.translator.TranslatorDecorator;
-import com.speedment.generator.translator.TranslatorKey;
+import com.speedment.generator.translator.*;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.generator.translator.component.DecoratorBuilder;
 import com.speedment.generator.translator.component.TranslatorAppender;
@@ -55,12 +52,17 @@ import static java.util.Objects.requireNonNull;
 
 public final class CodeGenerationComponentImpl implements CodeGenerationComponent {
 
-    private @Inject Injector injector;
+    private Injector injector;
 
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
 
     public CodeGenerationComponentImpl() {
         map = new ConcurrentHashMap<>();
+    }
+
+    @ExecuteBefore(State.INITIALIZED)
+    public void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
     }
 
     @Override

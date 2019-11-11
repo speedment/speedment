@@ -32,11 +32,11 @@ import java.util.stream.Stream;
  * @since  3.0.17
  */
 public final class ToggleTablesEnabledActionImpl
-extends AbstractToolAction
-implements ToggleTablesEnabledAction {
+    extends AbstractToolAction
+    implements ToggleTablesEnabledAction {
 
     @Override
-    void installMenuItems(ProjectTreeComponent projectTree) {
+    public void installMenuItems(ProjectTreeComponent projectTree) {
         projectTree.installContextMenu(SchemaProperty.class, (treeCell, node) -> {
             final MenuItem enableTables  = new MenuItem("Enable All Tables");
             final MenuItem disableTables = new MenuItem("Disable All Tables");

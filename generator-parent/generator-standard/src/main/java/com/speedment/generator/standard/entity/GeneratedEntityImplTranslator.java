@@ -17,37 +17,29 @@
 package com.speedment.generator.standard.entity;
 
 import com.speedment.common.codegen.constant.DefaultAnnotationUsage;
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import static com.speedment.common.codegen.util.Formatting.block;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import static com.speedment.generator.standard.entity.GeneratedEntityTranslator.getterReturnType;
-import static com.speedment.generator.standard.internal.util.ColumnUtil.optionalGetterName;
-import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
-import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
-import com.speedment.generator.standard.internal.util.FkHolder;
+import com.speedment.common.codegen.model.*;
+import com.speedment.generator.standard.util.ForeignKeyUtil;
+import com.speedment.generator.standard.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.component.TypeMapperComponent;
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
+
 import java.lang.reflect.Type;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.StringJoiner;
+
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.util.Formatting.block;
+import static com.speedment.generator.standard.entity.GeneratedEntityTranslator.getterReturnType;
+import static com.speedment.generator.standard.util.ColumnUtil.optionalGetterName;
+import static com.speedment.generator.standard.util.ColumnUtil.usesOptional;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -56,9 +48,6 @@ import java.util.StringJoiner;
  */
 public final class GeneratedEntityImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    @Inject private TypeMapperComponent typeMappers;
-    @Inject private Injector injector;
-    
     public GeneratedEntityImplTranslator(Table table) {
         super(table, Class::of);
     }
@@ -68,18 +57,18 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
         requireNonNull(file);
 
         return newBuilder(file, getSupport().generatedEntityImplName())
-            
-            /**
+
+            /*
              * Class details
              */
-            .forEveryTable((clazz, table) -> 
+            .forEveryTable((clazz, table) ->
                 clazz.public_()
                     .abstract_()
                     .add(getSupport().entityType())
                     .add(Constructor.of().protected_())
             )
             
-            /**
+            /*
              * Getters
              */
             .forEveryColumn((clazz, col) -> {
@@ -103,7 +92,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                         .add("return " + getter + ";"));
             })
             
-            /**
+            /*
              * Setters
              */
             .forEveryColumn((clazz, col) -> 
@@ -116,11 +105,11 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                         .add("return this;"))
             )
             
-            /**
+            /*
              * Finders
              */
             .forEveryColumn((clazz, col) -> {
-                EntityTranslatorSupport.getForeignKey(
+                ForeignKeyUtil.getForeignKey(
                     getSupport().tableOrThrow(), col
                 ).ifPresent(fkc -> {
                     final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
@@ -171,7 +160,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
 
     }
 
-    protected Method toStringMethod(File file) {
+    private Method toStringMethod(File file) {
         file.add(Import.of(StringJoiner.class));
         file.add(Import.of(Objects.class));
         

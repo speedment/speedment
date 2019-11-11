@@ -22,6 +22,7 @@ import com.speedment.runtime.config.mutator.TableMutator;
 import com.speedment.runtime.config.trait.*;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -145,5 +146,19 @@ public interface Table extends
     @Override
     default Table deepCopy() {
         return DocumentUtil.deepCopy(this, TableImpl::new);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link Table}
+     * with the given {@code parent} and {@code data}
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return new {@link Table} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static Table create(Schema parent, Map<String, Object> data) {
+        return new TableImpl(parent, data);
     }
 }

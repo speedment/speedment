@@ -41,8 +41,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
+import static com.speedment.runtime.core.db.DbmsTypeDefault.SkipLimitSupport.NONE;
+import static com.speedment.runtime.core.db.DbmsTypeDefault.SkipLimitSupport.ONLY_AFTER_SORTED;
 import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
 import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
 import static java.util.Objects.requireNonNull;
@@ -332,7 +332,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             final Consumer<? super LimitAction<ENTITY>> limitConsumer
         ) {
             this.filterConsumer = requireNonNull(filterConsumer);
-            this.sortedConsumer = requireNonNull(sortedConsumer);;
+            this.sortedConsumer = requireNonNull(sortedConsumer);
             this.skipConsumer = requireNonNull(skipConsumer);
             this.limitConsumer = requireNonNull(limitConsumer);
         }

@@ -16,14 +16,17 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
-import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
 import com.speedment.runtime.core.component.sql.Metrics;
+
+import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
 
 /**
  *
  * @author Per Minborg
  */
-public class MetricsImpl implements Metrics {
+public final class MetricsImpl implements Metrics {
+
+    public static final Metrics EMPTY_INSTANCE = new MetricsImpl(0, 0, 0, 0, 0);
 
     private final int pipelineReductions;
     private final int sqlWhileCount;
@@ -107,15 +110,5 @@ public class MetricsImpl implements Metrics {
         hash += 33 * getSqlLimitCount();
         return hash;
     }
-
-    public static final Metrics EMPTY_INSTANCE = new MetricsImpl(0, 0, 0, 0, 0) {
-        @Override
-        public String toString() {
-            return "Metrics.empty()";
-        }
-
-    };
-
-
 
 }

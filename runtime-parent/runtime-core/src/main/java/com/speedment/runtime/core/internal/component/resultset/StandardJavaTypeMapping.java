@@ -30,10 +30,10 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-
 public final class StandardJavaTypeMapping {
-    
+
+    private StandardJavaTypeMapping() {}
+
     /**
      * Returns a {@link Stream} of all JavaTypeMapping that is defined in this
      * class.
@@ -162,10 +162,4 @@ public final class StandardJavaTypeMapping {
         )
     };
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private StandardJavaTypeMapping() {
-        instanceNotAllowed(getClass());
-    }
 }

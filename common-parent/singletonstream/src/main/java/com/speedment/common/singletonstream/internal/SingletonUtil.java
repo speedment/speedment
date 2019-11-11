@@ -27,7 +27,9 @@ import java.security.PrivilegedAction;
  * @since  1.0.0
  */
 public final class SingletonUtil {
-    
+
+    private SingletonUtil() {}
+
     public static final boolean STRICT = true;
 
     public static void trip(Class<?> trippingClass, String msg) {
@@ -44,6 +46,4 @@ public final class SingletonUtil {
         AccessController.doPrivileged(
             (PrivilegedAction<Boolean>) () -> Boolean.getBoolean(TRIPWIRE_PROPERTY)
         );
-
-    private SingletonUtil() {}
 }

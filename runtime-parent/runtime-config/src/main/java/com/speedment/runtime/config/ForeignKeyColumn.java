@@ -29,6 +29,7 @@ import com.speedment.runtime.config.trait.HasOrdinalPosition;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentUtil;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExceptionFor;
@@ -137,5 +138,19 @@ public interface ForeignKeyColumn extends
     @Override
     default ForeignKeyColumn deepCopy() {
         return DocumentUtil.deepCopy(this, ForeignKeyColumnImpl::new);
+    }
+
+    /**
+     * Creates and returns a new standard implementation of a {@link ForeignKeyColumn}
+     * with the given {@code parent} and {@code data}
+     *
+     * @param parent of the config document (nullable)
+     * @param data of the config document
+     * @return new {@link ForeignKeyColumn} with the given parameters
+     *
+     * @throws NullPointerException if the provided {@code data} is {@code null}
+     */
+    static ForeignKeyColumn create(ForeignKey parent, Map<String, Object> data) {
+        return new ForeignKeyColumnImpl(parent, data);
     }
 }

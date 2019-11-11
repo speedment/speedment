@@ -49,7 +49,7 @@ public final class ProjectTreeComponentImpl implements ProjectTreeComponent {
      * This class is intended to be dependency injected. This constructor should
      * therefore not be invoked directly.
      */
-    ProjectTreeComponentImpl() {
+    public ProjectTreeComponentImpl() {
         contextMenuBuilders = new ConcurrentHashMap<>();
     }
 

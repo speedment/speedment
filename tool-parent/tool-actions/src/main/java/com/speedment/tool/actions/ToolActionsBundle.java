@@ -17,10 +17,10 @@
 package com.speedment.tool.actions;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.tool.actions.internal.ProjectTreeComponentImpl;
-import com.speedment.tool.actions.internal.menues.ToggleColumnsEnabledActionImpl;
-import com.speedment.tool.actions.internal.menues.ToggleExpandedActionImpl;
-import com.speedment.tool.actions.internal.menues.ToggleTablesEnabledActionImpl;
+import com.speedment.tool.actions.provider.DelegateColumnsEnabledAction;
+import com.speedment.tool.actions.provider.DelegateExpandedAction;
+import com.speedment.tool.actions.provider.DelegateProjectTreeComponent;
+import com.speedment.tool.actions.provider.DelegateTablesEnabledAction;
 
 import java.util.stream.Stream;
 
@@ -36,10 +36,10 @@ public final class ToolActionsBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return Stream.of(
-            ProjectTreeComponentImpl.class,
-            ToggleExpandedActionImpl.class,
-            ToggleTablesEnabledActionImpl.class,
-            ToggleColumnsEnabledActionImpl.class
+            DelegateProjectTreeComponent.class,
+            DelegateExpandedAction.class,
+            DelegateColumnsEnabledAction.class,
+            DelegateTablesEnabledAction.class
         );
     }
 }

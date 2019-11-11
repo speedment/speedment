@@ -26,42 +26,21 @@
     <parent>
         <groupId>com.speedment.tool</groupId>
         <artifactId>tool-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
         
     <artifactId>tool-core</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.tool.core</module-name>
+    </properties>
+
     <name>Speedment - Tool - Core</name>
     <description>
         A graphical user interface that allows the user to modify the Speedment 
         configuration file without writing .json-code.
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.tool.core.brand,
-                            com.speedment.tool.core.component,
-                            com.speedment.tool.core.event,
-                            com.speedment.tool.core.exception,
-                            com.speedment.tool.core.notification,
-                            com.speedment.tool.core.resource,
-                            com.speedment.tool.core.rule,
-                            com.speedment.tool.core.util,
-                            com.speedment.tool.core
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin> 
-        </plugins>
-    </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>

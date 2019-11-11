@@ -26,13 +26,21 @@
     <parent>
         <groupId>com.speedment.build</groupId>
         <artifactId>build-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
-    
+
+    <prerequisites>
+        <maven>3.5.0</maven>
+    </prerequisites>
+
     <groupId>com.speedment</groupId>
     <artifactId>speedment-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.maven.plugin</module-name>
+    </properties>
+
     <name>Speedment - Build - Maven Plugin</name>
     <description>
         A neat plugin for using Speedment as a maven target.
@@ -71,20 +79,20 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version>3.6.0</version>
+            <version>3.6.2</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>3.6.0</version>
+            <version>3.6.2</version>
             <type>jar</type>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.6.0</version>
+            <version>3.6.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.eclipse.sisu</groupId>
@@ -123,7 +131,7 @@
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.6.0</version>
-                
+
                 <configuration>
                     <goalPrefix>speedment</goalPrefix>
                 </configuration>
@@ -149,7 +157,6 @@
             
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
                 <configuration>
                     <archive>
                         <addMavenDescriptor>true</addMavenDescriptor>
@@ -162,6 +169,7 @@
                             <Implementation-Vendor>Speedment, Inc.</Implementation-Vendor>
                             <Implementation-URL>https://github.com/speedment/speedment</Implementation-URL>
                         </manifestEntries>
+                        <manifestFile combine.self="override"/>
                     </archive>
                 </configuration>
             </plugin>

@@ -20,7 +20,7 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.SchemaUtil;
 import com.speedment.runtime.config.Table;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.SchemaPropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -31,7 +31,7 @@ import javafx.collections.ObservableList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 
 /**
  *
@@ -82,6 +82,6 @@ implements Schema,
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.SCHEMAS, key);
+        return concat(DocumentPropertyComponentUtil.SCHEMAS, key);
     }
 }

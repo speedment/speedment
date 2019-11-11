@@ -16,6 +16,7 @@
  */
 package com.speedment.common.codegen;
 
+import com.speedment.common.codegen.internal.GeneratorImpl;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
 
 import java.util.Collection;
@@ -30,16 +31,6 @@ import java.util.stream.Stream;
  * @since   2.0
  */
 public interface Generator {
-
-    /**
-     * Returns an implementation of this interface that uses the default
-     * implementation used to generate Java code.
-     *
-     * @return  the default generator for Java
-     */
-    static Generator forJava() {
-        return new JavaGenerator();
-    }
 
     /**
      * Returns the {@link DependencyManager} currently being used.
@@ -230,4 +221,29 @@ public interface Generator {
             Transform<A, B> transform, 
             A model, 
             TransformFactory factory);
+
+    /**
+     * Returns an implementation of this interface that uses the default
+     * implementation used to generate Java code.
+     *
+     * @return  the default generator for Java
+     */
+    static Generator forJava() {
+        return new JavaGenerator();
+    }
+
+    /**
+     * Creates and returns a new Generator.
+     *
+     * @param mgr      the dependency manager to use
+     * @param factory  the factory to use
+     * @return a new Generator
+     *
+     * @throws NullPointerException if any of the provided
+     * parameters are {@code null}
+     */
+    static Generator create(DependencyManager mgr, TransformFactory factory) {
+        return new GeneratorImpl(mgr, factory);
+    }
+
 }

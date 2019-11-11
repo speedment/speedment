@@ -16,16 +16,18 @@
  */
 package com.speedment.common.codegen.constant;
 
-import static com.speedment.common.codegen.constant.DefaultValue.string;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Value;
+
 import java.lang.annotation.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+
+import static com.speedment.common.codegen.constant.DefaultValue.string;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration with default constants for the {@link AnnotationUsage}
@@ -45,11 +47,6 @@ public enum DefaultAnnotationUsage implements AnnotationUsage {
     REPEATABLE  (Repeatable.class),
     RETENTION   (Retention.class),
     TARGET      (Target.class),
-    @Deprecated
-    /**
-     * This class is not available in Java9 by default
-     */
-    GENERATED   (SimpleType.create("javax.annotation.Generated")),
     DEPRECATED  (Deprecated.class),
     SUPPRESS_WARNINGS_UNCHECKED (
         SuppressWarnings.class, string("unchecked")

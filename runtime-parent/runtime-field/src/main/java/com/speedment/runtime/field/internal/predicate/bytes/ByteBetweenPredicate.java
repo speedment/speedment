@@ -19,7 +19,7 @@ package com.speedment.runtime.field.internal.predicate.bytes;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
+import com.speedment.runtime.field.predicate.trait.HasInclusion;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasByteValue;
@@ -37,7 +37,7 @@ import static java.util.Objects.requireNonNull;
 @GeneratedCode(value = "Speedment")
 public final class ByteBetweenPredicate<ENTITY, D> 
 extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> 
-implements BetweenPredicate,
+implements HasInclusion,
           Tuple2<Byte, Byte> {
     
     private final byte start;

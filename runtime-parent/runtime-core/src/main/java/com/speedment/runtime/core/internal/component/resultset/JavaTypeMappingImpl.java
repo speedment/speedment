@@ -30,14 +30,14 @@ import static java.util.Objects.requireNonNull;
  * @author  Per Minborg
  * @since   2.0.0
  */
-public final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
+final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
 
     private final Class<T> clazz;
     private final String resultSetMethodName;
     private final Function<String, ? extends T> stringMapper;
     private final Function<Long, ? extends T> longMapper;
 
-    public JavaTypeMappingImpl(
+    JavaTypeMappingImpl(
             Class<T> clazz,
             String resultSetMethodName,
             Function<String, ? extends T> stringMapper,

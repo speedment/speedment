@@ -18,6 +18,8 @@ package com.speedment.runtime.core;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
@@ -572,6 +574,18 @@ public interface ApplicationBuilder<
      */
     BUILDER withBundle(Class<? extends InjectBundle> bundleClass);
 
+
+    /**
+     * Adds an InjectorProxy to the Builder.
+     * <p>
+     * An InjectorProxy can be used to create/manipulate
+     * instances on behalf of the actual injector.
+     *
+     * @param injectorProxy to add
+     * @return a reference to this builder
+     */
+    BUILDER withInjectorProxy(InjectorProxy injectorProxy);
+
     /**
      * Adds a logging configuration to the application. A number of standard log
      * types are available in the class
@@ -670,11 +684,15 @@ public interface ApplicationBuilder<
         /**
          * Logging related to SQL retries
          */
-        SQL_RETRY;
+        SQL_RETRY,
+        /**
+         * Logging related to the Java module system (JPMS)
+         */
+        MODULE_SYSTEM;
 
         private final String loggerName;
 
-        private LogType() {
+        LogType() {
             this.loggerName = "#" + name();
         }
 

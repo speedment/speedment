@@ -49,8 +49,10 @@ import static java.util.stream.Collectors.toMap;
  *
  * @author Per Minborg
  */
-public class SqlJoinStreamSupplierComponent
+public final class SqlJoinStreamSupplierComponent
     implements JoinStreamSupplierComponent {
+
+    private final boolean allowStreamIteratorAndSpliterator;
 
     private Map<TableIdentifier<?>, SqlAdapter<?>> sqlAdapterMap;
     private HasCreateJoin2 join2Creator;
@@ -63,11 +65,14 @@ public class SqlJoinStreamSupplierComponent
     private HasCreateJoin9 join9Creator;
     private HasCreateJoin10 join10Creator;
 
-    @Config(name = "allowStreamIteratorAndSpliterator", value = "false")
-    private boolean allowStreamIteratorAndSpliterator;
+    public SqlJoinStreamSupplierComponent(
+        @Config(name = "allowStreamIteratorAndSpliterator", value = "false") final boolean allowStreamIteratorAndSpliterator
+    ) {
+        this.allowStreamIteratorAndSpliterator = allowStreamIteratorAndSpliterator;
+    }
 
     @Execute
-    void init(
+    public void init(
         final Injector injector,
         final ProjectComponent projectComponent,
         final DbmsHandlerComponent dbmsHandlerComponent
@@ -77,7 +82,7 @@ public class SqlJoinStreamSupplierComponent
             .map(sa -> (SqlAdapter<?>) sa)
             .collect(
                 toMap(
-                    sa -> sa.identifier(),
+                    SqlAdapter::identifier,
                     sa -> sa
                 )
             );
@@ -222,7 +227,6 @@ public class SqlJoinStreamSupplierComponent
     ) {
         return join10Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
     }
-
 
     private <ENTITY> SqlAdapter<ENTITY> sqlAdapterMapper(TableIdentifier<ENTITY> identifier) {
         @SuppressWarnings("unchecked")

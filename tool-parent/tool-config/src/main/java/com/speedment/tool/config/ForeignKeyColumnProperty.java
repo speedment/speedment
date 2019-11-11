@@ -19,7 +19,7 @@ package com.speedment.tool.config;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.ForeignKeyColumnUtil;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyColumnPropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -29,7 +29,7 @@ import javafx.beans.property.StringProperty;
 import java.util.List;
 import java.util.Optional;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**
@@ -123,6 +123,6 @@ implements ForeignKeyColumn,
     
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.FOREIGN_KEY_COLUMNS, key);
+        return concat(DocumentPropertyComponentUtil.FOREIGN_KEY_COLUMNS, key);
     }
 }

@@ -19,6 +19,8 @@ package com.speedment.example.basic_example.util;
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.SakilaApplicationBuilder;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
+import com.speedment.runtime.join.JoinBundle;
+
 import java.util.Scanner;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
@@ -28,6 +30,8 @@ import java.util.stream.Stream;
  * @author Per Minborg
  */
 public final class ExampleUtil {
+
+    private ExampleUtil() {}
 
     private static final String DEFAULT_P = "sakila-password";
 
@@ -43,7 +47,11 @@ public final class ExampleUtil {
         final String password = inputPassword.isEmpty() ? DEFAULT_P : inputPassword;
 
         final SakilaApplicationBuilder builder = new SakilaApplicationBuilder()
+            .withParam("db.mysql.collationName", "utf8mb4_general_ci")
+            .withParam("db.mysql.binaryCollationName", "utf8mb4_bin")
             .withLogging(LogType.STREAM)
+/*            .withLogging(LogType.APPLICATION_BUILDER)*/
+            .withBundle(JoinBundle.class)
             .withPassword(password);
 
         Stream.of(operators).reduce(
@@ -61,9 +69,6 @@ public final class ExampleUtil {
 
     public static void log(String testName) {
         System.out.format("*** Starting example \"%s\" ***%n", testName);
-    }
-
-    private ExampleUtil() {
     }
 
 }

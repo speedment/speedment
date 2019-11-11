@@ -17,7 +17,8 @@
 package com.speedment.runtime.core.component.transaction;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.core.internal.component.transaction.TransactionComponentImpl;
+import com.speedment.runtime.core.provider.DelegateTransactionComponent;
+
 import java.util.stream.Stream;
 
 /**
@@ -26,10 +27,10 @@ import java.util.stream.Stream;
  * @author Per Minborg
  * @since 3.0.17
  */
-public class TransactionBundle implements InjectBundle {
+public final class TransactionBundle implements InjectBundle {
 
     @Override
     public Stream<Class<?>> injectables() {
-        return Stream.of(TransactionComponentImpl.class);
+        return Stream.of(DelegateTransactionComponent.class);
     }
 }

@@ -20,7 +20,7 @@ import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
 import com.speedment.runtime.config.IndexUtil;
 import com.speedment.runtime.config.Table;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.IndexPropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -30,7 +30,7 @@ import javafx.collections.ObservableList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 
 /**
  *
@@ -80,6 +80,6 @@ implements Index,
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.INDEXES, key);
+        return concat(DocumentPropertyComponentUtil.INDEXES, key);
     }
 }

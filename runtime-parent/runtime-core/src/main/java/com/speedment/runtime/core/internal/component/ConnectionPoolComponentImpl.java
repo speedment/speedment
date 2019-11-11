@@ -54,7 +54,7 @@ import static java.util.Objects.requireNonNull;
  */
 public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
-    protected static final Logger LOGGER_CONNECTION = LoggerManager.getLogger(ApplicationBuilder.LogType.CONNECTION.getLoggerName());
+    private static final Logger LOGGER_CONNECTION = LoggerManager.getLogger(ApplicationBuilder.LogType.CONNECTION.getLoggerName());
 
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
@@ -82,7 +82,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     }
 
     @ExecuteBefore(State.STOPPED)
-    void closeOpenConnections() {
+    public void closeOpenConnections() {
         leasedConnections.values().forEach(conn -> {
             try {
                 if (!conn.isClosed()) {
@@ -253,7 +253,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         requireNonNull(uri);
         // user nullable
         // password nullable
-        return uri + Objects.toString(user) + ((password == null) ? "null" : new String(password));
+        return uri + user + ((password == null) ? "null" : new String(password));
     }
 
     private Deque<PoolableConnection> acquireDeque(String key) {

@@ -19,8 +19,8 @@ package com.speedment.maven.abstractmojo;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.DbmsUtil;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
-import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasEnableUtil;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
@@ -85,7 +85,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         try {
             helper.setCurrentlyOpenFile(configLocation().toFile());
         } catch (final Exception ex) {
-            final String err = "An error occured while reloading.";
+            final String err = "An error occurred while reloading.";
             getLog().error(err);
             throw new MojoExecutionException(err, ex);
         }
@@ -98,7 +98,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
 
     @Override
     protected boolean debug() {
-        return debug == null ? false : debug;
+        return !(debug == null) && debug;
     }
 
     public String getConfigFile() {
@@ -153,7 +153,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addBooleanToMap(HasEnableUtil.ENABLED, Boolean.TRUE, projectData);
         addListToMap(ProjectUtil.DBMSES, createDbmses(), projectData);
 
-        projectProperty.merge(new DocumentPropertyComponentImpl(), new ProjectImpl(projectData));
+        projectProperty.merge(new DocumentPropertyComponentImpl(), Project.create(projectData));
 
         return projectProperty;
     }
@@ -189,9 +189,9 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
     private List<Map<String, Object>> createSchemas() {
         List<Map<String, Object>> schemas = new ArrayList<>();
         if (StringUtils.isNotBlank(dbmsSchemas)) {
-            Arrays.stream(dbmsSchemas.split(",")).forEach((schema) -> {
-                schemas.add(createSchema(schema));
-            });
+            Arrays.stream(dbmsSchemas.split(",")).forEach(schema ->
+                schemas.add(createSchema(schema))
+            );
         } else {
             if (StringUtils.isNotBlank(appName)) {
                 schemas.add(createSchema(appName));

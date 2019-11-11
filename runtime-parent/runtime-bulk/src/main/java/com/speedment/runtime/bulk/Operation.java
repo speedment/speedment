@@ -26,7 +26,7 @@ import com.speedment.runtime.core.manager.Manager;
 public interface Operation<ENTITY> {
 
     enum Type {
-        PERSIST, UPDATE, REMOVE;
+        PERSIST, UPDATE, REMOVE
     }
 
     /**

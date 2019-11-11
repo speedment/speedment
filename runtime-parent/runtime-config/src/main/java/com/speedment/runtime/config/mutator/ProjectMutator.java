@@ -18,7 +18,6 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
@@ -64,6 +63,6 @@ public class ProjectMutator<DOC extends Project> extends DocumentMutatorImpl<DOC
     }
     
     public Dbms addNewDbms() {
-        return new DbmsImpl(document(), newDocument(document(), DBMSES));
+        return Dbms.create(document(), newDocument(document(), DBMSES));
     }
 }

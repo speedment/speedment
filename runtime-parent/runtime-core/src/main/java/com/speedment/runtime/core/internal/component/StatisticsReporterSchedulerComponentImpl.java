@@ -30,27 +30,23 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Per Minborg
  */
-public class StatisticsReporterSchedulerComponentImpl implements StatisticsReporterSchedulerComponent {
+public final class StatisticsReporterSchedulerComponentImpl implements StatisticsReporterSchedulerComponent {
 
     private final AtomicBoolean outstanding;
+    private final boolean enabled;
+    private final ScheduledExecutorService scheduler;
 
-    @Config(name = "statistics.scheduler.enabled", value = "true")
-    private boolean enabled;
-
-    private ScheduledExecutorService scheduler;
-
-    public StatisticsReporterSchedulerComponentImpl() {
+    public StatisticsReporterSchedulerComponentImpl(@Config(name = "statistics.scheduler.enabled", value = "true") final boolean enabled) {
+        this.enabled = enabled;
         outstanding = new AtomicBoolean();
-    }
-
-    @ExecuteBefore(State.INITIALIZED)
-    public void init() {
         if (enabled) {
             scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
                 final Thread t = new Thread(r);
                 t.setDaemon(true);
                 return t;
             }); // Make the threads daemon to allow speedment applications to exit via main method completion Fix #322
+        } else {
+            scheduler = null;
         }
     }
 

@@ -50,8 +50,14 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
-    @Inject private StreamSupplierComponent streamSupplierComponent;
+    private StreamSupplierComponent streamSupplierComponent;
     private PersistenceProvider<ENTITY> persistenceProvider;
+
+    @ExecuteBefore(State.INITIALIZED)
+    public void setInjector(StreamSupplierComponent streamSupplierComponent) {
+        this.streamSupplierComponent = requireNonNull(streamSupplierComponent);
+    }
+
 
     protected AbstractManager() {}
 
@@ -66,12 +72,12 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
      * @param managerComponent  auto-injected managerComponent
      */
     @ExecuteBefore(INITIALIZED)
-    final void install(@WithState(INITIALIZED) ManagerComponent managerComponent) {
+    public final void install(@WithState(INITIALIZED) ManagerComponent managerComponent) {
         managerComponent.put(this);
     }
 
     @ExecuteBefore(STARTED)
-    final void resolve(@WithState(RESOLVED) PersistenceComponent persistenceComponent) {
+    public final void resolve(@WithState(RESOLVED) PersistenceComponent persistenceComponent) {
         persistenceProvider = persistenceComponent.persistenceProvider(this);
     }
 

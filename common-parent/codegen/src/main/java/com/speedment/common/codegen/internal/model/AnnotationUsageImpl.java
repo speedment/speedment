@@ -58,7 +58,7 @@ public final class AnnotationUsageImpl extends AnnotationUsageBase {
         super(requireNonNull(prototype));
     }
 
-    public final static class AnnotationUsageConst extends AnnotationUsageBase {
+    public static final class AnnotationUsageConst extends AnnotationUsageBase {
 
         public AnnotationUsageConst(Type type) {
             super(type);

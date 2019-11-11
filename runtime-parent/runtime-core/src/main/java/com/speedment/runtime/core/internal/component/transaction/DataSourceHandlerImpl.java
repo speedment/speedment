@@ -27,7 +27,7 @@ import java.util.function.Function;
  *
  * @author Per Minborg
  */
-public class DataSourceHandlerImpl<D, T> implements DataSourceHandler<D, T> {
+public final class DataSourceHandlerImpl<D, T> implements DataSourceHandler<D, T> {
 
     private final Function<? super D, ? extends T> extractor;
     private final BiFunction<? super T, Isolation, Isolation> isolationConfigurator;

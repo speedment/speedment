@@ -16,18 +16,13 @@
  */
 package com.speedment.common.injector.internal.util;
 
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.annotation.*;
 import com.speedment.common.injector.exception.InjectorException;
-import com.speedment.common.injector.exception.NoDefaultConstructorException;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -92,7 +87,7 @@ public final class ReflectionUtil {
         }
     }
 
-    public static <T> Optional<T> tryToCreate(Class<T> clazz, Properties properties, List<Object> instances, Set<Class<?>> allInjectableTypes)
+    public static <T> Optional<T> tryToCreate(Class<T> clazz, Properties properties, List<Object> instances, Set<Class<?>> allInjectableTypes, InjectorProxy injectorProxy)
         throws InstantiationException {
         try {
             final Optional<Constructor<T>> oConstr = findConstructor(clazz, instances, allInjectableTypes);
@@ -102,7 +97,8 @@ public final class ReflectionUtil {
             }
 
             final Constructor<T> constr = oConstr.get();
-            constr.setAccessible(true);
+
+            // injectorProxy.setAccessable(constr);
 
             final Parameter[] params = constr.getParameters();
             final Object[] args = new Object[params.length];
@@ -223,7 +219,7 @@ public final class ReflectionUtil {
                 }
             }
 
-            final T instance = constr.newInstance(args);
+            final T instance = injectorProxy.newInstance(constr, args);
             configureParams(instance, properties);
 
             return Optional.of(instance);
@@ -259,7 +255,7 @@ public final class ReflectionUtil {
             onlyInject = constr -> true;
         }
 
-        return Arrays.stream(c.getDeclaredConstructors())
+        return String.format("%s: %n", c.getSimpleName()) + Arrays.stream(c.getDeclaredConstructors())
             .map(constructor -> (Constructor<T>) constructor)
             .filter(onlyInject)
             .map(con ->

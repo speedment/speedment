@@ -29,7 +29,6 @@ import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.field.predicate.CombinedPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
@@ -79,15 +78,17 @@ public final class StreamTerminatorUtil {
             andPredicateBuilders.add(oPredicateBuilder.get()); // Just a top level predicate builder
         } else {
 
-            final Optional<AbstractCombinedPredicate.AndCombinedBasePredicate> oAndCombinedBasePredicate = Cast.cast(predicate, AbstractCombinedPredicate.AndCombinedBasePredicate.class);
-            if (oAndCombinedBasePredicate.isPresent()) {
+            final Optional<CombinedPredicate> oCombinedBasePredicate = Cast.cast(predicate, CombinedPredicate.class);
+            if (oCombinedBasePredicate.isPresent()) {
+                final CombinedPredicate<ENTITY> combinedBasePredicate = oCombinedBasePredicate.get();
+                if (combinedBasePredicate.getType() == CombinedPredicate.Type.AND) {
+                    combinedBasePredicate.stream()
+                        .map(p -> Cast.cast(p, FieldPredicate.class))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .forEachOrdered(andPredicateBuilders::add);
 
-                final AbstractCombinedPredicate.AndCombinedBasePredicate<ENTITY> andCombinedBasePredicate = (AbstractCombinedPredicate.AndCombinedBasePredicate<ENTITY>) oAndCombinedBasePredicate.get();
-                andCombinedBasePredicate.stream()
-                    .map(p -> Cast.cast(p, FieldPredicate.class))
-                    .filter(p -> p.isPresent())
-                    .map(Optional::get)
-                    .forEachOrdered(andPredicateBuilders::add);
+                }
             }
         }
         return andPredicateBuilders;

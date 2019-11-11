@@ -42,8 +42,8 @@ public final class AutoConstructor implements Consumer<Class> {
             .call(constr -> aClass.getFields().stream()
                 .filter(f -> f.getModifiers().contains(FINAL))
                 .map(Field::copy)
-                .peek(f -> f.getModifiers().clear())
                 .forEachOrdered(f -> {
+                    f.getModifiers().clear();
                     constr.add(f).imports(Objects.class, "requireNonNull");
                     if (isPrimitive(f.getType())) {
                         constr.add(format("this.%1$s = %1$s;", f.getName()));

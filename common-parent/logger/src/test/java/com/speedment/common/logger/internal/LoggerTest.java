@@ -37,7 +37,7 @@ final class LoggerTest {
     @Test
     void test() {
         LOGGER.setLevel(Level.TRACE);
-        assertEquals(LOGGER.getLevel(), Level.TRACE);
+        assertEquals(Level.TRACE, LOGGER.getLevel());
 
         LOGGER.trace(MESSAGE_1);
         LOGGER.debug(MESSAGE_1);

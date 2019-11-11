@@ -39,8 +39,8 @@ import static java.util.Arrays.asList;
  * 
  * @see IntField
  */
-@GeneratedCode(value = "Speedment")
-public final class IntFieldTest {
+@GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
+final class IntFieldTest {
     
     private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarInt();
     private IntField<BasicEntity, Integer> field;
@@ -59,7 +59,7 @@ public final class IntFieldTest {
     private BasicEntity l;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         field = IntField.create(
             BasicEntity.Identifier.VAR_INT,
             BasicEntity::getVarInt,
@@ -85,7 +85,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testBetween() {
+    void testBetween() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.between(0, 2);
         final Predicate<BasicEntity> t1 = field.between(-2, 2);
@@ -120,7 +120,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testEqual() {
+    void testEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.equal(-1);
         final Predicate<BasicEntity> t1 = field.equal(0);
@@ -167,7 +167,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testGreaterOrEqual() {
+    void testGreaterOrEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.greaterOrEqual(-1);
         final Predicate<BasicEntity> t1 = field.greaterOrEqual(0);
@@ -214,7 +214,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testGreaterThan() {
+    void testGreaterThan() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.greaterThan(-1);
         final Predicate<BasicEntity> t1 = field.greaterThan(0);
@@ -261,7 +261,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testIn() {
+    void testIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in();
         final Predicate<BasicEntity> t1 = field.in(0);
@@ -308,7 +308,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testInSet() {
+    void testInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.in(Collections.singleton(0));
@@ -355,7 +355,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testLessThan() {
+    void testLessThan() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.lessThan(-1);
         final Predicate<BasicEntity> t1 = field.lessThan(0);
@@ -402,7 +402,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testLessOrEqual() {
+    void testLessOrEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.lessOrEqual(-1);
         final Predicate<BasicEntity> t1 = field.lessOrEqual(0);
@@ -449,7 +449,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testNotBetween() {
+    void testNotBetween() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notBetween(0, 2);
         final Predicate<BasicEntity> t1 = field.notBetween(-2, 2);
@@ -484,7 +484,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testNotEqual() {
+    void testNotEqual() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notEqual(-1);
         final Predicate<BasicEntity> t1 = field.notEqual(0);
@@ -531,7 +531,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testNotIn() {
+    void testNotIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn();
         final Predicate<BasicEntity> t1 = field.notIn(0);
@@ -578,7 +578,7 @@ public final class IntFieldTest {
     }
     
     @Test
-    public void testNotInSet() {
+    void testNotInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton(0));

@@ -17,7 +17,7 @@
 package com.speedment.runtime.core.internal.db;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.core.db.DriverComponent;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.speedment.common.injector.State.STARTED;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,17 +34,22 @@ import static java.util.Objects.requireNonNull;
  */
 public final class DriverComponentImpl implements DriverComponent {
 
-    private @Inject Injector injector;
     // Driver names are cached because getting a Driver
     // is expensive and is called within the get connection loop
     // in the ConnectionPoolComponent,
     // See https://github.com/speedment/speedment/issues/725
     // And yes, we should not put Optionals in Maps but
-    // here it was so convenient.
+    // here it was so convenient.  :-)
     private final Map<String, Optional<Driver>> cache;
+    private Injector injector;
 
     public DriverComponentImpl() {
         this.cache = new ConcurrentHashMap<>();
+    }
+
+    @ExecuteBefore(STARTED)
+    public void setInjector(Injector injector) {
+        this.injector = injector;
     }
 
     @Override

@@ -18,7 +18,6 @@ package com.speedment.common.codegen.internal.util;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.common.codegen.util.Formatting;
 import static com.speedment.common.codegen.util.Formatting.repeat;
 import java.util.Collections;
@@ -34,6 +33,7 @@ import java.util.stream.Stream;
  * @author Per Minborg
  */
 public final class TextUtil {
+    private TextUtil() { }
 
     private static final Pattern WORDS = Pattern.compile("[\\s]+");
     private static final Pattern JAVADOC_WORDS = Pattern.compile("[ ]+"); // Text within html tags "pre" are treated as one "word"
@@ -87,7 +87,7 @@ public final class TextUtil {
         splitter.splitAsStream(text)
             .map(w -> w.replace("\t", Formatting.tab()))
             .forEachOrdered(w -> {
-                final int wordLen = w.length() - Math.max(w.lastIndexOf("\n"), 0);
+                final int wordLen = w.length() - Math.max(w.lastIndexOf('\n'), 0);
                 
                 if (singleRowers.contains(w)) {
                     sb.append(NL);
@@ -227,8 +227,5 @@ public final class TextUtil {
         }
     }
     
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private TextUtil() { instanceNotAllowed(getClass()); }
+
 }

@@ -39,6 +39,7 @@ import static java.util.Arrays.asList;
  * @author Emil Forslund
  * @since  3.1.0
  */
+@SuppressWarnings("overloads")
 public final class Expressions {
 
      /**
@@ -3429,6 +3430,7 @@ public final class Expressions {
      * @param <T>          the input entity type
      * @return             the joined expression
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> ToString<T> joining(
             ToString<T>... expressions) {
@@ -3445,6 +3447,7 @@ public final class Expressions {
      * @param <T>          the input entity type
      * @return             the joined expression
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> ToString<T> joining(
             CharSequence separator,
@@ -3464,6 +3467,7 @@ public final class Expressions {
      * @param <T>          the input entity type
      * @return             the joined expression
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> ToString<T> joining(
             CharSequence separator,

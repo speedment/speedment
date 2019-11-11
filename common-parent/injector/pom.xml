@@ -26,47 +26,25 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>injector</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.common.injector</module-name>
+    </properties>
+
     <name>Speedment - Common - Injector</name>
     <description>
         A small dependency injection library.
     </description>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.common.injector,
-                            com.speedment.common.injector.annotation,
-                            com.speedment.common.injector.dependency,
-                            com.speedment.common.injector.execution,
-                            com.speedment.common.injector.exception
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
 
     <profiles>
         <profile>
             <id>release</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin-version}</version>
-                    </plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -84,23 +62,10 @@
     </profiles>
     
     <dependencies>
-
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>logger</artifactId>
             <version>${speedment.version}</version>
         </dependency>
-
-        <!--Test dependencies-->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-
     </dependencies>
 </project>

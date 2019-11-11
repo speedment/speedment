@@ -18,7 +18,6 @@ package com.speedment.tool.propertyeditor.item;
 
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.core.util.StaticClassUtil;
 import com.speedment.tool.config.trait.HasNameProtectedProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,12 +34,12 @@ import javafx.scene.layout.StackPane;
  * @since 3.0.0
  */
 
-public class ItemUtil {
+public final class ItemUtil {
 
-    public static final String DATABASE_RELATION_TOOLTIP = 
+    public ItemUtil() {}
+
+    public static final String DATABASE_RELATION_TOOLTIP =
         "This field should ONLY be changed to reflect changes made in the underlying database.\nEnable editing by by right clicking on the field.";
-
-
 
     /**
      * Makes a node disabled by default, and requires that the user right-clicks
@@ -94,7 +93,4 @@ public class ItemUtil {
         return pane;
     }
 
-    private ItemUtil() {
-        StaticClassUtil.instanceNotAllowed(ItemUtil.class);
-    }
 }

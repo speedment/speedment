@@ -25,8 +25,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import static com.speedment.common.mapstream.util.StaticClassUtil.instanceNotAllowed;
-
 /**
  * Utility methods for collecting Speedment streams in various ways.
  * 
@@ -35,6 +33,8 @@ import static com.speedment.common.mapstream.util.StaticClassUtil.instanceNotAll
  * @since   2.1.0
  */
 public final class CollectorUtil {
+
+    private CollectorUtil() {}
 
     /**
      * Returns a new {@link MapStream} where the elements have been grouped together using
@@ -149,10 +149,4 @@ public final class CollectorUtil {
         }
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private CollectorUtil() {
-        instanceNotAllowed(getClass());
-    }
 }

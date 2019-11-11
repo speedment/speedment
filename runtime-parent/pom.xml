@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
         
     <groupId>com.speedment.runtime</groupId>
@@ -64,7 +64,7 @@
         </dependencies>
     </dependencyManagement>
     
-    <profiles>
+<!--    <profiles>
         <profile>
             <id>release</id>
             
@@ -90,5 +90,19 @@
             </build>
 
         </profile>
-    </profiles>
+    </profiles>-->
+
+    <dependencies>
+        <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

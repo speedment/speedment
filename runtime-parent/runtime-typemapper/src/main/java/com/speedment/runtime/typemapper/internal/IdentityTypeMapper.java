@@ -18,11 +18,13 @@ package com.speedment.runtime.typemapper.internal;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.lang.reflect.Type;
 
 /**
  * A special implementation of {@link TypeMapper} that simply returns the 
  * same object that it received.
+ * <p>
  * 
  * @param <T>  the type
  * 
@@ -31,6 +33,8 @@ import java.lang.reflect.Type;
  * @since   3.0.0
  */
 public final class IdentityTypeMapper<T> implements TypeMapper<T, T> {
+
+    private static final IdentityTypeMapper<?> SHARED_INSTANCE = new IdentityTypeMapper<>();
 
     @Override
     public String getLabel() {
@@ -56,5 +60,15 @@ public final class IdentityTypeMapper<T> implements TypeMapper<T, T> {
     public Ordering getOrdering() {
         return Ordering.RETAIN;
     }
-    
+
+    @Override
+    public boolean isIdentity() {
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> TypeMapper<T, T> shared() {
+        return (TypeMapper<T, T>) SHARED_INSTANCE;
+    }
+
 }

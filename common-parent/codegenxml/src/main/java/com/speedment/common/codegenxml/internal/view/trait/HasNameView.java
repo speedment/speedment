@@ -27,11 +27,11 @@ public interface HasNameView<T extends HasName<T>> {
 
     default String transformName(T model) {
         return model.getName()
-            .replaceAll("&", "")
-            .replaceAll(">", "")
-            .replaceAll("<", "")
-            .replaceAll("\"", "")
-            .replaceAll("'", "");
+            .replace("&", "")
+            .replace(">", "")
+            .replace("<", "")
+            .replace("\"", "")
+            .replace("'", "");
     }
 
 }

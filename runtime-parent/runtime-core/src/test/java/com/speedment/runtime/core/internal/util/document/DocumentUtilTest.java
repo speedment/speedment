@@ -78,7 +78,7 @@ final class DocumentUtilTest extends AbstractDocumentTest {
     @Test
     void testAncestor() {
         assertEquals(Optional.empty(), DocumentUtil.ancestor(project, Project.class));
-        stream().filter(d -> !Project.class.isInstance(d)).forEach(d -> {
+        stream().filter(d -> !(d instanceof Project)).forEach(d -> {
             assertEquals(Optional.of(project), DocumentUtil.ancestor(d, Project.class));
         });
 

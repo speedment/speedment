@@ -16,22 +16,22 @@
  */
 package com.speedment.runtime.test_support;
 
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.core.db.*;
-import com.speedment.runtime.core.internal.db.AbstractDbmsType;
+import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
-import java.sql.Driver;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
 
 
 /**
  *
  * @author Per Minborg
  */
-public class MockDbmsType extends AbstractDbmsType implements DbmsType {
-
-    public MockDbmsType() {
-        super(className -> Optional.empty());
-    }
+public class MockDbmsType implements DbmsType {
 
     @Override
     public String getName() {
@@ -77,5 +77,99 @@ public class MockDbmsType extends AbstractDbmsType implements DbmsType {
     public FieldPredicateView getFieldPredicateView() {
         return new MockSpeedmentPredicateView();
     }
-        
+
+    @Override
+    public DatabaseNamingConvention getDatabaseNamingConvention() {
+        return new DatabaseNamingConvention() {
+            @Override
+            public String fullNameOf(String schemaName, String tableName, String columnName) {
+                return "A";
+            }
+
+            @Override
+            public String fullNameOf(String schemaName, String tableName) {
+                return "A";
+            }
+
+            @Override
+            public String quoteField(String field) {
+                return null;
+            }
+
+            @Override
+            public String encloseField(String field) {
+                return null;
+            }
+
+            @Override
+            public Set<String> getSchemaExcludeSet() {
+                return Collections.emptySet();
+            }
+        };
+    }
+
+    @Override
+    public boolean isSupported() {
+        return true;
+    }
+
+    @Override
+    public String getSchemaTableDelimiter() {
+        return ".";
+    }
+
+    @Override
+    public DbmsColumnHandler getColumnHandler() {
+        return new DbmsColumnHandler() {
+            @Override
+            public Predicate<Column> excludedInInsertStatement() {
+                return Column::isAutoIncrement;
+            }
+
+            @Override
+            public Predicate<Column> excludedInUpdateStatement() {
+                return c -> false;
+            }
+        };
+    }
+
+    @Override
+    public String getResultSetTableSchema() {
+        return "TABLE_SCHEM";
+    }
+
+    @Override
+    public String getInitialQuery() {
+        return "select 1 from dual";
+    }
+
+    @Override
+    public Optional<String> getDefaultDbmsName() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Set<TypeInfoMetaData> getDataTypes() {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public SkipLimitSupport getSkipLimitSupport() {
+        return SkipLimitSupport.STANDARD;
+    }
+
+    @Override
+    public String applySkipLimit(String originalSql, List<Object> params, long skip, long limit) {
+        return originalSql;
+    }
+
+    @Override
+    public SubSelectAlias getSubSelectAlias() {
+        return SubSelectAlias.REQUIRED;
+    }
+
+    @Override
+    public SortByNullOrderInsertion getSortByNullOrderInsertion() {
+        return SortByNullOrderInsertion.PRE;
+    }
 }

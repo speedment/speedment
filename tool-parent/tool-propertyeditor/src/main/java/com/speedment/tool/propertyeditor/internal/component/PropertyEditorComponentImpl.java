@@ -18,7 +18,6 @@ package com.speedment.tool.propertyeditor.internal.component;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.*;
@@ -35,6 +34,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -44,14 +44,19 @@ import static com.speedment.common.injector.State.INITIALIZED;
 public final class PropertyEditorComponentImpl implements PropertyEditorComponent {
     
     private final Map<Class<?>, Map<String, Supplier<PropertyEditor<?>>>> factoryMap; // Ordered based on insert
-    private @Inject Injector injector;
+    private Injector injector;
     
     public PropertyEditorComponentImpl (){
         this.factoryMap = Collections.synchronizedMap(new LinkedHashMap<>());
     }
-    
+
     @ExecuteBefore(INITIALIZED)
-    void installEditors() {
+    public void setInjector(Injector injector) {
+        this.injector = requireNonNull(injector);
+    }
+
+    @ExecuteBefore(INITIALIZED)
+    public void installEditors() {
         install(HasEnabledProperty.class,    HasEnableUtil.ENABLED,    EnabledPropertyEditor::new);
         install(HasNameProperty.class,       HasNameUtil.NAME,          NamePropertyEditor::new);
         install(HasAliasProperty.class,      HasAliasUtil.ALIAS,        AliasPropertyEditor::new);
@@ -93,10 +98,10 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
 
     @Override
     public <DOC extends DocumentProperty> void install(Class<DOC> documentType, String propertyKey, Supplier<PropertyEditor<DOC>> factory) {
-        aquire(documentType).put(propertyKey, factory);
+        acquire(documentType).put(propertyKey, factory);
     }
     
-    private <DOC extends DocumentProperty> Map<String, Supplier<PropertyEditor<DOC>>> aquire(Class<DOC> documentType){
+    private <DOC extends DocumentProperty> Map<String, Supplier<PropertyEditor<DOC>>> acquire(Class<DOC> documentType){
         @SuppressWarnings("unchecked")
         final Map<String, Supplier<PropertyEditor<DOC>>> result = (Map<String, Supplier<PropertyEditor<DOC>>>) (Object)
             factoryMap.computeIfAbsent(

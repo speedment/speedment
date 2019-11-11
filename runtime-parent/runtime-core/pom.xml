@@ -26,50 +26,20 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>runtime-core</artifactId>
-    <packaging>bundle</packaging>
+
+    <properties>
+        <module-name>com.speedment.runtime.core</module-name>
+    </properties>
 
     <name>Speedment - Runtime - Core</name>
     <description>
         The runtime bundle of Speedment that all projects must depend on to use 
         the framework.
     </description>
-    
-    <build>
-        <plugins>                        
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Bundle-Description>
-                            The runtime environment of Speedment.
-                        </Bundle-Description>
-                        <Export-Package>
-                            com.speedment.runtime.core.component,
-                            com.speedment.runtime.core.component.connectionpool,
-                            com.speedment.runtime.core.component.resultset,
-                            com.speedment.runtime.core.component.sql,
-                            com.speedment.runtime.core.component.transaction,
-                            com.speedment.runtime.core.db,
-                            com.speedment.runtime.core.db.metadata,
-                            com.speedment.runtime.core.exception,
-                            com.speedment.runtime.core.manager,
-                            com.speedment.runtime.core.manager.sql,
-                            com.speedment.runtime.core.stream,
-                            com.speedment.runtime.core.stream.action,
-                            com.speedment.runtime.core.stream.parallel,
-                            com.speedment.runtime.core.util,
-                            com.speedment.runtime.core
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <!-- Common Dependencies -->
@@ -108,11 +78,6 @@
             <artifactId>tuple</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>lazy</artifactId>
-        </dependency>
-        
         <!-- Runtime Dependencies -->
         <dependency>
             <groupId>com.speedment.runtime</groupId>
@@ -139,37 +104,9 @@
         </dependency>
         
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
-
-<!--        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.opera</groupId>
-            <artifactId>operadriver</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.seleniumhq.selenium</groupId>
-                    <artifactId>selenium-remote-driver</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
 
     </dependencies>
 </project>

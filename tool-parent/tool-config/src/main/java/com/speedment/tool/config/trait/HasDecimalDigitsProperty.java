@@ -29,13 +29,11 @@ import javafx.beans.property.IntegerProperty;
  */
 public interface HasDecimalDigitsProperty 
 extends HasDecimalDigits, DocumentProperty {
-    
-    int DEFAULT_DECIMAL_DIGITS = -1;
 
     default IntegerProperty decimalDigitsProperty() {
         return integerPropertyOf(HasDecimalDigitsUtil.DECIMAL_DIGITS,
             () -> HasDecimalDigits.super.getDecimalDigits()
-                .orElse(DEFAULT_DECIMAL_DIGITS)
+                .orElse(ConstantUtil.DEFAULT_DECIMAL_DIGITS)
         );
     }
 

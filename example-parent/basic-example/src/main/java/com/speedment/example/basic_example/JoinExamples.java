@@ -33,20 +33,20 @@ import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.common.tuple.nullable.Tuple2OfNullables;
 import com.speedment.example.basic_example.util.ExampleUtil;
-import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
-import static java.util.stream.Collectors.*;
-
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent;
 
 import java.util.*;
 import java.util.function.Function;
 
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+import static java.util.stream.Collectors.*;
+
 /**
  *
  * @author Per Minborg
  */
-public class JoinExamples {
+public final class JoinExamples {
 
     private final SakilaApplication app;
     private final FilmManager films;
@@ -54,7 +54,7 @@ public class JoinExamples {
     private final ActorManager actors;
     private final JoinComponent joinComponent;
 
-    public JoinExamples() {
+    private JoinExamples() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
         languages = app.getOrThrow(LanguageManager.class);

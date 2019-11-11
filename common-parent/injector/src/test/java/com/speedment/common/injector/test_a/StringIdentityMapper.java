@@ -29,7 +29,7 @@ import static com.speedment.common.injector.State.RESOLVED;
 public final class StringIdentityMapper implements TypeMapper<String, String> {
 
     @ExecuteBefore(RESOLVED)
-    protected void install(@WithState(RESOLVED) TypeMapperComponent mappers) {
+    public void install(@WithState(RESOLVED) TypeMapperComponent mappers) {
         mappers.install(String.class, String.class, this);
     }
     

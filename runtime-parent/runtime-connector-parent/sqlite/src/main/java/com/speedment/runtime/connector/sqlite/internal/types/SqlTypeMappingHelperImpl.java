@@ -28,14 +28,10 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static com.speedment.runtime.core.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
@@ -52,9 +48,11 @@ public final class SqlTypeMappingHelperImpl implements SqlTypeMappingHelper {
     private final DbmsHandlerComponent dbmsHandler;
     private final JavaTypeMap javaTypeMap;
 
-    SqlTypeMappingHelperImpl(ConnectionPoolComponent connectionPool,
-                             DbmsHandlerComponent dbmsHandler,
-                             JavaTypeMap javaTypeMap) {
+    SqlTypeMappingHelperImpl(
+        final ConnectionPoolComponent connectionPool,
+        final DbmsHandlerComponent dbmsHandler,
+        final JavaTypeMap javaTypeMap
+    ) {
         this.connectionPool = requireNonNull(connectionPool);
         this.dbmsHandler    = requireNonNull(dbmsHandler);
         this.javaTypeMap    = requireNonNull(javaTypeMap);

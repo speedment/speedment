@@ -16,10 +16,8 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import com.speedment.runtime.core.internal.util.java9.Java9StreamUtil;
+import com.speedment.runtime.core.stream.java9.Java9StreamUtil;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -121,7 +119,7 @@ final class AutoClosingReferenceStreamTest extends AbstractAutoClosingStreamTest
 
     @Override
     Stream<NamedFunction<Stream<Integer>, Object>> terminatingOperations() {
-        return Stream.<NamedFunction<Stream<Integer>, Object>>of(
+        return Stream.of(
             NamedFunction.of("count", Stream::count),
             NamedFunction.of("forEach", (Stream<Integer> s) -> {
                 s.forEach(blackHole());

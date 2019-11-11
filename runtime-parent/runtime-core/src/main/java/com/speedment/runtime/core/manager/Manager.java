@@ -153,6 +153,17 @@ public interface Manager<ENTITY> extends PersistenceProvider<ENTITY>, Persistenc
     Stream<ENTITY> stream();
 
     /**
+     * Creates and returns a new local instance of the entity implementation.
+     * <p>
+     * The created entity is not persisted to the underlying database. The
+     * user is expected to provide any piece of information required by
+     * the entity and optionally persist it e.g. using {@link #persist(Object)}
+     *
+     * @return a new local instance of the entity implementation
+     */
+    ENTITY create();
+
+    /**
      * Persists the provided entity to the underlying database and returns a
      * potentially updated entity. If the persistence fails for any reason, an
      * unchecked {@link SpeedmentException} is thrown.
@@ -174,7 +185,7 @@ public interface Manager<ENTITY> extends PersistenceProvider<ENTITY>, Persistenc
      * @throws SpeedmentException if the underlying database throws an exception
      * (e.g. SQLException)
      */
-    default ENTITY persist(ENTITY entity) throws SpeedmentException {
+    default ENTITY persist(ENTITY entity) {
         return persister().apply(entity);
     }
 
@@ -202,7 +213,7 @@ public interface Manager<ENTITY> extends PersistenceProvider<ENTITY>, Persistenc
      * @throws SpeedmentException if the underlying database throws an exception
      * (e.g. SQLException)
      */
-    default ENTITY update(ENTITY entity) throws SpeedmentException {
+    default ENTITY update(ENTITY entity) {
         return updater().apply(entity);
     }
 
@@ -219,7 +230,7 @@ public interface Manager<ENTITY> extends PersistenceProvider<ENTITY>, Persistenc
      * @throws SpeedmentException if the underlying database throws an exception
      * (e.g. SQLException)
      */
-    default ENTITY remove(ENTITY entity) throws SpeedmentException {
+    default ENTITY remove(ENTITY entity) {
         return remover().apply(entity);
     }
 

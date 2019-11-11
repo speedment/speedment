@@ -19,11 +19,13 @@ package com.speedment.runtime.application;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.common.jvm_version.JvmVersion;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.application.internal.util.JpmsUtil;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
@@ -39,12 +41,12 @@ import com.speedment.runtime.core.component.*;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.component.InfoComponentImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.welcome.HasOnWelcome;
 
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -53,7 +55,6 @@ import java.util.stream.IntStream;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.lang.Boolean.TRUE;
 import static java.util.Objects.requireNonNull;
@@ -118,7 +119,9 @@ public abstract class AbstractApplicationBuilder<
         final String name,
         final BiConsumer<Injector, C> consumer
     ) {
-        requireNonNulls(type, name, consumer);
+        requireNonNull(type);
+        requireNonNull(name);
+        requireNonNull(consumer);
 
         injectorBuilder.before(resolved(ProjectComponent.class)
             .withStateInitialized(Injector.class)
@@ -140,7 +143,8 @@ public abstract class AbstractApplicationBuilder<
     public <C extends Document & HasEnabled> BUILDER with(
             Class<C> type, BiConsumer<Injector, C> consumer) {
         
-        requireNonNulls(type, consumer);
+        requireNonNull(type);
+        requireNonNull(consumer);
         
         injectorBuilder.before(resolved(ProjectComponent.class)
             .withStateInitialized(Injector.class)
@@ -169,7 +173,8 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withParam(String key, String value) {
-        requireNonNulls(key, value);
+        requireNonNull(key);
+        requireNonNull(value);
         injectorBuilder.withParam(key, value);
         return self();
     }
@@ -240,7 +245,8 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withIpAddress(String dbmsName, String ipAddress) {
-        requireNonNulls(dbmsName, ipAddress);
+        requireNonNull(dbmsName);
+        requireNonNull(ipAddress);
         with(Dbms.class, dbmsName, d -> d.mutator().setIpAddress(ipAddress));
         return self();
     }
@@ -273,7 +279,8 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withSchema(String oldSchemaName, String schemaName) {
-        requireNonNulls(oldSchemaName, schemaName);
+        requireNonNull(oldSchemaName);
+        requireNonNull(schemaName);
         with(Schema.class, oldSchemaName, s -> {
             // This makes sure that old json files with no id
             // first sets it id before the name is changed
@@ -337,8 +344,16 @@ public abstract class AbstractApplicationBuilder<
     }
 
     public <T> BUILDER withComponent(Class<T> injectableClass, Supplier<T> supplier) {
-        requireNonNulls(injectableClass, supplier);
+        requireNonNull(injectableClass);
+        requireNonNull(supplier);
         injectorBuilder.withComponent(injectableClass, supplier);
+        return self();
+    }
+
+    @Override
+    public BUILDER withInjectorProxy(InjectorProxy injectorProxy) {
+        requireNonNull(injectorProxy);
+        injectorBuilder.withInjectorProxy(injectorProxy);
         return self();
     }
 
@@ -458,8 +473,8 @@ public abstract class AbstractApplicationBuilder<
      */
     protected void printWelcomeMessage(Injector injector) {
 
-        final InfoComponent     info = injector.getOrThrow(InfoComponent.class);
-        final InfoComponentImpl upstreamInfo = injector.getOrThrow(InfoComponentImpl.class);
+        final InfoComponent info = injector.getOrThrow(InfoComponent.class);  // Get first
+        final InfoComponent upstreamInfo = injector.stream(InfoComponent.class).reduce((first, second) -> second).orElseThrow(NoSuchElementException::new); // Get last
         final String title = info.getTitle();
         final String version = info.getImplementationVersion();
 
@@ -498,7 +513,8 @@ public abstract class AbstractApplicationBuilder<
                 JvmVersion.getImplementationTitle(), JvmVersion.getImplementationVersion(), JvmVersion.getImplementationVendor()
             );
 
-            
+
+
 //            final Package package_ = Runtime.class.getPackage();
 //            final String javaMsg = package_.getSpecificationTitle()
 //                + " " + package_.getSpecificationVersion()
@@ -529,6 +545,8 @@ public abstract class AbstractApplicationBuilder<
             Runtime.getRuntime().availableProcessors(),
             Runtime.getRuntime().maxMemory()
         );
+
+        JpmsUtil.logModulesIfEnabled();
 
         // Invoke all HasOnWelcome methods
         injector.injectables()

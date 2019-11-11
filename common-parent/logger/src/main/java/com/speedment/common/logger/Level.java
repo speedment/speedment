@@ -17,7 +17,7 @@
 package com.speedment.common.logger;
 
 /**
- * This <tt>Level</tt> enum defines the supported levels for the logging
+ * This {@code Level} enum defines the supported levels for the logging
  * framework.
  *
  * @author pemi
@@ -25,67 +25,67 @@ package com.speedment.common.logger;
 public enum Level {
 
     /**
-     * The <tt>Trace</tt> Level designates finer-grained informational events
-     * than the <tt>Debug</tt> level.
+     * The {@code Trace} Level designates finer-grained informational events
+     * than the {@code Debug} level.
      * <p>
      * This is the lowest level of logging
      */
     TRACE("TRACE"),
     /**
-     * The <tt>Debug</tt> Level designates fine-grained informational events
+     * The {@code Debug} Level designates fine-grained informational events
      * that are most useful for debugging an application.
      * <p>
      * This level is higher than:
      * <ul>
-     * <li>{@link TRACE}</li>
+     * <li>{@link #TRACE}</li>
      * </ul>
      */
     DEBUG("DEBUG"),
     /**
-     * The <tt>Info</tt> level designates informational messages that highlight
+     * The {@code Info} level designates informational messages that highlight
      * the progress of the application at coarse-grained level.
      * <p>
      * This level is higher than:
      * <ul>
-     * <li>{@link TRACE}</li>
-     * <li>{@link DEBUG}</li>
+     * <li>{@link #TRACE}</li>
+     * <li>{@link #DEBUG}</li>
      * </ul>
      */
     INFO("INFO "),
     /**
-     * The <tt>Warning</tt> level designates potentially harmful situations.
+     * The {@code Warning} level designates potentially harmful situations.
      * <p>
      * This level is higher than:
      * <ul>
-     * <li>{@link TRACE}</li>
-     * <li>{@link DEBUG}</li>
-     * <li>{@link INFO}</li>
+     * <li>{@link #TRACE}</li>
+     * <li>{@link #DEBUG}</li>
+     * <li>{@link #INFO}</li>
      * </ul>
      */
     WARN("WARN "),
     /**
-     * The <tt>Warning</tt> level designates potentially harmful situations.
+     * The {@code Warning} level designates potentially harmful situations.
      * <p>
      * This level is higher than:
      * <ul>
-     * <li>{@link TRACE}</li>
-     * <li>{@link DEBUG}</li>
-     * <li>{@link INFO}</li>
-     * <li>{@link WARN}</li>
+     * <li>{@link #TRACE}</li>
+     * <li>{@link #DEBUG}</li>
+     * <li>{@link #INFO}</li>
+     * <li>{@link #WARN}</li>
      * </ul>
      */
     ERROR("ERROR"),
     /**
-     * The <tt>Fatal</tt> level designates a severe application error event that
+     * The {@code Fatal} level designates a severe application error event that
      * will most probably lead the application to abort.
      * <p>
      * This level is the highest log level and is higher than:
      * <ul>
-     * <li>{@link TRACE}</li>
-     * <li>{@link DEBUG}</li>
-     * <li>{@link INFO}</li>
-     * <li>{@link WARN}</li>
-     * <li>{@link ERROR}</li>
+     * <li>{@link #TRACE}</li>
+     * <li>{@link #DEBUG}</li>
+     * <li>{@link #INFO}</li>
+     * <li>{@link #WARN}</li>
+     * <li>{@link #ERROR}</li>
      * </ul>
      */
     FATAL("FATAL");

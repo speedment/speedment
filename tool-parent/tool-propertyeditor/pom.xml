@@ -26,38 +26,22 @@
     <parent>
         <groupId>com.speedment.tool</groupId>
         <artifactId>tool-parent</artifactId>
-        <version>3.1.18</version>
+        <version>3.2.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>tool-propertyeditor</artifactId>
-    <packaging>bundle</packaging>
-    
+
+    <properties>
+        <module-name>com.speedment.tool.propertyeditor</module-name>
+    </properties>
+
     <name>Speedment - Tool - Property Editor</name>
     <description>
         A visual JavaFX component that makes it possible to edit the database 
         configuration model in a graphical user interface.
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/PropertyEditor/</url>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            com.speedment.tool.propertyeditor,
-                            com.speedment.tool.propertyeditor.component,
-                            com.speedment.tool.propertyeditor.editor,
-                            com.speedment.tool.propertyeditor.item
-                        </Export-Package>
-                    </instructions>
-                </configuration>
-            </plugin>                            
-        </plugins>
-    </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>

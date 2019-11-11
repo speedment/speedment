@@ -38,8 +38,7 @@ import org.apache.maven.project.MavenProject;
  */
 public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
 
-        private final static Logger LOGGER = 
-            LoggerManager.getLogger(AbstractGenerateMojo.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractGenerateMojo.class);
     
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;
@@ -69,7 +68,7 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
 
                 // after generating the speedment code, the package location needs to be added as a source folder
                 if (!mavenProject.getCompileSourceRoots().contains(mavenProject.getBasedir().getAbsolutePath() + "/" + project.getPackageLocation())) {
-                    System.out.println("adding new source location");
+                    getLog().info("Adding new source location");
                     mavenProject.addCompileSourceRoot(mavenProject.getBasedir().getAbsolutePath() + "/" + project.getPackageLocation());
                 }
             } catch (final Exception ex) {
@@ -111,7 +110,7 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
     
     @Override
     protected boolean debug() {
-        return debug == null ? false: debug;
+        return !(debug == null) && debug;
     }
     
     @Override

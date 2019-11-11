@@ -18,6 +18,7 @@ package com.speedment.common.injector.test_c;
 
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.test_b.A;
 import com.speedment.common.injector.test_b.B;
 
 /**
@@ -26,8 +27,13 @@ import com.speedment.common.injector.test_b.B;
  */
 public class ChildType extends ParentType {
     
-    public @Inject B b;
-    
+    public final B b;
+
+    public ChildType(A a, B b) {
+        super(a);
+        this.b = b;
+    }
+
     @Execute
-    private void installChild() {}
+    public void installChild() {}
 }

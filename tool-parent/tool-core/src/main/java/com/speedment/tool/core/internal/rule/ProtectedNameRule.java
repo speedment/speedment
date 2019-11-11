@@ -16,20 +16,22 @@
  */
 package com.speedment.tool.core.internal.rule;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.util.DocumentDbUtil;
-import static com.speedment.runtime.config.util.DocumentDbUtil.isAllAncestorsEnabled;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.rule.Issue;
 import com.speedment.tool.core.rule.Rule;
+
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
+
+import static com.speedment.runtime.config.util.DocumentDbUtil.isAllAncestorsEnabled;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -66,19 +68,24 @@ public class ProtectedNameRule implements Rule{
     
     private final Pattern pattern;
     
-    private @Inject ProjectComponent projectComponent;
-    private @Inject IssueComponent issues;
+    private final ProjectComponent projectComponent;
+    private final IssueComponent issues;
     
-    public ProtectedNameRule() {
+    public ProtectedNameRule(
+        final ProjectComponent projectComponent,
+        final IssueComponent issues
+    ) {
+        this.projectComponent = requireNonNull(projectComponent);
+        this.issues = requireNonNull(issues);
         this.pattern = Pattern.compile(
-            Arrays.stream(PROTECTED_NAMES).collect(joining("|")), 
+            String.join("|", PROTECTED_NAMES),
             Pattern.CASE_INSENSITIVE
         );
     }
 
     @Override
     public CompletableFuture<Boolean> verify() {
-        return CompletableFuture.supplyAsync(() -> checkRule());
+        return CompletableFuture.supplyAsync(this::checkRule);
     }
     
     private boolean checkRule() {
@@ -86,7 +93,7 @@ public class ProtectedNameRule implements Rule{
         final Project project = projectComponent.getProject();  
         
         DocumentDbUtil.traverseOver(project)
-            .filter(d -> isAllAncestorsEnabled(d))
+            .filter(DocumentDbUtil::isAllAncestorsEnabled)
             .forEach(doc -> check(doc, noIssues));
         
         return noIssues.get();

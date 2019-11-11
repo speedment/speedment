@@ -19,7 +19,6 @@ package com.speedment.common.logger.internal.util;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.speedment.common.logger.internal.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 
 /**

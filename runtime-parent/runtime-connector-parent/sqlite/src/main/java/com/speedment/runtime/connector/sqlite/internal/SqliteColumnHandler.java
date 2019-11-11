@@ -27,7 +27,7 @@ import java.util.function.Predicate;
  * @author Emil Forslund
  * @since  3.1.10
  */
-public final class SqliteColumnHandler implements DbmsColumnHandler {
+final class SqliteColumnHandler implements DbmsColumnHandler {
     @Override
     public Predicate<Column> excludedInInsertStatement() {
         return col -> false;

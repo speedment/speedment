@@ -23,7 +23,7 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DbmsPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.trait.*;
@@ -39,7 +39,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 
 /**
  *
@@ -146,7 +146,7 @@ implements Dbms,
     
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return concat(DocumentPropertyComponent.DBMSES, key);
+        return concat(DocumentPropertyComponentUtil.DBMSES, key);
     }
 
     @Override

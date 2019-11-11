@@ -18,9 +18,11 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
+import com.speedment.runtime.field.predicate.trait.HasInclusion;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasReferenceValue;
+
+import java.util.function.Predicate;
 
 import static com.speedment.runtime.field.predicate.PredicateType.NOT_BETWEEN;
 import static java.util.Objects.requireNonNull;
@@ -35,50 +37,53 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<? super V>>
-extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
-implements BetweenPredicate, Tuple2<V, V> {
+    extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+    implements HasInclusion, Tuple2<V, V> {
 
     private final V start;
     private final V end;
     private final Inclusion inclusion;
 
     public ReferenceNotBetweenPredicate(
-            final HasReferenceValue<ENTITY, D, V> referenceField,
-            final V start,
-            final V end,
-            final Inclusion inclusion) {
-        
-        super(NOT_BETWEEN, referenceField, entity -> {
-            final V fieldValue = referenceField.get(entity);
-
-            switch (inclusion) {
-                case START_EXCLUSIVE_END_EXCLUSIVE : 
-                    if (fieldValue == null) return false;
-                    else if (start == null || end == null) return false;
-                    else return !(start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) > 0);
-                
-                case START_EXCLUSIVE_END_INCLUSIVE : 
-                    if (fieldValue == null) return start != null && end == null;
-                    else if (start == null || end == null) return false;
-                    else return !(start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) >= 0);
-                
-                case START_INCLUSIVE_END_EXCLUSIVE : 
-                    if (fieldValue == null) return start == null && end != null;
-                    else if (start == null || end == null) return false;
-                    return !(start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) > 0);
-                
-                case START_INCLUSIVE_END_INCLUSIVE : 
-                    if (fieldValue == null) return start == null || end == null;
-                    else if (start == null || end == null) return false;
-                    return !(start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) >= 0);
-                
-                default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
-            }
-        });
-        
+        final HasReferenceValue<ENTITY, D, V> referenceField,
+        final V start,
+        final V end,
+        final Inclusion inclusion
+    ) {
+        super(NOT_BETWEEN, referenceField, entityPredicate(referenceField, start, end, inclusion));
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
+    }
+
+    private static <ENTITY, D, V extends Comparable<? super V>> Predicate<ENTITY> entityPredicate(HasReferenceValue<ENTITY, D, V> referenceField, V start, V end, Inclusion inclusion) {
+        return entity -> {
+            final V fieldValue = referenceField.get(entity);
+
+            switch (inclusion) {
+                case START_EXCLUSIVE_END_EXCLUSIVE :
+                    if (fieldValue == null) return false;
+                    else if (start == null || end == null) return false;
+                    else return !(start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) > 0);
+
+                case START_EXCLUSIVE_END_INCLUSIVE :
+                    if (fieldValue == null) return start != null && end == null;
+                    else if (start == null || end == null) return false;
+                    else return !(start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) >= 0);
+
+                case START_INCLUSIVE_END_EXCLUSIVE :
+                    if (fieldValue == null) return start == null && end != null;
+                    else if (start == null || end == null) return false;
+                    return !(start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) > 0);
+
+                case START_INCLUSIVE_END_INCLUSIVE :
+                    if (fieldValue == null) return start == null || end == null;
+                    else if (start == null || end == null) return false;
+                    return !(start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) >= 0);
+
+                default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
+            }
+        };
     }
 
     @Override
