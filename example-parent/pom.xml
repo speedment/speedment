@@ -23,17 +23,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!--
-        <parent>
-            <groupId>com.speedment</groupId>
-            <artifactId>speedment-parent</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
-        </parent>
-    -->
-
     <groupId>com.speedment.example</groupId>
     <artifactId>example-parent</artifactId>
-    <version>3.2.0-SNAPSHOT</version>
+    <version>3.2.0</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -42,7 +34,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <!--<mysql.version>5.1.48</mysql.version>-->
         <mysql.version>8.0.13</mysql.version>
-        <speedment.version>3.2.0-SNAPSHOT</speedment.version>
+        <speedment.version>${project.version}</speedment.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
         <junit.platform.provider.version>1.5.2</junit.platform.provider.version>
     </properties>
@@ -78,6 +70,16 @@
                     </dependency>-->
                 </dependencies>
             </plugin>
+
+            <plugin>
+                <groupId>com.speedment</groupId>
+                <artifactId>speedmentversion-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <minVersion>${speedment.version}</minVersion>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

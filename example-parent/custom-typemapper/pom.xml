@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.example</groupId>
         <artifactId>example-parent</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
+        <version>3.2.0</version>
     </parent>
 
     <artifactId>custom-typemapper</artifactId>

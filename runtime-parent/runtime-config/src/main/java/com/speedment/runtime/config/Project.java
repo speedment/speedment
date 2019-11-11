@@ -93,7 +93,7 @@ extends Document,
      * will be shown when Speedment is started.
      * <p>
      * The version has the following structure:
-     * <pre>{@code speedment:3.0.21-SNAPSHOT}</pre>
+     * <pre>{@code speedment:3.0.21}</pre>
      * First comes the name of the edition (simply {@code speedment} for the
      * open-source edition) followed by a comma and the Maven version.
      * <p>
