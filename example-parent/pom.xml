@@ -23,17 +23,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!--
-        <parent>
-            <groupId>com.speedment</groupId>
-            <artifactId>speedment-parent</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
-        </parent>
-    -->
+<!--    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>-->
 
     <groupId>com.speedment.example</groupId>
     <artifactId>example-parent</artifactId>
-    <version>3.2.0-SNAPSHOT</version>
+    <version>3.2.0</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -42,7 +40,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <!--<mysql.version>5.1.48</mysql.version>-->
         <mysql.version>8.0.13</mysql.version>
-        <speedment.version>3.2.0-SNAPSHOT</speedment.version>
+        <speedment.version>${project.version}</speedment.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
         <junit.platform.provider.version>1.5.2</junit.platform.provider.version>
     </properties>
@@ -78,6 +76,29 @@
                     </dependency>-->
                 </dependencies>
             </plugin>
+
+            <plugin>
+                <groupId>com.speedment</groupId>
+                <artifactId>speedmentversion-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <minVersion>${speedment.version}</minVersion>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <!--According to this, the last module must not be skipped: https://stackoverflow.com/questions/25305850/how-to-disable-nexus-staging-maven-plugin-in-sub-modules-->
+
+                <!--See https://github.com/sonatype/nexus-maven-plugins/tree/master/staging/maven-plugin-->
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <configuration>
+<!--                    <skipStaging>true</skipStaging>-->
+                    <skipRemoteStaging>true</skipRemoteStaging>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -115,5 +136,20 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+<!--    <distributionManagement>
+        &lt;!&ndash; For OSSRH on SonaType &ndash;&gt;
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus snapshot repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Sonatype Nexus release staging repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>-->
 
 </project>
