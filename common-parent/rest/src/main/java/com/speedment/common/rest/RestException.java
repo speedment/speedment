@@ -41,7 +41,6 @@ public final class RestException extends RuntimeException {
     private final int port;
     private final String username;
     private final String path;
-    private final Option[] options;
 
     public RestException(Throwable cause, Rest.Protocol protocol,
                          Rest.Method method, String username, String host,
@@ -53,7 +52,6 @@ public final class RestException extends RuntimeException {
         this.port     = port;
         this.username = username;
         this.path     = path;
-        this.options  = options;
     }
 
     @Override
@@ -65,7 +63,6 @@ public final class RestException extends RuntimeException {
             ", port=" + port +
             ", username='" + username + '\'' +
             ", path='" + path + '\'' +
-            ", options=" + Arrays.toString(options) +
             '}';
     }
 

@@ -28,7 +28,7 @@ public interface RenderTree {
     List<Meta<?, ?>> branches();
     
     static Builder builder() {
-        return new DefaultRenderTree.Builder();
+        return new DefaultRenderTree.RenderTreeBuilder();
     }
     
     interface Builder {

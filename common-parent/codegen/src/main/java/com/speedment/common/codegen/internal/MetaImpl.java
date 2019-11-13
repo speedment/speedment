@@ -16,11 +16,8 @@
  */
 package com.speedment.common.codegen.internal;
 
-import com.speedment.common.codegen.Meta;
-import com.speedment.common.codegen.RenderStack;
-import com.speedment.common.codegen.RenderTree;
-import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.TransformFactory;
+import com.speedment.common.codegen.*;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -89,7 +86,7 @@ public final class MetaImpl<A, B> implements Meta<A, B> {
         return "MetaImpl{" + "model=" + model + ", result=" + result + ", transform=" + transform + ", factory=" + factory + ", stack=" + stack + ", tree=" + tree + '}';
     }
    
-    public static final class Builder<A, B> implements Meta.Builder<A, B> {
+    public static final class MetaBuilder<A, B> implements Meta.Builder<A, B> {
         
         private A model;
         private B result;
@@ -98,7 +95,7 @@ public final class MetaImpl<A, B> implements Meta<A, B> {
         private RenderStack stack;
         private RenderTree tree;
         
-        public Builder(A model, B result) {
+        public MetaBuilder(A model, B result) {
             this.model  = requireNonNull(model);
             this.result = requireNonNull(result);
         }

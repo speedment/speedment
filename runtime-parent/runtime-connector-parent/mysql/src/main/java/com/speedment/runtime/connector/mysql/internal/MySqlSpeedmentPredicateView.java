@@ -37,8 +37,11 @@ public final class MySqlSpeedmentPredicateView
     extends AbstractFieldPredicateView
     implements FieldPredicateView {
 
-    final private String binaryCollationName;
-    final private String collationName;
+    private static final String LOWER = "LOWER";
+    private static final String AND = " AND ";
+
+    private final String binaryCollationName;
+    private final String collationName;
 
     public MySqlSpeedmentPredicateView(String binaryCollationName, String collationName) {
         this.binaryCollationName = requireNonNull(binaryCollationName);
@@ -68,7 +71,7 @@ public final class MySqlSpeedmentPredicateView
     @Override
     protected SqlPredicateFragment
     startsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT(LOWER(?) ,'%'))", negated)
+        return of("(" + LOWER + "(" + cn + ") LIKE BINARY CONCAT(" + LOWER + "(?) ,'%'))", negated)
             .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         // return of("(" + cn + " " + Collation.UTF8_GENERAL_CI.getCollateCommand() + " LIKE BINARY CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
@@ -86,7 +89,7 @@ public final class MySqlSpeedmentPredicateView
     @Override
     protected SqlPredicateFragment
     endsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT('%', LOWER(?)))", negated)
+        return of("(" + LOWER + "(" + cn + ") LIKE BINARY CONCAT('%', " + LOWER + "(?)))", negated)
             .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         // return of("(" + cn + " " + Collation.UTF8_GENERAL_CI.getCollateCommand() +" LIKE CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
@@ -104,7 +107,7 @@ public final class MySqlSpeedmentPredicateView
     @Override
     protected SqlPredicateFragment
     containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT('%', LOWER(?) ,'%'))", negated)
+        return of("(" + LOWER + "(" + cn + ") LIKE BINARY CONCAT('%', " + LOWER + "(?) ,'%'))", negated)
             .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         //return of("(" + cn + " "+Collation.UTF8_GENERAL_CI.getCollateCommand()+" LIKE CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));        
@@ -238,26 +241,26 @@ public final class MySqlSpeedmentPredicateView
         switch (inclusion) {
             case START_EXCLUSIVE_END_EXCLUSIVE: {
                 return of(
-                    "(" + greaterThanString(cn) + " AND " + lessThanString(cn) + ")",
+                    "(" + greaterThanString(cn) + AND + lessThanString(cn) + ")",
                     negated
                 ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_INCLUSIVE_END_EXCLUSIVE: {
                 return of(
-                    "(" + greaterOrEqualString(cn) + " AND " + lessThanString(cn) + ")",
+                    "(" + greaterOrEqualString(cn) + AND + lessThanString(cn) + ")",
                     negated
                 ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_EXCLUSIVE_END_INCLUSIVE: {
 
                 return of(
-                    "(" + greaterThanString(cn) + " AND " + lessOrEqualString(cn) + ")",
+                    "(" + greaterThanString(cn) + AND + lessOrEqualString(cn) + ")",
                     negated
                 ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_INCLUSIVE_END_INCLUSIVE: {
                 return of(
-                    "(" + greaterOrEqualString(cn) + " AND " + lessOrEqualString(cn) + ")",
+                    "(" + greaterOrEqualString(cn) + AND + lessOrEqualString(cn) + ")",
                     negated
                 ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
