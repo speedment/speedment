@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.2.0</version>
+    <version>3.2.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <!-- Project Metadata -->
@@ -52,7 +52,6 @@
         <module>tool-parent</module>
         <module>build-parent</module>
         <module>plugin-parent</module>
-        <module>example-parent</module>
     </modules>
     
     <!-- Properties -->

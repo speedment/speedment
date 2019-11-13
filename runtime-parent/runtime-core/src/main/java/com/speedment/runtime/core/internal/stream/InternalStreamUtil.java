@@ -93,6 +93,8 @@ public final class InternalStreamUtil {
      */
     final static class ResultSetIterator<T> implements Iterator<T> {
 
+        private final String NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE = "The method next() was invoked even though hasNext() returns false.";
+
         /**
          * The current state of the {@code ResultSetIterator}.
          */
@@ -166,12 +168,12 @@ public final class InternalStreamUtil {
         public T next() {
             if (state == State.NOT_DETERMINED) {
                 if (!hasNext()) {
-                    throw noSuchElementException();
+                    throw new NoSuchElementException(NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE);
                 }
             }
 
             if (state == State.NO_NEXT) {
-                throw noSuchElementException();
+                throw new NoSuchElementException(NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE);
             }
 
             state = State.NOT_DETERMINED;
@@ -210,11 +212,6 @@ public final class InternalStreamUtil {
             }
         }
 
-        private NoSuchElementException noSuchElementException() {
-            return new NoSuchElementException(
-                "Next was called even though hasNext() returned false."
-            );
-        }
 
     }
 

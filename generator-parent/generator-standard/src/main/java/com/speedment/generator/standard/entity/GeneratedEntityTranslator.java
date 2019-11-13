@@ -22,8 +22,8 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.function.OptionalBoolean;
-import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.standard.util.FkHolder;
+import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.component.TypeMapperComponent;
@@ -59,7 +59,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTranslator<Interface> {
 
-    public static final String IDENTIFIER_NAME = "Identifier";
+    private static final String IDENTIFIER_NAME = "Identifier";
+    private static final String OF_THIS = " of this ";
 
     public GeneratedEntityTranslator(Table table) {
         super(table, Interface::of);
@@ -105,12 +106,12 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             );
 
         return newBuilder(file, getSupport().generatedEntityName())
-            /**
+            /*
              * General
              */
             .forEveryTable((intrf, col) -> intrf.public_().add(identifierEnum))
             
-            /**
+            /*
              * Getters
              */
             .forEveryColumn((intrf, col) -> {
@@ -119,19 +120,19 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 intrf.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
                     .set(Javadoc.of(
                         "Returns the " + getSupport().variableName(col)
-                        + " of this " + getSupport().entityName()
+                        + OF_THIS + getSupport().entityName()
                         + ". The " + getSupport().variableName(col)
                         + " field corresponds to the database column "
                         + relativeName(col, Dbms.class, DATABASE_NAME) + "."
                     ).add(RETURN.setText(
                         "the " + getSupport().variableName(col)
-                        + " of this " + getSupport().entityName()
+                        + OF_THIS + getSupport().entityName()
                     ))
                     )
                 );
             })
             
-            /**
+            /*
              * Setters
              */
             .forEveryColumn((intrf, col) -> 
@@ -139,7 +140,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     .add(Field.of(getSupport().variableName(col), typeMappers.get(col).getJavaType(col)))
                     .set(Javadoc.of(
                         "Sets the " + getSupport().variableName(col)
-                        + " of this " + getSupport().entityName()
+                        + OF_THIS + getSupport().entityName()
                         + ". The " + getSupport().variableName(col)
                         + " field corresponds to the database column "
                         + relativeName(col, Dbms.class, DATABASE_NAME) + "."
@@ -149,7 +150,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 )
             )
             
-            /**
+            /*
              * Finders
              */
             .forEveryColumn((intrf, col) -> 
@@ -181,7 +182,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 })
             )
             
-            /**
+            /*
              * Fields
              */
             .forEveryColumn((intrf, col) -> {

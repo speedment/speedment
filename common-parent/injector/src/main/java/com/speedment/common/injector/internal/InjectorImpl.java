@@ -105,7 +105,7 @@ public final class InjectorImpl implements Injector {
     }
 
     @Override
-    public <T> T getOrThrow(Class<T> type) throws IllegalArgumentException {
+    public <T> T getOrThrow(Class<T> type) {
         return find(type, true);
     }
 
@@ -124,6 +124,9 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public <T> Optional<T> getAfter(Class<T> type, T before) {
+        requireNonNull(type);
+        requireNonNull(before);
+
         boolean found = false;
         for (Iterator<T> i = stream(type).iterator(); i.hasNext(); ) {
             final T t = i.next();
@@ -144,8 +147,11 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public <T> T inject(T instance) {
+        requireNonNull(instance);
+
         injectFields(instance);
-        configureParams(instance, properties);
+        final InjectorProxy injectorProxy = builder.proxyFor(instance.getClass());
+        configureParams(instance, properties, injectorProxy);
         return instance;
     }
 

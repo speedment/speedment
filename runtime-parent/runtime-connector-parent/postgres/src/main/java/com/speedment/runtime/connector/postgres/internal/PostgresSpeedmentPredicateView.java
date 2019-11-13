@@ -33,6 +33,7 @@ import static com.speedment.runtime.field.util.PredicateOperandUtil.getSecondOpe
 public class PostgresSpeedmentPredicateView extends AbstractFieldPredicateView implements FieldPredicateView {
 
     private static final String BYTEA_CAST = "::bytea";
+    private static final String AND = " AND ";
 
     // Info from:
     // http://stackoverflow.com/questions/23320945/postgresql-select-if-string-contains
@@ -166,26 +167,26 @@ public class PostgresSpeedmentPredicateView extends AbstractFieldPredicateView i
         switch (inclusion) {
             case START_EXCLUSIVE_END_EXCLUSIVE: {
                 return of(
-                    "(" + greaterThanString(cn) + " AND " + lessThanString(cn) + ")",
+                    "(" + greaterThanString(cn) + AND + lessThanString(cn) + ")",
                     negated
                 ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_INCLUSIVE_END_EXCLUSIVE: {
                 return of(
-                    "(" + greaterOrEqualString(cn) + " AND " + lessThanString(cn) + ")",
+                    "(" + greaterOrEqualString(cn) + AND + lessThanString(cn) + ")",
                     negated
                 ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_EXCLUSIVE_END_INCLUSIVE: {
 
                 return of(
-                    "(" + greaterThanString(cn) + " AND " + lessOrEqualString(cn) + ")",
+                    "(" + greaterThanString(cn) + AND + lessOrEqualString(cn) + ")",
                     negated
                 ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_INCLUSIVE_END_INCLUSIVE: {
                 return of(
-                    "(" + greaterOrEqualString(cn) + " AND " + lessOrEqualString(cn) + ")",
+                    "(" + greaterOrEqualString(cn) + AND + lessOrEqualString(cn) + ")",
                     negated
                 ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }

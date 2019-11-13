@@ -16,7 +16,9 @@
  */
 package com.speedment.common.injector;
 
-import com.speedment.common.injector.annotation.*;
+import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.test_a.StringIdentityMapper;
 import com.speedment.common.injector.test_a.TypeMapperComponent;
@@ -209,15 +211,15 @@ final class InjectorTest {
     
     public final static class ClassWithConfig {
         
-        private @Config(name="a", value="example") String defaultString;
-        private @Config(name="b", value="-104726") int defaultInt;
-        private @Config(name="c", value="0.43472") float defaultFloat;
-        private @Config(name="d", value="false") boolean defaultBoolean;
-        
-        private @Config(name="e", value="example") String overridenString;
-        private @Config(name="f", value="-104726") int overridenInt;
-        private @Config(name="g", value="0.43472") float overridenFloat;
-        private @Config(name="h", value="false") boolean overridenBoolean;
+        public @Config(name="a", value="example") String defaultString;
+        public @Config(name="b", value="-104726") int defaultInt;
+        public @Config(name="c", value="0.43472") float defaultFloat;
+        public @Config(name="d", value="false") boolean defaultBoolean;
+
+        public @Config(name="e", value="example") String overridenString;
+        public @Config(name="f", value="-104726") int overridenInt;
+        public @Config(name="g", value="0.43472") float overridenFloat;
+        public @Config(name="h", value="false") boolean overridenBoolean;
         
     }
     

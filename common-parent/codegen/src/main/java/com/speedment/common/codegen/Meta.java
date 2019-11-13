@@ -80,7 +80,7 @@ public interface Meta<A, B> {
      * @return the builder instance.
      */
     static <A, B> Meta.Builder<A, B> builder(A model, B result) {
-        return new MetaImpl.Builder<>(model, result);
+        return new MetaImpl.MetaBuilder<>(model, result);
     }
 
     /**

@@ -18,8 +18,10 @@ package com.speedment.common.codegen.internal;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.RenderTree;
+
 import java.util.LinkedList;
 import java.util.List;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -39,16 +41,16 @@ public final class DefaultRenderTree implements RenderTree {
         return branches;
     }
     
-    public static final class Builder implements RenderTree.Builder {
+    public static final class RenderTreeBuilder implements RenderTree.Builder {
         
         private final List<Meta<?, ?>> branches;
         
-        public Builder() {
+        public RenderTreeBuilder() {
             branches = new LinkedList<>();
         }
 
         @Override
-        public Builder withBranch(Meta<?, ?> meta) {
+        public RenderTreeBuilder withBranch(Meta<?, ?> meta) {
             branches.add(requireNonNull(meta));
             return this;
         }
