@@ -46,7 +46,32 @@
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
+                    <!--Fix peculiar error-->
+<!--                    <source>8</source>-->
+                    <failOnError>false</failOnError>
+                    <docfilessubdirs>true</docfilessubdirs>
+<!--                    <includeDependencySources>true</includeDependencySources>-->
+<!--                    <additionalOptions combine.self="override"/>-->
+
+<!--                    <additionalOptions>
+                        <option>&#45;&#45;add-modules</option>
+                        <option>${module-name}</option>
+                        <option>&#45;&#45;add-reads</option>
+                        <option>com.speedment.runtime.join=${module-name}</option>
+                        <option>&#45;&#45;add-reads</option>
+                        <option>com.speedment.runtime.connector.mariadb=${module-name}</option>
+                        <option>&#45;&#45;add-reads</option>
+                        <option>com.speedment.runtime.connector.mysql=${module-name}</option>
+                        <option>&#45;&#45;add-reads</option>
+                        <option>com.speedment.runtime.connector.postgres=${module-name}</option>
+                        <option>&#45;&#45;add-reads</option>
+                        <option>com.speedment.runtime.connector.sqlite=${module-name}</option>
+                    </additionalOptions>
+                    <keywords>true</keywords>
                     <excludePackageNames>*.internal:*.internal.*:com.speedment.runtime.connector.*</excludePackageNames>
+                    <additionalJOptions>
+                        <additionalJOption>-J-Xmx1g</additionalJOption>
+                    </additionalJOptions>-->
                 </configuration>
             </plugin>
         </plugins>
