@@ -220,7 +220,7 @@ public final class ReflectionUtil {
             }
 
             final T instance = injectorProxy.newInstance(constr, args);
-            configureParams(instance, properties);
+            configureParams(instance, properties, injectorProxy);
 
             return Optional.of(instance);
 

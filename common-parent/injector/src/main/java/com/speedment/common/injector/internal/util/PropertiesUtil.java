@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector.internal.util;
 
+import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.logger.Logger;
 
@@ -28,6 +29,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -60,7 +62,11 @@ public final class PropertiesUtil {
         return properties;
     }
     
-    public static <T> void configureParams(T instance, Properties properties) {
+    public static <T> void configureParams(T instance, Properties properties, InjectorProxy injectorProxy) {
+        requireNonNull(instance);
+        requireNonNull(properties);
+        requireNonNull(injectorProxy);
+
         traverseFields(instance.getClass())
             .filter(f -> f.isAnnotationPresent(Config.class))
             .forEach(f -> {
@@ -124,8 +130,7 @@ public final class PropertiesUtil {
                         // No op
                         return;
                     }
-                    f.setAccessible(true);
-                    f.set(instance, object);
+                    injectorProxy.set(f, instance, object);
                 } catch (final ReflectiveOperationException ex) {
                     throw new RuntimeException(
                         "Failed to set config parameter '" + config.name() +
