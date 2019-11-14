@@ -19,8 +19,7 @@ package com.speedment.common.tuple.internal.nonnullable.mapper;
 import com.speedment.common.tuple.Tuple0;
 import com.speedment.common.tuple.TupleMapper;
 import com.speedment.common.tuple.Tuples;
-
-import java.util.function.Function;
+import com.speedment.common.tuple.internal.AbstractTupleMapper;
 
 /**
  * An implementation class of a {@link TupleMapper } of degree 0
@@ -32,32 +31,23 @@ import java.util.function.Function;
  * 
  * @author Per Minborg
  */
-public final class Tuple0MapperImpl<T> implements TupleMapper<T, Tuple0> {
+public final class Tuple0MapperImpl<T> 
+extends AbstractTupleMapper<T, Tuple0> 
+implements TupleMapper<T, Tuple0> {
     
     public final static Tuple0MapperImpl<?> EMPTY_MAPPER = new Tuple0MapperImpl<>();
     
     /**
      * Constructs a {@link TupleMapper } that can create {@link Tuple0 }.
      */
-    private Tuple0MapperImpl() {}
+    private Tuple0MapperImpl() {
+        super(0);
+    }
     
     @Override
     public Tuple0 apply(T t) {
         return Tuples.of(
             
         );
-    }
-    
-    @Override
-    public int degree() {
-        return 0;
-    }
-    
-    @Override
-    public Function<T, ?> get(int index) {
-        switch(index){
-            
-            default : throw new IndexOutOfBoundsException();
-        }
     }
 }

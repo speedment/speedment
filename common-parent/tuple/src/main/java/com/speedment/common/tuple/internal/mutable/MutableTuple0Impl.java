@@ -17,8 +17,13 @@
 package com.speedment.common.tuple.internal.mutable;
 
 import com.speedment.common.tuple.MutableTuple;
+import com.speedment.common.tuple.Tuple0;
+import com.speedment.common.tuple.Tuple;
+import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.internal.AbstractMutableTuple;
 import com.speedment.common.tuple.mutable.MutableTuple0;
+
+import java.util.Optional;
 
 /**
  * An implementation class of a {@link MutableTuple0}.
@@ -31,7 +36,7 @@ public final class MutableTuple0Impl
 extends AbstractMutableTuple 
 implements MutableTuple0 {
     
-    public static final MutableTuple0 EMPTY_TUPLE = new MutableTuple0Impl();
+    public final static MutableTuple0 EMPTY_TUPLE = new MutableTuple0Impl();
     
     /**
      * Constructs a {@link MutableTuple} of type {@link MutableTuple0}.
