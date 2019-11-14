@@ -20,6 +20,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.maven.component.MavenPathComponent;
+import com.speedment.maven.internal.util.ConfigUtil;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.application.ApplicationBuilders;
@@ -149,23 +150,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
      * @return {@code true} if available, else {@code false}
      */
     protected final boolean hasConfigFile(Path file) {
-        if (file == null) {
-            final String msg = "The expected .json-file is null.";
-            getLog().info(msg);
-            return false;
-        } else if (!file.toFile().exists()) {
-            final String msg = "The expected .json-file '"
-                + file + "' does not exist.";
-            getLog().info(msg);
-            return false;
-        } else if (!Files.isReadable(file)) {
-            final String err = "The expected .json-file '"
-                + file + "' is not readable.";
-            getLog().error(err);
-            return false;
-        } else {
-            return true;
-        }
+        return ConfigUtil.hasConfigFile(file, getLog());
     }
 
     @SuppressWarnings("unchecked")

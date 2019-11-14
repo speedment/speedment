@@ -24,6 +24,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
+import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.internal.util.InjectorUtil;
@@ -225,7 +226,7 @@ public final class InjectorImpl implements Injector {
                                 | IllegalArgumentException
                                 | InvocationTargetException ex) {
 
-                                throw new RuntimeException(ex);
+                                throw new InjectorException(ex);
                             }
                         });
 
@@ -292,8 +293,7 @@ public final class InjectorImpl implements Injector {
                         field.isAnnotationPresent(Inject.class)
                     );
                 }
-                // field.setAccessible(true);
-                //LOGGER_INSTANCE.warn("Setting fields is deprecated: " + field);
+                // LOGGER_INSTANCE.warn("Setting fields is deprecated: " + field);
                 try {
                     final InjectorProxy injectorProxy = builder.proxyFor(instance.getClass());
                     injectorProxy.set(field, instance, value);
@@ -307,7 +307,7 @@ public final class InjectorImpl implements Injector {
                     );
 
                     LOGGER_INSTANCE.error(ex, err);
-                    throw new RuntimeException(err, ex);
+                    throw new InjectorException(err, ex);
                 }
             });
     }

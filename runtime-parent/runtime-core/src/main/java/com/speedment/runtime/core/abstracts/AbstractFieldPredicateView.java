@@ -38,6 +38,12 @@ import static java.util.stream.Collectors.joining;
  */
 public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
+    private static final String LESS_THAN_WILDCARD = " < ?";
+    private static final String LESS_OR_EQUAL_WILDCARD = " <= ?";
+    private static final String GREATER_THAN_WILDCARD = " > ?";
+    private static final String GREATER_OR_EQUAL_WILDCARD = " >= ?";
+    private static final String NOT = "NOT";
+
     protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     protected abstract SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated);
@@ -135,7 +141,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
     }
 
     protected SqlPredicateFragment isNotNull(String cn) {
-        return of("(" + cn + " IS NOT NULL)");
+        return of("(" + cn + " IS " + NOT + " NULL)");
     }
 
     protected SqlPredicateFragment
@@ -150,22 +156,22 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
     protected SqlPredicateFragment
     greaterThan(String cn, Class<?> dbClass, FieldPredicate<?> model) {
-        return of("(" + cn + " > ?)").add(getFirstOperandAsRaw(model));
+        return of("(" + cn + GREATER_THAN_WILDCARD + ")").add(getFirstOperandAsRaw(model));
     }
 
     protected SqlPredicateFragment
     greaterOrEqual(String cn, Class<?> dbClass, FieldPredicate<?> model) {
-        return of("(" + cn + " >= ?)").add(getFirstOperandAsRaw(model));
+        return of("(" + cn + GREATER_OR_EQUAL_WILDCARD + ")").add(getFirstOperandAsRaw(model));
     }
 
     protected SqlPredicateFragment
     lessThan(String cn, Class<?> dbClass, FieldPredicate<?> model) {
-        return of("(" + cn + " < ?)").add(getFirstOperandAsRaw(model));
+        return of("(" + cn + LESS_THAN_WILDCARD + ")").add(getFirstOperandAsRaw(model));
     }
 
     protected SqlPredicateFragment
     lessOrEqual(String cn, Class<?> dbClass, FieldPredicate<?> model) {
-        return of("(" + cn + " <= ?)").add(getFirstOperandAsRaw(model));
+        return of("(" + cn + LESS_OR_EQUAL_WILDCARD + ")").add(getFirstOperandAsRaw(model));
     }
 
     protected SqlPredicateFragment
@@ -274,7 +280,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
     protected static SqlPredicateFragment of(String sql, boolean negated) {
         if (negated) {
-            return of("(NOT(" + sql + "))");
+            return of("(" + NOT + "(" + sql + "))");
         } else {
             return of(sql);
         }
@@ -282,7 +288,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
     protected static SqlPredicateFragment of(String sql, Object object, boolean negated) {
         if (negated) {
-            return of("(NOT(" + sql + "))", object);
+            return of("(" + NOT + "(" + sql + "))", object);
         } else {
             return of(sql, object);
         }
@@ -290,7 +296,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
     protected static SqlPredicateFragment of(String sql, Collection<Object> objects, boolean negated) {
         if (negated) {
-            return of("(NOT(" + sql + "))", objects);
+            return of("(" + NOT + "(" + sql + "))", objects);
         } else {
             return of(sql, objects);
         }
@@ -305,7 +311,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
     }
 
     protected SqlPredicateFragment notEqualHelper(String cn, Object argument) {
-        return of("(NOT (" + cn + " = ?))").add(argument);
+        return of("(" + NOT + " (" + cn + " = ?))").add(argument);
     }
 
     protected SqlPredicateFragment betweenHelper(String cn,
@@ -315,22 +321,22 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
         final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
             case START_EXCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " < ?)", negated)
+                return of("(" + cn + GREATER_THAN_WILDCARD + " AND " + cn + LESS_THAN_WILDCARD + ")", negated)
                     .add(getFirstOperandAsRaw(model))
                     .add(getSecondOperand(model));
             }
             case START_INCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " < ?)", negated)
+                return of("(" + cn + GREATER_OR_EQUAL_WILDCARD + " AND " + cn + LESS_THAN_WILDCARD + ")", negated)
                     .add(getFirstOperandAsRaw(model))
                     .add(getSecondOperand(model));
             }
             case START_EXCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " <= ?)", negated)
+                return of("(" + cn + GREATER_THAN_WILDCARD + " AND " + cn + LESS_OR_EQUAL_WILDCARD + ")", negated)
                     .add(getFirstOperandAsRaw(model))
                     .add(getSecondOperand(model));
             }
             case START_INCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " <= ?)", negated)
+                return of("(" + cn + GREATER_OR_EQUAL_WILDCARD + " AND " + cn + LESS_OR_EQUAL_WILDCARD + ")", negated)
                     .add(getFirstOperandAsRaw(model))
                     .add(getSecondOperand(model));
             }
