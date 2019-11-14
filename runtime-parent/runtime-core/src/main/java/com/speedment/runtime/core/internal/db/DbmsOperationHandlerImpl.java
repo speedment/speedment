@@ -207,8 +207,6 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         preparedStatementConfigurator.accept(statement);
     }
 
-    // Todo: Rewrite the method below.
-
     private void execute(Dbms dbms, SqlStatement sqlStatement) throws SQLException {
         final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
         if (connectionInfo.isInTransaction()) {

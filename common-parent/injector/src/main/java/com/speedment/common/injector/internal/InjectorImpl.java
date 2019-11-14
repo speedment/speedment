@@ -184,7 +184,6 @@ public final class InjectorImpl implements Injector {
             unfinished.forEach(n -> {
 
                 // Check if all its dependencies have been satisfied.
-                // TODO: Dependencies should be resolved in the opposite order 
                 // when stopping.
                 if (n.canBe(State.STOPPED)) {
 

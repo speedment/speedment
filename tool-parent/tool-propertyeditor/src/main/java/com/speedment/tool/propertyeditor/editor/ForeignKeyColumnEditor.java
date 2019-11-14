@@ -34,7 +34,6 @@ public class ForeignKeyColumnEditor<T extends ForeignKeyColumnProperty> implemen
 
     @Override
     public Stream<Item> fieldsFor(T document) {
-        //TODO Split editor into multiple editors
         return Stream.of(new SimpleTextFieldItem(
                  "Foreign Database Name",
                  document.foreignDatabaseNameProperty(), 

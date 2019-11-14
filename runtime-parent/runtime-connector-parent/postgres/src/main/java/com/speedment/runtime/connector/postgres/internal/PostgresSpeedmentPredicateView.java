@@ -152,8 +152,7 @@ public class PostgresSpeedmentPredicateView extends AbstractFieldPredicateView i
             return super.notBetween(cn, dbType, model);
         }
     }
-//
-//    // TODO: Maybe override "equal", "between" and "in" as well?
+
 //    ////////////////////////////////////////////////////////////////////////////
 //    //                          Private Helper Methods                        //
 //    ////////////////////////////////////////////////////////////////////////////
@@ -214,90 +213,4 @@ public class PostgresSpeedmentPredicateView extends AbstractFieldPredicateView i
         return "(" + cn + BYTEA_CAST + " " + operator + BYTEA_CAST + ")";
     }
 
-    //
-//    @Override
-//    protected SqlPredicateFragment equal(
-//        final String cn, Class<?> dbType,
-//        final FieldPredicate<?> model
-//    ) {
-//        return equalHelper(cn, dbType, getFirstOperandAsRaw(model));
-//    }
-//
-//    @Override
-//    protected SqlPredicateFragment notEqual(
-//        final String cn,
-//        final Class<?> dbType, FieldPredicate<?> model
-//    ) {
-//        return notEqualHelper(cn, dbType, getFirstOperandAsRaw(model));
-//    }
-//
-//    @Override
-//    protected SqlPredicateFragment in(
-//        final String cn, Class<?> dbType,
-//        final FieldPredicate<?> model
-//    ) {
-//        if (dbType.equals(String.class)) {
-//            return inStringHelper(cn, model, false);
-//        } else {
-//            return super.in(cn, dbType, model);
-//        }
-//    }
-//
-//    @Override
-//    protected SqlPredicateFragment notIn(
-//        final String cn,
-//        final Class<?> dbType, FieldPredicate<?> model
-//    ) {
-//        if (dbType.equals(String.class)) {
-//            return inStringHelper(cn, model, true);
-//        } else {
-//            return super.notIn(cn, dbType, model);
-//        }
-//    }
-//
-//
-//    private SqlPredicateFragment equalHelper(
-//        final String cn, Class<?> dbType,
-//        final Object argument
-//    ) {
-//        if (dbType.equals(String.class)) { // Use collation for string types
-//            return of(compare(cn, " = ?")).add(argument);
-//        } else {
-//            return of("(" + cn + " = ?)").add(argument);
-//        }
-//    }
-//
-//    private SqlPredicateFragment notEqualHelper(
-//        final String cn,
-//        final Class<?> dbType,
-//        final Object argument
-//    ) {
-//        if (dbType.equals(String.class)) {
-//            return of("(NOT " + compare(cn, " = ?") + ")").add(argument);
-//        } else {
-//            return of("(NOT (" + cn + " = ?))").add(argument);
-//        }
-//    }
-//
-//    private SqlPredicateFragment inStringHelper(
-//        final String cn,
-//        final FieldPredicate<?> model,
-//        final boolean negated
-//    ) {
-//        final Set<?> set = getFirstOperandAsRawSet(model);
-//        if (set.isEmpty()) {
-//            return negated ? alwaysTrue() : alwaysFalse();
-//        } else if (set.size() == 1) {
-//            final Object arg = set.iterator().next();
-//            return negated
-//                ? notEqualHelper(cn, String.class, arg)
-//                : equalHelper(cn, String.class, arg);
-//        }
-//
-//        return of("(" + cn + BYTEA_CAST + " IN ("
-//            + set.stream().map($ -> "?" + BYTEA_CAST).collect(joining(","))
-//            + ")", negated
-//        ).addAll(set);
-//    }
-//
 }

@@ -204,7 +204,6 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         return sqlStreamTerminatorComponent.<ENTITY>getDoubleCountTerminator().apply(info, this, pipeline);
     }
 
-    // Todo: Introduce delegator
     @Override
     public PrimitiveIterator.OfDouble iterator(DoublePipeline pipeline) {
         if (allowIteratorAndSpliterator) {
@@ -213,7 +212,6 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
     }
 
-    // Todo: Introduce delegator
     @Override
     public Spliterator.OfDouble spliterator(DoublePipeline pipeline) {
         if (allowIteratorAndSpliterator) {
@@ -228,7 +226,6 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         return sqlStreamTerminatorComponent.<ENTITY>getIntCountTerminator().apply(info, this, pipeline);
     }
 
-    // Todo: Introduce delegator
     @Override
     public PrimitiveIterator.OfInt iterator(IntPipeline pipeline) {
         if (allowIteratorAndSpliterator) {
@@ -237,7 +234,6 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
     }
 
-    // Todo: Introduce delegator
     @Override
     public Spliterator.OfInt spliterator(IntPipeline pipeline) {
         if (allowIteratorAndSpliterator) {
@@ -252,7 +248,6 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         return sqlStreamTerminatorComponent.<ENTITY>getLongCountTerminator().apply(info, this, pipeline);
     }
 
-    // Todo: Introduce delegator
     @Override
     public PrimitiveIterator.OfLong iterator(LongPipeline pipeline) {
         if (allowIteratorAndSpliterator) {
@@ -261,7 +256,6 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
     }
 
-    // Todo: Introduce delegator
     @Override
     public Spliterator.OfLong spliterator(LongPipeline pipeline) {
         if (allowIteratorAndSpliterator) {

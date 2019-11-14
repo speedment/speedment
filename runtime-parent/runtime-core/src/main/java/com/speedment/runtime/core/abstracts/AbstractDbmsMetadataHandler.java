@@ -517,7 +517,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             -> connection.getMetaData().getIndexInfo(
                 jdbcCatalogLookupName(schema),
                 jdbcSchemaLookupName(schema),
-                metaDataTableNameForIndexes(table), // Todo: break out in protected method
+                metaDataTableNameForIndexes(table),
                 false,
                 // 'true' below might speed up metadata retrieval since approximations can be used
                 // See https://github.com/speedment/speedment-enterprise/issues/168

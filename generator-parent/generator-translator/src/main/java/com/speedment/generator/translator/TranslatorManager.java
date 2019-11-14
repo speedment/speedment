@@ -29,9 +29,6 @@ import java.nio.file.Path;
 @InjectKey(TranslatorManager.class)
 public interface TranslatorManager {
     
-    // TODO: Name to TranslatorComponent and move to 'component' package in next
-    // major release.
-
     void accept(Project project);
 
     void clearExistingFiles(Project project);
