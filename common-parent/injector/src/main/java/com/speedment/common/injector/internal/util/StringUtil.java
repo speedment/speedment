@@ -40,13 +40,17 @@ public final class StringUtil {
             case 0: return "";
             case 1: return words[0];
             case 2: return words[0] + " and " + words[1];
-            default: {
-                final StringJoiner join = new StringJoiner(", ", "", " and ");
-                for (int i = 0; i < words.length - 1; i++) {
-                    join.add(words[i]);
-                }
-                return join.toString() + words[words.length - 1];
-            }
+            default:
+                return joinWordsWithAnd(words);
         }
     }
+
+    private static String joinWordsWithAnd(String[] words) {
+        final StringJoiner join = new StringJoiner(", ", "", " and ");
+        for (int i = 0; i < words.length - 1; i++) {
+            join.add(words[i]);
+        }
+        return join.toString() + words[words.length - 1];
+    }
+
 }

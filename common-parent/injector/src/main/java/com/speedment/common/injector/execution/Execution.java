@@ -16,7 +16,6 @@
  */
 package com.speedment.common.injector.execution;
 
-import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.dependency.Dependency;

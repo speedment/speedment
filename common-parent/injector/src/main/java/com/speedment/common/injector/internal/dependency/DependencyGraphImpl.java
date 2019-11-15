@@ -62,7 +62,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
     }
 
     @Override
-    public DependencyNode get(Class<?> clazz) throws IllegalArgumentException {
+    public DependencyNode get(Class<?> clazz) {
         return getIfPresent(clazz).orElseThrow(() -> new IllegalArgumentException(
             format("There is no implementation of '%s' in the injection dependency graph.", clazz)
         ));
@@ -92,9 +92,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
             // class and add them to the executors set.
             traverseMethods(clazz)
                 .filter(m -> m.isAnnotationPresent(Execute.class))
-                .forEach(m -> {
-                    node.getExecutions().add(createExecution(m, State.STARTED));
-                });
+                .forEach(m -> node.getExecutions().add(createExecution(m, State.STARTED)));
 
             // Go through all the methods with the '@ExecuteBefore'-annotation 
             // in the class  and add them to the executors set.

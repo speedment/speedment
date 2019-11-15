@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
-import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
+import static com.speedment.common.injector.internal.util.PrintUtil.HORIZONTAL_LINE;
 import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
@@ -75,7 +75,7 @@ public final class InjectorImpl implements Injector {
         return new InjectorBuilderImpl(classLoader);
     }
 
-    public final static Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorImpl.class);
+    public static final Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorImpl.class);
 
     private final Set<Injectable<?>> injectables;
     private final List<Object> instances;
@@ -187,7 +187,7 @@ public final class InjectorImpl implements Injector {
                 // when stopping.
                 if (n.canBe(State.STOPPED)) {
 
-                    LOGGER_INSTANCE.debug(horizontalLine());
+                    LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
 
                     // Retrieve the instance for that node
                     final Object inst = find(n.getRepresentedType(), true);
@@ -253,12 +253,12 @@ public final class InjectorImpl implements Injector {
             }
         }
 
-        LOGGER_INSTANCE.debug(horizontalLine());
+        LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
         LOGGER_INSTANCE.debug(
             "| %-79s |",
             "All " + instances.size() + " components have been stopped!"
         );
-        LOGGER_INSTANCE.debug(horizontalLine());
+        LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
     }
 
     @Override

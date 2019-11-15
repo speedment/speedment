@@ -19,7 +19,6 @@ package com.speedment.common.injector.internal.execution;
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
-import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
 
@@ -71,10 +70,8 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
     @Override
     public boolean invoke(T component, ClassMapper classMapper)
-    throws IllegalAccessException, 
-           IllegalArgumentException, 
-           InvocationTargetException, 
-           NotInjectableException {
+    throws IllegalAccessException,
+           InvocationTargetException {
 
         if (method.getParameterCount() > 0
         &&  getMissingArgumentStrategy() == SKIP_INVOCATION) {

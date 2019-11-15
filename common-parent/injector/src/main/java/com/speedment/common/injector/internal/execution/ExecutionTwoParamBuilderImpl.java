@@ -21,14 +21,11 @@ import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
-import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.execution.ExecutionThreeParamBuilder;
 import com.speedment.common.injector.execution.ExecutionTwoParamBuilder;
 import com.speedment.common.injector.internal.dependency.DependencyImpl;
-
-import java.lang.reflect.InvocationTargetException;
 
 import static com.speedment.common.injector.internal.util.SetUtil.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
@@ -49,7 +46,8 @@ implements ExecutionTwoParamBuilder<T, P0, P1> {
     
     private final Class<P0> param0;
     private final Class<P1> param1;
-    private final State state0, state1;
+    private final State state0;
+    private final State state1;
 
     private TriConsumer<T, P0, P1> executeAction;
     
@@ -101,10 +99,7 @@ implements ExecutionTwoParamBuilder<T, P0, P1> {
                 MissingArgumentStrategy.THROW_EXCEPTION) {
                     
             @Override
-            public boolean invoke(T component, ClassMapper classMapper)
-            throws IllegalAccessException, IllegalArgumentException, 
-                   InvocationTargetException, NotInjectableException {
-                
+            public boolean invoke(T component, ClassMapper classMapper) {
                 final P0 arg0 = classMapper.apply(param0);
                 final P1 arg1 = classMapper.apply(param1);
                 executeAction.accept(component, arg0, arg1);

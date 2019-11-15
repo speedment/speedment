@@ -45,7 +45,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
-import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
+import static com.speedment.common.injector.internal.util.PrintUtil.HORIZONTAL_LINE;
 import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.loadProperties;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.*;
@@ -211,7 +211,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
         INTERNAL_LOGGER.debug(String.format("Creating %d injectable instances.", injectablesSet.size()));
 
-        INTERNAL_LOGGER.debug(horizontalLine());
+        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
 
         // Create an instance of every injectable type
 
@@ -261,7 +261,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                             ))
                             .forEachOrdered(INTERNAL_LOGGER::debug);
 
-                        INTERNAL_LOGGER.debug(horizontalLine());
+                        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
                     }
                     it.remove();
                 } else {
@@ -273,7 +273,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                         INTERNAL_LOGGER.debug("| %-71s PENDING |",
                             limit(injectable.get().getSimpleName(), 71)
                         );
-                        INTERNAL_LOGGER.debug(horizontalLine());
+                        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
                     }
                 }
             }
@@ -472,7 +472,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     // Check if all its dependencies have been satisfied.
                     if (n.canBe(state)) {
 
-                        INTERNAL_LOGGER.debug(horizontalLine());
+                        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
 
                         // Retrieve the instance for that node
                         final Object instance = findIn(
@@ -505,21 +505,20 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                                 
                                 try {
                                     if (!exec.invoke(instance, classMapper)) {
-                                        switch (exec.getMissingArgumentStrategy()) {
-                                            case THROW_EXCEPTION: {
-                                                throw new InjectorException(format(
-                                                    "The injector could not invoke the method '%s' " +
+                                        MissingArgumentStrategy i = exec.getMissingArgumentStrategy();
+                                        if (i == MissingArgumentStrategy.THROW_EXCEPTION) {
+                                            throw new InjectorException(format(
+                                                "The injector could not invoke the method '%s' " +
                                                     "before state '%s' since one of the parameters is not available.",
-                                                    exec.getName(), exec.getState()));
+                                                exec.getName(), exec.getState()));
+                                        } else if (i == MissingArgumentStrategy.SKIP_INVOCATION) {
+                                            if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                                                INTERNAL_LOGGER.debug(
+                                                    "|      %-74s |",
+                                                    limit("(Not invoked due to missing optional dependencies.)", 74)
+                                                );
                                             }
-                                            case SKIP_INVOCATION:
-                                                if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                                    INTERNAL_LOGGER.debug(
-                                                        "|      %-74s |",
-                                                        limit("(Not invoked due to missing optional dependencies.)", 74)
-                                                    );
-                                                }
-                                                break;
+
                                         }
                                     }
                                 } catch (final IllegalAccessException 
@@ -603,12 +602,12 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             nextState.incrementAndGet();
         }
 
-        INTERNAL_LOGGER.debug(horizontalLine());
+        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
         INTERNAL_LOGGER.debug(
             "| %-79s |",
             "All " + instances.size() + " components have been configured!"
         );
-        INTERNAL_LOGGER.debug(horizontalLine());
+        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
 
         return injector;
     }
