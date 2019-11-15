@@ -48,6 +48,7 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -152,7 +153,7 @@ public final class GeneratedSqlAdapterTranslator
                             .add(Field.of(OFFSET_PARAMETER_NAME, int.class))
                             .add("return rs -> apply(rs, offset);")
                     )
-                    .call(() -> {
+                    .call(() ->
                         //file.add(Import.of(State.class).setStaticMember("RESOLVED").static_());
 
                         // Operate on enabled columns that has a type mapper
@@ -200,8 +201,8 @@ public final class GeneratedSqlAdapterTranslator
                                         + "." + getSupport().namer().javaStaticFieldName(col.getJavaName())
                                         + ", " + getSupport().entityName() + ".class);"
                                     );
-                            });
-                    });
+                            })
+                    );
             })
             .build();
     }
@@ -244,7 +245,7 @@ public final class GeneratedSqlAdapterTranslator
             ));
     }
 
-    private static Set<java.lang.Class<?>> NULL_AWARE_GETTERS = Stream.of(
+    private static final Set<java.lang.Class<?>> NULL_AWARE_GETTERS = Stream.of(
         String.class,
         BigDecimal.class,
         java.sql.Time.class,
@@ -253,7 +254,7 @@ public final class GeneratedSqlAdapterTranslator
         Blob.class,
         Clob.class,
         Object.class
-    ).collect(toSet());
+    ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
 
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();

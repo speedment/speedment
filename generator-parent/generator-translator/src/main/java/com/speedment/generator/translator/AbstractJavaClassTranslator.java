@@ -491,7 +491,6 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
                 + "());"
             );
         }
-        return;
     }
 
     private void defineField(TranslatorSupport<D> support, Constructor constructor, Column c) {
@@ -500,7 +499,6 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
             " = " + support.variableName() +
             "." + GETTER_METHOD_PREFIX +
             support.typeName(c) + "();");
-        return;
     }
 
     protected String getGeneratedJavadocMessage() {

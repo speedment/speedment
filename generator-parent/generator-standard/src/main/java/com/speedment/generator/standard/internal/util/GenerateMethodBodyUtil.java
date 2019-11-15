@@ -34,7 +34,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.util.Formatting.*;
+import static com.speedment.common.codegen.util.Formatting.indent;
+import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -43,6 +44,8 @@ import static java.util.stream.Collectors.joining;
  * @since 3.0.0
  */
 public final class GenerateMethodBodyUtil {
+
+    private GenerateMethodBodyUtil() {}
 
     public static Method generateFields(
         TranslatorSupport<Table> support,
@@ -62,7 +65,7 @@ public final class GenerateMethodBodyUtil {
             .add(generateFieldsBody(support, file, columnsSupplier));
     }
 
-    public static String[] generateFieldsBody(
+    private static String[] generateFieldsBody(
         TranslatorSupport<Table> support,
         File file,
         Supplier<Stream<? extends Column>> columnsSupplier) {
@@ -70,7 +73,7 @@ public final class GenerateMethodBodyUtil {
         file.add(Import.of(Stream.class));
 
         // If there are no matching columns:
-        if (columnsSupplier.get().noneMatch($ -> true)) {
+        if (columnsSupplier.get().noneMatch(unused -> true)) {
             return new String[]{"return Stream.empty();"};
         } else {
             final List<String> rows = new LinkedList<>();
@@ -122,7 +125,4 @@ public final class GenerateMethodBodyUtil {
         return rows.toArray(new String[rows.size()]);
     }
 
-    private GenerateMethodBodyUtil() {
-        throw new UnsupportedOperationException();
-    }
 }
