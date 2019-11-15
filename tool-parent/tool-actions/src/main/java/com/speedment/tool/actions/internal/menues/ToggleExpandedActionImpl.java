@@ -37,8 +37,7 @@ import java.util.stream.Stream;
  * @since  3.0.17
  */
 public final class ToggleExpandedActionImpl
-    extends AbstractToolAction
-    implements ToggleExpandedAction {
+    implements AbstractToolAction, ToggleExpandedAction {
 
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {

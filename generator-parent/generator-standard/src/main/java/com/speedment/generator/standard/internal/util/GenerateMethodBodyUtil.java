@@ -21,6 +21,7 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -34,8 +35,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.util.Formatting.indent;
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -79,12 +78,12 @@ public final class GenerateMethodBodyUtil {
             final List<String> rows = new LinkedList<>();
 
             rows.add("return Stream.of(");
-            rows.add(indent(columnsSupplier.get()
+            rows.add(Formatting.indent(columnsSupplier.get()
                 .filter(HasEnabled::isEnabled)
                 .map(Column::getJavaName)
                 .map(support.namer()::javaStaticFieldName)
                 .map(field -> support.typeName() + "." + field)
-                .collect(joining("," + nl()))
+                .collect(joining("," + Formatting.nl()))
             ));
             rows.add(");");
 
@@ -115,12 +114,12 @@ public final class GenerateMethodBodyUtil {
         columnsSupplier.get()
             .filter(HasEnabled::isEnabled)
             .forEachOrdered(c
-                -> streamBuilder.add(indent(".set"
+                -> streamBuilder.add(Formatting.indent(".set"
                 + support.namer().javaTypeName(c.getJavaName()) + "(\t "
                 + readFromResultSet.readFromResultSet(file, c, position)
                 + ")"))
             );
-        streamBuilder.add(indent(";"));
+        streamBuilder.add(Formatting.indent(";"));
         streamBuilder.build().forEachOrdered(rows::add);
         return rows.toArray(new String[rows.size()]);
     }

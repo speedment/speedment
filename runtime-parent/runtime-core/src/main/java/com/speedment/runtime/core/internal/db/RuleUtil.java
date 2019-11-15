@@ -21,7 +21,6 @@ import com.speedment.runtime.core.db.JavaTypeMap;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 final class RuleUtil {
     /**

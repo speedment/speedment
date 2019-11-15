@@ -83,7 +83,7 @@ public enum Isolation {
         return sqlIsolationLevel;
     }
 
-    private static Map<Integer, Isolation> LEVEL_TO_ISOLATION_MAP = new HashMap<>();
+    private static final Map<Integer, Isolation> LEVEL_TO_ISOLATION_MAP = new HashMap<>();
     static {
         LEVEL_TO_ISOLATION_MAP.put(Connection.TRANSACTION_READ_UNCOMMITTED, READ_UNCOMMITTED);
         LEVEL_TO_ISOLATION_MAP.put(Connection.TRANSACTION_READ_COMMITTED, READ_COMMITTED);

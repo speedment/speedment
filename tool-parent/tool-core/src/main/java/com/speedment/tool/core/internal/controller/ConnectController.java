@@ -96,24 +96,18 @@ public final class ConnectController implements Initializable {
     @FXML private RowConstraints userRow;
     @FXML private RowConstraints passRow;
 
-    private FilteredList<Node> hostRowChildren;
-    private FilteredList<Node> fileRowChildren;
-    private FilteredList<Node> userRowChildren;
-    private FilteredList<Node> passRowChildren;
-    private FilteredList<Node> dbmsRowChildren;
-    private FilteredList<Node> schemaRowChildren;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        final FilteredList<Node> hostRowChildren = inRow(hostRow);
+        final FilteredList<Node> fileRowChildren = inRow(fileRow);
+        final FilteredList<Node> userRowChildren = inRow(userRow);
+        final FilteredList<Node> passRowChildren = inRow(passRow);
+        final FilteredList<Node> dbmsRowChildren = inRow(dbmsRow);
+        final FilteredList<Node> schemaRowChildren = inRow(schemaRow);
+
         fieldFileBtn.setGraphic(FontAwesome.FOLDER_OPEN.view());
         buttonConnect.setGraphic(FontAwesome.SIGN_IN.view());
-
-        hostRowChildren = inRow(hostRow);
-        fileRowChildren = inRow(fileRow);
-        userRowChildren = inRow(userRow);
-        passRowChildren = inRow(passRow);
-        dbmsRowChildren = inRow(dbmsRow);
-        schemaRowChildren = inRow(schemaRow);
 
         fieldType.setItems(getDbmsTypes()
             .collect(toCollection(FXCollections::observableArrayList))

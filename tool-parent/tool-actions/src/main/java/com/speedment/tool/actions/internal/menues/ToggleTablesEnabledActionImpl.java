@@ -32,8 +32,7 @@ import java.util.stream.Stream;
  * @since  3.0.17
  */
 public final class ToggleTablesEnabledActionImpl
-    extends AbstractToolAction
-    implements ToggleTablesEnabledAction {
+    implements AbstractToolAction, ToggleTablesEnabledAction {
 
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {

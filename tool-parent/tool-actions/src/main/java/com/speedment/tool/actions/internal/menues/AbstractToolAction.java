@@ -29,7 +29,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  * @author Emil Forslund
  * @since  3.0.17
  */
-abstract class AbstractToolAction {
+interface AbstractToolAction {
 
     /**
      * This method will be invoked before the {@link State#RESOLVED}-phase, but
