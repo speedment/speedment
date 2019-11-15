@@ -21,10 +21,13 @@ import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.modifier.Modifier;
 import com.speedment.common.codegen.model.trait.HasModifiers;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -58,7 +61,7 @@ public interface HasModifiersView<M extends HasModifiers<M>> extends
             modifiers = Stream.of(allowed).collect(toSet());
             modifiers.retainAll(model.getModifiers());
         }
-        
-        return gen.onEach(modifiers).collect(joinIfNotEmpty(" ", "", " "));
+        final List<Modifier> sortedModifiers = modifiers.stream().sorted().collect(toList());
+        return gen.onEach(sortedModifiers).collect(joinIfNotEmpty(" ", "", " "));
     }
 }
