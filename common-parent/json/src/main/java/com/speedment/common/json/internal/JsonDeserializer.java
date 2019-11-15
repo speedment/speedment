@@ -57,7 +57,7 @@ public final class JsonDeserializer implements AutoCloseable {
     
     private int character;
     
-    public JsonDeserializer(InputStream in) throws UnsupportedEncodingException {
+    public JsonDeserializer(InputStream in) {
         reader = new InputStreamReader(in, ENCODING);
         row = new AtomicLong(0);
         col = new AtomicLong(0);

@@ -29,7 +29,53 @@ import static java.util.Objects.requireNonNull;
  */
 public enum OptionalBoolean {
     
-    FALSE, TRUE, EMPTY;
+    FALSE {
+        @Override
+        public <T extends Throwable> boolean orElseThrow(Supplier<T> thrower) throws T {
+            return false;
+        }
+
+        @Override
+        public boolean isPresent() {
+            return true;
+        }
+
+        @Override
+        public void ifPresent(BooleanConsumer consumer) {
+            consumer.accept(false);
+        }
+    }, TRUE {
+
+        @Override
+        public <T extends Throwable> boolean orElseThrow(Supplier<T> thrower) throws T {
+            return true;
+        }
+
+        @Override
+        public boolean isPresent() {
+            return true;
+        }
+
+        @Override
+        public void ifPresent(BooleanConsumer consumer) {
+            consumer.accept(true);
+        }
+    }, EMPTY{
+        @Override
+        public <T extends Throwable> boolean orElseThrow(Supplier<T> thrower) throws T {
+            throw thrower.get();
+        }
+
+        @Override
+        public boolean isPresent() {
+            return false;
+        }
+
+        @Override
+        public void ifPresent(BooleanConsumer consumer) {
+            // Do nothing
+        }
+    };
     
     public static OptionalBoolean empty() {
         return EMPTY;
@@ -85,32 +131,10 @@ public enum OptionalBoolean {
         }
     }
     
-    public <T extends Throwable> boolean orElseThrow(Supplier<T> thrower) throws T {
-        switch (this) {
-            case FALSE : return false;
-            case TRUE  : return true;
-            default    : throw thrower.get();
-        }
-    }
-    
-    public boolean isPresent() {
-        return this != EMPTY;
-    }
-    
-    public void ifPresent(BooleanConsumer consumer) {
-        switch (this) {
-            case FALSE : {
-                acceptConsumer(consumer, false);
-                break;}
-            case TRUE  : {
-                acceptConsumer(consumer, true);
-                break;}
-            default: // do nothing
-        }
-    }
+    public abstract <T extends Throwable> boolean orElseThrow(Supplier<T> thrower) throws T;
 
-    private void acceptConsumer(BooleanConsumer consumer, boolean b) {
-        consumer.accept(b);
-    }
+    public abstract boolean isPresent();
+
+    public abstract void ifPresent(BooleanConsumer consumer);
 
 }

@@ -636,7 +636,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         injectables.put(key, list);
     }
 
-    private void set(Field field, Object instance, Object value) throws IllegalArgumentException, IllegalAccessException {
+    private void set(Field field, Object instance, Object value) throws IllegalAccessException {
         final InjectorProxy injectorProxy = proxyFor(instance.getClass());
         injectorProxy.set(field, instance, value);
     }
