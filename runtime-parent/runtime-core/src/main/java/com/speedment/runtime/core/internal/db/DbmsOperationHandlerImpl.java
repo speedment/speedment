@@ -323,22 +323,34 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     private void executeSqlStatement(SqlStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
         assertNotClosed();
         switch (sqlStatement.getType()) {
-            case INSERT: {
-                final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
-                insertHandler.accept(dbms,conn,s);
+            case INSERT:
+                insert((SqlInsertStatement) sqlStatement, dbms, conn);
                 break;
-            }
-            case UPDATE: {
-                final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
-                handleSqlStatement(dbms, conn, s);
+            case UPDATE:
+                update((SqlUpdateStatement) sqlStatement, dbms, conn);
                 break;
-            }
-            case DELETE: {
-                final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
-                handleSqlStatement(dbms, conn, s);
+            case DELETE:
+                delete((SqlDeleteStatement) sqlStatement, dbms, conn);
                 break;
-            }
         }
+    }
+
+    private void delete(SqlDeleteStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
+        final SqlDeleteStatement s = sqlStatement;
+        handleSqlStatement(dbms, conn, s);
+        return;
+    }
+
+    private void update(SqlUpdateStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
+        final SqlUpdateStatement s = sqlStatement;
+        handleSqlStatement(dbms, conn, s);
+        return;
+    }
+
+    private void insert(SqlInsertStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
+        final SqlInsertStatement s = sqlStatement;
+        insertHandler.accept(dbms,conn,s);
+        return;
     }
 
     private <T> T applyOnConnection(Dbms dbms, SqlFunction<Connection, T> mapper) throws SQLException {

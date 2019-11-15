@@ -91,9 +91,9 @@ public final class InternalStreamUtil {
      *
      * @param <T>  the type of the entity
      */
-    final static class ResultSetIterator<T> implements Iterator<T> {
+    static final class ResultSetIterator<T> implements Iterator<T> {
 
-        private final String NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE = "The method next() was invoked even though hasNext() returns false.";
+        private static final String NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE = "The method next() was invoked even though hasNext() returns false.";
 
         /**
          * The current state of the {@code ResultSetIterator}.
@@ -143,25 +143,28 @@ public final class InternalStreamUtil {
             switch (state) {
                 case NEXT    : return true;
                 case NO_NEXT : return false;
-                case NOT_DETERMINED : {
-                    try {
-                        if (!resultSet.next()) {
-                            state = State.NO_NEXT;
-                            return false;
-                        }
-                    } catch (final SQLException ex) {
-                        state = State.NO_NEXT;
-                        return false;
-                    }
-
-                    state = State.NEXT;
-                    return true;
-                }
+                case NOT_DETERMINED :
+                    return setState();
 
                 default : throw new IllegalStateException(
                     "Unknown state '" + state + "'."
                 );
             }
+        }
+
+        private boolean setState() {
+            try {
+                if (!resultSet.next()) {
+                    state = State.NO_NEXT;
+                    return false;
+                }
+            } catch (final SQLException ex) {
+                state = State.NO_NEXT;
+                return false;
+            }
+
+            state = State.NEXT;
+            return true;
         }
 
         @Override

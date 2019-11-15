@@ -20,11 +20,7 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.internal.component.PasswordComponentImpl;
 
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *

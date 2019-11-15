@@ -19,7 +19,6 @@ package com.speedment.runtime.core.provider;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.core.component.EntityManager;
 import com.speedment.runtime.core.component.ManagerComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.EntityManagerImpl;
 
 import static com.speedment.common.injector.State.RESOLVED;
@@ -43,17 +42,17 @@ public final class DelegateEntityManager implements EntityManager {
     }
 
     @Override
-    public <ENTITY> void persist(ENTITY entity) throws SpeedmentException {
+    public <ENTITY> void persist(ENTITY entity) {
         inner.persist(entity);
     }
 
     @Override
-    public <ENTITY> void update(ENTITY entity) throws SpeedmentException {
+    public <ENTITY> void update(ENTITY entity) {
         inner.update(entity);
     }
 
     @Override
-    public <ENTITY> void remove(ENTITY entity) throws SpeedmentException {
+    public <ENTITY> void remove(ENTITY entity) {
         inner.remove(entity);
     }
 

@@ -16,13 +16,10 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.*;
 import java.util.stream.*;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static java.util.Objects.requireNonNull;
 
 /**

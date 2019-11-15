@@ -18,7 +18,6 @@ package com.speedment.runtime.core.stream;
 
 import com.speedment.runtime.core.stream.action.Action;
 
-import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
@@ -38,17 +37,15 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
      * Removes and returns the first element from this pipeline.
      *
      * @return the first element from this pipeline
-     * @throws NoSuchElementException if this pipeline is empty
      */
-    Action<?, ?> removeFirst() throws NoSuchElementException;
+    Action<?, ?> removeFirst();
 
     /**
      * Removes and returns the last element from this pipeline.
      *
      * @return the first element from this pipeline
-     * @throws NoSuchElementException if this pipeline is empty
      */
-    Action<?, ?> removeLast() throws NoSuchElementException;
+    Action<?, ?> removeLast();
 
     void addFirst(Action<?, ?> e);
 

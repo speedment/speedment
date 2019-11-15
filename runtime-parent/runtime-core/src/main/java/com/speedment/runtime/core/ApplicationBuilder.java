@@ -18,7 +18,6 @@ package com.speedment.runtime.core;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;

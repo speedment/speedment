@@ -30,7 +30,7 @@ import static com.speedment.runtime.core.internal.stream.builder.action.Standard
 public final class IntAsDoubleAction extends Action<IntStream, DoubleStream> {
 
     public IntAsDoubleAction() {
-        super(s -> s.asDoubleStream(), DoubleStream.class, AS);
+        super(IntStream::asDoubleStream, DoubleStream.class, AS);
     }
 
 }

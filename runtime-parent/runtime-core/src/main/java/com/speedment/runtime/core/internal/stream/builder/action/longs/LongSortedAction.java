@@ -29,7 +29,7 @@ import static com.speedment.runtime.core.internal.stream.builder.action.Standard
 public final class LongSortedAction extends Action<LongStream, LongStream> {
 
     public LongSortedAction() {
-        super(s -> s.sorted(), LongStream.class, SORTED);
+        super(LongStream::sorted, LongStream.class, SORTED);
     }
 
 }

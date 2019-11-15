@@ -21,13 +21,7 @@ import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.core.component.StatisticsReporterComponent;
 import com.speedment.runtime.core.component.StatisticsReporterSchedulerComponent;
-import com.speedment.runtime.core.internal.component.StatisticsReporterComponentImpl;
 import com.speedment.runtime.core.internal.component.StatisticsReporterSchedulerComponentImpl;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *

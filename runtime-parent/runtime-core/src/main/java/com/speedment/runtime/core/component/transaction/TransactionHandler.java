@@ -73,7 +73,7 @@ public interface TransactionHandler {
      * @throws TransactionException if the action throws an exception
      * @throws NullPointerException if the provided mapper is null
      */
-    default void createAndAccept(Consumer<? super Transaction> action) throws TransactionException {
+    default void createAndAccept(Consumer<? super Transaction> action) {
         createAndApply(tx -> {
             action.accept(tx);
             return null;
@@ -113,6 +113,6 @@ public interface TransactionHandler {
      * @throws TransactionException if the action throws an exception
      * @throws NullPointerException if the provided mapper is null
      */
-    <R> R createAndApply(Function<? super Transaction, ? extends R> mapper) throws TransactionException;
+    <R> R createAndApply(Function<? super Transaction, ? extends R> mapper);
 
 }

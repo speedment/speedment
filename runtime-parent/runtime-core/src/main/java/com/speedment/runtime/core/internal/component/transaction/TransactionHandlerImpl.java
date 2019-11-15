@@ -62,8 +62,8 @@ public final class TransactionHandlerImpl implements TransactionHandler {
         return isolation;
     }
 
-    @Override
-    public <R> R createAndApply(Function<? super Transaction, ? extends R> mapper) throws TransactionException {
+
+    public <R> R createAndApply(Function<? super Transaction, ? extends R> mapper) {
         requireNonNull(mapper);
         final Thread currentThread = Thread.currentThread();
         final Object txObject = dataSourceHandler.extractor().apply(dataSource); // e.g. obtains a Connection

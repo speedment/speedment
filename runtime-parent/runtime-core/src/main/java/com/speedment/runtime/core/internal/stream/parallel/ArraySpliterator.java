@@ -75,7 +75,8 @@ final class ArraySpliterator<T> implements Spliterator<T> {
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
         requireNonNull(action);
-        int i, hi;
+        int i;
+        int hi;
         if (array.length >= (hi = size) && (i = index) >= 0 && i < (index = hi)) {
             do {
                 action.accept((T) array[i]);

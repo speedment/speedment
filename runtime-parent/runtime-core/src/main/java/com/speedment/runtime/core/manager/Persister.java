@@ -56,7 +56,7 @@ public interface Persister<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTIT
      * (e.g. SQLException)
      */
     @Override
-    ENTITY apply(ENTITY entity) throws SpeedmentException;
+    ENTITY apply(ENTITY entity);
 
     /**
      * Persists the entity in the data store. The specified instance might be

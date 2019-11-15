@@ -19,7 +19,6 @@ package com.speedment.runtime.core.component.connectionpool;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
@@ -178,11 +177,12 @@ public final class SingletonConnectionPoolComponent implements ConnectionPoolCom
         return Long.MAX_VALUE;
     }
 
-    private final static class SerializedConnectionManager implements Closeable {
+    private static final class SerializedConnectionManager implements Closeable {
 
         private final Semaphore lock;
         private final Connection connection;
-        private final String uri, user;
+        private final String uri;
+        private final String user;
         private final char[] password;
         private final AtomicInteger counter;
         private final boolean blocking;
@@ -217,16 +217,19 @@ public final class SingletonConnectionPoolComponent implements ConnectionPoolCom
         }
     }
 
-    private final static class SerializedConnection implements PoolableConnection {
+    private static final class SerializedConnection implements PoolableConnection {
 
-        private final long id, created;
+        private final long id;
+        private final long created;
         private final Semaphore lock;
         private final Connection connection;
         private final AtomicInteger counter;
-        private final String uri, user;
+        private final String uri;
+        private final String user;
         private final char[] password;
         private final boolean blocking;
-        private boolean available, closed;
+        private boolean available;
+        private boolean closed;
         private List<Runnable> onClose;
 
         SerializedConnection(Semaphore lock, Connection connection, AtomicInteger counter, String uri, String user, char[] password, boolean blocking) {

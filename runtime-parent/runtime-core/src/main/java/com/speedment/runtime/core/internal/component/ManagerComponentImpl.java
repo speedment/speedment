@@ -47,8 +47,7 @@ public final class ManagerComponentImpl implements ManagerComponent {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <E> Manager<E> managerOf(Class<E> entityClass) 
-            throws SpeedmentException {
+    public <E> Manager<E> managerOf(Class<E> entityClass) {
         
         requireNonNull(entityClass);
         

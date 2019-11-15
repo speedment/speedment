@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.util.testing;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.field.Field;
 
@@ -94,12 +93,12 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public ENTITY persist(ENTITY entity) throws SpeedmentException {
+    public ENTITY persist(ENTITY entity) {
         return persister.apply(entity);
     }
 
     @Override
-    public ENTITY update(ENTITY entity) throws SpeedmentException {
+    public ENTITY update(ENTITY entity) {
         return updater.apply(entity);
     }
 
@@ -114,7 +113,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public ENTITY remove(ENTITY entity) throws SpeedmentException {
+    public ENTITY remove(ENTITY entity) {
         return remover.apply(entity);
     }
 

@@ -32,7 +32,7 @@ public final class Statement {
 
     private final Verb verb;
     private final Property property;
-    private final static Map<Statement, Statement> SINGLETONS = new HashMap<>();
+    private static final Map<Statement, Statement> SINGLETONS = new HashMap<>();
 
     private Statement(Verb verb, Property property) {
         this.verb = requireNonNull(verb);

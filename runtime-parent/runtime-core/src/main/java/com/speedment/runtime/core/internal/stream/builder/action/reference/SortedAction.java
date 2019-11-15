@@ -30,7 +30,7 @@ import static com.speedment.runtime.core.internal.stream.builder.action.Standard
 public final class SortedAction<T> extends Action<Stream<T>, Stream<T>> {
 
     public SortedAction() {
-        super(s -> s.sorted(), Stream.class, SORTED);
+        super(Stream::sorted, Stream.class, SORTED);
     }
 
 }

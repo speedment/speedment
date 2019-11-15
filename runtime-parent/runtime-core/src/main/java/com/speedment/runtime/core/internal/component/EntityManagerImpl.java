@@ -19,7 +19,6 @@ package com.speedment.runtime.core.internal.component;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.core.component.EntityManager;
 import com.speedment.runtime.core.component.ManagerComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 
 import java.util.Map;
@@ -49,19 +48,19 @@ public final class EntityManagerImpl implements EntityManager {
     }
 
     @Override
-    public <ENTITY> void persist(ENTITY entity) throws SpeedmentException {
+    public <ENTITY> void persist(ENTITY entity) {
         requireNonNull(entity);
         managerOf(entity).persist(entity);
     }
 
     @Override
-    public <ENTITY> void update(ENTITY entity) throws SpeedmentException {
+    public <ENTITY> void update(ENTITY entity) {
         requireNonNull(entity);
         managerOf(entity).update(entity);
     }
 
     @Override
-    public <ENTITY> void remove(ENTITY entity) throws SpeedmentException {
+    public <ENTITY> void remove(ENTITY entity) {
         requireNonNull(entity);
         managerOf(entity).remove(entity);
     }

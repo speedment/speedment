@@ -33,7 +33,7 @@ public interface Transaction {
      * @throws TransactionException if an exception is thrown by the underlying
      * transaction aware object (e.g. an SqlException is thrown)
      */
-    void commit() throws TransactionException;
+    void commit();
 
     /**
      * Undoes all changes made in the current transaction and releases any
@@ -43,7 +43,7 @@ public interface Transaction {
      * @throws TransactionException if an exception is thrown by the underlying
      * transaction aware object (e.g. an SqlException is thrown)
      */
-    void rollback() throws TransactionException;
+    void rollback();
 
     /**
      * Attaches the current thread to this Transaction.

@@ -29,7 +29,7 @@ import static com.speedment.runtime.core.internal.stream.builder.action.Standard
 public final class IntDistinctAction extends Action<IntStream, IntStream> {
 
     public IntDistinctAction() {
-        super(s -> s.distinct(), IntStream.class, DISTINCT);
+        super(IntStream::distinct, IntStream.class, DISTINCT);
     }
 
 }

@@ -50,6 +50,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
+import static java.sql.DatabaseMetaData.*;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -410,18 +411,14 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
             final boolean nullable;
             final int nullableValue = md.getNullable();
-            switch (nullableValue) {
-                case DatabaseMetaData.columnNullable:
-                case DatabaseMetaData.columnNullableUnknown: {
-                    nullable = true;
-                    break;
-                }
-                case DatabaseMetaData.columnNoNulls: {
-                    nullable = false;
-                    break;
-                }
-                default:
-                    throw new SpeedmentException("Unknown nullable type " + nullableValue);
+
+            if (nullableValue == columnNullable ||
+                nullableValue == columnNullableUnknown) {
+                nullable = true;
+            } else if (nullableValue == columnNoNulls) {
+                nullable = false;
+            } else {
+                throw new SpeedmentException("Unknown nullable type " + nullableValue);
             }
 
             column.mutator().setNullable(nullable);
@@ -549,7 +546,6 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         };
 
         final SqlPredicate<ResultSet> filter = rs -> {
-            final String type = rs.getString("TYPE");
             final String indexName = rs.getString("INDEX_NAME");
             return nonNull(indexName);
         };

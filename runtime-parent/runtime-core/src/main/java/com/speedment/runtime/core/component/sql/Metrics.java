@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.component.sql;
 
 import com.speedment.runtime.core.internal.component.sql.MetricsImpl;
-import java.util.Set;
 
 /**
  *

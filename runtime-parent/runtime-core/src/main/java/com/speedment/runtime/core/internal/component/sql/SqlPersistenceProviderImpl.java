@@ -159,7 +159,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         return entity -> persist(entity, f -> columns.test(columnsByFields.get(f)), statement);
     }
 
-    private ENTITY persist(ENTITY entity, Predicate<Field<ENTITY>> includedFields, String insertStatement) throws SpeedmentException {
+    private ENTITY persist(ENTITY entity, Predicate<Field<ENTITY>> includedFields, String insertStatement) {
         final List<Object> values = fields.get()
             .filter(includedFields)
             .map(f -> toDatabaseType(f, entity))
@@ -193,7 +193,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         return entity -> update(entity, f -> columns.test(columnsByFields.get(f)), statement);
     }
 
-    private ENTITY update(ENTITY entity, Predicate<Field<ENTITY>> includedFields, String updateStatement) throws SpeedmentException {
+    private ENTITY update(ENTITY entity, Predicate<Field<ENTITY>> includedFields, String updateStatement) {
         final List<Object> values = Stream.concat(
             fields.get().filter(includedFields),
             primaryKeyFields.get()
@@ -215,7 +215,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         return this::remove;
     }
 
-    private ENTITY remove(ENTITY entity) throws SpeedmentException {
+    private ENTITY remove(ENTITY entity) {
         final List<Object> values = primaryKeyFields.get()
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());

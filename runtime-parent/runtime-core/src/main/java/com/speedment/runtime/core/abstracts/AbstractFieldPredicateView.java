@@ -320,29 +320,22 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
         final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
-            case START_EXCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + GREATER_THAN_WILDCARD + " AND " + cn + LESS_THAN_WILDCARD + ")", negated)
-                    .add(getFirstOperandAsRaw(model))
-                    .add(getSecondOperand(model));
-            }
-            case START_INCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + GREATER_OR_EQUAL_WILDCARD + " AND " + cn + LESS_THAN_WILDCARD + ")", negated)
-                    .add(getFirstOperandAsRaw(model))
-                    .add(getSecondOperand(model));
-            }
-            case START_EXCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + GREATER_THAN_WILDCARD + " AND " + cn + LESS_OR_EQUAL_WILDCARD + ")", negated)
-                    .add(getFirstOperandAsRaw(model))
-                    .add(getSecondOperand(model));
-            }
-            case START_INCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + GREATER_OR_EQUAL_WILDCARD + " AND " + cn + LESS_OR_EQUAL_WILDCARD + ")", negated)
-                    .add(getFirstOperandAsRaw(model))
-                    .add(getSecondOperand(model));
-            }
+            case START_EXCLUSIVE_END_EXCLUSIVE:
+                return predicate(cn, model, negated, GREATER_THAN_WILDCARD, LESS_THAN_WILDCARD);
+            case START_INCLUSIVE_END_EXCLUSIVE:
+                return predicate(cn, model, negated, GREATER_OR_EQUAL_WILDCARD, LESS_THAN_WILDCARD);
+            case START_EXCLUSIVE_END_INCLUSIVE:
+                return predicate(cn, model, negated, GREATER_THAN_WILDCARD, LESS_OR_EQUAL_WILDCARD);
+            case START_INCLUSIVE_END_INCLUSIVE:
+                return predicate(cn, model, negated, GREATER_OR_EQUAL_WILDCARD, LESS_OR_EQUAL_WILDCARD);
         }
-
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
+    }
+
+    private SqlPredicateFragment predicate(String cn, FieldPredicate<?> model, boolean negated, String greaterThanWildcard, String lessThanWildcard) {
+        return of("(" + cn + greaterThanWildcard + " AND " + cn + lessThanWildcard + ")", negated)
+            .add(getFirstOperandAsRaw(model))
+            .add(getSecondOperand(model));
     }
 
     protected SqlPredicateFragment inHelper(String cn,

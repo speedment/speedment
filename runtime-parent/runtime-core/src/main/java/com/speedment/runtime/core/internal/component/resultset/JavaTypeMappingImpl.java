@@ -20,6 +20,7 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 
 import java.util.function.Function;
+import java.util.function.LongFunction;
 
 import static java.util.Objects.requireNonNull;
 

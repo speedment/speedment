@@ -30,11 +30,9 @@ import com.speedment.runtime.core.internal.stream.builder.streamterminator.Strea
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
-import com.speedment.runtime.field.EnumField;
 import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
-import com.speedment.runtime.field.comparator.ReferenceFieldComparator;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -309,15 +307,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         }
     }
 
-    private boolean isFilterActionAndContainingOnlyFieldPredicate(Action<?, ?> action) {
-        if (action instanceof FilterAction) {
-            @SuppressWarnings("unchecked")
-            final FilterAction<ENTITY> filterAction = (FilterAction<ENTITY>) action;
-            return isContainingOnlyFieldPredicate(filterAction.getPredicate());
-        }
-        return false;
-    }
-
     private static class Consumers<ENTITY> {
 
         private final Consumer<? super FilterAction<ENTITY>> filterConsumer;
@@ -375,6 +364,15 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             @SuppressWarnings("unchecked")
             final FilterAction<ENTITY> filterAction = (FilterAction<ENTITY>) action;
             consumers.getFilterConsumer().accept(filterAction);
+        }
+
+        private boolean isFilterActionAndContainingOnlyFieldPredicate(Action<?, ?> action) {
+            if (action instanceof FilterAction) {
+                @SuppressWarnings("unchecked")
+                final FilterAction<ENTITY> filterAction = (FilterAction<ENTITY>) action;
+                return isContainingOnlyFieldPredicate(filterAction.getPredicate());
+            }
+            return false;
         }
 
     }

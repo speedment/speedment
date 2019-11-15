@@ -30,7 +30,7 @@ import static com.speedment.runtime.core.internal.stream.builder.action.Standard
 public final class DoubleBoxedAction extends Action<DoubleStream, Stream<Double>> {
 
     public DoubleBoxedAction() {
-        super(s -> s.boxed(), Stream.class, BOXED);
+        super(DoubleStream::boxed, Stream.class, BOXED);
     }
 
 }

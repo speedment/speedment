@@ -21,7 +21,6 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.util.Set;
 
