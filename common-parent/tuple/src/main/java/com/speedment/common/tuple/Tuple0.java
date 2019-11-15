@@ -16,8 +16,6 @@
  */
 package com.speedment.common.tuple;
 
-import com.speedment.common.tuple.getter.TupleGetter;
-
 /**
  * This interface defines a generic {@link Tuple} of degree 0 that can hold
  * non-null values. A Tuple is type safe, immutable and thread safe. For tuples
@@ -43,7 +41,7 @@ public interface Tuple0 extends Tuple {
     
     default Object get(int index) {
         switch (index) {
-            
+
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }
