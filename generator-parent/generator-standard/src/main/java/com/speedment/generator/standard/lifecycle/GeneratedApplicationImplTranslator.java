@@ -51,11 +51,11 @@ public final class GeneratedApplicationImplTranslator extends AbstractJavaClassT
     @Override
     protected Class makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
-            .forEveryProject((clazz, project) -> {
+            .forEveryProject((clazz, project) ->
                 clazz.public_()
                     .setSupertype(AbstractSpeedment.class)
-                    .add(generatedType());
-            }).build();
+                    .add(generatedType())
+            ).build();
     }
     
     @Override

@@ -21,6 +21,7 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.generator.standard.util.FkHolder;
 import com.speedment.generator.standard.util.ForeignKeyUtil;
@@ -45,7 +46,6 @@ import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERR
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import static com.speedment.common.codegen.constant.DefaultType.*;
-import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.util.ColumnUtil.usesOptional;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
@@ -78,7 +78,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             .add(Constructor.of()
                 .add(Field.of("columnId", String.class))
                 .add("this.columnId\t = columnId;")
-                .add("this.tableIdentifier\t = TableIdentifier.of(" + indent(
+                .add("this.tableIdentifier\t = TableIdentifier.of(" + Formatting.indent(
                     "getDbmsId(), ",
                     "getSchemaId(), ",
                     "getTableId()"

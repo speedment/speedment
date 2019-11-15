@@ -16,18 +16,15 @@
  */
 package com.speedment.generator.standard.manager;
 
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -36,7 +33,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
@@ -74,9 +70,9 @@ import static java.util.stream.Collectors.*;
 public final class GeneratedSqlAdapterTranslator
     extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String CREATE_HELPERS_METHOD_NAME = "createHelpers";
-    public final static String INSTALL_METHOD_NAME = "installMethodName";
-    public final static String OFFSET_PARAMETER_NAME = "offset";
+    public static final String CREATE_HELPERS_METHOD_NAME = "createHelpers";
+    public static final String INSTALL_METHOD_NAME = "installMethodName";
+    public static final String OFFSET_PARAMETER_NAME = "offset";
 
     @Inject public ResultSetMapperComponent resultSetMapperComponent;
     @Inject public DbmsHandlerComponent dbmsHandlerComponent;

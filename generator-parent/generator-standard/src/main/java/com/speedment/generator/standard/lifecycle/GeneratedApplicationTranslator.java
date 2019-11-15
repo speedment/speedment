@@ -48,9 +48,9 @@ public final class GeneratedApplicationTranslator extends AbstractJavaClassTrans
     @Override
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
-            .forEveryProject((clazz, project) -> {
-                clazz.public_().add(Speedment.class);
-            }).build();
+            .forEveryProject((clazz, project) ->
+                clazz.public_().add(Speedment.class)
+            ).build();
     }
 
     @Override

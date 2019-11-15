@@ -45,9 +45,9 @@ public final class ApplicationTranslator extends AbstractJavaClassTranslator<Pro
     @Override
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
-            .forEveryProject((clazz, project) -> {
-                clazz.public_().add(generatedType());
-            }).build();
+            .forEveryProject((clazz, project) ->
+                clazz.public_().add(generatedType())
+            ).build();
     }
 
     @Override

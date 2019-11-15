@@ -52,11 +52,11 @@ import static java.util.Objects.requireNonNull;
  */
 public final class TranslatorSupport<DOC extends Document & HasName & HasMainInterface> {
     
-    public final static String IMPL_SUFFIX       = "Impl";
-    public final static String MANAGER_SUFFIX    = "Manager";
-    public final static String GENERATED_PACKAGE = "generated";
-    public final static String GENERATED_PREFIX  = "Generated";
-    public final static String SQL_ADAPTER_SUFFIX= "SqlAdapter";
+    public static final String IMPL_SUFFIX       = "Impl";
+    public static final String MANAGER_SUFFIX    = "Manager";
+    public static final String GENERATED_PACKAGE = "generated";
+    public static final String GENERATED_PREFIX  = "Generated";
+    public static final String SQL_ADAPTER_SUFFIX= "SqlAdapter";
 
     private  static final String MUST_HAVE_A = " must have a ";
     private static final String DOCUMENT_TEXT = " document.";

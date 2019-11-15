@@ -108,7 +108,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             /*
              * Finders
              */
-            .forEveryColumn((clazz, col) -> {
+            .forEveryColumn((clazz, col) ->
                 ForeignKeyUtil.getForeignKey(
                     getSupport().tableOrThrow(), col
                 ).ifPresent(fkc -> {
@@ -146,8 +146,8 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                                     "()" + getterName + ")).findAny().orElse(null);"
                         )
                     );
-                });
-            })
+                }
+            ))
             
             // We need to make it POST_MAKE because other plugins might add fields
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> 

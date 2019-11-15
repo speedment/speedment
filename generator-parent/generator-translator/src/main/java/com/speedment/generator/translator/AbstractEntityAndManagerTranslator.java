@@ -18,11 +18,8 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 
 import java.lang.reflect.Type;

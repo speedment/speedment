@@ -30,7 +30,6 @@ import com.speedment.generator.translator.component.TranslatorAppender;
 import com.speedment.generator.translator.component.function.GenerateClass;
 import com.speedment.generator.translator.component.function.GenerateEnum;
 import com.speedment.generator.translator.component.function.GenerateInterface;
-import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
@@ -135,7 +134,7 @@ public final class StandardCodeGenerationComponent implements CodeGenerationComp
     }
 
     @Override
-    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> Translator<DOC, T> findTranslator(DOC document, TranslatorKey<DOC, T> key) throws SpeedmentTranslatorException {
+    public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> Translator<DOC, T> findTranslator(DOC document, TranslatorKey<DOC, T> key) {
         return inner.findTranslator(document, key);
     }
 }
