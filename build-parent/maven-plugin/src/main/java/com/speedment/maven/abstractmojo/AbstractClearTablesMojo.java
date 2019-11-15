@@ -80,7 +80,7 @@ public abstract class AbstractClearTablesMojo extends AbstractSpeedmentMojo {
 
 	@Override
 	protected boolean debug() {
-		return !(debug == null) && debug;
+		return (debug != null) && debug;
 	}
 
 	public String getConfigFile() {
