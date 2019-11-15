@@ -75,7 +75,7 @@ public abstract class AbstractApplicationBuilder<
         BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
 > implements ApplicationBuilder<APP, BUILDER> {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(
+    private static final Logger LOGGER = LoggerManager.getLogger(
         LogType.APPLICATION_BUILDER.getLoggerName());
     
     private final InjectorBuilder injectorBuilder;
