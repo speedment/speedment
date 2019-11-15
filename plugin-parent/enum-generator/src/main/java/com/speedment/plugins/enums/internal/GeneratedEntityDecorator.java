@@ -16,14 +16,14 @@
  */
 package com.speedment.plugins.enums.internal;
 
-import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.value.InvocationValue;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.core.exception.SpeedmentGeneratorException;
-import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.standard.util.FkHolder;
+import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorDecorator;
