@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 /**
@@ -51,8 +52,8 @@ public final class Trees {
     }
 
     public static <T> Stream<? extends T> walk(
-            T first, 
-            Function<T, T> traverser) {
+            T first,
+            UnaryOperator<T> traverser) {
         
         requireNonNulls(first, traverser);
         
@@ -65,8 +66,8 @@ public final class Trees {
     }
 
     public static <T> Stream<? extends T> walk(
-            T first, 
-            Function<T, T> traverser, 
+            T first,
+            UnaryOperator<T> traverser,
             WalkingOrder order) {
         
         requireNonNulls(first, traverser, order);
@@ -144,8 +145,8 @@ public final class Trees {
     }
 
     private static <T> Stream.Builder<? extends T> walk(
-            T first, 
-            Function<T, T> traverser, 
+            T first,
+            UnaryOperator<T> traverser,
             WalkingOrder order, 
             Stream.Builder<T> builder) {
         
@@ -186,9 +187,7 @@ public final class Trees {
         final Stream<? extends T> next = traverser.apply(first);
         if (next != null) {
             next.filter(Objects::nonNull)
-                .forEach((T n) -> {
-                    traverse(n, traverser, traversalOrder, builder);
-                });
+                .forEach((T n) -> traverse(n, traverser, traversalOrder, builder));
         }
         
         if (traversalOrder == TraversalOrder.DEPTH_FIRST_POST) {

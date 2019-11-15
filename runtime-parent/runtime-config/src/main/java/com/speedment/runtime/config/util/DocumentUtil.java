@@ -61,7 +61,7 @@ public final class DocumentUtil {
         
         return Trees.traverse(
             document,
-            d -> d.children(),
+            Document::children,
             Trees.TraversalOrder.DEPTH_FIRST_PRE
         );
     }

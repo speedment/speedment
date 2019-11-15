@@ -27,7 +27,9 @@ import static java.util.Objects.requireNonNull;
  */
 public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY> {
 
-    private final String dbmsName, schemaName, tableName;
+    private final String dbmsName;
+    private final String schemaName;
+    private final String tableName;
     private final int hashCode;
 
     public TableIdentifierImpl(String dbmsName, String schemaName, String tableName) {
