@@ -27,8 +27,6 @@ import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.common.codegen.model.modifier.Modifier.*;
-import static com.speedment.common.codegen.util.Formatting.nl;
-import static com.speedment.common.codegen.util.Formatting.tab;
 
 /**
  * Transforms from a {@link Constructor} to java code.
@@ -50,7 +48,7 @@ implements Transform<Constructor, String>,
         if (model.getFields().size() >= 3
         ||  model.getFields().stream()
             .anyMatch(f -> !f.getAnnotations().isEmpty())) {
-            return "," + nl() + tab() + tab();
+            return "," + Formatting.nl() + Formatting.tab() + Formatting.tab();
         } else return ", ";
     }
 
@@ -72,7 +70,7 @@ implements Transform<Constructor, String>,
                 .orElseThrow(() -> new UnsupportedOperationException(
                     "Could not find a nameable parent of constructor."
                 )) +
-            ((splitFields(model)) ? "(" + nl() + tab() + tab() : "(") +
+            ((splitFields(model)) ? "(" + Formatting.nl() + Formatting.tab() + Formatting.tab() : "(") +
             renderFields(gen, model) + ") " +
             renderThrows(gen, model) +
             renderCode(gen, model)

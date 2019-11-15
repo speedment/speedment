@@ -27,7 +27,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -96,7 +95,7 @@ public final class AlignTabs<T> implements Consumer<T> {
                 
                 Formatting.alignTabs(rows);
                 
-                javadoc.setText(rows.stream().collect(joining(nl())));
+                javadoc.setText(rows.stream().collect(joining(Formatting.nl())));
             });
         }
     }

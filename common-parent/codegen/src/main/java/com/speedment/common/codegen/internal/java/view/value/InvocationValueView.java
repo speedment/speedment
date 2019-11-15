@@ -19,14 +19,13 @@ package com.speedment.common.codegen.internal.java.view.value;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.value.InvocationValue;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.speedment.common.codegen.util.Formatting.indent;
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -53,8 +52,8 @@ implements Transform<InvocationValue, String> {
             model.getValue() +
             (model.getValues().size() <= 3
                 ? gen.onEach(model.getValues()).collect(joining(", ", "(", ")"))
-                : ("(" + nl() + indent(gen.onEach(model.getValues())
-                    .collect(joining("," + nl()))) + nl() + ")"
+                : ("(" + Formatting.nl() + Formatting.indent(gen.onEach(model.getValues())
+                    .collect(joining("," + Formatting.nl()))) + Formatting.nl() + ")"
                 )
             )
         );

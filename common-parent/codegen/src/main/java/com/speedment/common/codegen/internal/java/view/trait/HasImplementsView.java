@@ -20,10 +20,9 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasImplements;
 import com.speedment.common.codegen.model.trait.HasSupertype;
+import com.speedment.common.codegen.util.Formatting;
 
 import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.util.Formatting.nl;
-import static com.speedment.common.codegen.util.Formatting.repeat;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -62,8 +61,8 @@ public interface HasImplementsView<M extends HasImplements<M>> extends
             final int spaces = extendsOrImplementsInterfaces().length() - 1;
             return gen.onEach(model.getInterfaces()).collect(
                 joinIfNotEmpty(
-                    "," + nl() + repeat(" ", spaces),
-                    nl() + extendsOrImplementsInterfaces(),
+                    "," + Formatting.nl() + Formatting.repeat(" ", spaces),
+                    Formatting.nl() + extendsOrImplementsInterfaces(),
                     " "
                 )
             );

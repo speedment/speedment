@@ -20,13 +20,12 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.common.codegen.model.modifier.Modifier.ABSTRACT;
-import static com.speedment.common.codegen.util.Formatting.nl;
-import static com.speedment.common.codegen.util.Formatting.tab;
 
 /**
  * Transforms from a {@link Method} to java code.
@@ -55,7 +54,7 @@ public final class MethodView implements Transform<Method, String>,
             renderGenerics(gen, model) +
             renderType(gen, model) +
             renderName(gen, model) + 
-            ((splitFields(model)) ? "(" + nl() + tab() + tab() : "(") +
+            ((splitFields(model)) ? "(" + Formatting.nl() + Formatting.tab() + Formatting.tab() : "(") +
             renderFields(gen, model) + ") " +
             renderThrows(gen, model) + 
             renderCode(gen, model)
@@ -64,7 +63,7 @@ public final class MethodView implements Transform<Method, String>,
     
     @Override
     public String fieldSeparator(Method model) {
-        if (splitFields(model)) return "," + nl() + tab() + tab();
+        if (splitFields(model)) return "," + Formatting.nl() + Formatting.tab() + Formatting.tab();
         else return ", ";
     }
 

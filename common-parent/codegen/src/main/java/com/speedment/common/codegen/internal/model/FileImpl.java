@@ -18,7 +18,6 @@ package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.*;
-import com.speedment.common.codegen.model.trait.HasCopy;
 
 import java.util.ArrayList;
 import java.util.List;

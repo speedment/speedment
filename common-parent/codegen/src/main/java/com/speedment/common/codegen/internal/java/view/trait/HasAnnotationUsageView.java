@@ -19,9 +19,9 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.common.codegen.util.Formatting;
 
 import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.util.Formatting.nl;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -40,7 +40,7 @@ public interface HasAnnotationUsageView<M extends HasAnnotationUsage<M>> extends
      * @return  the annotation separator
      */
     default String annotationSeparator() {
-        return nl();
+        return Formatting.nl();
     }
     
     /**

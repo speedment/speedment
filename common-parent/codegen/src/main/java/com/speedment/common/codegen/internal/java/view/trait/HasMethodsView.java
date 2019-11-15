@@ -20,10 +20,10 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.trait.HasMethods;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.util.Formatting.dnl;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -50,7 +50,7 @@ public interface HasMethodsView<M extends HasMethods<M>> extends Transform<M, St
             model.getMethods().stream()
                 .map(this::wrapMethod)
                 .collect(Collectors.toList())
-        ).collect(Collectors.joining(dnl()));
+        ).collect(Collectors.joining(Formatting.dnl()));
     }
     
     /**

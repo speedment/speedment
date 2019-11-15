@@ -19,13 +19,13 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasImports;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
 import static com.speedment.common.codegen.internal.util.ModelTreeUtil.importsOf;
-import static com.speedment.common.codegen.util.Formatting.nl;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -70,14 +70,14 @@ public interface HasImportsView<M extends HasImports<M>> extends
                 }
             });
 
-        final StringJoiner result = new StringJoiner(nl());
+        final StringJoiner result = new StringJoiner(Formatting.nl());
         customImports.forEach(result::add);
         if (!customImports.isEmpty() && !standardImports.isEmpty()) result.add("");
         standardImports.forEach(result::add);
         if (!standardImports.isEmpty() && (staticImports.size() + staticStandardImports.size()) > 0) result.add("");
         staticImports.forEach(result::add);
         staticStandardImports.forEach(result::add);
-        if (result.length() > 0) result.add(nl());
+        if (result.length() > 0) result.add(Formatting.nl());
 
         return result.toString();
     }

@@ -18,6 +18,7 @@ package com.speedment.common.codegen.controller;
 
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.trait.*;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -28,8 +29,6 @@ import java.util.stream.Collectors;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.common.codegen.util.Formatting.nl;
-import static com.speedment.common.codegen.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -130,16 +129,16 @@ implements Consumer<T> {
                 if (HasSupertype.class.isAssignableFrom(model.getClass())) {
                     final Optional<Type> supertype = ((HasSupertype<?>) model).getSupertype();
                     if (supertype.isPresent()) {
-                        m.add(tab() + ".filter(o -> super.equals(o))");
+                        m.add(Formatting.tab() + ".filter(o -> super.equals(o))");
                     }
                 }
             })
-            .add(tab() + ".filter(o -> getClass().equals(o.getClass()))")
-            .add(tab() + ".map(o -> (" + model.getName() + ") o)")
-            .add(tab() + model.getFields().stream().map(this::compare).collect(
-                    Collectors.joining(nl() + tab())
+            .add(Formatting.tab() + ".filter(o -> getClass().equals(o.getClass()))")
+            .add(Formatting.tab() + ".map(o -> (" + model.getName() + ") o)")
+            .add(Formatting.tab() + model.getFields().stream().map(this::compare).collect(
+                    Collectors.joining(Formatting.nl() + Formatting.tab())
                 ))
-            .add(tab() + ".isPresent();")
+            .add(Formatting.tab() + ".isPresent();")
         );
         
     }
@@ -167,7 +166,7 @@ implements Consumer<T> {
             .add("int hash = 7;")
             .add(model.getFields().stream()
                 .map(this::hash)
-                .collect(Collectors.joining(nl()))
+                .collect(Collectors.joining(Formatting.nl()))
             )
             .add("return hash;")
         );

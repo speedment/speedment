@@ -16,12 +16,13 @@
  */
 package com.speedment.common.codegen.model.trait;
 
+import com.speedment.common.codegen.util.Formatting;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.codegen.util.Formatting.nl;
 
 /**
  * A trait for models that contains code.
@@ -43,7 +44,7 @@ public interface HasCode<T extends HasCode<T>> {
      */
     @SuppressWarnings("unchecked")
     default T add(String row) {
-        return add(row.split(nl()));
+        return add(row.split(Formatting.nl()));
     }
     
     /**
@@ -58,7 +59,7 @@ public interface HasCode<T extends HasCode<T>> {
     default T add(String... rows) {
         requireNonNullElements(rows);
         for (final String row : rows) {
-            Collections.addAll(getCode(), row.split(nl()));
+            Collections.addAll(getCode(), row.split(Formatting.nl()));
         }
         return (T) this;
     }
@@ -73,7 +74,7 @@ public interface HasCode<T extends HasCode<T>> {
      */
     @SuppressWarnings("unchecked")
     default T add(Stream<String> rows) {
-        rows.flatMap(row -> Stream.of(row.split(nl())))
+        rows.flatMap(row -> Stream.of(row.split(Formatting.nl())))
             .forEachOrdered(this::add);
         return (T) this;
     }

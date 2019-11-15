@@ -21,8 +21,8 @@ import com.speedment.common.codegen.Transform;
 
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.util.Formatting.dnl;
 import com.speedment.common.codegen.model.trait.HasInitializers;
+import com.speedment.common.codegen.util.Formatting;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -45,6 +45,6 @@ public interface HasInitializersView<M extends HasInitializers<M>> extends
      */
     default String renderInitalizers(Generator gen, M model) {
         return gen.onEach(model.getInitializers())
-            .collect(Collectors.joining(dnl()));
+            .collect(Collectors.joining(Formatting.dnl()));
     }
 }
