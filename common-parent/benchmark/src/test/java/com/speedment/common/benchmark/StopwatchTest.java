@@ -54,6 +54,8 @@ final class StopwatchTest {
         sw.start();
         shortSleep();
         assertTrue(sw.elapsedNanos() > 0L);
+        sw.stop();
+        assertTrue(sw.elapsedNanos() > 0L);
     }
 
     @Test
@@ -79,11 +81,29 @@ final class StopwatchTest {
     }
 
     @Test
-    void stop() {
+    void startTwice() {
+        sw.start();
+        assertThrows(IllegalStateException.class, () -> sw.start());
+    }
+
+    @Test
+    void stopBeforeStart() {
         assertThrows(IllegalStateException.class, () -> sw.stop());
+    }
+
+    @Test
+    void stop() {
         sw.start();
         sw.stop();
     }
+
+    @Test
+    void stopTwice() {
+        sw.start();
+        sw.stop();
+        assertThrows(IllegalStateException.class, () -> sw.stop());
+    }
+
 
     @Test
     void reset() {
@@ -106,6 +126,21 @@ final class StopwatchTest {
         final Stopwatch stopwatch = Stopwatch.create();
         assertFalse(stopwatch.isStarted());
     }
+
+    @Test
+    void toStringNotStarted() {
+        final String actual = sw.toString();
+        assertEquals("0.00 ns", actual);
+    }
+
+    @Test
+    void toStringStarted() {
+        sw.start();
+        shortSleep();
+        final String actual = sw.toString();
+        assertNotEquals("0.00 ns", actual);
+    }
+
 
     private void shortSleep() {
         try {
