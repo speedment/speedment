@@ -99,9 +99,18 @@ public enum OptionalBoolean {
     
     public void ifPresent(BooleanConsumer consumer) {
         switch (this) {
-            case FALSE : { consumer.accept(false); break;}
-            case TRUE  : { consumer.accept(true); break;}
+            case FALSE : {
+                acceptConsumer(consumer, false);
+                break;}
+            case TRUE  : {
+                acceptConsumer(consumer, true);
+                break;}
             default: // do nothing
         }
     }
+
+    private void acceptConsumer(BooleanConsumer consumer, boolean b) {
+        consumer.accept(b);
+    }
+
 }
