@@ -48,7 +48,7 @@ public interface HasName extends Document, HasMainInterface {
      * @throws SpeedmentConfigException if no name is specified and the parent can't
      * generate one
      */
-    default String getName() throws SpeedmentConfigException {
+    default String getName() {
         final Optional<String> name = getAsString(HasNameUtil.NAME);
 
         if (name.isPresent()) {

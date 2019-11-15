@@ -49,7 +49,7 @@ public interface HasParent<PARENT extends Document> extends Document {
      * @throws IllegalStateException  if this was the root
      * @see #getParent()
      */
-    default PARENT getParentOrThrow() throws IllegalStateException {
+    default PARENT getParentOrThrow() {
         return getParent().orElseThrow(
             () -> new IllegalStateException(
                 "Unable to get parent for " + toString()

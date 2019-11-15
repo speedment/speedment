@@ -29,6 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -199,7 +200,7 @@ public final class DocumentUtil {
      */
     public static <T extends Document & HasName, D extends Document & HasName>
         String relativeName(D document, Class<T> from, Name name) {
-        return relativeName(document, from, name, Function.identity());
+        return relativeName(document, from, name, UnaryOperator.identity());
     }
 
     /**
@@ -224,7 +225,7 @@ public final class DocumentUtil {
             D document,
             Class<T> from,
             Name name,
-            Function<String, String> nameMapper) {
+            UnaryOperator<String> nameMapper) {
 
         return relativeName(document, from, name, ".", nameMapper);
     }
@@ -254,7 +255,7 @@ public final class DocumentUtil {
             final Class<T> from,
             final Name name,
             final CharSequence separator,
-            final Function<String, String> nameMapper) {
+            final UnaryOperator<String> nameMapper) {
         
         requireNonNull(document);
         requireNonNull(from);
@@ -406,7 +407,7 @@ public final class DocumentUtil {
         }
     }
 
-    private static final Function<Object, Object> VALUE_MAPPER = o -> {
+    private static final UnaryOperator<Object> VALUE_MAPPER = o -> {
         if (o instanceof List) {
             return "[" + ((List) o).size() + "]";
         } else {
