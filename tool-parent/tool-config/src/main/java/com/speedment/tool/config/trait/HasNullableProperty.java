@@ -64,7 +64,7 @@ public interface HasNullableProperty extends DocumentProperty, HasNullable {
      */
     default ObjectProperty<ImplementAs> nullableImplementationProperty() {
         final ImplementAs initial = HasNullable.super.getNullableImplementation();
-        final StringProperty implName = stringPropertyOf(HasNullableUtil.NULLABLE_IMPLEMENTATION, () -> initial.name());
+        final StringProperty implName = stringPropertyOf(HasNullableUtil.NULLABLE_IMPLEMENTATION, initial::name);
         final ObjectProperty<ImplementAs> property = new SimpleObjectProperty<>(initial);
         
         Bindings.bindBidirectional(implName, property, new StringConverter<ImplementAs>() {

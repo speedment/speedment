@@ -36,7 +36,7 @@ public final class DocumentPropertyComponentImpl implements DocumentPropertyComp
 
     private final Branch root;
 
-    private final static Constructor<?> DEFAULT_CONSTRUCTOR = parent -> {
+    private static final Constructor<?> DEFAULT_CONSTRUCTOR = parent -> {
         final AbstractDocumentProperty<?> castedParent
             = (AbstractDocumentProperty<?>) parent;
         return new DefaultDocumentProperty(castedParent, null);
@@ -68,7 +68,7 @@ public final class DocumentPropertyComponentImpl implements DocumentPropertyComp
         return (Constructor<PARENT>) root.find(keyPath).get();
     }
 
-    private final static class Branch {
+    private static final class Branch {
 
         private final ConstructorHolder holder;
         private final Map<String, Branch> children;
@@ -112,7 +112,7 @@ public final class DocumentPropertyComponentImpl implements DocumentPropertyComp
         }
     }
 
-    private final static class ConstructorHolder {
+    private static final class ConstructorHolder {
 
         private Constructor<?> constructor;
 

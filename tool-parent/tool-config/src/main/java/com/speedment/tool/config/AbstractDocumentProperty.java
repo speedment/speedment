@@ -66,13 +66,13 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     implements DocumentProperty {
  
     private final Map<String, Object> config;
-    private final transient ObservableMap<String, Property<?>> properties;
-    private final transient ObservableMap<String, ObservableList<AbstractDocumentProperty<?>>> children;
+    private final ObservableMap<String, Property<?>> properties;
+    private final ObservableMap<String, ObservableList<AbstractDocumentProperty<?>>> children;
     
     /**
      * Invalidation listeners required by the {@code Observable} interface.
      */
-    private final transient Set<InvalidationListener> listeners;
+    private final Set<InvalidationListener> listeners;
     
     protected AbstractDocumentProperty() {
         this.config     = new ConcurrentHashMap<>();
