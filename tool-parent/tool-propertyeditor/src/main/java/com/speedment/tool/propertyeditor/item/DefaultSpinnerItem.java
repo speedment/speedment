@@ -43,8 +43,8 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
     private final ObservableIntegerValue defaultValue;
     private final ObjectProperty<Integer> value;        //Output value
     private final ObjectProperty<Integer> customValue;  
-    private final int min,
-        max;
+    private final int min;
+    private final int max;
 
     /**
      * Creates a new DefaultSpinnerItem. 

@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractLabelTooltipItem implements PropertyEditor.Item {
     
-    protected final static UnaryOperator<Node> NO_DECORATOR = n -> {return n;};
+    protected static final UnaryOperator<Node> NO_DECORATOR = n -> n;
     
     private final String label;
     private final String tooltip;

@@ -46,7 +46,7 @@ public class OrderTypePropertyEditor<T extends HasOrderTypeProperty> implements 
                 document.orderTypeProperty(),
                 alternatives,
                 "The order in which elements will be considered.",
-                (editor) -> ItemUtil.lockDecorator(editor, document, ItemUtil.DATABASE_RELATION_TOOLTIP)
+                editor -> ItemUtil.lockDecorator(editor, document, ItemUtil.DATABASE_RELATION_TOOLTIP)
                 
             )
         );

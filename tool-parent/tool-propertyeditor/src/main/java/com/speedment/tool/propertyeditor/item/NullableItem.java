@@ -38,14 +38,13 @@ import static javafx.collections.FXCollections.observableArrayList;
  */
 public final class NullableItem extends AbstractLabelTooltipItem {
     
-    private final static String 
-        NULLABLE_TITLE         = "Is Nullable",
-        NULLABLE_TOOLTIP       = "If this node can hold 'null'-values or not.",
-        IMPLEMENTATION_TITLE   = "Implement As",
-        IMPLEMENTATION_TOOLTIP = 
-            "How the nullable column should be implemented, either by " + 
-            "using an Optional or by using a wrapper class that can have " + 
-            "a null value.";
+    private static final String NULLABLE_TITLE = "Is Nullable";
+    private static final String NULLABLE_TOOLTIP = "If this node can hold 'null'-values or not.";
+    private static final String IMPLEMENTATION_TITLE = "If this node can hold 'null'-values or not.";
+    private static final String IMPLEMENTATION_TOOLTIP = "How the nullable column should be implemented, either by " +
+        "using an Optional or by using a wrapper class that can have " +
+        "a null value.";
+
 
     private final Document document;
     private final BooleanProperty nullable;

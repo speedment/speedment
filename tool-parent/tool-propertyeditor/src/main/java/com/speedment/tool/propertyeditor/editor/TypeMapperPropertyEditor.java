@@ -44,7 +44,7 @@ import javafx.collections.ObservableList;
  */
 public class TypeMapperPropertyEditor<T extends HasTypeMapperProperty> implements PropertyEditor<T> {
 
-    private final static String IDENTITY_MAPPER = "(Use Identity Mapper)";
+    private static final String IDENTITY_MAPPER = "(Use Identity Mapper)";
 
     private final StringProperty outputValue;
     
