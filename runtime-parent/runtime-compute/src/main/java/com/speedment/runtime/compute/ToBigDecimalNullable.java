@@ -79,7 +79,7 @@ extends Expression<T>,
     }
 
     @Override
-    default ToBigDecimal<T> orThrow() throws NullPointerException {
+    default ToBigDecimal<T> orThrow() {
         return OrElseThrowUtil.bigDecimalOrElseThrow(this);
     }
 

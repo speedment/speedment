@@ -89,12 +89,12 @@ extends Expression<T>,
     }
 
     @Override
-    default double applyAsDouble(T object) throws NullPointerException {
+    default double applyAsDouble(T object) {
         return apply(object);
     }
 
     @Override
-    default ToDouble<T> orThrow() throws NullPointerException {
+    default ToDouble<T> orThrow() {
         return OrElseThrowUtil.doubleOrElseThrow(this);
     }
 

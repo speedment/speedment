@@ -56,7 +56,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToDoubleOrElseGetImpl<T>
+    private static final class ToDoubleOrElseGetImpl<T>
     extends AbstractNonNullable<T, ToDoubleNullable<T>, ToDouble<T>>
     implements ToDoubleOrElseGet<T> {
         private ToDoubleOrElseGetImpl(ToDoubleNullable<T> inner, ToDouble<T> getter) {
@@ -91,7 +91,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToFloatOrElseGetImpl<T>
+    private static final class ToFloatOrElseGetImpl<T>
         extends AbstractNonNullable<T, ToFloatNullable<T>, ToFloat<T>>
         implements ToFloatOrElseGet<T> {
         private ToFloatOrElseGetImpl(ToFloatNullable<T> inner, ToFloat<T> getter) {
@@ -126,7 +126,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToLongOrElseGetImpl<T>
+    private static final class ToLongOrElseGetImpl<T>
         extends AbstractNonNullable<T, ToLongNullable<T>, ToLong<T>>
         implements ToLongOrElseGet<T> {
         private ToLongOrElseGetImpl(ToLongNullable<T> inner, ToLong<T> getter) {
@@ -161,7 +161,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToIntOrElseGetImpl<T>
+    private static final class ToIntOrElseGetImpl<T>
         extends AbstractNonNullable<T, ToIntNullable<T>, ToInt<T>>
         implements ToIntOrElseGet<T> {
         private ToIntOrElseGetImpl(ToIntNullable<T> inner, ToInt<T> getter) {
@@ -196,7 +196,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToShortOrElseGetImpl<T>
+    private static final class ToShortOrElseGetImpl<T>
         extends AbstractNonNullable<T, ToShortNullable<T>, ToShort<T>>
         implements ToShortOrElseGet<T> {
         private ToShortOrElseGetImpl(ToShortNullable<T> inner, ToShort<T> getter) {
@@ -231,7 +231,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToByteOrElseGetImpl<T>
+    private static final class ToByteOrElseGetImpl<T>
         extends AbstractNonNullable<T, ToByteNullable<T>, ToByte<T>>
         implements ToByteOrElseGet<T> {
         private ToByteOrElseGetImpl(ToByteNullable<T> inner, ToByte<T> getter) {
@@ -266,7 +266,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToCharOrElseGetImpl<T>
+    private static final class ToCharOrElseGetImpl<T>
         extends AbstractNonNullable<T, ToCharNullable<T>, ToChar<T>>
         implements ToCharOrElseGet<T> {
         private ToCharOrElseGetImpl(ToCharNullable<T> inner, ToChar<T> getter) {
@@ -301,7 +301,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToBooleanOrElseGetImpl<T>
+    private static final class ToBooleanOrElseGetImpl<T>
         extends AbstractNonNullable<T, ToBooleanNullable<T>, ToBoolean<T>>
         implements ToBooleanOrElseGet<T> {
         private ToBooleanOrElseGetImpl(ToBooleanNullable<T> inner, ToBoolean<T> getter) {
@@ -336,7 +336,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToStringOrElseGetImpl<T>
+    private static final class ToStringOrElseGetImpl<T>
     extends AbstractNonNullable<T, ToStringNullable<T>, ToString<T>>
     implements ToStringOrElseGet<T> {
         private ToStringOrElseGetImpl(ToStringNullable<T> inner, ToString<T> getter) {
@@ -372,7 +372,7 @@ public final class OrElseGetUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToBigDecimalOrElseGetImpl<T>
+    private static final class ToBigDecimalOrElseGetImpl<T>
         extends AbstractNonNullable<T, ToBigDecimalNullable<T>, ToBigDecimal<T>>
         implements ToBigDecimalOrElseGet<T> {
         private ToBigDecimalOrElseGetImpl(ToBigDecimalNullable<T> inner, ToBigDecimal<T> getter) {
@@ -409,7 +409,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      * @param <E>  the enum type
      */
-    private final static class ToEnumOrElseGetImpl<T, E extends Enum<E>>
+    private static final class ToEnumOrElseGetImpl<T, E extends Enum<E>>
     extends AbstractNonNullable<T, ToEnumNullable<T, E>, ToEnum<T, E>>
     implements ToEnumOrElseGet<T, E> {
         private ToEnumOrElseGetImpl(ToEnumNullable<T, E> inner, ToEnum<T, E> getter) {
@@ -436,7 +436,7 @@ public final class OrElseGetUtil {
      * @param <INNER>    the wrapped nullable expression type
      * @param <DEFAULT>  the default value expression type
      */
-    private static abstract class AbstractNonNullable
+    private abstract static class AbstractNonNullable
         <T, INNER extends Expression<T>, DEFAULT extends Expression<T>>
     implements OrElseGetExpression<T, INNER, DEFAULT> {
 

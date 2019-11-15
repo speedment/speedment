@@ -59,12 +59,12 @@ public final class ToLongNullableImpl<T>
     }
 
     @Override
-    public long applyAsLong(T t) throws NullPointerException {
+    public long applyAsLong(T t) {
         return original.applyAsLong(t);
     }
 
     @Override
-    public ToLong<T> orThrow() throws NullPointerException {
+    public ToLong<T> orThrow() {
         return original;
     }
 

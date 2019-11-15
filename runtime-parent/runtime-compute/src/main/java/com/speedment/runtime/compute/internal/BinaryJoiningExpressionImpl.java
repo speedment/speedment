@@ -33,8 +33,11 @@ import static java.util.Objects.requireNonNull;
  */
 public final class BinaryJoiningExpressionImpl<T> implements JoiningExpression<T> {
 
-    private final CharSequence separator, prefix, suffix;
-    private final ToString<T> first, second;
+    private final CharSequence separator;
+    private final CharSequence prefix;
+    private final CharSequence suffix;
+    private final ToString<T> first;
+    private final ToString<T> second;
 
     public BinaryJoiningExpressionImpl(
             final CharSequence separator,

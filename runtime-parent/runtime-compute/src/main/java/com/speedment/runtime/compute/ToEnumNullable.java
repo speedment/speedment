@@ -146,7 +146,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.apply(object));
             }
 

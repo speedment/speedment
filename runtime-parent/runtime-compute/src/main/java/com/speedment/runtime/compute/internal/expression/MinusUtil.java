@@ -779,7 +779,7 @@ public final class MinusUtil {
      * @param <FIRST>   the first operand expression type
      * @param <SECOND>  the second operand expression type
      */
-    private static abstract class AbstractMinus<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
+    private abstract static class AbstractMinus<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
     implements BinaryExpression<T, FIRST, SECOND> {
 
         final FIRST firstInner;
@@ -829,7 +829,7 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMinusByte<T, INNER extends Expression<T>>
+    private abstract static class AbstractMinusByte<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Byte> {
 
         final INNER firstInner;
@@ -879,7 +879,7 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMinusInt<T, INNER extends Expression<T>>
+    private abstract static class AbstractMinusInt<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Integer> {
 
         final INNER firstInner;
@@ -929,7 +929,7 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMinusLong<T, INNER extends Expression<T>>
+    private abstract static class AbstractMinusLong<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Long> {
 
         final INNER firstInner;
@@ -979,7 +979,7 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMinusFloat<T, INNER extends Expression<T>>
+    private abstract static class AbstractMinusFloat<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Float> {
 
         final INNER firstInner;
@@ -1029,7 +1029,7 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMinusDouble<T, INNER extends Expression<T>>
+    private abstract static class AbstractMinusDouble<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Double> {
 
         final INNER firstInner;

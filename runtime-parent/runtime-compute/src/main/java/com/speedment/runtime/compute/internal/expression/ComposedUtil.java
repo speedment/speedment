@@ -76,7 +76,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToByte<T, A, AFTER extends ToByteFunction<A> & Expression<A>>
+    private static final class ComposeToByte<T, A, AFTER extends ToByteFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToByteNullable<T> {
 
         private final Function<T, A> before;
@@ -98,7 +98,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public byte applyAsByte(T object) throws NullPointerException {
+        public byte applyAsByte(T object) {
             final A intermediate = before.apply(object);
             return after.applyAsByte(intermediate);
         }
@@ -146,7 +146,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToShort<T, A, AFTER extends ToShortFunction<A> & Expression<A>>
+    private static final class ComposeToShort<T, A, AFTER extends ToShortFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToShortNullable<T> {
 
         private final Function<T, A> before;
@@ -168,7 +168,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public short applyAsShort(T object) throws NullPointerException {
+        public short applyAsShort(T object) {
             final A intermediate = before.apply(object);
             return after.applyAsShort(intermediate);
         }
@@ -216,7 +216,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToInt<T, A, AFTER extends ToIntFunction<A> & Expression<A>>
+    private static final class ComposeToInt<T, A, AFTER extends ToIntFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToIntNullable<T> {
 
         private final Function<T, A> before;
@@ -238,7 +238,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public int applyAsInt(T object) throws NullPointerException {
+        public int applyAsInt(T object) {
             final A intermediate = before.apply(object);
             return after.applyAsInt(intermediate);
         }
@@ -286,7 +286,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToLong<T, A, AFTER extends ToLongFunction<A> & Expression<A>>
+    private static final class ComposeToLong<T, A, AFTER extends ToLongFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToLongNullable<T> {
 
         private final Function<T, A> before;
@@ -308,7 +308,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public long applyAsLong(T object) throws NullPointerException {
+        public long applyAsLong(T object) {
             final A intermediate = before.apply(object);
             return after.applyAsLong(intermediate);
         }
@@ -356,7 +356,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToFloat<T, A, AFTER extends ToFloatFunction<A> & Expression<A>>
+    private static final class ComposeToFloat<T, A, AFTER extends ToFloatFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToFloatNullable<T> {
 
         private final Function<T, A> before;
@@ -378,7 +378,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public float applyAsFloat(T object) throws NullPointerException {
+        public float applyAsFloat(T object) {
             final A intermediate = before.apply(object);
             return after.applyAsFloat(intermediate);
         }
@@ -426,7 +426,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToDouble<T, A, AFTER extends ToDoubleFunction<A> & Expression<A>>
+    private static final class ComposeToDouble<T, A, AFTER extends ToDoubleFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToDoubleNullable<T> {
 
         private final Function<T, A> before;
@@ -448,7 +448,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public double applyAsDouble(T object) throws NullPointerException {
+        public double applyAsDouble(T object) {
             final A intermediate = before.apply(object);
             return after.applyAsDouble(intermediate);
         }
@@ -514,7 +514,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToBoolean<T, A, AFTER extends ToBooleanFunction<A> & Expression<A>>
+    private static final class ComposeToBoolean<T, A, AFTER extends ToBooleanFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToBoolean<T> {
 
         private final Function<T, A> before;
@@ -536,7 +536,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public boolean applyAsBoolean(T object) throws NullPointerException {
+        public boolean applyAsBoolean(T object) {
             final A intermediate = before.apply(object);
             return intermediate != null && after.applyAsBoolean(intermediate);
         }
@@ -549,7 +549,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToBooleanNullable<T, A, AFTER extends ToBooleanFunction<A> & Expression<A>>
+    private static final class ComposeToBooleanNullable<T, A, AFTER extends ToBooleanFunction<A> & Expression<A>>
         implements ComposedExpression<T, A>, ToBooleanNullable<T> {
 
         private final Function<T, A> before;
@@ -571,7 +571,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public boolean applyAsBoolean(T object) throws NullPointerException {
+        public boolean applyAsBoolean(T object) {
             final A intermediate = before.apply(object);
             return after.applyAsBoolean(intermediate);
         }
@@ -619,7 +619,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToChar<T, A, AFTER extends ToCharFunction<A> & Expression<A>>
+    private static final class ComposeToChar<T, A, AFTER extends ToCharFunction<A> & Expression<A>>
     implements ComposedExpression<T, A>, ToCharNullable<T> {
 
         private final Function<T, A> before;
@@ -641,7 +641,7 @@ public final class ComposedUtil {
         }
 
         @Override
-        public char applyAsChar(T object) throws NullPointerException {
+        public char applyAsChar(T object) {
             final A intermediate = before.apply(object);
             return after.applyAsChar(intermediate);
         }
@@ -689,7 +689,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToString<T, A, AFTER extends Function<A, String> & Expression<A>>
+    private static final class ComposeToString<T, A, AFTER extends Function<A, String> & Expression<A>>
     implements ComposedExpression<T, A>, ToStringNullable<T> {
 
         private final Function<T, A> before;
@@ -753,7 +753,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToBigDecimal<T, A, AFTER extends Function<A, BigDecimal> & Expression<A>>
+    private static final class ComposeToBigDecimal<T, A, AFTER extends Function<A, BigDecimal> & Expression<A>>
         implements ComposedExpression<T, A>, ToBigDecimalNullable<T> {
 
         private final Function<T, A> before;
@@ -817,7 +817,7 @@ public final class ComposedUtil {
      * @param <A>      the inner input type
      * @param <AFTER>  the expression type of the {@code after} operation
      */
-    private final static class ComposeToEnum<T, A, E extends Enum<E>, AFTER extends Function<A, E> & Expression<A>>
+    private static final class ComposeToEnum<T, A, E extends Enum<E>, AFTER extends Function<A, E> & Expression<A>>
     implements ComposedExpression<T, A>, ToEnumNullable<T, E> {
 
         private final Function<T, A> before;

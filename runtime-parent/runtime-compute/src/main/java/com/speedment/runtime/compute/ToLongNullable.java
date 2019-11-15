@@ -83,12 +83,12 @@ extends Expression<T>,
     }
 
     @Override
-    default long applyAsLong(T object) throws NullPointerException {
+    default long applyAsLong(T object) {
         return apply(object);
     }
 
     @Override
-    default ToLong<T> orThrow() throws NullPointerException {
+    default ToLong<T> orThrow() {
         return OrElseThrowUtil.longOrElseThrow(this);
     }
 
@@ -133,7 +133,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsLong(object));
             }
 
@@ -174,7 +174,7 @@ extends Expression<T>,
             }
 
             @Override
-            public long applyAsLong(T object) throws NullPointerException {
+            public long applyAsLong(T object) {
                 return mapper.applyAsLong(delegate.applyAsLong(object));
             }
 

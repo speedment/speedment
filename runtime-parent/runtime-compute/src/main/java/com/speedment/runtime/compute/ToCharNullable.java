@@ -77,12 +77,12 @@ extends Expression<T>,
     }
 
     @Override
-    default char applyAsChar(T object) throws NullPointerException {
+    default char applyAsChar(T object) {
         return apply(object);
     }
 
     @Override
-    default ToChar<T> orThrow() throws NullPointerException {
+    default ToChar<T> orThrow() {
         return OrElseThrowUtil.charOrElseThrow(this);
     }
 

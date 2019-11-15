@@ -83,7 +83,7 @@ extends Expression<T>,
     }
 
     @Override
-    default short applyAsShort(T object) throws NullPointerException {
+    default short applyAsShort(T object) {
         return apply(object);
     }
 

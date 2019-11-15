@@ -779,7 +779,7 @@ public final class PlusUtil {
      * @param <FIRST>   the first operand expression type
      * @param <SECOND>  the second operand expression type
      */
-    private static abstract class AbstractPlus<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
+    private abstract static class AbstractPlus<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
     implements BinaryExpression<T, FIRST, SECOND> {
 
         final FIRST firstInner;
@@ -829,7 +829,7 @@ public final class PlusUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusByte<T, INNER extends Expression<T>>
+    private abstract static class AbstractPlusByte<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Byte> {
 
         final INNER firstInner;
@@ -879,7 +879,7 @@ public final class PlusUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusInt<T, INNER extends Expression<T>>
+    private abstract static class AbstractPlusInt<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Integer> {
 
         final INNER firstInner;
@@ -929,7 +929,7 @@ public final class PlusUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusLong<T, INNER extends Expression<T>>
+    private abstract static class AbstractPlusLong<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Long> {
 
         final INNER firstInner;
@@ -979,7 +979,7 @@ public final class PlusUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusFloat<T, INNER extends Expression<T>>
+    private abstract static class AbstractPlusFloat<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Float> {
 
         final INNER firstInner;
@@ -1029,7 +1029,7 @@ public final class PlusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusDouble<T, INNER extends Expression<T>>
+    private abstract static class AbstractPlusDouble<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Double> {
 
         final INNER firstInner;

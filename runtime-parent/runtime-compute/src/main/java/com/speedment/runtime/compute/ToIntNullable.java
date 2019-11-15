@@ -84,12 +84,12 @@ extends Expression<T>,
     }
 
     @Override
-    default int applyAsInt(T object) throws NullPointerException {
+    default int applyAsInt(T object) {
         return apply(object);
     }
 
     @Override
-    default ToInt<T> orThrow() throws NullPointerException {
+    default ToInt<T> orThrow() {
         return OrElseThrowUtil.intOrElseThrow(this);
     }
 
@@ -134,7 +134,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsInt(object));
             }
 
@@ -175,7 +175,7 @@ extends Expression<T>,
             }
 
             @Override
-            public int applyAsInt(T object) throws NullPointerException {
+            public int applyAsInt(T object) {
                 return mapper.applyAsInt(delegate.applyAsInt(object));
             }
 

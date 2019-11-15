@@ -40,7 +40,9 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SignUtil {
 
-    private final static byte NEGATIVE = -1, POSITIVE = 1, ZERO = 0;
+    private static final byte NEGATIVE = -1;
+    private static final byte POSITIVE = 1;
+    private static final byte ZERO = 0;
 
     /**
      * Returns an expression that wraps another expression and returns

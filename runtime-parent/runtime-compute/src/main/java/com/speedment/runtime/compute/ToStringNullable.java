@@ -77,7 +77,7 @@ extends Expression<T>,
     }
 
     @Override
-    default ToString<T> orThrow() throws NullPointerException {
+    default ToString<T> orThrow() {
         return OrElseThrowUtil.stringOrElseThrow(this);
     }
 

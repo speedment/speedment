@@ -779,7 +779,7 @@ public final class MultiplyUtil {
      * @param <FIRST>   the first operand expression type
      * @param <SECOND>  the second operand expression type
      */
-    private static abstract class AbstractMultiply<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
+    private abstract static class AbstractMultiply<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
     implements BinaryExpression<T, FIRST, SECOND> {
 
         final FIRST firstInner;
@@ -828,7 +828,7 @@ public final class MultiplyUtil {
      *
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyByte<T, INNER extends Expression<T>>
+    private abstract static class AbstractMultiplyByte<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Byte> {
 
         final INNER firstInner;
@@ -878,7 +878,7 @@ public final class MultiplyUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyInt<T, INNER extends Expression<T>>
+    private abstract static class AbstractMultiplyInt<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Integer> {
 
         final INNER firstInner;
@@ -928,7 +928,7 @@ public final class MultiplyUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyLong<T, INNER extends Expression<T>>
+    private abstract static class AbstractMultiplyLong<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Long> {
 
         final INNER firstInner;
@@ -978,7 +978,7 @@ public final class MultiplyUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyFloat<T, INNER extends Expression<T>>
+    private abstract static class AbstractMultiplyFloat<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Float> {
 
         final INNER firstInner;
@@ -1028,7 +1028,7 @@ public final class MultiplyUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyDouble<T, INNER extends Expression<T>>
+    private abstract static class AbstractMultiplyDouble<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Double> {
 
         final INNER firstInner;

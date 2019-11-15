@@ -57,12 +57,12 @@ public final class ToDoubleNullableImpl<T>
     }
 
     @Override
-    public double applyAsDouble(T t) throws NullPointerException {
+    public double applyAsDouble(T t) {
         return original.applyAsDouble(t);
     }
 
     @Override
-    public ToDouble<T> orThrow() throws NullPointerException {
+    public ToDouble<T> orThrow() {
         return original;
     }
 

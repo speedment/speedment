@@ -83,12 +83,12 @@ extends Expression<T>,
     }
 
     @Override
-    default boolean applyAsBoolean(T object) throws NullPointerException {
+    default boolean applyAsBoolean(T object) {
         return apply(object);
     }
 
     @Override
-    default ToBoolean<T> orThrow() throws NullPointerException {
+    default ToBoolean<T> orThrow() {
         return OrElseThrowUtil.booleanOrElseThrow(this);
     }
 
@@ -113,7 +113,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsBoolean(object));
             }
 
@@ -154,7 +154,7 @@ extends Expression<T>,
             }
 
             @Override
-            public boolean applyAsBoolean(T object) throws NullPointerException {
+            public boolean applyAsBoolean(T object) {
                 return mapper.applyAsBoolean(delegate.applyAsBoolean(object));
             }
 

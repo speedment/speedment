@@ -59,12 +59,12 @@ implements NullableExpression<T, ToShort<T>>, ToShortNullable<T> {
     }
 
     @Override
-    public short applyAsShort(T t) throws NullPointerException {
+    public short applyAsShort(T t) {
         return original.applyAsShort(t);
     }
 
     @Override
-    public ToShort<T> orThrow() throws NullPointerException {
+    public ToShort<T> orThrow() {
         return original;
     }
 
