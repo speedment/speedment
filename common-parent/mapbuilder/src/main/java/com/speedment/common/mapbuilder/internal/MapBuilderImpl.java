@@ -72,15 +72,18 @@ public final class MapBuilderImpl<K, V> implements MapBuilder<K, V> {
     public Map<K, V> build() {
         switch (map.size()) {
             case 0: return emptyMap();
-            case 1: {
-                final Map.Entry<K, V> first = map.entrySet().iterator().next();
-                return singletonMap(first.getKey(), first.getValue());
-            }
+            case 1:
+                return getSingletonMap();
             default: return unmodifiableMap(new HashMap<>(map));
         }
     }
 
-    private final static class ExpectFirstKeyImpl
+    private Map<K, V> getSingletonMap() {
+        final Map.Entry<K, V> first = map.entrySet().iterator().next();
+        return singletonMap(first.getKey(), first.getValue());
+    }
+
+    private static final class ExpectFirstKeyImpl
     implements MapBuilder.ExpectFirstKey {
 
         private ExpectFirstKeyImpl() {}
@@ -91,7 +94,7 @@ public final class MapBuilderImpl<K, V> implements MapBuilder<K, V> {
         }
     }
 
-    private final static class ExpectFirstValueImpl<K>
+    private static final class ExpectFirstValueImpl<K>
     implements MapBuilder.ExpectFirstValue<K> {
 
         private final K key;
@@ -106,7 +109,7 @@ public final class MapBuilderImpl<K, V> implements MapBuilder<K, V> {
         }
     }
 
-    private final static class ExpectValueImpl<K, V>
+    private static class ExpectValueImpl<K, V>
     implements MapBuilder.ExpectValue<K, V> {
 
         private final Map<K, V> existing;
