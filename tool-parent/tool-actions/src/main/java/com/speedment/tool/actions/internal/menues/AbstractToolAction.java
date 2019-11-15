@@ -18,10 +18,8 @@ package com.speedment.tool.actions.internal.menues;
 
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.tool.actions.ProjectTreeComponent;
 
-import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 
 /**
