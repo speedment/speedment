@@ -44,7 +44,7 @@ implements FieldToByte<ENTITY, V> {
     }
 
     @Override
-    public byte applyAsByte(ENTITY object) throws NullPointerException {
+    public byte applyAsByte(ENTITY object) {
         return mapper.applyAsByte(field.get(object));
     }
 }

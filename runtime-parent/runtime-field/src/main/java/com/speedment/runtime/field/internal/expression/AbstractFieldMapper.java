@@ -63,7 +63,7 @@ implements FieldMapper<ENTITY, V, T, NON_NULLABLE, MAPPER> {
         return new MapperIsNotNull<>(this, field);
     }
 
-    private final static class MapperIsNull<ENTITY, V, T>
+    private static final class MapperIsNull<ENTITY, V, T>
     implements FieldIsNullPredicate<ENTITY, T> {
 
         private final ToNullable<ENTITY, T, ?> expression;
@@ -96,7 +96,7 @@ implements FieldMapper<ENTITY, V, T, NON_NULLABLE, MAPPER> {
         }
     }
 
-    private final static class MapperIsNotNull<ENTITY, V, T>
+    private static final class MapperIsNotNull<ENTITY, V, T>
         implements FieldIsNotNullPredicate<ENTITY, T> {
 
         private final ToNullable<ENTITY, T, ?> expression;

@@ -44,7 +44,7 @@ implements FieldToShort<ENTITY, V> {
     }
 
     @Override
-    public short applyAsShort(ENTITY object) throws NullPointerException {
+    public short applyAsShort(ENTITY object) {
         return mapper.applyAsShort(field.get(object));
     }
 }

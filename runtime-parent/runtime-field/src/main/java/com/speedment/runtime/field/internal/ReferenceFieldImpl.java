@@ -17,7 +17,6 @@
 package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.field.EnumForeignKeyField;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNullPredicate;
 import com.speedment.runtime.field.method.ReferenceGetter;

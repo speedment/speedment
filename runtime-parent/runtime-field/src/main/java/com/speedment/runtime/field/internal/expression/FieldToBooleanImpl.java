@@ -46,7 +46,7 @@ public final class FieldToBooleanImpl<ENTITY, V>
     }
 
     @Override
-    public boolean applyAsBoolean(ENTITY object) throws NullPointerException {
+    public boolean applyAsBoolean(ENTITY object) {
         return mapper.applyAsBoolean(field.get(object));
     }
 }

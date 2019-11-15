@@ -45,7 +45,7 @@ implements FieldToInt<ENTITY, V> {
     }
 
     @Override
-    public int applyAsInt(ENTITY object) throws NullPointerException {
+    public int applyAsInt(ENTITY object) {
         return mapper.applyAsInt(field.get(object));
     }
 }

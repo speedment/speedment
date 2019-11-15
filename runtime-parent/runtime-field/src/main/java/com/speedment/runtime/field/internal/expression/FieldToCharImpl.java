@@ -44,7 +44,7 @@ implements FieldToChar<ENTITY, V> {
     }
 
     @Override
-    public char applyAsChar(ENTITY object) throws NullPointerException {
+    public char applyAsChar(ENTITY object) {
         return mapper.applyAsChar(field.get(object));
     }
 }

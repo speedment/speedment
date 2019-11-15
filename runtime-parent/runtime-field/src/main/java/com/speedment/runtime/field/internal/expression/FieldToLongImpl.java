@@ -45,7 +45,7 @@ implements FieldToLong<ENTITY, V> {
     }
 
     @Override
-    public long applyAsLong(ENTITY object) throws NullPointerException {
+    public long applyAsLong(ENTITY object) {
         return mapper.applyAsLong(field.get(object));
     }
 }
