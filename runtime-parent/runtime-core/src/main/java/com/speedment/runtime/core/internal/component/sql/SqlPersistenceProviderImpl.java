@@ -42,17 +42,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
-import static java.util.function.Function.identity;
+import static java.util.function.UnaryOperator.identity;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -260,7 +257,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         return dbValue;
     }
     
-    private String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
+    private String sqlPrimaryKeyColumnList(UnaryOperator<String> postMapper) {
         requireNonNull(postMapper);
         return table.primaryKeyColumns()
             .sorted(comparing(PrimaryKeyColumn::getOrdinalPosition))
@@ -271,7 +268,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
             .collect(joining(" AND "));
     }
 
-    private String sqlColumnList(Predicate<Column> preFilter, Function<String, String> postMapper) {
+    private String sqlColumnList(Predicate<Column> preFilter, UnaryOperator<String> postMapper) {
         return table.columns()
             .sorted(comparing(Column::getOrdinalPosition))
             .filter(Column::isEnabled)
@@ -293,7 +290,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         }
     }
 
-    private final static class GeneratedFieldSupport<ENTITY, T> {
+    private static final class GeneratedFieldSupport<ENTITY, T> {
 
         private final Field<ENTITY> field;
         private final Column column;

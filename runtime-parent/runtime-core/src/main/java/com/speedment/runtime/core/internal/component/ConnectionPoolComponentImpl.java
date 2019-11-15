@@ -257,7 +257,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
     private Deque<PoolableConnection> acquireDeque(String key) {
         requireNonNull(key);
-        return pools.computeIfAbsent(key, $ -> new ConcurrentLinkedDeque<>());
+        return pools.computeIfAbsent(key, unused -> new ConcurrentLinkedDeque<>());
     }
 
     @Override

@@ -36,13 +36,13 @@ final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
     private final Class<T> clazz;
     private final String resultSetMethodName;
     private final Function<String, ? extends T> stringMapper;
-    private final Function<Long, ? extends T> longMapper;
+    private final LongFunction<? extends T> longMapper;
 
     JavaTypeMappingImpl(
             Class<T> clazz,
             String resultSetMethodName,
             Function<String, ? extends T> stringMapper,
-            Function<Long, ? extends T> longMapper) {
+            LongFunction<? extends T> longMapper) {
         
         this.clazz               = requireNonNull(clazz);
         this.resultSetMethodName = requireNonNull(resultSetMethodName);

@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
-    public static final FieldSetImpl<?> ALL = new FieldSetImpl<>($ -> true);
-    public static final FieldSetImpl<?> NONE = new FieldSetImpl<>($ -> false);
+    public static final FieldSetImpl<?> ALL = new FieldSetImpl<>(unused -> true);
+    public static final FieldSetImpl<?> NONE = new FieldSetImpl<>(unused -> false);
 
     private final Predicate<String> includedId;
 
@@ -38,7 +38,7 @@ public final class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
         Set<String> ids = fieldStream.map(f -> f.identifier().getColumnId()).collect(Collectors.toSet());
         switch (ids.size()) {
             case 0:
-                includedId = $ -> false;
+                includedId = unused -> false;
                 break;
             case 1:
                 final String id = ids.iterator().next();

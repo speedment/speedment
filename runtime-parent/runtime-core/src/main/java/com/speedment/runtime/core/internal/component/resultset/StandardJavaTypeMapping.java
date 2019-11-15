@@ -78,7 +78,7 @@ public final class StandardJavaTypeMapping {
         ),
         
         new JavaTypeMappingImpl<>(
-            Long.class, "Long", Long::parseLong, Function.identity()
+            Long.class, "Long", Long::parseLong, l -> l
         ),
         
         new JavaTypeMappingImpl<>(

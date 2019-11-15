@@ -21,6 +21,7 @@ import com.speedment.runtime.core.db.JavaTypeMap;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 final class RuleUtil {
     /**
@@ -32,39 +33,34 @@ final class RuleUtil {
         final int columnSize    = md.getColumnSize();
 
         switch (typeName) {
-            case "BIT": {
-                if (columnSize > 31) {  // jdbc will return unsigned 32 bit for BIT(32) which does not fit in Integer
-                    return Optional.of(Long.class);
-                }
-                if (columnSize == 0 || columnSize == 1) {
-                    return Optional.of(Boolean.class);
-                }
-                break;
-            }
             case "NCHAR":
-            case "NVARCHAR2": {
-                return Optional.of(String.class);
+            case "NVARCHAR2": return Optional.of(String.class);
+            case "BINARY_FLOAT": return Optional.of(Float.class);
+            case "BINARY_DOUBLE": return Optional.of(Double.class);
+        }
+
+        if ("BIT".equals(typeName)) {
+            if (columnSize > 31) {  // jdbc will return unsigned 32 bit for BIT(32) which does not fit in Integer
+                return Optional.of(Long.class);
             }
-            case "BINARY_FLOAT": {
-                return Optional.of(Float.class);
+            if (columnSize == 0 || columnSize == 1) {
+                return Optional.of(Boolean.class);
             }
-            case "BINARY_DOUBLE": {
-                return Optional.of(Double.class);
-            }
-            case "NUMBER":
-            case "DECIMAL": {
-                if (md.getDecimalDigits() == 0) {
-                    if (columnSize <= 2) {
-                        return Optional.of(Byte.class);
-                    } else if (columnSize <= 4) {
-                        return Optional.of(Short.class);
-                    } else if (columnSize <= 9) {
-                        return Optional.of(Integer.class);
-                    } else if (columnSize <= 18) {
-                        return Optional.of(Long.class);
-                    } else {
-                        return Optional.of(BigInteger.class);
-                    }
+            // Otherwise continue
+        }
+
+        if ("NUMBER".equals(typeName) || "DECIMAL".equals(typeName)) {
+            if (md.getDecimalDigits() == 0) {
+                if (columnSize <= 2) {
+                    return Optional.of(Byte.class);
+                } else if (columnSize <= 4) {
+                    return Optional.of(Short.class);
+                } else if (columnSize <= 9) {
+                    return Optional.of(Integer.class);
+                } else if (columnSize <= 18) {
+                    return Optional.of(Long.class);
+                } else {
+                    return Optional.of(BigInteger.class);
                 }
             }
         }

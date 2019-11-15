@@ -17,6 +17,8 @@
 package com.speedment.runtime.core.component.transaction;
 
 import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -81,23 +83,20 @@ public enum Isolation {
         return sqlIsolationLevel;
     }
 
+    private static Map<Integer, Isolation> LEVEL_TO_ISOLATION_MAP = new HashMap<>();
+    static {
+        LEVEL_TO_ISOLATION_MAP.put(Connection.TRANSACTION_READ_UNCOMMITTED, READ_UNCOMMITTED);
+        LEVEL_TO_ISOLATION_MAP.put(Connection.TRANSACTION_READ_COMMITTED, READ_COMMITTED);
+        LEVEL_TO_ISOLATION_MAP.put(Connection.TRANSACTION_REPEATABLE_READ, REPEATABLE_READ);
+        LEVEL_TO_ISOLATION_MAP.put(Connection.TRANSACTION_SERIALIZABLE, SERIALIZABLE);
+    }
+
     public static Isolation fromSqlIsolationLevel(int level) {
-        switch (level) {
-            case Connection.TRANSACTION_READ_UNCOMMITTED: {
-                return READ_UNCOMMITTED;
-            }
-            case Connection.TRANSACTION_READ_COMMITTED: {
-                return READ_COMMITTED;
-            }
-            case Connection.TRANSACTION_REPEATABLE_READ: {
-                return REPEATABLE_READ;
-            }
-            case Connection.TRANSACTION_SERIALIZABLE: {
-                return SERIALIZABLE;
-            }
-            default:
-                throw new IllegalArgumentException("No Isolation exists for " + level);
+        final Isolation isolation= LEVEL_TO_ISOLATION_MAP.get(level);
+        if (isolation == null) {
+            throw new IllegalArgumentException("No Isolation exists for " + level);
         }
+        return isolation;
     }
 
 }

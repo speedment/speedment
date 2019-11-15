@@ -44,12 +44,12 @@ public final class TransactionImpl implements Transaction {
     }
 
     @Override
-    public void commit() throws TransactionException {
+    public void commit() {
         dataSourceHandler.committer().accept(txObject);
     }
 
     @Override
-    public void rollback() throws TransactionException {
+    public void rollback() {
         dataSourceHandler.rollbacker().accept(txObject);
     }
 

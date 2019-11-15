@@ -338,19 +338,16 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     private void delete(SqlDeleteStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
         final SqlDeleteStatement s = sqlStatement;
         handleSqlStatement(dbms, conn, s);
-        return;
     }
 
     private void update(SqlUpdateStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
         final SqlUpdateStatement s = sqlStatement;
         handleSqlStatement(dbms, conn, s);
-        return;
     }
 
     private void insert(SqlInsertStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
         final SqlInsertStatement s = sqlStatement;
         insertHandler.accept(dbms,conn,s);
-        return;
     }
 
     private <T> T applyOnConnection(Dbms dbms, SqlFunction<Connection, T> mapper) throws SQLException {

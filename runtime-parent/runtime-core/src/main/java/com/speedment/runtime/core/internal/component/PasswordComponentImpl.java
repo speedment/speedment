@@ -17,10 +17,12 @@
 package com.speedment.runtime.core.internal.component;
 
 import com.speedment.runtime.core.component.PasswordComponent;
+
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -29,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class PasswordComponentImpl implements PasswordComponent {
 
-    private final transient Map<String, char[]> passwords;
+    private final Map<String, char[]> passwords;
 
     public PasswordComponentImpl() {
         this.passwords = new ConcurrentHashMap<>();

@@ -360,7 +360,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             throw new SpeedmentException(sqle);
         }
         final long duration = System.currentTimeMillis() - begin;
-        timers.computeIfAbsent(Table.class, $ -> new AtomicLong()).addAndGet(duration);
+        timers.computeIfAbsent(Table.class, unused -> new AtomicLong()).addAndGet(duration);
 
         final AtomicInteger cnt = new AtomicInteger();
         final double noTables = schema.tables().count();
@@ -644,7 +644,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             throw new SpeedmentException(sqle);
         }
         final long duration = System.currentTimeMillis() - begin;
-        timers.computeIfAbsent(type, $ -> new AtomicLong()).addAndGet(duration);
+        timers.computeIfAbsent(type, unused -> new AtomicLong()).addAndGet(duration);
     }
 
     /**

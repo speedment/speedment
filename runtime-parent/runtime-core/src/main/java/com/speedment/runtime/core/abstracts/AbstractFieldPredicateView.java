@@ -352,7 +352,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
                 : equalHelper(cn, arg);
         } else {
             return of("(" + cn + " IN (" +
-                set.stream().map($ -> "?").collect(joining(",")) +
+                set.stream().map(unused -> "?").collect(joining(",")) +
                 "))", negated
             ).addAll(set);
         }

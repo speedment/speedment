@@ -56,7 +56,7 @@ import java.util.stream.Collector;
  */
 public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
-    protected final String UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED = "This method has been disabled for this Stream type "
+    private static final String UNSUPPORTED_DUE_TO_CLOSE = "This method has been disabled for this Stream type "
         + "because improper use will lead to resources not being freed up. "
         + "We regret any inconvenience caused by this. "
         + "If you want to concatenate two or more stream, please use the " + StreamComposition.class.getName()
@@ -187,7 +187,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         if (allowIteratorAndSpliterator) {
             return sqlStreamTerminatorComponent.<ENTITY>getIteratorTerminator().apply(info, this, pipeline);
         }
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        throw new UnsupportedOperationException(UNSUPPORTED_DUE_TO_CLOSE);
     }
 
     @Override
@@ -195,7 +195,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         if (allowIteratorAndSpliterator) {
             return sqlStreamTerminatorComponent.<ENTITY>getSpliteratorTerminator().apply(info, this, pipeline);
         }
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        throw new UnsupportedOperationException(UNSUPPORTED_DUE_TO_CLOSE);
     }
 
     ///////////// double
@@ -209,7 +209,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         if (allowIteratorAndSpliterator) {
             return StreamTerminator.super.iterator(pipeline);
         }
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        throw new UnsupportedOperationException(UNSUPPORTED_DUE_TO_CLOSE);
     }
 
     @Override
@@ -217,7 +217,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         if (allowIteratorAndSpliterator) {
             return StreamTerminator.super.spliterator(pipeline);
         }
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        throw new UnsupportedOperationException(UNSUPPORTED_DUE_TO_CLOSE);
     }
 
     ///////////// int
@@ -231,7 +231,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         if (allowIteratorAndSpliterator) {
             return StreamTerminator.super.iterator(pipeline);
         }
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        throw new UnsupportedOperationException(UNSUPPORTED_DUE_TO_CLOSE);
     }
 
     @Override
@@ -239,7 +239,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         if (allowIteratorAndSpliterator) {
             return StreamTerminator.super.spliterator(pipeline);
         }
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        throw new UnsupportedOperationException(UNSUPPORTED_DUE_TO_CLOSE);
     }
 
     ///////////// long 
@@ -253,7 +253,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         if (allowIteratorAndSpliterator) {
             return StreamTerminator.super.iterator(pipeline);
         }
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        throw new UnsupportedOperationException(UNSUPPORTED_DUE_TO_CLOSE);
     }
 
     @Override
@@ -261,7 +261,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         if (allowIteratorAndSpliterator) {
             return StreamTerminator.super.spliterator(pipeline);
         }
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        throw new UnsupportedOperationException(UNSUPPORTED_DUE_TO_CLOSE);
     }
 
 }
