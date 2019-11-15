@@ -17,10 +17,13 @@
 package com.speedment.common.json.internal;
 
 import com.speedment.common.json.JsonSyntaxException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,9 +47,9 @@ import java.util.function.Consumer;
  */
 public final class JsonDeserializer implements AutoCloseable {
 
-    private final static String UNKNOWN_ENUM_CONSTANT = "Unknown enum constant '";
-    private final static String ENCODING = "UTF-8";
-    private final static int TAB_SIZE = 4;
+    private static final String UNKNOWN_ENUM_CONSTANT = "Unknown enum constant '";
+    private static final Charset ENCODING = StandardCharsets.UTF_8;
+    private static final int TAB_SIZE = 4;
 
     private final InputStreamReader reader;
     private final AtomicLong row;
@@ -660,15 +663,14 @@ public final class JsonDeserializer implements AutoCloseable {
     private int next() throws IOException {
         if ((character = reader.read()) != -1) {
             col.incrementAndGet();
-            
-            switch (character) {
-                case 0x0A : // new line
-                    row.incrementAndGet();
-                    col.set(-1);
-                    break;
-                case 0x09 : // tab
-                    col.addAndGet(TAB_SIZE - 1L);
-                    break;
+
+            if (character == 0x0A) { // new line
+                row.incrementAndGet();
+                col.set(-1);
+
+            } else if (character == 0x09) { // new tab
+                col.addAndGet(TAB_SIZE - 1L);
+
             }
             
             return character;

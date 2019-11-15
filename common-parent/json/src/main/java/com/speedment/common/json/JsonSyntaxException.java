@@ -28,7 +28,8 @@ public final class JsonSyntaxException extends RuntimeException {
 
     private static final long serialVersionUID = -4342465797407497924L;
     
-    private final long row, col;
+    private final long row;
+    private final long col;
     
     public JsonSyntaxException() {
         this.row = -1;
