@@ -234,12 +234,12 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
         return support.getSortByNullOrderInsertion();
     }
 
-    private final static class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
+    private static final class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
 
-        private final static String ENCLOSER = "`",
-            QUOTE = "'";
+        private static final String ENCLOSER = "`";
+        private static final String QUOTE = "'";
 
-        private final static Set<String> EXCLUDE_SET = Stream.of(
+        private static final Set<String> EXCLUDE_SET = Stream.of(
             "information_schema"
         ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
 
@@ -310,18 +310,20 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
 
             return result.toString();
         }
+
+        private int driverVersion() {
+            return
+                Stream.of(
+                    driver(NEW_DRIVER),
+                    driver(OLD_DRIVER)
+                )
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .mapToInt(Driver::getMajorVersion)
+                    .findFirst()
+                    .orElse(5);  // Fallback. There is no driver so we just make up a version
+        }
+
     }
 
-    private int driverVersion() {
-        return
-            Stream.of(
-                driver(NEW_DRIVER),
-                driver(OLD_DRIVER)
-            )
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .mapToInt(Driver::getMajorVersion)
-            .findFirst()
-            .orElse(5);  // Fallback. There is no driver so we just make up a version
-    }
 }

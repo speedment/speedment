@@ -19,7 +19,6 @@ package com.speedment.runtime.connector.mysql.provider;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.connector.mysql.MySqlDbmsType;
 import com.speedment.runtime.connector.mysql.internal.MySqlDbmsTypeImpl;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -32,9 +31,6 @@ import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
 
 public final class DelegateMySqlDbmsType implements MySqlDbmsType {
 

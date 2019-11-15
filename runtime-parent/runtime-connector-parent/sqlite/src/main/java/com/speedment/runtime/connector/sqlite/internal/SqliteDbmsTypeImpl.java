@@ -22,7 +22,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.OnlyIfMissing;
 import com.speedment.runtime.connector.sqlite.SqliteMetadataHandler;
 import com.speedment.runtime.connector.sqlite.SqliteOperationHandler;
-import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.db.*;
@@ -43,7 +42,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SqliteDbmsTypeImpl implements DbmsType {
 
-    final static String SQLITE = "SQLite";
+    static final String SQLITE = "SQLite";
 
     private final DriverComponent drivers; // Nullable
     private final SqliteMetadataHandler metadataHandler;

@@ -24,10 +24,7 @@ import com.speedment.runtime.core.db.JavaTypeMap;
 import com.speedment.runtime.core.abstracts.AbstractDbmsMetadataHandler;
 import java.sql.Blob;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Specific MySQL implementation of a {@link DbmsMetadataHandler}.
@@ -53,9 +50,7 @@ public final class MySqlDbmsMetadataHandler extends AbstractDbmsMetadataHandler 
         javaTypeMap.put("YEAR", Integer.class);
         javaTypeMap.put("JSON", String.class);
 
-        Stream.of("LONG", "MEDIUM", "TINY").forEach(key -> {
-            javaTypeMap.put(key + "BLOB", Blob.class);
-        });
+        Stream.of("LONG", "MEDIUM", "TINY").forEach(key -> javaTypeMap.put(key + "BLOB", Blob.class));
 
         javaTypeMap.addRule((sqlTypeMapping, md) -> {
             if ("GEOMETRY".equalsIgnoreCase(md.getTypeName())) {
