@@ -472,5 +472,5 @@ abstract class AbstractLogger implements Logger {
         return sb.toString();
     }
 
-    private final static Throwable NO_THROWABLE = null;
+    private static final Throwable NO_THROWABLE = null;
 }

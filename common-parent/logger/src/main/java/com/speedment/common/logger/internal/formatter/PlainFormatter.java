@@ -20,11 +20,8 @@ import com.speedment.common.logger.Level;
 import com.speedment.common.logger.LoggerFormatter;
 import java.time.Instant;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.stream.IntStream;
 
 /**
  *
