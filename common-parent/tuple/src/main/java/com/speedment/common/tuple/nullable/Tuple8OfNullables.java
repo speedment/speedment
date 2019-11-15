@@ -129,8 +129,7 @@ public interface Tuple8OfNullables<T0, T1, T2, T3, T4, T5, T6, T7> extends Tuple
             case 5 : return (Optional<Object>)get5();
             case 6 : return (Optional<Object>)get6();
             case 7 : return (Optional<Object>)get7();
-            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
-            ));
+            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
         }
     }
     

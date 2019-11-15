@@ -36,7 +36,7 @@ public final class Tuple0OfNullablesMapperImpl<T>
 extends AbstractTupleMapper<T, Tuple0OfNullables> 
 implements TupleMapper<T, Tuple0OfNullables> {
     
-    public final static Tuple0OfNullablesMapperImpl<?> EMPTY_MAPPER = new Tuple0OfNullablesMapperImpl<>();
+    public static final Tuple0OfNullablesMapperImpl<?> EMPTY_MAPPER = new Tuple0OfNullablesMapperImpl<>();
     
     /**
      * Constructs a {@link TupleMapper } that can create {@link Tuple0 }.

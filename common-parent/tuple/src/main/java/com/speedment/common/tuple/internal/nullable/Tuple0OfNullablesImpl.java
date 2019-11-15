@@ -16,14 +16,9 @@
  */
 package com.speedment.common.tuple.internal.nullable;
 
-import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple0;
-import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.internal.AbstractTupleOfNullables;
 import com.speedment.common.tuple.nullable.Tuple0OfNullables;
-
-import java.util.Optional;
 
 /**
  * An implementation class of a {@link Tuple0OfNullables}.
@@ -36,7 +31,7 @@ public final class Tuple0OfNullablesImpl
 extends AbstractTupleOfNullables 
 implements Tuple0OfNullables {
     
-    public final static Tuple0OfNullables EMPTY_TUPLE = new Tuple0OfNullablesImpl();
+    public static final Tuple0OfNullables EMPTY_TUPLE = new Tuple0OfNullablesImpl();
     
     /**
      * Constructs a {@link TupleOfNullables} of type {@link Tuple0OfNullables}.

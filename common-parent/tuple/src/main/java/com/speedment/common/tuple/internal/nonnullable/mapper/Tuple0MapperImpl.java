@@ -35,7 +35,7 @@ public final class Tuple0MapperImpl<T>
 extends AbstractTupleMapper<T, Tuple0> 
 implements TupleMapper<T, Tuple0> {
     
-    public final static Tuple0MapperImpl<?> EMPTY_MAPPER = new Tuple0MapperImpl<>();
+    public static final Tuple0MapperImpl<?> EMPTY_MAPPER = new Tuple0MapperImpl<>();
     
     /**
      * Constructs a {@link TupleMapper } that can create {@link Tuple0 }.

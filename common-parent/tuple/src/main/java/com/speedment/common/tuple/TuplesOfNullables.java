@@ -149,7 +149,7 @@ public final class TuplesOfNullables {
      * @see Tuple
      */
     public static <T0> Tuple1OfNullables<T0> ofNullables(T0 e0) {
-        return  new Tuple1OfNullablesImpl<>(e0);
+        return new Tuple1OfNullablesImpl<>(e0);
     }
     
     /**
@@ -185,7 +185,7 @@ public final class TuplesOfNullables {
      * @see Tuple
      */
     public static <T0, T1> Tuple2OfNullables<T0, T1> ofNullables(T0 e0, T1 e1) {
-        return  new Tuple2OfNullablesImpl<>(e0, e1);
+        return new Tuple2OfNullablesImpl<>(e0, e1);
     }
     
     /**
@@ -228,7 +228,7 @@ public final class TuplesOfNullables {
             T0 e0,
             T1 e1,
             T2 e2) {
-        return  new Tuple3OfNullablesImpl<>(e0, e1, e2);
+        return new Tuple3OfNullablesImpl<>(e0, e1, e2);
     }
     
     /**
@@ -279,7 +279,7 @@ public final class TuplesOfNullables {
             T1 e1,
             T2 e2,
             T3 e3) {
-        return  new Tuple4OfNullablesImpl<>(e0, e1, e2, e3);
+        return new Tuple4OfNullablesImpl<>(e0, e1, e2, e3);
     }
     
     /**
@@ -336,7 +336,7 @@ public final class TuplesOfNullables {
             T2 e2,
             T3 e3,
             T4 e4) {
-        return  new Tuple5OfNullablesImpl<>(e0, e1, e2, e3, e4);
+        return new Tuple5OfNullablesImpl<>(e0, e1, e2, e3, e4);
     }
     
     /**
@@ -399,7 +399,7 @@ public final class TuplesOfNullables {
             T3 e3,
             T4 e4,
             T5 e5) {
-        return  new Tuple6OfNullablesImpl<>(e0, e1, e2, e3, e4, e5);
+        return new Tuple6OfNullablesImpl<>(e0, e1, e2, e3, e4, e5);
     }
     
     /**
@@ -468,7 +468,7 @@ public final class TuplesOfNullables {
             T4 e4,
             T5 e5,
             T6 e6) {
-        return  new Tuple7OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6);
+        return new Tuple7OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6);
     }
     
     /**
@@ -543,7 +543,7 @@ public final class TuplesOfNullables {
             T5 e5,
             T6 e6,
             T7 e7) {
-        return  new Tuple8OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7);
+        return new Tuple8OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7);
     }
     
     /**
@@ -624,7 +624,7 @@ public final class TuplesOfNullables {
             T6 e6,
             T7 e7,
             T8 e8) {
-        return  new Tuple9OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8);
+        return new Tuple9OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8);
     }
     
     /**
@@ -711,7 +711,7 @@ public final class TuplesOfNullables {
             T7 e7,
             T8 e8,
             T9 e9) {
-        return  new Tuple10OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9);
+        return new Tuple10OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9);
     }
     
     /**
@@ -804,7 +804,7 @@ public final class TuplesOfNullables {
             T8 e8,
             T9 e9,
             T10 e10) {
-        return  new Tuple11OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
+        return new Tuple11OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
     }
     
     /**
@@ -904,7 +904,7 @@ public final class TuplesOfNullables {
             T9 e9,
             T10 e10,
             T11 e11) {
-        return  new Tuple12OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11);
+        return new Tuple12OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11);
     }
     
     /**
@@ -1010,7 +1010,7 @@ public final class TuplesOfNullables {
             T10 e10,
             T11 e11,
             T12 e12) {
-        return  new Tuple13OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12);
+        return new Tuple13OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12);
     }
     
     /**
@@ -1122,7 +1122,7 @@ public final class TuplesOfNullables {
             T11 e11,
             T12 e12,
             T13 e13) {
-        return  new Tuple14OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13);
+        return new Tuple14OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13);
     }
     
     /**
@@ -1240,7 +1240,7 @@ public final class TuplesOfNullables {
             T12 e12,
             T13 e13,
             T14 e14) {
-        return  new Tuple15OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14);
+        return new Tuple15OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14);
     }
     
     /**
@@ -1364,7 +1364,7 @@ public final class TuplesOfNullables {
             T13 e13,
             T14 e14,
             T15 e15) {
-        return  new Tuple16OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15);
+        return new Tuple16OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15);
     }
     
     /**
@@ -1494,7 +1494,7 @@ public final class TuplesOfNullables {
             T14 e14,
             T15 e15,
             T16 e16) {
-        return  new Tuple17OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16);
+        return new Tuple17OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16);
     }
     
     /**
@@ -1630,7 +1630,7 @@ public final class TuplesOfNullables {
             T15 e15,
             T16 e16,
             T17 e17) {
-        return  new Tuple18OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17);
+        return new Tuple18OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17);
     }
     
     /**
@@ -1772,7 +1772,7 @@ public final class TuplesOfNullables {
             T16 e16,
             T17 e17,
             T18 e18) {
-        return  new Tuple19OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18);
+        return new Tuple19OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18);
     }
     
     /**
@@ -1920,7 +1920,7 @@ public final class TuplesOfNullables {
             T17 e17,
             T18 e18,
             T19 e19) {
-        return  new Tuple20OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19);
+        return new Tuple20OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19);
     }
     
     /**
@@ -2074,7 +2074,7 @@ public final class TuplesOfNullables {
             T18 e18,
             T19 e19,
             T20 e20) {
-        return  new Tuple21OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20);
+        return new Tuple21OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20);
     }
     
     /**
@@ -2234,7 +2234,7 @@ public final class TuplesOfNullables {
             T19 e19,
             T20 e20,
             T21 e21) {
-        return  new Tuple22OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21);
+        return new Tuple22OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21);
     }
     
     /**
@@ -2400,7 +2400,7 @@ public final class TuplesOfNullables {
             T20 e20,
             T21 e21,
             T22 e22) {
-        return  new Tuple23OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22);
+        return new Tuple23OfNullablesImpl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22);
     }
     
     /**

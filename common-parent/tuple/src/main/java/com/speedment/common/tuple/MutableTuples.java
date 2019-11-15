@@ -16,30 +16,7 @@
  */
 package com.speedment.common.tuple;
 
-import com.speedment.common.tuple.internal.mutable.MutableTuple0Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple10Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple11Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple12Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple13Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple14Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple15Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple16Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple17Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple18Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple19Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple1Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple20Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple21Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple22Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple23Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple2Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple3Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple4Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple5Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple6Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple7Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple8Impl;
-import com.speedment.common.tuple.internal.mutable.MutableTuple9Impl;
+import com.speedment.common.tuple.internal.mutable.*;
 import com.speedment.common.tuple.mutable.MutableTuple0;
 import com.speedment.common.tuple.mutable.MutableTuple10;
 import com.speedment.common.tuple.mutable.MutableTuple11;
@@ -77,9 +54,7 @@ import java.util.function.Supplier;
  */
 public final class MutableTuples {
     
-    private MutableTuples() {
-        throw new UnsupportedOperationException();
-    }
+    private MutableTuples() {}
     
     /**
      * Creates and returns a new {@link MutableTuple0} constructor that creates
@@ -120,7 +95,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0> Supplier<MutableTuple1<T0>> constructor(Class<T0> e0) {
-        return () ->  new MutableTuple1Impl<>();
+        return MutableTuple1Impl::new;
     }
     
     /**
@@ -133,7 +108,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0> MutableTuple1<T0> create1() {
-        return  new MutableTuple1Impl<>();
+        return new MutableTuple1Impl<>();
     }
     
     /**
@@ -151,7 +126,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1> Supplier<MutableTuple2<T0, T1>> constructor(Class<T0> e0, Class<T1> e1) {
-        return () ->  new MutableTuple2Impl<>();
+        return MutableTuple2Impl::new;
     }
     
     /**
@@ -165,7 +140,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1> MutableTuple2<T0, T1> create2() {
-        return  new MutableTuple2Impl<>();
+        return new MutableTuple2Impl<>();
     }
     
     /**
@@ -188,7 +163,7 @@ public final class MutableTuples {
             Class<T0> e0,
             Class<T1> e1,
             Class<T2> e2) {
-        return () ->  new MutableTuple3Impl<>();
+        return MutableTuple3Impl::new;
     }
     
     /**
@@ -203,7 +178,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2> MutableTuple3<T0, T1, T2> create3() {
-        return  new MutableTuple3Impl<>();
+        return new MutableTuple3Impl<>();
     }
     
     /**
@@ -229,7 +204,7 @@ public final class MutableTuples {
             Class<T1> e1,
             Class<T2> e2,
             Class<T3> e3) {
-        return () ->  new MutableTuple4Impl<>();
+        return MutableTuple4Impl::new;
     }
     
     /**
@@ -245,7 +220,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3> MutableTuple4<T0, T1, T2, T3> create4() {
-        return  new MutableTuple4Impl<>();
+        return new MutableTuple4Impl<>();
     }
     
     /**
@@ -274,7 +249,7 @@ public final class MutableTuples {
             Class<T2> e2,
             Class<T3> e3,
             Class<T4> e4) {
-        return () ->  new MutableTuple5Impl<>();
+        return MutableTuple5Impl::new;
     }
     
     /**
@@ -291,7 +266,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4> MutableTuple5<T0, T1, T2, T3, T4> create5() {
-        return  new MutableTuple5Impl<>();
+        return new MutableTuple5Impl<>();
     }
     
     /**
@@ -323,7 +298,7 @@ public final class MutableTuples {
             Class<T3> e3,
             Class<T4> e4,
             Class<T5> e5) {
-        return () ->  new MutableTuple6Impl<>();
+        return MutableTuple6Impl::new;
     }
     
     /**
@@ -341,7 +316,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5> MutableTuple6<T0, T1, T2, T3, T4, T5> create6() {
-        return  new MutableTuple6Impl<>();
+        return new MutableTuple6Impl<>();
     }
     
     /**
@@ -376,7 +351,7 @@ public final class MutableTuples {
             Class<T4> e4,
             Class<T5> e5,
             Class<T6> e6) {
-        return () ->  new MutableTuple7Impl<>();
+        return MutableTuple7Impl::new;
     }
     
     /**
@@ -395,7 +370,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6> MutableTuple7<T0, T1, T2, T3, T4, T5, T6> create7() {
-        return  new MutableTuple7Impl<>();
+        return new MutableTuple7Impl<>();
     }
     
     /**
@@ -433,7 +408,7 @@ public final class MutableTuples {
             Class<T5> e5,
             Class<T6> e6,
             Class<T7> e7) {
-        return () ->  new MutableTuple8Impl<>();
+        return MutableTuple8Impl::new;
     }
     
     /**
@@ -453,7 +428,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7> MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> create8() {
-        return  new MutableTuple8Impl<>();
+        return new MutableTuple8Impl<>();
     }
     
     /**
@@ -494,7 +469,7 @@ public final class MutableTuples {
             Class<T6> e6,
             Class<T7> e7,
             Class<T8> e8) {
-        return () ->  new MutableTuple9Impl<>();
+        return MutableTuple9Impl::new;
     }
     
     /**
@@ -515,7 +490,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8> MutableTuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8> create9() {
-        return  new MutableTuple9Impl<>();
+        return new MutableTuple9Impl<>();
     }
     
     /**
@@ -559,7 +534,7 @@ public final class MutableTuples {
             Class<T7> e7,
             Class<T8> e8,
             Class<T9> e9) {
-        return () ->  new MutableTuple10Impl<>();
+        return MutableTuple10Impl::new;
     }
     
     /**
@@ -581,7 +556,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> MutableTuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> create10() {
-        return  new MutableTuple10Impl<>();
+        return new MutableTuple10Impl<>();
     }
     
     /**
@@ -628,7 +603,7 @@ public final class MutableTuples {
             Class<T8> e8,
             Class<T9> e9,
             Class<T10> e10) {
-        return () ->  new MutableTuple11Impl<>();
+        return MutableTuple11Impl::new;
     }
     
     /**
@@ -651,7 +626,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> MutableTuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> create11() {
-        return  new MutableTuple11Impl<>();
+        return new MutableTuple11Impl<>();
     }
     
     /**
@@ -701,7 +676,7 @@ public final class MutableTuples {
             Class<T9> e9,
             Class<T10> e10,
             Class<T11> e11) {
-        return () ->  new MutableTuple12Impl<>();
+        return MutableTuple12Impl::new;
     }
     
     /**
@@ -725,7 +700,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> MutableTuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> create12() {
-        return  new MutableTuple12Impl<>();
+        return new MutableTuple12Impl<>();
     }
     
     /**
@@ -778,7 +753,7 @@ public final class MutableTuples {
             Class<T10> e10,
             Class<T11> e11,
             Class<T12> e12) {
-        return () ->  new MutableTuple13Impl<>();
+        return MutableTuple13Impl::new;
     }
     
     /**
@@ -803,7 +778,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> MutableTuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> create13() {
-        return  new MutableTuple13Impl<>();
+        return new MutableTuple13Impl<>();
     }
     
     /**
@@ -859,7 +834,7 @@ public final class MutableTuples {
             Class<T11> e11,
             Class<T12> e12,
             Class<T13> e13) {
-        return () ->  new MutableTuple14Impl<>();
+        return MutableTuple14Impl::new;
     }
     
     /**
@@ -885,7 +860,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> MutableTuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> create14() {
-        return  new MutableTuple14Impl<>();
+        return new MutableTuple14Impl<>();
     }
     
     /**
@@ -944,7 +919,7 @@ public final class MutableTuples {
             Class<T12> e12,
             Class<T13> e13,
             Class<T14> e14) {
-        return () ->  new MutableTuple15Impl<>();
+        return MutableTuple15Impl::new;
     }
     
     /**
@@ -971,7 +946,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> MutableTuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> create15() {
-        return  new MutableTuple15Impl<>();
+        return new MutableTuple15Impl<>();
     }
     
     /**
@@ -1033,7 +1008,7 @@ public final class MutableTuples {
             Class<T13> e13,
             Class<T14> e14,
             Class<T15> e15) {
-        return () ->  new MutableTuple16Impl<>();
+        return MutableTuple16Impl::new;
     }
     
     /**
@@ -1061,7 +1036,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> MutableTuple16<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> create16() {
-        return  new MutableTuple16Impl<>();
+        return new MutableTuple16Impl<>();
     }
     
     /**
@@ -1126,7 +1101,7 @@ public final class MutableTuples {
             Class<T14> e14,
             Class<T15> e15,
             Class<T16> e16) {
-        return () ->  new MutableTuple17Impl<>();
+        return MutableTuple17Impl::new;
     }
     
     /**
@@ -1155,7 +1130,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> create17() {
-        return  new MutableTuple17Impl<>();
+        return new MutableTuple17Impl<>();
     }
     
     /**
@@ -1223,7 +1198,7 @@ public final class MutableTuples {
             Class<T15> e15,
             Class<T16> e16,
             Class<T17> e17) {
-        return () ->  new MutableTuple18Impl<>();
+        return MutableTuple18Impl::new;
     }
     
     /**
@@ -1253,7 +1228,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> MutableTuple18<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> create18() {
-        return  new MutableTuple18Impl<>();
+        return new MutableTuple18Impl<>();
     }
     
     /**
@@ -1324,7 +1299,7 @@ public final class MutableTuples {
             Class<T16> e16,
             Class<T17> e17,
             Class<T18> e18) {
-        return () ->  new MutableTuple19Impl<>();
+        return MutableTuple19Impl::new;
     }
     
     /**
@@ -1355,7 +1330,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> MutableTuple19<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> create19() {
-        return  new MutableTuple19Impl<>();
+        return new MutableTuple19Impl<>();
     }
     
     /**
@@ -1429,7 +1404,7 @@ public final class MutableTuples {
             Class<T17> e17,
             Class<T18> e18,
             Class<T19> e19) {
-        return () ->  new MutableTuple20Impl<>();
+        return MutableTuple20Impl::new;
     }
     
     /**
@@ -1461,7 +1436,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19> MutableTuple20<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19> create20() {
-        return  new MutableTuple20Impl<>();
+        return new MutableTuple20Impl<>();
     }
     
     /**
@@ -1538,7 +1513,7 @@ public final class MutableTuples {
             Class<T18> e18,
             Class<T19> e19,
             Class<T20> e20) {
-        return () ->  new MutableTuple21Impl<>();
+        return MutableTuple21Impl::new;
     }
     
     /**
@@ -1571,7 +1546,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20> MutableTuple21<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20> create21() {
-        return  new MutableTuple21Impl<>();
+        return new MutableTuple21Impl<>();
     }
     
     /**
@@ -1651,7 +1626,7 @@ public final class MutableTuples {
             Class<T19> e19,
             Class<T20> e20,
             Class<T21> e21) {
-        return () ->  new MutableTuple22Impl<>();
+        return MutableTuple22Impl::new;
     }
     
     /**
@@ -1685,7 +1660,7 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> MutableTuple22<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> create22() {
-        return  new MutableTuple22Impl<>();
+        return new MutableTuple22Impl<>();
     }
     
     /**
@@ -1768,7 +1743,7 @@ public final class MutableTuples {
             Class<T20> e20,
             Class<T21> e21,
             Class<T22> e22) {
-        return () ->  new MutableTuple23Impl<>();
+        return MutableTuple23Impl::new;
     }
     
     /**
@@ -1803,6 +1778,6 @@ public final class MutableTuples {
      * @see Tuple
      */
     public static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> MutableTuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> create23() {
-        return  new MutableTuple23Impl<>();
+        return new MutableTuple23Impl<>();
     }
 }
