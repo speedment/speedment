@@ -230,7 +230,7 @@ public final class MySqlSpeedmentPredicateView
         }
 
         return of("(" + cn + " IN (" +
-            set.stream().map($ -> "?").collect(joining(",")) +
+            set.stream().map(unused -> "?").collect(joining(",")) +
             " COLLATE "+ binaryCollationName +"))", negated
         ).addAll(set);
     }
