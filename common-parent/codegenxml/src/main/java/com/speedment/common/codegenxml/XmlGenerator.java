@@ -98,7 +98,7 @@ public final class XmlGenerator implements Generator {
         return inner.transform(transform, model, factory);
     }
 
-    private final static class XmlTransformFactory implements TransformFactory {
+    private static final class XmlTransformFactory implements TransformFactory {
 
         private final TransformFactory inner;
 
