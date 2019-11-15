@@ -312,9 +312,9 @@ public final class ConfigFileHelper {
      * @param from the project defining the type mappers
      */
     private void setTypeMappersFrom(Project to, Project from) {
-        from.dbmses().forEach(dbms -> {
-            dbms.schemas().forEach(schema -> {
-                schema.tables().forEach(table -> {
+        from.dbmses().forEach(dbms ->
+            dbms.schemas().forEach(schema ->
+                schema.tables().forEach(table ->
                     table.columns().filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
                         String mapperName = column.getTypeMapper().get();
                         try {
@@ -325,10 +325,10 @@ public final class ConfigFileHelper {
                         } catch (ClassNotFoundException | ClassCastException e) {
                             throw new IllegalStateException("Unable to find mapper class " + mapperName);
                         }
-                    });
-                });
-            });
-        });
+                    })
+                )
+            )
+        );
     }
 
     /**
@@ -359,9 +359,7 @@ public final class ConfigFileHelper {
             // Perhaps one would expect this to match a single column, so findFirst would do,
             // but fetching metadata from the database seems to create multiple instances of
             // similar dbmses in the same Project, so we make sure to do this forEach copy.
-            .forEach(c -> {
-                c.mutator().setTypeMapper(typeMapperClass);
-            });
+            .forEach(c -> c.mutator().setTypeMapper(typeMapperClass));
     }
 
     /**
@@ -370,9 +368,9 @@ public final class ConfigFileHelper {
      */
     private void printTypeMappers(String heading, Project p) {
         System.out.println(heading);
-        p.dbmses().forEach(dbms -> {
-            dbms.schemas().forEach(schema -> {
-                schema.tables().forEach(table -> {
+        p.dbmses().forEach(dbms ->
+            dbms.schemas().forEach(schema ->
+                schema.tables().forEach(table ->
                     table.columns().filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
                         String mapperName = column.getTypeMapper().get();
                         if (mapperName.endsWith("PrimitiveTypeMapper")) {
@@ -380,10 +378,10 @@ public final class ConfigFileHelper {
                         }
                         System.out.println(" - " + dbms.getName() + ":" + schema.getName() + "/" +
                             table.getName() + "." + column.getName() + " mapped by " + mapperName);
-                    });
-                });
-            });
-        });
+                    })
+                )
+            )
+        );
     }
 
     public void loadConfigFile(File file, ReuseStage reuse) {

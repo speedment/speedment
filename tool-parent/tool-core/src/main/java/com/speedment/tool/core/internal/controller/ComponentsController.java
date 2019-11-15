@@ -93,21 +93,21 @@ public final class ComponentsController implements Initializable {
     private static class ComponentItem extends TreeItem<String> {
 
         private ComponentItem(Class<?> comp) {
-            super(injectorKeyValue(comp).map(c -> c.getSimpleName()).orElse(comp.getSimpleName()) + " ("
+            super(injectorKeyValue(comp).map(Class::getSimpleName).orElse(comp.getSimpleName()) + " ("
                 + comp.getSimpleName()
                 + ")"
             );
             setExpanded(false);
             setGraphic(SpeedmentIcon.BRICKS.view());
         }
-    }
 
-    private static Optional<? extends Class<?>> injectorKeyValue(Class<?> clazz) {
-        return traverseAncestors(clazz)
-            .map(c -> c.getAnnotation(InjectKey.class))
-            .filter(Objects::nonNull)
-            .map(InjectKey::value)
-            .findFirst();
+        private static Optional<? extends Class<?>> injectorKeyValue(Class<?> clazz) {
+            return traverseAncestors(clazz)
+                .map(c -> c.getAnnotation(InjectKey.class))
+                .filter(Objects::nonNull)
+                .map(InjectKey::value)
+                .findFirst();
+        }
     }
 
     public static Stream<Class<?>> traverseAncestors(Class<?> clazz) {
@@ -182,12 +182,12 @@ public final class ComponentsController implements Initializable {
         if (CodeGenerationComponent.class.isAssignableFrom(comp)) {
             final TranslatorsItem translators = new TranslatorsItem();
             injector.get(CodeGenerationComponent.class).ifPresent(
-                cg -> {
+                cg ->
                     cg.translatorKeys()
                     .sorted()
                     .map(TranslatorItem::new)
-                    .forEachOrdered(translators.getChildren()::add);
-                });
+                    .forEachOrdered(translators.getChildren()::add)
+                );
 
             if (!translators.getChildren().isEmpty()) {
                 item.getChildren().add(translators);
@@ -197,12 +197,12 @@ public final class ComponentsController implements Initializable {
         if (DbmsHandlerComponent.class.isAssignableFrom(comp)) {
             final DbmsTypesItem dbmsTypes = new DbmsTypesItem();
 
-            injector.get(DbmsHandlerComponent.class).ifPresent(dh -> {
+            injector.get(DbmsHandlerComponent.class).ifPresent(dh ->
                 dh.supportedDbmsTypes()
                     .sorted(Comparator.comparing(DbmsType::getName))
                     .map(DbmsTypeItem::new)
-                    .forEachOrdered(dbmsTypes.getChildren()::add);
-            });
+                    .forEachOrdered(dbmsTypes.getChildren()::add)
+            );
             if (!dbmsTypes.getChildren().isEmpty()) {
                 item.getChildren().add(dbmsTypes);
             }
@@ -211,12 +211,12 @@ public final class ComponentsController implements Initializable {
         // Show Type Mappers
         if (TypeMapperComponent.class.isAssignableFrom(comp)) {
             final TypeMappersItem typeMappers = new TypeMappersItem();
-            injector.get(TypeMapperComponent.class).ifPresent(tm -> {
+            injector.get(TypeMapperComponent.class).ifPresent(tm ->
                 tm.stream()
                     .sorted(TypeMapper.standardComparator())
                     .map(TypeMapperItem::new)
-                    .forEachOrdered(typeMappers.getChildren()::add);
-            });
+                    .forEachOrdered(typeMappers.getChildren()::add)
+            );
             if (!typeMappers.getChildren().isEmpty()) {
                 item.getChildren().add(typeMappers);
             }

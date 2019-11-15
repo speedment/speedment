@@ -26,6 +26,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerEvent;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Dbms;
@@ -189,26 +190,15 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final Throttler throttler = Throttler.limitToOnceEvery(2_000);
         LoggerManager.getFactory().addListener(ev -> {
             switch (ev.getLevel()) {
-                case DEBUG : case TRACE : case INFO : {
+                case DEBUG : case TRACE : case INFO :
                     addToOutputMessages(OutputUtil.info(ev.getMessage()));
                     break;
-                }
-                case WARN : {
-                    addToOutputMessages(OutputUtil.warning(ev.getMessage()));
-                    final String title = "There are warnings. See output.";
-                    throttler.call(title, () ->
-                        showNotification(title,
-                            FontAwesome.EXCLAMATION_CIRCLE,
-                            Palette.WARNING,
-                            () -> outputVisible.set(true)
-                        )
-                    );
+                case WARN :
+                    outputWarningAndShowNotification(throttler, ev);
                     break;
-                }
-                case ERROR : case FATAL : {
+                case ERROR : case FATAL :
                     addToOutputMessages(OutputUtil.error(ev.getMessage()));
                     break;
-                }
             }
         });
         
@@ -219,7 +209,20 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
         Statistics.report(info, projectComponent, GUI_STARTED);
     }
-    
+
+    public void outputWarningAndShowNotification(Throttler throttler, LoggerEvent ev) {
+        addToOutputMessages(OutputUtil.warning(ev.getMessage()));
+        final String title = "There are warnings. See output.";
+        throttler.call(title, () ->
+            showNotification(title,
+                FontAwesome.EXCLAMATION_CIRCLE,
+                Palette.WARNING,
+                () -> outputVisible.set(true)
+            )
+        );
+        return;
+    }
+
     private void addToOutputMessages(Node node) {
         runLater(() -> outputMessages.add(node));
     }

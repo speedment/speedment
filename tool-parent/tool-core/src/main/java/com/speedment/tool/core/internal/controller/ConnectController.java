@@ -65,8 +65,8 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
  */
 public final class ConnectController implements Initializable {
     
-    private final static String DEFAULT_HOST = "127.0.0.1";
-    private final static String DEFAULT_USER = "root";
+    private static final String DEFAULT_HOST = "127.0.0.1";
+    private static final String DEFAULT_USER = "root";
     
     @Inject public UserInterfaceComponent ui;
     @Inject public DbmsHandlerComponent dbmsHandler;
@@ -524,12 +524,12 @@ public final class ConnectController implements Initializable {
         }
 
         @Override
-        public Optional<String> getAsString(String key) throws ClassCastException {
+        public Optional<String> getAsString(String key) {
             return get(key).map(String.class::cast);
         }
 
         @Override
-        public OptionalBoolean getAsBoolean(String key) throws ClassCastException {
+        public OptionalBoolean getAsBoolean(String key) {
             return get(key)
                 .map(Boolean.class::cast)
                 .map(OptionalBoolean::of)
@@ -537,7 +537,7 @@ public final class ConnectController implements Initializable {
         }
 
         @Override
-        public OptionalLong getAsLong(String key) throws ClassCastException {
+        public OptionalLong getAsLong(String key) {
             return get(key)
                 .map(Long.class::cast)
                 .map(OptionalLong::of)
@@ -547,7 +547,7 @@ public final class ConnectController implements Initializable {
 
 
         @Override
-        public OptionalDouble getAsDouble(String key) throws ClassCastException {
+        public OptionalDouble getAsDouble(String key) {
             return get(key)
                 .map(Double.class::cast)
                 .map(OptionalDouble::of)
@@ -555,7 +555,7 @@ public final class ConnectController implements Initializable {
         }
 
         @Override
-        public OptionalInt getAsInt(String key) throws ClassCastException {
+        public OptionalInt getAsInt(String key) {
             return get(key)
                 .map(Integer.class::cast)
                 .map(OptionalInt::of)

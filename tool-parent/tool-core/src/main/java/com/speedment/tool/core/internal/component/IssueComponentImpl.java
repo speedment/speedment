@@ -37,9 +37,7 @@ public class IssueComponentImpl implements IssueComponent {
 
     @Override
     public void post(Issue issue) {
-        Platform.runLater( () -> {
-            issues.add(issue);
-        });
+        Platform.runLater( () -> issues.add(issue));
     }
     
     @Override

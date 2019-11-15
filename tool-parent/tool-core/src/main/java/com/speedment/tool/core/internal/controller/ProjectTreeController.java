@@ -150,7 +150,7 @@ public final class ProjectTreeController implements Initializable {
         return branch;
     }
 
-    private final static class DocumentPropertyCell extends TreeCell<DocumentProperty> {
+    private static final class DocumentPropertyCell extends TreeCell<DocumentProperty> {
 
         private final ChangeListener<Boolean> change = (ob, o, enabled) -> {
             if (enabled) {
@@ -170,12 +170,12 @@ public final class ProjectTreeController implements Initializable {
             // node when a new node is selected.
             itemProperty().addListener((ob, o, n) -> {
 
-                if (o != null && o instanceof HasEnabledProperty) {
+                if (o instanceof HasEnabledProperty) {
                     final HasEnabledProperty hasEnabled = (HasEnabledProperty) o;
                     hasEnabled.enabledProperty().removeListener(change);
                 }
 
-                if (n != null && n instanceof HasEnabledProperty) {
+                if (n instanceof HasEnabledProperty) {
                     final HasEnabledProperty hasEnabled = (HasEnabledProperty) n;
                     hasEnabled.enabledProperty().addListener(change);
                 }

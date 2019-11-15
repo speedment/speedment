@@ -48,8 +48,8 @@ import java.util.concurrent.TimeoutException;
  */
 public final class SceneController implements Initializable {
     
-    private final static Logger LOGGER = LoggerManager.getLogger(SceneController.class);
-    private final static SemanticVersionComparator SEMANTIC_VERSION =
+    private static final Logger LOGGER = LoggerManager.getLogger(SceneController.class);
+    private static final SemanticVersionComparator SEMANTIC_VERSION =
         new SemanticVersionComparator();
     
     public @Inject UserInterfaceComponent ui;

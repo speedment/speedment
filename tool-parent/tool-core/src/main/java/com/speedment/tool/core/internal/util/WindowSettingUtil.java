@@ -32,20 +32,20 @@ import java.util.prefs.Preferences;
  */
 final class WindowSettingUtil {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(WindowSettingUtil.class);
-    private final static Preferences PREFERENCES = Preferences.userNodeForPackage(WindowSettingUtil.class);
-    
-    private final static String WINDOW_WIDTH = "windowWidth";
-    private final static String WINDOW_HEIGHT = "windowHeight";
-    private final static String WINDOW_X_POS = "windowXPos";
-    private final static String WINDOW_Y_POS = "windowYPos";
-    private final static String WINDOW_MAXIMIZED = "windowMaximized";
-    
-    
-    private final static double DEFUALT_WIDTH  = 1280;
-    private final static double DEFUALT_HEIHGT = 720;
-    private final static double DEFUALT_X = 0;
-    private final static double DEFUALT_Y = 0;
+    private static final Logger LOGGER = LoggerManager.getLogger(WindowSettingUtil.class);
+    private static final Preferences PREFERENCES = Preferences.userNodeForPackage(WindowSettingUtil.class);
+
+    private static final String WINDOW_WIDTH = "windowWidth";
+    private static final String WINDOW_HEIGHT = "windowHeight";
+    private static final String WINDOW_X_POS = "windowXPos";
+    private static final String WINDOW_Y_POS = "windowYPos";
+    private static final String WINDOW_MAXIMIZED = "windowMaximized";
+
+
+    private static final double DEFUALT_WIDTH  = 1280;
+    private static final double DEFUALT_HEIHGT = 720;
+    private static final double DEFUALT_X = 0;
+    private static final double DEFUALT_Y = 0;
 
     private WindowSettingUtil() {}
 
