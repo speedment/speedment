@@ -19,7 +19,6 @@ package com.speedment.runtime.join.internal.component.stream.sql;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.FieldPredicateView;

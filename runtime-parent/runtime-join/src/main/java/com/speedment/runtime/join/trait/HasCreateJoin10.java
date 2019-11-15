@@ -17,7 +17,6 @@
 package com.speedment.runtime.join.trait;
 
 import com.speedment.common.function.Function10;
-import com.speedment.common.function.Function9;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.stage.Stage;

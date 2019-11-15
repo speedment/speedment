@@ -405,14 +405,14 @@ final class JoinSqlUtil {
         requireNonNegative(stageIndex);
         final SqlStage sqlStage = sqlStages.get(stageIndex);
         final Stage<?> stage = sqlStage.stage();
-        // This might be different for different databse types...
+        // This might be different for different database types...
         final StringBuilder sb = new StringBuilder();
-        switch (joinType) {
-            case CROSS_JOIN:
-                sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
-                break;
-//            case FULL_OUTER_JOIN:
-//                // Most databases do not support this natively so we create a 
+
+        if (joinType == JoinType.CROSS_JOIN) {
+            sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
+        }
+        //       if (joinType == JoinType.FULL_OUTER_JOIN) {
+//                // Most databases do not support this natively so we create a
 //                // UNION between a LEFT JOIN and a RIGHT JOIN instead.
 //                sb
 //                    .append("(")
@@ -420,18 +420,18 @@ final class JoinSqlUtil {
 //                    .append(" UNION ")
 //                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.RIGHT_JOIN))
 //                    .append(")");
-//                break;
-            default:
-                sb.append(joinType.sql()).append(" ");
-                sb.append(sqlStage.sqlTableReference()).append(" ");
-                stage.field().ifPresent(field -> {
-                    final HasComparableOperators<?, ?> foreignFirstField = stage.foreignField().get();
-                    final int foreignStageIndex = stage.referencedStage(); //stageIndexOf(stages, foreignFirstField);
-                    sb.append("ON (");
-                    final JoinOperator joinOperator = stage.joinOperator().get();
-                     renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
-                     
-                     
+//       }
+         else {
+            sb.append(joinType.sql()).append(" ");
+            sb.append(sqlStage.sqlTableReference()).append(" ");
+            stage.field().ifPresent(field -> {
+                final HasComparableOperators<?, ?> foreignFirstField = stage.foreignField().get();
+                final int foreignStageIndex = stage.referencedStage(); //stageIndexOf(stages, foreignFirstField);
+                sb.append("ON (");
+                final JoinOperator joinOperator = stage.joinOperator().get();
+                renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
+
+
 //                    switch (joinOperator) {
 //                        case BETWEEN:
 //                        case NOT_BETWEEN: {
@@ -453,10 +453,8 @@ final class JoinSqlUtil {
 //                        }
 //                    }
 
-
-                    sb.append(") ");
-                });
-                break;
+                sb.append(") ");
+            });
         }
         return sb.toString();
     }

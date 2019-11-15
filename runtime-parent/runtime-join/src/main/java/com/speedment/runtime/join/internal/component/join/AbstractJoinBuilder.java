@@ -46,7 +46,7 @@ import static java.util.stream.Collectors.toList;
  */
 abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
 
-    private final static Logger LOGGER_JOIN =
+    private static final Logger LOGGER_JOIN =
         LoggerManager.getLogger(ApplicationBuilder.LogType.JOIN.getLoggerName());
 
     private final JoinStreamSupplierComponent streamSupplier;

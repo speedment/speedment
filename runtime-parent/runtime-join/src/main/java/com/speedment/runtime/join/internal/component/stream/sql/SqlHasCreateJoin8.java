@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.join.internal.component.stream.sql;
 
-import com.speedment.common.function.Function7;
 import com.speedment.common.function.Function8;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.TableIdentifier;
@@ -25,7 +24,6 @@ import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.internal.component.stream.SqlAdapterMapper;
 import com.speedment.runtime.join.stage.Stage;
-import com.speedment.runtime.join.trait.HasCreateJoin7;
 import com.speedment.runtime.join.trait.HasCreateJoin8;
 
 import java.sql.ResultSet;
