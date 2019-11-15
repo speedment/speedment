@@ -50,7 +50,6 @@ import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.manager.HasLabelSet;
 import com.speedment.runtime.core.manager.Manager;
@@ -89,7 +88,6 @@ import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -113,7 +111,7 @@ public final class AddRemoveStringItem
                & HasName>
 extends AbstractLabelTooltipItem {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(AddRemoveStringItem.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AddRemoveStringItem.class);
 
     private final DOC column;
     private final ObservableList<String> strings;
@@ -122,9 +120,9 @@ extends AbstractLabelTooltipItem {
     @SuppressWarnings("FieldCanBeLocal")
     private final StringProperty cache;
     
-    private final String DEFAULT_FIELD = "ENUM_CONSTANT_";
-    private final double SPACING  = 10.0;
-    private final int LIST_HEIGHT = 200;
+    private static final String DEFAULT_FIELD = "ENUM_CONSTANT_";
+    private static final double SPACING  = 10.0;
+    private static final int LIST_HEIGHT = 200;
 
     @Inject public ProjectComponent projects;
     @Inject public DbmsMetadataHandler metadata;
@@ -201,7 +199,6 @@ extends AbstractLabelTooltipItem {
         container.getChildren().addAll(listView, controls);
         hideShowBehaviour(container);
 
-        
         return container;
     }
     
@@ -563,7 +560,7 @@ extends AbstractLabelTooltipItem {
         }
 
         @Override
-        public final String persist(String entity) throws SpeedmentException {
+        public final String persist(String entity) {
             throw newUnsupportedOperationExceptionReadOnly();
         }
 
@@ -578,7 +575,7 @@ extends AbstractLabelTooltipItem {
         }
 
         @Override
-        public final String update(String entity) throws SpeedmentException {
+        public final String update(String entity) {
             throw newUnsupportedOperationExceptionReadOnly();
         }
 
@@ -593,7 +590,7 @@ extends AbstractLabelTooltipItem {
         }
 
         @Override
-        public final String remove(String entity) throws SpeedmentException {
+        public final String remove(String entity) {
             throw newUnsupportedOperationExceptionReadOnly();
         }
 
@@ -608,6 +605,11 @@ extends AbstractLabelTooltipItem {
                 tableId.toString()
                 + "}";
         }
+
+        private static UnsupportedOperationException newUnsupportedOperationExceptionReadOnly() {
+            return new UnsupportedOperationException("This manager is read-only.");
+        }
+
     }
 
     private static final class EnumCell extends TextFieldListCell<String> {
@@ -671,7 +673,4 @@ extends AbstractLabelTooltipItem {
         }
     }
 
-    private static UnsupportedOperationException newUnsupportedOperationExceptionReadOnly() {
-        return new UnsupportedOperationException("This manager is read-only.");
-    }
 }

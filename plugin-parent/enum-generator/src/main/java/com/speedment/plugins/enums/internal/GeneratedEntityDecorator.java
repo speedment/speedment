@@ -19,6 +19,7 @@ package com.speedment.plugins.enums.internal;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.value.InvocationValue;
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.core.exception.SpeedmentGeneratorException;
 import com.speedment.generator.standard.util.ForeignKeyUtil;
@@ -44,7 +45,6 @@ import java.util.*;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultType.*;
 import static com.speedment.common.codegen.model.Value.*;
-import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.util.ColumnUtil.usesOptional;
 import static com.speedment.plugins.enums.internal.EnumGeneratorUtil.enumConstantsOf;
@@ -62,20 +62,20 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedEntityDecorator implements TranslatorDecorator<Table, Interface> {
 
-    private final static Set<String> ENUM_TYPE_MAPPERS =
+    private static final Set<String> ENUM_TYPE_MAPPERS =
         unmodifiableSet(new HashSet<>(asList(
             StringToEnumTypeMapper.class.getName(),
             IntegerToEnumTypeMapper.class.getName()
         )));
 
-    public final static String FROM_DATABASE_METHOD         = "fromDatabase";
-    public final static String FROM_DATABASE_ORDINAL_METHOD = "fromDatabaseOrdinal";
-    public final static String TO_DATABASE_METHOD           = "toDatabase";
-    public final static String TO_DATABASE_ORDINAL_METHOD   = "toDatabaseOrdinal";
-    public final static String DATABASE_NAME                = "databaseName";
-    public final static String DATABASE_ORDINAL             = "databaseOrdinal";
+    public static final String FROM_DATABASE_METHOD         = "fromDatabase";
+    public static final String FROM_DATABASE_ORDINAL_METHOD = "fromDatabaseOrdinal";
+    public static final String TO_DATABASE_METHOD           = "toDatabase";
+    public static final String TO_DATABASE_ORDINAL_METHOD   = "toDatabaseOrdinal";
+    public static final String DATABASE_NAME                = "databaseName";
+    public static final String DATABASE_ORDINAL             = "databaseOrdinal";
 
-    private  static final String COLUMN = "column";
+    private static final String COLUMN = "column";
     private static final String RETURN = "return ";
 
     private final Injector injector;
@@ -86,7 +86,7 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
     
     @Override
     public void apply(JavaClassTranslator<Table, Interface> translator) {
-        translator.onMake((file, builder) -> {
+        translator.onMake((file, builder) ->
             builder.forEveryTable(Translator.Phase.POST_MAKE, (intrf, table) -> {
 
                 file.getImports().removeIf(i -> i.getType().equals(StringToEnumTypeMapper.class));
@@ -152,12 +152,12 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
                                     .add(Value.ofText(constant))
                                     .add(Value.ofNumber(ordinal));
 
-                            fromDatabase.add(indent(
+                            fromDatabase.add(Formatting.indent(
                                 "case \"" + constant + "\" : return " +
                                     namer.javaStaticFieldName(constant) + ";"
                             ));
 
-                            fromDatabaseOrdinal.add(indent(
+                            fromDatabaseOrdinal.add(Formatting.indent(
                                 "case " + ordinal + " : return " +
                                     namer.javaStaticFieldName(constant) + ";"
                             ));
@@ -174,15 +174,15 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
                         );
 
                         fromDatabase
-                            .add(indent("default : throw new UnsupportedOperationException("))
-                            .add(indent("\"Unknown enum constant '\" + " + DATABASE_NAME + " + \"'.\"", 2))
-                            .add(indent(");"))
+                            .add(Formatting.indent("default : throw new UnsupportedOperationException("))
+                            .add(Formatting.indent("\"Unknown enum constant '\" + " + DATABASE_NAME + " + \"'.\"", 2))
+                            .add(Formatting.indent(");"))
                             .add("}");
 
                         fromDatabaseOrdinal
-                            .add(indent("default : throw new UnsupportedOperationException("))
-                            .add(indent("\"Unknown enum ordinal '\" + " + DATABASE_ORDINAL + " + \"'.\"", 2))
-                            .add(indent(");"))
+                            .add(Formatting.indent("default : throw new UnsupportedOperationException("))
+                            .add(Formatting.indent("\"Unknown enum ordinal '\" + " + DATABASE_ORDINAL + " + \"'.\"", 2))
+                            .add(Formatting.indent(");"))
                             .add("}");
                         
                         colEnum.add(fromDatabase);
@@ -283,14 +283,14 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
                                 translator.getSupport().tableOrThrow(), col
                             ).map(fkc -> new FkHolder(injector, fkc.getParentOrThrow()));
 
-                        fk.ifPresent(holder -> {
+                        fk.ifPresent(holder ->
                             params.add(ofReference(
                                 holder.getForeignEmt().getSupport().entityName() + "." +
                                 translator.getSupport().namer().javaStaticFieldName(
                                     holder.getForeignColumn().getJavaName()
                                 ) + ","
-                            ));
-                        });
+                            ))
+                        );
 
                         params.add(Value.ofReference(enumShortName + "::" + TO_DATABASE_METHOD));
                         params.add(Value.ofReference(enumShortName + "::" + FROM_DATABASE_METHOD));
@@ -312,8 +312,8 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
                             params.toArray(new Value<?>[params.size()])
                         ));
                     });
-            });
-        });
+            }
+        ));
     }
 
     private boolean hasTypeMapper(Column col, Class<?> typeMapperClass) {

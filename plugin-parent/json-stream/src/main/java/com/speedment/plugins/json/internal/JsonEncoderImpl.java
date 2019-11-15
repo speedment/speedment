@@ -193,7 +193,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
         final String columnName = jsonField(project, field.identifier());
         final Manager<FK_ENTITY> fkManager = encoder.getManager();
         final TableIdentifier<FK_ENTITY> identifier = fkManager.getTableIdentifier();
-        final FindFrom<ENTITY, FK_ENTITY> entityFinder = field.finder(identifier, () -> fkManager.stream());
+        final FindFrom<ENTITY, FK_ENTITY> entityFinder = field.finder(identifier, fkManager::stream);
         return put(columnName, entityFinder, encoder);
     }
 
