@@ -30,6 +30,8 @@ import java.util.function.IntToDoubleFunction;
 import java.util.function.IntUnaryOperator;
 import java.util.function.ToIntFunction;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Expression that given an entity returns an {@code int} value, or
  * {@code null}. This expression can be implemented using a lamdda, or it can be
@@ -71,6 +73,7 @@ extends Expression<T>,
      * {@code null}
      */
     static <T> ToIntNullable<T> of(Function<T, Integer> lambda) {
+        requireNonNull(lambda);
         if (lambda instanceof ToIntNullable) {
             return (ToIntNullable<T>) lambda;
         } else {

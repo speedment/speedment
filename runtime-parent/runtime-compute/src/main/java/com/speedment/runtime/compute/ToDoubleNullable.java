@@ -37,6 +37,8 @@ import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Expression that given an entity returns a {@code double} value, or
  * {@code null}. This expression can be implemented using a lambda, or it can be
@@ -76,6 +78,7 @@ extends Expression<T>,
      * {@code null}
      */
     static <T> ToDoubleNullable<T> of(Function<T, Double> lambda) {
+        requireNonNull(lambda);
         if (lambda instanceof ToDoubleNullable) {
             return (ToDoubleNullable<T>) lambda;
         } else {

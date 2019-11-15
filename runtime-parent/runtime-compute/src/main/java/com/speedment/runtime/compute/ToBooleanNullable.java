@@ -34,6 +34,8 @@ import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Expression that given an entity returns a {@code boolean} value, or
  * {@code null}. This expression can be implemented using a lambda, or it can be
@@ -70,6 +72,7 @@ extends Expression<T>,
      * {@code null}
      */
     static <T> ToBooleanNullable<T> of(Function<T, Boolean> lambda) {
+        requireNonNull(lambda);
         if (lambda instanceof ToBooleanNullable) {
             return (ToBooleanNullable<T>) lambda;
         } else {

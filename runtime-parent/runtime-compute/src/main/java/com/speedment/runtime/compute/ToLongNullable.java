@@ -30,6 +30,8 @@ import java.util.function.LongToDoubleFunction;
 import java.util.function.LongUnaryOperator;
 import java.util.function.ToLongFunction;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Expression that given an entity returns a {@code long} value, or
  * {@code null}. This expression can be implemented using a lamda, or it can be
@@ -70,6 +72,7 @@ extends Expression<T>,
      * {@code null}
      */
     static <T> ToLongNullable<T> of(Function<T, Long> lambda) {
+        requireNonNull(lambda);
         if (lambda instanceof ToLongNullable) {
             return (ToLongNullable<T>) lambda;
         } else {

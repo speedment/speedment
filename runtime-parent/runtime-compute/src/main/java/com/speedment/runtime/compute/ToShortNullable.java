@@ -88,7 +88,7 @@ extends Expression<T>,
     }
 
     @Override
-    default ToShort<T> orThrow() throws NullPointerException {
+    default ToShort<T> orThrow() {
         return OrElseThrowUtil.shortOrElseThrow(this);
     }
 
@@ -133,7 +133,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsShort(object));
             }
 
@@ -174,7 +174,7 @@ extends Expression<T>,
             }
 
             @Override
-            public short applyAsShort(T object) throws NullPointerException {
+            public short applyAsShort(T object) {
                 return mapper.applyAsShort(delegate.applyAsShort(object));
             }
 
