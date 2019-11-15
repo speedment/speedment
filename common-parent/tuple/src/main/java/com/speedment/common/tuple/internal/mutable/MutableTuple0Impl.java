@@ -20,8 +20,6 @@ import com.speedment.common.tuple.MutableTuple;
 import com.speedment.common.tuple.internal.AbstractMutableTuple;
 import com.speedment.common.tuple.mutable.MutableTuple0;
 
-import java.util.Optional;
-
 /**
  * An implementation class of a {@link MutableTuple0}.
  * <p>
