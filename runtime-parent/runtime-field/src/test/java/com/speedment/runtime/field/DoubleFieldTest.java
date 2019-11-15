@@ -42,7 +42,7 @@ import static java.util.Arrays.asList;
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
 final class DoubleFieldTest {
     
-    private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarDouble();
+    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarDouble();
     private DoubleField<BasicEntity, Double> field;
     private List<BasicEntity> entities;
     private BasicEntity a;
