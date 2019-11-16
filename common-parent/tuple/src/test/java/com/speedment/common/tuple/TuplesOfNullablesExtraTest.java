@@ -18,7 +18,7 @@ package com.speedment.common.tuple;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,44 +27,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Emil Forslund
  * @since  1.0.5
  */
-final class TuplesExtraTest {
+final class TuplesOfNullablesExtraTest {
 
     private static final int SIZE = 100;
-
-    /**
-     * Attempts to recreate issue #500 (initializing a very large tuple caused
-     * a NullPointerException since the constructor implementation of internal
-     * abstract base class {@code BasicAbstractTuple} accessed the
-     * {@link Tuple#degree()}-method before the inner array was initialized.)
-     */
-    @Test
-    void ofArrayLarge() {
-        final Random random = new Random();
-        final Integer[] array = new Integer[SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            array[i] = random.nextInt();
-        }
-
-        final Tuple tuple = Tuples.ofArray((Object[]) array);
-        assertEquals(SIZE, tuple.degree());
-
-        for (int i = 0; i < SIZE; i++) {
-            final Integer expected = array[i];
-            final Integer actual = (Integer) tuple.get(i);
-            assertEquals(expected, actual);
-        }
-    }
 
     @Test
     void ofArray() {
         IntStream.range(0, SIZE).forEach(i -> {
-            final Tuple tuple = TuplesTestUtil.createTupleFilled(i);
+            final TupleOfNullables tuple = TuplesTestUtil.createTupleOfNullableFilled(i);
             assertEquals(i, tuple.degree());
 
             final Integer[] array = TuplesTestUtil.array(i);
             for (int j = 0; j < i; j++) {
                 final Integer expected = array[j];
-                final Integer actual = (Integer) tuple.get(j);
+                final Integer actual = (Integer) tuple.get(j).orElseThrow(NoSuchElementException::new);
                 assertEquals(expected, actual);
             }
 

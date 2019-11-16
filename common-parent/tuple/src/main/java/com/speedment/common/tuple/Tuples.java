@@ -78,9 +78,7 @@ import java.util.function.Function;
  */
 public final class Tuples {
     
-    private Tuples() {
-        throw new UnsupportedOperationException();
-    }
+    private Tuples() {}
     
     /**
      * Creates and returns a new {@link Tuple0}  with the given parameters.

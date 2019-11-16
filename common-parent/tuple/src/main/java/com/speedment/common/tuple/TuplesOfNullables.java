@@ -102,9 +102,7 @@ import java.util.function.Function;
  */
 public final class TuplesOfNullables {
     
-    private TuplesOfNullables() {
-        throw new UnsupportedOperationException();
-    }
+    private TuplesOfNullables() {}
     
     /**
      * Creates and returns a new {@link Tuple0OfNullables}  with the given
