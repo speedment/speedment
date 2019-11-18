@@ -67,10 +67,12 @@ public final class StandardTypeMapperComponent implements TypeMapperComponent {
         return inner.findDatabaseTypeOf(typeMapper);
     }
 
+    @Override
     public Type typeOf(Column column) {
         return inner.typeOf(column);
     }
 
+    @Override
     public TypeMapper.Category categoryOf(Column column) {
         return inner.categoryOf(column);
     }

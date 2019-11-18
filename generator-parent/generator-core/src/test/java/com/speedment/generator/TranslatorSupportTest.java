@@ -190,7 +190,6 @@ final class TranslatorSupportTest extends SimpleModel {
     void testFullyQualifiedTypeName_String_String() {
         final String result = instance.fullyQualifiedTypeName("subPath", "filePrefix");
         assertEquals(PATH + ".subPath." + "FilePrefix" + instance.typeName(table), result);
-        System.out.println(result);
     }
 
     @Test
