@@ -21,6 +21,7 @@ import com.speedment.runtime.config.identifier.trait.HasSchemaId;
 import com.speedment.runtime.config.identifier.trait.HasTableId;
 import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -74,6 +75,8 @@ extends HasDbmsId, HasSchemaId, HasTableId {
     }
 
     class Hidden {
+        private Hidden() {}
+
         private static final Map<TableIdentifier<?>, TableIdentifier<?>>
             INTERNED = new ConcurrentHashMap<>();
     }
