@@ -16,10 +16,6 @@
  */
 package com.speedment.generator.core.internal.translator;
 
-import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
-import static com.speedment.runtime.core.util.Statistics.Event.GENERATE;
-import static java.util.Objects.requireNonNull;
-
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
@@ -56,6 +52,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
+import static com.speedment.runtime.core.util.Statistics.Event.GENERATE;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -116,7 +116,7 @@ public final class TranslatorManagerImpl {
                 }
             });
 
-        System.out.println("Generating code:");
+        println("Generating code:");
         traverseOver(project, Table.class)
             .filter(HasEnabled::test)
             .forEach(table
@@ -133,13 +133,13 @@ public final class TranslatorManagerImpl {
         );
 
         if (!skipClear) {
-            System.out.println();
-            System.out.println("Clearing existing files");
+            println();
+            println("Clearing existing files");
             // Erase any previous unmodified files.
-            delegator.clearExistingFiles(project);
+            delegator.clearExistingFiles();
         }
 
-        System.out.println("Checking write-once classes:");
+        println("Checking write-once classes:");
         // Write generated code to file.
         gen.metaOn(writeOnceTranslators.stream()
             .map(Translator::get)
@@ -149,8 +149,8 @@ public final class TranslatorManagerImpl {
             delegator.writeToFile(project, meta, false);
         });
 
-        System.out.println();
-        System.out.println("Writing write-always classes:");
+        println();
+        println("Writing write-always classes:");
         gen.metaOn(writeAlwaysTranslators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
@@ -159,10 +159,18 @@ public final class TranslatorManagerImpl {
             delegator.writeToFile(project, meta, true);
         });
 
-        System.out.println();
+        println();
         LOGGER.info("Wrote %d files in %s", getFilesCreated(), paths.packageLocation());
 
         events.notify(new AfterGenerate(project, gen, delegator));
+    }
+
+    private void println() {
+        System.out.println();
+    }
+
+    private void println(String s) {
+        System.out.println(s);
     }
 
     private void printAndFlush(String s) {
@@ -170,9 +178,8 @@ public final class TranslatorManagerImpl {
         System.out.flush();
     }
     
-    public void clearExistingFiles(Project project) {
+    public void clearExistingFiles() {
         final Path dir = paths.packageLocation();
-
         try {
             clearExistingFilesIn(dir);
         } catch (final IOException ex) {
@@ -183,10 +190,10 @@ public final class TranslatorManagerImpl {
     }
 
     private void clearExistingFilesIn(Path directory) throws IOException {
-        if (Files.exists(directory)) {
+        if (directory.toFile().exists()) {
             try (final DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
                 for (final Path entry : stream) {
-                    if (Files.isDirectory(entry)) {
+                    if (entry.toFile().isDirectory()) {
                         clearExistingFilesIn(entry);
 
                         if (isDirectoryEmpty(entry)) {
@@ -233,12 +240,12 @@ public final class TranslatorManagerImpl {
         delegator.writeToFile(project, meta.getModel().getName(), meta.getResult(), overwriteExisting);
     }
 
-    public void writeToFile(TranslatorManager delegator, Project project, String filename, String content, boolean overwriteExisting) {
+    public void writeToFile(TranslatorManager delegator, String filename, String content, boolean overwriteExisting) {
         final Path codePath = paths.packageLocation().resolve(filename);
         delegator.writeToFile(codePath, content, overwriteExisting);
     }
 
-    public void writeToFile(TranslatorManager delegator, Path codePath, String content, boolean overwriteExisting) {
+    public void writeToFile(Path codePath, String content, boolean overwriteExisting) {
         requireNonNull(codePath);
         requireNonNull(content);
 

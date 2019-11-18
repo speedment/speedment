@@ -77,7 +77,7 @@ public abstract class SimpleModel {
         }
 
         @Override
-        public void clearExistingFiles(Project project) {}
+        public void clearExistingFiles() {}
 
         @Override
         public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {}

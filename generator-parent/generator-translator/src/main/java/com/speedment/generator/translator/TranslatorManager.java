@@ -31,7 +31,7 @@ public interface TranslatorManager {
     
     void accept(Project project);
 
-    void clearExistingFiles(Project project);
+    void clearExistingFiles();
     
     void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting);
     

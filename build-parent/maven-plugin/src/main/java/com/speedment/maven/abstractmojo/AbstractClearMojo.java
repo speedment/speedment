@@ -61,7 +61,7 @@ public abstract class AbstractClearMojo extends AbstractSpeedmentMojo {
         if (hasConfigFile()) {
             try {
                 final Project project = speedment.getOrThrow(ProjectComponent.class).getProject();
-                speedment.getOrThrow(TranslatorManager.class).clearExistingFiles(project);
+                speedment.getOrThrow(TranslatorManager.class).clearExistingFiles();
             } catch (final Exception ex) {
                 final String err = "Error parsing configFile file.";
                 getLog().error(err);
