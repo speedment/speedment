@@ -19,8 +19,11 @@ package com.speedment.runtime.core.internal.component;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.component.StatisticsReporterComponent;
 import com.speedment.runtime.core.component.StatisticsReporterSchedulerComponent;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +34,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Per Minborg
  */
 public final class StatisticsReporterSchedulerComponentImpl implements StatisticsReporterSchedulerComponent {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(StatisticsReporterSchedulerComponentImpl.class);
 
     private final AtomicBoolean outstanding;
     private final boolean enabled;
@@ -65,7 +70,7 @@ public final class StatisticsReporterSchedulerComponentImpl implements Statistic
             try {
                 scheduler.awaitTermination(2, TimeUnit.SECONDS);
             } catch (InterruptedException ie) {
-                System.out.println("Unable to terminate " + StatisticsReporterSchedulerComponentImpl.class.getSimpleName());
+                LOGGER.error("Unable to terminate " + StatisticsReporterSchedulerComponentImpl.class.getSimpleName());
                 Thread.currentThread().interrupt();
             } finally {
                 scheduler.shutdownNow();
