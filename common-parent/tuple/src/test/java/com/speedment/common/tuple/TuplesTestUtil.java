@@ -1,6 +1,13 @@
 package com.speedment.common.tuple;
 
+import java.util.stream.IntStream;
+
 final class TuplesTestUtil {
+
+    static final int SIZE = 100;
+
+    static final Integer[] LARGE_ARRAY = IntStream.range(0, SIZE).boxed().toArray(Integer[]::new);
+    static final Tuple LARGE_TUPLE = Tuples.ofArray(LARGE_ARRAY);
 
     private TuplesTestUtil() {}
 

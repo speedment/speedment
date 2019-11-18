@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
+import static com.speedment.common.tuple.TuplesTestUtil.SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -28,8 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since  1.0.5
  */
 final class TuplesOfNullablesExtraTest {
-
-    private static final int SIZE = 100;
 
     @Test
     void ofArray() {
