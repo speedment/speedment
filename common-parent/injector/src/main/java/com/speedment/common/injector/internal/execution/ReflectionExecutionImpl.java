@@ -74,16 +74,15 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
            InvocationTargetException {
 
         if (method.getParameterCount() > 0
-        &&  getMissingArgumentStrategy() == SKIP_INVOCATION) {
+            && getMissingArgumentStrategy() == SKIP_INVOCATION
+            && Stream.of(method.getParameters())
+            .map(Parameter::getType)
+            .map(classMapper::applyOrNull)
+            .anyMatch(Objects::isNull)) {
+            // Do not invoke if all arguments are optional
+            // and the arguments are all null) {
 
-            if (Stream.of(method.getParameters())
-                .map(Parameter::getType)
-                .map(classMapper::applyOrNull)
-                .anyMatch(Objects::isNull)) {
-                // Do not invoke if all arguments are optional
-                // and the arguments are all null
-                return false;
-            }
+            return false;
         }
 
         final Object[] args = Stream.of(method.getParameters())
@@ -92,7 +91,6 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
             .toArray();
 
         injectorProxy.invoke(method, component, args);
-        //method.invoke(component, args);
 
         return true;
     }
