@@ -53,7 +53,6 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     private static final Logger LOGGER_UPDATE = LoggerManager.getLogger(ApplicationBuilder.LogType.UPDATE.getLoggerName());
     private static final Logger LOGGER_REMOVE = LoggerManager.getLogger(ApplicationBuilder.LogType.REMOVE.getLoggerName());
     private static final Logger LOGGER_SQL_RETRY = LoggerManager.getLogger(ApplicationBuilder.LogType.SQL_RETRY.getLoggerName());
-    private static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private final ConnectionPoolComponent connectionPoolComponent;
     private final TransactionComponent transactionComponent;
@@ -287,15 +286,11 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         postSuccessfulTransaction(sqlStatement);
     }
 
-     private void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement sqlStatement) throws SQLException {
-        insertHandler.accept(dbms,conn,sqlStatement);
-    }
-
-    private void handleSqlStatement(Dbms dbms, Connection conn, SqlUpdateStatement sqlStatement) throws SQLException {
+    private void handleSqlStatement(Connection conn, SqlUpdateStatement sqlStatement) throws SQLException {
         handleSqlStatementHelper(conn, sqlStatement);
     }
 
-    private void handleSqlStatement(Dbms dbms, Connection conn, SqlDeleteStatement sqlStatement) throws SQLException {
+    private void handleSqlStatement(Connection conn, SqlDeleteStatement sqlStatement) throws SQLException {
         handleSqlStatementHelper(conn, sqlStatement);
     }
 
@@ -337,12 +332,12 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
 
     private void delete(SqlDeleteStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
         final SqlDeleteStatement s = sqlStatement;
-        handleSqlStatement(dbms, conn, s);
+        handleSqlStatement(conn, s);
     }
 
     private void update(SqlUpdateStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
         final SqlUpdateStatement s = sqlStatement;
-        handleSqlStatement(dbms, conn, s);
+        handleSqlStatement(conn, s);
     }
 
     private void insert(SqlInsertStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {

@@ -17,9 +17,11 @@
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
+
 import java.util.*;
-import static java.util.Objects.requireNonNull;
 import java.util.function.*;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -27,7 +29,7 @@ import java.util.function.*;
  */
 public interface LongStreamTerminator extends BaseStreamTerminator {
 
-    default <T> void forEach(LongPipeline pipeline, LongConsumer action) {
+    default void forEach(LongPipeline pipeline, LongConsumer action) {
         requireNonNull(pipeline);
         requireNonNull(action);
         optimize(pipeline).getAsLongStream().forEach(action);

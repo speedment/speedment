@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.stream.java9;
 
+import com.speedment.runtime.core.exception.SpeedmentException;
+
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -34,6 +36,7 @@ import java.util.stream.Stream;
  * @author Per Minborg
  */
 public final class Java9StreamUtil {
+
     private Java9StreamUtil() {}
 
     private static final String TAKE_WHILE = "takeWhile";
@@ -96,7 +99,7 @@ public final class Java9StreamUtil {
             final Object obj = DOUBLE_TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (DoubleStream) obj;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -121,7 +124,7 @@ public final class Java9StreamUtil {
             final Object obj = DOUBLE_DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (DoubleStream) obj;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -132,7 +135,7 @@ public final class Java9StreamUtil {
         try {
             return (DoubleStream) DOUBLE_FILTER_METHOD_HANDLE.invoke(stream, predicate);
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -157,7 +160,7 @@ public final class Java9StreamUtil {
             final Object obj = INT_TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (IntStream) obj;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -182,7 +185,7 @@ public final class Java9StreamUtil {
             final Object obj = INT_DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (IntStream) obj;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -193,7 +196,7 @@ public final class Java9StreamUtil {
         try {
             return (IntStream) INT_FILTER_METHOD_HANDLE.invoke(stream, predicate);
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -218,7 +221,7 @@ public final class Java9StreamUtil {
             final Object obj = LONG_TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (LongStream) obj;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -243,7 +246,7 @@ public final class Java9StreamUtil {
             final Object obj = LONG_DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (LongStream) obj;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -254,7 +257,7 @@ public final class Java9StreamUtil {
         try {
             return (LongStream) LONG_FILTER_METHOD_HANDLE.invoke(stream, predicate);
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -280,7 +283,7 @@ public final class Java9StreamUtil {
             final Object obj = TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (Stream<T>) obj;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -306,7 +309,7 @@ public final class Java9StreamUtil {
             final Object obj = DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (Stream<T>) obj;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 
@@ -315,9 +318,11 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         try {
-            return (Stream<T>) FILTER_METHOD_HANDLE.invoke(stream, predicate);
+            @SuppressWarnings("unchecked")
+            final Stream<T> s = (Stream<T>) FILTER_METHOD_HANDLE.invoke(stream, predicate);
+            return s;
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new SpeedmentException(t);
         }
     }
 

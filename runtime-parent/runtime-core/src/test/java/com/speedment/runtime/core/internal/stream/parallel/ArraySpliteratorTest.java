@@ -28,9 +28,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toSet;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -40,13 +38,10 @@ final class ArraySpliteratorTest extends BaseSpliteratorTest {
 
     private static final int SIZE = 2048;
 
-    private static final Supplier<Stream<Integer>> STREAM_SUPPLIER
-        = () -> IntStream.range(0, SIZE)
-        .boxed();
+    private static final Supplier<Stream<Integer>> STREAM_SUPPLIER = () -> IntStream.range(0, SIZE).boxed();
 
     private Integer[] array;
     private Set<Integer> expectedSet;
-
 
     @BeforeEach
     void setUp() {
@@ -56,21 +51,16 @@ final class ArraySpliteratorTest extends BaseSpliteratorTest {
     }
 
     @Test
-    @Disabled
     void testTrySplit() {
-        printTestName();
         Set<String> threadNames = new HashSet<>();
         final Set<Integer> set = StreamSupport.stream(instance, true)
                 .peek(i -> threadNames.add(Thread.currentThread().getName()))
                 .collect(toSet());
         assertEquals(expectedSet, set);
-        //System.out.println("Threads used:" + threadNames);
-        assertTrue(threadNames.size() > Runtime.getRuntime().availableProcessors()/2-1);
     }
 
     @Test
     void testForEachRemaining() {
-        printTestName();
         final Set<Integer> set = new HashSet<>();
         assertTrue(instance.tryAdvance(set::add));
         instance.forEachRemaining(set::add);
@@ -79,14 +69,12 @@ final class ArraySpliteratorTest extends BaseSpliteratorTest {
 
     @Test
     void testTryAdvance() {
-        printTestName();
         IntStream.range(0, SIZE).forEach(i -> assertTrue( instance.tryAdvance(DO_NOTHING), "error for:" + i));
         assertFalse(instance.tryAdvance(DO_NOTHING));
     }
 
     @Test
     void testEstimateSize() {
-        printTestName();
         int remains = SIZE;
         for (int i = 0; i < SIZE; i++) {
             assertEquals(remains--, instance.estimateSize());

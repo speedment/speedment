@@ -362,28 +362,6 @@ public final class ConfigFileHelper {
             .forEach(c -> c.mutator().setTypeMapper(typeMapperClass));
     }
 
-    /**
-     * Debug method used to track type mappers of a project. May be of future use if one perhaps would venture to
-     * investigate why we get several copies of the dbms from the database
-     */
-    private void printTypeMappers(String heading, Project p) {
-        System.out.println(heading);
-        p.dbmses().forEach(dbms ->
-            dbms.schemas().forEach(schema ->
-                schema.tables().forEach(table ->
-                    table.columns().filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
-                        String mapperName = column.getTypeMapper().get();
-                        if (mapperName.endsWith("PrimitiveTypeMapper")) {
-                            mapperName = "Primitive";
-                        }
-                        System.out.println(" - " + dbms.getName() + ":" + schema.getName() + "/" +
-                            table.getName() + "." + column.getName() + " mapped by " + mapperName);
-                    })
-                )
-            )
-        );
-    }
-
     public void loadConfigFile(File file, ReuseStage reuse) {
         if (OPEN_FILE_CONDITIONS.test(file)) {
             try {
@@ -454,7 +432,7 @@ public final class ConfigFileHelper {
             }
 
             try {
-                if (!Files.exists(parent)) {
+                if (!parent.toFile().exists()) {
                     Files.createDirectories(parent);
                 }
             } catch (IOException ex) {/*
@@ -483,7 +461,7 @@ public final class ConfigFileHelper {
         saveConfigFile(currentlyOpenFile);
     }
 
-    public void saveConfigFile(File file) {
+    private void saveConfigFile(File file) {
         saveConfigFile(file, userInterfaceComponent.projectProperty(), true);
     }
 

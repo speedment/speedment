@@ -24,13 +24,12 @@ import com.speedment.runtime.field.predicate.SpeedmentPredicate;
  * predicates.
  *
  * @param <ENTITY> the entity type
- * @param <D> the database type
  *
  * @author Per Minborg
  * @author Emil Forslund
  * @since 2.2.0
  */
-public interface HasStringOperators<ENTITY, D> {
+public interface HasStringOperators<ENTITY> {
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to

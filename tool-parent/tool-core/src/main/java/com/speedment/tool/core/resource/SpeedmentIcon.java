@@ -21,14 +21,15 @@ import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.tool.config.trait.HasIconPath;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.io.InputStream;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration of all the icons available in the Speedment Icon Package.
@@ -133,17 +134,9 @@ public enum SpeedmentIcon implements Icon {
         return new Image(getFileInputStream());
     }
 
-    public Image load(Document node) {
-        return new Image(getFileInputStream(node));
-    }
-
     @Override
     public ImageView view() {
         return new ImageView(load());
-    }
-
-    public ImageView view(Document node) {
-        return new ImageView(load(node));
     }
 
     public static ImageView forNode(Document node) {
@@ -193,17 +186,12 @@ public enum SpeedmentIcon implements Icon {
     }
 
     private InputStream getFileInputStream() {
-        return getFileInputStream(null);
-    }
-
-    private InputStream getFileInputStream(Document node) {
         final InputStream stream = getClass().getResourceAsStream(filename);
-
         if (stream == null) {
             throw new RuntimeException("Could not find icon: '" + filename + "'.");
         }
-
         return stream;
+
     }
 
     public String getFilename() {

@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     private final Manager<ENTITY> inner;
-    private Supplier<ENTITY> entityCreator;
     private Supplier<Stream<ENTITY>> streamer;
     private Persister<ENTITY> persister;
     private Updater<ENTITY> updater;
@@ -39,19 +38,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
-//        this.entityCreator = inner.entityCreator();
         this.streamer = inner::stream;
         this.persister = inner.persister();
         this.updater = inner.updater();
         this.remover = inner.remover();
     }
-
-    // MockManager
-//    @Override
-//    public MockManager<ENTITY> setEntityCreator(EntityCreator<ENTITY> factory) {
-//        entityCreator = factory;
-//        return this;
-//    }
 
     @Override
     public MockManager<ENTITY> setStreamer(Supplier<Stream<ENTITY>> streamer) {
@@ -76,16 +67,6 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         this.remover = remover;
         return this;
     }
-
-//    @Override
-//    public ENTITY entityCreate() {
-//        return entityCreator.get();
-//    }
-//
-//    @Override
-//    public Supplier<ENTITY> entityCreator() {
-//        return entityCreator;
-//    }
 
     @Override
     public Class<ENTITY> getEntityClass() {
@@ -121,11 +102,6 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Remover<ENTITY> remover() {
         return remover;
     }
-//
-//    @Override
-//    public ENTITY entityCopy(ENTITY source) {
-//        return inner.entityCopy(source);
-//    }
 
     @Override
     public TableIdentifier<ENTITY> getTableIdentifier() {
@@ -151,11 +127,6 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public ENTITY create() {
         throw new UnsupportedOperationException();
     }
-
-//    @Override
-//    public UnaryOperator<ENTITY> entityCopier() {
-//        return inner.entityCopier();
-//    }
 
     @Override
     public Updater<ENTITY> updater() {

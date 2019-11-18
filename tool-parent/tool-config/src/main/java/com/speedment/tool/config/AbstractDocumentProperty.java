@@ -85,7 +85,11 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     public final Map<String, Object> getData() {
         return config;
     }
-    
+
+    /**
+     * {@inheritDoc}
+     * @deprecated Not supported for observables
+     */
     @Override
     @Deprecated // Deprecated to use but will not be removed from the API
     public final void put(String key, Object val) {
@@ -225,6 +229,10 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
             .values();
     }
 
+    /**
+     * {@inheritDoc}
+     * @deprecated Not supported for observables
+     */
     @Override
     @Deprecated // Deprecated to use but will be retained in the API
     public final <P extends Document, T extends Document> Stream<T> 

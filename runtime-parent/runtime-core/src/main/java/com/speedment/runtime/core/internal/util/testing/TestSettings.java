@@ -20,7 +20,9 @@ package com.speedment.runtime.core.internal.util.testing;
  *
  * @author Per Minborg
  */
-public class TestSettings {
+public final class TestSettings {
+
+    private TestSettings() {}
 
     private static boolean testMode;
 

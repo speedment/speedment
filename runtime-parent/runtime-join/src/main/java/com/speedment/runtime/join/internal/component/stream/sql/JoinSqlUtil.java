@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.join.internal.component.stream.sql;
 
-import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
@@ -42,18 +41,19 @@ import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.ResultSet;
-import java.util.*;
-
-import static com.speedment.runtime.join.JoinComponentUtil.MAX_DEGREE;
-import static java.util.Objects.requireNonNull;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
-
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
+import static com.speedment.runtime.join.JoinComponentUtil.MAX_DEGREE;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -153,8 +153,6 @@ final class JoinSqlUtil {
         }
 
     }
-
-
 
     private static int findNullOffset(
         final Table table,
@@ -379,7 +377,6 @@ final class JoinSqlUtil {
 
     }
 
-
     private static String renderJoin(
         final DatabaseNamingConvention naming,
         final List<SqlStage> sqlStages,
@@ -410,18 +407,7 @@ final class JoinSqlUtil {
 
         if (joinType == JoinType.CROSS_JOIN) {
             sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
-        }
-        //       if (joinType == JoinType.FULL_OUTER_JOIN) {
-//                // Most databases do not support this natively so we create a
-//                // UNION between a LEFT JOIN and a RIGHT JOIN instead.
-//                sb
-//                    .append("(")
-//                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.LEFT_JOIN))
-//                    .append(" UNION ")
-//                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.RIGHT_JOIN))
-//                    .append(")");
-//       }
-         else {
+        } else {
             sb.append(joinType.sql()).append(" ");
             sb.append(sqlStage.sqlTableReference()).append(" ");
             stage.field().ifPresent(field -> {
@@ -430,7 +416,6 @@ final class JoinSqlUtil {
                 sb.append("ON (");
                 final JoinOperator joinOperator = stage.joinOperator().get();
                 renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
-
 
 //                    switch (joinOperator) {
 //                        case BETWEEN:
@@ -559,10 +544,7 @@ final class JoinSqlUtil {
 //            .collect(joining(", ", "[", "]"));
 //    }
 
-
     private static NoSuchElementException newNoSuchElementException(Stage<?> stage) {
         return new NoSuchElementException("Stage " + stage + " did not have a join type");
     }
-
-
 }

@@ -23,6 +23,9 @@ import java.sql.Timestamp;
 import java.util.Optional;
 
 final class RuleUtil {
+
+    private RuleUtil() {}
+
     /**
      * All default rules that need more than just the jdbc type name to trigger.
      * Overrides the inner defaults of JavaTypeMapImpl

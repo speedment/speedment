@@ -18,8 +18,8 @@ package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.join.builder.JoinBuilder1;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
+import com.speedment.runtime.join.builder.JoinBuilder1;
 import com.speedment.runtime.join.builder.JoinBuilder2;
 import com.speedment.runtime.join.stage.JoinType;
 
@@ -50,11 +50,6 @@ final class JoinBuilder1Impl<T0>
     public <T1> AfterJoin<T0, T1> rightJoinOn(HasComparableOperators<T1, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.RIGHT_JOIN, joinedField));
     }
-
-//    @Override
-//    public <T1> AfterJoin<T0, T1> fullOuterJoinOn(HasComparableOperators<T1, ?> joinedField) {
-//        return new AfterJoinImpl<>(addStageBeanOf(JoinType.FULL_OUTER_JOIN, joinedField));
-//    }
 
     @Override
     public <T1> JoinBuilder2<T0, T1> crossJoin(TableIdentifier<T1> joinedTable) {

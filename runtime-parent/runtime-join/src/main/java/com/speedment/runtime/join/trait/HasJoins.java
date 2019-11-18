@@ -101,37 +101,6 @@ public interface HasJoins<R, RC> {
 
     // FULL OUTER JOIN HAS BEEN POSTPONED TO A FUTURE RELEASE
     // IT IS NOT SUPPORTED BY MOST RDBMS TYPES
-//    /**
-//     * Adds the provided {@code joinedField} to the collection of joined
-//     * column/tables. Elements are joined from the table of the provided
-//     * {@code joinedField} using an <em>FULL OUTER JOIN</em> whereby rows from
-//     * two tables are present either if there is a match between the joining
-//     * columns or for each row from the provided {@code joinedField} or for each
-//     * row from previously existing table(s).
-//     *
-//     * <p>
-//     * Unmatched rows will have entities from the table in the given
-//     * {@code joinedField} set to {@code null}
-//     *
-//     * @param <ENTITY> entity type
-//     * @param joinedField to add to the current join builder
-//     * @return a builder where the provided {@code joinedField} is added
-//     *
-//     * @throws NullPointerException if the provided {@code joinedField} is
-//     * {@code null}
-//     */
-//    <ENTITY> R fullOuterJoinOn(HasComparableOperators<ENTITY, ?> joinedField);
-//
-// Future joins
-//    
-//    <ENTITY> R leftSemiJoin(Manager<? extends ENTITY> joinedManager);
-//
-//    <ENTITY> R rightSemiJoin(Manager<? extends ENTITY> joinedManager);
-//
-//
-//    <ENTITY> R naturalJoin(Manager<? extends ENTITY> joinedManager);
-//
-//    <ENTITY> R naturalLeftJoin(Manager<? extends ENTITY> joinedManager);
-//
-//    <ENTITY> R naturalRigthJoin(Manager<? extends ENTITY> joinedManager);
+    // Future joins leftSemiJoin, rightSemiJoin, naturalJoin, naturalLeftJoin, naturalRightJoin
+
 }

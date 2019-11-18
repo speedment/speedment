@@ -42,19 +42,6 @@ public final class InternalStreamUtil {
 
     private InternalStreamUtil() {}
 
-/*    public static <T> Stream<T> streamOfOptional(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> element) {
-        return Stream.of(element.orElse(null)).filter(Objects::nonNull);
-    }
-
-    public static <T> Stream<T> streamOfNullable(T element) {
-        // Needless to say, element is nullable...
-        if (element == null) {
-            return Stream.empty();
-        } else {
-            return Stream.of(element);
-        }
-    } */
-
     public static <T> Stream<T> asStream(Iterator<T> iterator) {
         requireNonNull(iterator);
         return asStream(iterator, false);
@@ -66,24 +53,13 @@ public final class InternalStreamUtil {
         return StreamSupport.stream(iterable.spliterator(), parallel);
     }
 
-    /*
-    public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper) {
-         return asStream(resultSet, mapper, ParallelStrategy.computeIntensityDefault());
-    } */
-    
     public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper, ParallelStrategy parallelStrategy) {
         requireNonNull(resultSet);
         requireNonNull(mapper);
         final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
         return StreamSupport.stream(parallelStrategy.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
     }
-
-/*
-    public static <T> Stream<T> from(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> optional) {
-        requireNonNull(optional);
-        return optional.map(Stream::of).orElseGet(Stream::empty);
-    } */
-
+    
     /**
      * Specialized read-only {@link Iterator} for consuming
      * {@link ResultSet ResultSets} by mapping them to an entity using an

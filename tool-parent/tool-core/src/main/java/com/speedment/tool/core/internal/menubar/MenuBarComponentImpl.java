@@ -62,9 +62,9 @@ public final class MenuBarComponentImpl implements MenuBarComponent {
         final ObservableList<Menu> menus = menuBar.getMenus();
         menus.clear();
 
-        for (final MenuBarTab tab : handlers.keySet()) {
-            final Menu menu = new Menu(tab.getText());
-            handlers.get(tab).populate(menu);
+        for (final Map.Entry<MenuBarTab, MenuBarTabHandler> e : handlers.entrySet()) {
+            final Menu menu = new Menu(e.getKey().getText());
+            e.getValue().populate(menu);
             if (!menu.getItems().isEmpty()) {
                 menus.add(menu);
             }

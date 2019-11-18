@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  */
 public interface IntStreamTerminator extends BaseStreamTerminator {
 
-    default <T> void forEach(IntPipeline pipeline, IntConsumer action) {
+    default void forEach(IntPipeline pipeline, IntConsumer action) {
         requireNonNull(pipeline);
         requireNonNull(action);
         optimize(pipeline).getAsIntStream().forEach(action);

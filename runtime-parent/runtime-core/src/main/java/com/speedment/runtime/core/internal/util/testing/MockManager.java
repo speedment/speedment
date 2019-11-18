@@ -31,16 +31,6 @@ import java.util.stream.Stream;
  */
 public interface MockManager<ENTITY> extends Manager<ENTITY> {
 
-//    /**
-//     * Sets the instance factory of this {@code MockManager}. The instance
-//     * factory is invoked each time a Managers {@link Manager#entityCreate() }
-//     * method is called.
-//     *
-//     * @param factory the new instance factory to use
-//     * @return this instance
-//     */
-//    MockManager<ENTITY> setEntityCreator(EntityCreator<ENTITY> factory);
-//
     /**
      * Sets the streamer of this {@code MockManager}.
      *

@@ -36,9 +36,7 @@ import java.util.function.Predicate;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  *
@@ -79,7 +77,7 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
         return (SELF) this;
     }
 
-    <U> StageBean<U> addStageBeanOf(TableIdentifier<U> table) {
+    private <U> StageBean<U> addStageBeanOf(TableIdentifier<U> table) {
         return addStageBeanHelper(new StageBean<>(table));
     }
 
@@ -91,7 +89,7 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
         return addStageBeanHelper(new StageBean<>(joinType, field));
     }
 
-    <U> StageBean<U> addStageBeanHelper(final StageBean<U> stageBean) {
+    private <U> StageBean<U> addStageBeanHelper(final StageBean<U> stageBean) {
         requireNonNull(stageBean);
         stageBeans.add(stageBean);
         return stageBean;
@@ -102,7 +100,7 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
      *
      * @return a mutable list of mutable StageBean objects
      */
-    List<StageBean<?>> stageBeans() {
+    private List<StageBean<?>> stageBeans() {
         return stageBeans;
     }
 
@@ -110,7 +108,7 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
         return stageBean;
     }
 
-    void addPredicate(Predicate<? super T> predicate) {
+    private void addPredicate(Predicate<? super T> predicate) {
         requireNonNull(predicate);
         if (!(predicate instanceof FieldPredicate || predicate instanceof CombinedPredicate)) {
             throw new IllegalArgumentException(
@@ -143,37 +141,10 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
 
     }
 
-//    void assertFieldsAreInJoinTables() throws IllegalStateException {
-//        final Set<TableIdentifier<?>> tableIdentifiers = stageBeans.stream()
-//            .map(StageBean::getIdentifier)
-//            .collect(toSet());
-//
-//        for (int i = 1; i < stageBeans.size(); i++) {
-//            final StageBean<?> sb = stageBeans.get(i);
-//            assertFieldIn(tableIdentifiers, sb.getField(), i);
-//            assertFieldIn(tableIdentifiers, sb.getForeignField(), i);
-//            //assertFieldIn(tableIdentifiers, sb.getForeignSecondField(), i);
-//        }
-//    }
-//
-//    private void assertFieldIn(Set<TableIdentifier<?>> tableIdentifiers, HasComparableOperators<?, ?> field, int index) {
-//        if (field != null) {
-//            if (!tableIdentifiers.contains(field.identifier().asTableIdentifier())) {
-//                throw new IllegalStateException(
-//                    "The field " + field.identifier().getColumnId()
-//                    + " from join stage " + (index + 1)
-//                    + " is not associated with any of the tables in the join: "
-//                    + tableIdentifiers.stream().map(TableIdentifier::getTableId).collect(joining(", "))
-//                );
-//            }
-//        }
-//    }
-
-
     /**
      * Calculates which reference to use taking "as()" columns into account.
      */
-    void resolveStages() {
+    private void resolveStages() {
         for (int i = 0; i < stageBeans.size(); i++) {
             final StageBean<?> stageBean = stageBeans.get(i);
             final HasComparableOperators<?, ?> foreignField = stageBean.getForeignField();
@@ -224,7 +195,7 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
 
         for (int i = 0; i < stages.size(); i++) {
             final StageBean<?> stage = stages.get(i);
-            final String fieldTableIdentifierString = tableTdentifierString(stage);
+            final String fieldTableIdentifierString = tableIdentifierString(stage);
             if (fieldTableIdentifierString.equals(foreignTableIdentifierString)) {
                 matches.add(i);
             }
@@ -234,7 +205,7 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
                 "The identifier " + foreignTableIdentifierString + " for stage index " + index + " is ambiguous. "
                     + "There are matching table identifiers for stage indexes " + matches
                     + ". These table identifiers are available from previous join stages: "
-                    + stages.stream().map(AbstractJoinBuilder::tableTdentifierString).collect(joining(", "))
+                    + stages.stream().map(AbstractJoinBuilder::tableIdentifierString).collect(joining(", "))
             );
         } else if (matches.size() == 1) {
             return matches.iterator().next();
@@ -242,16 +213,8 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
         throw new IllegalStateException(
             "There is no table for table identifier \"" + tableIdentifierString(foreignField) + "\" for stage index " + index + " of [0, " + (stages.size() - 1) + "]"
                 + ". These table identifiers are available from previous join stages: "
-                + stages.stream().map(AbstractJoinBuilder::tableTdentifierString).collect(joining(", "))
+                + stages.stream().map(AbstractJoinBuilder::tableIdentifierString).collect(joining(", "))
         );
-
-//        for (int i = 0; i < stages.size(); i++) {
-//            final Stage<?> stage = stages.get(i);
-//            final TableIdentifier<?> tableIdentifier = foreignField.identifier().asTableIdentifier();
-//            if (tableIdentifier.equals(stage.identifier())) {
-//                return i;
-//            }
-//        }
 
     }
 
@@ -259,15 +222,15 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
         return !field.tableAlias().equals(field.identifier().getTableId());
     }
 
-    private static <T> String tableTdentifierString(StageBean<?> stage) {
+    private static String tableIdentifierString(StageBean<?> stage) {
         if (stage.getField() != null) {
             return tableIdentifierString(stage.getField());
         } else {
-            return tableTdentifierString(stage.getIdentifier());
+            return tableIdentifierString(stage.getIdentifier());
         }
     }
 
-    private static <T> String tableTdentifierString(TableIdentifier<T> tableIdentifier) {
+    private static <T> String tableIdentifierString(TableIdentifier<T> tableIdentifier) {
         return tableIdentifier.getDbmsId() + "." +
             tableIdentifier.getSchemaId() + "." +
             tableIdentifier.getTableId(); // Take tableAlias into account
@@ -282,14 +245,5 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
             tableIdentifier.getSchemaId() + "." +
             tableIdentifier.getTableId();
     }
-
-    private static String references(final List<StageBean<?>> stages, Set<Integer> set) {
-        return set.stream()
-            .map(stages::get)
-            .map(Object::toString)
-            .collect(joining(", ", "[", "]"));
-    }
-
-
 
 }

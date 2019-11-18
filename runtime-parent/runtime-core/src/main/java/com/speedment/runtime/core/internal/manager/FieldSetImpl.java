@@ -54,6 +54,7 @@ public final class FieldSetImpl<ENTITY> implements FieldSet<ENTITY> {
         return includedId.test(id);
     }
 
+    @Override
     public FieldSetImpl<ENTITY> negate() {
         return new FieldSetImpl<>(includedId.negate());
     }

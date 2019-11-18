@@ -276,7 +276,7 @@ public final class ConnectController implements Initializable {
             if (!"".equals(fieldFile.getText().trim())) {
                 final Path path = Paths.get(fieldFile.getText().trim());
 
-                if (Files.exists(path.getParent())) {
+                if (path.getParent().toFile().exists()) {
                     final String parentFolder = path.getParent().toString();
 
                     if (!"".equals(parentFolder)) {
@@ -284,7 +284,7 @@ public final class ConnectController implements Initializable {
                     }
                 }
 
-                if (Files.exists(path)) {
+                if (path.toFile().exists()) {
                     fileChooser.setInitialFileName(fieldFile.getText());
                 }
             }
@@ -347,7 +347,7 @@ public final class ConnectController implements Initializable {
             } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
                 String filename = Paths.get(fieldFile.getText()).getFileName().toString();
                 if (filename.contains(".")) {
-                    filename = filename.substring(0, filename.lastIndexOf("."));
+                    filename = filename.substring(0, filename.lastIndexOf('.'));
                 }
                 ui.projectProperty().nameProperty()
                     .setValue(filename);

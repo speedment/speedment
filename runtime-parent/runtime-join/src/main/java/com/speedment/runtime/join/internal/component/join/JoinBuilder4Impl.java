@@ -24,7 +24,9 @@ import com.speedment.runtime.join.builder.JoinBuilder4;
 import com.speedment.runtime.join.builder.JoinBuilder5;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
+
 import java.util.List;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -54,11 +56,6 @@ final class JoinBuilder4Impl<T0, T1, T2, T3>
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.RIGHT_JOIN, joinedField));
     }
 
-//    @Override
-//    public <T5> AfterJoin<T1, T2, T3, T4, T5> fullOuterJoinOn(HasComparableOperators<T5, ?> joinedField) {
-//        return new AfterJoinImpl<>(addStageBeanOf(JoinType.FULL_OUTER_JOIN, joinedField));
-//    }
-
     @Override
     public <T4> JoinBuilder5<T0, T1, T2, T3, T4> crossJoin(TableIdentifier<T4> joinedTable) {
         return new JoinBuilder5Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
@@ -78,7 +75,6 @@ final class JoinBuilder4Impl<T0, T1, T2, T3>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(QuadFunction<T0, T1, T2, T3, T> constructor) {
         requireNonNull(constructor);
-//        assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
             stages,
