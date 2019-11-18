@@ -17,9 +17,10 @@
 package com.speedment.runtime.core.component.sql.override.doubles;
 
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
-import static com.speedment.runtime.core.internal.component.sql.override.def.doubles.DefaultDoubleCountTerminator.DEFAULT;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
+
+import static com.speedment.runtime.core.internal.component.sql.override.def.doubles.DefaultDoubleCountTerminator.DEFAULT;
 
 /**
  *
@@ -29,7 +30,7 @@ import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipelin
 @FunctionalInterface
 public interface DoubleCountTerminator<ENTITY> extends DoubleTerminator {
 
-    <T> long apply(
+    long apply(
         SqlStreamOptimizerInfo<ENTITY> info,        
         SqlStreamTerminator<ENTITY> sqlStreamTerminator,
         DoublePipeline pipeline
