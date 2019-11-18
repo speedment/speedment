@@ -93,8 +93,10 @@ final class StopwatchTest {
 
     @Test
     void stop() {
-        sw.start();
-        sw.stop();
+        assertDoesNotThrow(() -> {
+            sw.start();
+            sw.stop();
+        });
     }
 
     @Test
