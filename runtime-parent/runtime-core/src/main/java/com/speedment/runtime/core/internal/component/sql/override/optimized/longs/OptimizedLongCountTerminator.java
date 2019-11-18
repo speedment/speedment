@@ -18,9 +18,10 @@ package com.speedment.runtime.core.internal.component.sql.override.optimized.lon
 
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.longs.LongCountTerminator;
-import static com.speedment.runtime.core.internal.component.sql.override.optimized.util.CountUtil.countHelper;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
+
+import static com.speedment.runtime.core.internal.component.sql.override.optimized.util.CountUtil.countHelper;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -30,11 +31,10 @@ import static java.util.Objects.requireNonNull;
  */
 public final class OptimizedLongCountTerminator<ENTITY> implements LongCountTerminator<ENTITY> {
 
-    private OptimizedLongCountTerminator() {
-    }
+    private OptimizedLongCountTerminator() {}
 
     @Override
-    public <T> long apply(
+    public long apply(
         final SqlStreamOptimizerInfo<ENTITY> info,
         final SqlStreamTerminator<ENTITY> sqlStreamTerminator,
         final LongPipeline pipeline

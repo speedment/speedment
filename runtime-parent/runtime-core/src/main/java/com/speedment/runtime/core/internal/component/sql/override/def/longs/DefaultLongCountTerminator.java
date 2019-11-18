@@ -33,7 +33,7 @@ public final class DefaultLongCountTerminator<ENTITY> implements LongCountTermin
     }
 
     @Override
-    public <T> long apply(
+    public long apply(
         final SqlStreamOptimizerInfo<ENTITY> info,        
         final SqlStreamTerminator<ENTITY> sqlStreamTerminator,
         final LongPipeline pipeline
