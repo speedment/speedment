@@ -2424,6 +2424,8 @@ public final class Tuples {
      * 
      * @see Tuple
      */
+    @SafeVarargs
+    @SuppressWarnings(value = "varargs")
     public static Tuple ofArray(Object... el) {
         switch (el.length) {
             case 0: return of();

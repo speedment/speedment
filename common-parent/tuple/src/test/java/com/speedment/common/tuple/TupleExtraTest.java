@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.speedment.common.tuple.TuplesTestUtil.LARGE_TUPLE;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,9 +32,6 @@ final class TupleExtraTest {
         return IntStream.range(0, MAX)
             .mapToObj(i -> DynamicTest.dynamicTest("Tuple.streamOfString(" + i + ")", () -> streamTestTyped(i, String.class)));
     }
-
-    private static final Integer[] ARR = IntStream.range(0, MAX).boxed().toArray(Integer[]::new);
-    private static final Tuple TUPLE = Tuples.ofArray(ARR);
 
     @TestFactory
     Stream<DynamicTest> getter() {
@@ -60,7 +58,7 @@ final class TupleExtraTest {
     void getterTest(int i) {
         final TupleGetter<Tuple, Integer> getter = Tuple.getter(i);
         assertEquals(i, getter.index());
-        assertEquals(i, getter.apply(TUPLE));
+        assertEquals(i, getter.apply(LARGE_TUPLE));
     }
 
 }
