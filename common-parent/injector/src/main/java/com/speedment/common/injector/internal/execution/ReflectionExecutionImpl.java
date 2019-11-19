@@ -34,13 +34,12 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
- * An implementation of {@link Execution} that uses reflection to invoke a 
+ * An implementation of {@link Execution} that uses reflection to invoke a
  * method.
- * 
- * @param <T>  the component to execute on
- * 
- * @author  Emil Forslund
- * @since   1.2.0
+ *
+ * @param <T> the component to execute on
+ * @author Emil Forslund
+ * @since 1.2.0
  */
 public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
@@ -70,8 +69,8 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
     @Override
     public boolean invoke(T component, ClassMapper classMapper)
-    throws IllegalAccessException,
-           InvocationTargetException {
+        throws IllegalAccessException,
+        InvocationTargetException {
 
         if (method.getParameterCount() > 0
             && getMissingArgumentStrategy() == SKIP_INVOCATION

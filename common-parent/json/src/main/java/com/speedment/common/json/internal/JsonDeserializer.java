@@ -17,6 +17,7 @@
 package com.speedment.common.json.internal;
 
 import com.speedment.common.json.JsonSyntaxException;
+import com.speedment.common.json.exception.JsonException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -113,17 +114,17 @@ public final class JsonDeserializer implements AutoCloseable {
                 
                 final CloseMethod close = parseEntryInto(object);
                 switch (close) {
-                    case EXIT_FROM_PARENT : 
+                    case EXIT_FROM_PARENT :
                         if (character == 0x7D) { // }
                             return object;
                         } else {
                             throw unexpectedCharacterException();
                         }
-                        
-                    case CONTINUE_IN_PARENT : 
+
+                    case CONTINUE_IN_PARENT :
                         break firstChar;
-                        
-                    case NOT_DECIDED : 
+
+                    case NOT_DECIDED :
                         switch (nextNonBlankspace()) {
                             case 0x2C : // , (continue with next entry)
                                 break firstChar;
@@ -137,8 +138,8 @@ public final class JsonDeserializer implements AutoCloseable {
                             UNKNOWN_ENUM_CONSTANT + close + "'."
                         );
                 }
-                
-            // If the first non-whitespace character was not neither 
+
+            // If the first non-whitespace character was not neither
             // a '}' nor a '"':
             default : 
                 throw unexpectedCharacterException();
@@ -177,7 +178,7 @@ public final class JsonDeserializer implements AutoCloseable {
         
         throw unexpectedCharacterException();
     }
-    
+
     private CloseMethod parseEntryInto(Map<String, Object> object) throws IOException {
         final StringBuilder keyBuilder = new StringBuilder();
         
@@ -277,7 +278,7 @@ public final class JsonDeserializer implements AutoCloseable {
                 
             case 0x7B : // { (begin parsing object)
                 list.add(parseObject());
-                
+
                 switch (nextNonBlankspace()) {
                     case 0x2C : // , (continue with next element)
                         break firstChar; // nextEntry
@@ -286,7 +287,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     default :
                         throw unexpectedCharacterException();
                 }
-                
+
             case 0x5B : // [ (begin parsing array)
                 list.add(parseArray());
                 
@@ -458,7 +459,7 @@ public final class JsonDeserializer implements AutoCloseable {
             }
         }
     }
-    
+
     private String parseString() throws IOException {
         final StringBuilder builder = new StringBuilder();
 
@@ -710,7 +711,7 @@ public final class JsonDeserializer implements AutoCloseable {
         try { 
             reader.close(); 
         } catch (final IOException ex) {
-            throw new RuntimeException("Failed to safely close stream.", ex);
+            throw new JsonException("Failed to safely close stream.", ex);
         }
     }
 }

@@ -112,13 +112,7 @@ public final class AlignTabs<T> implements Consumer<T> {
             
             models.forEach(model -> {
                 final String row = getRow.apply(model);
-                if (row != null) {
-                    final int index  = row.indexOf('\t');
-
-                    if (index > maxIndex.get()) {
-                        maxIndex.set(index);
-                    }
-                }
+                updateMaxIndex(maxIndex, row);
             });
             
             if (maxIndex.get() > -1) {
@@ -126,18 +120,32 @@ public final class AlignTabs<T> implements Consumer<T> {
                     final String row = getRow.apply(model);
                     if (row != null) {
                         final int index = row.indexOf('\t');
-                        if (index > -1) {
-                            setRow.accept(model,
-                                row.replaceFirst("\t", Formatting.repeat(
-                                    " ",
-                                    maxIndex.get() - index
-                                ))
-                            );
-                        }
+                        replaceTabWithSpace(setRow, maxIndex, model, row, index);
                     }
                 }
             } else {
                 break;
+            }
+        }
+    }
+
+    private static <T> void replaceTabWithSpace(BiConsumer<T, String> setRow, AtomicInteger maxIndex, T model, String row, int index) {
+        if (index > -1) {
+            setRow.accept(model,
+                row.replaceFirst("\t", Formatting.repeat(
+                    " ",
+                    maxIndex.get() - index
+                ))
+            );
+        }
+    }
+
+    private static void updateMaxIndex(AtomicInteger maxIndex, String row) {
+        if (row != null) {
+            final int index  = row.indexOf('\t');
+
+            if (index > maxIndex.get()) {
+                maxIndex.set(index);
             }
         }
     }

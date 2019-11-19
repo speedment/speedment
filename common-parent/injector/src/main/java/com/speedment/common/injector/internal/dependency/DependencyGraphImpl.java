@@ -134,27 +134,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
                 // TODO: Maybe create a dependency even if WithState is missing,
 
                 if (ws != null) {
-                    final Class<?> type = p.getType();
-                    final State state   = ws.value();
-
-                    try {
-                        dependencies.add(
-                            new DependencyImpl(
-                                getOrCreate(type),
-                                state
-                            )
-                        );
-                    } catch (final CyclicReferenceException ex) {
-                        throw new CyclicReferenceException(
-                            m.getDeclaringClass(), ex
-                        );
-                    } catch (final IllegalArgumentException iae) {
-                        throw new IllegalStateException(
-                            "Unable to resolve " + m.toString() + " (" + type.toString() + ") at state " + state.toString()
-                            ,
-                            iae
-                        );
-                    }
+                    addDependency(m, dependencies, p.getType(), ws.value());
                 }
             }
         } catch (final CyclicReferenceException ex) {
@@ -173,4 +153,26 @@ public final class DependencyGraphImpl implements DependencyGraph {
             proxyFunction.apply(m.getDeclaringClass())
         );
     }
+
+    private void addDependency(Method m, Set<Dependency> dependencies, Class<?> type, State state) {
+        try {
+            dependencies.add(
+                new DependencyImpl(
+                    getOrCreate(type),
+                    state
+                )
+            );
+        } catch (final CyclicReferenceException ex) {
+            throw new CyclicReferenceException(
+                m.getDeclaringClass(), ex
+            );
+        } catch (final IllegalArgumentException iae) {
+            throw new IllegalStateException(
+                "Unable to resolve " + m.toString() + " (" + type.toString() + ") at state " + state.toString()
+                ,
+                iae
+            );
+        }
+    }
+
 }

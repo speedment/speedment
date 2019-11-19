@@ -98,8 +98,6 @@ public final class ReflectionUtil {
 
             final Constructor<T> constr = oConstr.get();
 
-            // injectorProxy.setAccessable(constr);
-
             final Parameter[] params = constr.getParameters();
             final Object[] args = new Object[params.length];
             for (int i = 0; i < params.length; i++) {
@@ -152,13 +150,7 @@ public final class ReflectionUtil {
                     } else if (File.class.isAssignableFrom(type)) {
                         value = new File(serialized);
                     } else if (URL.class.isAssignableFrom(type)) {
-                        try {
-                            value = new URL(serialized);
-                        } catch (final MalformedURLException ex) {
-                            throw new IllegalArgumentException(String.format(
-                                "Specified URL '%s' is malformed.", serialized
-                            ), ex);
-                        }
+                        value = UrlUtil.tryCreateURL(serialized);
                     } else {
                         throw new IllegalArgumentException(String.format(
                             "Unsupported type '%s' injected into the " +

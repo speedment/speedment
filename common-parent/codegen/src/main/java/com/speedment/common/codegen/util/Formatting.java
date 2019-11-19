@@ -399,15 +399,19 @@ public final class Formatting {
 
             if (maxIndex > -1) {
                 for (int i = 0; i < rows.size(); i++) {
-                    final String row = rows.get(i);
-                    final int index = row.indexOf('\t');
-                    if (index > -1) {
-                        rows.set(i, row.replaceFirst("\t", Formatting.repeat(" ", maxIndex - index)));
-                    }
+                    replaceTabsWithSpace(rows, maxIndex, i);
                 }
             } else {
                 break;
             }
+        }
+    }
+
+    private static void replaceTabsWithSpace(List<String> rows, int maxIndex, int i) {
+        final String row = rows.get(i);
+        final int index = row.indexOf('\t');
+        if (index > -1) {
+            rows.set(i, row.replaceFirst("\t", Formatting.repeat(" ", maxIndex - index)));
         }
     }
 

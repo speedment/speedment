@@ -18,6 +18,7 @@ package com.speedment.common.injector.internal.util;
 
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.logger.Logger;
 
 import java.io.File;
@@ -50,7 +51,7 @@ public final class PropertiesUtil {
                 final String err = "Error loading default settings from "
                     + configFile.getAbsolutePath() + "-file.";
                 logger.error(ex, err);
-                throw new RuntimeException(err, ex);
+                throw new InjectorException(err, ex);
             }
         } else {
             logger.info(
@@ -81,7 +82,7 @@ public final class PropertiesUtil {
 
                 final Object object;
                 try {
-                    if (boolean.class == f.getType() 
+                    if (boolean.class == f.getType()
                     || Boolean.class.isAssignableFrom(f.getType())) {
                         object = Boolean.parseBoolean(serialized);
                     } else if (byte.class == f.getType()
@@ -110,7 +111,7 @@ public final class PropertiesUtil {
                             object = serialized.charAt(0);
                         } else {
                             throw new IllegalArgumentException(
-                                "Value '" + serialized + "' is to long to be " + 
+                                "Value '" + serialized + "' is to long to be " +
                                 "parsed into a field of type '" +
                                 f.getType().getName() + "'."
                             );
@@ -118,27 +119,20 @@ public final class PropertiesUtil {
                     } else if (File.class.isAssignableFrom(f.getType())) {
                         object = new File(serialized);
                     } else if (URL.class.isAssignableFrom(f.getType())) {
-                        try {
-                            object = new URL(serialized);
-                        } catch (final MalformedURLException ex) {
-                            throw new IllegalArgumentException(
-                                "Specified URL '" + serialized + "' is " + 
-                                "malformed.", ex
-                            );
-                        }
+                        object = UrlUtil.tryCreateURL(serialized);
                     } else {
                         // No op
                         return;
                     }
                     injectorProxy.set(f, instance, object);
                 } catch (final ReflectiveOperationException ex) {
-                    throw new RuntimeException(
+                    throw new InjectorException(
                         "Failed to set config parameter '" + config.name() +
-                        "' in class '" + instance.getClass().getName() + 
+                        "' in class '" + instance.getClass().getName() +
                         "'.", ex
                     );
                 }
             });
     }
-    
+
 }

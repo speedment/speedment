@@ -16,6 +16,7 @@
  */
 package com.speedment.common.json;
 
+import com.speedment.common.json.exception.JsonException;
 import com.speedment.common.json.internal.JsonDeserializer;
 import com.speedment.common.json.internal.JsonSerializer;
 import java.io.ByteArrayInputStream;
@@ -63,7 +64,7 @@ public final class Json {
             toJson(object, out);
             return new String(out.toByteArray(), StandardCharsets.UTF_8);
         } catch (final IOException ex) {
-            throw new RuntimeException(
+            throw new JsonException(
                 "Error in internal toString()-stream.", ex
             );
         }
@@ -96,7 +97,7 @@ public final class Json {
             toJson(object, out, pretty);
             return new String(out.toByteArray(), StandardCharsets.UTF_8);
         } catch (final IOException ex) {
-            throw new RuntimeException(
+            throw new JsonException(
                 "Error in internal toString()-stream.", ex
             );
         }
@@ -177,7 +178,7 @@ public final class Json {
             
             return fromJson(stream);
         } catch (final IOException ex) {
-            throw new RuntimeException(ex);
+            throw new JsonException(ex);
         }
     }
     
