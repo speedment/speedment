@@ -200,16 +200,7 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
 
         attachListener(editor.focusedProperty(), (ov, wasFocused, isFocused) -> {
             if (wasFocused) {
-                try {
-                    final int editorValue = Integer.parseInt(editor.getText());
-                    if (editorValue > max) {
-                        editor.setText(String.valueOf(max));
-                    } else if (editorValue < min) {
-                        editor.setText(String.valueOf(min));
-                    }
-                } catch (final NumberFormatException ex) {
-                    throw new RuntimeException("Unable to parse an integer from editor field", ex);
-                }
+                tryConstrainValueIn(editor);
             }
         });
 
@@ -223,6 +214,21 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
 
         container.getChildren().addAll(auto, spinner);
         return container;
+    }
+
+    private void tryConstrainValueIn(TextField editor) {
+        requireNonNull(editor);
+
+        try {
+            final int editorValue = Integer.parseInt(editor.getText());
+            if (editorValue > max) {
+                editor.setText(String.valueOf(max));
+            } else if (editorValue < min) {
+                editor.setText(String.valueOf(min));
+            }
+        } catch (final NumberFormatException ex) {
+            throw new RuntimeException("Unable to parse an integer from editor field", ex);
+        }
     }
 
     private static void setSpinnerBehaviour(
