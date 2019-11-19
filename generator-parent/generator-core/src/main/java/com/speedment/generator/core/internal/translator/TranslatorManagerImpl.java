@@ -193,32 +193,38 @@ public final class TranslatorManagerImpl {
         if (directory.toFile().exists()) {
             try (final DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
                 for (final Path entry : stream) {
-                    if (entry.toFile().isDirectory()) {
-                        clearExistingFilesIn(entry);
+                    clearExistingFilesInEntry(entry);
+                }
+            }
+        }
+    }
 
-                        if (isDirectoryEmpty(entry)) {
-                            Files.delete(entry);
-                        }
-                    } else {
-                        final String filename = entry.toFile().getName();
-                        if (filename.startsWith(HASH_PREFIX)
-                            && filename.endsWith(HASH_SUFFIX)) {
-                            final Path original
-                                = entry
-                                    .getParent() // The hidden folder
-                                    .getParent() // The parent folder
-                                    .resolve(filename.substring( // Lookup original .java file
-                                        HASH_PREFIX.length(),
-                                        filename.length() - HASH_SUFFIX.length()
-                                    ));
+    private void clearExistingFilesInEntry(Path entry) throws IOException {
+        requireNonNull(entry);
 
-                            if (original.toFile().exists()
-                                && HashUtil.compare(original, entry)) {
-                                delete(original);
-                                delete(entry);
-                            }
-                        }
-                    }
+        if (entry.toFile().isDirectory()) {
+            clearExistingFilesIn(entry);
+
+            if (isDirectoryEmpty(entry)) {
+                Files.delete(entry);
+            }
+        } else {
+            final String filename = entry.toFile().getName();
+            if (filename.startsWith(HASH_PREFIX)
+                && filename.endsWith(HASH_SUFFIX)) {
+                final Path original
+                    = entry
+                        .getParent() // The hidden folder
+                        .getParent() // The parent folder
+                        .resolve(filename.substring( // Lookup original .java file
+                            HASH_PREFIX.length(),
+                            filename.length() - HASH_SUFFIX.length()
+                        ));
+
+                if (original.toFile().exists()
+                    && HashUtil.compare(original, entry)) {
+                    delete(original);
+                    delete(entry);
                 }
             }
         }
