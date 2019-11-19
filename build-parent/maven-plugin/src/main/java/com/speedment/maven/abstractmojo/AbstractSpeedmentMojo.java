@@ -257,25 +257,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         final String[] components = components();
         if (components != null) {
             for (final String component : components) {
-                try {
-                    final Class<?> uncasted = classLoader.loadClass(component);
-
-                    if (InjectBundle.class.isAssignableFrom(uncasted)) {
-                        @SuppressWarnings("unchecked")
-                        final Class<? extends InjectBundle> casted
-                            = (Class<? extends InjectBundle>) uncasted;
-                        result.withBundle(casted);
-                    } else {
-                        result.withComponent(uncasted);
-                    }
-
-                } catch (final ClassNotFoundException ex) {
-                    throw new MojoExecutionException(
-                        SPECIFIED_CLASS + "'" + component + "' could not be "
-                        + "found on class path. Has the dependency been "
-                        + "configured properly?", ex
-                    );
-                }
+                tryAddExtraComponent(result, classLoader, component);
             }
         }
 
@@ -289,6 +271,28 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
         // Return the resulting builder.
         return result;
+    }
+
+    private void tryAddExtraComponent(ApplicationBuilder<?, ?> result, ClassLoader classLoader, String component) throws MojoExecutionException {
+        try {
+            final Class<?> uncasted = classLoader.loadClass(component);
+
+            if (InjectBundle.class.isAssignableFrom(uncasted)) {
+                @SuppressWarnings("unchecked")
+                final Class<? extends InjectBundle> casted
+                    = (Class<? extends InjectBundle>) uncasted;
+                result.withBundle(casted);
+            } else {
+                result.withComponent(uncasted);
+            }
+
+        } catch (final ClassNotFoundException ex) {
+            throw new MojoExecutionException(
+                SPECIFIED_CLASS + "'" + component + "' could not be "
+                + "found on class path. Has the dependency been "
+                + "configured properly?", ex
+            );
+        }
     }
 
     protected void configureBuilder( ApplicationBuilder<?, ?>  builder) {}
