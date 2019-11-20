@@ -40,6 +40,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -214,89 +215,9 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
 
         // Create an instance of every injectable type
-
         final Set<Injectable<?>> injectablesLeft = new LinkedHashSet<>(injectablesSet);
-        int injectablesLeftSize = injectablesLeft.size();
         while (!injectablesLeft.isEmpty()) {
-            final Iterator<Injectable<?>> it = injectablesLeft.iterator();
-
-            while (it.hasNext()) {
-                final Injectable<?> injectable = it.next();
-
-                boolean created = false;
-                if (injectable.hasSupplier()) {
-                    final Object instance = injectable.supplier().get();
-                    instanceMap.put(injectable.get(), instance);
-                    created = true;
-                } else {
-                    final Class<?> clazz = injectable.get();
-                    final Optional<?> instance = tryToCreate(clazz, properties, instancesSoFarInReversedOrder(instanceMap), allInjectableTypes, proxyFor(clazz));
-                    if (instance.isPresent()) {
-                        instanceMap.put(injectable.get(), instance.get());
-                        created = true;
-                    }
-                }
-
-                if (created) {
-                    // If we are currently debugging, print out every created
-                    // instance and which configuration options are available for
-                    // it.
-                    if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                        INTERNAL_LOGGER.debug("| %-71s CREATED |",
-                            limit(injectable.get().getSimpleName(), 71)
-                        );
-
-                        traverseFields(injectable.get())
-                            .filter(f -> f.isAnnotationPresent(Config.class))
-                            .map(f -> f.getAnnotation(Config.class))
-                            .map(a -> format(
-                                "|     %-48s %26s |",
-                                limit(a.name(), 48),
-                                limit(properties.containsKey(a.name())
-                                    ? properties.get(a.name()).toString()
-                                    : a.value(), 26
-                                )
-                            ))
-                            .forEachOrdered(INTERNAL_LOGGER::debug);
-
-                        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
-                    }
-                    it.remove();
-                } else {
-
-                    // If we are currently debugging, print out every created
-                    // instance and which configuration options are available for
-                    // it.
-                    if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                        INTERNAL_LOGGER.debug("| %-71s PENDING |",
-                            limit(injectable.get().getSimpleName(), 71)
-                        );
-                        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
-                    }
-                }
-            }
-
-            // Check if no injectables was instantiated this pass
-            if (injectablesLeftSize == injectablesLeft.size()) {
-                final StringBuilder msg = new StringBuilder();
-                msg.append(injectablesLeft.size());
-                msg.append(" injectables could not be instantiated. These where: [\n");
-                final List<Object> instancesSoFarInCorrectOrder = instancesSoFarInReversedOrder(instanceMap);
-                injectablesLeft.stream()
-                    .map(Injectable::get)
-                    .map(c -> ReflectionUtil.errorMsg(c, instancesSoFarInCorrectOrder))
-                    .forEachOrdered(s -> msg.append("  ").append(s).append('\n'));
-                msg.append("]\n")
-                    .append("Available candidates were: ")
-                    .append(
-                        injectables.entrySet().stream()
-                            .map(e -> String.format("%s:%d", e.getKey(), e.getValue().size()))
-                            .collect(joining(", ", "[", "]"))
-                    );
-                throw new ConstructorResolutionException(msg.toString());
-            }
-
-            injectablesLeftSize = injectablesLeft.size();
+            tryToCreateInstances(properties, allInjectableTypes, instanceMap, injectablesLeft);
         }
 
         final LinkedList<Object> instances = instancesSoFarInReversedOrder(instanceMap);
@@ -337,57 +258,185 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         };
 
         // Make sure annotations are used correctly
-        instances.forEach(instance ->
-            traverseMethods(instance.getClass())
-                .filter(m -> m.isAnnotationPresent(ExecuteBefore.class))
-                .forEach(m -> {
-                    final ExecuteBefore execute = m.getAnnotation(ExecuteBefore.class);
-                    final List<Parameter> errenousParams = Stream.of(m.getParameters())
-                        .filter(p -> p.isAnnotationPresent(WithState.class))
-                        .filter(p -> {
-                            final State paramState = p.getAnnotation(WithState.class).value();
-                            return !(paramState == execute.value()
-                            || (paramState.isBefore(State.STARTED) && paramState.next() == execute.value()));
-                        })
-                        .collect(toList());
-
-                    if (!errenousParams.isEmpty()) {
-                        throw new MisusedAnnotationException(format(
-                            "The class %s has an auto-executed method %s(%s) " +
-                            "that should execute just before the instance " +
-                            "enters the %s state, so the parameters must %s " +
-                            "when the method is invoked. Yet, the " +
-                            "@WithState-annotation is present on %d " +
-                            "parameter%s with requested state%s %s.",
-                            instance.getClass().getSimpleName(),
-                            m.getName(),
-                            Stream.of(m.getParameters())
-                                .map(Parameter::getType)
-                                .map(Class::getSimpleName)
-                                .collect(joining(", ")),
-                            execute.value().name(),
-                            execute.value() == State.CREATED
-                                ? "also be in the CREATED state"
-                                : String.format(
-                                    "either be in the %s or the %s state",
-                                    execute.value().previous().name(),
-                                    execute.value().name()
-                                ),
-                            errenousParams.size(),
-                            errenousParams.size() > 1 ? "s" : "",
-                            errenousParams.size() > 1 ? "s" : "",
-                            commaAnd(errenousParams.stream()
-                                .map(p -> p.getAnnotation(WithState.class))
-                                .map(WithState::value)
-                                .map(State::name)
-                                .toArray(String[]::new))
-                        ));
-                    }
-                })
-        );
+        instances.forEach(this::assertAnnotationsCorrect);
 
         // Set the auto-injected fields
-        instances.forEach(instance -> traverseFields(instance.getClass())
+        instances.forEach(instance -> setAutoInjectedFields(instance, instances, injector));
+        
+        // Build explicit executions and add them to the graph
+        executions.stream()
+            .map(builder -> builder.build(graph))
+            .forEachOrdered(execution -> {
+                final DependencyNode node = graph.get(execution.getType());
+                node.getExecutions().add(execution);
+            });
+
+        final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
+        final AtomicInteger nextState = new AtomicInteger(0);
+
+        // Go through every state up and including STARTED.
+        while (nextState.get() <= State.STARTED.ordinal()) {
+            handleNextState(graph, instances, injector, classMapper, hasAnythingChanged, nextState);
+        }
+
+        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+        INTERNAL_LOGGER.debug(
+            "| %-79s |",
+            "All " + instances.size() + " components have been configured!"
+        );
+        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+
+        return injector;
+    }
+
+    private void handleNextState(DependencyGraph graph, LinkedList<Object> instances, Injector injector, ClassMapper classMapper, AtomicBoolean hasAnythingChanged, AtomicInteger nextState) {
+        Set<DependencyNode> unfinished;// Get a set of the nodes that has not yet reached that state,
+        // and operate upon it until it is empty
+        while (!(unfinished = graph.nodes()
+            .filter(n -> n.getCurrentState().ordinal() < nextState.get())
+            .collect(toSet())).isEmpty()) {
+
+            hasAnythingChanged.set(false);
+
+            unfinished.forEach(n -> {
+                // Determine the next state of this node.
+                final State state = n.getCurrentState().next();
+
+                // Check if all its dependencies have been satisfied.
+                if (n.canBe(state)) {
+
+                    INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+
+                    // Retrieve the instance for that node
+                    final Object instance = findIn(
+                        n.getRepresentedType(),
+                        injector,
+                        instances,
+                        false
+                    );
+                    // Execute all the executions for the next step.
+                    n.getExecutions().stream()
+                        .filter(e -> e.getState() == state)
+                        .map(exec -> {
+                            @SuppressWarnings("unchecked")
+                            final Execution<Object> casted =
+                                (Execution<Object>) exec;
+                            return casted;
+                        })
+                        .forEach(exec -> {
+
+                            // We might want to log exactly which steps we
+                            // have completed.
+                            if (INTERNAL_LOGGER.getLevel()
+                                .isEqualOrLowerThan(Level.DEBUG)) {
+
+                                INTERNAL_LOGGER.debug(
+                                    "| -> %-76s |",
+                                    limit(exec.toString(), 76)
+                                );
+                            }
+
+                            try {
+                                if (!exec.invoke(instance, classMapper)) {
+                                    MissingArgumentStrategy i = exec.getMissingArgumentStrategy();
+                                    if (i == MissingArgumentStrategy.THROW_EXCEPTION) {
+                                        throw new InjectorException(format(
+                                            "The injector could not invoke the method '%s' " +
+                                                "before state '%s' since one of the parameters is not available.",
+                                            exec.getName(), exec.getState()));
+                                    } else if (i == MissingArgumentStrategy.SKIP_INVOCATION) {
+                                        if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                                            INTERNAL_LOGGER.debug(
+                                                "|      %-74s |",
+                                                limit("(Not invoked due to missing optional dependencies.)", 74)
+                                            );
+                                        }
+
+                                    }
+                                }
+                            } catch (final IllegalAccessException
+                                         | IllegalArgumentException
+                                         | InvocationTargetException ex) {
+
+                                INTERNAL_LOGGER.error("Exception thrown by method invoked by Injector:");
+                                if (ex.getCause() != null) {
+                                    INTERNAL_LOGGER.error("Exception: " + ex.getCause().getClass().getSimpleName());
+                                }
+                                INTERNAL_LOGGER.error("Class: " + exec.getType().getName());
+                                INTERNAL_LOGGER.error("    @ExecuteBefore(" + exec.getState().name() + ")");
+
+                                if (exec instanceof ReflectionExecutionImpl) {
+                                    final Method method = ((ReflectionExecutionImpl<?>) exec).getMethod();
+                                    INTERNAL_LOGGER.error(format("   %s %s %s%s",
+                                        Modifier.toString(method.getModifiers()),
+                                        method.getReturnType().getSimpleName(),
+                                        method.getName(),
+                                        method.getParameterCount() == 0 ? "()" : "("));
+
+                                    if (method.getParameterCount() > 0) {
+                                        Stream.of(method.getParameters())
+                                            .map(param -> {
+                                                final Config config = param.getAnnotation(Config.class);
+                                                final WithState withState = param.getAnnotation(WithState.class);
+                                                if (config != null) {
+                                                    return format("        @Config(name=\"%s\", value=\"%s\") %s",
+                                                        config.name(),
+                                                        config.value(),
+                                                        param.getType().getSimpleName()
+                                                    );
+                                                } else {
+
+                                                    return format("        %s%s (%s)",
+                                                        withState == null ? "" : format("@WithState(%s) ", withState.value().name()),
+                                                        param.getType().getSimpleName(),
+                                                        graph.getIfPresent(param.getType())
+                                                            .map(node -> String.format(
+                                                                "Implemented as: %s, state: %s",
+                                                                node.getRepresentedType().getSimpleName(),
+                                                                node.getCurrentState().name()
+                                                            ))
+                                                            .orElse("No implementation found")
+                                                    );
+                                                }
+                                            })
+                                            .forEachOrdered(INTERNAL_LOGGER::error);
+                                        INTERNAL_LOGGER.error("    );");
+                                    }
+                                }
+
+                                throw new InjectorException(ex);
+                            }
+                        });
+
+                    // Update its state to the new state.
+                    n.setState(state);
+                    hasAnythingChanged.set(true);
+
+                    INTERNAL_LOGGER.debug(
+                        "| %-66s %12s |",
+                        limit(n.getRepresentedType().getSimpleName(), 66),
+                        limit(state.name(), 12)
+                    );
+                }
+            });
+
+            // The set was not empty when we entered the 'while' clause,
+            // and yet nothing has changed. This means that we are stuck
+            // in an infinite loop.
+            if (!hasAnythingChanged.get()) {
+                throw new IllegalStateException(
+                    "Injector appears to be stuck in an infinite loop."
+                );
+            }
+        }
+
+        // Every node has reached the desired state.
+        // Begin working with the next state.
+        nextState.incrementAndGet();
+    }
+
+    private void setAutoInjectedFields(Object instance, LinkedList<Object> instances, Injector injector) {
+        traverseFields(instance.getClass())
             .filter(f -> f.isAnnotationPresent(Inject.class)
                       || f.isAnnotationPresent(InjectOrNull.class)
             )
@@ -435,179 +484,137 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                             + "'.", ex
                     );
                 }
-            })
-        );
-        
-        // Build explicit executions and add them to the graph
-        executions.stream()
-            .map(builder -> builder.build(graph))
-            .forEachOrdered(execution -> {
-                final DependencyNode node = graph.get(execution.getType());
-                node.getExecutions().add(execution);
             });
+    }
 
-        final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
-        final AtomicInteger nextState = new AtomicInteger(0);
+    private void assertAnnotationsCorrect(Object instance) {
+        traverseMethods(instance.getClass())
+            .filter(m -> m.isAnnotationPresent(ExecuteBefore.class))
+            .forEach(m -> {
+                final ExecuteBefore execute = m.getAnnotation(ExecuteBefore.class);
+                final List<Parameter> errenousParams = Stream.of(m.getParameters())
+                    .filter(p -> p.isAnnotationPresent(WithState.class))
+                    .filter(p -> {
+                        final State paramState = p.getAnnotation(WithState.class).value();
+                        return !(paramState == execute.value()
+                        || (paramState.isBefore(State.STARTED) && paramState.next() == execute.value()));
+                    })
+                    .collect(toList());
 
-        // Loop until all nodes have been started.
-        Set<DependencyNode> unfinished;
+                if (!errenousParams.isEmpty()) {
+                    throw new MisusedAnnotationException(format(
+                        "The class %s has an auto-executed method %s(%s) " +
+                        "that should execute just before the instance " +
+                        "enters the %s state, so the parameters must %s " +
+                        "when the method is invoked. Yet, the " +
+                        "@WithState-annotation is present on %d " +
+                        "parameter%s with requested state%s %s.",
+                        instance.getClass().getSimpleName(),
+                        m.getName(),
+                        Stream.of(m.getParameters())
+                            .map(Parameter::getType)
+                            .map(Class::getSimpleName)
+                            .collect(joining(", ")),
+                        execute.value().name(),
+                        execute.value() == State.CREATED
+                            ? "also be in the CREATED state"
+                            : String.format(
+                                "either be in the %s or the %s state",
+                                execute.value().previous().name(),
+                                execute.value().name()
+                            ),
+                        errenousParams.size(),
+                        errenousParams.size() > 1 ? "s" : "",
+                        errenousParams.size() > 1 ? "s" : "",
+                        commaAnd(errenousParams.stream()
+                            .map(p -> p.getAnnotation(WithState.class))
+                            .map(WithState::value)
+                            .map(State::name)
+                            .toArray(String[]::new))
+                    ));
+                }
+            });
+    }
 
-        // Go through every state up and including STARTED.
-        while (nextState.get() <= State.STARTED.ordinal()) {
+    private void tryToCreateInstances(Properties properties, Set<Class<?>> allInjectableTypes, Map<Class<?>, Object> instanceMap, Set<Injectable<?>> injectablesLeft) throws InstantiationException {
+        int injectablesLeftSize = injectablesLeft.size();
+        final Iterator<Injectable<?>> it = injectablesLeft.iterator();
 
-            // Get a set of the nodes that has not yet reached that state,
-            // and operate upon it until it is empty
-            while (!(unfinished = graph.nodes()
-                .filter(n -> n.getCurrentState().ordinal() < nextState.get())
-                .collect(toSet())).isEmpty()) {
+        while (it.hasNext()) {
+            final Injectable<?> injectable = it.next();
 
-                hasAnythingChanged.set(false);
-
-                unfinished.forEach(n -> {
-                    // Determine the next state of this node.
-                    final State state = n.getCurrentState().next();
-
-                    // Check if all its dependencies have been satisfied.
-                    if (n.canBe(state)) {
-
-                        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
-
-                        // Retrieve the instance for that node
-                        final Object instance = findIn(
-                            n.getRepresentedType(),
-                            injector,
-                            instances,
-                            false
-                        );
-                        // Execute all the executions for the next step.
-                        n.getExecutions().stream()
-                            .filter(e -> e.getState() == state)
-                            .map(exec -> {
-                                @SuppressWarnings("unchecked")
-                                final Execution<Object> casted = 
-                                    (Execution<Object>) exec;
-                                return casted;
-                            })
-                            .forEach(exec -> {
-                                
-                                // We might want to log exactly which steps we
-                                // have completed.
-                                if (INTERNAL_LOGGER.getLevel()
-                                    .isEqualOrLowerThan(Level.DEBUG)) {
-                                    
-                                    INTERNAL_LOGGER.debug(
-                                        "| -> %-76s |", 
-                                        limit(exec.toString(), 76)
-                                    );
-                                }
-                                
-                                try {
-                                    if (!exec.invoke(instance, classMapper)) {
-                                        MissingArgumentStrategy i = exec.getMissingArgumentStrategy();
-                                        if (i == MissingArgumentStrategy.THROW_EXCEPTION) {
-                                            throw new InjectorException(format(
-                                                "The injector could not invoke the method '%s' " +
-                                                    "before state '%s' since one of the parameters is not available.",
-                                                exec.getName(), exec.getState()));
-                                        } else if (i == MissingArgumentStrategy.SKIP_INVOCATION) {
-                                            if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                                INTERNAL_LOGGER.debug(
-                                                    "|      %-74s |",
-                                                    limit("(Not invoked due to missing optional dependencies.)", 74)
-                                                );
-                                            }
-
-                                        }
-                                    }
-                                } catch (final IllegalAccessException 
-                                             | IllegalArgumentException 
-                                             | InvocationTargetException ex) {
-
-                                    INTERNAL_LOGGER.error("Exception thrown by method invoked by Injector:");
-                                    if (ex.getCause() != null) {
-                                        INTERNAL_LOGGER.error("Exception: " + ex.getCause().getClass().getSimpleName());
-                                    }
-                                    INTERNAL_LOGGER.error("Class: " + exec.getType().getName());
-                                    INTERNAL_LOGGER.error("    @ExecuteBefore(" + exec.getState().name() + ")");
-
-                                    if (exec instanceof ReflectionExecutionImpl) {
-                                        final Method method = ((ReflectionExecutionImpl<?>) exec).getMethod();
-                                        INTERNAL_LOGGER.error(format("   %s %s %s%s",
-                                            Modifier.toString(method.getModifiers()),
-                                            method.getReturnType().getSimpleName(),
-                                            method.getName(),
-                                            method.getParameterCount() == 0 ? "()" : "("));
-
-                                        if (method.getParameterCount() > 0) {
-                                            Stream.of(method.getParameters())
-                                                .map(param -> {
-                                                    final Config config = param.getAnnotation(Config.class);
-                                                    final WithState withState = param.getAnnotation(WithState.class);
-                                                    if (config != null) {
-                                                        return format("        @Config(name=\"%s\", value=\"%s\") %s",
-                                                            config.name(),
-                                                            config.value(),
-                                                            param.getType().getSimpleName()
-                                                        );
-                                                    } else {
-
-                                                        return format("        %s%s (%s)",
-                                                            withState == null ? "" : format("@WithState(%s) ", withState.value().name()),
-                                                            param.getType().getSimpleName(),
-                                                            graph.getIfPresent(param.getType())
-                                                                .map(node -> String.format(
-                                                                    "Implemented as: %s, state: %s",
-                                                                    node.getRepresentedType().getSimpleName(),
-                                                                    node.getCurrentState().name()
-                                                                ))
-                                                                .orElse("No implementation found")
-                                                        );
-                                                    }
-                                                })
-                                                .forEachOrdered(INTERNAL_LOGGER::error);
-                                            INTERNAL_LOGGER.error("    );");
-                                        }
-                                    }
-
-                                    throw new InjectorException(ex);
-                                }
-                            });
-
-                        // Update its state to the new state.
-                        n.setState(state);
-                        hasAnythingChanged.set(true);
-
-                        INTERNAL_LOGGER.debug(
-                            "| %-66s %12s |",
-                            limit(n.getRepresentedType().getSimpleName(), 66),
-                            limit(state.name(), 12)
-                        );
-                    }
-                });
-
-                // The set was not empty when we entered the 'while' clause, 
-                // and yet nothing has changed. This means that we are stuck
-                // in an infinite loop.
-                if (!hasAnythingChanged.get()) {
-                    throw new IllegalStateException(
-                        "Injector appears to be stuck in an infinite loop."
-                    );
+            boolean created = false;
+            if (injectable.hasSupplier()) {
+                final Object instance = injectable.supplier().get();
+                instanceMap.put(injectable.get(), instance);
+                created = true;
+            } else {
+                final Class<?> clazz = injectable.get();
+                final Optional<?> instance = tryToCreate(clazz, properties, instancesSoFarInReversedOrder(instanceMap), allInjectableTypes, proxyFor(clazz));
+                if (instance.isPresent()) {
+                    instanceMap.put(injectable.get(), instance.get());
+                    created = true;
                 }
             }
 
-            // Every node has reached the desired state. 
-            // Begin working with the next state.
-            nextState.incrementAndGet();
+            if (created) {
+                // If we are currently debugging, print out every created
+                // instance and which configuration options are available for
+                // it.
+                if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                    INTERNAL_LOGGER.debug("| %-71s CREATED |",
+                        limit(injectable.get().getSimpleName(), 71)
+                    );
+
+                    traverseFields(injectable.get())
+                        .filter(f -> f.isAnnotationPresent(Config.class))
+                        .map(f -> f.getAnnotation(Config.class))
+                        .map(a -> format(
+                            "|     %-48s %26s |",
+                            limit(a.name(), 48),
+                            limit(properties.containsKey(a.name())
+                                ? properties.get(a.name()).toString()
+                                : a.value(), 26
+                            )
+                        ))
+                        .forEachOrdered(INTERNAL_LOGGER::debug);
+
+                    INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+                }
+                it.remove();
+            } else {
+
+                // If we are currently debugging, print out every created
+                // instance and which configuration options are available for
+                // it.
+                if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                    INTERNAL_LOGGER.debug("| %-71s PENDING |",
+                        limit(injectable.get().getSimpleName(), 71)
+                    );
+                    INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+                }
+            }
         }
 
-        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
-        INTERNAL_LOGGER.debug(
-            "| %-79s |",
-            "All " + instances.size() + " components have been configured!"
-        );
-        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
-
-        return injector;
+        // Check if no injectables was instantiated this pass
+        if (injectablesLeftSize == injectablesLeft.size()) {
+            final StringBuilder msg = new StringBuilder();
+            msg.append(injectablesLeft.size());
+            msg.append(" injectables could not be instantiated. These where: [\n");
+            final List<Object> instancesSoFarInCorrectOrder = instancesSoFarInReversedOrder(instanceMap);
+            injectablesLeft.stream()
+                .map(Injectable::get)
+                .map(c -> ReflectionUtil.errorMsg(c, instancesSoFarInCorrectOrder))
+                .forEachOrdered(s -> msg.append("  ").append(s).append('\n'));
+            msg.append("]\n")
+                .append("Available candidates were: ")
+                .append(
+                    injectables.entrySet().stream()
+                        .map(e -> String.format("%s:%d", e.getKey(), e.getValue().size()))
+                        .collect(joining(", ", "[", "]"))
+                );
+            throw new ConstructorResolutionException(msg.toString());
+        }
     }
 
     @Override

@@ -177,63 +177,8 @@ public final class InjectorImpl implements Injector {
             hasAnythingChanged.set(false);
 
             unfinished.forEach(n -> {
+                stop(hasAnythingChanged, classMapper, n);
 
-                // Check if all its dependencies have been satisfied.
-                // when stopping.
-                if (n.canBe(State.STOPPED)) {
-
-                    LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
-
-                    // Retrieve the instance for that node
-                    final Object inst = find(n.getRepresentedType(), true);
-
-                    // Execute all the executions for the next step.
-                    n.getExecutions().stream()
-                        .filter(e -> e.getState() == State.STOPPED)
-                        .map(exec -> {
-                            @SuppressWarnings("unchecked") final Execution<Object> casted =
-                                (Execution<Object>) exec;
-                            return casted;
-                        })
-                        .forEach(exec -> {
-
-                            // We might want to log exactly which steps we
-                            // have completed.
-                            if (LOGGER_INSTANCE.getLevel()
-                                .isEqualOrLowerThan(Level.DEBUG)) {
-
-                                LOGGER_INSTANCE.debug(
-                                    "| -> %-76s |",
-                                    limit(exec.toString(), 76)
-                                );
-                            }
-
-                            try {
-                                if (!exec.invoke(inst, classMapper) &&
-                                    LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                    LOGGER_INSTANCE.debug(
-                                        "|      %-74s |",
-                                        limit("(Ignored due to missing dependencies.)", 74)
-                                    );
-                                }
-                            } catch (final IllegalAccessException
-                                | IllegalArgumentException
-                                | InvocationTargetException ex) {
-
-                                throw new InjectorException(ex);
-                            }
-                        });
-
-                    // Update its state to the new state.
-                    n.setState(State.STOPPED);
-                    hasAnythingChanged.set(true);
-
-                    LOGGER_INSTANCE.debug(
-                        "| %-66s %12s |",
-                        n.getRepresentedType().getSimpleName(),
-                        State.STOPPED.name()
-                    );
-                }
             });
 
             if (!hasAnythingChanged.get()) {
@@ -254,6 +199,66 @@ public final class InjectorImpl implements Injector {
             "All " + instances.size() + " components have been stopped!"
         );
         LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
+    }
+
+    private void stop(AtomicBoolean hasAnythingChanged, ClassMapper classMapper, DependencyNode node) {
+        // Check if all its dependencies have been satisfied.
+        // when stopping.
+        if (node.canBe(State.STOPPED)) {
+
+            LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
+
+            // Retrieve the instance for that node
+            final Object inst = find(node.getRepresentedType(), true);
+
+            // Execute all the executions for the next step.
+            node.getExecutions().stream()
+                .filter(e -> e.getState() == State.STOPPED)
+                .map(exec -> {
+                    @SuppressWarnings("unchecked")
+                    final Execution<Object> casted = (Execution<Object>) exec;
+                    return casted;
+                })
+                .forEach(exec -> stopInstance(classMapper, inst, exec));
+
+            // Update its state to the new state.
+            node.setState(State.STOPPED);
+            hasAnythingChanged.set(true);
+
+            LOGGER_INSTANCE.debug(
+                "| %-66s %12s |",
+                node.getRepresentedType().getSimpleName(),
+                State.STOPPED.name()
+            );
+        }
+    }
+
+    private void stopInstance(ClassMapper classMapper, Object inst, Execution<Object> exec) {
+        // We might want to log exactly which steps we
+        // have completed.
+        if (LOGGER_INSTANCE.getLevel()
+            .isEqualOrLowerThan(Level.DEBUG)) {
+
+            LOGGER_INSTANCE.debug(
+                "| -> %-76s |",
+                limit(exec.toString(), 76)
+            );
+        }
+
+        try {
+            if (!exec.invoke(inst, classMapper) &&
+                LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                LOGGER_INSTANCE.debug(
+                    "|      %-74s |",
+                    limit("(Ignored due to missing dependencies.)", 74)
+                );
+            }
+        } catch (final IllegalAccessException
+            | IllegalArgumentException
+            | InvocationTargetException ex) {
+
+            throw new InjectorException(ex);
+        }
     }
 
     @Override

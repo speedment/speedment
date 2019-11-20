@@ -26,7 +26,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.net.URL;
 import java.util.Properties;
 
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
@@ -83,62 +82,22 @@ public final class PropertiesUtil {
             serialized = config.value();
         }
 
-        trySetInjectorProxy(instance, injectorProxy, f, config, serialized);
+        trySetField(instance, f, serialized, injectorProxy, config);
     }
 
-    private static <T> void trySetInjectorProxy(T instance, InjectorProxy injectorProxy, Field f, Config config, String serialized) {
-        final Object object;
-        try {
-            if (boolean.class == f.getType()
-            || Boolean.class.isAssignableFrom(f.getType())) {
-                object = Boolean.parseBoolean(serialized);
-            } else if (byte.class == f.getType()
-            || Byte.class.isAssignableFrom(f.getType())) {
-                object = Byte.parseByte(serialized);
-            } else if (short.class == f.getType()
-            || Short.class.isAssignableFrom(f.getType())) {
-                object = Short.parseShort(serialized);
-            } else if (int.class == f.getType()
-            || Integer.class.isAssignableFrom(f.getType())) {
-                object = Integer.parseInt(serialized);
-            } else if (long.class == f.getType()
-            || Long.class.isAssignableFrom(f.getType())) {
-                object = Long.parseLong(serialized);
-            } else if (float.class == f.getType()
-            || Float.class.isAssignableFrom(f.getType())) {
-                object = Float.parseFloat(serialized);
-            } else if (double.class == f.getType()
-            || Double.class.isAssignableFrom(f.getType())) {
-                object = Double.parseDouble(serialized);
-            } else if (String.class.isAssignableFrom(f.getType())) {
-                object = serialized;
-            } else if (char.class == f.getType()
-            || Character.class.isAssignableFrom(f.getType())) {
-                if (serialized.length() == 1) {
-                    object = serialized.charAt(0);
-                } else {
-                    throw new IllegalArgumentException(
-                        "Value '" + serialized + "' is to long to be " +
-                        "parsed into a field of type '" +
-                        f.getType().getName() + "'."
+    private static <T> void trySetField(T instance, Field f, String serialized, InjectorProxy injectorProxy, Config config) {
+        ReflectionUtil.parse(f.getType(), serialized)
+            .ifPresent(object -> {
+                try {
+                    injectorProxy.set(f, instance, object);
+                } catch (final ReflectiveOperationException ex) {
+                    throw new InjectorException(
+                        "Failed to set config parameter '" + config.name() +
+                            "' in class '" + instance.getClass().getName() +
+                            "'.", ex
                     );
                 }
-            } else if (File.class.isAssignableFrom(f.getType())) {
-                object = new File(serialized);
-            } else if (URL.class.isAssignableFrom(f.getType())) {
-                object = UrlUtil.tryCreateURL(serialized);
-            } else {
-                // No op
-                return;
-            }
-            injectorProxy.set(f, instance, object);
-        } catch (final ReflectiveOperationException ex) {
-            throw new InjectorException(
-                "Failed to set config parameter '" + config.name() +
-                "' in class '" + instance.getClass().getName() +
-                "'.", ex
-            );
-        }
+            });
     }
 
 }

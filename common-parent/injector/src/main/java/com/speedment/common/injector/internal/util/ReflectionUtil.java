@@ -23,9 +23,9 @@ import com.speedment.common.injector.exception.InjectorException;
 
 import java.io.File;
 import java.lang.reflect.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -112,52 +112,11 @@ public final class ReflectionUtil {
                     }
 
                     final Class<?> type = param.getType();
-                    Object value;
-                    if (boolean.class == type
-                    || Boolean.class.isAssignableFrom(type)) {
-                        value = Boolean.parseBoolean(serialized);
-                    } else if (byte.class == type
-                    || Byte.class.isAssignableFrom(type)) {
-                        value = Byte.parseByte(serialized);
-                    } else if (short.class == type
-                    || Short.class.isAssignableFrom(type)) {
-                        value = Short.parseShort(serialized);
-                    } else if (int.class == type
-                    || Integer.class.isAssignableFrom(type)) {
-                        value = Integer.parseInt(serialized);
-                    } else if (long.class == type
-                    || Long.class.isAssignableFrom(type)) {
-                        value = Long.parseLong(serialized);
-                    } else if (float.class == type
-                    || Float.class.isAssignableFrom(type)) {
-                        value = Float.parseFloat(serialized);
-                    } else if (double.class == type
-                    || Double.class.isAssignableFrom(type)) {
-                        value = Double.parseDouble(serialized);
-                    } else if (String.class.isAssignableFrom(type)) {
-                        value = serialized;
-                    } else if (char.class == type
-                    || Character.class.isAssignableFrom(type)) {
-                        if (serialized.length() == 1) {
-                            value = serialized.charAt(0);
-                        } else {
-                            throw new IllegalArgumentException(
-                                "Value '" + serialized + "' is to long to be " +
-                                "parsed into a field of type '" +
-                                type.getName() + "'."
-                            );
-                        }
-                    } else if (File.class.isAssignableFrom(type)) {
-                        value = new File(serialized);
-                    } else if (URL.class.isAssignableFrom(type)) {
-                        value = UrlUtil.tryCreateURL(serialized);
-                    } else {
-                        throw new IllegalArgumentException(String.format(
-                            "Unsupported type '%s' injected into the " +
+                    final Object value = parse(type, serialized).orElseThrow(() -> new IllegalArgumentException(String.format(
+                        "Unsupported type '%s' injected into the " +
                             "constructor of class '%s'.",
-                            type.getName(), clazz.getName()
-                        ));
-                    }
+                        type.getName(), clazz.getName()
+                    )));
 
                     args[i] = value;
 
@@ -299,6 +258,47 @@ public final class ReflectionUtil {
             allInjectableTypes.stream()
                 .anyMatch(missingType::isAssignableFrom)
         );
+    }
+
+    private static final Map<Class<?>, Function<String, Object>> PARSER_MAP;
+    static {
+        final Function<String, Object> characterMapper = s -> {
+            if (s.length() == 1) {
+                return s.charAt(0);
+            } else {
+                throw new IllegalArgumentException(
+                    "Value '" + s + "' is to long to be " +
+                        "parsed into a field of type char."
+                );
+            }
+        };
+
+        final Map<Class<?>, Function<String, Object>> map = new HashMap<>();
+        map.put(boolean.class, Boolean::parseBoolean);
+        map.put(Boolean.class, Boolean::parseBoolean);
+        map.put(byte.class, Byte::parseByte);
+        map.put(Byte.class, Byte::parseByte);
+        map.put(short.class, Short::parseShort);
+        map.put(Short.class, Short::parseShort);
+        map.put(int.class, Integer::parseInt);
+        map.put(Integer.class, Integer::parseInt);
+        map.put(long.class, Long::parseLong);
+        map.put(Long.class, Long::parseLong);
+        map.put(float.class, Float::parseFloat);
+        map.put(Float.class, Float::parseFloat);
+        map.put(double.class, Double::parseDouble);
+        map.put(Double.class, Double::parseDouble);
+        map.put(String.class, s -> s);
+        map.put(char.class, characterMapper);
+        map.put(Character.class, characterMapper);
+        map.put(File.class, File::new);
+        map.put(URL.class, UrlUtil::tryCreateURL);
+        PARSER_MAP = Collections.unmodifiableMap(map);
+    }
+
+    public static Optional<Object> parse(Type type, String serialized) {
+        return Optional.ofNullable(PARSER_MAP.get(type))
+            .map(m -> m.apply(serialized));
     }
 
 }
