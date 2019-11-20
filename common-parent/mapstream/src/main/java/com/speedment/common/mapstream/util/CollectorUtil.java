@@ -18,11 +18,11 @@ package com.speedment.common.mapstream.util;
 
 import com.speedment.common.mapstream.MapStream;
 
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 /**
