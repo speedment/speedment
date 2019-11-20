@@ -410,7 +410,6 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
         private void processDocument(T model, Phase phase, String key, Document doc) {
             // Recursively invoke on the children
             if (aboveTable.contains(key)) {
-                /*System.out.println(model + " " + phase + " " + key);*/
                 namedChildren(doc)
                     .forEach(e ->
                         // Tables and below has already been handled.

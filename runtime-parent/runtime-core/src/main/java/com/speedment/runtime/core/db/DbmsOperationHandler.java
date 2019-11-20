@@ -305,6 +305,4 @@ public interface DbmsOperationHandler {
      */
     void close();
 
-    // void handleGeneratedKeys(PreparedStatement ps, LongConsumer longConsumer) throws SQLException;
-
 }

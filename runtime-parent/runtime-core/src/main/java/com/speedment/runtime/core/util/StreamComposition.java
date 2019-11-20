@@ -76,27 +76,6 @@ public final class StreamComposition {
         return configureAutoCloseStream(AutoClosingStream.of(Stream.of(streams).flatMap(Function.identity())), streams);
     }
 
-/*    @SuppressWarnings("varargs")
-    @SafeVarargs // Creating a Stream of an array is safe.
-    public static IntStream concatAndAutoClose(IntStream... streams) {
-        requireNonNullElements(streams);
-        return configureAutoCloseStream(new AutoClosingIntStream(Stream.of(streams).flatMapToInt(Function.identity())), streams);
-    }
-
-    @SuppressWarnings("varargs")
-    @SafeVarargs // Creating a Stream of an array is safe.
-    public static LongStream concatAndAutoClose(LongStream... streams) {
-        requireNonNullElements(streams);
-        return configureAutoCloseStream(new AutoClosingLongStream(Stream.of(streams).flatMapToLong(Function.identity())), streams);
-    }
-
-    @SuppressWarnings("varargs")
-    @SafeVarargs // Creating a Stream of an array is safe.
-    public static DoubleStream concatAndAutoClose(DoubleStream... streams) {
-        requireNonNullElements(streams);
-        return configureAutoCloseStream(new AutoClosingDoubleStream(Stream.of(streams).flatMapToDouble(Function.identity())), streams);
-    }*/
-
     @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.
     private static <T extends BaseStream<?, ?>> T configureAutoCloseStream(T concatStream, T... streams) {

@@ -101,8 +101,9 @@ public final class WorkspaceController implements Initializable {
                         .forEachOrdered(properties::add);
                 }
             }
-
-            events.notify(new TreeSelectionChange((ListChangeListener.Change<TreeItem<DocumentProperty>>) change, properties));
+            @SuppressWarnings("unchecked")
+            final ListChangeListener.Change<TreeItem<DocumentProperty>> changeCasted = (ListChangeListener.Change<TreeItem<DocumentProperty>>) change;
+            events.notify(new TreeSelectionChange(changeCasted, properties));
         };
     }
 }

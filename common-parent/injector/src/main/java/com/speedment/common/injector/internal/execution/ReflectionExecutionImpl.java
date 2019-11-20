@@ -79,7 +79,7 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
             .map(classMapper::applyOrNull)
             .anyMatch(Objects::isNull)) {
             // Do not invoke if all arguments are optional
-            // and the arguments are all null) {
+            // and the arguments are all null
 
             return false;
         }

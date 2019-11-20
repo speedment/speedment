@@ -35,7 +35,11 @@ import static com.speedment.common.injector.State.RESOLVED;
 @InjectKey(TypeMapperInstaller.class)
 public final class TypeMapperInstaller { // This class must be public
 
-    static Mapping[] mappings;
+    private final Mapping[] mappings;
+
+    public TypeMapperInstaller(Mapping[] mappings) {
+        this.mappings = mappings; // Nullable
+    }
 
     @ExecuteBefore(RESOLVED)
     public void installInTypeMapper(

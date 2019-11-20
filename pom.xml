@@ -303,8 +303,6 @@
                     <showWarnings>true</showWarnings>
                     <meminitial>256m</meminitial>
                     <maxmem>1024m</maxmem>
-                    <!--<source>1.8</source>
-                    <target>1.8</target>-->
                     <excludes>
                         <exclude>**/package-info.java</exclude>
                     </excludes>
@@ -338,23 +336,6 @@
                             </compilerArgs>
                         </configuration>
                     </execution>
-
-<!--                    <execution>
-                        <id>default-testCompile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <release>11</release>
-                            <compilerArgs>
-&lt;!&ndash;                                <arg>&#45;&#45;patch-module</arg>
-                                <arg>${module-name}=${project.build.outputDirectory}</arg>&ndash;&gt;
-&lt;!&ndash;                                <arg>&#45;&#45;add-modules</arg>
-                                <arg>${module-name}</arg>&ndash;&gt;
-                            </compilerArgs>
-
-                        </configuration>
-                    </execution>-->
 
                     <execution>
                         <id>module-testCompile</id>

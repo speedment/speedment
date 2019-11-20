@@ -19,14 +19,12 @@ package com.speedment.runtime.core.internal.component.transaction;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.ApplicationBuilder;
-import com.speedment.runtime.core.component.transaction.DataSourceHandler;
-import com.speedment.runtime.core.component.transaction.Isolation;
-import com.speedment.runtime.core.component.transaction.Transaction;
-import com.speedment.runtime.core.component.transaction.TransactionComponent;
-import com.speedment.runtime.core.component.transaction.TransactionHandler;
+import com.speedment.runtime.core.component.transaction.*;
 import com.speedment.runtime.core.exception.TransactionException;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Function;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

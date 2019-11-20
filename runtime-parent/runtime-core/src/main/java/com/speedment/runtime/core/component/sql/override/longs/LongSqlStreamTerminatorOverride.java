@@ -23,9 +23,6 @@ package com.speedment.runtime.core.component.sql.override.longs;
  */
 public interface LongSqlStreamTerminatorOverride {
 
-//    ForEachTerminator<ENTITY> getForEachHandler();
-//
-//    void setForEachHandler(ForEachTerminator<ENTITY> forEach);
     <ENTITY> LongCountTerminator<ENTITY> getLongCountTerminator();
 
     <ENTITY> void setLongCountTerminator(LongCountTerminator<ENTITY> count);

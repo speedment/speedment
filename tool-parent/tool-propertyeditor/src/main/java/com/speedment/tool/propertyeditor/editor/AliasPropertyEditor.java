@@ -96,7 +96,7 @@ public class AliasPropertyEditor<T extends HasAliasProperty> implements Property
                     .orElseThrow(() -> new NoSuchElementException("No TextInputControl found for the children of " + hBox));
 
                 final TextField code = new TextField(toCode(inputControl.getText()));
-                //code.setEditable(false);
+
                 code.setDisable(true);
                 code.setStyle("-fx-font-family: 'monospaced';");
 

@@ -446,8 +446,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             }
 
             column.mutator().setDatabaseType(selectedJdbcClass);
-                       
-//            column.mutator().setTypeMapper(TypeMapper.identity());            
+
             if (!nullable) {
                 if (selectedJdbcClass == Byte.class
                 ||  selectedJdbcClass == Short.class

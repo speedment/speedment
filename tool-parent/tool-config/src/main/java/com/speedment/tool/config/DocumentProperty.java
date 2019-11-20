@@ -21,7 +21,6 @@ import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.tool.config.trait.HasUiVisibleProperties;
 import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
@@ -55,8 +54,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-public interface DocumentProperty extends Document, 
-        HasUiVisibleProperties, 
+public interface DocumentProperty extends Document,
         HasMainInterface,
         HasId,
         HasName,

@@ -233,8 +233,6 @@ public final class SqliteMetadataHandlerImpl implements DbmsMetadataHandler {
     private CompletableFuture<Project> readSchemaMetadata(
             Project project, Dbms dbms, ProgressMeasure progress) {
 
-        //final DbmsType dbmsType = dbmsTypeOf(dbmsHandlerComponent, dbms);
-
         progress.setCurrentAction(describe(dbms));
         LOGGER.info(describe(dbms));
 

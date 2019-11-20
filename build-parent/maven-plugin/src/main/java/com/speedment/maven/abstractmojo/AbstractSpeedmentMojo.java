@@ -249,9 +249,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         configureBuilder(result); // Add MOJO specific components (if any)
 
         // Add any extra type mappers requested by the user
-        TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.
-
-        result.withComponent(TypeMapperInstaller.class);
+        result.withComponent(TypeMapperInstaller.class, () -> new TypeMapperInstaller(typeMappers()));
 
         // Add extra components requested by the user
         final String[] components = components();

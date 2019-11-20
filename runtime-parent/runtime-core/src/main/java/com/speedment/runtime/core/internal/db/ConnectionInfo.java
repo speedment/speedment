@@ -18,9 +18,10 @@ package com.speedment.runtime.core.internal.db;
 
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.core.db.SqlConsumer;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
+import com.speedment.runtime.core.db.SqlConsumer;
 import com.speedment.runtime.core.exception.TransactionException;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
@@ -97,11 +98,4 @@ public final class ConnectionInfo {
         }
     }
 
-//    public void ifInTransactionOrElse(SqlConsumer<? super Connection> actionInTransaction, SqlConsumer<? super Connection> actionNotInTransaction) throws SQLException {
-//        if (inTransaction) {
-//            actionInTransaction.accept(connection);
-//        } else {
-//            actionNotInTransaction.accept(connection);
-//        }
-//    }
 }

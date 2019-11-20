@@ -161,7 +161,6 @@ public final class PostgresDbmsOperationHandler implements DbmsOperationHandler 
                 final int columnType = generatedKeys.getMetaData().getColumnType(1);
                 if (generatedKeys.getMetaData().isAutoIncrement(1) && LONG_GETTABLE_TYPES.contains(columnType)) {
                     longConsumer.accept(generatedKeys.getLong(1));
-                    //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
                 }
             }
         }

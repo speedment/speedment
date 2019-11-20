@@ -154,8 +154,6 @@ public final class GeneratedSqlAdapterTranslator
                             .add("return rs -> apply(rs, offset);")
                     )
                     .call(() ->
-                        //file.add(Import.of(State.class).setStaticMember("RESOLVED").static_());
-
                         // Operate on enabled columns that has a type mapper
                         // that is not either empty, an identity mapper or a
                         // primitive mapper.

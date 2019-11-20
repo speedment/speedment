@@ -513,16 +513,6 @@ public abstract class AbstractApplicationBuilder<
                 JvmVersion.getImplementationTitle(), JvmVersion.getImplementationVersion(), JvmVersion.getImplementationVendor()
             );
 
-
-
-//            final Package package_ = Runtime.class.getPackage();
-//            final String javaMsg = package_.getSpecificationTitle()
-//                + " " + package_.getSpecificationVersion()
-//                + " by " + package_.getSpecificationVendor()
-//                + ". Implementation "
-//                + package_.getImplementationVendor()
-//                + " " + package_.getImplementationVersion()
-//                + " by " + package_.getImplementationVendor();
             LOGGER.info(javaMsg);
 
             final String versionString = JvmVersion.getImplementationVersion();

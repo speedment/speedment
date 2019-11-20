@@ -166,12 +166,7 @@ public final class InjectorImpl implements Injector {
         final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
 
         // Create ClassMapper
-        final ClassMapper classMapper = new ClassMapper() {
-            @Override
-            public <T> T apply(Class<T> type) {
-                return find(type, true);
-            }
-        };
+        final ClassMapper classMapper = this::findRequired;
 
         // Loop until all nodes have been started.
         Set<DependencyNode> unfinished;
@@ -270,6 +265,10 @@ public final class InjectorImpl implements Injector {
         return InjectorUtil.findAll(type, this, instances);
     }
 
+    private <T> T findRequired(Class<T> type) {
+        return find(type, true);
+    }
+
     private <T> T find(Class<T> type, boolean required) {
         return findIn(type, this, instances, required);
     }
@@ -292,7 +291,7 @@ public final class InjectorImpl implements Injector {
                         field.isAnnotationPresent(Inject.class)
                     );
                 }
-                // LOGGER_INSTANCE.warn("Setting fields is deprecated: " + field);
+                // Todo: log a warning that this is deprecated
                 try {
                     final InjectorProxy injectorProxy = builder.proxyFor(instance.getClass());
                     injectorProxy.set(field, instance, value);

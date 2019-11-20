@@ -67,10 +67,5 @@ public interface Transaction {
      * issued separated from this transaction's scope.
      */
     void detachCurrentThread();
-    
-//    /**
-//     * Closes this transaction, rolling back any uncommitted updates, detatching
-//     * all attached threads and relinquishing any underlying resources.
-//     */
-//    void close();
+
 }

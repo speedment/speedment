@@ -196,7 +196,6 @@ public final class StreamTerminatorUtil {
 
         List<Object> getValues();
 
-        //Pipeline getPipeline();
     }
 
     private static final class RenderResultImpl implements RenderResult {

@@ -85,7 +85,6 @@ public final class TextUtil {
 
         final StringBuilder sb = new StringBuilder();
         final AtomicInteger col = new AtomicInteger();
-        //final AtomicInteger wordCount = new AtomicInteger();
         final List<String> words = splitter.splitAsStream(text).collect(toList());
         for (final String w : words) {
             final int wordLen = w.length();
@@ -105,7 +104,6 @@ public final class TextUtil {
                 sb.append(w);
                 col.getAndAdd(wordLen);
             }
-            //wordCount.incrementAndGet();
         }
         return sb.toString();
     }

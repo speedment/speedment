@@ -225,11 +225,7 @@ public final class ResultSetUtil {
     public static byte[] getBytes(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
         return getNullableFrom(resultSet, rs -> rs.getBytes(ordinalPosition));
     }
-    
-//    public static Object getPGLine(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
-//        return getNullableFrom(resultSet, rs -> (Object) rs.getObject(ordinalPosition));
-//    }
-    
+
     private static <T> T getNullableFrom(ResultSet rs, SqlFunction<ResultSet, T> mapper) throws SQLException {
         final T result = mapper.apply(rs);
         return rs.wasNull() ? null : result;

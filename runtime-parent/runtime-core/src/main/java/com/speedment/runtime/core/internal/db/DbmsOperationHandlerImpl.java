@@ -381,7 +381,6 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
             while (generatedKeys.next()) {
                 longConsumer.accept(generatedKeys.getLong(1));
-                //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
             }
         }
     }

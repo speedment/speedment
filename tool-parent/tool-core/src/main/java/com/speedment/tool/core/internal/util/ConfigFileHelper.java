@@ -473,7 +473,7 @@ public final class ConfigFileHelper {
         }
 
         try {
-            if (!Files.exists(parent)) {
+            if (!parent.toFile().exists()) {
                 Files.createDirectories(parent);
             }
 

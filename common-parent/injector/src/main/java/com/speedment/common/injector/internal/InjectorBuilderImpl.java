@@ -227,14 +227,12 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 if (injectable.hasSupplier()) {
                     final Object instance = injectable.supplier().get();
                     instanceMap.put(injectable.get(), instance);
-                    //instances.addFirst(instance);
                     created = true;
                 } else {
                     final Class<?> clazz = injectable.get();
                     final Optional<?> instance = tryToCreate(clazz, properties, instancesSoFarInReversedOrder(instanceMap), allInjectableTypes, proxyFor(clazz));
                     if (instance.isPresent()) {
                         instanceMap.put(injectable.get(), instance.get());
-                        //instances.addFirst(instance.get());
                         created = true;
                     }
                 }

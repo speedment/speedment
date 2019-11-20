@@ -72,33 +72,4 @@ public final class ResultSetMapperComponentImpl implements ResultSetMapperCompon
         return new ConcurrentHashMap<>();
     }
 
-
-//    /**
-//     * Returns a {@link Stream} of the current mappings that are registered with
-//     * this class. Mappings that are not associated to any particular DbmsType
-//     * will have their {@code Optional<DbmsType>} set to
-//     * {@code Optional.empty()} whereas specific DbmsType mappings will have the
-//     * {@code Optional<DbmsType>} field set accordingly.
-//     *
-//     * @return a {@link Stream} of the current mappings that are registered with
-//     * this class
-//     */
-    /*
-    public Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> stream() {
-
-        final Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> s0 = map.values().stream().map(v -> Tuples.of(Optional.empty(), v));
-
-        final Stream.Builder<Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>>> sb = Stream.builder();
-        sb.add(s0);
-
-        dbmsTypeMap.entrySet().forEach(e -> {
-            final DbmsType dbmsType = e.getKey();
-            Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> sn = e.getValue().values().stream().map(v -> Tuples.of(Optional.of(dbmsType), v));
-            sb.add(sn);
-        });
-
-        return sb.build().flatMap(Function.identity());
-    }
-*/
-
 }
