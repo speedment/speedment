@@ -207,9 +207,7 @@ public final class ConnectController implements Initializable {
         fieldFile.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
         fieldName.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
 
-        fieldHost.focusedProperty().addListener((ob, o, n) -> {
-            recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldHost);
-        });
+        fieldHost.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldHost));
 
         UnaryOperator<TextFormatter.Change> onlyDigitsFilter = change ->
             change.getText().matches("[0-9]*") ? change : null;
