@@ -35,12 +35,14 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.core.util.DatabaseUtil;
+import com.speedment.runtime.core.util.MergeUtil;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -50,6 +52,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static java.util.Collections.singleton;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.UnaryOperator.identity;
@@ -76,6 +79,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
     private final boolean hasPrimaryKeyColumns;
     private final DatabaseNamingConvention naming;
     private final DbmsOperationHandler operationHandler;
+    private final ManagerComponent managerComponent;
     private final Class<ENTITY> entityClass;
     
     private final String insertStatement;
@@ -93,7 +97,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         final ProjectComponent projectComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final ManagerComponent managerComponent,
-        final  ResultSetMapperComponent resultSetMapperComponent
+        final ResultSetMapperComponent resultSetMapperComponent
     ) {
         requireNonNull(tableInfo);
         requireNonNull(projectComponent);
@@ -103,13 +107,13 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
 
         final Project project = projectComponent.getProject();
 
-        TableIdentifier<ENTITY> tableId = tableInfo.getTableIdentifier();
+        final TableIdentifier<ENTITY> tableId = tableInfo.getTableIdentifier();
         this.table = DocumentDbUtil.referencedTable(project, tableId);
         this.dbms  = DocumentDbUtil.referencedDbms(project, tableId);
-        DbmsType dbmsType = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
+        final DbmsType dbmsType = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
         this.naming           = dbmsType.getDatabaseNamingConvention();
         this.operationHandler = dbmsType.getOperationHandler();
-        DbmsColumnHandler columnHandler = dbmsType.getColumnHandler();
+        final DbmsColumnHandler columnHandler = dbmsType.getColumnHandler();
         
         this.primaryKeyFields = tableInfo::primaryKeyFields;
         this.fields           = tableInfo::fields;
@@ -139,6 +143,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         this.generatedFields = generatedFieldSupports.stream()
             .map(GeneratedFieldSupport::getField).collect(toList());
 
+        this.managerComponent = requireNonNull(managerComponent);
     }
 
     private String getInsertStatement(Predicate<Column> includedInInsert) {
@@ -226,6 +231,21 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         } catch (final SQLException ex) {
             throw new SpeedmentException(ex);
         }
+    }
+
+    @Override
+    public Merger<ENTITY> merger() {
+        assertHasPrimaryKeyColumns();
+        final Manager<ENTITY> manager = managerComponent.managerOf(entityClass);
+        return entity -> merge(manager, entity);
+    }
+
+    private ENTITY merge(Manager<ENTITY> manager, ENTITY entity) {
+        final Set<ENTITY> result = MergeUtil.merge(manager, singleton(entity));
+        if (result.size() != 1) {
+            throw new SpeedmentException("Unable to merge entity of type " + entity.getClass().getName());
+        }
+        return result.iterator().next();
     }
 
     private Consumer<List<Long>> newGeneratedKeyConsumer(ENTITY entity) {
