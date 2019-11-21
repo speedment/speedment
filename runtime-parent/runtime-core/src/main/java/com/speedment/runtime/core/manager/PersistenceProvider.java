@@ -52,7 +52,7 @@ public interface PersistenceProvider<ENTITY> {
      * for example when persisting an entity with auto incremented fields of fields with
      * defaults.
      * See {@link #updater()}
-     * @param fields the fields to updatepersist, any others are ignored
+     * @param fields the fields to update, any others are ignored
      * @return a Persister
      */
     Updater<ENTITY> updater(HasLabelSet<ENTITY> fields);
