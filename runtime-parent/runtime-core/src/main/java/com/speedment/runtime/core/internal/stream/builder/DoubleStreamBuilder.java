@@ -117,7 +117,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     }
 
     @Override
-    public DoubleStream takeWhile(DoublePredicate predicate) {
+    public DoubleStream takeWhile​(DoublePredicate predicate) {
         return append(new DoubleTakeWhileAction(predicate));
     }
 
