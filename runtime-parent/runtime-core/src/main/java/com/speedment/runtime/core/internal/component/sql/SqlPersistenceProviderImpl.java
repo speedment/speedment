@@ -42,7 +42,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -224,7 +227,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
             throw new SpeedmentException(ex);
         }
     }
-    
+
     private Consumer<List<Long>> newGeneratedKeyConsumer(ENTITY entity) {
         return l -> {
             if (!l.isEmpty()) {

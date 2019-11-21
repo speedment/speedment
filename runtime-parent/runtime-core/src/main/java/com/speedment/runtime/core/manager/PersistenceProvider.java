@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.manager;
 
+import com.speedment.runtime.core.exception.SpeedmentException;
+
 public interface PersistenceProvider<ENTITY> {
     /**
      * Returns a {@link Persister} which can be used to persist
@@ -63,4 +65,23 @@ public interface PersistenceProvider<ENTITY> {
      * @return a Remover
      */
     Remover<ENTITY> remover();
+
+    /**
+     * Returns a {@link Merger} which can be used to merge
+     * entities in the underlying database.
+     * @see Merger#apply
+     *
+     * @return a Merger
+     */
+    default Merger<ENTITY> merger() {
+        return entity -> {
+            try {
+                persister().apply(entity);
+                return entity;
+            } catch (SpeedmentException se) {
+                updater().apply(entity);
+                return entity;
+            }
+        };
+    }
 }
