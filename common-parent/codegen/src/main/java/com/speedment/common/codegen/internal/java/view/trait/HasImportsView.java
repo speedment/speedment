@@ -52,39 +52,26 @@ public interface HasImportsView<M extends HasImports<M>> extends
         final List<String> staticImports         = new ArrayList<>();
         final List<String> staticStandardImports = new ArrayList<>();
 
-        // Work-around to create a private method in an interface
-        final class Hidden {
-             private void renderToLists(List<String> customImports, List<String> standardImports, List<String> staticImports, List<String> staticStandardImports, String line) {
-                 if (line.startsWith("import static")) {
-                     if (line.startsWith("import static java")) {
-                         staticStandardImports.add(line);
-                     } else {
-                         staticImports.add(line);
-                     }
-                 } else {
-                     if (line.startsWith("import java")) {
-                         standardImports.add(line);
-                     } else {
-                         customImports.add(line);
-                     }
-                 }
-            }
-        }
-
         gen.onEach(importsOf(model))
             .distinct().sorted()
             .forEachOrdered(line ->
-                new Hidden().renderToLists(customImports, standardImports, staticImports, staticStandardImports, line)
+                TraitUtil.renderImportToLists(customImports, standardImports, staticImports, staticStandardImports, line)
             );
 
         final StringJoiner result = new StringJoiner(Formatting.nl());
         customImports.forEach(result::add);
-        if (!customImports.isEmpty() && !standardImports.isEmpty()) result.add("");
+        if (!customImports.isEmpty() && !standardImports.isEmpty()) {
+            result.add("");
+        }
         standardImports.forEach(result::add);
-        if (!standardImports.isEmpty() && (staticImports.size() + staticStandardImports.size()) > 0) result.add("");
+        if (!standardImports.isEmpty() && (staticImports.size() + staticStandardImports.size()) > 0) {
+            result.add("");
+        }
         staticImports.forEach(result::add);
         staticStandardImports.forEach(result::add);
-        if (result.length() > 0) result.add(Formatting.nl());
+        if (result.length() > 0) {
+            result.add(Formatting.nl());
+        }
 
         return result.toString();
     }
