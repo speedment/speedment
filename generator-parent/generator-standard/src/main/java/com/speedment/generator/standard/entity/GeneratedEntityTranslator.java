@@ -114,161 +114,169 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             /*
              * Getters
              */
-            .forEveryColumn((intrf, col) -> {
-                final Type retType = getterReturnType(typeMappers, col);
-
-                intrf.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
-                    .set(Javadoc.of(
-                        "Returns the " + getSupport().variableName(col)
-                        + OF_THIS + getSupport().entityName()
-                        + ". The " + getSupport().variableName(col)
-                        + " field corresponds to the database column "
-                        + relativeName(col, Dbms.class, DATABASE_NAME) + "."
-                    ).add(RETURN.setText(
-                        "the " + getSupport().variableName(col)
-                        + OF_THIS + getSupport().entityName()
-                    ))
-                    )
-                );
-            })
+            .forEveryColumn(this::addGetterMethod)
             
             /*
              * Setters
              */
-            .forEveryColumn((intrf, col) -> 
-                intrf.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
-                    .add(Field.of(getSupport().variableName(col), typeMappers.get(col).getJavaType(col)))
-                    .set(Javadoc.of(
-                        "Sets the " + getSupport().variableName(col)
-                        + OF_THIS + getSupport().entityName()
-                        + ". The " + getSupport().variableName(col)
-                        + " field corresponds to the database column "
-                        + relativeName(col, Dbms.class, DATABASE_NAME) + "."
-                    )
-                        .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
-                        .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
-                )
-            )
+            .forEveryColumn(this::addSetterMethod)
             
             /*
              * Finders
              */
-            .forEveryColumn((intrf, col) -> 
-                ForeignKeyUtil.getForeignKey(
-                    getSupport().tableOrThrow(), col
-                ).ifPresent(fkc -> {
-                    final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
-                    final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
-
-                    file.add(Import.of(fuSupport.entityType()));
-
-                    intrf.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col),
-                        col.isNullable()
-                            ? optional(fuSupport.entityType())
-                            : fuSupport.entityType()
-                    )
-                        .set(Javadoc.of(
-                            "Queries the specified manager for the referenced "
-                            + fuSupport.entityName() + ". If no such "
-                            + fuSupport.entityName()
-                            + " exists, an {@code NullPointerException} will be thrown."
-                        ).add(DefaultJavadocTag.PARAM.setValue("foreignManager").setText("the manager to query for the entity"))
-                            .add(DefaultJavadocTag.RETURN.setText("the foreign entity referenced"))
-                        )
-                        .add(Field.of("foreignManager", SimpleParameterizedType.create(
-                            Manager.class, fuSupport.entityType()
-                        )))
-                    );
-                })
-            )
+            .forEveryColumn((inter, col) -> addIfForeignKey(file, inter, col))
             
             /*
              * Fields
              */
-            .forEveryColumn((intrf, col) -> {
+            .forEveryColumn((inter, col) -> addField(file, identifierEnum, inter, col))
 
-                final ForeignKeyUtil.ReferenceFieldType ref
-                    = ForeignKeyUtil.getReferenceFieldType(
-                        file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
-                    );
-
-                final Type entityType = getSupport().entityType();
-                final String shortEntityName = getSupport().entityName();
-
-                file.add(Import.of(entityType));
-                
-                final String constant = getSupport().namer().javaStaticFieldName(col.getJavaName());
-                identifierEnum.add(EnumConstant.of(constant).add(Value.ofText(col.getId())));
-
-                // Begin building the field value parameters.
-                final List<Value<?>> fieldParams = new ArrayList<>();
-                fieldParams.add(Value.ofReference("Identifier." + constant));
-                
-                // Add getter method reference
-                if (usesOptional(col)) {
-                    fieldParams.add(Value.ofReference(
-                        "o -> OptionalUtil.unwrap(o." +
-                            GETTER_METHOD_PREFIX +
-                            getSupport().typeName(col) + "())"));
-
-                    file.add(Import.of(OptionalUtil.class));
-                } else {
-                    fieldParams.add(Value.ofReference(
-                        shortEntityName + "::get" +
-                            getSupport().typeName(col)));
-                }
-                
-                // Add setter method reference
-                fieldParams.add(Value.ofReference(
-                    shortEntityName + "::" + SETTER_METHOD_PREFIX +
-                        getSupport().typeName(col)));
-
-                // Add the foreign key method reference
-                ForeignKeyUtil.getForeignKey(getSupport().tableOrThrow(), col)
-                    .ifPresent(fkc -> {
-                        final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
-                        final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
-
-                        fieldParams.add(Value.ofReference(
-                            fuSupport.entityName() + "."
-                            + fuSupport.namer().javaStaticFieldName(
-                                fu.getForeignColumn().getJavaName()
-                            )
-                        ));
-                    });
-                
-                // Add type mapper
-                if (col.getTypeMapper().isPresent()) {
-                    final String typeMapper = col.getTypeMapper().get();
-
-                    if (PrimitiveTypeMapper.class.getName().equals(typeMapper)) {
-                        file.add(Import.of(TypeMapper.class));
-                        fieldParams.add(Value.ofReference("TypeMapper.primitive()"));
-                    } else {
-                        file.add(Import.of(SimpleType.create(typeMapper)));
-                        fieldParams.add(Value.ofReference("new " + shortName(typeMapper) + "()"));
-                    }
-                } else {
-                    fieldParams.add(Value.ofReference("TypeMapper.identity()"));
-                    file.add(Import.of(TypeMapper.class));
-                }
-
-                // Add the 'unique' boolean to the end
-                fieldParams.add(Value.ofBoolean(DocumentDbUtil.isUnique(col)));
-
-                intrf.add(Field.of(getSupport().namer().javaStaticFieldName(col.getJavaName()), ref.getType())
-                    .final_()
-                    .set(Value.ofInvocation(
-                        ref.getType(),
-                        "create",
-                        fieldParams.toArray(new Value<?>[0])
-                    ))
-                    .set(Javadoc.of(
-                        "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "
-                        + "{@link " + shortEntityName + "#get" + getSupport().typeName(col) + "()} method."
-                    )));
-            })
             .build();
+    }
+
+    private void addField(File file, Enum identifierEnum, Interface intrf, Column col) {
+        final ForeignKeyUtil.ReferenceFieldType ref
+            = ForeignKeyUtil.getReferenceFieldType(
+                file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
+            );
+
+        final Type entityType = getSupport().entityType();
+        final String shortEntityName = getSupport().entityName();
+
+        file.add(Import.of(entityType));
+
+        final String constant = getSupport().namer().javaStaticFieldName(col.getJavaName());
+        identifierEnum.add(EnumConstant.of(constant).add(Value.ofText(col.getId())));
+
+        // Begin building the field value parameters.
+        final List<Value<?>> fieldParams = new ArrayList<>();
+        fieldParams.add(Value.ofReference("Identifier." + constant));
+
+        // Add getter method reference
+        if (usesOptional(col)) {
+            fieldParams.add(Value.ofReference(
+                "o -> OptionalUtil.unwrap(o." +
+                    GETTER_METHOD_PREFIX +
+                    getSupport().typeName(col) + "())"));
+
+            file.add(Import.of(OptionalUtil.class));
+        } else {
+            fieldParams.add(Value.ofReference(
+                shortEntityName + "::get" +
+                    getSupport().typeName(col)));
+        }
+
+        // Add setter method reference
+        fieldParams.add(Value.ofReference(
+            shortEntityName + "::" + SETTER_METHOD_PREFIX +
+                getSupport().typeName(col)));
+
+        // Add the foreign key method reference
+        ForeignKeyUtil.getForeignKey(getSupport().tableOrThrow(), col)
+            .ifPresent(fkc -> {
+                final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+                final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
+
+                fieldParams.add(Value.ofReference(
+                    fuSupport.entityName() + "."
+                    + fuSupport.namer().javaStaticFieldName(
+                        fu.getForeignColumn().getJavaName()
+                    )
+                ));
+            });
+
+        // Add type mapper
+        if (col.getTypeMapper().isPresent()) {
+            final String typeMapper = col.getTypeMapper().get();
+
+            if (PrimitiveTypeMapper.class.getName().equals(typeMapper)) {
+                file.add(Import.of(TypeMapper.class));
+                fieldParams.add(Value.ofReference("TypeMapper.primitive()"));
+            } else {
+                file.add(Import.of(SimpleType.create(typeMapper)));
+                fieldParams.add(Value.ofReference("new " + shortName(typeMapper) + "()"));
+            }
+        } else {
+            fieldParams.add(Value.ofReference("TypeMapper.identity()"));
+            file.add(Import.of(TypeMapper.class));
+        }
+
+        // Add the 'unique' boolean to the end
+        fieldParams.add(Value.ofBoolean(DocumentDbUtil.isUnique(col)));
+
+        intrf.add(Field.of(getSupport().namer().javaStaticFieldName(col.getJavaName()), ref.getType())
+            .final_()
+            .set(Value.ofInvocation(
+                ref.getType(),
+                "create",
+                fieldParams.toArray(new Value<?>[0])
+            ))
+            .set(Javadoc.of(
+                "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "
+                + "{@link " + shortEntityName + "#get" + getSupport().typeName(col) + "()} method."
+            )));
+    }
+
+    private void addIfForeignKey(File file, Interface intrf, Column col) {
+        ForeignKeyUtil.getForeignKey(
+            getSupport().tableOrThrow(), col
+        ).ifPresent(fkc -> {
+            final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+            final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
+
+            file.add(Import.of(fuSupport.entityType()));
+
+            intrf.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col),
+                col.isNullable()
+                    ? optional(fuSupport.entityType())
+                    : fuSupport.entityType()
+            )
+                .set(Javadoc.of(
+                    "Queries the specified manager for the referenced "
+                    + fuSupport.entityName() + ". If no such "
+                    + fuSupport.entityName()
+                    + " exists, an {@code NullPointerException} will be thrown."
+                ).add(DefaultJavadocTag.PARAM.setValue("foreignManager").setText("the manager to query for the entity"))
+                    .add(DefaultJavadocTag.RETURN.setText("the foreign entity referenced"))
+                )
+                .add(Field.of("foreignManager", SimpleParameterizedType.create(
+                    Manager.class, fuSupport.entityType()
+                )))
+            );
+        });
+    }
+
+    private Interface addSetterMethod(Interface intrf, Column col) {
+        return intrf.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
+            .add(Field.of(getSupport().variableName(col), typeMappers.get(col).getJavaType(col)))
+            .set(Javadoc.of(
+                "Sets the " + getSupport().variableName(col)
+                + OF_THIS + getSupport().entityName()
+                + ". The " + getSupport().variableName(col)
+                + " field corresponds to the database column "
+                + relativeName(col, Dbms.class, DATABASE_NAME) + "."
+            )
+                .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
+                .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
+        );
+    }
+
+    private void addGetterMethod(Interface intrf, Column col) {
+        final Type retType = getterReturnType(typeMappers, col);
+
+        intrf.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
+            .set(Javadoc.of(
+                "Returns the " + getSupport().variableName(col)
+                + OF_THIS + getSupport().entityName()
+                + ". The " + getSupport().variableName(col)
+                + " field corresponds to the database column "
+                + relativeName(col, Dbms.class, DATABASE_NAME) + "."
+            ).add(RETURN.setText(
+                "the " + getSupport().variableName(col)
+                + OF_THIS + getSupport().entityName()
+            ))
+            )
+        );
     }
 
     @Override
