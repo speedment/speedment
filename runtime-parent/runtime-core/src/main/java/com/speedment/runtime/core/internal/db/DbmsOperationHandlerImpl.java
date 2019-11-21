@@ -226,14 +226,14 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
 
         assertNotClosed();
         int retryCount = INITIAL_RETRY_COUNT;
-        boolean transactionCompleted = false;
+        boolean complete = false;
         do {
             try {
                 conn.setAutoCommit(false);
                 executeSqlStatement(sqlStatement, dbms, conn);
                 conn.commit();
                 conn.close();
-                transactionCompleted = true;
+                complete = true;
             } catch (SQLException sqlEx) {
                 if (retryCount < INITIAL_RETRY_COUNT) {
                     LOGGER_SQL_RETRY.error("SqlStatementList: " + sqlStatement);
@@ -249,26 +249,28 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
                     throw sqlEx; // Finally will be executed...
                 }
             } finally {
-
-                if (!transactionCompleted) {
-                    try {
-                        // If we got here the transaction should be rolled back, as not
-                        // all work has been done
-                        conn.rollback();
-                    } catch (SQLException sqlEx) {
-                        // If we got an exception here, something
-                        // pretty serious is going on
-                        LOGGER.error(sqlEx, "Rollback error! connection:" + sqlEx.getMessage());
-                        retryCount = 0;
-                    } finally {
-                        conn.close();
-                    }
-                }
+                cleanup(conn, complete);
             }
-        } while (!transactionCompleted && (retryCount > 0));
+        } while (!complete && (retryCount > 0));
 
-        if (transactionCompleted) {
+        if (complete) {
             postSuccessfulTransaction(sqlStatement);
+        }
+    }
+
+    private void cleanup(Connection conn, boolean transactionCompleted) throws SQLException {
+        if (!transactionCompleted) {
+            try {
+                // If we got here the transaction should be rolled back, as not
+                // all work has been done
+                conn.rollback();
+            } catch (SQLException sqlEx) {
+                // If we got an exception here, something
+                // pretty serious is going on
+                throw new SpeedmentException("Rollback error! connection:", sqlEx);
+            } finally {
+                conn.close();
+            }
         }
     }
 
