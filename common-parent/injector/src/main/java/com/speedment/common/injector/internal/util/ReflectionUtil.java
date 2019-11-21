@@ -103,71 +103,16 @@ public final class ReflectionUtil {
             for (int i = 0; i < params.length; i++) {
                 final Parameter param = params[i];
                 final Config config = param.getAnnotation(Config.class);
+                final Object arg;
                 if (config != null) {
-                    final String serialized;
-                    if (properties.containsKey(config.name())) {
-                        serialized = properties.getProperty(config.name());
-                    } else {
-                        serialized = config.value();
-                    }
-
-                    final Class<?> type = param.getType();
-                    final Object value = parse(type, serialized).orElseThrow(() -> new IllegalArgumentException(String.format(
-                        "Unsupported type '%s' injected into the " +
-                            "constructor of class '%s'.",
-                        type.getName(), clazz.getName()
-                    )));
-
-                    args[i] = value;
-
-                } else { // Not a @Config-field
-                    final Class<?> paramType = param.getType();
-                    final Optional<? extends Class<?>> injectKeyClass = traverseAncestors(paramType)
-                        .filter(c -> c.isAnnotationPresent(InjectKey.class))
-                        .map(c -> c.getAnnotation(InjectKey.class).value())
-                        .findFirst();
-                    if (injectKeyClass.isPresent()) {
-                        // Make sure that there are no other pending instances that
-                        // may implement this type, see #758
-                        //
-                        // This set contains all classes that we need to be instantiated
-                        // before we know which one to select
-                        final Set<Class<?>> needed = allInjectableTypes.stream()
-                            .filter(c -> traverseAncestors(c)
-                                .anyMatch(a ->
-                                    a.isAnnotationPresent(InjectKey.class) &&
-                                        a.getAnnotation(InjectKey.class).value().equals(injectKeyClass.get())
-                                )
-                            )
-                            .collect(toSet());
-
-                        // Remove the existing classes
-                        instances.stream()
-                            .map(Object::getClass)
-                            .forEach(needed::remove);
-
-                        if (!needed.isEmpty()) {
-                            // We do not know all instances yet so we have to wait for
-                            // their creation
-                            return Optional.empty();
-                        }
-                    }
-
-                    final Optional<Object> value = instances.stream()
-                        .filter(o -> paramType.isAssignableFrom(o.getClass()))
-                        .findFirst();
-
-                    if (value.isPresent()) {
-                        args[i] = value.get();
-                    } else {
-                        throw new IllegalArgumentException(String.format(
-                            "No instance found that match the required type " +
-                            "'%s' in the constructor for injected class '%s'.",
-                            param.getClass().getName(),
-                            clazz.getName()
-                        ));
+                    arg = configField(clazz, properties, param, config);
+                } else {
+                    arg = notConfigField(clazz, instances, allInjectableTypes, param);
+                    if (arg == null) {
+                        return Optional.empty();
                     }
                 }
+                args[i] = arg;
             }
 
             final T instance = injectorProxy.newInstance(constr, args);
@@ -182,6 +127,73 @@ public final class ReflectionUtil {
             throw new InjectorException(String.format(
                 "Unable to create class '%s'.", clazz.getName()
             ), ex);
+        }
+    }
+
+    private static <T> Object configField(Class<T> clazz, Properties properties, Parameter param, Config config) {
+        final String serialized;
+        if (properties.containsKey(config.name())) {
+            serialized = properties.getProperty(config.name());
+        } else {
+            serialized = config.value();
+        }
+
+        final Class<?> type = param.getType();
+        final Object value = parse(type, serialized).orElseThrow(() -> new IllegalArgumentException(String.format(
+            "Unsupported type '%s' injected into the " +
+                "constructor of class '%s'.",
+            type.getName(), clazz.getName()
+        )));
+
+        return value;
+    }
+
+    private static <T> Object notConfigField(Class<T> clazz, List<Object> instances, Set<Class<?>> allInjectableTypes, Parameter param) {
+        final Class<?> paramType = param.getType();
+        final Optional<? extends Class<?>> injectKeyClass = traverseAncestors(paramType)
+            .filter(c -> c.isAnnotationPresent(InjectKey.class))
+            .map(c -> c.getAnnotation(InjectKey.class).value())
+            .findFirst();
+        if (injectKeyClass.isPresent()) {
+            // Make sure that there are no other pending instances that
+            // may implement this type, see #758
+            //
+            // This set contains all classes that we need to be instantiated
+            // before we know which one to select
+            final Set<Class<?>> needed = allInjectableTypes.stream()
+                .filter(c -> traverseAncestors(c)
+                    .anyMatch(a ->
+                        a.isAnnotationPresent(InjectKey.class) &&
+                            a.getAnnotation(InjectKey.class).value().equals(injectKeyClass.get())
+                    )
+                )
+                .collect(toSet());
+
+            // Remove the existing classes
+            instances.stream()
+                .map(Object::getClass)
+                .forEach(needed::remove);
+
+            if (!needed.isEmpty()) {
+                // We do not know all instances yet so we have to wait for
+                // their creation
+                return null;
+            }
+        }
+
+        final Optional<Object> value = instances.stream()
+            .filter(o -> paramType.isAssignableFrom(o.getClass()))
+            .findFirst();
+
+        if (value.isPresent()) {
+            return value.get();
+        } else {
+            throw new IllegalArgumentException(String.format(
+                "No instance found that match the required type " +
+                "'%s' in the constructor for injected class '%s'.",
+                param.getClass().getName(),
+                clazz.getName()
+            ));
         }
     }
 
