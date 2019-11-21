@@ -46,7 +46,6 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -209,44 +208,28 @@ public final class ConnectController implements Initializable {
         fieldName.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
 
         fieldHost.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldHost.getText().isEmpty()) {
-                recalculateFields.run();
-            }
+            recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldHost);
         });
 
         UnaryOperator<TextFormatter.Change> onlyDigitsFilter = change ->
             change.getText().matches("[0-9]*") ? change : null;
 
         fieldPort.setTextFormatter(new TextFormatter<>(onlyDigitsFilter));
-        fieldPort.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldPort.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldPort.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldPort));
 
-        fieldFile.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldFile.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldFile.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldFile));
 
-        fieldUser.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldUser.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldUser.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldUser));
 
-        fieldName.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldName.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldName.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldName));
 
-        fieldSchema.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldSchema.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldSchema.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldSchema));
+    }
+
+    private void recalculateOnLostFocusAndEmptyField(Runnable recalculateFields, Boolean oldValue, TextField field) {
+        if (oldValue && field.getText().isEmpty()) {
+            recalculateFields.run();
+        }
     }
 
     private void disableConnectButtonIfAnyFieldIsNotEntered(AtomicReference<DbmsType> dbmsType) {

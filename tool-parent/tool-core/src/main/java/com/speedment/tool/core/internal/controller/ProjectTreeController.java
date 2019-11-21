@@ -229,23 +229,27 @@ public final class ProjectTreeController implements Initializable {
                 projectTreeComponent.createContextMenu(this, item)
                     .ifPresent(this::setContextMenu);
 
-                boolean indicateEnabled = HasEnabled.test(item);
-
-                if (item instanceof ColumnProperty) {
-                    indicateEnabled &= ((ColumnProperty) item).getParentOrThrow().isEnabled();
-                } else if (item instanceof IndexProperty) {
-                    indicateEnabled &= ((IndexProperty) item).getParentOrThrow().isEnabled();
-                } else if (item instanceof PrimaryKeyColumnProperty) {
-                    indicateEnabled &= ((PrimaryKeyColumnProperty) item).getParentOrThrow().isEnabled();
-                }
-
-                if (indicateEnabled) {
-                    enable();
-                } else {
-                    disable();
-                }
+                updateEnabled(item);
 
                 getTreeView().refresh();
+            }
+        }
+
+        private void updateEnabled(DocumentProperty item) {
+            boolean indicateEnabled = HasEnabled.test(item);
+
+            if (item instanceof ColumnProperty) {
+                indicateEnabled &= ((ColumnProperty) item).getParentOrThrow().isEnabled();
+            } else if (item instanceof IndexProperty) {
+                indicateEnabled &= ((IndexProperty) item).getParentOrThrow().isEnabled();
+            } else if (item instanceof PrimaryKeyColumnProperty) {
+                indicateEnabled &= ((PrimaryKeyColumnProperty) item).getParentOrThrow().isEnabled();
+            }
+
+            if (indicateEnabled) {
+                enable();
+            } else {
+                disable();
             }
         }
     }
