@@ -39,8 +39,10 @@ import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 
+import java.lang.Class;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
@@ -51,6 +53,8 @@ import static com.speedment.generator.standard.util.ColumnUtil.usesOptional;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -186,8 +190,9 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             });
 
         // Add type mapper
-        if (col.getTypeMapper().isPresent()) {
-            final String typeMapper = col.getTypeMapper().get();
+        final Optional<String> oTypemapper = col.getTypeMapper();
+        if (oTypemapper.isPresent()) {
+            final String typeMapper = oTypemapper.get();
 
             if (PrimitiveTypeMapper.class.getName().equals(typeMapper)) {
                 file.add(Import.of(TypeMapper.class));
@@ -296,42 +301,29 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
     public boolean isInGeneratedPackage() {
         return true;
     }
+    
+    private static final Map<Type, Type> OPTIONAL_MAPPING = Stream.of(
+        new AbstractMap.SimpleImmutableEntry<>(int.class, OptionalInt.class),
+        new AbstractMap.SimpleImmutableEntry<>(long.class, OptionalLong.class),
+        new AbstractMap.SimpleImmutableEntry<>(double.class, OptionalDouble.class),
+        new AbstractMap.SimpleImmutableEntry<>(boolean.class, OptionalBoolean.class),
+
+        new AbstractMap.SimpleImmutableEntry<>(Integer.class, OptionalInt.class),
+        new AbstractMap.SimpleImmutableEntry<>(Long.class, OptionalLong.class),
+        new AbstractMap.SimpleImmutableEntry<>(Double.class, OptionalDouble.class),
+        new AbstractMap.SimpleImmutableEntry<>(Boolean.class, OptionalBoolean.class)
+    ).collect(collectingAndThen(toMap(Map.Entry::getKey, Map.Entry::getValue), Collections::unmodifiableMap);
 
     static Type getterReturnType(TypeMapperComponent typeMappers, Column col) {
-        final Type retType;
         final Type type = typeMappers.get(col).getJavaType(col);
-
         if (usesOptional(col)) {
             if (isPrimitive(type)) {
-                if (type.equals(int.class)) {
-                    retType = OptionalInt.class;
-                } else if (type.equals(long.class)) {
-                    retType = OptionalLong.class;
-                } else if (type.equals(double.class)) {
-                    retType = OptionalDouble.class;
-                } else if (type.equals(boolean.class)) {
-                    retType = OptionalBoolean.class;
-                } else {
-                    retType = optional(wrapperFor(type)); // Optional<Float>
-                }
+                return OPTIONAL_MAPPING.getOrDefault(type, optional(wrapperFor(type)));
             } else {
-                if (type.equals(Integer.class)) {
-                    retType = OptionalInt.class;
-                } else if (type.equals(Long.class)) {
-                    retType = OptionalLong.class;
-                } else if (type.equals(Double.class)) {
-                    retType = OptionalDouble.class;
-                } else if (type.equals(Boolean.class)) {
-                    retType = OptionalBoolean.class;
-                } else {
-                    retType = optional(type);
-                }
+                return OPTIONAL_MAPPING.getOrDefault(type, optional(type));
             }
-        } else {
-            retType = type;
         }
-
-        return retType;
+        return type;
     }
     
     private String returnString(String s) {
