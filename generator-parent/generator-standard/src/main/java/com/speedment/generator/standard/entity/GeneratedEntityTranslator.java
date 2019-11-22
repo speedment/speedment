@@ -301,7 +301,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
     public boolean isInGeneratedPackage() {
         return true;
     }
-    
+
     private static final Map<Type, Type> OPTIONAL_MAPPING = Stream.of(
         new AbstractMap.SimpleImmutableEntry<>(int.class, OptionalInt.class),
         new AbstractMap.SimpleImmutableEntry<>(long.class, OptionalLong.class),
@@ -312,7 +312,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
         new AbstractMap.SimpleImmutableEntry<>(Long.class, OptionalLong.class),
         new AbstractMap.SimpleImmutableEntry<>(Double.class, OptionalDouble.class),
         new AbstractMap.SimpleImmutableEntry<>(Boolean.class, OptionalBoolean.class)
-    ).collect(collectingAndThen(toMap(Map.Entry::getKey, Map.Entry::getValue), Collections::unmodifiableMap);
+    ).collect(collectingAndThen(toMap(Map.Entry::getKey, Map.Entry::getValue), Collections::unmodifiableMap));
 
     static Type getterReturnType(TypeMapperComponent typeMappers, Column col) {
         final Type type = typeMappers.get(col).getJavaType(col);
