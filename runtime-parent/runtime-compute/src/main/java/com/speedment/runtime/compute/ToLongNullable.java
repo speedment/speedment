@@ -71,6 +71,8 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
+    // Note that Function<T, Long> is not the same as ToLongFunction<T>
+    // since the former returns Long and the later long
     static <T> ToLongNullable<T> of(Function<T, Long> lambda) {
         requireNonNull(lambda);
         if (lambda instanceof ToLongNullable) {

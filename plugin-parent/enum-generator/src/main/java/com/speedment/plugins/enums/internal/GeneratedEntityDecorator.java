@@ -38,7 +38,6 @@ import com.speedment.runtime.field.EnumField;
 import com.speedment.runtime.field.EnumForeignKeyField;
 import com.speedment.runtime.typemapper.TypeMapper;
 
-import java.lang.Class;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -316,7 +315,7 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
         ));
     }
 
-    private boolean hasTypeMapper(Column col, Class<?> typeMapperClass) {
+    private boolean hasTypeMapper(Column col, java.lang.Class<?> typeMapperClass) {
         return col.getTypeMapper()
             .filter(typeMapperClass.getName()::equals)
             .isPresent();

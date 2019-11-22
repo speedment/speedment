@@ -210,7 +210,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         Statistics.report(info, projectComponent, GUI_STARTED);
     }
 
-    public void outputWarningAndShowNotification(Throttler throttler, LoggerEvent ev) {
+    private void outputWarningAndShowNotification(Throttler throttler, LoggerEvent ev) {
         addToOutputMessages(OutputUtil.warning(ev.getMessage()));
         final String title = "There are warnings. See output.";
         throttler.call(title, () ->
@@ -220,7 +220,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                 () -> outputVisible.set(true)
             )
         );
-        return;
     }
 
     private void addToOutputMessages(Node node) {

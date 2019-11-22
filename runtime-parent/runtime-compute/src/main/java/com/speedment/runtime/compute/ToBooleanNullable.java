@@ -71,6 +71,8 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
+    // Note that Function<T, Boolean> is not the same as Predicate<T>
+    // since the former returns Boolean and the later boolean
     static <T> ToBooleanNullable<T> of(Function<T, Boolean> lambda) {
         requireNonNull(lambda);
         if (lambda instanceof ToBooleanNullable) {

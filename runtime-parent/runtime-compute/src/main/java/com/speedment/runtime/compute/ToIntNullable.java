@@ -72,6 +72,8 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
+    // Note that Function<T, Integer> is not the same as ToIntFunction<T>
+    // since the former returns Integer and the later int
     static <T> ToIntNullable<T> of(Function<T, Integer> lambda) {
         requireNonNull(lambda);
         if (lambda instanceof ToIntNullable) {

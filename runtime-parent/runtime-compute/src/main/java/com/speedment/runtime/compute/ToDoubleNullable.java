@@ -77,6 +77,8 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
+    // Note that Function<T, Double> is not the same as ToDoubleFunction<T>
+    // since the former returns Double and the later double
     static <T> ToDoubleNullable<T> of(Function<T, Double> lambda) {
         requireNonNull(lambda);
         if (lambda instanceof ToDoubleNullable) {

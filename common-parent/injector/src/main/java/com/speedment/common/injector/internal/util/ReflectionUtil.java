@@ -139,13 +139,12 @@ public final class ReflectionUtil {
         }
 
         final Class<?> type = param.getType();
-        final Object value = parse(type, serialized).orElseThrow(() -> new IllegalArgumentException(String.format(
+        return parse(type, serialized).orElseThrow(() -> new IllegalArgumentException(String.format(
             "Unsupported type '%s' injected into the " +
                 "constructor of class '%s'.",
             type.getName(), clazz.getName()
         )));
 
-        return value;
     }
 
     private static <T> Object notConfigField(Class<T> clazz, List<Object> instances, Set<Class<?>> allInjectableTypes, Parameter param) {

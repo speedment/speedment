@@ -1,6 +1,5 @@
 package com.speedment.runtime.core.internal.util;
 
-import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.ComparableField;

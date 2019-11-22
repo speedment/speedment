@@ -176,10 +176,7 @@ public final class InjectorImpl implements Injector {
 
             hasAnythingChanged.set(false);
 
-            unfinished.forEach(n -> {
-                stop(hasAnythingChanged, classMapper, n);
-
-            });
+            unfinished.forEach(n -> stop(hasAnythingChanged, classMapper, n));
 
             if (!hasAnythingChanged.get()) {
                 throw new IllegalStateException(

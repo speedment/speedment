@@ -39,7 +39,6 @@ import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 
-import java.lang.Class;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Stream;

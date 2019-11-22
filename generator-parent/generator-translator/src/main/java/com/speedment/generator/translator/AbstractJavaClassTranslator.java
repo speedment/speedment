@@ -323,11 +323,7 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
                             // map the stream so that every value in the list
                             // becomes an element of the stream.
                             .filterValue(List.class::isInstance)
-                            .mapValue(v -> {
-                                @SuppressWarnings("unchecked")
-                                final List<Map<String, Object>> val = (List<Map<String, Object>>) v;
-                                return val;
-                            })
+                            .mapValue(AbstractJavaClassTranslator::castToListOfMap)
                             .flatMapValue(List::stream)
 
                             // The foreignKeys-property is special in that only
@@ -425,6 +421,12 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         }
 
+    }
+
+    private static List<Map<String, Object>> castToListOfMap(Object v) {
+        @SuppressWarnings("unchecked")
+        final List<Map<String, Object>> val = (List<Map<String, Object>>)v;
+        return val;
     }
 
     protected final Builder<T> newBuilder(File file, String className) {
