@@ -561,17 +561,13 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 // If we are currently debugging, print out every created
                 // instance and which configuration options are available for
                 // it.
-                if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                    logCreated(properties, injectable);
-                }
+                logCreated(properties, injectable);
                 it.remove();
             } else {
                 // If we are currently debugging, print out every created
                 // instance and which configuration options are available for
                 // it.
-                if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                    logPending(injectable);
-                }
+                logPending(injectable);
             }
         }
 
@@ -582,33 +578,36 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     }
 
     private void logPending(Injectable<?> injectable) {
-        INTERNAL_LOGGER.debug("| %-71s PENDING |",
-            limit(injectable.get().getSimpleName(), 71)
-        );
-        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+        if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+            INTERNAL_LOGGER.debug("| %-71s PENDING |",
+                limit(injectable.get().getSimpleName(), 71)
+            );
+            INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+        }
     }
 
     private void logCreated(Properties properties, Injectable<?> injectable) {
-        INTERNAL_LOGGER.debug("| %-71s CREATED |",
-            limit(injectable.get().getSimpleName(), 71)
-        );
+        if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+            INTERNAL_LOGGER.debug("| %-71s CREATED |",
+                limit(injectable.get().getSimpleName(), 71)
+            );
 
-        traverseFields(injectable.get())
-            .filter(f -> f.isAnnotationPresent(Config.class))
-            .map(f -> f.getAnnotation(Config.class))
-            .map(a -> format(
-                "|     %-48s %26s |",
-                limit(a.name(), 48),
-                limit(properties.containsKey(a.name())
-                    ? properties.get(a.name()).toString()
-                    : a.value(), 26
-                )
-            ))
-            .forEachOrdered(INTERNAL_LOGGER::debug);
+            traverseFields(injectable.get())
+                .filter(f -> f.isAnnotationPresent(Config.class))
+                .map(f -> f.getAnnotation(Config.class))
+                .map(a -> format(
+                    "|     %-48s %26s |",
+                    limit(a.name(), 48),
+                    limit(properties.containsKey(a.name())
+                        ? properties.get(a.name()).toString()
+                        : a.value(), 26
+                    )
+                ))
+                .forEachOrdered(INTERNAL_LOGGER::debug);
 
-        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+            INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+        }
     }
-
 
     private void throwNewConstructorResolutionException(Set<Injectable<?>> injectablesLeft, Map<Class<?>, Object> instanceMap) {
         final StringBuilder msg = new StringBuilder();
