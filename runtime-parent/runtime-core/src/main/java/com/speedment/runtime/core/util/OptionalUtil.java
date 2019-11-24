@@ -71,9 +71,11 @@ public final class OptionalUtil {
      * @return          the inner value or {@code null}
      */
     public static Integer unwrap(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") OptionalInt optional) {
-        return optional == null 
-            ? null 
-            : optional.isPresent() ? optional.getAsInt() : null;
+        if (optional == null) {
+            return null;
+        } else {
+            return optional.isPresent() ? optional.getAsInt() : null;
+        }
     }
     
     /**
@@ -84,9 +86,11 @@ public final class OptionalUtil {
      * @return          the inner value or {@code null}
      */
     public static Boolean unwrap(OptionalBoolean optional) {
-        return optional == null 
-            ? null 
-            : optional.isPresent() ? optional.getAsBoolean() : null;
+        if (optional == null) {
+            return null;
+        } else {
+            return optional.isPresent() ? optional.getAsBoolean() : null;
+        }
     }
     
     /**
@@ -97,9 +101,11 @@ public final class OptionalUtil {
      * @return          the inner value or {@code null}
      */
     public static Long unwrap(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") OptionalLong optional) {
-        return optional == null 
-            ? null 
-            : optional.isPresent() ? optional.getAsLong() : null;
+        if (optional == null) {
+            return null;
+        } else {
+            return optional.isPresent() ? optional.getAsLong() : null;
+        }
     }
     
     /**
@@ -110,9 +116,11 @@ public final class OptionalUtil {
      * @return          the inner value or {@code null}
      */
     public static Double unwrap(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") OptionalDouble optional) {
-        return optional == null 
-            ? null 
-            : optional.isPresent() ? optional.getAsDouble() : null;
+        if (optional == null) {
+            return null;
+        } else {
+            return optional.isPresent() ? optional.getAsDouble() : null;
+        }
     }
 
     /**

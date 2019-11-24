@@ -146,12 +146,12 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
      */
     private void resolveStages() {
         for (int i = 0; i < stageBeans.size(); i++) {
-            final StageBean<?> stageBean = stageBeans.get(i);
-            final HasComparableOperators<?, ?> foreignField = stageBean.getForeignField();
+            final StageBean<?> currentStageBean = stageBeans.get(i);
+            final HasComparableOperators<?, ?> foreignField = currentStageBean.getForeignField();
             if (foreignField == null) {
-                stageBean.setReferencedStage(-1);
+                currentStageBean.setReferencedStage(-1);
             } else {
-                stageBean.setReferencedStage(stageIndexOf(stageBeans, foreignField, i));
+                currentStageBean.setReferencedStage(stageIndexOf(stageBeans, foreignField, i));
             }
         }
         if (LOGGER_JOIN.getLevel().isEqualOrHigherThan(Level.DEBUG)) {

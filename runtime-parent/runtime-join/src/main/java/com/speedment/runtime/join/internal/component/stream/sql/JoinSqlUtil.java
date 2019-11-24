@@ -115,10 +115,8 @@ final class JoinSqlUtil {
         int nullOffset = -1;
 
         // Check if this stage renders an on-field to be nullable
-        if (stage.joinType().isPresent()) {
-            if (stage.joinType().orElseThrow(() -> newNoSuchElementException(stage)).isNullableSelf()) {
-                nullOffset = findNullOffset(table, stage, stage.field().orElseThrow(() -> new NoSuchElementException("field is missing in stage" + stage)));
-            }
+        if (stage.joinType().isPresent() && stage.joinType().orElseThrow(() -> newNoSuchElementException(stage)).isNullableSelf()) {
+            nullOffset = findNullOffset(table, stage, stage.field().orElseThrow(() -> new NoSuchElementException("field is missing in stage" + stage)));
         }
 
         // Check if another (RIGHT JOIN) stage renders an on-field in this stage to be nullable
@@ -177,16 +175,14 @@ final class JoinSqlUtil {
                 continue;
             }
             final Stage<?> otherStage = stages.get(i);
-            if (otherStage.joinType().isPresent()) {
-                if (otherStage.joinType().orElseThrow(() -> newNoSuchElementException(otherStage)).isNullableOther()) {
-                    final HasComparableOperators<?, ?> otherStageForeignField = otherStage.foreignField().orElseThrow(() -> new NoSuchElementException("Foreign field is missing in other stage " + otherStage));
-                    final TableIdentifier<?> referencedId = otherStageForeignField.identifier().asTableIdentifier();
-                    if (thisId.equals(referencedId)) {
-                        nullOffset = findNullOffset(table, otherStage, otherStageForeignField);
-                        // If we have a between operation where there is another field pointed, my
-                        // belief is that we can safely ignore that because both fields will be null and we
-                        // only need to detect one
-                    }
+            if (otherStage.joinType().isPresent() && otherStage.joinType().orElseThrow(() -> newNoSuchElementException(otherStage)).isNullableOther()) {
+                final HasComparableOperators<?, ?> otherStageForeignField = otherStage.foreignField().orElseThrow(() -> new NoSuchElementException("Foreign field is missing in other stage " + otherStage));
+                final TableIdentifier<?> referencedId = otherStageForeignField.identifier().asTableIdentifier();
+                if (thisId.equals(referencedId)) {
+                    nullOffset = findNullOffset(table, otherStage, otherStageForeignField);
+                    // If we have a between operation where there is another field pointed, my
+                    // belief is that we can safely ignore that because both fields will be null and we
+                    // only need to detect one
                 }
             }
         }
@@ -315,11 +311,9 @@ final class JoinSqlUtil {
         if (!stage.predicates().isEmpty()) {
             for (int j = 0; j < stage.predicates().size(); j++) {
                 final Predicate<?> predicate = stage.predicates().get(j);
-                if (predicate instanceof FieldPredicate) {
-                    if (((FieldPredicate)predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
-                        // Remove redundant ALWAYS_TRUE predicates
-                        continue;
-                    }
+                if (predicate instanceof FieldPredicate && ((FieldPredicate) predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
+                    // Remove redundant ALWAYS_TRUE predicates
+                    continue;
                 }
                 if (cnt++ != 0) {
                     sql.append(" AND ");

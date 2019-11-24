@@ -114,7 +114,7 @@ public interface Rest {
         try {
             return URLEncoder.encode(value, "UTF-8");
         } catch (final UnsupportedEncodingException ex) {
-            throw new RuntimeException("Error encoding value '" + value + "'.");
+            throw new IllegalStateException("Error encoding value '" + value + "'.");
         }
     }
 }

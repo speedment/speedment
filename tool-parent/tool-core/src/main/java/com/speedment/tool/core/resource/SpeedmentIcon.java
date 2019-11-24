@@ -20,6 +20,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.tool.config.trait.HasIconPath;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -191,7 +192,7 @@ public enum SpeedmentIcon implements Icon {
     private InputStream getFileInputStream() {
         final InputStream stream = getClass().getResourceAsStream(filename);
         if (stream == null) {
-            throw new RuntimeException("Could not find icon: '" + filename + "'.");
+            throw new SpeedmentException("Could not find icon: '" + filename + "'.");
         }
         return stream;
 

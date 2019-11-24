@@ -121,23 +121,23 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
     @Override
     public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
         void put(Class<DOC> docType, Class<T> modelType, String key, TranslatorConstructor<DOC, T> constructor) {
-        aquireTranslatorSettings(docType, modelType, key).setConstructor(constructor);
+        acquireTranslatorSettings(docType, modelType, key).setConstructor(constructor);
     }
 
     @Override
     public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
         void add(Class<DOC> docType, Class<T> modelType, String key, TranslatorDecorator<DOC, T> decorator) {
-        aquireTranslatorSettings(docType, modelType, key).decorators().add(decorator);
+        acquireTranslatorSettings(docType, modelType, key).decorators().add(decorator);
     }
 
     @Override
     public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
         void remove(Class<DOC> docType, String key) {
-        aquireTranslatorSettings(docType, null, key).setConstructor(null);
+        acquireTranslatorSettings(docType, null, key).setConstructor(null);
     }
 
     private <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
-        TranslatorSettings<DOC, T> aquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
+        TranslatorSettings<DOC, T> acquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
         @SuppressWarnings("unchecked")
         final TranslatorSettings<DOC, T> result = (TranslatorSettings<DOC, T>) map
             .computeIfAbsent(docType,

@@ -58,7 +58,9 @@ public final class InternalMergeUtil {
             try {
                 manager.update(entity);
                 result.add(entity);
-            } catch (SpeedmentException ignore) {}
+            } catch (SpeedmentException ignore) {
+                // No operation
+            }
         }
         for (T entity:missing) {
             try {

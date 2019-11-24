@@ -16,8 +16,7 @@
  */
 package com.speedment.tool.propertyeditor.item;
 
-import static java.util.Objects.requireNonNull;
-import java.util.function.UnaryOperator;
+import com.speedment.runtime.core.exception.SpeedmentException;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -29,6 +28,10 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+
+import java.util.function.UnaryOperator;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An editor for editing a StringProperty via an IntegerSpinner, which has a default value. The user
@@ -227,7 +230,7 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
                 editor.setText(String.valueOf(min));
             }
         } catch (final NumberFormatException ex) {
-            throw new RuntimeException("Unable to parse an integer from editor field", ex);
+            throw new SpeedmentException("Unable to parse an integer from editor field", ex);
         }
     }
 

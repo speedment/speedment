@@ -93,7 +93,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
             try {
                 fromDatabase = enumClass.getMethod(FROM_DATABASE_METHOD, String.class);
             } catch (final NoSuchMethodException ex) {
-                throw new RuntimeException(
+                throw new IllegalArgumentException(
                     "Could not find generated '" + FROM_DATABASE_METHOD + 
                     "'-method in enum class '" + enumClass.getName() + "'.", ex
                 );
@@ -106,7 +106,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
             } catch (final IllegalAccessException 
                          | IllegalArgumentException 
                          | InvocationTargetException ex) {
-                throw new RuntimeException(
+                throw new IllegalArgumentException(
                     "Error executing '" + FROM_DATABASE_METHOD + 
                     "' in generated enum class '" + enumClass.getName() + "'.",
                     ex
@@ -155,7 +155,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                 toDatabase = enumClass.getMethod(TO_DATABASE_METHOD);
 
             } catch (final NoSuchMethodException ex) {
-                throw new RuntimeException(
+                throw new IllegalArgumentException(
                     "Could not find generated '" + TO_DATABASE_METHOD + 
                     "'-method in enum class '" + 
                     constant.getClass().getName() + "'.", ex
@@ -167,7 +167,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                 final String result = (String) toDatabase.invoke(constant);
                 return result;
             } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                throw new RuntimeException(
+                throw new IllegalArgumentException(
                     "Error executing '" + TO_DATABASE_METHOD + 
                     "' in generated enum class '" + constant.getClass().getName() + "'.", ex
                 );

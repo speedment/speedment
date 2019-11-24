@@ -53,19 +53,17 @@ final class RuleUtil {
             // Otherwise continue
         }
 
-        if ("NUMBER".equals(typeName) || "DECIMAL".equals(typeName)) {
-            if (md.getDecimalDigits() == 0) {
-                if (columnSize <= 2) {
-                    return Optional.of(Byte.class);
-                } else if (columnSize <= 4) {
-                    return Optional.of(Short.class);
-                } else if (columnSize <= 9) {
-                    return Optional.of(Integer.class);
-                } else if (columnSize <= 18) {
-                    return Optional.of(Long.class);
-                } else {
-                    return Optional.of(BigInteger.class);
-                }
+        if (("NUMBER".equals(typeName) || "DECIMAL".equals(typeName)) && md.getDecimalDigits() == 0) {
+            if (columnSize <= 2) {
+                return Optional.of(Byte.class);
+            } else if (columnSize <= 4) {
+                return Optional.of(Short.class);
+            } else if (columnSize <= 9) {
+                return Optional.of(Integer.class);
+            } else if (columnSize <= 18) {
+                return Optional.of(Long.class);
+            } else {
+                return Optional.of(BigInteger.class);
             }
         }
 

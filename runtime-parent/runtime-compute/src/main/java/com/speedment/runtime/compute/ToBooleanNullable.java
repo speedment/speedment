@@ -191,7 +191,10 @@ extends Expression<T>,
 
     @Override
     default long hash(T object) {
-        return isNull(object) ? 0 : (applyAsBoolean(object) ? 1 : 2);
+        if (isNotNull(object)) {
+            return 0;
+        }
+        return applyAsBoolean(object) ? 1 : 2;
     }
 
     @Override
@@ -210,6 +213,7 @@ extends Expression<T>,
 
     @Override
     default <V> ToBooleanNullable<V> compose(Function<? super V, ? extends T> before) {
+        requireNonNull(before);
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToBooleanNullable(casted, this);

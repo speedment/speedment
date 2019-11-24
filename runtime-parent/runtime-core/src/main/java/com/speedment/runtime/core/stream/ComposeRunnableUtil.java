@@ -53,6 +53,7 @@ public final class ComposeRunnableUtil {
                     try {
                         exception.addSuppressed(e);
                     } catch (Exception ignored) {
+                        // No op
                     }
                 }
             }

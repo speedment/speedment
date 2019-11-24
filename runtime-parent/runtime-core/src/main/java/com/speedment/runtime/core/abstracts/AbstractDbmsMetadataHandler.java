@@ -242,13 +242,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                     final String schemaName = catalogResultSet.getString(1);
 
                     boolean schemaWasUsed = false;
-                    if (filterCriteria.test(schemaName)) {
-                        if (!naming.getSchemaExcludeSet().contains(schemaName)) {
-                            final Schema schema = dbms.mutator().addNewSchema();
-                            schema.mutator().setId(schemaName);
-                            schema.mutator().setName(schemaName);
-                            schemaWasUsed = true;
-                        }
+                    if (filterCriteria.test(schemaName) && !naming.getSchemaExcludeSet().contains(schemaName)) {
+                        final Schema schema = dbms.mutator().addNewSchema();
+                        schema.mutator().setId(schemaName);
+                        schema.mutator().setName(schemaName);
+                        schemaWasUsed = true;
                     }
 
                     if (!schemaWasUsed) {
@@ -271,13 +269,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                     final String name = readSchemaName(rs, dbmsType);
 
                     boolean schemaWasUsed = false;
-                    if (!naming.getSchemaExcludeSet().contains(name)) {
-                        if (filterCriteria.test(name)) {
-                            final Schema schema = dbms.mutator().addNewSchema();
-                            schema.mutator().setId(name);
-                            schema.mutator().setName(name);
-                            schemaWasUsed = true;
-                        }
+                    if (!naming.getSchemaExcludeSet().contains(name)&& filterCriteria.test(name)) {
+                        final Schema schema = dbms.mutator().addNewSchema();
+                        schema.mutator().setId(name);
+                        schema.mutator().setName(name);
+                        schemaWasUsed = true;
                     }
 
                     if (!schemaWasUsed) {
@@ -462,10 +458,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
             column.mutator().setDatabaseType(selectedJdbcClass);
 
-            if (!nullable) {
-                if (hasPrimitiveClass(selectedJdbcClass)) {
-                    column.mutator().setTypeMapper(TypeMapper.primitive().getClass());
-                }
+            if (!nullable && hasPrimitiveClass(selectedJdbcClass)) {
+                column.mutator().setTypeMapper(TypeMapper.primitive().getClass());
             }
             
             if ("ENUM".equalsIgnoreCase(md.getTypeName())) {

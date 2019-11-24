@@ -346,11 +346,15 @@ public final class DocumentUtil {
             + " {"
             + MapStream.of(document.getData())
             .mapValue(VALUE_MAPPER)
-            .map((k, v) -> "\"" + k + "\": " + (v == null ? "null" : (v instanceof String ? ("\"" + v + "\"") : v.toString())))
+            .map((k, v) -> "\"" + k + "\": " + (v == null ? "null" : quoteIfString(v)))
             .collect(joining(", "))
             + "}";
     }
-    
+
+    private static String quoteIfString(Object o) {
+        return (o instanceof String ? ("\"" + o + "\"") : o.toString());
+    }
+
     /**
      * Casts the specified object to a {@code List<Map<String, Object>>}.
      * <p>

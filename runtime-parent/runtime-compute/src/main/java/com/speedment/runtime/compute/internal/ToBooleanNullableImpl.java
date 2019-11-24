@@ -94,8 +94,11 @@ implements NullableExpression<T, ToBoolean<T>>, ToBooleanNullable<T> {
 
     @Override
     public long hash(T object) {
-        return isNull.test(object)
-            ? 2 : (original.applyAsBoolean(object) ? 1 : 0);
+        if (isNull.test(object)) {
+            return 2;
+        } else {
+            return original.applyAsBoolean(object) ? 1 : 0;
+        }
     }
 
     @Override

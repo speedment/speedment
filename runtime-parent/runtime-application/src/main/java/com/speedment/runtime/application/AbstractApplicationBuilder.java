@@ -562,10 +562,8 @@ public abstract class AbstractApplicationBuilder<
         if (majorVersion < 8) {
             return Optional.of(Boolean.FALSE);
         }
-        if (majorVersion == 8) {
-            if (securityVersion < 40) {
-                return Optional.of(Boolean.FALSE);
-            }
+        if (majorVersion == 8 && securityVersion < 40) {
+            return Optional.of(Boolean.FALSE);
         }
         return Optional.of(Boolean.TRUE);
     }

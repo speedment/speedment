@@ -86,7 +86,11 @@ public final class SignUtil {
             @Override
             public byte applyAsByte(T object) {
                 final double value = inner.applyAsDouble(object);
-                return value < 0 ? NEGATIVE : (value > 0 ? POSITIVE : ZERO);
+                if (value < 0) {
+                    return NEGATIVE;
+                } else {
+                    return value > 0 ? POSITIVE : ZERO;
+                }
             }
         }
 
@@ -111,7 +115,11 @@ public final class SignUtil {
             @Override
             public byte applyAsByte(T object) {
                 final float value = inner.applyAsFloat(object);
-                return value < 0 ? NEGATIVE : (value > 0 ? POSITIVE : ZERO);
+                if (value < 0) {
+                    return NEGATIVE;
+                } else {
+                    return value > 0 ? POSITIVE : ZERO;
+                }
             }
         }
 
@@ -136,7 +144,11 @@ public final class SignUtil {
             @Override
             public byte applyAsByte(T object) {
                 final long value = inner.applyAsLong(object);
-                return value < 0 ? NEGATIVE : (value > 0 ? POSITIVE : ZERO);
+                if (value < 0) {
+                    return NEGATIVE;
+                } else {
+                    return value > 0 ? POSITIVE : ZERO;
+                }
             }
         }
 
@@ -161,7 +173,11 @@ public final class SignUtil {
             @Override
             public byte applyAsByte(T object) {
                 final int value = inner.applyAsInt(object);
-                return value < 0 ? NEGATIVE : (value > 0 ? POSITIVE : ZERO);
+                if (value < 0) {
+                    return NEGATIVE;
+                } else {
+                    return value > 0 ? POSITIVE : ZERO;
+                }
             }
         }
 
@@ -186,7 +202,11 @@ public final class SignUtil {
             @Override
             public byte applyAsByte(T object) {
                 final short value = inner.applyAsShort(object);
-                return value < 0 ? NEGATIVE : (value > 0 ? POSITIVE : ZERO);
+                if (value < 0) {
+                    return NEGATIVE;
+                } else {
+                    return value > 0 ? POSITIVE : ZERO;
+                }
             }
         }
 
@@ -211,7 +231,11 @@ public final class SignUtil {
             @Override
             public byte applyAsByte(T object) {
                 final byte value = inner.applyAsByte(object);
-                return value < 0 ? NEGATIVE : (value > 0 ? POSITIVE : ZERO);
+                if (value < 0) {
+                    return NEGATIVE;
+                } else {
+                    return value > 0 ? POSITIVE : ZERO;
+                }
             }
         }
 

@@ -364,6 +364,10 @@ public final class JsonDeserializer implements AutoCloseable {
         }
 
         // Parse each remaining entry
+        return parseEachRemainingEntry(list);
+    }
+
+    private List<Object> parseEachRemainingEntry(List<Object> list) throws IOException {
         while (true) {
             switch (nextNonBlankspace()) {
                 case 0x7B: // { (begin parsing object)
@@ -391,7 +395,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     break;
 
                 // Digit '0 - 9'
-                case 0x30: case 0x31: case 0x32: case 0x33: case 0x34: 
+                case 0x30: case 0x31: case 0x32: case 0x33: case 0x34:
                 case 0x35: case 0x36: case 0x37: case 0x38: case 0x39:
                 case 0x2E: // . (decimal sign)
                 case 0x2D: // - (minus sign)

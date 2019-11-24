@@ -657,7 +657,7 @@ public final class SqliteMetadataHandlerImpl implements DbmsMetadataHandler {
 
             return sb.toString();
         } catch (NoSuchAlgorithmException ex) {
-            throw new RuntimeException("MD5 algorithm not supported.", ex);
+            throw new IllegalArgumentException("MD5 algorithm not supported.", ex);
         }
     }
 

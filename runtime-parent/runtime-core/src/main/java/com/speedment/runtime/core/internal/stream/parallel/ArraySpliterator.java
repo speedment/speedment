@@ -66,9 +66,11 @@ final class ArraySpliterator<T> implements Spliterator<T> {
     public Spliterator<T> trySplit() {
         final int lo = index;
         final int mid = (lo + size) >>> 1;
-        return (lo >= mid)
-                ? null
-                : new ArraySpliterator<>(array, lo, index = mid, characteristics);
+        if (lo >= mid) {
+            return null;
+        } else {
+            return new ArraySpliterator<>(array, lo, index = mid, characteristics);
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -123,7 +123,7 @@ public final class InternalJvmVersion {
         }
         try {
             return Integer.parseInt(System.getProperty("java.runtime.version").split("([\\._-])")[java8Index]);
-        } catch (Throwable t) {
+        } catch (Exception t) {
             return 0;
         }
     }

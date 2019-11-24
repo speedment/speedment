@@ -539,7 +539,8 @@ public final class ConfigFileHelper {
     }
 
     private String alignRight(String substring, int totalWidth) {
-        return String.format("%" + totalWidth + "s", substring);
+        final String formatString = "%" + totalWidth + "s";
+        return String.format(formatString, substring);
     }
 
     public void clearTablesAndSaveToFile() {
@@ -569,10 +570,8 @@ public final class ConfigFileHelper {
 
         // always start with a new file.
         if (currentlyOpenFile.isFile()) {
-            if (currentlyOpenFile.exists()) {
-                if (!currentlyOpenFile.delete()) {
-                    userInterfaceComponent.log(OutputUtil.warning("Unable to delete " + currentlyOpenFile));
-                }
+            if (currentlyOpenFile.exists() && !currentlyOpenFile.delete()) {
+                userInterfaceComponent.log(OutputUtil.warning("Unable to delete " + currentlyOpenFile));
             }
             DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
         } else {

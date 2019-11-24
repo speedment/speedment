@@ -145,10 +145,8 @@ public final class InternalStreamUtil {
 
         @Override
         public T next() {
-            if (state == State.NOT_DETERMINED) {
-                if (!hasNext()) {
-                    throw new NoSuchElementException(NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE);
-                }
+            if (state == State.NOT_DETERMINED && !hasNext()) {
+                throw new NoSuchElementException(NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE);
             }
 
             if (state == State.NO_NEXT) {
@@ -166,10 +164,8 @@ public final class InternalStreamUtil {
 
         @Override
         public void forEachRemaining(Consumer<? super T> action) {
-            if (state == State.NOT_DETERMINED) {
-                if (!hasNext()) {
-                    return;
-                }
+            if (state == State.NOT_DETERMINED && !hasNext()) {
+                return;
             }
 
             if (state == State.NO_NEXT) {

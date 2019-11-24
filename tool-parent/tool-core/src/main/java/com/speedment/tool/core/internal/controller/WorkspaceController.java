@@ -105,9 +105,10 @@ public final class WorkspaceController implements Initializable {
     }
 
     private String type(HasNameProperty withName) {
-        return withName instanceof Table
-            ? ((Table) withName).isView()
-                ? "view" : "table"
-            : withName.mainInterface().getSimpleName().toLowerCase();
+        if (withName instanceof Table) {
+            return ((Table) withName).isView() ? "view" : "table";
+        } else {
+            return withName.mainInterface().getSimpleName().toLowerCase();
+        }
     }
 }
