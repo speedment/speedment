@@ -34,11 +34,13 @@ final class RuleUtil {
         final String typeName   = md.getTypeName().toUpperCase();
         final int columnSize    = md.getColumnSize();
 
+
         switch (typeName) {
             case "NCHAR":
             case "NVARCHAR2": return Optional.of(String.class);
             case "BINARY_FLOAT": return Optional.of(Float.class);
             case "BINARY_DOUBLE": return Optional.of(Double.class);
+            default: // just continue
         }
 
         if ("BIT".equals(typeName)) {

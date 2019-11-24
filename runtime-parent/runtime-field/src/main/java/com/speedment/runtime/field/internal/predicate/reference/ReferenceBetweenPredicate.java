@@ -37,21 +37,20 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceBetweenPredicate<ENTITY, D, V extends Comparable<? super V>>
-extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
-implements HasInclusion, Tuple2<V, V> {
+    extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+    implements HasInclusion, Tuple2<V, V> {
 
     private final V start;
     private final V end;
     private final Inclusion inclusion;
 
     public ReferenceBetweenPredicate(
-            final HasReferenceValue<ENTITY, D, V> referenceField,
-            final V start,
-            final V end,
-            final Inclusion inclusion) {
-        
+        final HasReferenceValue<ENTITY, D, V> referenceField,
+        final V start,
+        final V end,
+        final Inclusion inclusion
+    ) {
         super(BETWEEN, referenceField, entityPredicate(referenceField, start, end, inclusion));
-        
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
@@ -63,28 +62,54 @@ implements HasInclusion, Tuple2<V, V> {
 
             switch (inclusion) {
                 case START_EXCLUSIVE_END_EXCLUSIVE :
-                    if (fieldValue == null) return false;
-                    else if (start == null || end == null) return false;
-                    else return (start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) > 0);
+                    return startExclusiveEndExclusive(start, end, fieldValue);
 
                 case START_EXCLUSIVE_END_INCLUSIVE :
-                    if (fieldValue == null) return start != null && end == null;
-                    else if (start == null || end == null) return false;
-                    else return (start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) >= 0);
+                    return startExclusiveEndIncluseve(start, end, fieldValue);
 
                 case START_INCLUSIVE_END_EXCLUSIVE :
-                    if (fieldValue == null) return start == null && end != null;
-                    else if (start == null || end == null) return false;
-                    return (start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) > 0);
+                    return startInclusiveEndExclusive(start, end, fieldValue);
 
                 case START_INCLUSIVE_END_INCLUSIVE :
-                    if (fieldValue == null) return start == null || end == null;
-                    else if (start == null || end == null) return false;
-                    return (start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) >= 0);
+                    return startInclusiveEndInclusive(start, end, fieldValue);
 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
         };
+    }
+
+    private static <V extends Comparable<? super V>> boolean startInclusiveEndInclusive(V start, V end, V fieldValue) {
+        if (fieldValue == null) {
+            return start == null || end == null;
+        } else if (start == null || end == null) {
+            return false;
+        }
+        return (start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) >= 0);
+    }
+
+    private static <V extends Comparable<? super V>> boolean startInclusiveEndExclusive(V start, V end, V fieldValue) {
+        if (fieldValue == null) {
+            return start == null && end != null;
+        } else if (start == null || end == null) {
+            return false;
+        }
+        return (start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) > 0);
+    }
+
+    private static <V extends Comparable<? super V>> boolean startExclusiveEndIncluseve(V start, V end, V fieldValue) {
+        if (fieldValue == null) {
+            return start != null && end == null;
+        } else if (start == null || end == null) {
+            return false;
+        } else return (start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) >= 0);
+    }
+
+    private static <V extends Comparable<? super V>> boolean startExclusiveEndExclusive(V start, V end, V fieldValue) {
+        if (fieldValue == null) {
+            return false;
+        } else if (start == null || end == null) {
+            return false;
+        } else return (start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) > 0);
     }
 
     @Override

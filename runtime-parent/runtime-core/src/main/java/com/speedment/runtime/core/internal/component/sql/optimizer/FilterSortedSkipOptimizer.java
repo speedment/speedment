@@ -22,6 +22,7 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.runtime.core.db.DbmsTypeDefault;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.LimitAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
@@ -152,28 +153,10 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         sql.append(info.getSqlSelect());
 
         if (!filters.isEmpty()) {
-            @SuppressWarnings("unchecked")
-            List<Predicate<ENTITY>> predicates = filters.stream()
-                .map(FilterAction::getPredicate)
-                .map(p -> (Predicate<ENTITY>) p)
-                .collect(toList());
-
-            final RenderResult rr = StreamTerminatorUtil.renderSqlWhere(
-                dbmsType,
-                info.getSqlColumnNamer(),
-                info.getSqlDatabaseTypeFunction(),
-                predicates
-            );
-
-            final String whereFragmentSql = rr.getSql();
-            if (!whereFragmentSql.isEmpty()) {
-                sql.append(" WHERE ").append(whereFragmentSql);
-                values.addAll(rr.getValues());
-            }
+            renderWhere(info, dbmsType, filters, values, sql);
         }
 
         if (!sorteds.isEmpty()) {
-
             final List<FieldComparator<ENTITY>> fieldComparators = new ArrayList<>();
             for (int i = sorteds.size() - 1; i >= 0; i--) {
                 final SortedComparatorAction<ENTITY> sortedAction = sorteds.get(i);
@@ -196,59 +179,41 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             }
 
             if (!fieldComparators.isEmpty()) {
-
-                sql.append(" ORDER BY ");
-                // Iterate backwards
-                final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
-                int cnt = 0;
-                for (FieldComparator<ENTITY> fieldComparator : fieldComparators) {
-                    final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
-
-                    // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
-                    if (columns.add(columnIdentifier)) {
-                        if (cnt++ != 0) {
-                            sql.append(", ");
-                        }
-
-                        boolean isReversed = fieldComparator.isReversed();
-                        String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
-
-                        final NullOrder effectiveNullOrder = isReversed
-                            ? fieldComparator.getNullOrder().reversed()
-                            : fieldComparator.getNullOrder();
-
-                        // Specify NullOrder pre column if nulls are first
-                        if (effectiveNullOrder == NullOrder.FIRST) {
-                            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
-                                sql.append(fieldName).append("IS NOT NULL, ");
-                            }
-                            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
-                                sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
-                            }
-                        }
-
-                        sql.append(fieldName);
-                        if (String.class.equals(info.getSqlDatabaseTypeFunction().apply(fieldComparator.getField()))) {
-                            sql.append(dbmsType.getCollateFragment().getSql());
-                        }
-
-                        if (isReversed) {
-                            sql.append(" DESC");
-                        } else {
-                            sql.append(" ASC");
-                        }
-
-                        // Specify NullOrder post column
-                        if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
-                            sql.append(" NULLS FIRST");
-                        }
-
-                    }
-                }
+                renderOrderBy(info, dbmsType, sql, fieldComparators);
             }
         }
 
-        final String finalSql;
+        final String finalSql = renderSkipLimit(initialPipeline, dbmsType, skipLimitSupport, filters, sorteds, skips, limits, values, sql);
+
+        query.setSql(finalSql);
+        query.setValues(values);
+
+        return initialPipeline;
+    }
+
+    private void renderWhere(SqlStreamOptimizerInfo<ENTITY> info, DbmsType dbmsType, List<FilterAction<ENTITY>> filters, List<Object> values, StringBuilder sql) {
+        @SuppressWarnings("unchecked")
+        List<Predicate<ENTITY>> predicates = filters.stream()
+            .map(FilterAction::getPredicate)
+            .map(p -> (Predicate<ENTITY>) p)
+            .collect(toList());
+
+        final RenderResult rr = StreamTerminatorUtil.renderSqlWhere(
+            dbmsType,
+            info.getSqlColumnNamer(),
+            info.getSqlDatabaseTypeFunction(),
+            predicates
+        );
+
+        final String whereFragmentSql = rr.getSql();
+        if (!whereFragmentSql.isEmpty()) {
+            sql.append(" WHERE ").append(whereFragmentSql);
+            values.addAll(rr.getValues());
+        }
+    }
+
+    private <P extends Pipeline> String renderSkipLimit(P initialPipeline, DbmsType dbmsType, DbmsTypeDefault.SkipLimitSupport skipLimitSupport, List<FilterAction<ENTITY>> filters, List<SortedComparatorAction<ENTITY>> sorteds, List<SkipAction<ENTITY>> skips, List<LimitAction<ENTITY>> limits, List<Object> values, StringBuilder sql) {
+        String finalSql;
         if (skipLimitSupport == NONE) {
             finalSql = sql.toString();
             initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a));
@@ -259,11 +224,78 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 .applySkipLimit(sql.toString(), values, sumSkip, minLimit);
             initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a) || skips.contains(a) || limits.contains(a));
         }
+        return finalSql;
+    }
 
-        query.setSql(finalSql);
-        query.setValues(values);
+    private void renderOrderBy(SqlStreamOptimizerInfo<ENTITY> info, DbmsType dbmsType, StringBuilder sql, List<FieldComparator<ENTITY>> fieldComparators) {
+        sql.append(" ORDER BY ");
+        // Iterate backwards
+        final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
+        int cnt = 0;
+        for (FieldComparator<ENTITY> fieldComparator : fieldComparators) {
+            final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
 
-        return initialPipeline;
+            // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY
+            if (columns.add(columnIdentifier)) {
+                if (cnt++ != 0) {
+                    sql.append(", ");
+                }
+
+                boolean isReversed = fieldComparator.isReversed();
+                final String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
+
+                final NullOrder effectiveNullOrder = effectiveNullOrder(fieldComparator, isReversed);
+
+                // Specify NullOrder pre column if nulls are first
+                appendNullOrderingPreColumnIfAny(dbmsType, sql, fieldName, effectiveNullOrder);
+
+                sql.append(fieldName);
+                appendStringCollationIfAny(info, dbmsType, sql, fieldComparator);
+
+                appendAscOrDesc(sql, isReversed);
+
+                // Specify NullOrder post column
+                appendNullOrderingPostColumnIfAny(dbmsType, sql, effectiveNullOrder);
+
+            }
+        }
+    }
+
+    private void appendNullOrderingPostColumnIfAny(DbmsType dbmsType, StringBuilder sql, NullOrder effectiveNullOrder) {
+        if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
+            sql.append(" NULLS FIRST");
+        }
+    }
+
+    private void appendStringCollationIfAny(SqlStreamOptimizerInfo<ENTITY> info, DbmsType dbmsType, StringBuilder sql, FieldComparator<ENTITY> fieldComparator) {
+        if (String.class.equals(info.getSqlDatabaseTypeFunction().apply(fieldComparator.getField()))) {
+            sql.append(dbmsType.getCollateFragment().getSql());
+        }
+    }
+
+    private void appendAscOrDesc(StringBuilder sql, boolean isReversed) {
+        if (isReversed) {
+            sql.append(" DESC");
+        } else {
+            sql.append(" ASC");
+        }
+    }
+
+    private void appendNullOrderingPreColumnIfAny(DbmsType dbmsType, StringBuilder sql, String fieldName, NullOrder effectiveNullOrder) {
+        if (effectiveNullOrder == NullOrder.FIRST) {
+            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
+                sql.append(fieldName).append("IS NOT NULL, ");
+            }
+            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
+                sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
+            }
+        }
+    }
+
+    private NullOrder effectiveNullOrder(FieldComparator<ENTITY> fieldComparator, boolean isReversed) {
+        return isReversed
+            ? fieldComparator.getNullOrder().reversed()
+            : fieldComparator.getNullOrder();
     }
 
     private void traverse(Pipeline pipeline,

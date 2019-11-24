@@ -4,6 +4,7 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,14 +33,14 @@ public final class InternalMergeUtil {
         requireNonNull(manager);
         requireNonNull(entities);
 
-        final List<ComparableField<T, ?, V>> pks = manager.primaryKeyFields()
-            .map(pk -> (ComparableField<T, ?, V>)pk)
+        final List<HasComparableOperators<T, V>> pks = manager.primaryKeyFields()
+            .map(pk -> (HasComparableOperators<T, V>)pk)
             .collect(Collectors.toList());
 
         final SpeedmentPredicate<T> pkPredicate = pks.stream()
             .map(cf -> cf.in(
                 entities.stream()
-                    .map(cf::get)
+                    .map(e -> (V) cf.getter().apply(e))
                     .collect(toSet())))
             .reduce(SpeedmentPredicate::and)
             .orElseThrow(() -> new IllegalStateException("The entity does not have a primary key"));

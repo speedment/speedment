@@ -369,14 +369,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                         "The injector could not invoke the method '%s' " +
                             "before state '%s' since one of the parameters is not available.",
                         exec.getName(), exec.getState()));
-                } else if (i == MissingArgumentStrategy.SKIP_INVOCATION) {
-                    if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                        INTERNAL_LOGGER.debug(
-                            "|      %-74s |",
-                            limit("(Not invoked due to missing optional dependencies.)", 74)
-                        );
-                    }
-
+                } else if (i == MissingArgumentStrategy.SKIP_INVOCATION && INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                    INTERNAL_LOGGER.debug(
+                        "|      %-74s |",
+                        limit("(Not invoked due to missing optional dependencies.)", 74)
+                    );
                 }
             }
         } catch (final ReflectiveOperationException ex) {

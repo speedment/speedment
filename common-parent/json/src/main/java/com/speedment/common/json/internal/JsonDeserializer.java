@@ -103,15 +103,15 @@ public final class JsonDeserializer implements AutoCloseable {
     
     private Map<String, Object> parseObject() throws IOException {
         final Map<String, Object> object = new LinkedHashMap<>();
-        
+
         firstChar: switch (nextNonBlankspace()) {
             // If the map should be closed with no entries:
             case 0x7D : // } (close the map)
                 return object;
-                
+
             // If this character begins a new entry
             case 0x22 : // " (begin key)
-                
+
                 final CloseMethod close = parseEntryInto(object);
                 switch (close) {
                     case EXIT_FROM_PARENT :
@@ -141,7 +141,7 @@ public final class JsonDeserializer implements AutoCloseable {
 
             // If the first non-whitespace character was not neither
             // a '}' nor a '"':
-            default : 
+            default :
                 throw unexpectedCharacterException();
         }
 
@@ -211,45 +211,27 @@ public final class JsonDeserializer implements AutoCloseable {
         // Read the value
         switch (nextNonBlankspace()) {
             case 0x7B : // { (begin parsing object)
-                if (object.put(key, parseObject()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseObject());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x5B : // [ (begin parsing array)
-                if (object.put(key, parseArray()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseArray());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x22 : // " (begin parsing string)
-                if (object.put(key, parseString()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseString());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x66 : // f (begin parsing false)
-                if (object.put(key, parseFalse()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseFalse());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x74 : // t (begin parsing true)
-                if (object.put(key, parseTrue()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseTrue());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x6E : // n (begin parsing null)
-                if (object.put(key, parseNull()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseNull());
                 return CloseMethod.NOT_DECIDED;
                 
             // Digit '0 - 9'
@@ -257,11 +239,7 @@ public final class JsonDeserializer implements AutoCloseable {
             case 0x35 : case 0x36 : case 0x37 : case 0x38 : case 0x39 :
             case 0x2E : // . (decimal sign)
             case 0x2D : // - (minus sign)
-                return parseNumber(num -> {
-                    if (object.put(key, num) != null) {
-                        throw duplicateKeyException(key);
-                    }
-                });
+                return parseNumber(num -> putIfUniqueOrThrow(object, key, num));
                 
             default :
                 throw unexpectedCharacterException();
@@ -524,7 +502,6 @@ public final class JsonDeserializer implements AutoCloseable {
             }
         }
         throw unexpectedCharacterException();
-
     }
     
     private CloseMethod parseNumber(Consumer<Number> consumer) throws IOException {
@@ -697,7 +674,13 @@ public final class JsonDeserializer implements AutoCloseable {
             "Unexpected end of stream"
         );
     }
-    
+
+    private void putIfUniqueOrThrow(Map<String, Object> object, String key, Object value) {
+        if (object.put(key, value) != null) {
+            throw duplicateKeyException(key);
+        }
+    }
+
     private String codePoints(String c) {
         final StringJoiner str = new StringJoiner(" ");
         for (int i = 0; i < c.length(); i++) {

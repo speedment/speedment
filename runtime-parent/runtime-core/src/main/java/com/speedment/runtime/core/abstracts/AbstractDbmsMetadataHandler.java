@@ -190,81 +190,19 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         final Set<TypeInfoMetaData> preSet = dbmsType.getDataTypes();
 
         // Task that downloads the SQL Type Mappings from the database
-        final CompletableFuture<Map<String, Class<?>>> sqlTypeMappingTask
-            = CompletableFuture.supplyAsync(() -> {
-                final Map<String, Class<?>> sqlTypeMapping;
-
-                try {
-                    sqlTypeMapping = !preSet.isEmpty()
-                        ? readTypeMapFromSet(preSet)
-                        : readTypeMapFromDB(dbms);
-                } catch (final SQLException ex) {
-                    throw new SpeedmentException(
-                        "Error loading type map from database.", ex
-                    );
-                }
-
-                return sqlTypeMapping;
-            });
+        final CompletableFuture<Map<String, Class<?>>> sqlTypeMappingTask = CompletableFuture.supplyAsync(() ->
+            loadSqlTypeMappings(dbms, preSet)
+        );
 
         // Task that downloads the schemas from the database
-        final CompletableFuture<Void> schemasTask = CompletableFuture.runAsync(() -> {
-            try (final Connection connection = getConnection(dbms)) {
-                try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
-                    while (rs.next()) {
-
-                        final String name = readSchemaName(rs, dbmsType);
-
-                        boolean schemaWasUsed = false;
-                        if (!naming.getSchemaExcludeSet().contains(name)) {
-                            if (filterCriteria.test(name)) {
-                                final Schema schema = dbms.mutator().addNewSchema();                                
-                                schema.mutator().setId(name);
-                                schema.mutator().setName(name);
-                                schemaWasUsed = true;
-                            }
-                        }
-
-                        if (!schemaWasUsed) {
-                            discardedSchemas.add(name);
-                        }
-                    }
-                }
-            } catch (final SQLException sqle) {
-                throw new SpeedmentException(
-                    "Error reading metadata from result set.", sqle
-                );
-            }
-        });
+        final CompletableFuture<Void> schemasTask = CompletableFuture.runAsync(() ->
+            loadSchemas(dbms, filterCriteria, dbmsType, discardedSchemas, naming)
+        );
 
         // Task that downloads the catalogs from the database
-        final CompletableFuture<Void> catalogsTask = CompletableFuture.runAsync(() -> {
-            try (final Connection connection = getConnection(dbms)) {
-                try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
-                    while (catalogResultSet.next()) {
-                        final String schemaName = catalogResultSet.getString(1);
-
-                        boolean schemaWasUsed = false;
-                        if (filterCriteria.test(schemaName)) {
-                            if (!naming.getSchemaExcludeSet().contains(schemaName)) {
-                                final Schema schema = dbms.mutator().addNewSchema();
-                                schema.mutator().setId(schemaName);
-                                schema.mutator().setName(schemaName);
-                                schemaWasUsed = true;
-                            }
-                        }
-
-                        if (!schemaWasUsed) {
-                            discardedSchemas.add(schemaName);
-                        }
-                    }
-                }
-            } catch (final SQLException sqle) {
-                throw new SpeedmentException(
-                    "Error reading metadata from result set.", sqle
-                );
-            }
-        });
+        final CompletableFuture<Void> catalogsTask = CompletableFuture.runAsync(() ->
+            loadCatalogs(dbms, filterCriteria, discardedSchemas, naming)
+        );
 
         // Create a new task that will execute once the schemas and the catalogs 
         // have been loaded independently of each other.
@@ -290,11 +228,84 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                         }
                     } else {
                         throw new SpeedmentException(
-                            "An exception occured while the tables were loading.", ex
+                            "An exception occurred while the tables were loading.", ex
                         );
                     }
                 });
         });
+    }
+
+    private void loadCatalogs(Dbms dbms, Predicate<String> filterCriteria, Set<String> discardedSchemas, DatabaseNamingConvention naming) {
+        try (final Connection connection = getConnection(dbms)) {
+            try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
+                while (catalogResultSet.next()) {
+                    final String schemaName = catalogResultSet.getString(1);
+
+                    boolean schemaWasUsed = false;
+                    if (filterCriteria.test(schemaName)) {
+                        if (!naming.getSchemaExcludeSet().contains(schemaName)) {
+                            final Schema schema = dbms.mutator().addNewSchema();
+                            schema.mutator().setId(schemaName);
+                            schema.mutator().setName(schemaName);
+                            schemaWasUsed = true;
+                        }
+                    }
+
+                    if (!schemaWasUsed) {
+                        discardedSchemas.add(schemaName);
+                    }
+                }
+            }
+        } catch (final SQLException sqle) {
+            throw new SpeedmentException(
+                "Error reading metadata from result set.", sqle
+            );
+        }
+    }
+
+    private void loadSchemas(Dbms dbms, Predicate<String> filterCriteria, DbmsType dbmsType, Set<String> discardedSchemas, DatabaseNamingConvention naming) {
+        try (final Connection connection = getConnection(dbms)) {
+            try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
+                while (rs.next()) {
+
+                    final String name = readSchemaName(rs, dbmsType);
+
+                    boolean schemaWasUsed = false;
+                    if (!naming.getSchemaExcludeSet().contains(name)) {
+                        if (filterCriteria.test(name)) {
+                            final Schema schema = dbms.mutator().addNewSchema();
+                            schema.mutator().setId(name);
+                            schema.mutator().setName(name);
+                            schemaWasUsed = true;
+                        }
+                    }
+
+                    if (!schemaWasUsed) {
+                        discardedSchemas.add(name);
+                    }
+                }
+            }
+        } catch (final SQLException sqle) {
+            throw new SpeedmentException(
+                "Error reading metadata from result set.", sqle
+            );
+        }
+    }
+
+    private Map<String, Class<?>> loadSqlTypeMappings(Dbms dbms, Set<TypeInfoMetaData> preSet) {
+        final Map<String, Class<?>> sqlTypeMapping;
+
+        try {
+            sqlTypeMapping = !preSet.isEmpty()
+                ? readTypeMapFromSet(preSet)
+                : readTypeMapFromDB(dbms);
+        } catch (final SQLException ex) {
+            throw new SpeedmentException(
+                "Error loading type map from database.", ex
+            );
+        }
+
+        return sqlTypeMapping;
     }
 
     private String readSchemaName(ResultSet rs, DbmsType dbmsType) throws SQLException {
@@ -331,30 +342,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                     jdbcSchemaLookupName(schema),
                     null, new String[] {"TABLE", "VIEW"})) {
 
-                if (SHOW_METADATA) {
-                    final ResultSetMetaData rsmd = rsTable.getMetaData();
-                    int numberOfColumns = rsmd.getColumnCount();
-                    for (int x = 1; x <= numberOfColumns; x++) {
-                        LOGGER.debug(rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + rsmd.getColumnType(x));
-                    }
-                }
-
-                while (rsTable.next()) {
-                    if (SHOW_METADATA) {
-                        final ResultSetMetaData rsmd = rsTable.getMetaData();
-                        int numberOfColumns = rsmd.getColumnCount();
-                        for (int x = 1; x <= numberOfColumns; x++) {
-                            LOGGER.debug(rsmd.getColumnName(x) + ":'" + rsTable.getObject(x) + "'");
-                        }
-                    }
-                    
-                    final Table table      = schema.mutator().addNewTable();
-                    final String tableName = rsTable.getString("TABLE_NAME");
-                    final String tableType = rsTable.getString("TABLE_TYPE");
-                    table.mutator().setId(tableName);
-                    table.mutator().setName(tableName);
-                    table.mutator().setView("VIEW".equals(tableType));
-                }
+                readTables(schema, rsTable);
             }
         } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
@@ -379,6 +367,33 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 }
             })).toArray(CompletableFuture[]::new)
         ).thenApplyAsync(v -> schema);
+    }
+
+    private void readTables(Schema schema, ResultSet rsTable) throws SQLException {
+        if (SHOW_METADATA) {
+            final ResultSetMetaData rsmd = rsTable.getMetaData();
+            int numberOfColumns = rsmd.getColumnCount();
+            for (int x = 1; x <= numberOfColumns; x++) {
+                LOGGER.debug(rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + rsmd.getColumnType(x));
+            }
+        }
+
+        while (rsTable.next()) {
+            if (SHOW_METADATA) {
+                final ResultSetMetaData rsmd = rsTable.getMetaData();
+                int numberOfColumns = rsmd.getColumnCount();
+                for (int x = 1; x <= numberOfColumns; x++) {
+                    LOGGER.debug(rsmd.getColumnName(x) + ":'" + rsTable.getObject(x) + "'");
+                }
+            }
+
+            final Table table      = schema.mutator().addNewTable();
+            final String tableName = rsTable.getString("TABLE_NAME");
+            final String tableType = rsTable.getString("TABLE_TYPE");
+            table.mutator().setId(tableName);
+            table.mutator().setName(tableName);
+            table.mutator().setView("VIEW".equals(tableType));
+        }
     }
 
     protected void columns(
@@ -448,14 +463,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             column.mutator().setDatabaseType(selectedJdbcClass);
 
             if (!nullable) {
-                if (selectedJdbcClass == Byte.class
-                ||  selectedJdbcClass == Short.class
-                ||  selectedJdbcClass == Integer.class
-                ||  selectedJdbcClass == Long.class
-                ||  selectedJdbcClass == Float.class
-                ||  selectedJdbcClass == Double.class
-                ||  selectedJdbcClass == Character.class
-                ||  selectedJdbcClass == Boolean.class) {
+                if (hasPrimitiveClass(selectedJdbcClass)) {
                     column.mutator().setTypeMapper(TypeMapper.primitive().getClass());
                 }
             }
@@ -472,6 +480,17 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         };
 
         tableChilds(Column.class, table.mutator()::addNewColumn, supplier, mutator, progressListener);
+    }
+
+    private boolean hasPrimitiveClass(Class<?> clazz) {
+        return clazz == Byte.class
+            ||  clazz == Short.class
+            ||  clazz == Integer.class
+            ||  clazz == Long.class
+            ||  clazz == Float.class
+            ||  clazz == Double.class
+            ||  clazz == Character.class
+            ||  clazz == Boolean.class;
     }
 
     protected void primaryKeyColumns(Connection connection, Table table, ProgressMeasure progressListener) {
@@ -613,37 +632,40 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         final long begin = System.currentTimeMillis();
         try (final ResultSet rsChild = resultSetSupplier.get()) {
-
-            if (SHOW_METADATA) {
-                final ResultSetMetaData rsmd = rsChild.getMetaData();
-                final int numberOfColumns = rsmd.getColumnCount();
-                for (int x = 1; x <= numberOfColumns; x++) {
-                    final int columnType = rsmd.getColumnType(x);
-                    LOGGER.info(x + ":" + rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + columnType);
-                }
-            }
-
-            while (rsChild.next()) {
-                if (SHOW_METADATA) {
-                    final ResultSetMetaData rsmd = rsChild.getMetaData();
-                    final int numberOfColumns = rsmd.getColumnCount();
-                    for (int x = 1; x <= numberOfColumns; x++) {
-                        final Object val = rsChild.getObject(x);
-                        LOGGER.info(x + ":" + rsmd.getColumnName(x) + ":'" + val + "'");
-                    }
-                }
-                if (filter.test(rsChild)) {
-                    resultSetMutator.mutate(childSupplier.get(), rsChild);
-                } else {
-                    LOGGER.info("Skipped due to RS filtering. This is normal for some DBMS types.");
-                }
-            }
+            readChild(childSupplier, resultSetMutator, filter, rsChild);
         } catch (final SQLException sqle) {
             LOGGER.error(sqle, "Unable to read table child.");
             throw new SpeedmentException(sqle);
         }
         final long duration = System.currentTimeMillis() - begin;
         timers.computeIfAbsent(type, unused -> new AtomicLong()).addAndGet(duration);
+    }
+
+    private <T extends Document> void readChild(Supplier<T> childSupplier, TableChildMutator<T, ResultSet> resultSetMutator, SqlPredicate<ResultSet> filter, ResultSet rsChild) throws SQLException {
+        if (SHOW_METADATA) {
+            final ResultSetMetaData rsmd = rsChild.getMetaData();
+            final int numberOfColumns = rsmd.getColumnCount();
+            for (int x = 1; x <= numberOfColumns; x++) {
+                final int columnType = rsmd.getColumnType(x);
+                LOGGER.info(x + ":" + rsmd.getColumnName(x) + ", " + rsmd.getColumnClassName(x) + ", " + columnType);
+            }
+        }
+
+        while (rsChild.next()) {
+            if (SHOW_METADATA) {
+                final ResultSetMetaData rsmd = rsChild.getMetaData();
+                final int numberOfColumns = rsmd.getColumnCount();
+                for (int x = 1; x <= numberOfColumns; x++) {
+                    final Object val = rsChild.getObject(x);
+                    LOGGER.info(x + ":" + rsmd.getColumnName(x) + ":'" + val + "'");
+                }
+            }
+            if (filter.test(rsChild)) {
+                resultSetMutator.mutate(childSupplier.get(), rsChild);
+            } else {
+                LOGGER.info("Skipped due to RS filtering. This is normal for some DBMS types.");
+            }
+        }
     }
 
     /**

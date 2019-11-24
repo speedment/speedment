@@ -124,26 +124,7 @@ final class JoinSqlUtil {
         // Check if another (RIGHT JOIN) stage renders an on-field in this stage to be nullable
         // No use to check if we already know
         if (nullOffset == -1) {
-            final TableIdentifier<?> thisId = stage.identifier();
-            for (int i = 0; i < stages.size(); i++) {
-                if (stageIndex == i) {
-                    // Ignore this stage
-                    continue;
-                }
-                final Stage<?> otherStage = stages.get(i);
-                if (otherStage.joinType().isPresent()) {
-                    if (otherStage.joinType().orElseThrow(() -> newNoSuchElementException(otherStage)).isNullableOther()) {
-                        final HasComparableOperators<?, ?> otherStageForeignField = otherStage.foreignField().orElseThrow(() -> new NoSuchElementException("Foreign fiels is missing in other stage " + otherStage));
-                        final TableIdentifier<?> referencedId = otherStageForeignField.identifier().asTableIdentifier();
-                        if (thisId.equals(referencedId)) {
-                            nullOffset = findNullOffset(table, otherStage, otherStageForeignField);
-                            // If we have a between operation where there is another field pointed, my
-                            // belief is that we can safely ignore that because both fields will be null and we
-                            // only need to detect one
-                        }
-                    }
-                }
-            }
+            nullOffset = checkOther(stages, stageIndex, stage, table, nullOffset);
         }
 
         if (nullOffset >= 0) {
@@ -153,6 +134,7 @@ final class JoinSqlUtil {
         }
 
     }
+
 
     private static int findNullOffset(
         final Table table,
@@ -184,6 +166,31 @@ final class JoinSqlUtil {
             );
         }
         return result;
+    }
+
+
+    private static <T> int checkOther(List<Stage<?>> stages, int stageIndex, Stage<T> stage, Table table, int nullOffset) {
+        final TableIdentifier<?> thisId = stage.identifier();
+        for (int i = 0; i < stages.size(); i++) {
+            if (stageIndex == i) {
+                // Ignore this stage
+                continue;
+            }
+            final Stage<?> otherStage = stages.get(i);
+            if (otherStage.joinType().isPresent()) {
+                if (otherStage.joinType().orElseThrow(() -> newNoSuchElementException(otherStage)).isNullableOther()) {
+                    final HasComparableOperators<?, ?> otherStageForeignField = otherStage.foreignField().orElseThrow(() -> new NoSuchElementException("Foreign field is missing in other stage " + otherStage));
+                    final TableIdentifier<?> referencedId = otherStageForeignField.identifier().asTableIdentifier();
+                    if (thisId.equals(referencedId)) {
+                        nullOffset = findNullOffset(table, otherStage, otherStageForeignField);
+                        // If we have a between operation where there is another field pointed, my
+                        // belief is that we can safely ignore that because both fields will be null and we
+                        // only need to detect one
+                    }
+                }
+            }
+        }
+        return nullOffset;
     }
 
     private static class NullAwareSqlAdapter<ENTITY> implements SqlAdapter<ENTITY> {
@@ -300,23 +307,27 @@ final class JoinSqlUtil {
         int cnt = 0;
         for (int stageIndex = 0; stageIndex < stages.size(); stageIndex++) {
             final Stage<?> stage = stages.get(stageIndex);
+            cnt = renderPredicate(sqlInfo, sql, values, cnt, stageIndex, stage);
+        }
+    }
 
-            if (!stage.predicates().isEmpty()) {
-                for (int j = 0; j < stage.predicates().size(); j++) {
-                    final Predicate<?> predicate = stage.predicates().get(j);
-                    if (predicate instanceof FieldPredicate) {
-                        if (((FieldPredicate)predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
-                            // Remove redundant ALWAYS_TRUE predicates
-                            continue;
-                        }
+    private static int renderPredicate(SqlInfo sqlInfo, StringBuilder sql, List<Object> values, int cnt, int stageIndex, Stage<?> stage) {
+        if (!stage.predicates().isEmpty()) {
+            for (int j = 0; j < stage.predicates().size(); j++) {
+                final Predicate<?> predicate = stage.predicates().get(j);
+                if (predicate instanceof FieldPredicate) {
+                    if (((FieldPredicate)predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
+                        // Remove redundant ALWAYS_TRUE predicates
+                        continue;
                     }
-                    if (cnt++ != 0) {
-                        sql.append(" AND ");
-                    }
-                    renderPredicateHelper(sqlInfo, stage, stageIndex, sql, values, predicate);
                 }
+                if (cnt++ != 0) {
+                    sql.append(" AND ");
+                }
+                renderPredicateHelper(sqlInfo, stage, stageIndex, sql, values, predicate);
             }
         }
+        return cnt;
     }
 
     // See StreamTerminatorUtil::renderSqlWhereHelper for regular streams

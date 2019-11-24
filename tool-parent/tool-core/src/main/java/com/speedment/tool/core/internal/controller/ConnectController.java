@@ -288,33 +288,8 @@ public final class ConnectController implements Initializable {
             );
 
             // Create a new Dbms using the settings configured.
-            final DbmsProperty dbms = ui.projectProperty()
-                .mutator().addNewDbms();
-
-            dbms.typeNameProperty().set(dbmsType.get().getName());
-
-            if (type.getConnectionType() == DbmsType.ConnectionType.HOST_AND_PORT) {
-                dbms.ipAddressProperty().set(fieldHost.getText());
-                dbms.portProperty().set(Integer.parseInt(fieldPort.getText()));
-            } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
-                dbms.localPathProperty().set(fieldFile.getText());
-            }
-
-            if (type.hasDatabaseUsers()) {
-                dbms.usernameProperty().set(fieldUser.getText());
-            }
-
-            dbms.nameProperty().set(Optional.of(fieldName.getText())
-                .filter(s -> dbmsType.get().hasDatabaseNames())
-                .filter(s -> !s.isEmpty())
-                .orElseGet(() -> type.getDefaultDbmsName().orElseGet(fieldName::getText)));
-
-            if (!areaConnectionUrl.getText().isEmpty()
-            &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
-                dbms.connectionUrlProperty().setValue(
-                    areaConnectionUrl.getText()
-                );
-            }
+            final DbmsProperty dbms = ui.projectProperty().mutator().addNewDbms();
+            setDbmsProperties(dbmsType, generatedConnUrl, type, dbms);
 
             final String schema = Optional.of(fieldSchema.getText())
                 .filter(s -> dbmsType.get().hasSchemaNames())
@@ -322,20 +297,7 @@ public final class ConnectController implements Initializable {
                 .orElseGet(() -> type.getDefaultSchemaName().orElseGet(dbms::getName));
 
             // Set the default project name to the name of the schema.
-            if (type.hasSchemaNames() || type.hasDatabaseNames()) {
-                ui.projectProperty().nameProperty()
-                    .setValue(schema);
-            } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
-                String filename = Paths.get(fieldFile.getText()).getFileName().toString();
-                if (filename.contains(".")) {
-                    filename = filename.substring(0, filename.lastIndexOf('.'));
-                }
-                ui.projectProperty().nameProperty()
-                    .setValue(filename);
-            } else {
-                ui.projectProperty().nameProperty()
-                    .setValue("Demo");
-            }
+            setDefaultProjectName(type, schema);
 
             // Connect to database
             if (cfHelper.loadFromDatabase(dbms, schema)) {
@@ -343,6 +305,47 @@ public final class ConnectController implements Initializable {
                 events.notify(UIEvent.OPEN_MAIN_WINDOW);
             }
         };
+    }
+
+    private void setDbmsProperties(AtomicReference<DbmsType> dbmsType, AtomicReference<String> generatedConnUrl, DbmsType type, DbmsProperty dbms) {
+        dbms.typeNameProperty().set(dbmsType.get().getName());
+
+        if (type.getConnectionType() == DbmsType.ConnectionType.HOST_AND_PORT) {
+            dbms.ipAddressProperty().set(fieldHost.getText());
+            dbms.portProperty().set(Integer.parseInt(fieldPort.getText()));
+        } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
+            dbms.localPathProperty().set(fieldFile.getText());
+        }
+
+        if (type.hasDatabaseUsers()) {
+            dbms.usernameProperty().set(fieldUser.getText());
+        }
+
+        dbms.nameProperty().set(Optional.of(fieldName.getText())
+            .filter(s -> dbmsType.get().hasDatabaseNames())
+            .filter(s -> !s.isEmpty())
+            .orElseGet(() -> type.getDefaultDbmsName().orElseGet(fieldName::getText)));
+
+        if (!areaConnectionUrl.getText().isEmpty() && !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
+            dbms.connectionUrlProperty().setValue(areaConnectionUrl.getText());
+        }
+    }
+
+    private void setDefaultProjectName(DbmsType type, String schema) {
+        if (type.hasSchemaNames() || type.hasDatabaseNames()) {
+            ui.projectProperty().nameProperty()
+                .setValue(schema);
+        } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
+            String filename = Paths.get(fieldFile.getText()).getFileName().toString();
+            if (filename.contains(".")) {
+                filename = filename.substring(0, filename.lastIndexOf('.'));
+            }
+            ui.projectProperty().nameProperty()
+                .setValue(filename);
+        } else {
+            ui.projectProperty().nameProperty()
+                .setValue("Demo");
+        }
     }
 
     private void recalculateConnUrl(AtomicReference<DbmsType> dbmsType, AtomicReference<String> generatedConnUrl) {
