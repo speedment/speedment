@@ -11,11 +11,15 @@ public final class MergeUtil {
 
     /**
      * Merges the provided {@code entities} with the underlying database.
+     * <p>
+     * The entity must have exactly one primary key.
      *
      * @param <T> entity type
      * @param manager to use for merging
      * @param entities to merge with the database
      * @return the entities that have been merged
+     * @throws UnsupportedOperationException if the entity class
+     *         does not have exactly one primary key
      */
     public static <T> Set<T> merge(Manager<T> manager, Set<T> entities) {
         return InternalMergeUtil.merge(manager, entities);

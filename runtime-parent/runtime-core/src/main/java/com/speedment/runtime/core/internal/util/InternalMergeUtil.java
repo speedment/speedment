@@ -2,11 +2,11 @@ package com.speedment.runtime.core.internal.util;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptySet;
@@ -33,43 +33,78 @@ public final class InternalMergeUtil {
         requireNonNull(manager);
         requireNonNull(entities);
 
+        @SuppressWarnings("unchecked")
         final List<HasComparableOperators<T, V>> pks = manager.primaryKeyFields()
             .map(pk -> (HasComparableOperators<T, V>)pk)
             .collect(Collectors.toList());
 
-        final SpeedmentPredicate<T> pkPredicate = pks.stream()
-            .map(cf -> cf.in(
-                entities.stream()
-                    .map(e -> (V) cf.getter().apply(e))
-                    .collect(toSet())))
-            .reduce(SpeedmentPredicate::and)
-            .orElseThrow(() -> new IllegalStateException("The entity does not have a primary key"));
+        if (pks.size() != 1) {
+            throw new UnsupportedOperationException(
+                "Merge operations are only supported for entities with exactly one primary keys." +
+                " Operation failed because there are " + pks.size() +
+                " primary keys for " + manager.getEntityClass().getSimpleName() + "."
+            );
+            // Multiple PKs are hard to support because in predicates cannot be composed
+            // correctly by .and(). E.g. in (1, 2) and in (3 ,4) is not the same as
+            // (1 and 3) or (2 and 4)
+        }
 
-        final Set<T> existing = manager.stream()
+        final HasComparableOperators<T, V> co = pks
+            .iterator()
+            .next();
+
+        @SuppressWarnings("unchecked")
+        final SpeedmentPredicate<T> pkPredicate =
+            co.in(entities.stream()
+                .map(pkExtractor(co))
+                .collect(toSet()));
+
+        final Set<V> existingPks = manager.stream()
             .filter(pkPredicate)
+            .map(pkExtractor(co))
+            .collect(toSet());
+
+        final Set<T> existing = entities.stream()
+            .filter(e -> existingPks.contains(pkExtractor(co).apply(e)))
             .collect(toCollection(LinkedHashSet::new)); // Retain order
 
         final Set<T> missing = entities.stream()
-            .filter(e -> !existing.contains(e))
+            .filter(e -> !existingPks.contains(pkExtractor(co).apply(e)))
             .collect(toCollection(LinkedHashSet::new)); // Retain order
 
+        System.out.println("entities = " + entities);
+        System.out.println("existing = " + existing);
+        System.out.println("missing = " + missing);
+
+        final List<SpeedmentException> exceptions = new ArrayList<>();
         final Set<T> result = new HashSet<>();
         for (T entity:existing) {
             try {
-                manager.update(entity);
-                result.add(entity);
-            } catch (SpeedmentException ignore) {
-                // No operation
+                final T updated = manager.update(entity);
+                result.add(updated);
+            } catch (SpeedmentException ex) {
+                exceptions.add(ex);
             }
         }
         for (T entity:missing) {
             try {
-                manager.persist(entity);
-                result.add(entity);
-            } catch (SpeedmentException ignore) {}
+                final T persisted = manager.persist(entity);
+                result.add(persisted);
+            } catch (SpeedmentException ex) {
+                exceptions.add(ex);
+            }
         }
+        if (!exceptions.isEmpty()) {
+            throw new SpeedmentException("Unable to merge because " + exceptions.size() + " operation(s) failed.", exceptions.iterator().next());
+        }
+
         return result;
 
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T, V extends Comparable<V>> Function<T, V> pkExtractor(HasComparableOperators<T, V> co) {
+        return entity -> (V) co.getter().apply(entity);
     }
 
     private static <T> List<Set<T>> chunks(Collection<T> keys) {
