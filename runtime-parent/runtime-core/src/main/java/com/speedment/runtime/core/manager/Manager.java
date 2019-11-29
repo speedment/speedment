@@ -242,7 +242,7 @@ public interface Manager<ENTITY> extends PersistenceProvider<ENTITY>, Persistenc
      * potentially updated entity. If the persistence fails for any reason, an
      * unchecked {@link SpeedmentException} is thrown.
      * <p>
-     * Note: Merge is only supported for entities with exactly on primary key.
+     * Note: Merge is only supported for entities with exactly one primary key.
      * <p>
      * It is unspecified if the returned updated entity is the same provided
      * entity instance or another entity instance. It is erroneous to assume
