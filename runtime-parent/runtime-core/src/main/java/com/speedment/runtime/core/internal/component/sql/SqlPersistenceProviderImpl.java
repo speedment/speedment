@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasColumn;
@@ -44,10 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,8 +52,7 @@ import static java.util.Collections.singleton;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.UnaryOperator.identity;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * Default implementation of the {@link SqlPersistence}-interface.
@@ -130,9 +125,11 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         this.deleteStatement = "DELETE FROM " + sqlTableReference + " WHERE " +
             sqlPrimaryKeyColumnList(pk -> pk + " = ?");
 
-        this.columnsByFields = MapStream.fromKeys(fields.get(), f ->
-            DocumentDbUtil.referencedColumn(project, f.identifier())
-        ).toMap();
+         this.columnsByFields = fields.get()
+            .collect(toMap(
+                Function.identity(),
+                f -> DocumentDbUtil.referencedColumn(project, f.identifier())
+            ));
 
         this.generatedFieldSupports = columnsByFields.entrySet().stream().filter(e -> e.getValue().isAutoIncrement())
         .map(e -> new GeneratedFieldSupport<>(

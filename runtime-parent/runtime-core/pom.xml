@@ -55,11 +55,6 @@
         
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>mapstream</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
             <artifactId>logger</artifactId>
         </dependency>
         
