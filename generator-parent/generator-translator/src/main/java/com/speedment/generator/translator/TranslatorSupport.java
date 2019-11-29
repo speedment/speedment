@@ -18,7 +18,7 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasAlias;

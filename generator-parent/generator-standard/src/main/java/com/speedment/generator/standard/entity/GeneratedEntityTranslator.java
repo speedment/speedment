@@ -27,7 +27,7 @@ import com.speedment.generator.standard.util.FkHolder;
 import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;

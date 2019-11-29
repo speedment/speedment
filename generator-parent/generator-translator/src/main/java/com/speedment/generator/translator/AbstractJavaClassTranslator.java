@@ -26,7 +26,7 @@ import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasEnabled;

@@ -23,7 +23,7 @@ import com.speedment.common.codegen.model.Import;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;

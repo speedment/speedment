@@ -21,7 +21,7 @@ import static java.util.Objects.requireNonNull;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.trait.HasTypeMapper;
 import com.speedment.runtime.typemapper.TypeMapper;

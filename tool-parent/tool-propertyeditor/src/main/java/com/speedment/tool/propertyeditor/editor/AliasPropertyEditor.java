@@ -17,7 +17,7 @@
 package com.speedment.tool.propertyeditor.editor;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.TableProperty;

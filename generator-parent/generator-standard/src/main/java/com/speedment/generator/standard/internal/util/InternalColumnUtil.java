@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.standard.internal.util;
 
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasNullable;
 

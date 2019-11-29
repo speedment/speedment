@@ -19,7 +19,7 @@ package com.speedment.generator.translator.provider;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.generator.translator.internal.component.TypeMapperComponentImpl;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasTypeMapper;

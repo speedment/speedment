@@ -47,5 +47,11 @@
             <version>${speedment.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>injector</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

@@ -20,7 +20,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.InfoComponent;

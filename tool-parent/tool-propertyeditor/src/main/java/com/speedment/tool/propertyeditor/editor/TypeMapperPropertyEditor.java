@@ -18,7 +18,7 @@ package com.speedment.tool.propertyeditor.editor;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.config.trait.HasTypeMapperProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
@@ -26,7 +26,6 @@ import com.speedment.tool.propertyeditor.item.ChoiceBoxItem;
 
 import java.util.ArrayList;
 import java.util.Map;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;

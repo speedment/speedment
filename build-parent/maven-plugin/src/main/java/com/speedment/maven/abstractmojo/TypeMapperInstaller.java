@@ -20,7 +20,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.typemapper.TypeMapper;
 import org.apache.maven.plugin.MojoExecutionException;
