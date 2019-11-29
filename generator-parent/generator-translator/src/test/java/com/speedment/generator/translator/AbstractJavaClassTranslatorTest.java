@@ -18,12 +18,18 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.provider.StandardJavaGenerator;
+import com.speedment.common.injector.Injector;
+import com.speedment.generator.translator.provider.StandardTypeMapperComponent;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasNameUtil;
+import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.internal.component.InfoComponentImpl;
+import com.speedment.runtime.core.provider.DelegateInfoComponent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -146,6 +152,7 @@ final class AbstractJavaClassTranslatorTest {
     }
 
 
+
     private void addDbms(Map<String, Object> map, String dbmsId) {
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> list = (List<Map<String, Object>>)map.get(ProjectUtil.DBMSES);
@@ -161,7 +168,7 @@ final class AbstractJavaClassTranslatorTest {
         private final UnaryOperator<Builder<Class>> operator;
 
         private MyTranslator(Project project, UnaryOperator<Builder<Class>> operator) {
-            super(project, Class::of);
+            super(createInjector(), project, Class::of);
             this.operator = requireNonNull(operator);
 
         }
@@ -325,7 +332,6 @@ final class AbstractJavaClassTranslatorTest {
         );
     }
 
-
     private void assertVisitedMapEquals(Map<String, Integer> map) {
         assertEquals(map.size(), visitedMap.size(), "The size of the maps differ");
         map.forEach((k, v) -> {
@@ -342,6 +348,17 @@ final class AbstractJavaClassTranslatorTest {
         return new AbstractMap.SimpleEntry<>(k, v);
     }
 
+    private static Injector createInjector() {
+        try {
+            return Injector.builder()
+                .withComponent(DelegateInfoComponent.class)
+                .withComponent(StandardJavaGenerator.class)
+                .withComponent(StandardTypeMapperComponent.class)
+                .build();
+        } catch (InstantiationException ie) {
+            throw new SpeedmentException(ie);
+        }
+    }
 
 
 }

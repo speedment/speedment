@@ -24,9 +24,7 @@ import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasEnabled;
@@ -34,6 +32,7 @@ import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.component.InfoComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -70,12 +69,20 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
     private final Function<String, T> mainModelConstructor;
     private final List<BiConsumer<File, Builder<T>>> listeners;
 
-    @Inject public Generator generator;
-    @Inject public InfoComponent infoComponent;
-    @Inject public TypeMapperComponent typeMappers;
-    @Inject public Injector injector;
+    private final Generator generator;
+    private final InfoComponent infoComponent;
+    private final TypeMapperComponent typeMappers;
+    private final Injector injector;
 
-    protected AbstractJavaClassTranslator(D document, Function<String, T> mainModelConstructor) {
+    protected AbstractJavaClassTranslator(
+        final Injector injector,
+        final D document,
+        final Function<String, T> mainModelConstructor
+    ) {
+        this.injector             = requireNonNull(injector);
+        this.generator            = injector.getOrThrow(Generator.class);
+        this.infoComponent        = injector.getOrThrow(InfoComponent.class);
+        this.typeMappers          = injector.getOrThrow(TypeMapperComponent.class);
         this.document             = requireNonNull(document);
         this.mainModelConstructor = requireNonNull(mainModelConstructor);
         this.listeners            = new CopyOnWriteArrayList<>();

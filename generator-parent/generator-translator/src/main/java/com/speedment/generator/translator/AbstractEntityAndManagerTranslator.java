@@ -18,6 +18,7 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.model.ClassOrInterface;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -36,10 +37,11 @@ public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterf
     extends AbstractJavaClassTranslator<Table, T> {
 
     protected AbstractEntityAndManagerTranslator(
-        Table table,
-        Function<String, T> modelConstructor) {
-
-        super(table, modelConstructor);
+        final Injector injector,
+        final Table table,
+        final Function<String, T> modelConstructor
+    ) {
+        super(injector, table, modelConstructor);
     }
 
     protected Type typeOfPK() {

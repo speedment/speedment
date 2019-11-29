@@ -21,8 +21,9 @@ import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
-import com.speedment.generator.standard.util.ForeignKeyUtil;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.standard.util.FkHolder;
+import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
@@ -49,8 +50,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedEntityImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    public GeneratedEntityImplTranslator(Table table) {
-        super(table, Class::of);
+    public GeneratedEntityImplTranslator(Injector injector, Table table) {
+        super(injector, table, Class::of);
     }
 
     @Override
@@ -91,13 +92,13 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
         ForeignKeyUtil.getForeignKey(
             getSupport().tableOrThrow(), col
         ).ifPresent(fkc -> {
-            final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+            final FkHolder fu = new FkHolder(injector(), fkc.getParentOrThrow());
             final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
 
             file.add(Import.of(fuSupport.entityType()));
 
             final String isPresentName = usesOptional(col) ? ".isPresent()" : " != null";
-            final String getterName = optionalGetterName(typeMappers, col).orElse("");
+            final String getterName = optionalGetterName(typeMappers(), col).orElse("");
 
             clazz.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col),
                 col.isNullable()
@@ -147,7 +148,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
         requireNonNull(clazz);
         requireNonNull(col);
 
-        final Type retType = getterReturnType(typeMappers, col);
+        final Type retType = getterReturnType(typeMappers(), col);
         final String getter;
         if (usesOptional(col)) {
             final String varName = getSupport().variableName(col);
@@ -207,7 +208,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + getSupport().typeName(c);
-            final Type type = typeMappers.get(c).getJavaType(c);
+            final Type type = typeMappers().get(c).getJavaType(c);
             if (usesOptional(c) || !DefaultType.isPrimitive(type)) {
                 method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) { return false; }");
             } else {
@@ -229,7 +230,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
 
             final StringBuilder str = new StringBuilder();
             str.append("hash = 31 * hash + ");
-            final Type type = typeMappers.get(c).getJavaType(c);
+            final Type type = typeMappers().get(c).getJavaType(c);
 
             if (!usesOptional(c) && DefaultType.isPrimitive(type)) {
                 str.append(DefaultType.wrapperFor(type).getSimpleName());

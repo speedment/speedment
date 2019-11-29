@@ -21,6 +21,7 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.util.Formatting;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.config.Project;
@@ -37,8 +38,8 @@ import static com.speedment.common.codegen.constant.DefaultType.WILDCARD;
  */
 public final class InjectorProxyTranslator extends AbstractJavaClassTranslator<Project, Class> {
 
-    public InjectorProxyTranslator(Project project) {
-        super(project, Class::of);
+    public InjectorProxyTranslator(Injector injector, Project project) {
+        super(injector, project, Class::of);
     }
 
     @Override

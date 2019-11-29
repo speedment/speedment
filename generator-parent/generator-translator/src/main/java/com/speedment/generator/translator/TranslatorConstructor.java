@@ -17,6 +17,7 @@
 package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.config.trait.HasMainInterface;
 
 /**
@@ -36,11 +37,11 @@ public interface TranslatorConstructor<DOC extends HasMainInterface, T extends C
     /**
      * Constructs the {@link Translator} instance.
      * <p>
-     * This method is ment to be implemented using a functional reference to the
+     * This method is meant to be implemented using a functional reference to the
      * implementing classes constructor method.
      * 
      * @param document   the document to generate from
      * @return           the created translator
      */
-    Translator<DOC, T> apply(DOC document);
+    Translator<DOC, T> apply(Injector injector, DOC document);
 }

@@ -20,6 +20,7 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
@@ -68,18 +69,19 @@ import static java.util.stream.Collectors.*;
  * @author Emil Forslund
  * @since 3.0.1
  */
-public final class GeneratedSqlAdapterTranslator
-    extends AbstractEntityAndManagerTranslator<Class> {
+public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
     public static final String CREATE_HELPERS_METHOD_NAME = "createHelpers";
     public static final String INSTALL_METHOD_NAME = "installMethodName";
     public static final String OFFSET_PARAMETER_NAME = "offset";
 
-    @Inject public ResultSetMapperComponent resultSetMapperComponent;
-    @Inject public DbmsHandlerComponent dbmsHandlerComponent;
+    private final ResultSetMapperComponent resultSetMapperComponent;
+    private final DbmsHandlerComponent dbmsHandlerComponent;
 
-    public GeneratedSqlAdapterTranslator(Table table) {
-        super(table, Class::of);
+    public GeneratedSqlAdapterTranslator(Injector injector, Table table) {
+        super(injector, table, Class::of);
+        this.resultSetMapperComponent = injector.getOrThrow(ResultSetMapperComponent.class);
+        this.dbmsHandlerComponent     = injector.getOrThrow(DbmsHandlerComponent.class);
     }
 
     @Override

@@ -23,11 +23,11 @@ import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.function.OptionalBoolean;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.standard.util.FkHolder;
 import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
@@ -37,6 +37,7 @@ import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 
 import java.lang.reflect.Type;
@@ -65,8 +66,8 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
     private static final String IDENTIFIER_NAME = "Identifier";
     private static final String OF_THIS = " of this ";
 
-    public GeneratedEntityTranslator(Table table) {
-        super(table, Interface::of);
+    public GeneratedEntityTranslator(Injector injector, Table table) {
+        super(injector, table, Interface::of);
     }
 
     @Override
@@ -140,7 +141,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
     private void addField(File file, Enum identifierEnum, Interface intrf, Column col) {
         final ForeignKeyUtil.ReferenceFieldType ref
             = ForeignKeyUtil.getReferenceFieldType(
-                file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
+                file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector()
             );
 
         final Type entityType = getSupport().entityType();
@@ -177,7 +178,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
         // Add the foreign key method reference
         ForeignKeyUtil.getForeignKey(getSupport().tableOrThrow(), col)
             .ifPresent(fkc -> {
-                final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+                final FkHolder fu = new FkHolder(injector(), fkc.getParentOrThrow());
                 final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
 
                 fieldParams.add(Value.ofReference(
@@ -225,7 +226,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
         ForeignKeyUtil.getForeignKey(
             getSupport().tableOrThrow(), col
         ).ifPresent(fkc -> {
-            final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+            final FkHolder fu = new FkHolder(injector(), fkc.getParentOrThrow());
             final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
 
             file.add(Import.of(fuSupport.entityType()));
@@ -252,7 +253,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
 
     private Interface addSetterMethod(Interface intrf, Column col) {
         return intrf.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
-            .add(Field.of(getSupport().variableName(col), typeMappers.get(col).getJavaType(col)))
+            .add(Field.of(getSupport().variableName(col), typeMappers().get(col).getJavaType(col)))
             .set(Javadoc.of(
                 "Sets the " + getSupport().variableName(col)
                 + OF_THIS + getSupport().entityName()
@@ -266,7 +267,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
     }
 
     private void addGetterMethod(Interface intrf, Column col) {
-        final Type retType = getterReturnType(typeMappers, col);
+        final Type retType = getterReturnType(typeMappers(), col);
 
         intrf.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
             .set(Javadoc.of(

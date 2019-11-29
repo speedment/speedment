@@ -19,6 +19,7 @@ package com.speedment.generator.standard.lifecycle;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.ApplicationBuilder;
@@ -32,8 +33,8 @@ import java.lang.reflect.Type;
  */
 public final class ApplicationBuilderTranslator extends AbstractJavaClassTranslator<Project, Class> {
 
-    public ApplicationBuilderTranslator(Project project) {
-        super(project, Class::of);
+    public ApplicationBuilderTranslator(Injector injector, Project project) {
+        super(injector, project, Class::of);
     }
 
     @Override

@@ -72,7 +72,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         put(Project.class,
             com.speedment.common.codegen.model.Class.class,
             creator.getClass().getName(),
-            project -> new SimpleTranslator<>(injector, project, creator, false));
+            (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
         return this;
     }
 
@@ -82,7 +82,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         put(Project.class,
             Enum.class,
             creator.getClass().getName(),
-            project -> new SimpleTranslator<>(injector, project, creator, false));
+            (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
         return this;
     }
 
@@ -92,7 +92,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         put(Project.class,
             Interface.class,
             creator.getClass().getName(),
-            project -> new SimpleTranslator<>(injector, project, creator, false));
+            (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
         return this;
     }
 
@@ -222,7 +222,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         public JavaClassTranslator<DOC, T> createDecorated(Injector injector, DOC document) {
             @SuppressWarnings("unchecked")
             final JavaClassTranslator<DOC, T> translator
-                = (JavaClassTranslator<DOC, T>) getConstructor().apply(document);
+                = (JavaClassTranslator<DOC, T>) getConstructor().apply(injector, document);
 
             injector.inject(translator);
             
@@ -325,7 +325,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             put(docClass,
                 com.speedment.common.codegen.model.Class.class,
                 creator.getClass().getName(),
-                project -> new SimpleTranslator<>(injector, project, creator, false));
+                (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
             return CodeGenerationComponentImpl.this;
         }
 
@@ -335,7 +335,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             put(docClass,
                 Enum.class,
                 creator.getClass().getName(),
-                project -> new SimpleTranslator<>(injector, project, creator, false));
+                (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
             return CodeGenerationComponentImpl.this;
         }
 
@@ -345,7 +345,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             put(docClass,
                 Interface.class,
                 creator.getClass().getName(),
-                project -> new SimpleTranslator<>(injector, project, creator, false));
+                (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
             return CodeGenerationComponentImpl.this;
         }
     }

@@ -60,8 +60,8 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
 
     private static final String CLASS = "class";
 
-    public GeneratedApplicationBuilderTranslator(Project doc) {
-        super(doc, Class::of);
+    public GeneratedApplicationBuilderTranslator(Injector injector, Project doc) {
+        super(injector, doc, Class::of);
     }
 
     @Override

@@ -18,6 +18,7 @@ package com.speedment.generator.standard.entity;
 
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Table;
 
@@ -28,8 +29,8 @@ import com.speedment.runtime.config.Table;
  */
 public final class EntityImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    public EntityImplTranslator(Table table) {
-        super(table, Class::of);
+    public EntityImplTranslator(Injector injector, Table table) {
+        super(injector, table, Class::of);
     }
 
     @Override

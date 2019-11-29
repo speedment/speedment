@@ -24,6 +24,7 @@ import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.util.Formatting;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -48,11 +49,10 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  * @since 2.3.0
  */
-public final class GeneratedManagerTranslator
-    extends AbstractEntityAndManagerTranslator<Interface> {
+public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTranslator<Interface> {
 
-    public GeneratedManagerTranslator(Table table) {
-        super(table, Interface::of);
+    public GeneratedManagerTranslator(Injector injector, Table table) {
+        super(injector, table, Interface::of);
     }
 
     @Override

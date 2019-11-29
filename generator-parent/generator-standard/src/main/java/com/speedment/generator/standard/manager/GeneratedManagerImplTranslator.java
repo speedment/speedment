@@ -29,6 +29,7 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
@@ -46,14 +47,13 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.3.0
  */
-public final class GeneratedManagerImplTranslator
-    extends AbstractEntityAndManagerTranslator<Class> {
+public final class GeneratedManagerImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
     private static final String FIELDS_METHOD = "fields";
     private static final String PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
 
-    public GeneratedManagerImplTranslator(Table table) {
-        super(table, Class::of);
+    public GeneratedManagerImplTranslator(Injector injector, Table table) {
+        super(injector, table, Class::of);
     }
 
     @Override
