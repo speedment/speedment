@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.util;
 
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.internal.util.Trees;
 import com.speedment.runtime.config.trait.HasAlias;
@@ -344,9 +343,9 @@ public final class DocumentUtil {
 
         return document.getClass().getSimpleName()
             + " {"
-            + MapStream.of(document.getData())
-            .mapValue(VALUE_MAPPER)
-            .map((k, v) -> "\"" + k + "\": " + (v == null ? "null" : quoteIfString(v)))
+            + document.getData().entrySet().stream()
+            .map(e -> new AbstractMap.SimpleImmutableEntry<>(e.getKey(), VALUE_MAPPER.apply(e.getValue())))
+            .map(e -> "\"" + e.getKey() + "\": " + (e.getValue() == null ? "null" : quoteIfString(e.getValue())))
             .collect(joining(", "))
             + "}";
     }
@@ -373,9 +372,9 @@ public final class DocumentUtil {
     private static <K, V> Map<K, V> deepCopyMap(Map<K, V> original) {
         final Map<K, V> copy = new ConcurrentSkipListMap<>();
 
-        MapStream.of(original)
-            .mapValue(DocumentUtil::deepCopyObject)
-            .forEachOrdered(copy::put);
+        original.entrySet().stream()
+            .map(e -> new AbstractMap.SimpleImmutableEntry<>(e.getKey(), deepCopyObject(e.getValue())))
+            .forEach(e -> copy.put(e.getKey(), e.getValue()));
 
         return copy;
     }
@@ -413,7 +412,7 @@ public final class DocumentUtil {
 
     private static final UnaryOperator<Object> VALUE_MAPPER = o -> {
         if (o instanceof List) {
-            return "[" + ((List) o).size() + "]";
+            return "[" + ((List<?>) o).size() + "]";
         } else {
             return o;
         }
