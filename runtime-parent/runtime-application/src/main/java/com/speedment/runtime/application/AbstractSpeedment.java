@@ -19,8 +19,6 @@ package com.speedment.runtime.application;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -28,6 +26,7 @@ import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
 
@@ -39,7 +38,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractSpeedment implements Speedment {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(AbstractSpeedment.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractSpeedment.class.getName());
 
     private Injector injector;
 
@@ -83,7 +82,7 @@ public abstract class AbstractSpeedment implements Speedment {
         final String componentSimpleName = componentClass.getSimpleName();
 
         if ("JoinComponent".equals(componentSimpleName)) {
-            LOGGER.error(
+            LOGGER.warning(
                 "Since 3.2.0, The JoinBundle (that contains the JoinComponent) is optional. " +
                 "Make sure that you have installed the JoinBundle by invoking .withBundle(JoinBundle.class) in your application builder " +
                 "and add 'requires com.speedment.runtime.join;' in your module-info.java file (if any)."

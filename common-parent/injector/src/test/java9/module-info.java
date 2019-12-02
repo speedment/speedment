@@ -21,5 +21,5 @@ open module com.speedment.common.injector {
     exports com.speedment.common.injector.exception;
     exports com.speedment.common.injector.execution;
 
-    requires transitive com.speedment.common.logger;
+    requires transitive java.logging; // Exposed in the API
 }

@@ -20,11 +20,11 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.internal.InjectorBuilderImpl;
-import com.speedment.common.logger.Logger;
 
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.*;
 

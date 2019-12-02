@@ -19,7 +19,6 @@ package com.speedment.common.injector.internal.util;
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.exception.InjectorException;
-import com.speedment.common.logger.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import static java.util.Objects.requireNonNull;
@@ -49,7 +49,7 @@ public final class PropertiesUtil {
             } catch (final IOException ex) {
                 final String err = "Error loading default settings from "
                     + configFile.getAbsolutePath() + "-file.";
-                logger.error(ex, err);
+                logger.severe(err);
                 throw new InjectorException(err, ex);
             }
         } else {

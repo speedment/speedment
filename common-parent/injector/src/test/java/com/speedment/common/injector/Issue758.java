@@ -18,10 +18,11 @@ package com.speedment.common.injector;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.internal.InjectorBuilderImpl;
-import com.speedment.common.logger.Level;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.logging.Level;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +34,7 @@ final class Issue758 {
     @BeforeEach
     void beforeEach() {
         defaultLevel = InjectorBuilderImpl.INTERNAL_LOGGER.getLevel();
-        InjectorBuilderImpl.INTERNAL_LOGGER.setLevel(Level.DEBUG);
+        InjectorBuilderImpl.INTERNAL_LOGGER.setLevel(Level.FINEST);
     }
 
     @AfterEach

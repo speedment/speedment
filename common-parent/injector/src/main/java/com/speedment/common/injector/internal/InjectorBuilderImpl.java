@@ -29,9 +29,6 @@ import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.internal.execution.ReflectionExecutionImpl;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
 
 import java.io.File;
 import java.lang.reflect.*;
@@ -42,6 +39,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
@@ -64,7 +63,8 @@ import static java.util.stream.Collectors.*;
  */
 public final class InjectorBuilderImpl implements InjectorBuilder {
 
-    public static final Logger INTERNAL_LOGGER = LoggerManager.getLogger(InjectorBuilderImpl.class);
+    public static final Logger INTERNAL_LOGGER = LogFormatter.apply(Logger.getLogger(InjectorBuilderImpl.class.getName()));
+
     private static final Object UNINSTANTIATED = new Object(); // Used as a marker of an Object that is not yet created
 
     private final ClassLoader classLoader;
@@ -209,9 +209,9 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 LinkedHashMap::new
             ));
 
-        INTERNAL_LOGGER.debug(String.format("Creating %d injectable instances.", injectablesSet.size()));
+        INTERNAL_LOGGER.fine(String.format("Creating %d injectable instances.", injectablesSet.size()));
 
-        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+        INTERNAL_LOGGER.fine(HORIZONTAL_LINE);
 
         // Create an instance of every injectable type
         final Set<Injectable<?>> injectablesLeft = new LinkedHashSet<>(injectablesSet);
@@ -278,12 +278,12 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             handleNextState(graph, instances, injector, classMapper, hasAnythingChanged, nextState);
         }
 
-        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
-        INTERNAL_LOGGER.debug(
+        INTERNAL_LOGGER.fine(HORIZONTAL_LINE);
+        INTERNAL_LOGGER.fine(String.format(
             "| %-79s |",
             "All " + instances.size() + " components have been configured!"
-        );
-        INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+        ));
+        INTERNAL_LOGGER.fine(HORIZONTAL_LINE);
 
         return injector;
     }
@@ -304,7 +304,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 // Check if all its dependencies have been satisfied.
                 if (n.canBe(state)) {
 
-                    INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+                    INTERNAL_LOGGER.fine(HORIZONTAL_LINE);
 
                     // Retrieve the instance for that node
                     final Object instance = findIn(
@@ -328,11 +328,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                     n.setState(state);
                     hasAnythingChanged.set(true);
 
-                    INTERNAL_LOGGER.debug(
+                    INTERNAL_LOGGER.fine(String.format(
                         "| %-66s %12s |",
                         limit(n.getRepresentedType().getSimpleName(), 66),
                         limit(state.name(), 12)
-                    );
+                    ));
                 }
             });
 
@@ -352,14 +352,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     private void executionHandler(DependencyGraph graph, ClassMapper classMapper, Object instance, Execution<Object> exec) {
         // We might want to log exactly which steps we
         // have completed.
-        if (INTERNAL_LOGGER.getLevel()
-            .isEqualOrLowerThan(Level.DEBUG)) {
 
-            INTERNAL_LOGGER.debug(
-                "| -> %-76s |",
-                limit(exec.toString(), 76)
-            );
-        }
+        INTERNAL_LOGGER.fine(String.format(
+            "| -> %-76s |",
+            limit(exec.toString(), 76)
+        ));
 
         try {
             if (!exec.invoke(instance, classMapper)) {
@@ -369,11 +366,11 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                         "The injector could not invoke the method '%s' " +
                             "before state '%s' since one of the parameters is not available.",
                         exec.getName(), exec.getState()));
-                } else if (i == MissingArgumentStrategy.SKIP_INVOCATION && INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                    INTERNAL_LOGGER.debug(
+                } else if (i == MissingArgumentStrategy.SKIP_INVOCATION) {
+                    INTERNAL_LOGGER.fine(String.format(
                         "|      %-74s |",
                         limit("(Not invoked due to missing optional dependencies.)", 74)
-                    );
+                    ));
                 }
             }
         } catch (final ReflectiveOperationException ex) {
@@ -382,16 +379,16 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     }
 
     private void throwInjectorException(DependencyGraph graph, Execution<Object> exec, Exception ex) {
-        INTERNAL_LOGGER.error("Exception thrown by method invoked by Injector:");
+        INTERNAL_LOGGER.severe("Exception thrown by method invoked by Injector:");
         if (ex.getCause() != null) {
-            INTERNAL_LOGGER.error("Exception: " + ex.getCause().getClass().getSimpleName());
+            INTERNAL_LOGGER.severe("Exception: " + ex.getCause().getClass().getSimpleName());
         }
-        INTERNAL_LOGGER.error("Class: " + exec.getType().getName());
-        INTERNAL_LOGGER.error("    @ExecuteBefore(" + exec.getState().name() + ")");
+        INTERNAL_LOGGER.severe("Class: " + exec.getType().getName());
+        INTERNAL_LOGGER.severe("    @ExecuteBefore(" + exec.getState().name() + ")");
 
         if (exec instanceof ReflectionExecutionImpl) {
             final Method method = ((ReflectionExecutionImpl<?>) exec).getMethod();
-            INTERNAL_LOGGER.error(format("   %s %s %s%s",
+            INTERNAL_LOGGER.severe(format("   %s %s %s%s",
                 Modifier.toString(method.getModifiers()),
                 method.getReturnType().getSimpleName(),
                 method.getName(),
@@ -400,8 +397,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
             if (method.getParameterCount() > 0) {
                 Stream.of(method.getParameters())
                     .map(param -> formatParameter(graph, param))
-                    .forEachOrdered(INTERNAL_LOGGER::error);
-                INTERNAL_LOGGER.error("    );");
+                    .forEachOrdered(INTERNAL_LOGGER::severe);
+                INTERNAL_LOGGER.severe("    );");
             }
         }
         throw new InjectorException(ex);
@@ -470,7 +467,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 }
 
                 try {
-                    INTERNAL_LOGGER.warn("Setting fields is deprecated: " + field);
+                    INTERNAL_LOGGER.warning("Setting fields is deprecated: " + field);
                     set(field, instance, value);
                 } catch (final IllegalAccessException ex) {
                     throw new InjectorException(
@@ -574,19 +571,21 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     }
 
     private void logPending(Injectable<?> injectable) {
-        if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-            INTERNAL_LOGGER.debug("| %-71s PENDING |",
-                limit(injectable.get().getSimpleName(), 71)
-            );
-            INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
-        }
+        INTERNAL_LOGGER.fine(String.format("| %-71s PENDING |",
+            limit(injectable.get().getSimpleName(), 71)
+        ));
+        INTERNAL_LOGGER.fine(HORIZONTAL_LINE);
     }
 
     private void logCreated(Properties properties, Injectable<?> injectable) {
-        if (INTERNAL_LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-            INTERNAL_LOGGER.debug("| %-71s CREATED |",
+        final Level level = Optional.of(INTERNAL_LOGGER)
+            .map(Logger::getLevel)
+            .orElse(INTERNAL_LOGGER.getParent().getLevel());
+
+        if (level.intValue() < Level.CONFIG.intValue()) {
+            INTERNAL_LOGGER.fine(String.format("| %-71s CREATED |",
                 limit(injectable.get().getSimpleName(), 71)
-            );
+            ));
 
             traverseFields(injectable.get())
                 .filter(f -> f.isAnnotationPresent(Config.class))
@@ -599,9 +598,9 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                         : a.value(), 26
                     )
                 ))
-                .forEachOrdered(INTERNAL_LOGGER::debug);
+                .forEachOrdered(INTERNAL_LOGGER::fine);
 
-            INTERNAL_LOGGER.debug(HORIZONTAL_LINE);
+            INTERNAL_LOGGER.fine(HORIZONTAL_LINE);
         }
     }
 

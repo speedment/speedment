@@ -21,8 +21,8 @@ module com.speedment.runtime.application {
     requires com.speedment.common.invariant;
     requires com.speedment.runtime.welcome;
     requires com.speedment.common.jvm_version;
-    requires com.speedment.common.logger;
     requires com.speedment.common.json;
+    requires java.logging;
 
     requires transitive com.speedment.runtime.core;
     requires transitive com.speedment.common.annotation;

@@ -28,13 +28,11 @@ import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.internal.util.InjectorUtil;
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -75,7 +73,7 @@ public final class InjectorImpl implements Injector {
         return new InjectorBuilderImpl(classLoader);
     }
 
-    public static final Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorImpl.class);
+    public static final Logger LOGGER_INSTANCE = LogFormatter.apply(Logger.getLogger(InjectorImpl.class.getName()));
 
     private final Set<Injectable<?>> injectables;
     private final List<Object> instances;
@@ -190,12 +188,12 @@ public final class InjectorImpl implements Injector {
             }
         }
 
-        LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
-        LOGGER_INSTANCE.debug(
+        LOGGER_INSTANCE.fine(HORIZONTAL_LINE);
+        LOGGER_INSTANCE.fine(String.format(
             "| %-79s |",
             "All " + instances.size() + " components have been stopped!"
-        );
-        LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
+        ));
+        LOGGER_INSTANCE.fine(HORIZONTAL_LINE);
     }
 
     private void stop(AtomicBoolean hasAnythingChanged, ClassMapper classMapper, DependencyNode node) {
@@ -203,7 +201,7 @@ public final class InjectorImpl implements Injector {
         // when stopping.
         if (node.canBe(State.STOPPED)) {
 
-            LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
+            LOGGER_INSTANCE.fine(HORIZONTAL_LINE);
 
             // Retrieve the instance for that node
             final Object inst = find(node.getRepresentedType(), true);
@@ -222,38 +220,29 @@ public final class InjectorImpl implements Injector {
             node.setState(State.STOPPED);
             hasAnythingChanged.set(true);
 
-            LOGGER_INSTANCE.debug(
+            LOGGER_INSTANCE.fine(String.format(
                 "| %-66s %12s |",
                 node.getRepresentedType().getSimpleName(),
                 State.STOPPED.name()
-            );
+            ));
         }
     }
 
     private void stopInstance(ClassMapper classMapper, Object inst, Execution<Object> exec) {
         // We might want to log exactly which steps we
         // have completed.
-        if (LOGGER_INSTANCE.getLevel()
-            .isEqualOrLowerThan(Level.DEBUG)) {
-
-            LOGGER_INSTANCE.debug(
-                "| -> %-76s |",
-                limit(exec.toString(), 76)
-            );
-        }
-
+        LOGGER_INSTANCE.fine(String.format(
+            "| -> %-76s |",
+            limit(exec.toString(), 76)
+        ));
         try {
-            if (!exec.invoke(inst, classMapper) &&
-                LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                LOGGER_INSTANCE.debug(
+            if (!exec.invoke(inst, classMapper)) {
+                LOGGER_INSTANCE.fine(String.format(
                     "|      %-74s |",
                     limit("(Ignored due to missing dependencies.)", 74)
-                );
+                ));
             }
-        } catch (final IllegalAccessException
-            | IllegalArgumentException
-            | InvocationTargetException ex) {
-
+        } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             throw new InjectorException(ex);
         }
     }
@@ -306,7 +295,7 @@ public final class InjectorImpl implements Injector {
                         field.getType()
                     );
 
-                    LOGGER_INSTANCE.error(ex, err);
+                    LOGGER_INSTANCE.severe(err);
                     throw new InjectorException(err, ex);
                 }
             });

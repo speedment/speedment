@@ -22,9 +22,6 @@ import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.common.jvm_version.JvmVersion;
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.application.internal.util.JpmsUtil;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
@@ -51,6 +48,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.logging.*;
 import java.util.stream.IntStream;
 
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
@@ -75,8 +73,13 @@ public abstract class AbstractApplicationBuilder<
         BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
 > implements ApplicationBuilder<APP, BUILDER> {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(
-        LogType.APPLICATION_BUILDER.getLoggerName());
+    private static final Logger LOGGER = Logger.getLogger(LogType.APPLICATION_BUILDER.getLoggerName());
+    static {
+        LOGGER.setUseParentHandlers(false);
+        final ConsoleHandler handler = new ConsoleHandler();
+        handler.setFormatter(new LogFormatter());
+        LOGGER.addHandler(handler);
+    }
     
     private final InjectorBuilder injectorBuilder;
 
@@ -85,9 +88,9 @@ public abstract class AbstractApplicationBuilder<
     private boolean skipLogoPrintout;
     
     protected AbstractApplicationBuilder(
-        Class<? extends APP> applicationImplClass,
-        Class<? extends ApplicationMetadata> metadataClass) {
-
+        final Class<? extends APP> applicationImplClass,
+        final Class<? extends ApplicationMetadata> metadataClass
+    ) {
         this(Injector.builder()
             .withBundle(RuntimeBundle.class)
             .withComponent(applicationImplClass)
@@ -96,10 +99,10 @@ public abstract class AbstractApplicationBuilder<
     }
     
     protected AbstractApplicationBuilder(
-        ClassLoader classLoader,
-        Class<? extends APP> applicationImplClass,
-        Class<? extends ApplicationMetadata> metadataClass) {
-
+        final ClassLoader classLoader,
+        final Class<? extends APP> applicationImplClass,
+        final Class<? extends ApplicationMetadata> metadataClass
+    ) {
         this(Injector.builder(classLoader)
             .withBundle(RuntimeBundle.class)
             .withComponent(applicationImplClass)
@@ -111,6 +114,11 @@ public abstract class AbstractApplicationBuilder<
         this.injectorBuilder                   = requireNonNull(injectorBuilder);
         this.skipCheckDatabaseConnectivity     = false;
         this.skipValidateRuntimeConfig         = false;
+        // Set the default handler level which is by default INFO
+        final Handler[] handlers = Logger.getLogger("").getHandlers();
+        if (handlers.length > 0) {
+            handlers[0].setLevel(Level.FINE); // Programatically set the min level
+        }
     }
 
     @Override
@@ -359,14 +367,12 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withLogging(HasLoggerName namer) {
-        LoggerManager.getLogger(namer.getLoggerName()).setLevel(Level.DEBUG);
-        
-        if (LogType.APPLICATION_BUILDER.getLoggerName()
-                .equals(namer.getLoggerName())) {
-            
+        Logger.getLogger(namer.getLoggerName()).setLevel(Level.FINEST);
+
+       if (LogType.APPLICATION_BUILDER.getLoggerName().equals(namer.getLoggerName())) {
             // Special case because its in a common module
-            Injector.logger().setLevel(Level.DEBUG); 
-            InjectorBuilder.logger().setLevel(Level.DEBUG);
+            Injector.logger().setLevel(Level.FINEST);
+            InjectorBuilder.logger().setLevel(Level.FINEST);
         }
         
         return self();
@@ -411,7 +417,7 @@ public abstract class AbstractApplicationBuilder<
     protected abstract APP build(Injector injector);
 
     protected void validateRuntimeConfig(Injector injector) {
-        LOGGER.debug("Validating Runtime Configuration");
+        LOGGER.fine("Validating Runtime Configuration");
         final Project project = injector.getOrThrow(ProjectComponent.class)
             .getProject();
         
@@ -432,7 +438,7 @@ public abstract class AbstractApplicationBuilder<
             final DbmsType dbmsType = oDbmsType.get();
             
             if (!dbmsType.isSupported()) {
-                LOGGER.error("The database driver class " + dbmsType.getDriverName() + 
+                LOGGER.severe("The database driver class " + dbmsType.getDriverName() +
                     " is not available. Make sure to include it in your " + 
                     "class path (e.g. in the POM file)"
                 );
@@ -442,7 +448,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     protected void checkDatabaseConnectivity(Injector injector) {
-        LOGGER.debug("Checking Database Connectivity");
+        LOGGER.fine("Checking Database Connectivity");
         final Project project = injector.getOrThrow(ProjectComponent.class)
             .getProject();
         
@@ -496,13 +502,13 @@ public abstract class AbstractApplicationBuilder<
                 ", License: " + info.getLicenseName();
         LOGGER.info(msg);
         if (!info.isProductionMode()) {
-            LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
+            LOGGER.warning("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
 
         if (info != upstreamInfo) {
             LOGGER.info("Upstream version is " + upstreamInfo.getImplementationVersion() + " (" + upstreamInfo.getSpecificationNickname() + ")");
             if (!upstreamInfo.isProductionMode()) {
-                LOGGER.warn("Upstream version is NOT INTENDED FOR PRODUCTION USE!");
+                LOGGER.warning("Upstream version is NOT INTENDED FOR PRODUCTION USE!");
             }
         }
 
@@ -519,22 +525,22 @@ public abstract class AbstractApplicationBuilder<
             final Optional<Boolean> isVersionOk = isVersionOk();
             if (isVersionOk.isPresent()) {
                 if (!isVersionOk.get()) {
-                    LOGGER.warn("The current Java version (" + versionString + 
+                    LOGGER.warning("The current Java version (" + versionString +
                         ") is outdated. Please upgrade to a more recent " + 
                         "Java version.");
                 }
             } else {
-                LOGGER.warn("Unable to fully parse the java version. " + 
+                LOGGER.warning("Unable to fully parse the java version. " +
                     "Version check skipped!");
             }
         } catch (final Exception ex) {
             LOGGER.info("Unknown Java version.");
         }
-        LOGGER.info(
+        LOGGER.info(String.format(
             "Available processors: %d, Max Memory: %,d bytes",
             Runtime.getRuntime().availableProcessors(),
             Runtime.getRuntime().maxMemory()
-        );
+        ));
 
         JpmsUtil.logModulesIfEnabled();
 
@@ -586,7 +592,9 @@ public abstract class AbstractApplicationBuilder<
     }
 
     private void printStreamSupplierOrder(StreamSupplierComponent ssc, int level) {
-        LOGGER.info("%s%s (0x%08x) %s", indent(level), ssc.getClass().getSimpleName(), ssc.hashCode(), ssc.isImmutable() ? "mutable" : "immutable");
+        LOGGER.info(String.format(
+            "%s%s (0x%08x) %s", indent(level), ssc.getClass().getSimpleName(), ssc.hashCode(), ssc.isImmutable() ? "mutable" : "immutable"
+        ));
         ssc.sourceStreamSupplierComponents()
             .forEachOrdered(child -> printStreamSupplierOrder(child, level + 1));
     }
@@ -595,6 +603,17 @@ public abstract class AbstractApplicationBuilder<
         return IntStream.range(0, level)
             .collect(StringBuilder::new, (sb, i) -> sb.append("    "), StringBuilder::append)
             .toString();
+    }
+
+    private static final class LogFormatter extends Formatter {
+        @Override
+        public String format(LogRecord record) {
+            return String.format(
+                "%s: %s%n",
+                record.getLevel(),
+                record.getMessage()
+            );
+        }
     }
 
 }

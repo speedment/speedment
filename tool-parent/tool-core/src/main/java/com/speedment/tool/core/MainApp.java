@@ -34,6 +34,8 @@ import com.speedment.tool.core.util.InjectionLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.util.logging.Level;
+
 import static com.speedment.common.logger.Level.DEBUG;
 import static java.util.Objects.requireNonNull;
 
@@ -53,7 +55,7 @@ public final class MainApp extends Application {
     public void start(Stage stage) {
         requireNonNull(stage);
 
-        InjectorBuilder.logger().setLevel(DEBUG);
+        InjectorBuilder.logger().setLevel(Level.FINEST);
         
         if (InjectorHolder.INSTANCE.getInjector() == null) {
             LOGGER.warn("Creating new Speedment instance for UI session.");

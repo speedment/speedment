@@ -21,9 +21,9 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.internal.InjectorImpl;
-import com.speedment.common.logger.Logger;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**

@@ -16,21 +16,20 @@
  */
 package com.speedment.runtime.application.internal.util;
 
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.ApplicationBuilder;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
 public final class JpmsUtil {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(ApplicationBuilder.LogType.MODULE_SYSTEM.getLoggerName());
+    private static final Logger LOGGER = Logger.getLogger(ApplicationBuilder.LogType.MODULE_SYSTEM.getLoggerName());
 
     private JpmsUtil() {}
 
@@ -40,8 +39,8 @@ public final class JpmsUtil {
             .map(JpmsUtil::removeModuleTag)
             .collect(groupingBy(JpmsUtil::initialPath, TreeMap::new, mapping(JpmsUtil::restPath, toList())));
 
-        LOGGER.debug("JPMS Modules: ");
-        moduleNames.forEach((key, value) -> LOGGER.debug("%s.%s", key, format(value)));
+        LOGGER.fine("JPMS Modules: ");
+        moduleNames.forEach((key, value) -> LOGGER.fine(String.format("%s.%s", key, format(value))));
     }
 
     private static String format(List<String> value) {
