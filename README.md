@@ -4,7 +4,7 @@ Java Stream ORM
 ====================================================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime)
-[![Javadocs](https://www.javadoc.io/doc/com.speedment.runtime/runtime-application.svg)](https://www.javadoc.io/doc/com.speedment.runtime/runtime-application)
+[![Javadocs](https://javadoc-badge.appspot.com/com.speedment.runtime/runtime-application.svg?label=javadoc)](https://www.javadoc.io/doc/com.speedment.runtime/runtime-application)
 [![Build Status](https://travis-ci.org/speedment/speedment.svg?branch=develop-3.0)](https://travis-ci.org/speedment/speedment)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
