@@ -40,7 +40,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.1.0
  */
 public final class CastUtil {
-    
+
+    private CastUtil() {}
+
     ////////////////////////////////////////////////////////////////////////////
     //                               ToDouble                                 //
     ////////////////////////////////////////////////////////////////////////////
@@ -683,7 +685,7 @@ public final class CastUtil {
             else if (!(o instanceof UnaryExpression)) return false;
             final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
             return Objects.equals(inner(), that.inner())
-                && operator().equals(that.operator());
+                && operator() == that.operator();
         }
 
         @Override
@@ -692,8 +694,4 @@ public final class CastUtil {
         }
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private CastUtil() {}
 }

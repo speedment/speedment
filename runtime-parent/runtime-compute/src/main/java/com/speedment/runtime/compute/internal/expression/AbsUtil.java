@@ -340,7 +340,7 @@ public final class AbsUtil {
             else if (!(o instanceof UnaryExpression)) return false;
             final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
             return Objects.equals(inner(), that.inner())
-                && operator().equals(that.operator());
+                && operator() == that.operator();
         }
 
         @Override

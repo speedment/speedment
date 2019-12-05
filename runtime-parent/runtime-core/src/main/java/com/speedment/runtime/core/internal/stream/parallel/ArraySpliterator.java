@@ -69,7 +69,8 @@ final class ArraySpliterator<T> implements Spliterator<T> {
         if (lo >= mid) {
             return null;
         } else {
-            return new ArraySpliterator<>(array, lo, index = mid, characteristics);
+            index = mid;
+            return new ArraySpliterator<>(array, lo, index, characteristics);
         }
     }
 

@@ -41,6 +41,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class NegateUtil {
 
+    private NegateUtil() {}
+
     /**
      * Creates and returns an expression that will compute the negative result
      * of the specified expression.
@@ -388,7 +390,7 @@ public final class NegateUtil {
             else if (!(o instanceof UnaryExpression)) return false;
             final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
             return Objects.equals(inner(), that.inner())
-                && operator().equals(that.operator());
+                && operator() == that.operator();
         }
 
         @Override
@@ -397,8 +399,4 @@ public final class NegateUtil {
         }
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private NegateUtil() {}
 }

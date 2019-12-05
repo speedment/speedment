@@ -55,7 +55,7 @@ final class SqlStage {
             .collect(joining(","));
 
         this.sqlTableReference = info.namingConvention().fullNameOf(table)
-            + (DbmsType.SubSelectAlias.PROHIBITED.equals(info.dbmsType().getSubSelectAlias()) ? " " : " AS ")
+            + ((DbmsType.SubSelectAlias.PROHIBITED == info.dbmsType().getSubSelectAlias()) ? " " : " AS ")
             + tableAlias;
     }
 

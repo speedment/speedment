@@ -134,7 +134,7 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
     }
 
     private int forNull(Parameter parameter) {
-        final int firstOutcome = Parameter.FIRST.equals(parameter) ? -1 : 1;
+        final int firstOutcome = (Parameter.FIRST == parameter) ? -1 : 1;
         final int lastOutcome  = -firstOutcome;
         
         switch (nullOrder) {
