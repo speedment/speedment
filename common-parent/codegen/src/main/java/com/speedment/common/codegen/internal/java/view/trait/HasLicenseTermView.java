@@ -19,8 +19,7 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasLicenseTerm;
-
-import static com.speedment.common.codegen.util.Formatting.nl;
+import com.speedment.common.codegen.util.Formatting;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -42,7 +41,7 @@ public interface HasLicenseTermView<M extends HasLicenseTerm<M>> extends Transfo
      */
     default String renderLicenseTerm(Generator gen, M model) {
         return gen.on(model.getLicenseTerm())
-            .map(doc -> doc + nl())
+            .map(doc -> doc + Formatting.nl())
             .orElse("");
     }
 }

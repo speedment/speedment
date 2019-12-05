@@ -62,7 +62,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
     }
 
     @Override
-    public DependencyNode get(Class<?> clazz) throws IllegalArgumentException {
+    public DependencyNode get(Class<?> clazz) {
         return getIfPresent(clazz).orElseThrow(() -> new IllegalArgumentException(
             format("There is no implementation of '%s' in the injection dependency graph.", clazz)
         ));
@@ -92,9 +92,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
             // class and add them to the executors set.
             traverseMethods(clazz)
                 .filter(m -> m.isAnnotationPresent(Execute.class))
-                .forEach(m -> {
-                    node.getExecutions().add(createExecution(m, State.STARTED));
-                });
+                .forEach(m -> node.getExecutions().add(createExecution(m, State.STARTED)));
 
             // Go through all the methods with the '@ExecuteBefore'-annotation 
             // in the class  and add them to the executors set.
@@ -136,27 +134,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
                 // TODO: Maybe create a dependency even if WithState is missing,
 
                 if (ws != null) {
-                    final Class<?> type = p.getType();
-                    final State state   = ws.value();
-
-                    try {
-                        dependencies.add(
-                            new DependencyImpl(
-                                getOrCreate(type),
-                                state
-                            )
-                        );
-                    } catch (final CyclicReferenceException ex) {
-                        throw new CyclicReferenceException(
-                            m.getDeclaringClass(), ex
-                        );
-                    } catch (final IllegalArgumentException iae) {
-                        throw new IllegalStateException(
-                            "Unable to resolve " + m.toString() + " (" + type.toString() + ") at state " + state.toString()
-                            ,
-                            iae
-                        );
-                    }
+                    addDependency(m, dependencies, p.getType(), ws.value());
                 }
             }
         } catch (final CyclicReferenceException ex) {
@@ -175,4 +153,26 @@ public final class DependencyGraphImpl implements DependencyGraph {
             proxyFunction.apply(m.getDeclaringClass())
         );
     }
+
+    private void addDependency(Method m, Set<Dependency> dependencies, Class<?> type, State state) {
+        try {
+            dependencies.add(
+                new DependencyImpl(
+                    getOrCreate(type),
+                    state
+                )
+            );
+        } catch (final CyclicReferenceException ex) {
+            throw new CyclicReferenceException(
+                m.getDeclaringClass(), ex
+            );
+        } catch (final IllegalArgumentException iae) {
+            throw new IllegalStateException(
+                "Unable to resolve " + m.toString() + " (" + type.toString() + ") at state " + state.toString()
+                ,
+                iae
+            );
+        }
+    }
+
 }

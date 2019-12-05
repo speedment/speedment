@@ -53,7 +53,7 @@ public final class InitialFilterOptimizer<ENTITY> implements SqlStreamOptimizer<
         requireNonNull(initialPipeline);
         requireNonNull(dbmsType);
         final AtomicInteger filterCounter = new AtomicInteger();
-        traverse(initialPipeline, $ -> filterCounter.getAndIncrement());
+        traverse(initialPipeline, unused -> filterCounter.getAndIncrement());
         return Metrics.of(filterCounter.get(), filterCounter.get(), 0, 0, 0);
     }
 
@@ -96,11 +96,6 @@ public final class InitialFilterOptimizer<ENTITY> implements SqlStreamOptimizer<
             }
         }
 
-//        final List<FieldPredicate<ENTITY>> andPredicateBuilders = topLevelAndPredicates(initialPipeline);
-//
-//        if (!andPredicateBuilders.isEmpty()) {
-//            modifySource(andPredicateBuilders, info, query);
-//        }
         query.setSql(sql.toString());
         query.setValues(values);
 

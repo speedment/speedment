@@ -40,7 +40,7 @@ public interface SpeedmentPredicate<ENTITY> extends ToBoolean<ENTITY> {
 
     @Override
     default SpeedmentPredicate<ENTITY> negate() {
-        return (t) -> !test(t);
+        return t -> !test(t);
     }
 
     @Override

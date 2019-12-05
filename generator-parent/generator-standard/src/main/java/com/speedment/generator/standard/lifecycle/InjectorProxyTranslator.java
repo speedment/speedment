@@ -20,6 +20,8 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.util.Formatting;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.config.Project;
@@ -28,7 +30,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
 import static com.speedment.common.codegen.constant.DefaultType.WILDCARD;
-import static com.speedment.common.codegen.util.Formatting.nl;
 
 /**
  *
@@ -37,8 +38,8 @@ import static com.speedment.common.codegen.util.Formatting.nl;
  */
 public final class InjectorProxyTranslator extends AbstractJavaClassTranslator<Project, Class> {
 
-    public InjectorProxyTranslator(Project project) {
-        super(project, Class::of);
+    public InjectorProxyTranslator(Injector injector, Project project) {
+        super(injector, project, Class::of);
     }
 
     @Override
@@ -65,8 +66,8 @@ public final class InjectorProxyTranslator extends AbstractJavaClassTranslator<P
     protected String getJavadocRepresentText() {
         return "The default {@link " + InjectorProxy.class.getName() +
             "} implementation class for the {@link " + Project.class.getName() + 
-            "} named " + getSupport().projectOrThrow().getId() + "." + nl() +
-            "<p>" + nl() +
+            "} named " + getSupport().projectOrThrow().getId() + "." + Formatting.nl() +
+            "<p>" + Formatting.nl() +
             "An InjectorProxy is used to reduce the required number of " +
             "{@code exports} in the module-info.java " +
             "file for a Speedment project"

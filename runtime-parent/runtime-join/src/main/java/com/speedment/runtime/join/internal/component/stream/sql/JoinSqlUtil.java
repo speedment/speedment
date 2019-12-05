@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.join.internal.component.stream.sql;
 
-import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
@@ -42,18 +41,19 @@ import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.ResultSet;
-import java.util.*;
-
-import static com.speedment.runtime.join.JoinComponentUtil.MAX_DEGREE;
-import static java.util.Objects.requireNonNull;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
-
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
+import static com.speedment.runtime.join.JoinComponentUtil.MAX_DEGREE;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -115,35 +115,14 @@ final class JoinSqlUtil {
         int nullOffset = -1;
 
         // Check if this stage renders an on-field to be nullable
-        if (stage.joinType().isPresent()) {
-            if (stage.joinType().orElseThrow(() -> newNoSuchElementException(stage)).isNullableSelf()) {
-                nullOffset = findNullOffset(table, stage, stage.field().orElseThrow(() -> new NoSuchElementException("field is missing in stage" + stage)));
-            }
+        if (stage.joinType().isPresent() && stage.joinType().orElseThrow(() -> newNoSuchElementException(stage)).isNullableSelf()) {
+            nullOffset = findNullOffset(table, stage, stage.field().orElseThrow(() -> new NoSuchElementException("field is missing in stage" + stage)));
         }
 
         // Check if another (RIGHT JOIN) stage renders an on-field in this stage to be nullable
         // No use to check if we already know
         if (nullOffset == -1) {
-            final TableIdentifier<?> thisId = stage.identifier();
-            for (int i = 0; i < stages.size(); i++) {
-                if (stageIndex == i) {
-                    // Ignore this stage
-                    continue;
-                }
-                final Stage<?> otherStage = stages.get(i);
-                if (otherStage.joinType().isPresent()) {
-                    if (otherStage.joinType().orElseThrow(() -> newNoSuchElementException(otherStage)).isNullableOther()) {
-                        final HasComparableOperators<?, ?> otherStageForeignField = otherStage.foreignField().orElseThrow(() -> new NoSuchElementException("Foreign fiels is missing in other stage " + otherStage));
-                        final TableIdentifier<?> referencedId = otherStageForeignField.identifier().asTableIdentifier();
-                        if (thisId.equals(referencedId)) {
-                            nullOffset = findNullOffset(table, otherStage, otherStageForeignField);
-                            // If we have a between operation where there is another field pointed, my
-                            // belief is that we can safely ignore that because both fields will be null and we
-                            // only need to detect one
-                        }
-                    }
-                }
-            }
+            nullOffset = checkOther(stages, stageIndex, stage, table, nullOffset);
         }
 
         if (nullOffset >= 0) {
@@ -153,7 +132,6 @@ final class JoinSqlUtil {
         }
 
     }
-
 
 
     private static int findNullOffset(
@@ -186,6 +164,29 @@ final class JoinSqlUtil {
             );
         }
         return result;
+    }
+
+
+    private static <T> int checkOther(List<Stage<?>> stages, int stageIndex, Stage<T> stage, Table table, int nullOffset) {
+        final TableIdentifier<?> thisId = stage.identifier();
+        for (int i = 0; i < stages.size(); i++) {
+            if (stageIndex == i) {
+                // Ignore this stage
+                continue;
+            }
+            final Stage<?> otherStage = stages.get(i);
+            if (otherStage.joinType().isPresent() && otherStage.joinType().orElseThrow(() -> newNoSuchElementException(otherStage)).isNullableOther()) {
+                final HasComparableOperators<?, ?> otherStageForeignField = otherStage.foreignField().orElseThrow(() -> new NoSuchElementException("Foreign field is missing in other stage " + otherStage));
+                final TableIdentifier<?> referencedId = otherStageForeignField.identifier().asTableIdentifier();
+                if (thisId.equals(referencedId)) {
+                    nullOffset = findNullOffset(table, otherStage, otherStageForeignField);
+                    // If we have a between operation where there is another field pointed, my
+                    // belief is that we can safely ignore that because both fields will be null and we
+                    // only need to detect one
+                }
+            }
+        }
+        return nullOffset;
     }
 
     private static class NullAwareSqlAdapter<ENTITY> implements SqlAdapter<ENTITY> {
@@ -302,23 +303,25 @@ final class JoinSqlUtil {
         int cnt = 0;
         for (int stageIndex = 0; stageIndex < stages.size(); stageIndex++) {
             final Stage<?> stage = stages.get(stageIndex);
+            cnt = renderPredicate(sqlInfo, sql, values, cnt, stageIndex, stage);
+        }
+    }
 
-            if (!stage.predicates().isEmpty()) {
-                for (int j = 0; j < stage.predicates().size(); j++) {
-                    final Predicate<?> predicate = stage.predicates().get(j);
-                    if (predicate instanceof FieldPredicate) {
-                        if (((FieldPredicate)predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
-                            // Remove redundant ALWAYS_TRUE predicates
-                            continue;
-                        }
-                    }
-                    if (cnt++ != 0) {
-                        sql.append(" AND ");
-                    }
-                    renderPredicateHelper(sqlInfo, stage, stageIndex, sql, values, predicate);
+    private static int renderPredicate(SqlInfo sqlInfo, StringBuilder sql, List<Object> values, int cnt, int stageIndex, Stage<?> stage) {
+        if (!stage.predicates().isEmpty()) {
+            for (int j = 0; j < stage.predicates().size(); j++) {
+                final Predicate<?> predicate = stage.predicates().get(j);
+                if (predicate instanceof FieldPredicate && ((FieldPredicate) predicate).getPredicateType() == PredicateType.ALWAYS_TRUE) {
+                    // Remove redundant ALWAYS_TRUE predicates
+                    continue;
                 }
+                if (cnt++ != 0) {
+                    sql.append(" AND ");
+                }
+                renderPredicateHelper(sqlInfo, stage, stageIndex, sql, values, predicate);
             }
         }
+        return cnt;
     }
 
     // See StreamTerminatorUtil::renderSqlWhereHelper for regular streams
@@ -379,7 +382,6 @@ final class JoinSqlUtil {
 
     }
 
-
     private static String renderJoin(
         final DatabaseNamingConvention naming,
         final List<SqlStage> sqlStages,
@@ -405,33 +407,21 @@ final class JoinSqlUtil {
         requireNonNegative(stageIndex);
         final SqlStage sqlStage = sqlStages.get(stageIndex);
         final Stage<?> stage = sqlStage.stage();
-        // This might be different for different databse types...
+        // This might be different for different database types...
         final StringBuilder sb = new StringBuilder();
-        switch (joinType) {
-            case CROSS_JOIN:
-                sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
-                break;
-//            case FULL_OUTER_JOIN:
-//                // Most databases do not support this natively so we create a 
-//                // UNION between a LEFT JOIN and a RIGHT JOIN instead.
-//                sb
-//                    .append("(")
-//                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.LEFT_JOIN))
-//                    .append(" UNION ")
-//                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.RIGHT_JOIN))
-//                    .append(")");
-//                break;
-            default:
-                sb.append(joinType.sql()).append(" ");
-                sb.append(sqlStage.sqlTableReference()).append(" ");
-                stage.field().ifPresent(field -> {
-                    final HasComparableOperators<?, ?> foreignFirstField = stage.foreignField().get();
-                    final int foreignStageIndex = stage.referencedStage(); //stageIndexOf(stages, foreignFirstField);
-                    sb.append("ON (");
-                    final JoinOperator joinOperator = stage.joinOperator().get();
-                     renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
-                     
-                     
+
+        if (joinType == JoinType.CROSS_JOIN) {
+            sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
+        } else {
+            sb.append(joinType.sql()).append(" ");
+            sb.append(sqlStage.sqlTableReference()).append(" ");
+            stage.field().ifPresent(field -> {
+                final HasComparableOperators<?, ?> foreignFirstField = stage.foreignField().get();
+                final int foreignStageIndex = stage.referencedStage(); //stageIndexOf(stages, foreignFirstField);
+                sb.append("ON (");
+                final JoinOperator joinOperator = stage.joinOperator().get();
+                renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
+
 //                    switch (joinOperator) {
 //                        case BETWEEN:
 //                        case NOT_BETWEEN: {
@@ -453,10 +443,8 @@ final class JoinSqlUtil {
 //                        }
 //                    }
 
-
-                    sb.append(") ");
-                });
-                break;
+                sb.append(") ");
+            });
         }
         return sb.toString();
     }
@@ -561,10 +549,7 @@ final class JoinSqlUtil {
 //            .collect(joining(", ", "[", "]"));
 //    }
 
-
     private static NoSuchElementException newNoSuchElementException(Stage<?> stage) {
         return new NoSuchElementException("Stage " + stage + " did not have a join type");
     }
-
-
 }

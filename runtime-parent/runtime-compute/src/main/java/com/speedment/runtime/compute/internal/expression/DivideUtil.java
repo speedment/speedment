@@ -879,7 +879,7 @@ public final class DivideUtil {
      * @param <FIRST>   the first expression type
      * @param <SECOND>  the second expression type
      */
-    private static abstract class DivideToDouble
+    private abstract static class DivideToDouble
         <T, FIRST extends Expression<T>, SECOND extends Expression<T>>
     extends Divide<T, FIRST, SECOND> implements ToDouble<T> {
         DivideToDouble(FIRST first, SECOND second) {
@@ -899,7 +899,7 @@ public final class DivideUtil {
      * @param <FIRST>   the first expression type
      * @param <SECOND>  the second expression type
      */
-    private static abstract class Divide
+    private abstract static class Divide
         <T, FIRST extends Expression<T>, SECOND extends Expression<T>>
     implements BinaryExpression<T, FIRST, SECOND> {
 
@@ -945,7 +945,7 @@ public final class DivideUtil {
      * @param <INNER>  the first expression type
      * @param <N>      the second expression type
      */
-    private static abstract class DivideObjToDouble
+    private abstract static class DivideObjToDouble
         <T, INNER extends Expression<T>, N>
     extends DivideObj<T, INNER, N> implements ToDouble<T> {
 
@@ -982,7 +982,7 @@ public final class DivideUtil {
      * @param <INNER> the type of the expression to divide
      * @param <N>     the value to divide with
      */
-    private static abstract class DivideObj
+    private abstract static class DivideObj
         <T, INNER extends Expression<T>, N>
     implements BinaryObjExpression<T, INNER, N> {
 

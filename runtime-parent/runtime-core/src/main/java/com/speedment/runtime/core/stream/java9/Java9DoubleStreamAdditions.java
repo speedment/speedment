@@ -27,6 +27,6 @@ public interface Java9DoubleStreamAdditions {
 
     DoubleStream takeWhile​(DoublePredicate predicate);
 
-    DoubleStream dropWhile​(DoublePredicate predicate);
+    DoubleStream dropWhile(DoublePredicate predicate);
 
 }

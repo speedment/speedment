@@ -32,9 +32,9 @@ import java.lang.reflect.Type;
 public final class DateIntToShortMapper
 implements TypeMapper<Integer, Short> {
 
-    private final static int DAY_MASK   = 0b0000_0000_0001_1111;
-    private final static int MONTH_MASK = 0b0000_0001_1110_0000;
-    private final static int YEAR_MASK  = 0b1111_1110_0000_0000;
+    private static final int DAY_MASK   = 0b0000_0000_0001_1111;
+    private static final int MONTH_MASK = 0b0000_0001_1110_0000;
+    private static final int YEAR_MASK  = 0b1111_1110_0000_0000;
     
     @Override
     public String getLabel() {

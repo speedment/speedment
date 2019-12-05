@@ -20,6 +20,7 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.doubles.DoubleCountTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,7 +34,7 @@ public final class DefaultDoubleCountTerminator<ENTITY> implements DoubleCountTe
     }
 
     @Override
-    public <T> long apply(
+    public long apply(
         final SqlStreamOptimizerInfo<ENTITY> info,
         final SqlStreamTerminator<ENTITY> sqlStreamTerminator,
         final DoublePipeline pipeline

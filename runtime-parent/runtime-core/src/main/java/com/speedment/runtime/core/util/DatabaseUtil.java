@@ -69,7 +69,7 @@ public final class DatabaseUtil {
      * @return                     the connection URL to use
      * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
      */
-    public static String findConnectionUrl(DbmsHandlerComponent dbmsHandlerComponent, Dbms dbms) throws SpeedmentException {
+    public static String findConnectionUrl(DbmsHandlerComponent dbmsHandlerComponent, Dbms dbms) {
         final DbmsType type = findDbmsType(dbmsHandlerComponent, dbms);
         return dbms.getConnectionUrl().orElseGet(() -> type.getConnectionUrlGenerator().from(dbms));
     }

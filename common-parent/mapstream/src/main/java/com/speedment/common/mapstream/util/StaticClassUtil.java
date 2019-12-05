@@ -32,7 +32,7 @@ public final class StaticClassUtil {
      * 
      * @param caller the class of the instance that called this method
      */
-    public static void instanceNotAllowed(Class<?> caller) throws UnsupportedOperationException {
+    public static void instanceNotAllowed(Class<?> caller) {
         throw new UnsupportedOperationException(
             "It is not allowed to create instances of the " + 
             caller.getName() + 

@@ -64,8 +64,7 @@ public interface Tuple2<T0, T1> extends Tuple {
         switch (index) {
             case 0 : return get0();
             case 1 : return get1();
-            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
-            ));
+            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
         }
     }
     

@@ -16,13 +16,10 @@
  */
 package com.speedment.runtime.core.internal.stream.autoclose;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.*;
 import java.util.stream.*;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -57,7 +54,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         return allowStreamIteratorAndSpliterator;
     }
 
-    <T> boolean finallyClose(BooleanSupplier bs) {
+    boolean finallyClose(BooleanSupplier bs) {
         try {
             return bs.getAsBoolean();
         } finally {
@@ -65,7 +62,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         }
     }
 
-    <T> long finallyClose(LongSupplier lp) {
+    long finallyClose(LongSupplier lp) {
         try {
             return lp.getAsLong();
         } finally {
@@ -73,7 +70,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         }
     }
 
-    <T> int finallyClose(IntSupplier is) {
+    int finallyClose(IntSupplier is) {
         try {
             return is.getAsInt();
         } finally {
@@ -81,7 +78,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         }
     }
 
-    <T> double finallyClose(DoubleSupplier ds) {
+    double finallyClose(DoubleSupplier ds) {
         try {
             return ds.getAsDouble();
         } finally {
@@ -89,7 +86,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         }
     }
 
-    <T> void finallyClose(Runnable r) {
+    void finallyClose(Runnable r) {
         try {
             r.run();
         } finally {
@@ -97,7 +94,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         }
     }
 
-    <T> T finallyClose(Supplier<T> s) {
+    <U> U finallyClose(Supplier<U> s) {
         try {
             return s.get();
         } finally {
@@ -105,7 +102,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         }
     }
 
-    <T> Stream<T> wrap(Stream<T> stream) {
+    <U> Stream<U> wrap(Stream<U> stream) {
         return wrap(stream, /*getStreamSet(),*/ AutoClosingReferenceStream::new);
     }
 
@@ -121,7 +118,7 @@ abstract class AbstractAutoClosingStream<T, S extends BaseStream<T, S>> implemen
         return wrap(stream, /*getStreamSet(),*/ AutoClosingDoubleStream::new);
     }
 
-    private <T> T wrap(T stream, BiFunction<T, Boolean, T> wrapper) {
+    private <U> U wrap(U stream, BiFunction<U, Boolean, U> wrapper) {
         if (stream instanceof AbstractAutoClosingStream) {
             return stream; // If we already are wrapped, then do not wrap again
         }

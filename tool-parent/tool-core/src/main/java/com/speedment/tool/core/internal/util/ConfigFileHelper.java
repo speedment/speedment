@@ -312,9 +312,9 @@ public final class ConfigFileHelper {
      * @param from the project defining the type mappers
      */
     private void setTypeMappersFrom(Project to, Project from) {
-        from.dbmses().forEach(dbms -> {
-            dbms.schemas().forEach(schema -> {
-                schema.tables().forEach(table -> {
+        from.dbmses().forEach(dbms ->
+            dbms.schemas().forEach(schema ->
+                schema.tables().forEach(table ->
                     table.columns().filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
                         String mapperName = column.getTypeMapper().get();
                         try {
@@ -325,10 +325,10 @@ public final class ConfigFileHelper {
                         } catch (ClassNotFoundException | ClassCastException e) {
                             throw new IllegalStateException("Unable to find mapper class " + mapperName);
                         }
-                    });
-                });
-            });
-        });
+                    })
+                )
+            )
+        );
     }
 
     /**
@@ -359,31 +359,7 @@ public final class ConfigFileHelper {
             // Perhaps one would expect this to match a single column, so findFirst would do,
             // but fetching metadata from the database seems to create multiple instances of
             // similar dbmses in the same Project, so we make sure to do this forEach copy.
-            .forEach(c -> {
-                c.mutator().setTypeMapper(typeMapperClass);
-            });
-    }
-
-    /**
-     * Debug method used to track type mappers of a project. May be of future use if one perhaps would venture to
-     * investigate why we get several copies of the dbms from the database
-     */
-    private void printTypeMappers(String heading, Project p) {
-        System.out.println(heading);
-        p.dbmses().forEach(dbms -> {
-            dbms.schemas().forEach(schema -> {
-                schema.tables().forEach(table -> {
-                    table.columns().filter(c -> c.getTypeMapper().isPresent()).forEach(column -> {
-                        String mapperName = column.getTypeMapper().get();
-                        if (mapperName.endsWith("PrimitiveTypeMapper")) {
-                            mapperName = "Primitive";
-                        }
-                        System.out.println(" - " + dbms.getName() + ":" + schema.getName() + "/" +
-                            table.getName() + "." + column.getName() + " mapped by " + mapperName);
-                    });
-                });
-            });
-        });
+            .forEach(c -> c.mutator().setTypeMapper(typeMapperClass));
     }
 
     public void loadConfigFile(File file, ReuseStage reuse) {
@@ -456,7 +432,7 @@ public final class ConfigFileHelper {
             }
 
             try {
-                if (!Files.exists(parent)) {
+                if (!parent.toFile().exists()) {
                     Files.createDirectories(parent);
                 }
             } catch (IOException ex) {/*
@@ -485,7 +461,7 @@ public final class ConfigFileHelper {
         saveConfigFile(currentlyOpenFile);
     }
 
-    public void saveConfigFile(File file) {
+    private void saveConfigFile(File file) {
         saveConfigFile(file, userInterfaceComponent.projectProperty(), true);
     }
 
@@ -497,7 +473,7 @@ public final class ConfigFileHelper {
         }
 
         try {
-            if (!Files.exists(parent)) {
+            if (!parent.toFile().exists()) {
                 Files.createDirectories(parent);
             }
 
@@ -563,7 +539,8 @@ public final class ConfigFileHelper {
     }
 
     private String alignRight(String substring, int totalWidth) {
-        return String.format("%" + totalWidth + "s", substring);
+        final String formatString = "%" + totalWidth + "s";
+        return String.format(formatString, substring);
     }
 
     public void clearTablesAndSaveToFile() {
@@ -593,10 +570,8 @@ public final class ConfigFileHelper {
 
         // always start with a new file.
         if (currentlyOpenFile.isFile()) {
-            if (currentlyOpenFile.exists()) {
-                if (!currentlyOpenFile.delete()) {
-                    userInterfaceComponent.log(OutputUtil.warning("Unable to delete " + currentlyOpenFile));
-                }
+            if (currentlyOpenFile.exists() && !currentlyOpenFile.delete()) {
+                userInterfaceComponent.log(OutputUtil.warning("Unable to delete " + currentlyOpenFile));
             }
             DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
         } else {

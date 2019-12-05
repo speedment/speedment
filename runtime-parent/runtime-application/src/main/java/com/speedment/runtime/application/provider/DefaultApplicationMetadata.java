@@ -40,7 +40,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class DefaultApplicationMetadata implements ApplicationMetadata {
     
-    public final static String METADATA_LOCATION = "metadata_location";
+    public static final String METADATA_LOCATION = "metadata_location";
     
     /**
      * Specified the location of the .json-file from which the metadata

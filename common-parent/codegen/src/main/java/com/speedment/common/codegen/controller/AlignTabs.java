@@ -27,7 +27,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -96,7 +95,7 @@ public final class AlignTabs<T> implements Consumer<T> {
                 
                 Formatting.alignTabs(rows);
                 
-                javadoc.setText(rows.stream().collect(joining(nl())));
+                javadoc.setText(rows.stream().collect(joining(Formatting.nl())));
             });
         }
     }
@@ -113,13 +112,7 @@ public final class AlignTabs<T> implements Consumer<T> {
             
             models.forEach(model -> {
                 final String row = getRow.apply(model);
-                if (row != null) {
-                    final int index  = row.indexOf('\t');
-
-                    if (index > maxIndex.get()) {
-                        maxIndex.set(index);
-                    }
-                }
+                updateMaxIndex(maxIndex, row);
             });
             
             if (maxIndex.get() > -1) {
@@ -127,18 +120,32 @@ public final class AlignTabs<T> implements Consumer<T> {
                     final String row = getRow.apply(model);
                     if (row != null) {
                         final int index = row.indexOf('\t');
-                        if (index > -1) {
-                            setRow.accept(model,
-                                row.replaceFirst("\t", Formatting.repeat(
-                                    " ",
-                                    maxIndex.get() - index
-                                ))
-                            );
-                        }
+                        replaceTabWithSpace(setRow, maxIndex, model, row, index);
                     }
                 }
             } else {
                 break;
+            }
+        }
+    }
+
+    private static <T> void replaceTabWithSpace(BiConsumer<T, String> setRow, AtomicInteger maxIndex, T model, String row, int index) {
+        if (index > -1) {
+            setRow.accept(model,
+                row.replaceFirst("\t", Formatting.repeat(
+                    " ",
+                    maxIndex.get() - index
+                ))
+            );
+        }
+    }
+
+    private static void updateMaxIndex(AtomicInteger maxIndex, String row) {
+        if (row != null) {
+            final int index  = row.indexOf('\t');
+
+            if (index > maxIndex.get()) {
+                maxIndex.set(index);
             }
         }
     }

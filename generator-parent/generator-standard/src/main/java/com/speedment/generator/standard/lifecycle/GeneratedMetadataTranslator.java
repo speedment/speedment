@@ -19,6 +19,8 @@ package com.speedment.generator.standard.lifecycle;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.util.Formatting;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.json.Json;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.application.AbstractApplicationMetadata;
@@ -33,7 +35,6 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.common.codegen.util.Formatting.indent;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -49,8 +50,8 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
 
     static final String METADATA = "Metadata";
 
-    public GeneratedMetadataTranslator(Project doc) {
-        super(doc, Class::of);
+    public GeneratedMetadataTranslator(Injector injector, Project doc) {
+        super(injector, doc, Class::of);
     }
 
     @Override
@@ -72,7 +73,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
         final ProjectMutator<? extends Project> project =
             Project.deepCopy(getSupport().projectOrThrow()).mutator();
 
-        project.setSpeedmentVersion(infoComponent.getEditionAndVersionString());
+        project.setSpeedmentVersion(infoComponent().getEditionAndVersionString());
 
         final List<String> lines = Stream.of(
             DocumentTranscoder.save(project.document(), Json::toJson)
@@ -96,7 +97,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
             int lineCnt = 0;
             for (String line : seg) {
                 subMethod.add(
-                    indent("\"" + line.replace("\\", "\\\\")
+                    Formatting.indent("\"" + line.replace("\\", "\\\\")
                         .replace("\"", "\\\"")
                         .replace("\n", "\\n") + "\"" + 
                         (++lineCnt == seg.size() ? "" : ",")
@@ -111,9 +112,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
         file.add(Import.of(StringBuilder.class));
         file.add(Import.of(Stream.class));
         initializer.add("final StringBuilder " + STRING_BUILDER_NAME + " = new StringBuilder();");
-        subInitializers.stream().forEachOrdered(si -> {
-            initializer.add(si.getName() + "(" + STRING_BUILDER_NAME + ");");
-        });
+        subInitializers.forEach(si -> initializer.add(si.getName() + "(" + STRING_BUILDER_NAME + ");"));
         initializer.add("return " + STRING_BUILDER_NAME + ".toString();");
 
         metadataField.set(Value.ofReference("init()"));
@@ -141,7 +140,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
 
     @Override
     protected Javadoc getJavaDoc() {
-        final String owner = infoComponent.getTitle();
+        final String owner = infoComponent().getTitle();
         return Javadoc.of(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }

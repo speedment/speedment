@@ -88,10 +88,7 @@ public final class WorkspaceController implements Initializable {
                     workspace.textProperty().bind(
                         Bindings.createStringBinding(() -> String.format(
                             "Settings for database %s '%s' %s",
-                            withName instanceof Table
-                                ? ((Table) withName).isView()
-                                    ? "view" : "table"
-                                : withName.mainInterface().getSimpleName().toLowerCase(),
+                            type(withName),
                             withName.getName(),
                             extraInfo
                         ), withName.nameProperty())
@@ -101,8 +98,17 @@ public final class WorkspaceController implements Initializable {
                         .forEachOrdered(properties::add);
                 }
             }
-
-            events.notify(new TreeSelectionChange((ListChangeListener.Change<TreeItem<DocumentProperty>>) change, properties));
+            @SuppressWarnings("unchecked")
+            final ListChangeListener.Change<TreeItem<DocumentProperty>> changeCasted = (ListChangeListener.Change<TreeItem<DocumentProperty>>) change;
+            events.notify(new TreeSelectionChange(changeCasted, properties));
         };
+    }
+
+    private String type(HasNameProperty withName) {
+        if (withName instanceof Table) {
+            return ((Table) withName).isView() ? "view" : "table";
+        } else {
+            return withName.mainInterface().getSimpleName().toLowerCase();
+        }
     }
 }

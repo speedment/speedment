@@ -24,7 +24,6 @@ import com.speedment.common.codegen.internal.java.view.trait.HasImportsView;
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
 import com.speedment.common.codegen.internal.java.view.trait.HasLicenseTermView;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.trait.HasLicenseTerm;
 import com.speedment.common.codegen.util.Formatting;
 
 import java.util.Optional;

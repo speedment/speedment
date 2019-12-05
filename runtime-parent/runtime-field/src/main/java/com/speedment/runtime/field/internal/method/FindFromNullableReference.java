@@ -62,8 +62,7 @@ implements FindFromNullable<ENTITY, FK_ENTITY> {
     }
 
     @Override
-    public FK_ENTITY applyOrThrow(ENTITY entity)
-            throws IllegalArgumentException {
+    public FK_ENTITY applyOrThrow(ENTITY entity) {
 
         return apply(entity).findAny()
             .orElseThrow(() -> new IllegalArgumentException(format(

@@ -41,7 +41,7 @@ public interface HasId extends Document, HasName {
      * @throws SpeedmentConfigException if no id is specified and no name is
      * available
      */
-    default String getId() throws SpeedmentConfigException {
+    default String getId() {
         return getAsString(HasIdUtil.ID).orElse(getName());
     }
 

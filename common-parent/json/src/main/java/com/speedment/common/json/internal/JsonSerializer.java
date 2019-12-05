@@ -189,18 +189,16 @@ public final class JsonSerializer {
         }
     }
     
-    private final static int
-        BEGIN_OBJECT = 0x7B, // {
-        END_OBJECT   = 0x7D, // }
-        BEGIN_ARRAY  = 0x5B, // [
-        END_ARRAY    = 0x5D, // ]
-        BEGIN_STRING = 0x22, // "
-        END_STRING   = 0x22, // "
-        ASSIGN       = 0x3A, // :
-        SEPARATOR    = 0x2C, // ,
-        NEW_LINE     = 0x0A, // new-line
-        SPACE        = 0x20; // space
+    private static final int BEGIN_OBJECT = 0x7B; // {
+    private static final int END_OBJECT   = 0x7D; // }
+    private static final int BEGIN_ARRAY  = 0x5B; // [
+    private static final int END_ARRAY    = 0x5D; // ]
+    private static final int BEGIN_STRING = 0x22; // "
+    private static final int END_STRING   = 0x22; // "
+    private static final int ASSIGN       = 0x3A; // :
+    private static final int SEPARATOR    = 0x2C; // ,
+    private static final int NEW_LINE     = 0x0A; // new-line
+    private static final int SPACE        = 0x20; // space
     
-    
-    private final static int PRETTY_TAB_SIZE = 2;
+    private static final int PRETTY_TAB_SIZE = 2;
 }

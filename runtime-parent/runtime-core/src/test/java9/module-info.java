@@ -41,7 +41,6 @@ open module com.speedment.runtime.core {
     exports com.speedment.runtime.core.util;
 
     requires com.speedment.common.invariant;
-    requires com.speedment.common.mapstream;
     requires com.speedment.common.logger;
     requires com.speedment.common.json;
     requires java.prefs; // InternalEmailUtil

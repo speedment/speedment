@@ -42,7 +42,7 @@ import static java.util.Arrays.asList;
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
 final class ShortFieldTest {
     
-    private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarShort();
+    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarShort();
     private ShortField<BasicEntity, Short> field;
     private List<BasicEntity> entities;
     private BasicEntity a;

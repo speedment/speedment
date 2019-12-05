@@ -181,7 +181,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
         );
 
         final Supplier<BaseStream<?, ?>> initialSupplier
-            = () -> asynchronousQueryResult.stream();
+            = asynchronousQueryResult::stream;
 
         final Stream<ENTITY> result = new ReferenceStreamBuilder<>(
             new PipelineImpl<>(initialSupplier),

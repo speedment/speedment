@@ -31,7 +31,7 @@ import javafx.stage.Stage;
  */
 public final class BrandUtil {
 
-    public BrandUtil() {}
+    private BrandUtil() {}
 
     public static void applyBrand(Injector injector, Stage stage) {
         applyBrand(injector, stage, stage.getScene());

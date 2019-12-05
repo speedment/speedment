@@ -29,7 +29,7 @@ import java.util.stream.IntStream;
  */
 public final class ComputeIntensityMediumParallelStrategy implements ParallelStrategy {
 
-    private final static int[] BATCH_SIZES = IntStream.range(4, 14)
+    private static final int[] BATCH_SIZES = IntStream.range(4, 14)
             .map(ComputeIntensityUtil::toThePowerOfTwo)
             .toArray();
 

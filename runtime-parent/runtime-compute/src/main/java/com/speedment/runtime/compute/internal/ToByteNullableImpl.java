@@ -59,12 +59,12 @@ implements NullableExpression<T, ToByte<T>>, ToByteNullable<T> {
     }
 
     @Override
-    public byte applyAsByte(T t) throws NullPointerException {
+    public byte applyAsByte(T t) {
         return original.applyAsByte(t);
     }
 
     @Override
-    public ToByte<T> orThrow() throws NullPointerException {
+    public ToByte<T> orThrow() {
         return original;
     }
 

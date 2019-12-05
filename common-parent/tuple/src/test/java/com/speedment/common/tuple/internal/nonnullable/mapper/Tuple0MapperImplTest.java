@@ -14,16 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.tool.config.trait;
+package com.speedment.common.tuple.internal.nonnullable.mapper;
 
+import com.speedment.common.tuple.Tuples;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-/**
- *
- * @author  Emil Forslund
- * @since   2.3.0
- */
-
-public interface HasUiVisibleProperties {
-    //Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector);
+final class Tuple0MapperImplTest {
+    
+    private final @SuppressWarnings(value = "unchecked") Tuple0MapperImpl<Integer> instance = (Tuple0MapperImpl) Tuple0MapperImpl.EMPTY_MAPPER;;
+    
+    @Test
+    void degree() {
+        assertEquals(0, instance.degree());
+    }
+    
+    @Test
+    void apply() {
+        assertEquals(Tuples.of(), instance.apply(0));
+    }
 }

@@ -159,12 +159,12 @@ public final class TransactionComponentImpl implements TransactionComponent {
 
     private DataSourceHandler<Object, Object> findMapping(Object dataSource) {
         final Class<?> originalClass = dataSource.getClass();
-        {
-            final DataSourceHandler<Object, Object> dataSourceHandler = dataSourceHandlers.get(originalClass);
-            if (dataSourceHandler != null) {
-                return dataSourceHandler;
-            }
-        }
+
+        final DataSourceHandler<Object, Object> dataSourceHandlerOriginal = dataSourceHandlers.get(originalClass);
+        if (dataSourceHandlerOriginal != null) {
+            return dataSourceHandlerOriginal;
+         }
+
         for (Class<?> inter : originalClass.getInterfaces()) {
             final DataSourceHandler<Object, Object> dataSourceHandler = dataSourceHandlers.get(inter);
             if (dataSourceHandler != null) {

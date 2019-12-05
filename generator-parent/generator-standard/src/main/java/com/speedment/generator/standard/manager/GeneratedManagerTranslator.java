@@ -23,6 +23,8 @@ import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.util.Formatting;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -39,8 +41,6 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultType.classOf;
 import static com.speedment.common.codegen.constant.DefaultType.list;
-import static com.speedment.common.codegen.util.Formatting.indent;
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.joining;
 
@@ -49,11 +49,10 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  * @since 2.3.0
  */
-public final class GeneratedManagerTranslator
-    extends AbstractEntityAndManagerTranslator<Interface> {
+public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTranslator<Interface> {
 
-    public GeneratedManagerTranslator(Table table) {
-        super(table, Interface::of);
+    public GeneratedManagerTranslator(Injector injector, Table table) {
+        super(injector, table, Interface::of);
     }
 
     @Override
@@ -84,15 +83,15 @@ public final class GeneratedManagerTranslator
                     .add(Field.of("FIELDS", list(SimpleParameterizedType.create(
                         com.speedment.runtime.field.Field.class,
                         getSupport().entityType())
-                    )).set(Value.ofReference("unmodifiableList(asList(" + nl() + indent(
+                    )).set(Value.ofReference("unmodifiableList(asList(" + Formatting.nl() + Formatting.indent(
                         table.columns()
                             .sorted(comparing(Column::getOrdinalPosition))
                             .filter(HasEnabled::isEnabled)
                             .map(Column::getJavaName)
                             .map(getSupport().namer()::javaStaticFieldName)
                             .map(field -> getSupport().typeName() + "." + field)
-                            .collect(joining("," + nl()))
-                    ) + nl() + "))")))
+                            .collect(joining("," + Formatting.nl()))
+                    ) + Formatting.nl() + "))")))
                     .add(Method.of("getEntityClass", classOf(getSupport().entityType()))
                         .default_().add(OVERRIDE)
                         .add("return " + getSupport().entityName() + ".class;")

@@ -44,7 +44,7 @@ implements FieldToFloat<ENTITY, V> {
     }
 
     @Override
-    public float applyAsFloat(ENTITY object) throws NullPointerException {
+    public float applyAsFloat(ENTITY object) {
         return mapper.applyAsFloat(field.get(object));
     }
 }

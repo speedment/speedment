@@ -57,6 +57,7 @@ extends HasDbmsId,
      * Internal class only used to hide a map of interned instances.
      */
     class Hidden {
+        private Hidden() { }
         private static final Map<ColumnIdentifier<?>, ColumnIdentifier<?>>
             INTERNED = new ConcurrentHashMap<>();
     }

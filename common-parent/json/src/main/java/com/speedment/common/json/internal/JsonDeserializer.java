@@ -17,10 +17,13 @@
 package com.speedment.common.json.internal;
 
 import com.speedment.common.json.JsonSyntaxException;
+import com.speedment.common.json.exception.JsonException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,9 +47,9 @@ import java.util.function.Consumer;
  */
 public final class JsonDeserializer implements AutoCloseable {
 
-    private final static String UNKNOWN_ENUM_CONSTANT = "Unknown enum constant '";
-    private final static String ENCODING = "UTF-8";
-    private final static int TAB_SIZE = 4;
+    private static final String UNKNOWN_ENUM_CONSTANT = "Unknown enum constant '";
+    private static final Charset ENCODING = StandardCharsets.UTF_8;
+    private static final int TAB_SIZE = 4;
 
     private final InputStreamReader reader;
     private final AtomicLong row;
@@ -54,7 +57,7 @@ public final class JsonDeserializer implements AutoCloseable {
     
     private int character;
     
-    public JsonDeserializer(InputStream in) throws UnsupportedEncodingException {
+    public JsonDeserializer(InputStream in) {
         reader = new InputStreamReader(in, ENCODING);
         row = new AtomicLong(0);
         col = new AtomicLong(0);
@@ -100,28 +103,28 @@ public final class JsonDeserializer implements AutoCloseable {
     
     private Map<String, Object> parseObject() throws IOException {
         final Map<String, Object> object = new LinkedHashMap<>();
-        
+
         firstChar: switch (nextNonBlankspace()) {
             // If the map should be closed with no entries:
             case 0x7D : // } (close the map)
                 return object;
-                
+
             // If this character begins a new entry
             case 0x22 : // " (begin key)
-                
+
                 final CloseMethod close = parseEntryInto(object);
                 switch (close) {
-                    case EXIT_FROM_PARENT : 
+                    case EXIT_FROM_PARENT :
                         if (character == 0x7D) { // }
                             return object;
                         } else {
                             throw unexpectedCharacterException();
                         }
-                        
-                    case CONTINUE_IN_PARENT : 
+
+                    case CONTINUE_IN_PARENT :
                         break firstChar;
-                        
-                    case NOT_DECIDED : 
+
+                    case NOT_DECIDED :
                         switch (nextNonBlankspace()) {
                             case 0x2C : // , (continue with next entry)
                                 break firstChar;
@@ -135,10 +138,10 @@ public final class JsonDeserializer implements AutoCloseable {
                             UNKNOWN_ENUM_CONSTANT + close + "'."
                         );
                 }
-                
-            // If the first non-whitespace character was not neither 
+
+            // If the first non-whitespace character was not neither
             // a '}' nor a '"':
-            default : 
+            default :
                 throw unexpectedCharacterException();
         }
 
@@ -175,7 +178,7 @@ public final class JsonDeserializer implements AutoCloseable {
         
         throw unexpectedCharacterException();
     }
-    
+
     private CloseMethod parseEntryInto(Map<String, Object> object) throws IOException {
         final StringBuilder keyBuilder = new StringBuilder();
         
@@ -208,45 +211,27 @@ public final class JsonDeserializer implements AutoCloseable {
         // Read the value
         switch (nextNonBlankspace()) {
             case 0x7B : // { (begin parsing object)
-                if (object.put(key, parseObject()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseObject());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x5B : // [ (begin parsing array)
-                if (object.put(key, parseArray()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseArray());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x22 : // " (begin parsing string)
-                if (object.put(key, parseString()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseString());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x66 : // f (begin parsing false)
-                if (object.put(key, parseFalse()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseFalse());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x74 : // t (begin parsing true)
-                if (object.put(key, parseTrue()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseTrue());
                 return CloseMethod.NOT_DECIDED;
                 
             case 0x6E : // n (begin parsing null)
-                if (object.put(key, parseNull()) != null) {
-                    throw duplicateKeyException(key);
-                }
-                
+                putIfUniqueOrThrow(object, key, parseNull());
                 return CloseMethod.NOT_DECIDED;
                 
             // Digit '0 - 9'
@@ -254,11 +239,7 @@ public final class JsonDeserializer implements AutoCloseable {
             case 0x35 : case 0x36 : case 0x37 : case 0x38 : case 0x39 :
             case 0x2E : // . (decimal sign)
             case 0x2D : // - (minus sign)
-                return parseNumber(num -> {
-                    if (object.put(key, num) != null) {
-                        throw duplicateKeyException(key);
-                    }
-                });
+                return parseNumber(num -> putIfUniqueOrThrow(object, key, num));
                 
             default :
                 throw unexpectedCharacterException();
@@ -275,7 +256,7 @@ public final class JsonDeserializer implements AutoCloseable {
                 
             case 0x7B : // { (begin parsing object)
                 list.add(parseObject());
-                
+
                 switch (nextNonBlankspace()) {
                     case 0x2C : // , (continue with next element)
                         break firstChar; // nextEntry
@@ -284,7 +265,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     default :
                         throw unexpectedCharacterException();
                 }
-                
+
             case 0x5B : // [ (begin parsing array)
                 list.add(parseArray());
                 
@@ -383,6 +364,10 @@ public final class JsonDeserializer implements AutoCloseable {
         }
 
         // Parse each remaining entry
+        return parseEachRemainingEntry(list);
+    }
+
+    private List<Object> parseEachRemainingEntry(List<Object> list) throws IOException {
         while (true) {
             switch (nextNonBlankspace()) {
                 case 0x7B: // { (begin parsing object)
@@ -410,7 +395,7 @@ public final class JsonDeserializer implements AutoCloseable {
                     break;
 
                 // Digit '0 - 9'
-                case 0x30: case 0x31: case 0x32: case 0x33: case 0x34: 
+                case 0x30: case 0x31: case 0x32: case 0x33: case 0x34:
                 case 0x35: case 0x36: case 0x37: case 0x38: case 0x39:
                 case 0x2E: // . (decimal sign)
                 case 0x2D: // - (minus sign)
@@ -456,7 +441,7 @@ public final class JsonDeserializer implements AutoCloseable {
             }
         }
     }
-    
+
     private String parseString() throws IOException {
         final StringBuilder builder = new StringBuilder();
 
@@ -521,7 +506,6 @@ public final class JsonDeserializer implements AutoCloseable {
             }
         }
         throw unexpectedCharacterException();
-
     }
     
     private CloseMethod parseNumber(Consumer<Number> consumer) throws IOException {
@@ -660,15 +644,14 @@ public final class JsonDeserializer implements AutoCloseable {
     private int next() throws IOException {
         if ((character = reader.read()) != -1) {
             col.incrementAndGet();
-            
-            switch (character) {
-                case 0x0A : // new line
-                    row.incrementAndGet();
-                    col.set(-1);
-                    break;
-                case 0x09 : // tab
-                    col.addAndGet(TAB_SIZE - 1L);
-                    break;
+
+            if (character == 0x0A) { // new line
+                row.incrementAndGet();
+                col.set(-1);
+
+            } else if (character == 0x09) { // new tab
+                col.addAndGet(TAB_SIZE - 1L);
+
             }
             
             return character;
@@ -695,7 +678,13 @@ public final class JsonDeserializer implements AutoCloseable {
             "Unexpected end of stream"
         );
     }
-    
+
+    private void putIfUniqueOrThrow(Map<String, Object> object, String key, Object value) {
+        if (object.put(key, value) != null) {
+            throw duplicateKeyException(key);
+        }
+    }
+
     private String codePoints(String c) {
         final StringJoiner str = new StringJoiner(" ");
         for (int i = 0; i < c.length(); i++) {
@@ -709,7 +698,7 @@ public final class JsonDeserializer implements AutoCloseable {
         try { 
             reader.close(); 
         } catch (final IOException ex) {
-            throw new RuntimeException("Failed to safely close stream.", ex);
+            throw new JsonException("Failed to safely close stream.", ex);
         }
     }
 }

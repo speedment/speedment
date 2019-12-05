@@ -42,7 +42,7 @@ import static java.util.Arrays.asList;
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
 final class LongFieldTest {
     
-    private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarLong();
+    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarLong();
     private LongField<BasicEntity, Long> field;
     private List<BasicEntity> entities;
     private BasicEntity a;

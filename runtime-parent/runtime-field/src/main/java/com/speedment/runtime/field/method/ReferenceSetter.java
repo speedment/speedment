@@ -42,7 +42,7 @@ public interface ReferenceSetter<ENTITY, V>
 extends Setter<ENTITY>, BiConsumer<ENTITY, V> {
 
     @Override
-    default void set(ENTITY entity, Object value) throws ClassCastException {
+    default void set(ENTITY entity, Object value) {
         @SuppressWarnings("unchecked")
         final V casted = (V) value;
         accept(entity, casted);

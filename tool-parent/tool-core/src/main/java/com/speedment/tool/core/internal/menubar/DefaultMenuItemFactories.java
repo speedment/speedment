@@ -36,22 +36,6 @@ import javafx.scene.control.CheckMenuItem;
 @InjectKey(DefaultMenuItemFactories.class)
 public final class DefaultMenuItemFactories {
 
-    /*
-    private @FXML MenuItem mbNew;
-    private @FXML MenuItem mbOpen;
-    private @FXML MenuItem mbSave;
-    private @FXML MenuItem mbSaveAs;
-    private @FXML MenuItem mbQuit;
-    private @FXML MenuItem mbGenerate;
-    private @FXML CheckMenuItem mbProjectTree;
-    private @FXML CheckMenuItem mbWorkspace;
-    private @FXML CheckMenuItem mbOutput;
-    private @FXML MenuItem mbGitter;
-    private @FXML MenuItem mbGitHub;
-    private @FXML MenuItem mbComponents;
-    private @FXML MenuItem mbAbout;
-     */
-
     @ExecuteBefore(State.INITIALIZED)
     public void install(@WithState(State.INITIALIZED) MenuBarComponent menuBar,
                  @WithState(State.INITIALIZED) UserInterfaceComponent ui,

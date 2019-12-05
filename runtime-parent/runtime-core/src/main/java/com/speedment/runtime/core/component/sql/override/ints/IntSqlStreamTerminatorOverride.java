@@ -23,9 +23,6 @@ package com.speedment.runtime.core.component.sql.override.ints;
  */
 public interface IntSqlStreamTerminatorOverride {
 
-//    ForEachTerminator<ENTITY> getForEachHandler();
-//
-//    void setForEachHandler(ForEachTerminator<ENTITY> forEach);
     <ENTITY> IntCountTerminator<ENTITY> getIntCountTerminator();
 
     <ENTITY> void setIntCountTerminator(IntCountTerminator<ENTITY> count);

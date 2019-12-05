@@ -18,6 +18,7 @@ package com.speedment.common.codegenxml.internal.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.codegenxml.Document;
 import com.speedment.common.codegenxml.internal.view.trait.HasElementsView;
 
@@ -25,8 +26,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.util.Formatting.indent;
-import static com.speedment.common.codegen.util.Formatting.nl;
 
 /**
  *
@@ -44,12 +43,12 @@ public final class DocumentView implements Transform<Document, String>,
     public Optional<String> transform(Generator gen, Document model) {
         return Optional.of(
             Stream.of(
-                gen.onEach(model.preamble()).map(s -> useIndent() ? indent(s) : s).collect(joinIfNotEmpty(nl(), "", "")),
+                gen.onEach(model.preamble()).map(s -> useIndent() ? Formatting.indent(s) : s).collect(joinIfNotEmpty(Formatting.nl(), "", "")),
                 model.getXmlDeclaration().flatMap(gen::on).orElse(""),
                 model.getDocType().flatMap(gen::on).orElse(""),
                 transformElements(gen, model)
             ).filter(s -> !s.isEmpty())
-            .collect(joinIfNotEmpty(nl(), "", ""))
+            .collect(joinIfNotEmpty(Formatting.nl(), "", ""))
         );
     }
 }

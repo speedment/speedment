@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.join.trait;
 
-import com.speedment.common.function.Function6;
 import com.speedment.common.function.Function7;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.Join;

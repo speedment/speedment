@@ -23,9 +23,9 @@ import com.speedment.common.injector.exception.InjectorException;
 
 import java.io.File;
 import java.lang.reflect.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -98,125 +98,21 @@ public final class ReflectionUtil {
 
             final Constructor<T> constr = oConstr.get();
 
-            // injectorProxy.setAccessable(constr);
-
             final Parameter[] params = constr.getParameters();
             final Object[] args = new Object[params.length];
             for (int i = 0; i < params.length; i++) {
                 final Parameter param = params[i];
                 final Config config = param.getAnnotation(Config.class);
+                final Object arg;
                 if (config != null) {
-                    final String serialized;
-                    if (properties.containsKey(config.name())) {
-                        serialized = properties.getProperty(config.name());
-                    } else {
-                        serialized = config.value();
-                    }
-
-                    final Class<?> type = param.getType();
-                    Object value;
-                    if (boolean.class == type
-                    || Boolean.class.isAssignableFrom(type)) {
-                        value = Boolean.parseBoolean(serialized);
-                    } else if (byte.class == type
-                    || Byte.class.isAssignableFrom(type)) {
-                        value = Byte.parseByte(serialized);
-                    } else if (short.class == type
-                    || Short.class.isAssignableFrom(type)) {
-                        value = Short.parseShort(serialized);
-                    } else if (int.class == type
-                    || Integer.class.isAssignableFrom(type)) {
-                        value = Integer.parseInt(serialized);
-                    } else if (long.class == type
-                    || Long.class.isAssignableFrom(type)) {
-                        value = Long.parseLong(serialized);
-                    } else if (float.class == type
-                    || Float.class.isAssignableFrom(type)) {
-                        value = Float.parseFloat(serialized);
-                    } else if (double.class == type
-                    || Double.class.isAssignableFrom(type)) {
-                        value = Double.parseDouble(serialized);
-                    } else if (String.class.isAssignableFrom(type)) {
-                        value = serialized;
-                    } else if (char.class == type
-                    || Character.class.isAssignableFrom(type)) {
-                        if (serialized.length() == 1) {
-                            value = serialized.charAt(0);
-                        } else {
-                            throw new IllegalArgumentException(
-                                "Value '" + serialized + "' is to long to be " +
-                                "parsed into a field of type '" +
-                                type.getName() + "'."
-                            );
-                        }
-                    } else if (File.class.isAssignableFrom(type)) {
-                        value = new File(serialized);
-                    } else if (URL.class.isAssignableFrom(type)) {
-                        try {
-                            value = new URL(serialized);
-                        } catch (final MalformedURLException ex) {
-                            throw new IllegalArgumentException(String.format(
-                                "Specified URL '%s' is malformed.", serialized
-                            ), ex);
-                        }
-                    } else {
-                        throw new IllegalArgumentException(String.format(
-                            "Unsupported type '%s' injected into the " +
-                            "constructor of class '%s'.",
-                            type.getName(), clazz.getName()
-                        ));
-                    }
-
-                    args[i] = value;
-
-                } else { // Not a @Config-field
-                    final Class<?> paramType = param.getType();
-                    final Optional<? extends Class<?>> injectKeyClass = traverseAncestors(paramType)
-                        .filter(c -> c.isAnnotationPresent(InjectKey.class))
-                        .map(c -> c.getAnnotation(InjectKey.class).value())
-                        .findFirst();
-                    if (injectKeyClass.isPresent()) {
-                        // Make sure that there are no other pending instances that
-                        // may implement this type, see #758
-                        //
-                        // This set contains all classes that we need to be instantiated
-                        // before we know which one to select
-                        final Set<Class<?>> needed = allInjectableTypes.stream()
-                            .filter(c -> traverseAncestors(c)
-                                .anyMatch(a ->
-                                    a.isAnnotationPresent(InjectKey.class) &&
-                                        a.getAnnotation(InjectKey.class).value().equals(injectKeyClass.get())
-                                )
-                            )
-                            .collect(toSet());
-
-                        // Remove the existing classes
-                        instances.stream()
-                            .map(Object::getClass)
-                            .forEach(needed::remove);
-
-                        if (!needed.isEmpty()) {
-                            // We do not know all instances yet so we have to wait for
-                            // their creation
-                            return Optional.empty();
-                        }
-                    }
-
-                    final Optional<Object> value = instances.stream()
-                        .filter(o -> paramType.isAssignableFrom(o.getClass()))
-                        .findFirst();
-
-                    if (value.isPresent()) {
-                        args[i] = value.get();
-                    } else {
-                        throw new IllegalArgumentException(String.format(
-                            "No instance found that match the required type " +
-                            "'%s' in the constructor for injected class '%s'.",
-                            param.getClass().getName(),
-                            clazz.getName()
-                        ));
+                    arg = configField(clazz, properties, param, config);
+                } else {
+                    arg = notConfigField(clazz, instances, allInjectableTypes, param);
+                    if (arg == null) {
+                        return Optional.empty();
                     }
                 }
+                args[i] = arg;
             }
 
             final T instance = injectorProxy.newInstance(constr, args);
@@ -231,6 +127,72 @@ public final class ReflectionUtil {
             throw new InjectorException(String.format(
                 "Unable to create class '%s'.", clazz.getName()
             ), ex);
+        }
+    }
+
+    private static <T> Object configField(Class<T> clazz, Properties properties, Parameter param, Config config) {
+        final String serialized;
+        if (properties.containsKey(config.name())) {
+            serialized = properties.getProperty(config.name());
+        } else {
+            serialized = config.value();
+        }
+
+        final Class<?> type = param.getType();
+        return parse(type, serialized).orElseThrow(() -> new IllegalArgumentException(String.format(
+            "Unsupported type '%s' injected into the " +
+                "constructor of class '%s'.",
+            type.getName(), clazz.getName()
+        )));
+
+    }
+
+    private static <T> Object notConfigField(Class<T> clazz, List<Object> instances, Set<Class<?>> allInjectableTypes, Parameter param) {
+        final Class<?> paramType = param.getType();
+        final Optional<? extends Class<?>> injectKeyClass = traverseAncestors(paramType)
+            .filter(c -> c.isAnnotationPresent(InjectKey.class))
+            .map(c -> c.getAnnotation(InjectKey.class).value())
+            .findFirst();
+        if (injectKeyClass.isPresent()) {
+            // Make sure that there are no other pending instances that
+            // may implement this type, see #758
+            //
+            // This set contains all classes that we need to be instantiated
+            // before we know which one to select
+            final Set<Class<?>> needed = allInjectableTypes.stream()
+                .filter(c -> traverseAncestors(c)
+                    .anyMatch(a ->
+                        a.isAnnotationPresent(InjectKey.class) &&
+                            a.getAnnotation(InjectKey.class).value().equals(injectKeyClass.get())
+                    )
+                )
+                .collect(toSet());
+
+            // Remove the existing classes
+            instances.stream()
+                .map(Object::getClass)
+                .forEach(needed::remove);
+
+            if (!needed.isEmpty()) {
+                // We do not know all instances yet so we have to wait for
+                // their creation
+                return null;
+            }
+        }
+
+        final Optional<Object> value = instances.stream()
+            .filter(o -> paramType.isAssignableFrom(o.getClass()))
+            .findFirst();
+
+        if (value.isPresent()) {
+            return value.get();
+        } else {
+            throw new IllegalArgumentException(String.format(
+                "No instance found that match the required type " +
+                "'%s' in the constructor for injected class '%s'.",
+                param.getClass().getName(),
+                clazz.getName()
+            ));
         }
     }
 
@@ -307,6 +269,47 @@ public final class ReflectionUtil {
             allInjectableTypes.stream()
                 .anyMatch(missingType::isAssignableFrom)
         );
+    }
+
+    private static final Map<Class<?>, Function<String, Object>> PARSER_MAP;
+    static {
+        final Function<String, Object> characterMapper = s -> {
+            if (s.length() == 1) {
+                return s.charAt(0);
+            } else {
+                throw new IllegalArgumentException(
+                    "Value '" + s + "' is to long to be " +
+                        "parsed into a field of type char."
+                );
+            }
+        };
+
+        final Map<Class<?>, Function<String, Object>> map = new HashMap<>();
+        map.put(boolean.class, Boolean::parseBoolean);
+        map.put(Boolean.class, Boolean::parseBoolean);
+        map.put(byte.class, Byte::parseByte);
+        map.put(Byte.class, Byte::parseByte);
+        map.put(short.class, Short::parseShort);
+        map.put(Short.class, Short::parseShort);
+        map.put(int.class, Integer::parseInt);
+        map.put(Integer.class, Integer::parseInt);
+        map.put(long.class, Long::parseLong);
+        map.put(Long.class, Long::parseLong);
+        map.put(float.class, Float::parseFloat);
+        map.put(Float.class, Float::parseFloat);
+        map.put(double.class, Double::parseDouble);
+        map.put(Double.class, Double::parseDouble);
+        map.put(String.class, s -> s);
+        map.put(char.class, characterMapper);
+        map.put(Character.class, characterMapper);
+        map.put(File.class, File::new);
+        map.put(URL.class, UrlUtil::tryCreateURL);
+        PARSER_MAP = Collections.unmodifiableMap(map);
+    }
+
+    public static Optional<Object> parse(Type type, String serialized) {
+        return Optional.ofNullable(PARSER_MAP.get(type))
+            .map(m -> m.apply(serialized));
     }
 
 }

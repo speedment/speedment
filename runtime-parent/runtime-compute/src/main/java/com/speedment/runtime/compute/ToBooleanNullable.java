@@ -34,6 +34,8 @@ import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.util.function.Function;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Expression that given an entity returns a {@code boolean} value, or
  * {@code null}. This expression can be implemented using a lambda, or it can be
@@ -69,7 +71,10 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
+    // Note that Function<T, Boolean> is not the same as Predicate<T>
+    // since the former returns Boolean and the later boolean
     static <T> ToBooleanNullable<T> of(Function<T, Boolean> lambda) {
+        requireNonNull(lambda);
         if (lambda instanceof ToBooleanNullable) {
             return (ToBooleanNullable<T>) lambda;
         } else {
@@ -83,12 +88,12 @@ extends Expression<T>,
     }
 
     @Override
-    default boolean applyAsBoolean(T object) throws NullPointerException {
+    default boolean applyAsBoolean(T object) {
         return apply(object);
     }
 
     @Override
-    default ToBoolean<T> orThrow() throws NullPointerException {
+    default ToBoolean<T> orThrow() {
         return OrElseThrowUtil.booleanOrElseThrow(this);
     }
 
@@ -113,7 +118,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsBoolean(object));
             }
 
@@ -154,7 +159,7 @@ extends Expression<T>,
             }
 
             @Override
-            public boolean applyAsBoolean(T object) throws NullPointerException {
+            public boolean applyAsBoolean(T object) {
                 return mapper.applyAsBoolean(delegate.applyAsBoolean(object));
             }
 
@@ -186,7 +191,10 @@ extends Expression<T>,
 
     @Override
     default long hash(T object) {
-        return isNull(object) ? 0 : (applyAsBoolean(object) ? 1 : 2);
+        if (isNotNull(object)) {
+            return 0;
+        }
+        return applyAsBoolean(object) ? 1 : 2;
     }
 
     @Override
@@ -205,6 +213,7 @@ extends Expression<T>,
 
     @Override
     default <V> ToBooleanNullable<V> compose(Function<? super V, ? extends T> before) {
+        requireNonNull(before);
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
         return ComposedUtil.composeToBooleanNullable(casted, this);

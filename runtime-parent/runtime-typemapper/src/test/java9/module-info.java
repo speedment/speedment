@@ -31,4 +31,5 @@ open module com.speedment.runtime.typemapper {
 
     requires transitive java.sql;
     requires transitive com.speedment.runtime.config;
+    requires transitive com.speedment.common.injector;
 }

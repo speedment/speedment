@@ -83,12 +83,12 @@ extends Expression<T>,
     }
 
     @Override
-    default byte applyAsByte(T object) throws NullPointerException {
+    default byte applyAsByte(T object) {
         return apply(object);
     }
 
     @Override
-    default ToByte<T> orThrow() throws NullPointerException {
+    default ToByte<T> orThrow() {
         return OrElseThrowUtil.byteOrElseThrow(this);
     }
 
@@ -133,7 +133,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsByte(object));
             }
 
@@ -174,7 +174,7 @@ extends Expression<T>,
             }
 
             @Override
-            public byte applyAsByte(T object) throws NullPointerException {
+            public byte applyAsByte(T object) {
                 return mapper.applyAsByte(delegate.applyAsByte(object));
             }
 

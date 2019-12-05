@@ -30,7 +30,7 @@ import static com.speedment.runtime.core.internal.stream.builder.action.Standard
 public final class IntAsLongAction extends Action<IntStream, LongStream> {
 
     public IntAsLongAction() {
-        super(s -> s.asLongStream(), LongStream.class, AS);
+        super(IntStream::asLongStream, LongStream.class, AS);
     }
 
 }

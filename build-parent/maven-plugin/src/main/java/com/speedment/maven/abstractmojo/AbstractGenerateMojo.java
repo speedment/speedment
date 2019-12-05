@@ -110,7 +110,7 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
     
     @Override
     protected boolean debug() {
-        return !(debug == null) && debug;
+        return (debug != null) && debug;
     }
     
     @Override

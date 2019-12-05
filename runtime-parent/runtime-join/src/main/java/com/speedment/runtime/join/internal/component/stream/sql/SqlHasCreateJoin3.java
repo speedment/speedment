@@ -27,7 +27,6 @@ import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.join.trait.HasCreateJoin3;
 import java.sql.ResultSet;
 import java.util.List;
-import java.util.function.BiFunction;
 
 /**
  *

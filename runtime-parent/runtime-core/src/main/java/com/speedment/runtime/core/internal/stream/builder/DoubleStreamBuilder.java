@@ -82,7 +82,6 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
         requireNonNull(mapper);
         assertNotLinkedOrConsumedAndSet();
         return append(new DoubleFlatMapAction(mapper));
-        //return new DoubleStreamBuilder(pipeline, streamTerminator).append(new DoubleFlatMapAction(mapper));
     }
 
     @Override
@@ -118,7 +117,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     }
 
     @Override
-    public DoubleStream takeWhile(DoublePredicate predicate) {
+    public DoubleStream takeWhile​(DoublePredicate predicate) {
         return append(new DoubleTakeWhileAction(predicate));
     }
 

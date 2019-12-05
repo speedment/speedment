@@ -99,7 +99,7 @@ final class AutoClosingDoubleStream
     }
 
     @Override
-    public DoubleStream dropWhile​(DoublePredicate predicate) {
+    public DoubleStream dropWhile(DoublePredicate predicate) {
         return wrap(Java9StreamUtil.dropWhile(stream(), predicate));
     }
 

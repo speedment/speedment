@@ -66,13 +66,13 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     implements DocumentProperty {
  
     private final Map<String, Object> config;
-    private final transient ObservableMap<String, Property<?>> properties;
-    private final transient ObservableMap<String, ObservableList<AbstractDocumentProperty<?>>> children;
+    private final ObservableMap<String, Property<?>> properties;
+    private final ObservableMap<String, ObservableList<AbstractDocumentProperty<?>>> children;
     
     /**
      * Invalidation listeners required by the {@code Observable} interface.
      */
-    private final transient Set<InvalidationListener> listeners;
+    private final Set<InvalidationListener> listeners;
     
     protected AbstractDocumentProperty() {
         this.config     = new ConcurrentHashMap<>();
@@ -85,7 +85,11 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     public final Map<String, Object> getData() {
         return config;
     }
-    
+
+    /**
+     * {@inheritDoc}
+     * @deprecated Not supported for observables
+     */
     @Override
     @Deprecated // Deprecated to use but will not be removed from the API
     public final void put(String key, Object val) {
@@ -225,6 +229,10 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
             .values();
     }
 
+    /**
+     * {@inheritDoc}
+     * @deprecated Not supported for observables
+     */
     @Override
     @Deprecated // Deprecated to use but will be retained in the API
     public final <P extends Document, T extends Document> Stream<T> 

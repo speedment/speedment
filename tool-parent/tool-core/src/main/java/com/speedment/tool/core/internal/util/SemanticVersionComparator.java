@@ -17,6 +17,7 @@
 package com.speedment.tool.core.internal.util;
 
 import java.util.Comparator;
+import java.util.OptionalInt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,59 +41,8 @@ public final class SemanticVersionComparator implements Comparator<String> {
             final String[] firstWords  = first.split("(\\.|-)");
             final String[] secondWords = second.split("(\\.|-)");
             for (int i = 0; i < Math.min(firstWords.length, secondWords.length); i++) {
-                final String fw = firstWords[i];
-                final String sw = secondWords[i];
-
-                // If they are completely equal, continue to the next word.
-                if (fw.equals(sw)) {
-                    continue;
-                }
-
-                // Snapshots are considered < than everything.
-                if ("SNAPSHOT".equals(fw)) {
-                    return -1;
-                } else if ("SNAPSHOT".equals(sw)) {
-                    return 1;
-                }
-
-                // Releases are considered > than everything.
-                if ("RELEASE".equals(fw)) {
-                    return 1;
-                } else if ("RELEASE".equals(sw)) {
-                    return -1;
-                }
-
-                // Since neither is a release, an early access is > than everything else.
-                if ("EA".equals(fw)) {
-                    return 1;
-                } else if ("EA".equals(sw)) {
-                    return -1;
-                }
-
-                // Look for any initial non-numeric characters. If present, we
-                // should begin by comparing those.
-                final Matcher fn = NUMERIC.matcher(fw);
-                final Matcher sn = NUMERIC.matcher(sw);
-
-                if (fn.find()) {
-                    if (sn.find()) { // Both are numeric
-                        final int f = Integer.parseInt(fn.group());
-                        final int s = Integer.parseInt(sn.group());
-                        final int c = Integer.compare(f, s);
-                        if (c != 0) return c;
-                    } else { // sw is not numeric. We are not equal.
-                        return fw.compareTo(sw);
-                    }
-                } else {
-                    if (sn.find()) { // sw is numeric but fw isn't
-                        return fw.compareTo(sw);
-                    } else { // Neither is numeric
-                        final int c = fw.compareTo(sw);
-                        if (c != 0) return c;
-                    }
-                }
-
-                // Continue to the next word.
+                final OptionalInt j = compareWords(firstWords[i], secondWords[i]);
+                if (j.isPresent()) return j.getAsInt();
             }
 
             // If first has more words, it is considered greater
@@ -105,5 +55,62 @@ public final class SemanticVersionComparator implements Comparator<String> {
                 return 0;
             }
         }
+    }
+
+    private OptionalInt compareWords(String firstWord, String secondWord) {
+        // If they are completely equal, continue to the next word.
+        if (firstWord.equals(secondWord)) {
+            return OptionalInt.empty();
+        }
+
+        // Snapshots are considered < than everything.
+        if ("SNAPSHOT".equals(firstWord)) {
+            return OptionalInt.of(-1);
+        } else if ("SNAPSHOT".equals(secondWord)) {
+            return OptionalInt.of(1);
+        }
+
+        // Releases are considered > than everything.
+        if ("RELEASE".equals(firstWord)) {
+            return OptionalInt.of(1);
+        } else if ("RELEASE".equals(secondWord)) {
+            return OptionalInt.of(-1);
+        }
+
+        // Since neither is a release, an early access is > than everything else.
+        if ("EA".equals(firstWord)) {
+            return OptionalInt.of(1);
+        } else if ("EA".equals(secondWord)) {
+            return OptionalInt.of(-1);
+        }
+
+        final OptionalInt c = compareNonNumericChars(firstWord, secondWord);
+        return c.isPresent() ? c : OptionalInt.empty();
+    }
+
+    private OptionalInt compareNonNumericChars(String firstWord, String secondWord) {
+        // Look for any initial non-numeric characters. If present, we
+        // should begin by comparing those.
+        final Matcher fn = NUMERIC.matcher(firstWord);
+        final Matcher sn = NUMERIC.matcher(secondWord);
+
+        if (fn.find()) {
+            if (sn.find()) { // Both are numeric
+                final int f = Integer.parseInt(fn.group());
+                final int s = Integer.parseInt(sn.group());
+                final int c = Integer.compare(f, s);
+                if (c != 0) return OptionalInt.of(c);
+            } else { // secondWord is not numeric. We are not equal.
+                return OptionalInt.of(firstWord.compareTo(secondWord));
+            }
+        } else {
+            if (sn.find()) { // secondWord is numeric but firstWord isn't
+                return OptionalInt.of(firstWord.compareTo(secondWord));
+            } else { // Neither is numeric
+                final int c = firstWord.compareTo(secondWord);
+                if (c != 0) return OptionalInt.of(c);
+            }
+        }
+        return OptionalInt.empty();
     }
 }

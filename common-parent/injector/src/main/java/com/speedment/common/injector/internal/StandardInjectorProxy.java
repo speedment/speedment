@@ -41,7 +41,7 @@ final class StandardInjectorProxy implements InjectorProxy {
     }
 
     @Override
-    public Object invoke(Method m, Object obj, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public Object invoke(Method m, Object obj, Object... args) throws IllegalAccessException, InvocationTargetException {
         return m.invoke(obj, args);
     }
 }

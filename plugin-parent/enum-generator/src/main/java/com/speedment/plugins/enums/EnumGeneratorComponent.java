@@ -26,7 +26,7 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.standard.StandardTranslatorKey;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.generator.translator.provider.StandardCodeGenerationComponent;
 import com.speedment.generator.translator.provider.StandardTypeMapperComponent;
 import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;

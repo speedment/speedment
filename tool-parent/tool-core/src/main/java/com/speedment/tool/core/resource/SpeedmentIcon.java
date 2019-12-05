@@ -20,15 +20,18 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.tool.config.trait.HasIconPath;
-import java.io.InputStream;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration of all the icons available in the Speedment Icon Package.
@@ -114,36 +117,30 @@ public enum SpeedmentIcon implements Icon {
     private final String filename;
 
     private static final Logger LOGGER = LoggerManager.getLogger(SpeedmentIcon.class);
-    private static final Map<Class<?>, SpeedmentIcon> NODE_ICONS = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, SpeedmentIcon> NODE_ICONS;
 
     static {
-        NODE_ICONS.put(Dbms.class, DBMS);
-        NODE_ICONS.put(Schema.class, SCHEMA);
-        NODE_ICONS.put(Table.class, TABLE);
-        NODE_ICONS.put(Column.class, COLUMN);
-        NODE_ICONS.put(Index.class, INDEX);
-        NODE_ICONS.put(IndexColumn.class, INDEX_COLUMN);
-        NODE_ICONS.put(ForeignKey.class, FOREIGN_KEY);
-        NODE_ICONS.put(ForeignKeyColumn.class, FOREIGN_KEY_COLUMN);
-        NODE_ICONS.put(PrimaryKeyColumn.class, PRIMARY_KEY_COLUMN);
-        NODE_ICONS.put(Project.class, PROJECT);
+        final Map<Class<?>, SpeedmentIcon> map = new HashMap<>();
+        map.put(Dbms.class, DBMS);
+        map.put(Schema.class, SCHEMA);
+        map.put(Table.class, TABLE);
+        map.put(Column.class, COLUMN);
+        map.put(Index.class, INDEX);
+        map.put(IndexColumn.class, INDEX_COLUMN);
+        map.put(ForeignKey.class, FOREIGN_KEY);
+        map.put(ForeignKeyColumn.class, FOREIGN_KEY_COLUMN);
+        map.put(PrimaryKeyColumn.class, PRIMARY_KEY_COLUMN);
+        map.put(Project.class, PROJECT);
+        NODE_ICONS = Collections.unmodifiableMap(map);
     }
 
     public Image load() {
         return new Image(getFileInputStream());
     }
 
-    public Image load(Document node) {
-        return new Image(getFileInputStream(node));
-    }
-
     @Override
     public ImageView view() {
         return new ImageView(load());
-    }
-
-    public ImageView view(Document node) {
-        return new ImageView(load(node));
     }
 
     public static ImageView forNode(Document node) {
@@ -176,7 +173,7 @@ public enum SpeedmentIcon implements Icon {
                     .filter(HasMainInterface.class::isInstance)
                     .map(HasMainInterface.class::cast)
                     .map(HasMainInterface::mainInterface)
-                    .orElse(node.getClass())
+                    .orElse(null)
             );
         }
 
@@ -193,17 +190,12 @@ public enum SpeedmentIcon implements Icon {
     }
 
     private InputStream getFileInputStream() {
-        return getFileInputStream(null);
-    }
-
-    private InputStream getFileInputStream(Document node) {
         final InputStream stream = getClass().getResourceAsStream(filename);
-
         if (stream == null) {
-            throw new RuntimeException("Could not find icon: '" + filename + "'.");
+            throw new SpeedmentException("Could not find icon: '" + filename + "'.");
         }
-
         return stream;
+
     }
 
     public String getFilename() {

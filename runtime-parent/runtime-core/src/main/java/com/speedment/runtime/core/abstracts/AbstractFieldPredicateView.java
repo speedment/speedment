@@ -38,6 +38,12 @@ import static java.util.stream.Collectors.joining;
  */
 public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
+    private static final String LESS_THAN_WILDCARD = " < ?";
+    private static final String LESS_OR_EQUAL_WILDCARD = " <= ?";
+    private static final String GREATER_THAN_WILDCARD = " > ?";
+    private static final String GREATER_OR_EQUAL_WILDCARD = " >= ?";
+    private static final String NOT = "NOT";
+
     protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     protected abstract SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated);
@@ -135,7 +141,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
     }
 
     protected SqlPredicateFragment isNotNull(String cn) {
-        return of("(" + cn + " IS NOT NULL)");
+        return of("(" + cn + " IS " + NOT + " NULL)");
     }
 
     protected SqlPredicateFragment
@@ -150,22 +156,22 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
     protected SqlPredicateFragment
     greaterThan(String cn, Class<?> dbClass, FieldPredicate<?> model) {
-        return of("(" + cn + " > ?)").add(getFirstOperandAsRaw(model));
+        return of("(" + cn + GREATER_THAN_WILDCARD + ")").add(getFirstOperandAsRaw(model));
     }
 
     protected SqlPredicateFragment
     greaterOrEqual(String cn, Class<?> dbClass, FieldPredicate<?> model) {
-        return of("(" + cn + " >= ?)").add(getFirstOperandAsRaw(model));
+        return of("(" + cn + GREATER_OR_EQUAL_WILDCARD + ")").add(getFirstOperandAsRaw(model));
     }
 
     protected SqlPredicateFragment
     lessThan(String cn, Class<?> dbClass, FieldPredicate<?> model) {
-        return of("(" + cn + " < ?)").add(getFirstOperandAsRaw(model));
+        return of("(" + cn + LESS_THAN_WILDCARD + ")").add(getFirstOperandAsRaw(model));
     }
 
     protected SqlPredicateFragment
     lessOrEqual(String cn, Class<?> dbClass, FieldPredicate<?> model) {
-        return of("(" + cn + " <= ?)").add(getFirstOperandAsRaw(model));
+        return of("(" + cn + LESS_OR_EQUAL_WILDCARD + ")").add(getFirstOperandAsRaw(model));
     }
 
     protected SqlPredicateFragment
@@ -274,7 +280,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
     protected static SqlPredicateFragment of(String sql, boolean negated) {
         if (negated) {
-            return of("(NOT(" + sql + "))");
+            return of("(" + NOT + "(" + sql + "))");
         } else {
             return of(sql);
         }
@@ -282,7 +288,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
     protected static SqlPredicateFragment of(String sql, Object object, boolean negated) {
         if (negated) {
-            return of("(NOT(" + sql + "))", object);
+            return of("(" + NOT + "(" + sql + "))", object);
         } else {
             return of(sql, object);
         }
@@ -290,7 +296,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
     protected static SqlPredicateFragment of(String sql, Collection<Object> objects, boolean negated) {
         if (negated) {
-            return of("(NOT(" + sql + "))", objects);
+            return of("(" + NOT + "(" + sql + "))", objects);
         } else {
             return of(sql, objects);
         }
@@ -305,7 +311,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
     }
 
     protected SqlPredicateFragment notEqualHelper(String cn, Object argument) {
-        return of("(NOT (" + cn + " = ?))").add(argument);
+        return of("(" + NOT + " (" + cn + " = ?))").add(argument);
     }
 
     protected SqlPredicateFragment betweenHelper(String cn,
@@ -314,29 +320,22 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
         final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
-            case START_EXCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " < ?)", negated)
-                    .add(getFirstOperandAsRaw(model))
-                    .add(getSecondOperand(model));
-            }
-            case START_INCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " < ?)", negated)
-                    .add(getFirstOperandAsRaw(model))
-                    .add(getSecondOperand(model));
-            }
-            case START_EXCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " <= ?)", negated)
-                    .add(getFirstOperandAsRaw(model))
-                    .add(getSecondOperand(model));
-            }
-            case START_INCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " <= ?)", negated)
-                    .add(getFirstOperandAsRaw(model))
-                    .add(getSecondOperand(model));
-            }
+            case START_EXCLUSIVE_END_EXCLUSIVE:
+                return predicate(cn, model, negated, GREATER_THAN_WILDCARD, LESS_THAN_WILDCARD);
+            case START_INCLUSIVE_END_EXCLUSIVE:
+                return predicate(cn, model, negated, GREATER_OR_EQUAL_WILDCARD, LESS_THAN_WILDCARD);
+            case START_EXCLUSIVE_END_INCLUSIVE:
+                return predicate(cn, model, negated, GREATER_THAN_WILDCARD, LESS_OR_EQUAL_WILDCARD);
+            case START_INCLUSIVE_END_INCLUSIVE:
+                return predicate(cn, model, negated, GREATER_OR_EQUAL_WILDCARD, LESS_OR_EQUAL_WILDCARD);
         }
-
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
+    }
+
+    private SqlPredicateFragment predicate(String cn, FieldPredicate<?> model, boolean negated, String greaterThanWildcard, String lessThanWildcard) {
+        return of("(" + cn + greaterThanWildcard + " AND " + cn + lessThanWildcard + ")", negated)
+            .add(getFirstOperandAsRaw(model))
+            .add(getSecondOperand(model));
     }
 
     protected SqlPredicateFragment inHelper(String cn,
@@ -353,7 +352,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
                 : equalHelper(cn, arg);
         } else {
             return of("(" + cn + " IN (" +
-                set.stream().map($ -> "?").collect(joining(",")) +
+                set.stream().map(unused -> "?").collect(joining(",")) +
                 "))", negated
             ).addAll(set);
         }

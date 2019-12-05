@@ -26,18 +26,20 @@ import com.speedment.common.codegen.model.trait.HasCopy;
  * @since  2.0
  */
 public enum Modifier implements HasCopy<Modifier> {
-    
+
+	// Order according to https://stackoverflow.com/questions/10299067/modifier-keyword-order-in-java
+
 	PUBLIC ("public"),
 	PROTECTED ("protected"),
 	PRIVATE ("private"),
+	STATIC ("static"),
 	ABSTRACT ("abstract"),
-	FINAL ("final"),
-    STATIC ("static"),
-    STRICTFP ("strictfp"),
+	SYNCHRONIZED ("synchronized"),
 	TRANSIENT ("transient"),
 	VOLATILE ("volatile"),
-	SYNCHRONIZED ("synchronized"),
+	FINAL ("final"),
 	NATIVE ("native"),
+    STRICTFP ("strictfp"),
 	DEFAULT ("default");
 	
 	private final String name;

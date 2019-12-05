@@ -22,6 +22,7 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.runtime.core.db.DbmsTypeDefault;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.LimitAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
@@ -30,23 +31,22 @@ import com.speedment.runtime.core.internal.stream.builder.streamterminator.Strea
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
-import com.speedment.runtime.field.EnumField;
 import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
-import com.speedment.runtime.field.comparator.ReferenceFieldComparator;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.db.DbmsTypeDefault.SkipLimitSupport.NONE;
 import static com.speedment.runtime.core.db.DbmsTypeDefault.SkipLimitSupport.ONLY_AFTER_SORTED;
 import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
 import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * This Optimizer takes care of the following case:
@@ -54,7 +54,7 @@ import static java.util.stream.Collectors.toList;
  *   <li> a) Zero or more filter() operations
  *   <li> b) Zero or more sorted() operations
  *   <li> c) Zero or more skip() operations
- *   <li> d) Zero or more limit() operations
+ *   <li> dSqlPersistenceProviderImpl) Zero or more limit() operations
  * </ul>
  *
  * <em>No other operations</em> must be in the sequence a-d or within the
@@ -71,23 +71,26 @@ import static java.util.stream.Collectors.toList;
  */
 public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimizer<ENTITY> {
 
-    private final FilterOperation FILTER_OPERATION = new FilterOperation();
-    private final SortedOperation SORTED_OPERATION = new SortedOperation();
-    private final SkipOperation SKIP_OPERATION = new SkipOperation();
-    private final LimitOperation LIMIT_OPERATION = new LimitOperation();
+    private static final FilterOperation<?> FILTER_OPERATION = new FilterOperation<>();
+    private static final SortedOperation<?> SORTED_OPERATION = new SortedOperation<>();
+    private static final SkipOperation<?> SKIP_OPERATION = new SkipOperation<>();
+    private static final LimitOperation<?> LIMIT_OPERATION = new LimitOperation<>();
 
-    private final List<Operation<ENTITY>> FILTER_SORTED_SKIP_LIMIT_PATH = Arrays.asList(
-        FILTER_OPERATION,
-        SORTED_OPERATION,
-        SKIP_OPERATION,
-        LIMIT_OPERATION
-    );
-    private final List<Operation<ENTITY>> SORTED_FILTER_SKIP_LIMIT_PATH = Arrays.asList(
-        SORTED_OPERATION,
-        FILTER_OPERATION,
-        SKIP_OPERATION,
-        LIMIT_OPERATION
-    );
+    private static final List<Operation<?>> FILTER_SORTED_SKIP_LIMIT_PATH =
+        Stream.of(
+            FILTER_OPERATION,
+            SORTED_OPERATION,
+            SKIP_OPERATION,
+            LIMIT_OPERATION
+        ).collect(collectingAndThen(toList(), Collections::unmodifiableList));
+
+    private static final List<Operation<?>> SORTED_FILTER_SKIP_LIMIT_PATH =
+        Stream.of(
+            SORTED_OPERATION,
+            FILTER_OPERATION,
+            SKIP_OPERATION,
+            LIMIT_OPERATION
+        ).collect(collectingAndThen(toList(), Collections::unmodifiableList));
 
     // FILTER <-> SORTED
     // This optimizer can handle a (FILTER*,SORTED*,SKIP*, LIMIT*) pattern where filter and sorted parameters are all Field derived
@@ -102,10 +105,10 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         final AtomicInteger limitCounter = new AtomicInteger();
 
         traverse(initialPipeline,
-            $ -> filterCounter.incrementAndGet(),
-            $ -> orderCounter.incrementAndGet(),
-            $ -> skipCounter.incrementAndGet(),
-            $ -> limitCounter.incrementAndGet()
+            unused -> filterCounter.incrementAndGet(),
+            unused -> orderCounter.incrementAndGet(),
+            unused -> skipCounter.incrementAndGet(),
+            unused -> limitCounter.incrementAndGet()
         );
 
         if (skipLimitSupport == ONLY_AFTER_SORTED && orderCounter.get() == 0) {
@@ -150,28 +153,10 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         sql.append(info.getSqlSelect());
 
         if (!filters.isEmpty()) {
-            @SuppressWarnings("unchecked")
-            List<Predicate<ENTITY>> predicates = filters.stream()
-                .map(FilterAction::getPredicate)
-                .map(p -> (Predicate<ENTITY>) p)
-                .collect(toList());
-
-            final RenderResult rr = StreamTerminatorUtil.renderSqlWhere(
-                dbmsType,
-                info.getSqlColumnNamer(),
-                info.getSqlDatabaseTypeFunction(),
-                predicates
-            );
-
-            final String whereFragmentSql = rr.getSql();
-            if (!whereFragmentSql.isEmpty()) {
-                sql.append(" WHERE ").append(whereFragmentSql);
-                values.addAll(rr.getValues());
-            }
+            renderWhere(info, dbmsType, filters, values, sql);
         }
 
         if (!sorteds.isEmpty()) {
-
             final List<FieldComparator<ENTITY>> fieldComparators = new ArrayList<>();
             for (int i = sorteds.size() - 1; i >= 0; i--) {
                 final SortedComparatorAction<ENTITY> sortedAction = sorteds.get(i);
@@ -194,59 +179,41 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             }
 
             if (!fieldComparators.isEmpty()) {
-
-                sql.append(" ORDER BY ");
-                // Iterate backwards
-                final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
-                int cnt = 0;
-                for (FieldComparator<ENTITY> fieldComparator : fieldComparators) {
-                    final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
-
-                    // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
-                    if (columns.add(columnIdentifier)) {
-                        if (cnt++ != 0) {
-                            sql.append(", ");
-                        }
-
-                        boolean isReversed = fieldComparator.isReversed();
-                        String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
-
-                        final NullOrder effectiveNullOrder = isReversed
-                            ? fieldComparator.getNullOrder().reversed()
-                            : fieldComparator.getNullOrder();
-
-                        // Specify NullOrder pre column if nulls are first
-                        if (effectiveNullOrder == NullOrder.FIRST) {
-                            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
-                                sql.append(fieldName).append("IS NOT NULL, ");
-                            }
-                            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
-                                sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
-                            }
-                        }
-
-                        sql.append(fieldName);
-                        if (String.class.equals(info.getSqlDatabaseTypeFunction().apply(fieldComparator.getField()))) {
-                            sql.append(dbmsType.getCollateFragment().getSql());
-                        }
-
-                        if (isReversed) {
-                            sql.append(" DESC");
-                        } else {
-                            sql.append(" ASC");
-                        }
-
-                        // Specify NullOrder post column
-                        if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
-                            sql.append(" NULLS FIRST");
-                        }
-
-                    }
-                }
+                renderOrderBy(info, dbmsType, sql, fieldComparators);
             }
         }
 
-        final String finalSql;
+        final String finalSql = renderSkipLimit(initialPipeline, dbmsType, skipLimitSupport, filters, sorteds, skips, limits, values, sql);
+
+        query.setSql(finalSql);
+        query.setValues(values);
+
+        return initialPipeline;
+    }
+
+    private void renderWhere(SqlStreamOptimizerInfo<ENTITY> info, DbmsType dbmsType, List<FilterAction<ENTITY>> filters, List<Object> values, StringBuilder sql) {
+        @SuppressWarnings("unchecked")
+        List<Predicate<ENTITY>> predicates = filters.stream()
+            .map(FilterAction::getPredicate)
+            .map(p -> (Predicate<ENTITY>) p)
+            .collect(toList());
+
+        final RenderResult rr = StreamTerminatorUtil.renderSqlWhere(
+            dbmsType,
+            info.getSqlColumnNamer(),
+            info.getSqlDatabaseTypeFunction(),
+            predicates
+        );
+
+        final String whereFragmentSql = rr.getSql();
+        if (!whereFragmentSql.isEmpty()) {
+            sql.append(" WHERE ").append(whereFragmentSql);
+            values.addAll(rr.getValues());
+        }
+    }
+
+    private <P extends Pipeline> String renderSkipLimit(P initialPipeline, DbmsType dbmsType, DbmsTypeDefault.SkipLimitSupport skipLimitSupport, List<FilterAction<ENTITY>> filters, List<SortedComparatorAction<ENTITY>> sorteds, List<SkipAction<ENTITY>> skips, List<LimitAction<ENTITY>> limits, List<Object> values, StringBuilder sql) {
+        String finalSql;
         if (skipLimitSupport == NONE) {
             finalSql = sql.toString();
             initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a));
@@ -257,11 +224,78 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 .applySkipLimit(sql.toString(), values, sumSkip, minLimit);
             initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a) || skips.contains(a) || limits.contains(a));
         }
+        return finalSql;
+    }
 
-        query.setSql(finalSql);
-        query.setValues(values);
+    private void renderOrderBy(SqlStreamOptimizerInfo<ENTITY> info, DbmsType dbmsType, StringBuilder sql, List<FieldComparator<ENTITY>> fieldComparators) {
+        sql.append(" ORDER BY ");
+        // Iterate backwards
+        final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
+        int cnt = 0;
+        for (FieldComparator<ENTITY> fieldComparator : fieldComparators) {
+            final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
 
-        return initialPipeline;
+            // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY
+            if (columns.add(columnIdentifier)) {
+                if (cnt++ != 0) {
+                    sql.append(", ");
+                }
+
+                boolean isReversed = fieldComparator.isReversed();
+                final String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
+
+                final NullOrder effectiveNullOrder = effectiveNullOrder(fieldComparator, isReversed);
+
+                // Specify NullOrder pre column if nulls are first
+                appendNullOrderingPreColumnIfAny(dbmsType, sql, fieldName, effectiveNullOrder);
+
+                sql.append(fieldName);
+                appendStringCollationIfAny(info, dbmsType, sql, fieldComparator);
+
+                appendAscOrDesc(sql, isReversed);
+
+                // Specify NullOrder post column
+                appendNullOrderingPostColumnIfAny(dbmsType, sql, effectiveNullOrder);
+
+            }
+        }
+    }
+
+    private void appendNullOrderingPostColumnIfAny(DbmsType dbmsType, StringBuilder sql, NullOrder effectiveNullOrder) {
+        if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
+            sql.append(" NULLS FIRST");
+        }
+    }
+
+    private void appendStringCollationIfAny(SqlStreamOptimizerInfo<ENTITY> info, DbmsType dbmsType, StringBuilder sql, FieldComparator<ENTITY> fieldComparator) {
+        if (String.class.equals(info.getSqlDatabaseTypeFunction().apply(fieldComparator.getField()))) {
+            sql.append(dbmsType.getCollateFragment().getSql());
+        }
+    }
+
+    private void appendAscOrDesc(StringBuilder sql, boolean isReversed) {
+        if (isReversed) {
+            sql.append(" DESC");
+        } else {
+            sql.append(" ASC");
+        }
+    }
+
+    private void appendNullOrderingPreColumnIfAny(DbmsType dbmsType, StringBuilder sql, String fieldName, NullOrder effectiveNullOrder) {
+        if (effectiveNullOrder == NullOrder.FIRST) {
+            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
+                sql.append(fieldName).append("IS NOT NULL, ");
+            }
+            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
+                sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
+            }
+        }
+    }
+
+    private NullOrder effectiveNullOrder(FieldComparator<ENTITY> fieldComparator, boolean isReversed) {
+        return isReversed
+            ? fieldComparator.getNullOrder().reversed()
+            : fieldComparator.getNullOrder();
     }
 
     private void traverse(Pipeline pipeline,
@@ -284,7 +318,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         //   Sorted*,Filter*,Skip*,Limit*
         //   Filter*,Sorted*,Skip*,Limit*
         // If there are other operations types in between, the optimizer will not kick in
-        final List<Operation<ENTITY>> path;
+        final List<Operation<?>> path;
         if (firstAction instanceof SortedComparatorAction) {
             path = SORTED_FILTER_SKIP_LIMIT_PATH;
         } else {
@@ -299,7 +333,8 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 if (pos >= path.size()) {
                     return;  // Reached the end of the path without finding the action
                 }
-                Operation<ENTITY> operation = path.get(pos);
+                @SuppressWarnings("unchecked")
+                final Operation<ENTITY> operation = (Operation<ENTITY>)path.get(pos);
                 if (operation.is(action)) {
                     operation.consume(action, consumers);
                     pathStart = pos;  // Never look back at parts of the path that are now to be considered passed
@@ -309,15 +344,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         }
     }
 
-    private boolean isFilterActionAndContainingOnlyFieldPredicate(Action<?, ?> action) {
-        if (action instanceof FilterAction) {
-            @SuppressWarnings("unchecked")
-            final FilterAction<ENTITY> filterAction = (FilterAction<ENTITY>) action;
-            return isContainingOnlyFieldPredicate(filterAction.getPredicate());
-        }
-        return false;
-    }
-
     private static class Consumers<ENTITY> {
 
         private final Consumer<? super FilterAction<ENTITY>> filterConsumer;
@@ -325,7 +351,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         private final Consumer<? super SkipAction<ENTITY>> skipConsumer;
         private final Consumer<? super LimitAction<ENTITY>> limitConsumer;
 
-        public Consumers(
+        Consumers(
             final Consumer<? super FilterAction<ENTITY>> filterConsumer,
             final Consumer<? super SortedComparatorAction<ENTITY>> sortedConsumer,
             final Consumer<? super SkipAction<ENTITY>> skipConsumer,
@@ -337,19 +363,19 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             this.limitConsumer = requireNonNull(limitConsumer);
         }
 
-        public Consumer<? super FilterAction<ENTITY>> getFilterConsumer() {
+        Consumer<? super FilterAction<ENTITY>> getFilterConsumer() {
             return filterConsumer;
         }
 
-        public Consumer<? super SortedComparatorAction<ENTITY>> getSortedConsumer() {
+        Consumer<? super SortedComparatorAction<ENTITY>> getSortedConsumer() {
             return sortedConsumer;
         }
 
-        public Consumer<? super SkipAction<ENTITY>> getSkipConsumer() {
+        Consumer<? super SkipAction<ENTITY>> getSkipConsumer() {
             return skipConsumer;
         }
 
-        public Consumer<? super LimitAction<ENTITY>> getLimitConsumer() {
+        Consumer<? super LimitAction<ENTITY>> getLimitConsumer() {
             return limitConsumer;
         }
 
@@ -363,7 +389,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
     }
 
-    private class FilterOperation implements Operation<ENTITY> {
+    private static final class FilterOperation<ENTITY> implements Operation<ENTITY> {
 
         @Override
         public boolean is(Action<?, ?> action) {
@@ -377,9 +403,18 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             consumers.getFilterConsumer().accept(filterAction);
         }
 
+        private boolean isFilterActionAndContainingOnlyFieldPredicate(Action<?, ?> action) {
+            if (action instanceof FilterAction) {
+                @SuppressWarnings("unchecked")
+                final FilterAction<ENTITY> filterAction = (FilterAction<ENTITY>) action;
+                return isContainingOnlyFieldPredicate(filterAction.getPredicate());
+            }
+            return false;
+        }
+
     }
 
-    private class SortedOperation implements Operation<ENTITY> {
+    private static final class SortedOperation<ENTITY> implements Operation<ENTITY> {
 
         @Override
         public boolean is(Action<?, ?> action) {
@@ -395,7 +430,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
     }
 
-    private class SkipOperation implements Operation<ENTITY> {
+    private static final class SkipOperation<ENTITY> implements Operation<ENTITY> {
 
         @Override
         public boolean is(Action<?, ?> action) {
@@ -411,7 +446,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
     }
 
-    private class LimitOperation implements Operation<ENTITY> {
+    private static final class LimitOperation<ENTITY> implements Operation<ENTITY> {
 
         @Override
         public boolean is(Action<?, ?> action) {

@@ -19,9 +19,8 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasCode;
+import com.speedment.common.codegen.util.Formatting;
 
-import static com.speedment.common.codegen.util.Formatting.block;
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -45,8 +44,8 @@ public interface HasCodeView<M extends HasCode<M>> extends Transform<M, String> 
         if (model.getCode().isEmpty()) {
             return "{}";
         } else {
-            return block(model.getCode().stream()
-                .collect(joining(nl()))
+            return Formatting.block(model.getCode().stream()
+                .collect(joining(Formatting.nl()))
             );
         }
     }

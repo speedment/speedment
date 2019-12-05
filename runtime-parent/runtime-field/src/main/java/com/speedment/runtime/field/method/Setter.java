@@ -34,6 +34,6 @@ public interface Setter<ENTITY> {
      * 
      * @throws ClassCastException  if the specified value is of the wrong type
      */
-    void set(ENTITY entity, Object value) throws ClassCastException;
+    void set(ENTITY entity, Object value);
     
 }

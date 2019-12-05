@@ -19,6 +19,7 @@ package com.speedment.runtime.config.util;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -84,8 +85,7 @@ public final class DocumentTranscoder {
      * 
      * @throws SpeedmentConfigException  if the inputed object is not valid
      */
-    public static String save(Project project, Encoder encoder) 
-            throws SpeedmentConfigException {
+    public static String save(Project project, Encoder encoder) {
         
         if (project == null) {
             return "null";
@@ -109,8 +109,7 @@ public final class DocumentTranscoder {
      * 
      * @throws SpeedmentConfigException if the file could not be saved
      */
-    public static void save(Project project, Path location, Encoder encoder) 
-            throws SpeedmentConfigException {
+    public static void save(Project project, Path location, Encoder encoder) {
         
         try {
             Files.write(location, save(project, encoder)
@@ -132,8 +131,7 @@ public final class DocumentTranscoder {
      * 
      * @throws SpeedmentConfigException  if the file couldn't be loaded
      */
-    public static Project load(String json, Decoder decoder) 
-            throws SpeedmentConfigException {
+    public static Project load(String json, Decoder decoder) {
         
         requireNonNull(json, "No json value specified.");
         
@@ -163,8 +161,7 @@ public final class DocumentTranscoder {
      * 
      * @throws SpeedmentConfigException if the file could not be loaded
      */
-    public static Project load(Path location, Decoder decoder) 
-            throws SpeedmentConfigException {
+    public static Project load(Path location, Decoder decoder) {
         
         try {
             final byte[] content = Files.readAllBytes(location);

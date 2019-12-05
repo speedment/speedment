@@ -50,6 +50,10 @@ public final class YNStringToBooleanMapper implements TypeMapper<String, Boolean
 
     @Override
     public String toDatabaseType(Boolean value) {
-        return value == null ? null : (value ? "Y" : "N");
+        if (value == null) {
+            return null;
+        } else {
+            return value ? "Y" : "N";
+        }
     }
 }

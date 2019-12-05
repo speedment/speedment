@@ -83,12 +83,12 @@ extends Expression<T>,
     }
 
     @Override
-    default float applyAsFloat(T object) throws NullPointerException {
+    default float applyAsFloat(T object) {
         return apply(object);
     }
 
     @Override
-    default ToFloat<T> orThrow() throws NullPointerException {
+    default ToFloat<T> orThrow() {
         return OrElseThrowUtil.floatOrElseThrow(this);
     }
 
@@ -133,7 +133,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsFloat(object));
             }
 
@@ -174,7 +174,7 @@ extends Expression<T>,
             }
 
             @Override
-            public float applyAsFloat(T object) throws NullPointerException {
+            public float applyAsFloat(T object) {
                 return mapper.applyAsFloat(delegate.applyAsFloat(object));
             }
 

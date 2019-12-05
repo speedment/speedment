@@ -78,9 +78,7 @@ import java.util.function.Function;
  */
 public final class Tuples {
     
-    private Tuples() {
-        throw new UnsupportedOperationException();
-    }
+    private Tuples() {}
     
     /**
      * Creates and returns a new {@link Tuple0}  with the given parameters.
@@ -122,7 +120,7 @@ public final class Tuples {
      * @see Tuple
      */
     public static <T0> Tuple1<T0> of(T0 e0) {
-        return  new Tuple1Impl<>(e0);
+        return new Tuple1Impl<>(e0);
     }
     
     /**
@@ -156,7 +154,7 @@ public final class Tuples {
      * @see Tuple
      */
     public static <T0, T1> Tuple2<T0, T1> of(T0 e0, T1 e1) {
-        return  new Tuple2Impl<>(e0, e1);
+        return new Tuple2Impl<>(e0, e1);
     }
     
     /**
@@ -197,7 +195,7 @@ public final class Tuples {
             T0 e0,
             T1 e1,
             T2 e2) {
-        return  new Tuple3Impl<>(e0, e1, e2);
+        return new Tuple3Impl<>(e0, e1, e2);
     }
     
     /**
@@ -246,7 +244,7 @@ public final class Tuples {
             T1 e1,
             T2 e2,
             T3 e3) {
-        return  new Tuple4Impl<>(e0, e1, e2, e3);
+        return new Tuple4Impl<>(e0, e1, e2, e3);
     }
     
     /**
@@ -301,7 +299,7 @@ public final class Tuples {
             T2 e2,
             T3 e3,
             T4 e4) {
-        return  new Tuple5Impl<>(e0, e1, e2, e3, e4);
+        return new Tuple5Impl<>(e0, e1, e2, e3, e4);
     }
     
     /**
@@ -362,7 +360,7 @@ public final class Tuples {
             T3 e3,
             T4 e4,
             T5 e5) {
-        return  new Tuple6Impl<>(e0, e1, e2, e3, e4, e5);
+        return new Tuple6Impl<>(e0, e1, e2, e3, e4, e5);
     }
     
     /**
@@ -429,7 +427,7 @@ public final class Tuples {
             T4 e4,
             T5 e5,
             T6 e6) {
-        return  new Tuple7Impl<>(e0, e1, e2, e3, e4, e5, e6);
+        return new Tuple7Impl<>(e0, e1, e2, e3, e4, e5, e6);
     }
     
     /**
@@ -502,7 +500,7 @@ public final class Tuples {
             T5 e5,
             T6 e6,
             T7 e7) {
-        return  new Tuple8Impl<>(e0, e1, e2, e3, e4, e5, e6, e7);
+        return new Tuple8Impl<>(e0, e1, e2, e3, e4, e5, e6, e7);
     }
     
     /**
@@ -581,7 +579,7 @@ public final class Tuples {
             T6 e6,
             T7 e7,
             T8 e8) {
-        return  new Tuple9Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8);
+        return new Tuple9Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8);
     }
     
     /**
@@ -666,7 +664,7 @@ public final class Tuples {
             T7 e7,
             T8 e8,
             T9 e9) {
-        return  new Tuple10Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9);
+        return new Tuple10Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9);
     }
     
     /**
@@ -757,7 +755,7 @@ public final class Tuples {
             T8 e8,
             T9 e9,
             T10 e10) {
-        return  new Tuple11Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
+        return new Tuple11Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
     }
     
     /**
@@ -855,7 +853,7 @@ public final class Tuples {
             T9 e9,
             T10 e10,
             T11 e11) {
-        return  new Tuple12Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11);
+        return new Tuple12Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11);
     }
     
     /**
@@ -959,7 +957,7 @@ public final class Tuples {
             T10 e10,
             T11 e11,
             T12 e12) {
-        return  new Tuple13Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12);
+        return new Tuple13Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12);
     }
     
     /**
@@ -1069,7 +1067,7 @@ public final class Tuples {
             T11 e11,
             T12 e12,
             T13 e13) {
-        return  new Tuple14Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13);
+        return new Tuple14Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13);
     }
     
     /**
@@ -1185,7 +1183,7 @@ public final class Tuples {
             T12 e12,
             T13 e13,
             T14 e14) {
-        return  new Tuple15Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14);
+        return new Tuple15Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14);
     }
     
     /**
@@ -1307,7 +1305,7 @@ public final class Tuples {
             T13 e13,
             T14 e14,
             T15 e15) {
-        return  new Tuple16Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15);
+        return new Tuple16Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15);
     }
     
     /**
@@ -1435,7 +1433,7 @@ public final class Tuples {
             T14 e14,
             T15 e15,
             T16 e16) {
-        return  new Tuple17Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16);
+        return new Tuple17Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16);
     }
     
     /**
@@ -1569,7 +1567,7 @@ public final class Tuples {
             T15 e15,
             T16 e16,
             T17 e17) {
-        return  new Tuple18Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17);
+        return new Tuple18Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17);
     }
     
     /**
@@ -1709,7 +1707,7 @@ public final class Tuples {
             T16 e16,
             T17 e17,
             T18 e18) {
-        return  new Tuple19Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18);
+        return new Tuple19Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18);
     }
     
     /**
@@ -1855,7 +1853,7 @@ public final class Tuples {
             T17 e17,
             T18 e18,
             T19 e19) {
-        return  new Tuple20Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19);
+        return new Tuple20Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19);
     }
     
     /**
@@ -2007,7 +2005,7 @@ public final class Tuples {
             T18 e18,
             T19 e19,
             T20 e20) {
-        return  new Tuple21Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20);
+        return new Tuple21Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20);
     }
     
     /**
@@ -2165,7 +2163,7 @@ public final class Tuples {
             T19 e19,
             T20 e20,
             T21 e21) {
-        return  new Tuple22Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21);
+        return new Tuple22Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21);
     }
     
     /**
@@ -2329,7 +2327,7 @@ public final class Tuples {
             T20 e20,
             T21 e21,
             T22 e22) {
-        return  new Tuple23Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22);
+        return new Tuple23Impl<>(e0, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22);
     }
     
     /**
@@ -2426,6 +2424,8 @@ public final class Tuples {
      * 
      * @see Tuple
      */
+    @SafeVarargs
+    @SuppressWarnings(value = "varargs")
     public static Tuple ofArray(Object... el) {
         switch (el.length) {
             case 0: return of();

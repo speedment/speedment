@@ -38,7 +38,7 @@ interface SqlPersistence<ENTITY> {
      * 
      * @throws SpeedmentException  if the entity could not be persisted
      */
-    ENTITY persist(ENTITY entity) throws SpeedmentException;
+    ENTITY persist(ENTITY entity);
 
     /**
      * Updates the specified entity in the table managed by this handler.
@@ -48,7 +48,7 @@ interface SqlPersistence<ENTITY> {
      * 
      * @throws SpeedmentException  if the entity could not be updated
      */
-    ENTITY update(ENTITY entity) throws SpeedmentException;
+    ENTITY update(ENTITY entity);
 
     /**
      * Removes the specified entity from the table managed by this handler.
@@ -58,8 +58,7 @@ interface SqlPersistence<ENTITY> {
      * 
      * @throws SpeedmentException  if the entity could not be removed
      */
-    ENTITY remove(ENTITY entity) throws SpeedmentException;
-
+    ENTITY remove(ENTITY entity);
 
     
 }

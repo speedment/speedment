@@ -44,33 +44,35 @@ import static java.util.Objects.requireNonNull;
 public final class MainApp extends Application {
 
     private static final Logger LOGGER = LoggerManager.getLogger(MainApp.class);
-    private static Injector INJECTOR;
-    
+
     public static void setInjector(Injector injector) {
-        INJECTOR = requireNonNull(injector);
+        InjectorHolder.INSTANCE.setInjector(injector);
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         requireNonNull(stage);
 
         InjectorBuilder.logger().setLevel(DEBUG);
         
-        if (INJECTOR == null) {
+        if (InjectorHolder.INSTANCE.getInjector() == null) {
             LOGGER.warn("Creating new Speedment instance for UI session.");
-            INJECTOR = new DefaultApplicationBuilder(
+            final Injector newInjector = new DefaultApplicationBuilder(
                     getClass().getClassLoader(),
                     DefaultApplicationMetadata.class
                 )
                 .withBundle(GeneratorBundle.class)
                 .withComponent(ToolBundle.class)
                 .build().getOrThrow(Injector.class);
+            InjectorHolder.INSTANCE.setInjector(newInjector);
         }
-        
-        final UserInterfaceComponentImpl ui = INJECTOR.getOrThrow(UserInterfaceComponentImpl.class);
-        final ProjectComponent projects     = INJECTOR.getOrThrow(ProjectComponent.class);
-        final EventComponent events         = INJECTOR.getOrThrow(EventComponent.class);
-        final InjectionLoader loader        = INJECTOR.getOrThrow(InjectionLoader.class);
+
+        final Injector injector = InjectorHolder.INSTANCE.getInjector();
+
+        final UserInterfaceComponentImpl ui = injector.getOrThrow(UserInterfaceComponentImpl.class);
+        final ProjectComponent projects     = injector.getOrThrow(ProjectComponent.class);
+        final EventComponent events         = injector.getOrThrow(EventComponent.class);
+        final InjectionLoader loader        = injector.getOrThrow(InjectionLoader.class);
 
         events.on(UIEvent.class, ev -> {
             if (ev == UIEvent.OPEN_MAIN_WINDOW) {

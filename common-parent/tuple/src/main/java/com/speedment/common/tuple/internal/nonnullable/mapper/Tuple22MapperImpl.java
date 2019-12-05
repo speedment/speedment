@@ -19,10 +19,9 @@ package com.speedment.common.tuple.internal.nonnullable.mapper;
 import com.speedment.common.tuple.Tuple22;
 import com.speedment.common.tuple.TupleMapper;
 import com.speedment.common.tuple.Tuples;
+import com.speedment.common.tuple.internal.AbstractTupleMapper;
 
 import java.util.function.Function;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * An implementation class of a {@link TupleMapper } of degree 22
@@ -56,30 +55,9 @@ import static java.util.Objects.requireNonNull;
  * 
  * @author Per Minborg
  */
-public final class Tuple22MapperImpl<T, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> implements TupleMapper<T, Tuple22<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>> {
-    
-    private final Function<T, T0> m0;
-    private final Function<T, T1> m1;
-    private final Function<T, T2> m2;
-    private final Function<T, T3> m3;
-    private final Function<T, T4> m4;
-    private final Function<T, T5> m5;
-    private final Function<T, T6> m6;
-    private final Function<T, T7> m7;
-    private final Function<T, T8> m8;
-    private final Function<T, T9> m9;
-    private final Function<T, T10> m10;
-    private final Function<T, T11> m11;
-    private final Function<T, T12> m12;
-    private final Function<T, T13> m13;
-    private final Function<T, T14> m14;
-    private final Function<T, T15> m15;
-    private final Function<T, T16> m16;
-    private final Function<T, T17> m17;
-    private final Function<T, T18> m18;
-    private final Function<T, T19> m19;
-    private final Function<T, T20> m20;
-    private final Function<T, T21> m21;
+public final class Tuple22MapperImpl<T, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> 
+extends AbstractTupleMapper<T, Tuple22<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>> 
+implements TupleMapper<T, Tuple22<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21>> {
     
     /**
      * Constructs a {@link TupleMapper } that can create {@link Tuple22 }.
@@ -130,177 +108,144 @@ public final class Tuple22MapperImpl<T, T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, 
             Function<T, T19> m19,
             Function<T, T20> m20,
             Function<T, T21> m21) {
-        this.m0	=	requireNonNull(m0);
-        this.m1	=	requireNonNull(m1);
-        this.m2	=	requireNonNull(m2);
-        this.m3	=	requireNonNull(m3);
-        this.m4	=	requireNonNull(m4);
-        this.m5	=	requireNonNull(m5);
-        this.m6	=	requireNonNull(m6);
-        this.m7	=	requireNonNull(m7);
-        this.m8	=	requireNonNull(m8);
-        this.m9	=	requireNonNull(m9);
-        this.m10	=	requireNonNull(m10);
-        this.m11	=	requireNonNull(m11);
-        this.m12	=	requireNonNull(m12);
-        this.m13	=	requireNonNull(m13);
-        this.m14	=	requireNonNull(m14);
-        this.m15	=	requireNonNull(m15);
-        this.m16	=	requireNonNull(m16);
-        this.m17	=	requireNonNull(m17);
-        this.m18	=	requireNonNull(m18);
-        this.m19	=	requireNonNull(m19);
-        this.m20	=	requireNonNull(m20);
-        this.m21	=	requireNonNull(m21);
+        super(22);
+        set(0, m0);
+        set(1, m1);
+        set(2, m2);
+        set(3, m3);
+        set(4, m4);
+        set(5, m5);
+        set(6, m6);
+        set(7, m7);
+        set(8, m8);
+        set(9, m9);
+        set(10, m10);
+        set(11, m11);
+        set(12, m12);
+        set(13, m13);
+        set(14, m14);
+        set(15, m15);
+        set(16, m16);
+        set(17, m17);
+        set(18, m18);
+        set(19, m19);
+        set(20, m20);
+        set(21, m21);
     }
     
     @Override
     public Tuple22<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> apply(T t) {
         return Tuples.of(
-            m0.apply(t),
-            m1.apply(t),
-            m2.apply(t),
-            m3.apply(t),
-            m4.apply(t),
-            m5.apply(t),
-            m6.apply(t),
-            m7.apply(t),
-            m8.apply(t),
-            m9.apply(t),
-            m10.apply(t),
-            m11.apply(t),
-            m12.apply(t),
-            m13.apply(t),
-            m14.apply(t),
-            m15.apply(t),
-            m16.apply(t),
-            m17.apply(t),
-            m18.apply(t),
-            m19.apply(t),
-            m20.apply(t),
-            m21.apply(t)
+            get0().apply(t),
+            get1().apply(t),
+            get2().apply(t),
+            get3().apply(t),
+            get4().apply(t),
+            get5().apply(t),
+            get6().apply(t),
+            get7().apply(t),
+            get8().apply(t),
+            get9().apply(t),
+            get10().apply(t),
+            get11().apply(t),
+            get12().apply(t),
+            get13().apply(t),
+            get14().apply(t),
+            get15().apply(t),
+            get16().apply(t),
+            get17().apply(t),
+            get18().apply(t),
+            get19().apply(t),
+            get20().apply(t),
+            get21().apply(t)
         );
     }
     
-    @Override
-    public int degree() {
-        return 22;
-    }
-    
-    @Override
-    public Function<T, ?> get(int index) {
-        switch(index){
-            case 0	: return	get0();
-            case 1	: return	get1();
-            case 2	: return	get2();
-            case 3	: return	get3();
-            case 4	: return	get4();
-            case 5	: return	get5();
-            case 6	: return	get6();
-            case 7	: return	get7();
-            case 8	: return	get8();
-            case 9	: return	get9();
-            case 10	: return	get10();
-            case 11	: return	get11();
-            case 12	: return	get12();
-            case 13	: return	get13();
-            case 14	: return	get14();
-            case 15	: return	get15();
-            case 16	: return	get16();
-            case 17	: return	get17();
-            case 18	: return	get18();
-            case 19	: return	get19();
-            case 20	: return	get20();
-            case 21	: return	get21();
-            default : throw new IndexOutOfBoundsException();
-        }
-    }
-    
     public Function<T, T0> get0() {
-        return m0;
+        return getAndCast(0);
     }
     
     public Function<T, T1> get1() {
-        return m1;
+        return getAndCast(1);
     }
     
     public Function<T, T2> get2() {
-        return m2;
+        return getAndCast(2);
     }
     
     public Function<T, T3> get3() {
-        return m3;
+        return getAndCast(3);
     }
     
     public Function<T, T4> get4() {
-        return m4;
+        return getAndCast(4);
     }
     
     public Function<T, T5> get5() {
-        return m5;
+        return getAndCast(5);
     }
     
     public Function<T, T6> get6() {
-        return m6;
+        return getAndCast(6);
     }
     
     public Function<T, T7> get7() {
-        return m7;
+        return getAndCast(7);
     }
     
     public Function<T, T8> get8() {
-        return m8;
+        return getAndCast(8);
     }
     
     public Function<T, T9> get9() {
-        return m9;
+        return getAndCast(9);
     }
     
     public Function<T, T10> get10() {
-        return m10;
+        return getAndCast(10);
     }
     
     public Function<T, T11> get11() {
-        return m11;
+        return getAndCast(11);
     }
     
     public Function<T, T12> get12() {
-        return m12;
+        return getAndCast(12);
     }
     
     public Function<T, T13> get13() {
-        return m13;
+        return getAndCast(13);
     }
     
     public Function<T, T14> get14() {
-        return m14;
+        return getAndCast(14);
     }
     
     public Function<T, T15> get15() {
-        return m15;
+        return getAndCast(15);
     }
     
     public Function<T, T16> get16() {
-        return m16;
+        return getAndCast(16);
     }
     
     public Function<T, T17> get17() {
-        return m17;
+        return getAndCast(17);
     }
     
     public Function<T, T18> get18() {
-        return m18;
+        return getAndCast(18);
     }
     
     public Function<T, T19> get19() {
-        return m19;
+        return getAndCast(19);
     }
     
     public Function<T, T20> get20() {
-        return m20;
+        return getAndCast(20);
     }
     
     public Function<T, T21> get21() {
-        return m21;
+        return getAndCast(21);
     }
 }

@@ -24,6 +24,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectOrNull;
 import com.speedment.common.injector.dependency.DependencyGraph;
 import com.speedment.common.injector.dependency.DependencyNode;
+import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.internal.util.InjectorUtil;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
-import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
+import static com.speedment.common.injector.internal.util.PrintUtil.HORIZONTAL_LINE;
 import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
@@ -74,7 +75,7 @@ public final class InjectorImpl implements Injector {
         return new InjectorBuilderImpl(classLoader);
     }
 
-    public final static Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorImpl.class);
+    public static final Logger LOGGER_INSTANCE = LoggerManager.getLogger(InjectorImpl.class);
 
     private final Set<Injectable<?>> injectables;
     private final List<Object> instances;
@@ -165,12 +166,7 @@ public final class InjectorImpl implements Injector {
         final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
 
         // Create ClassMapper
-        final ClassMapper classMapper = new ClassMapper() {
-            @Override
-            public <T> T apply(Class<T> type) {
-                return find(type, true);
-            }
-        };
+        final ClassMapper classMapper = this::findRequired;
 
         // Loop until all nodes have been started.
         Set<DependencyNode> unfinished;
@@ -180,66 +176,7 @@ public final class InjectorImpl implements Injector {
 
             hasAnythingChanged.set(false);
 
-            unfinished.forEach(n -> {
-
-                // Check if all its dependencies have been satisfied.
-                // TODO: Dependencies should be resolved in the opposite order 
-                // when stopping.
-                if (n.canBe(State.STOPPED)) {
-
-                    LOGGER_INSTANCE.debug(horizontalLine());
-
-                    // Retrieve the instance for that node
-                    final Object inst = find(n.getRepresentedType(), true);
-
-                    // Execute all the executions for the next step.
-                    n.getExecutions().stream()
-                        .filter(e -> e.getState() == State.STOPPED)
-                        .map(exec -> {
-                            @SuppressWarnings("unchecked") final Execution<Object> casted =
-                                (Execution<Object>) exec;
-                            return casted;
-                        })
-                        .forEach(exec -> {
-
-                            // We might want to log exactly which steps we
-                            // have completed.
-                            if (LOGGER_INSTANCE.getLevel()
-                                .isEqualOrLowerThan(Level.DEBUG)) {
-
-                                LOGGER_INSTANCE.debug(
-                                    "| -> %-76s |",
-                                    limit(exec.toString(), 76)
-                                );
-                            }
-
-                            try {
-                                if (!exec.invoke(inst, classMapper) &&
-                                    LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                    LOGGER_INSTANCE.debug(
-                                        "|      %-74s |",
-                                        limit("(Ignored due to missing dependencies.)", 74)
-                                    );
-                                }
-                            } catch (final IllegalAccessException
-                                | IllegalArgumentException
-                                | InvocationTargetException ex) {
-
-                                throw new RuntimeException(ex);
-                            }
-                        });
-
-                    // Update its state to the new state.
-                    n.setState(State.STOPPED);
-                    hasAnythingChanged.set(true);
-
-                    LOGGER_INSTANCE.debug(
-                        "| %-66s %12s |",
-                        n.getRepresentedType().getSimpleName(),
-                        State.STOPPED.name()
-                    );
-                }
-            });
+            unfinished.forEach(n -> stop(hasAnythingChanged, classMapper, n));
 
             if (!hasAnythingChanged.get()) {
                 throw new IllegalStateException(
@@ -253,12 +190,72 @@ public final class InjectorImpl implements Injector {
             }
         }
 
-        LOGGER_INSTANCE.debug(horizontalLine());
+        LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
         LOGGER_INSTANCE.debug(
             "| %-79s |",
             "All " + instances.size() + " components have been stopped!"
         );
-        LOGGER_INSTANCE.debug(horizontalLine());
+        LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
+    }
+
+    private void stop(AtomicBoolean hasAnythingChanged, ClassMapper classMapper, DependencyNode node) {
+        // Check if all its dependencies have been satisfied.
+        // when stopping.
+        if (node.canBe(State.STOPPED)) {
+
+            LOGGER_INSTANCE.debug(HORIZONTAL_LINE);
+
+            // Retrieve the instance for that node
+            final Object inst = find(node.getRepresentedType(), true);
+
+            // Execute all the executions for the next step.
+            node.getExecutions().stream()
+                .filter(e -> e.getState() == State.STOPPED)
+                .map(exec -> {
+                    @SuppressWarnings("unchecked")
+                    final Execution<Object> casted = (Execution<Object>) exec;
+                    return casted;
+                })
+                .forEach(exec -> stopInstance(classMapper, inst, exec));
+
+            // Update its state to the new state.
+            node.setState(State.STOPPED);
+            hasAnythingChanged.set(true);
+
+            LOGGER_INSTANCE.debug(
+                "| %-66s %12s |",
+                node.getRepresentedType().getSimpleName(),
+                State.STOPPED.name()
+            );
+        }
+    }
+
+    private void stopInstance(ClassMapper classMapper, Object inst, Execution<Object> exec) {
+        // We might want to log exactly which steps we
+        // have completed.
+        if (LOGGER_INSTANCE.getLevel()
+            .isEqualOrLowerThan(Level.DEBUG)) {
+
+            LOGGER_INSTANCE.debug(
+                "| -> %-76s |",
+                limit(exec.toString(), 76)
+            );
+        }
+
+        try {
+            if (!exec.invoke(inst, classMapper) &&
+                LOGGER_INSTANCE.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                LOGGER_INSTANCE.debug(
+                    "|      %-74s |",
+                    limit("(Ignored due to missing dependencies.)", 74)
+                );
+            }
+        } catch (final IllegalAccessException
+            | IllegalArgumentException
+            | InvocationTargetException ex) {
+
+            throw new InjectorException(ex);
+        }
     }
 
     @Override
@@ -268,6 +265,10 @@ public final class InjectorImpl implements Injector {
 
     private <T> Stream<T> findAll(Class<T> type) {
         return InjectorUtil.findAll(type, this, instances);
+    }
+
+    private <T> T findRequired(Class<T> type) {
+        return find(type, true);
     }
 
     private <T> T find(Class<T> type, boolean required) {
@@ -292,8 +293,7 @@ public final class InjectorImpl implements Injector {
                         field.isAnnotationPresent(Inject.class)
                     );
                 }
-                // field.setAccessible(true);
-                //LOGGER_INSTANCE.warn("Setting fields is deprecated: " + field);
+                // Todo: log a warning that this is deprecated
                 try {
                     final InjectorProxy injectorProxy = builder.proxyFor(instance.getClass());
                     injectorProxy.set(field, instance, value);
@@ -307,7 +307,7 @@ public final class InjectorImpl implements Injector {
                     );
 
                     LOGGER_INSTANCE.error(ex, err);
-                    throw new RuntimeException(err, ex);
+                    throw new InjectorException(err, ex);
                 }
             });
     }

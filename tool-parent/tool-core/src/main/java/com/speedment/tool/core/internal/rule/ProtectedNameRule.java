@@ -25,14 +25,11 @@ import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.rule.Issue;
 import com.speedment.tool.core.rule.Rule;
 
-import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
-import static com.speedment.runtime.config.util.DocumentDbUtil.isAllAncestorsEnabled;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  * A rule which checks the future Java names of generated entities.
@@ -50,7 +47,7 @@ import static java.util.stream.Collectors.joining;
  * @since  3.0.0
  */
 public class ProtectedNameRule implements Rule{
-    private final static String[] PROTECTED_NAMES = {
+    private static final String[] PROTECTED_NAMES = {
         "AbstractEntity", "AbstractApplicationMetadata", "AbstractSqlManager",
         "Boolean",
         "Char", "Class", "ComparableField", "ComparableFieldImpl",

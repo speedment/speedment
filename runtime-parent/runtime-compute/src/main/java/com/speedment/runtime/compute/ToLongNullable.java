@@ -30,6 +30,8 @@ import java.util.function.LongToDoubleFunction;
 import java.util.function.LongUnaryOperator;
 import java.util.function.ToLongFunction;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Expression that given an entity returns a {@code long} value, or
  * {@code null}. This expression can be implemented using a lamda, or it can be
@@ -69,7 +71,10 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
+    // Note that Function<T, Long> is not the same as ToLongFunction<T>
+    // since the former returns Long and the later long
     static <T> ToLongNullable<T> of(Function<T, Long> lambda) {
+        requireNonNull(lambda);
         if (lambda instanceof ToLongNullable) {
             return (ToLongNullable<T>) lambda;
         } else {
@@ -83,12 +88,12 @@ extends Expression<T>,
     }
 
     @Override
-    default long applyAsLong(T object) throws NullPointerException {
+    default long applyAsLong(T object) {
         return apply(object);
     }
 
     @Override
-    default ToLong<T> orThrow() throws NullPointerException {
+    default ToLong<T> orThrow() {
         return OrElseThrowUtil.longOrElseThrow(this);
     }
 
@@ -133,7 +138,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsLong(object));
             }
 
@@ -174,7 +179,7 @@ extends Expression<T>,
             }
 
             @Override
-            public long applyAsLong(T object) throws NullPointerException {
+            public long applyAsLong(T object) {
                 return mapper.applyAsLong(delegate.applyAsLong(object));
             }
 

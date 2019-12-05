@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ProjectComponentImpl implements ProjectComponent {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(ProjectComponentImpl.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(ProjectComponentImpl.class);
     private Project project;
 
     @ExecuteBefore(INITIALIZED)

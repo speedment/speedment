@@ -104,7 +104,7 @@ public interface MenuBarTabHandler {
      * @throws IndexOutOfBoundsException  if the specified index is {@code < 0}
      *   or {@code >} the number of factories installed
      */
-    MenuBarTabHandler insert(int index, MenuItemFactory factory) throws IndexOutOfBoundsException;
+    MenuBarTabHandler insert(int index, MenuItemFactory factory);
 
     /**
      * Removes the factory with the specified key and returns {@code true}. If

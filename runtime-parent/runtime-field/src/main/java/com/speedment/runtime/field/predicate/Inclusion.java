@@ -68,7 +68,8 @@ public enum Inclusion {
     START_EXCLUSIVE_END_INCLUSIVE(false, true),
     START_EXCLUSIVE_END_EXCLUSIVE(false, false);
 
-    private final boolean startInclusive, endInclusive;
+    private final boolean startInclusive;
+    private final boolean endInclusive;
 
     Inclusion(boolean startInclusive, boolean endInclusive) {
         this.startInclusive = startInclusive;

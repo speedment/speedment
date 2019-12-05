@@ -73,7 +73,7 @@ final class TypeViewTest {
             "\n" +
             "public final class Main {\n" +
             "    \n" +
-            "    public final static String MESSAGE = \"Hello, World!\";\n" +
+            "    public static final String MESSAGE = \"Hello, World!\";\n" +
             "    \n" +
             "    public static void main(String... params) {\n" +
             "        System.out.println(MESSAGE);\n" +

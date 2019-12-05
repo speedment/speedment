@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.provider;
 
 import com.speedment.runtime.core.component.ManagerComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.ManagerComponentImpl;
 import com.speedment.runtime.core.manager.Manager;
 
@@ -42,7 +41,7 @@ public final class DelegateManagerComponent implements ManagerComponent {
     }
 
     @Override
-    public <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException {
+    public <E> Manager<E> managerOf(Class<E> entityClass) {
         return inner.managerOf(entityClass);
     }
 

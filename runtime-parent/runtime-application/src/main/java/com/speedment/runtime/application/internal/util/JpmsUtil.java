@@ -69,7 +69,7 @@ public final class JpmsUtil {
             return result;
 
         } catch (Throwable ignore) {
-
+            // ignore this exception
         }
         return Collections.emptySet();
     }

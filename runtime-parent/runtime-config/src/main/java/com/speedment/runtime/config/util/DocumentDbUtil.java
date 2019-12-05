@@ -16,17 +16,7 @@
  */
 package com.speedment.runtime.config.util;
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.trait.HasColumnId;
@@ -34,6 +24,7 @@ import com.speedment.runtime.config.identifier.trait.HasDbmsId;
 import com.speedment.runtime.config.identifier.trait.HasSchemaId;
 import com.speedment.runtime.config.identifier.trait.HasTableId;
 import com.speedment.runtime.config.trait.HasEnabled;
+
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -187,7 +178,7 @@ public final class DocumentDbUtil {
      * @return                     {@code true} if unique, else {@code false}
      * @throws SpeedmentConfigException  if an index or PK could not be traversed
      */
-    public static boolean isUnique(Column column) throws SpeedmentConfigException {
+    public static boolean isUnique(Column column) {
         final Table table = column.getParentOrThrow();
         
         return

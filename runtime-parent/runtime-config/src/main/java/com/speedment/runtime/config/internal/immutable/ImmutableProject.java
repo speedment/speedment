@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.internal.immutable;
 
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
@@ -27,12 +26,14 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.config.ProjectUtil.*;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -62,10 +63,12 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         this.packageLocation = prototype.getPackageLocation();
         this.configPath      = prototype.getConfigPath().orElse(null);
         this.dbmses = unmodifiableList(super.children(DBMSES, ImmutableDbms::new).collect(toList()));
-        this.tablesByName = MapStream.fromValues(
-            DocumentDbUtil.traverseOver(this, ImmutableTable.class),
-            table -> DocumentUtil.relativeName(table, Dbms.class, DATABASE_NAME)
-        ).toMap();
+
+        this.tablesByName = DocumentDbUtil.traverseOver(this, ImmutableTable.class)
+            .collect(toMap(
+                table -> DocumentUtil.relativeName(table, Dbms.class, DATABASE_NAME),
+                Function.identity()
+            ));
     }
 
     @Override

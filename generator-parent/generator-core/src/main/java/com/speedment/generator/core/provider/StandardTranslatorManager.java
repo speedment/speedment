@@ -62,8 +62,8 @@ public final class StandardTranslatorManager implements TranslatorManager {
     }
 
     @Override
-    public void clearExistingFiles(Project project) {
-        helper.clearExistingFiles(project);
+    public void clearExistingFiles() {
+        helper.clearExistingFiles();
     }
 
     @Override
@@ -73,12 +73,12 @@ public final class StandardTranslatorManager implements TranslatorManager {
 
     @Override
     public void writeToFile(Project project, String filename, String content, boolean overwriteExisting) {
-        helper.writeToFile(this, project, filename, content, overwriteExisting);
+        helper.writeToFile(this, filename, content, overwriteExisting);
     }
 
     @Override
     public void writeToFile(Path location, String content, boolean overwriteExisting) {
-        helper.writeToFile(this, location, content, overwriteExisting);
+        helper.writeToFile(location, content, overwriteExisting);
     }
 
     @Override

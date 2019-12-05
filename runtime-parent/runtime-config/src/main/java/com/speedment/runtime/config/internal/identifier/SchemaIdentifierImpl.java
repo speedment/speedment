@@ -27,7 +27,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SchemaIdentifierImpl<ENTITY> implements SchemaIdentifier<ENTITY> {
 
-    private final String dbmsName, schemaName;
+    private final String dbmsName;
+    private final String schemaName;
     private final int hashCode;
 
     public SchemaIdentifierImpl(String dbmsName, String schemaName) {

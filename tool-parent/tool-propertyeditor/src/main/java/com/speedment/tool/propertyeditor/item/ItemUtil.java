@@ -36,7 +36,7 @@ import javafx.scene.layout.StackPane;
 
 public final class ItemUtil {
 
-    public ItemUtil() {}
+    private ItemUtil() {}
 
     public static final String DATABASE_RELATION_TOOLTIP =
         "This field should ONLY be changed to reflect changes made in the underlying database.\nEnable editing by by right clicking on the field.";

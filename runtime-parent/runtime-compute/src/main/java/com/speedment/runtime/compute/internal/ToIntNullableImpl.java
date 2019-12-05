@@ -59,12 +59,12 @@ public final class ToIntNullableImpl<T>
     }
 
     @Override
-    public int applyAsInt(T t) throws NullPointerException {
+    public int applyAsInt(T t) {
         return original.applyAsInt(t);
     }
 
     @Override
-    public ToInt<T> orThrow() throws NullPointerException {
+    public ToInt<T> orThrow() {
         return original;
     }
 

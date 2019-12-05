@@ -33,8 +33,7 @@ import java.util.stream.Stream;
  * @since  3.0.17
  */
 public final class ToggleColumnsEnabledActionImpl
-    extends AbstractToolAction
-    implements ToggleColumnsEnabledAction {
+    implements AbstractToolAction, ToggleColumnsEnabledAction {
 
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {

@@ -16,12 +16,7 @@
  */
 package com.speedment.common.rest;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -230,7 +225,7 @@ final class RestImpl implements Rest {
         try {
             return new URL(urlStr);
         } catch (final MalformedURLException ex) {
-            throw new RuntimeException(String.format(
+            throw new IllegalArgumentException(String.format(
                 "Error building URL: '%s'.", urlStr
             ), ex);
         }
@@ -321,21 +316,7 @@ final class RestImpl implements Rest {
                 }
 
                 int status = getResponseCodeFrom(conn);
-                final String text;
-
-                try (final BufferedReader rd = new BufferedReader(
-                        new InputStreamReader(status >= 400
-                            ? conn.getErrorStream()
-                            : conn.getInputStream()))) {
-
-                    final StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = rd.readLine()) != null) {
-                        sb.append(line);
-                    }
-
-                    text = sb.toString();
-                }
+                final String text = tryGetResponseTextFrom(conn, status);
 
                 return new Response(status, text, conn.getHeaderFields());
             } catch (final Exception ex) {
@@ -346,6 +327,24 @@ final class RestImpl implements Rest {
                 }
             }
         });
+    }
+
+    private static String tryGetResponseTextFrom(HttpURLConnection conn, int status) throws IOException {
+        String text;
+        try (final BufferedReader rd = new BufferedReader(
+                new InputStreamReader(status >= 400
+                    ? conn.getErrorStream()
+                    : conn.getInputStream()))) {
+
+            final StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+
+            text = sb.toString();
+        }
+        return text;
     }
 
     @Override

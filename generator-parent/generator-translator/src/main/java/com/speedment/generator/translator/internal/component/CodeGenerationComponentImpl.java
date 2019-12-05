@@ -41,6 +41,7 @@ import com.speedment.runtime.config.trait.HasName;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -71,7 +72,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         put(Project.class,
             com.speedment.common.codegen.model.Class.class,
             creator.getClass().getName(),
-            project -> new SimpleTranslator<>(injector, project, creator, false));
+            (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
         return this;
     }
 
@@ -81,7 +82,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         put(Project.class,
             Enum.class,
             creator.getClass().getName(),
-            project -> new SimpleTranslator<>(injector, project, creator, false));
+            (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
         return this;
     }
 
@@ -91,7 +92,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         put(Project.class,
             Interface.class,
             creator.getClass().getName(),
-            project -> new SimpleTranslator<>(injector, project, creator, false));
+            (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
         return this;
     }
 
@@ -120,28 +121,28 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
     @Override
     public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
         void put(Class<DOC> docType, Class<T> modelType, String key, TranslatorConstructor<DOC, T> constructor) {
-        aquireTranslatorSettings(docType, modelType, key).setConstructor(constructor);
+        acquireTranslatorSettings(docType, modelType, key).setConstructor(constructor);
     }
 
     @Override
     public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
         void add(Class<DOC> docType, Class<T> modelType, String key, TranslatorDecorator<DOC, T> decorator) {
-        aquireTranslatorSettings(docType, modelType, key).decorators().add(decorator);
+        acquireTranslatorSettings(docType, modelType, key).decorators().add(decorator);
     }
 
     @Override
     public <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
         void remove(Class<DOC> docType, String key) {
-        aquireTranslatorSettings(docType, null, key).setConstructor(null);
+        acquireTranslatorSettings(docType, null, key).setConstructor(null);
     }
 
     private <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>>
-        TranslatorSettings<DOC, T> aquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
+        TranslatorSettings<DOC, T> acquireTranslatorSettings(Class<DOC> docType, Class<T> modelType, String key) {
         @SuppressWarnings("unchecked")
         final TranslatorSettings<DOC, T> result = (TranslatorSettings<DOC, T>) map
             .computeIfAbsent(docType,
                 s -> new ConcurrentHashMap<>()
-            ).computeIfAbsent(key, k -> new TranslatorSettings<>(k));
+            ).computeIfAbsent(key, TranslatorSettings::new);
 
         return result;
     }
@@ -157,10 +158,6 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         return map.values().stream()
             .flatMap(m -> MapStream.of(m).filterValue(s -> s.constructor != null).keys())
             .distinct();
-    }
-
-    private MapStream<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> translatorKeyClasses() {
-        return MapStream.of(map);
     }
 
     @Override
@@ -182,7 +179,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             .values()
             .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
             .map(s -> (TranslatorSettings<DOC, ?>) s)
-            .filter(s -> s != null)
+            .filter(Objects::nonNull)
             .filter(s -> s.getConstructor() != null)
             .map(settings -> settings.createDecorated(injector, document));
     }
@@ -195,7 +192,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         );
     }
 
-    private final static class TranslatorSettings<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
+    private static final class TranslatorSettings<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
 
         private final String key;
         private final List<TranslatorDecorator<DOC, T>> decorators;
@@ -225,7 +222,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
         public JavaClassTranslator<DOC, T> createDecorated(Injector injector, DOC document) {
             @SuppressWarnings("unchecked")
             final JavaClassTranslator<DOC, T> translator
-                = (JavaClassTranslator<DOC, T>) getConstructor().apply(document);
+                = (JavaClassTranslator<DOC, T>) getConstructor().apply(injector, document);
 
             injector.inject(translator);
             
@@ -252,17 +249,17 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             final Class<?> documentType = figureOutDocumentType();
             if (Project.class.equals(documentType)) {
                 add(figureOutDocumentType(), key, translator ->
-                    translator.onMake((file, builder) -> {
+                    translator.onMake((file, builder) ->
                         builder.forEveryProject(Translator.Phase.PRE_MAKE,
-                            (model, table) -> action.accept(model));
-                    })
+                            (model, table) -> action.accept(model))
+                    )
                 );
             } else if (Table.class.equals(documentType)) {
                 add(figureOutDocumentType(), key, translator ->
-                    translator.onMake((file, builder) -> {
+                    translator.onMake((file, builder) ->
                         builder.forEveryTable(Translator.Phase.PRE_MAKE,
-                            (model, table) -> action.accept(model));
-                    })
+                            (model, table) -> action.accept(model))
+                    )
                 );
             } else {
                 throw new IllegalArgumentException(
@@ -278,17 +275,17 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             final Class<?> documentType = figureOutDocumentType();
             if (Project.class.equals(documentType)) {
                 add(figureOutDocumentType(), key, translator ->
-                    translator.onMake((file, builder) -> {
+                    translator.onMake((file, builder) ->
                         builder.forEveryProject(Translator.Phase.POST_MAKE,
-                            (model, table) -> action.accept(model));
-                    })
+                            (model, table) -> action.accept(model))
+                    )
                 );
             } else if (Table.class.equals(documentType)) {
                 add(figureOutDocumentType(), key, translator ->
-                    translator.onMake((file, builder) -> {
+                    translator.onMake((file, builder) ->
                         builder.forEveryTable(com.speedment.generator.translator.Translator.Phase.POST_MAKE,
-                            (model, table) -> action.accept(model));
-                    })
+                            (model, table) -> action.accept(model))
+                    )
                 );
             } else {
                 throw new IllegalArgumentException(
@@ -297,6 +294,10 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             }
 
             return CodeGenerationComponentImpl.this;
+        }
+
+        private MapStream<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> translatorKeyClasses() {
+            return MapStream.of(map);
         }
 
         @SuppressWarnings("unchecked")
@@ -324,7 +325,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             put(docClass,
                 com.speedment.common.codegen.model.Class.class,
                 creator.getClass().getName(),
-                project -> new SimpleTranslator<>(injector, project, creator, false));
+                (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
             return CodeGenerationComponentImpl.this;
         }
 
@@ -334,7 +335,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             put(docClass,
                 Enum.class,
                 creator.getClass().getName(),
-                project -> new SimpleTranslator<>(injector, project, creator, false));
+                (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
             return CodeGenerationComponentImpl.this;
         }
 
@@ -344,7 +345,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             put(docClass,
                 Interface.class,
                 creator.getClass().getName(),
-                project -> new SimpleTranslator<>(injector, project, creator, false));
+                (inj, project) -> new SimpleTranslator<>(inj, project, creator, false));
             return CodeGenerationComponentImpl.this;
         }
     }

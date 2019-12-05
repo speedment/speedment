@@ -67,7 +67,7 @@ public class MenuBarTabHandlerImpl implements MenuBarTabHandler {
     }
 
     @Override
-    public MenuBarTabHandler insert(int index, MenuItemFactory factory) throws IndexOutOfBoundsException {
+    public MenuBarTabHandler insert(int index, MenuItemFactory factory) {
         factories.add(index, injector.inject(factory));
         return this;
     }

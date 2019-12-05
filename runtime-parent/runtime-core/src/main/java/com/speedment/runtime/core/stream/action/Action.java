@@ -16,10 +16,7 @@
  */
 package com.speedment.runtime.core.stream.action;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
@@ -46,7 +43,7 @@ public abstract class Action<T extends BaseStream<?, T>, R extends BaseStream<?,
     protected Action(Function<T, R> mapper, @SuppressWarnings("rawtypes") Class<? extends BaseStream> resultStreamClass, BasicAction basicAction) {
         this.mapper = requireNonNull(mapper);
         this.resultStreamClass = requireNonNull(resultStreamClass);
-        this.streamImpacts = new HashMap<>();
+        this.streamImpacts = new EnumMap<>(Verb.class);
         set(basicAction);
     }
 

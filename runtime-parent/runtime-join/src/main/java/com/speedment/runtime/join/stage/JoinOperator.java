@@ -22,7 +22,8 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-public enum JoinOperator {
+public enum
+JoinOperator {
     EQUAL("=", true),
     NOT_EQUAL("<>", true),
     LESS_THAN("<", false),

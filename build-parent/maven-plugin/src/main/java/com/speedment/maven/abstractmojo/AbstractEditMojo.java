@@ -17,6 +17,8 @@
 package com.speedment.maven.abstractmojo;
 
 import com.speedment.common.json.Json;
+import com.speedment.maven.exception.SpeedmentMavenPluginException;
+import com.speedment.maven.internal.util.ConfigUtil;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentTranscoder;
@@ -27,7 +29,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
@@ -73,38 +74,7 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             final LongAdder edits = new LongAdder();
             locate(loaded).collect(toList()).forEach(doc -> {
                 if (delete) {
-                    doc.getParent().ifPresent(parent -> {
-                        final Collection<? extends Map<String, Object>> coll;
-                        if (doc instanceof Dbms) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ProjectUtil.DBMSES);
-                        } else if (doc instanceof Schema) {
-                            coll =(Collection<? extends Map<String, Object>>) parent.getData().get(DbmsUtil.SCHEMAS);
-                        } else if (doc instanceof Table) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(SchemaUtil.TABLES);
-                        } else if (doc instanceof Column) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.COLUMNS);
-                        } else if (doc instanceof PrimaryKeyColumn) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.PRIMARY_KEY_COLUMNS);
-                        } else if (doc instanceof IndexColumn) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(IndexUtil.INDEX_COLUMNS);
-                        } else if (doc instanceof ForeignKeyColumn) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKeyUtil.FOREIGN_KEY_COLUMNS);
-                        } else if (doc instanceof ForeignKey) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKeyUtil.FOREIGN_KEY_COLUMNS);
-                        } else if (doc instanceof Index) {
-                            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.INDEXES);
-                        } else {
-                            getLog().error("Doc was of type " + doc.getClass());
-                            return;
-                        }
-
-                        final String id = doc.getAsString("id").orElseGet(() -> doc.getAsString("name").orElseThrow(() -> new RuntimeException("No id in document.")));
-                        if (coll.removeIf(d -> d.get("id").equals(id))) {
-                            edits.increment();
-                        } else {
-                            getLog().error("Could not remove doc " + doc);
-                        }
-                    });
+                    doc.getParent().ifPresent(parent -> remove(edits, doc, parent));
                 } else {
                     final int equalPos = set.indexOf(SET_OPERATOR);
                     final String param = set.substring(0, equalPos);
@@ -122,6 +92,40 @@ public abstract class AbstractEditMojo extends AbstractMojo {
             throw new MojoExecutionException(format(
                     "The configFile '%s' can't be loaded.",
                     configLocation().toString()));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void remove(LongAdder edits, Document doc, Document parent) {
+        final Collection<? extends Map<String, Object>> coll;
+        if (doc instanceof Dbms) {
+            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ProjectUtil.DBMSES);
+        } else if (doc instanceof Schema) {
+            coll =(Collection<? extends Map<String, Object>>) parent.getData().get(DbmsUtil.SCHEMAS);
+        } else if (doc instanceof Table) {
+            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(SchemaUtil.TABLES);
+        } else if (doc instanceof Column) {
+            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.COLUMNS);
+        } else if (doc instanceof PrimaryKeyColumn) {
+            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.PRIMARY_KEY_COLUMNS);
+        } else if (doc instanceof IndexColumn) {
+            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(IndexUtil.INDEX_COLUMNS);
+        } else if (doc instanceof ForeignKeyColumn) {
+            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKeyUtil.FOREIGN_KEY_COLUMNS);
+        } else if (doc instanceof ForeignKey) {
+            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(ForeignKeyUtil.FOREIGN_KEY_COLUMNS);
+        } else if (doc instanceof Index) {
+            coll = (Collection<? extends Map<String, Object>>) parent.getData().get(TableUtil.INDEXES);
+        } else {
+            getLog().error("Doc was of type " + doc.getClass());
+            return;
+        }
+
+        final String id = doc.getAsString("id").orElseGet(() -> doc.getAsString("name").orElseThrow(() -> new RuntimeException("No id in document.")));
+        if (coll.removeIf(d -> d.get("id").equals(id))) {
+            edits.increment();
+        } else {
+            getLog().error("Could not remove doc " + doc);
         }
     }
 
@@ -145,23 +149,7 @@ public abstract class AbstractEditMojo extends AbstractMojo {
     }
 
     protected final boolean hasConfigFile(Path file) {
-        if (file == null) {
-            final String msg = "The expected .json-file is null.";
-            getLog().info(msg);
-            return false;
-        } else if (!file.toFile().exists()) {
-            final String msg = "The expected .json-file '"
-                    + file + "' does not exist.";
-            getLog().info(msg);
-            return false;
-        } else if (!Files.isReadable(file)) {
-            final String err = "The expected .json-file '"
-                    + file + "' is not readable.";
-            getLog().error(err);
-            return false;
-        } else {
-            return true;
-        }
+        return ConfigUtil.hasConfigFile(file, getLog());
     }
 
     @SuppressWarnings("unchecked")
@@ -242,7 +230,7 @@ public abstract class AbstractEditMojo extends AbstractMojo {
                 case "java.lang.Double": newValue = Double.parseDouble(value); break;
                 case "java.lang.Boolean": newValue = Boolean.parseBoolean(value); break;
                 case "java.lang.String": newValue = value; break;
-                default: throw new RuntimeException(format(
+                default: throw new SpeedmentMavenPluginException(format(
                         "Unknown type of existing value '%s' for param '%s'.",
                         current.get(), param
                 ));

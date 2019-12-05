@@ -18,24 +18,21 @@ package com.speedment.runtime.core;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.identifier.trait.HasColumnId;
 import com.speedment.runtime.config.identifier.trait.HasDbmsId;
 import com.speedment.runtime.config.identifier.trait.HasSchemaId;
 import com.speedment.runtime.config.identifier.trait.HasTableId;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.manager.Manager;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Builder class for producing new {@link Speedment} instances.
@@ -554,6 +551,25 @@ public interface ApplicationBuilder<
      * @return this instance
      */
     BUILDER withComponent(Class<?> componentClass);
+
+    /**
+     * Adds a custom component implementation class. The specified class will be
+     * instantiated using the provided {@code instanceSupplier} and fields annotated with
+     * {@link Inject} will be dependency injected. Methods annotated with
+     * {@link ExecuteBefore} will also be executed as part of the application
+     * configuration phase.
+     * <p>
+     * Note: If a component class is specifying the same {@link InjectKey } as
+     * an existing class previously added to this ApplicationBuilder, then the
+     * last class will be associated with that {@link InjectKey }. Thus, the
+     * order of calls to {@link #withComponent(java.lang.Class) } and
+     * {@link #withBundle(java.lang.Class) } is significant.
+     *
+     * @param componentClass the implementation class
+     * @param instanceSupplier a supplier of the component instance
+     * @return this instance
+     */
+    <T> BUILDER withComponent(Class<T> componentClass, Supplier<T> instanceSupplier);
 
     /**
      * Adds a custom bundle of dependency injectable implementation classes.

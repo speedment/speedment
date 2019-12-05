@@ -17,7 +17,6 @@
 package com.speedment.runtime.join.internal.component.stream.sql;
 
 import com.speedment.common.function.Function10;
-import com.speedment.common.function.Function9;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -26,7 +25,6 @@ import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.internal.component.stream.SqlAdapterMapper;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.join.trait.HasCreateJoin10;
-import com.speedment.runtime.join.trait.HasCreateJoin9;
 
 import java.sql.ResultSet;
 import java.util.List;

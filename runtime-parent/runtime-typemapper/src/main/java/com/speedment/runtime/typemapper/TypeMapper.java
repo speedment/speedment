@@ -110,20 +110,25 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
             case "boolean" : return Category.BOOLEAN;
             case "char"    : return Category.CHAR;
             case "java.lang.String" : return Category.STRING;
-            default : {
-                if (type instanceof Class<?>) {
-                    final Class<?> clazz = (Class<?>) type;
-                    if (Enum.class.isAssignableFrom(clazz)) {
-                        return Category.ENUM;
-                    } else if (Comparable.class.isAssignableFrom(clazz)) {
-                        return Category.COMPARABLE;
-                    }
-                }
-            }
+            default :
+                Category x = mapToDefault(type);
+                if (x != null) return x;
         }
         return Category.REFERENCE;
     }
-    
+
+    default Category mapToDefault(Type type) {
+        if (type instanceof Class<?>) {
+            final Class<?> clazz = (Class<?>) type;
+            if (Enum.class.isAssignableFrom(clazz)) {
+                return Category.ENUM;
+            } else if (Comparable.class.isAssignableFrom(clazz)) {
+                return Category.COMPARABLE;
+            }
+        }
+        return null;
+    }
+
     /**
      * Converts a value from the database domain to the java domain.
      *

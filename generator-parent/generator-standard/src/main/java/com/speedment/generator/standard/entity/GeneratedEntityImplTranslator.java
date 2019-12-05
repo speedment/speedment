@@ -21,10 +21,12 @@ import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
-import com.speedment.generator.standard.util.ForeignKeyUtil;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.standard.util.FkHolder;
+import com.speedment.generator.standard.util.ForeignKeyUtil;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
@@ -48,8 +50,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedEntityImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    public GeneratedEntityImplTranslator(Table table) {
-        super(table, Class::of);
+    public GeneratedEntityImplTranslator(Injector injector, Table table) {
+        super(injector, table, Class::of);
     }
 
     @Override
@@ -67,87 +69,13 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                     .add(getSupport().entityType())
                     .add(Constructor.of().protected_())
             )
-            
-            /*
-             * Getters
-             */
-            .forEveryColumn((clazz, col) -> {
-                final Type retType = getterReturnType(typeMappers, col);
-                final String getter;
-                if (usesOptional(col)) {
-                    final String varName = getSupport().variableName(col);
-                    if (retType.getTypeName().equals(Optional.class.getName())) {
-                        getter = "Optional.ofNullable(" + varName + ")";
-                    } else {
-                        file.add(Import.of(OptionalUtil.class));
-                        getter = "OptionalUtil.ofNullable(" + varName + ")";
-                    }
-                } else {
-                    getter = getSupport().variableName(col);
-                }
-                clazz
-                    .add(fieldFor(col).private_())
-                    .add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
-                        .public_().add(OVERRIDE)
-                        .add("return " + getter + ";"));
-            })
-            
-            /*
-             * Setters
-             */
-            .forEveryColumn((clazz, col) -> 
-                clazz
-                    .add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
-                        .public_()
-                        .add(OVERRIDE)
-                        .add(fieldFor(col))
-                        .add("this." + getSupport().variableName(col) + " = " + getSupport().variableName(col) + ";")
-                        .add("return this;"))
-            )
-            
-            /*
-             * Finders
-             */
-            .forEveryColumn((clazz, col) -> {
-                ForeignKeyUtil.getForeignKey(
-                    getSupport().tableOrThrow(), col
-                ).ifPresent(fkc -> {
-                    final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
-                    final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
-                    
-                    file.add(Import.of(fuSupport.entityType()));
 
-                    final String isPresentName = usesOptional(col) ? ".isPresent()" : " != null";
-                    final String getterName = optionalGetterName(typeMappers, col).orElse("");
-                    
-                    clazz.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col), 
-                        col.isNullable() 
-                            ? DefaultType.optional(fuSupport.entityType()) 
-                            : fuSupport.entityType())
-                        .public_()
-                        .add(DefaultAnnotationUsage.OVERRIDE)
-                        .add(Field.of("foreignManager", SimpleParameterizedType.create(
-                            Manager.class, fuSupport.entityType()
-                        )))
-                        .add(
-                            col.isNullable() ?
-                                "if (" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + "()" + isPresentName + ") " + block(
-                                    "return foreignManager.stream().filter(" + fuSupport.entityName() + 
-                                    "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
-                                    ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
-                                    "()" + getterName + ")).findAny();"
-                                ) + " else " + block(
-                                    "return Optional.empty();"
-                                )
-                                :
-                                "return foreignManager.stream().filter(" + fuSupport.entityName() + 
-                                    "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
-                                    ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
-                                    "()" + getterName + ")).findAny().orElse(null);"
-                        )
-                    );
-                });
-            })
+            /*
+             * Getters, setters and findersGeneratedEntityTranslator.java
+             */
+            .forEveryColumn((clazz, col) -> addGetterTo(file, clazz, col))
+            .forEveryColumn(this::addSetterTo)
+            .forEveryColumn((clazz, col) -> addFindersTo(file, clazz, col))
             
             // We need to make it POST_MAKE because other plugins might add fields
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> 
@@ -158,6 +86,86 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             )
             .build();
 
+    }
+
+    private void addFindersTo(File file, Class clazz, Column col) {
+        ForeignKeyUtil.getForeignKey(
+            getSupport().tableOrThrow(), col
+        ).ifPresent(fkc -> {
+            final FkHolder fu = new FkHolder(injector(), fkc.getParentOrThrow());
+            final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
+
+            file.add(Import.of(fuSupport.entityType()));
+
+            final String isPresentName = usesOptional(col) ? ".isPresent()" : " != null";
+            final String getterName = optionalGetterName(typeMappers(), col).orElse("");
+
+            clazz.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col),
+                col.isNullable()
+                    ? DefaultType.optional(fuSupport.entityType())
+                    : fuSupport.entityType())
+                .public_()
+                .add(DefaultAnnotationUsage.OVERRIDE)
+                .add(Field.of("foreignManager", SimpleParameterizedType.create(
+                    Manager.class, fuSupport.entityType()
+                )))
+                .add(
+                    col.isNullable() ?
+                        "if (" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + "()" + isPresentName + ") " + block(
+                            "return foreignManager.stream().filter(" + fuSupport.entityName() +
+                            "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) +
+                            ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) +
+                            "()" + getterName + ")).findAny();"
+                        ) + " else " + block(
+                            "return Optional.empty();"
+                        )
+                        :
+                        "return foreignManager.stream().filter(" + fuSupport.entityName() +
+                            "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) +
+                            ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) +
+                            "()" + getterName + ")).findAny().orElse(null);"
+                )
+            );
+        }
+    );
+    }
+
+    private Class addSetterTo(Class clazz, Column col) {
+        requireNonNull(clazz);
+        requireNonNull(col);
+
+        return clazz
+            .add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
+                .public_()
+                .add(OVERRIDE)
+                .add(fieldFor(col))
+                .add("this." + getSupport().variableName(col) + " = " + getSupport().variableName(col) + ";")
+                .add("return this;"));
+    }
+
+    private void addGetterTo(File file, Class clazz, Column col) {
+        requireNonNull(file);
+        requireNonNull(clazz);
+        requireNonNull(col);
+
+        final Type retType = getterReturnType(typeMappers(), col);
+        final String getter;
+        if (usesOptional(col)) {
+            final String varName = getSupport().variableName(col);
+            if (retType.getTypeName().equals(Optional.class.getName())) {
+                getter = "Optional.ofNullable(" + varName + ")";
+            } else {
+                file.add(Import.of(OptionalUtil.class));
+                getter = "OptionalUtil.ofNullable(" + varName + ")";
+            }
+        } else {
+            getter = getSupport().variableName(col);
+        }
+        clazz
+            .add(fieldFor(col).private_())
+            .add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
+                .public_().add(OVERRIDE)
+                .add("return " + getter + ";"));
     }
 
     private Method toStringMethod(File file) {
@@ -200,7 +208,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + getSupport().typeName(c);
-            final Type type = typeMappers.get(c).getJavaType(c);
+            final Type type = typeMappers().get(c).getJavaType(c);
             if (usesOptional(c) || !DefaultType.isPrimitive(type)) {
                 method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) { return false; }");
             } else {
@@ -222,7 +230,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
 
             final StringBuilder str = new StringBuilder();
             str.append("hash = 31 * hash + ");
-            final Type type = typeMappers.get(c).getJavaType(c);
+            final Type type = typeMappers().get(c).getJavaType(c);
 
             if (!usesOptional(c) && DefaultType.isPrimitive(type)) {
                 str.append(DefaultType.wrapperFor(type).getSimpleName());

@@ -30,7 +30,7 @@ import static com.speedment.runtime.core.internal.stream.builder.action.Standard
 public final class LongBoxedAction extends Action<LongStream, Stream<Long>> {
 
     public LongBoxedAction() {
-        super(s -> s.boxed(), Stream.class, BOXED);
+        super(LongStream::boxed, Stream.class, BOXED);
     }
 
 }

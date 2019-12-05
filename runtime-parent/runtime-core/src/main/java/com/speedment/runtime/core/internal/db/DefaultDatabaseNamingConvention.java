@@ -27,9 +27,9 @@ import java.util.Set;
  */
 public final class DefaultDatabaseNamingConvention extends AbstractDatabaseNamingConvention {
 
-    private final static String DEFAULT_ENCLOSER = "`",
-            DEFAULT_QUOTE = "'",
-            DEFAULT_DELIMITER = ".";
+    private static final String DEFAULT_ENCLOSER = "`";
+    private static final String DEFAULT_QUOTE = "'";
+    private static final String DEFAULT_DELIMITER = ".";
 
     @Override
     public String fullNameOf(String schemaName, String tableName, String columnName) {

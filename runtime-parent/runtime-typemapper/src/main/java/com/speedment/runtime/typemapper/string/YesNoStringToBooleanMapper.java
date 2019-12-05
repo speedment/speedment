@@ -51,6 +51,10 @@ public final class YesNoStringToBooleanMapper implements TypeMapper<String, Bool
 
     @Override
     public String toDatabaseType(Boolean value) {
-        return value == null ? null : (value ? "yes" : "no");
+        if (value == null) {
+            return null;
+        } else {
+            return value ? "yes" : "no";
+        }
     }
 }

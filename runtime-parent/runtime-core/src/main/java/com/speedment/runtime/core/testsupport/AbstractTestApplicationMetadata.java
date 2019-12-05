@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author  Emil Forslund
  * @since   3.0.0
+ * @deprecated This class should be replaced
  * 
  * This is a temporary support class that has been replaced in runtime-application.
  * Once the module system is reworked, this class should go away.

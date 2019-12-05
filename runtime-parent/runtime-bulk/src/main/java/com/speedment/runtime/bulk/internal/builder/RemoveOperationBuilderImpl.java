@@ -19,7 +19,6 @@ package com.speedment.runtime.bulk.internal.builder;
 import com.speedment.runtime.bulk.BulkOperation.Builder;
 import com.speedment.runtime.bulk.Operation;
 import com.speedment.runtime.bulk.internal.BulkOperationBuilder;
-import com.speedment.runtime.bulk.internal.operation.AbstractOperation;
 import com.speedment.runtime.bulk.internal.operation.RemoveOperationImpl;
 import com.speedment.runtime.core.manager.Manager;
 import java.util.ArrayList;

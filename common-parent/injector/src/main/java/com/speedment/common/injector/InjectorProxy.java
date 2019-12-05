@@ -187,7 +187,7 @@ public interface InjectorProxy {
      * @exception ExceptionInInitializerError if the initialization
      * provoked by this method fails.
      */
-    Object invoke(Method method, Object obj, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+    Object invoke(Method method, Object obj, Object... args) throws IllegalAccessException, InvocationTargetException;
 
     /**
      * Returns a {@code Predicate} that will evaluate to true iff

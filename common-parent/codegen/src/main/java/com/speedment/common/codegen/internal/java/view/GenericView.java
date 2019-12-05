@@ -43,15 +43,17 @@ public final class GenericView implements Transform<Generic, String> {
 			return Optional.of(
 				model.getLowerBound().orElse("") +
 				gen.onEach(model.getUpperBounds()).collect(joinIfNotEmpty("&", 
-						model.getLowerBound().isPresent()
-							? model.getBoundType() == Generic.BoundType.EXTENDS
-								? " extends "
-								: " super "
-						: "", 
+						model.getLowerBound().isPresent() ? boundsType(model) : "",
 						""
 					)
 				)
 			);
 		}
+	}
+
+	private String boundsType(Generic model) {
+		return model.getBoundType() == Generic.BoundType.EXTENDS
+			? " extends "
+			: " super ";
 	}
 }

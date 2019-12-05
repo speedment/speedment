@@ -25,7 +25,6 @@ import com.speedment.generator.translator.TranslatorKey;
 import com.speedment.generator.translator.component.function.GenerateClass;
 import com.speedment.generator.translator.component.function.GenerateEnum;
 import com.speedment.generator.translator.component.function.GenerateInterface;
-import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
@@ -225,12 +224,10 @@ public interface CodeGenerationComponent {
      * @param key       the key
      * @return          a Stream of newly created {@code Translator Translators} 
      *                  for the given Document
-     * 
-     * @throws SpeedmentTranslatorException  if the specified translator did not 
-     *                                      exist
+     *
      */
     default <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> Translator<DOC, T>
-    findTranslator(DOC document, TranslatorKey<DOC, T> key) throws SpeedmentTranslatorException {
+    findTranslator(DOC document, TranslatorKey<DOC, T> key) {
         return CodeGenerationComponent.this.findTranslator(document, key.getTranslatedType(), key.getKey());
     }
 
@@ -246,12 +243,9 @@ public interface CodeGenerationComponent {
      * @param key        the key
      * @return           the newly created {@code Translator Translators} for the 
      *                   given Document
-     * 
-     * @throws SpeedmentTranslatorException  if the specified translator did not 
-     *                                      exist
      */
     <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> Translator<DOC, T> 
-    findTranslator(DOC document, Class<T> modelType, String key) throws SpeedmentTranslatorException;
+    findTranslator(DOC document, Class<T> modelType, String key);
     
     /**
      * Returns a stream over the currently installed translator keys.

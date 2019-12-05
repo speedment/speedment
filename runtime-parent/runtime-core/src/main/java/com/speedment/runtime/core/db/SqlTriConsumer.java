@@ -19,7 +19,6 @@ package com.speedment.runtime.core.db;
 import com.speedment.common.function.TriConsumer;
 
 import java.sql.SQLException;
-import java.util.function.BiConsumer;
 
 import static java.util.Objects.requireNonNull;
 

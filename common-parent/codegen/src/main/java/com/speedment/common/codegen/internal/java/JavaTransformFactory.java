@@ -18,7 +18,6 @@ package com.speedment.common.codegen.internal.java;
 
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.TransformFactory;
-import com.speedment.common.codegen.internal.TransformFactoryImpl;
 import com.speedment.common.codegen.internal.java.view.*;
 import com.speedment.common.codegen.internal.java.view.value.*;
 import com.speedment.common.codegen.model.*;

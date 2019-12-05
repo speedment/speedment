@@ -45,7 +45,11 @@ public final class PrimitiveIntegerZeroOneToBooleanMapper
 
     @Override
     public Integer toDatabaseType(Boolean value) {
-        return value == null ? null : value ? 1 : 0;
+        if (value == null) {
+            return null;
+        } else {
+            return value ? 1 : 0;
+        }
     }
 
     @Override

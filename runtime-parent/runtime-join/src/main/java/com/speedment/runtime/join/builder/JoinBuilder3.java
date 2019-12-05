@@ -53,9 +53,6 @@ public interface JoinBuilder3<T0, T1, T2>
     @Override
     <T3> AfterJoin<T0, T1, T2, T3> rightJoinOn(HasComparableOperators<T3, ?> joinedField);
 
-//                @Override
-//                <T3> AfterJoin<T0, T1, T2, T3> fullOuterJoinOn(HasComparableOperators<T3, ?> joinedField);
-
     @Override
     <T3> JoinBuilder4<T0, T1, T2, T3> crossJoin(TableIdentifier<T3> joinedTable);
 

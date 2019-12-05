@@ -67,13 +67,13 @@ implements JavaClassTranslator<DOC, T> {
 
     @Override
     public File get() {
-        final T generated = creator.generate(document);
+        final T generatedClass = creator.generate(document);
         final File file = File.of(getSupport().baseDirectoryName() + "/"
             + (isInGeneratedPackage() ? "generated/" : "")
-            + generated.getName() + ".java"
+            + generatedClass.getName() + ".java"
         );
 
-        file.add(generated);
+        file.add(generatedClass);
         file.call(new AutoImports(getCodeGenerator().getDependencyMgr()));
         file.call(new AlignTabs<>());
         return file;

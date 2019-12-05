@@ -46,7 +46,6 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -65,8 +64,8 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
  */
 public final class ConnectController implements Initializable {
     
-    private final static String DEFAULT_HOST = "127.0.0.1";
-    private final static String DEFAULT_USER = "root";
+    private static final String DEFAULT_HOST = "127.0.0.1";
+    private static final String DEFAULT_USER = "root";
     
     @Inject public UserInterfaceComponent ui;
     @Inject public DbmsHandlerComponent dbmsHandler;
@@ -96,24 +95,18 @@ public final class ConnectController implements Initializable {
     @FXML private RowConstraints userRow;
     @FXML private RowConstraints passRow;
 
-    private FilteredList<Node> hostRowChildren;
-    private FilteredList<Node> fileRowChildren;
-    private FilteredList<Node> userRowChildren;
-    private FilteredList<Node> passRowChildren;
-    private FilteredList<Node> dbmsRowChildren;
-    private FilteredList<Node> schemaRowChildren;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        final FilteredList<Node> hostRowChildren = inRow(hostRow);
+        final FilteredList<Node> fileRowChildren = inRow(fileRow);
+        final FilteredList<Node> userRowChildren = inRow(userRow);
+        final FilteredList<Node> passRowChildren = inRow(passRow);
+        final FilteredList<Node> dbmsRowChildren = inRow(dbmsRow);
+        final FilteredList<Node> schemaRowChildren = inRow(schemaRow);
+
         fieldFileBtn.setGraphic(FontAwesome.FOLDER_OPEN.view());
         buttonConnect.setGraphic(FontAwesome.SIGN_IN.view());
-
-        hostRowChildren = inRow(hostRow);
-        fileRowChildren = inRow(fileRow);
-        userRowChildren = inRow(userRow);
-        passRowChildren = inRow(passRow);
-        dbmsRowChildren = inRow(dbmsRow);
-        schemaRowChildren = inRow(schemaRow);
 
         fieldType.setItems(getDbmsTypes()
             .collect(toCollection(FXCollections::observableArrayList))
@@ -214,45 +207,27 @@ public final class ConnectController implements Initializable {
         fieldFile.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
         fieldName.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
 
-        fieldHost.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldHost.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldHost.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldHost));
 
         UnaryOperator<TextFormatter.Change> onlyDigitsFilter = change ->
             change.getText().matches("[0-9]*") ? change : null;
 
         fieldPort.setTextFormatter(new TextFormatter<>(onlyDigitsFilter));
-        fieldPort.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldPort.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldPort.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldPort));
 
-        fieldFile.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldFile.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldFile.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldFile));
 
-        fieldUser.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldUser.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldUser.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldUser));
 
-        fieldName.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldName.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldName.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldName));
 
-        fieldSchema.focusedProperty().addListener((ob, o, n) -> {
-            if(o && fieldSchema.getText().isEmpty()) {
-                recalculateFields.run();
-            }
-        });
+        fieldSchema.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldSchema));
+    }
+
+    private void recalculateOnLostFocusAndEmptyField(Runnable recalculateFields, Boolean oldValue, TextField field) {
+        if (oldValue && field.getText().isEmpty()) {
+            recalculateFields.run();
+        }
     }
 
     private void disableConnectButtonIfAnyFieldIsNotEntered(AtomicReference<DbmsType> dbmsType) {
@@ -282,7 +257,7 @@ public final class ConnectController implements Initializable {
             if (!"".equals(fieldFile.getText().trim())) {
                 final Path path = Paths.get(fieldFile.getText().trim());
 
-                if (Files.exists(path.getParent())) {
+                if (path.getParent().toFile().exists()) {
                     final String parentFolder = path.getParent().toString();
 
                     if (!"".equals(parentFolder)) {
@@ -290,7 +265,7 @@ public final class ConnectController implements Initializable {
                     }
                 }
 
-                if (Files.exists(path)) {
+                if (path.toFile().exists()) {
                     fileChooser.setInitialFileName(fieldFile.getText());
                 }
             }
@@ -313,33 +288,8 @@ public final class ConnectController implements Initializable {
             );
 
             // Create a new Dbms using the settings configured.
-            final DbmsProperty dbms = ui.projectProperty()
-                .mutator().addNewDbms();
-
-            dbms.typeNameProperty().set(dbmsType.get().getName());
-
-            if (type.getConnectionType() == DbmsType.ConnectionType.HOST_AND_PORT) {
-                dbms.ipAddressProperty().set(fieldHost.getText());
-                dbms.portProperty().set(Integer.parseInt(fieldPort.getText()));
-            } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
-                dbms.localPathProperty().set(fieldFile.getText());
-            }
-
-            if (type.hasDatabaseUsers()) {
-                dbms.usernameProperty().set(fieldUser.getText());
-            }
-
-            dbms.nameProperty().set(Optional.of(fieldName.getText())
-                .filter(s -> dbmsType.get().hasDatabaseNames())
-                .filter(s -> !s.isEmpty())
-                .orElseGet(() -> type.getDefaultDbmsName().orElseGet(fieldName::getText)));
-
-            if (!areaConnectionUrl.getText().isEmpty()
-            &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
-                dbms.connectionUrlProperty().setValue(
-                    areaConnectionUrl.getText()
-                );
-            }
+            final DbmsProperty dbms = ui.projectProperty().mutator().addNewDbms();
+            setDbmsProperties(dbmsType, generatedConnUrl, type, dbms);
 
             final String schema = Optional.of(fieldSchema.getText())
                 .filter(s -> dbmsType.get().hasSchemaNames())
@@ -347,20 +297,7 @@ public final class ConnectController implements Initializable {
                 .orElseGet(() -> type.getDefaultSchemaName().orElseGet(dbms::getName));
 
             // Set the default project name to the name of the schema.
-            if (type.hasSchemaNames() || type.hasDatabaseNames()) {
-                ui.projectProperty().nameProperty()
-                    .setValue(schema);
-            } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
-                String filename = Paths.get(fieldFile.getText()).getFileName().toString();
-                if (filename.contains(".")) {
-                    filename = filename.substring(0, filename.lastIndexOf("."));
-                }
-                ui.projectProperty().nameProperty()
-                    .setValue(filename);
-            } else {
-                ui.projectProperty().nameProperty()
-                    .setValue("Demo");
-            }
+            setDefaultProjectName(type, schema);
 
             // Connect to database
             if (cfHelper.loadFromDatabase(dbms, schema)) {
@@ -368,6 +305,47 @@ public final class ConnectController implements Initializable {
                 events.notify(UIEvent.OPEN_MAIN_WINDOW);
             }
         };
+    }
+
+    private void setDbmsProperties(AtomicReference<DbmsType> dbmsType, AtomicReference<String> generatedConnUrl, DbmsType type, DbmsProperty dbms) {
+        dbms.typeNameProperty().set(dbmsType.get().getName());
+
+        if (type.getConnectionType() == DbmsType.ConnectionType.HOST_AND_PORT) {
+            dbms.ipAddressProperty().set(fieldHost.getText());
+            dbms.portProperty().set(Integer.parseInt(fieldPort.getText()));
+        } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
+            dbms.localPathProperty().set(fieldFile.getText());
+        }
+
+        if (type.hasDatabaseUsers()) {
+            dbms.usernameProperty().set(fieldUser.getText());
+        }
+
+        dbms.nameProperty().set(Optional.of(fieldName.getText())
+            .filter(s -> dbmsType.get().hasDatabaseNames())
+            .filter(s -> !s.isEmpty())
+            .orElseGet(() -> type.getDefaultDbmsName().orElseGet(fieldName::getText)));
+
+        if (!areaConnectionUrl.getText().isEmpty() && !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
+            dbms.connectionUrlProperty().setValue(areaConnectionUrl.getText());
+        }
+    }
+
+    private void setDefaultProjectName(DbmsType type, String schema) {
+        if (type.hasSchemaNames() || type.hasDatabaseNames()) {
+            ui.projectProperty().nameProperty()
+                .setValue(schema);
+        } else if (type.getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE) {
+            String filename = Paths.get(fieldFile.getText()).getFileName().toString();
+            if (filename.contains(".")) {
+                filename = filename.substring(0, filename.lastIndexOf('.'));
+            }
+            ui.projectProperty().nameProperty()
+                .setValue(filename);
+        } else {
+            ui.projectProperty().nameProperty()
+                .setValue("Demo");
+        }
     }
 
     private void recalculateConnUrl(AtomicReference<DbmsType> dbmsType, AtomicReference<String> generatedConnUrl) {
@@ -524,12 +502,12 @@ public final class ConnectController implements Initializable {
         }
 
         @Override
-        public Optional<String> getAsString(String key) throws ClassCastException {
+        public Optional<String> getAsString(String key) {
             return get(key).map(String.class::cast);
         }
 
         @Override
-        public OptionalBoolean getAsBoolean(String key) throws ClassCastException {
+        public OptionalBoolean getAsBoolean(String key) {
             return get(key)
                 .map(Boolean.class::cast)
                 .map(OptionalBoolean::of)
@@ -537,7 +515,7 @@ public final class ConnectController implements Initializable {
         }
 
         @Override
-        public OptionalLong getAsLong(String key) throws ClassCastException {
+        public OptionalLong getAsLong(String key) {
             return get(key)
                 .map(Long.class::cast)
                 .map(OptionalLong::of)
@@ -547,7 +525,7 @@ public final class ConnectController implements Initializable {
 
 
         @Override
-        public OptionalDouble getAsDouble(String key) throws ClassCastException {
+        public OptionalDouble getAsDouble(String key) {
             return get(key)
                 .map(Double.class::cast)
                 .map(OptionalDouble::of)
@@ -555,7 +533,7 @@ public final class ConnectController implements Initializable {
         }
 
         @Override
-        public OptionalInt getAsInt(String key) throws ClassCastException {
+        public OptionalInt getAsInt(String key) {
             return get(key)
                 .map(Integer.class::cast)
                 .map(OptionalInt::of)

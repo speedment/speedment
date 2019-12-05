@@ -30,7 +30,7 @@ public interface SqlRunnable {
 
     void run() throws SQLException;
 
-    static <T> SqlRunnable wrap(Runnable inner) {
+    static SqlRunnable wrap(Runnable inner) {
         return requireNonNull(inner)::run;
     }
 }

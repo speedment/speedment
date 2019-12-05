@@ -62,28 +62,54 @@ public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<
 
             switch (inclusion) {
                 case START_EXCLUSIVE_END_EXCLUSIVE :
-                    if (fieldValue == null) return false;
-                    else if (start == null || end == null) return false;
-                    else return !(start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) > 0);
+                    return startExclusiveEndExclusive(start, end, fieldValue);
 
                 case START_EXCLUSIVE_END_INCLUSIVE :
-                    if (fieldValue == null) return start != null && end == null;
-                    else if (start == null || end == null) return false;
-                    else return !(start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) >= 0);
+                    return startExclusiveEndInclusive(start, end, fieldValue);
 
                 case START_INCLUSIVE_END_EXCLUSIVE :
-                    if (fieldValue == null) return start == null && end != null;
-                    else if (start == null || end == null) return false;
-                    return !(start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) > 0);
+                    return startInclusiveEndExclusive(start, end, fieldValue);
 
                 case START_INCLUSIVE_END_INCLUSIVE :
-                    if (fieldValue == null) return start == null || end == null;
-                    else if (start == null || end == null) return false;
-                    return !(start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) >= 0);
+                    return starInclusiveEndInclusive(start, end, fieldValue);
 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
         };
+    }
+
+    private static <V extends Comparable<? super V>> boolean starInclusiveEndInclusive(V start, V end, V fieldValue) {
+        if (fieldValue == null) {
+            return start == null || end == null;
+        } else if (start == null || end == null) {
+            return false;
+        }
+        return !(start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) >= 0);
+    }
+
+    private static <V extends Comparable<? super V>> boolean startInclusiveEndExclusive(V start, V end, V fieldValue) {
+        if (fieldValue == null) {
+            return start == null && end != null;
+        } else if (start == null || end == null) {
+            return false;
+        }
+        return !(start.compareTo(fieldValue) <= 0 && end.compareTo(fieldValue) > 0);
+    }
+
+    private static <V extends Comparable<? super V>> boolean startExclusiveEndInclusive(V start, V end, V fieldValue) {
+        if (fieldValue == null) {
+            return start != null && end == null;
+        } else if (start == null || end == null) {
+            return false;
+        } else return !(start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) >= 0);
+    }
+
+    private static <V extends Comparable<? super V>> boolean startExclusiveEndExclusive(V start, V end, V fieldValue) {
+        if (fieldValue == null) {
+            return false;
+        } else if (start == null || end == null) {
+            return false;
+        } else return !(start.compareTo(fieldValue) < 0 && end.compareTo(fieldValue) > 0);
     }
 
     @Override

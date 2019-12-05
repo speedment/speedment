@@ -36,10 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collector;
 import static java.util.stream.Collectors.toList;
 
@@ -176,7 +173,7 @@ public final class FieldCollectors {
         }
         else {
             @SuppressWarnings("unchecked")
-            Function<A, A> downstreamFinisher = (Function<A, A>) downstream.finisher();
+            UnaryOperator<A> downstreamFinisher = (UnaryOperator<A>) downstream.finisher();
             Function<Map<K, A>, M> finisher = intermediate -> {
                 intermediate.replaceAll((k, v) -> downstreamFinisher.apply(v));
                 @SuppressWarnings("unchecked")

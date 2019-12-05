@@ -83,7 +83,6 @@ public final class SqlStreamOptimizerComponentImpl implements SqlStreamOptimizer
                 LOGGER_STREAM_OPTIMIZER.debug("Candidate: %-30s : %s ", candidate.getClass().getSimpleName(), candidateMetric);
             }
             if (METRICS_COMPARATOR.compare(candidateMetric, metric) > 0) {
-//            if (candidateMetric.getPipelineReductions() > metric.getPipelineReductions()) {
                 metric = candidateMetric;
                 result = candidate;
                 if (metric.getPipelineReductions() == Integer.MAX_VALUE) {

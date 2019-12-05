@@ -73,9 +73,9 @@ public final class ProjectProblemController implements Initializable {
             }
         });
 
-        btnClose.setOnAction( (ev) -> closeWindow() );
+        btnClose.setOnAction(ev -> closeWindow() );
         
-        btnProceed.setOnAction( (ev) -> closeWindowAndGenerate());
+        btnProceed.setOnAction(ev -> closeWindowAndGenerate());
         btnProceed.disableProperty().bind(hasErrors);
         //We need to attach a scene listener somewhere, so this button will do
         btnProceed.sceneProperty().addListener(sceneChangeListener());
@@ -86,11 +86,11 @@ public final class ProjectProblemController implements Initializable {
             if (oldVal == null && newVal != null) {
                 final Window window = newVal.windowProperty().get();
                 if (window != null) {
-                    window.setOnCloseRequest((ev) -> closeWindow());
+                    window.setOnCloseRequest(ev -> closeWindow());
                 } else {
-                    newVal.windowProperty().addListener((ob, oldW, newW) -> {
-                        newW.setOnCloseRequest((ev) -> closeWindow());
-                    });
+                    newVal.windowProperty().addListener((ob, oldW, newW) ->
+                        newW.setOnCloseRequest(ev -> closeWindow())
+                    );
                 }
             }
         };
@@ -103,13 +103,13 @@ public final class ProjectProblemController implements Initializable {
                 super.updateItem(item, empty);
                 if (item != null) {
                     setText(item.getLevel() + " - " + item.getTitle());
-                    switch (item.getLevel()) {
-                        case ERROR:
-                            setTextFill(Color.RED);
-                            break;
-                        case WARNING:
-                            setTextFill(Color.DARKORANGE);
-                            break;
+                    Issue.Level i = item.getLevel();
+                    if (i == Issue.Level.ERROR) {
+                        setTextFill(Color.RED);
+
+                    } else if (i == Issue.Level.WARNING) {
+                        setTextFill(Color.DARKORANGE);
+
                     }
                 } else {
                     setText("");

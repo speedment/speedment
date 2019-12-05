@@ -18,11 +18,11 @@ package com.speedment.common.mapstream.util;
 
 import com.speedment.common.mapstream.MapStream;
 
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 /**
@@ -46,12 +46,11 @@ public final class CollectorUtil {
      * @return         a {@link MapStream} grouped by key
      */
     public static <T, C> Collector<T, ?, MapStream<C, List<T>>> groupBy(Function<T, C> grouper) {
-        return new CollectorImpl<>(
+        return Collector.of(
             () -> new GroupHolder<>(grouper),
             GroupHolder::add,
             GroupHolder::merge,
-            GroupHolder::finisher,
-            Collections.emptySet()
+            GroupHolder::finisher
         );
     }
 
@@ -84,68 +83,6 @@ public final class CollectorUtil {
 
         public MapStream<C, List<T>> finisher() {
             return MapStream.of(elements);
-        }
-    }
-
-    /**
-     * Simple implementation class for {@code Collector}.
-     *
-     * @param <T> the type of elements to be collected
-     * @param <A> the type of the intermediate holder
-     * @param <R> the type of the result
-     */
-    static class CollectorImpl<T, A, R> implements Collector<T, A, R> {
-
-        private final Supplier<A> supplier;
-        private final BiConsumer<A, T> accumulator;
-        private final BinaryOperator<A> combiner;
-        private final Function<A, R> finisher;
-        private final Set<Collector.Characteristics> characteristics;
-
-        CollectorImpl(Supplier<A> supplier,
-            BiConsumer<A, T> accumulator,
-            BinaryOperator<A> combiner,
-            Function<A, R> finisher,
-            Set<Collector.Characteristics> characteristics) {
-            this.supplier = supplier;
-            this.accumulator = accumulator;
-            this.combiner = combiner;
-            this.finisher = finisher;
-            this.characteristics = characteristics;
-        }
-
-        @SuppressWarnings("unchecked")
-        CollectorImpl(Supplier<A> supplier,
-            BiConsumer<A, T> accumulator,
-            BinaryOperator<A> combiner,
-            Set<Collector.Characteristics> characteristics) {
-
-            this(supplier, accumulator, combiner, i -> (R) i, characteristics);
-        }
-
-        @Override
-        public BiConsumer<A, T> accumulator() {
-            return accumulator;
-        }
-
-        @Override
-        public Supplier<A> supplier() {
-            return supplier;
-        }
-
-        @Override
-        public BinaryOperator<A> combiner() {
-            return combiner;
-        }
-
-        @Override
-        public Function<A, R> finisher() {
-            return finisher;
-        }
-
-        @Override
-        public Set<Collector.Characteristics> characteristics() {
-            return characteristics;
         }
     }
 

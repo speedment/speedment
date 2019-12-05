@@ -59,7 +59,7 @@ public interface Updater<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY>
      * (e.g. SQLException)
      */
     @Override
-    ENTITY apply(ENTITY entity) throws SpeedmentException;
+    ENTITY apply(ENTITY entity);
 
     /**
      * Updates the entity in the data store. The specified instance might be

@@ -18,6 +18,7 @@ package com.speedment.generator.standard.manager;
 
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Table;
 
@@ -25,11 +26,10 @@ import com.speedment.runtime.config.Table;
  *
  * @author Emil Forslund
  */
-public final class SqlAdapterTranslator
-extends AbstractEntityAndManagerTranslator<Class> {
+public final class SqlAdapterTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    public SqlAdapterTranslator(Table table) {
-        super(table, Class::of);
+    public SqlAdapterTranslator(Injector injector, Table table) {
+        super(injector, table, Class::of);
     }
 
     @Override

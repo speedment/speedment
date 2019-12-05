@@ -35,8 +35,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 3.0.0
  */
 final class PropertyLayout extends GridPane {
-    private final static int MIN_LABEL_WIDTH = 150;
-    private final static int MIN_EDITOR_WIDTH = 450;
+    private static final int MIN_LABEL_WIDTH = 150;
+    private static final int MIN_EDITOR_WIDTH = 450;
     private final AtomicInteger index;
     private final Set<PropertyEditor.Item> items;
 
@@ -54,8 +54,7 @@ final class PropertyLayout extends GridPane {
         getColumnConstraints().add(1, new ColumnConstraints(MIN_EDITOR_WIDTH, USE_COMPUTED_SIZE, Double.MAX_VALUE, Priority.ALWAYS, HPos.LEFT, true));
         getStyleClass().add("properties-layout");
 
-        properties.stream().forEachOrdered( i -> addItem(i) );
-
+        properties.stream().forEachOrdered(this::addItem);
     }
 
     /**

@@ -85,7 +85,7 @@ public interface Document {
      * @return     the mapped value or an empty {@code OptionalBoolean}
      * @throws ClassCastException  if the mapped value was not a {@code Boolean}
      */
-    OptionalBoolean getAsBoolean(String key) throws ClassCastException;
+    OptionalBoolean getAsBoolean(String key);
 
     /**
      * Returns the {@code long} mapped to the specified key, or an empty 
@@ -97,7 +97,7 @@ public interface Document {
      * @return     the mapped value or an empty {@code OptionalLong}
      * @throws ClassCastException  if the mapped value was not a {@code Long}
      */
-    OptionalLong getAsLong(String key) throws ClassCastException;
+    OptionalLong getAsLong(String key);
 
     /**
      * Returns the {@code double} mapped to the specified key, or an empty 
@@ -109,7 +109,7 @@ public interface Document {
      * @return     the mapped value or an empty {@code OptionalDouble}
      * @throws ClassCastException  if the mapped value was not a {@code Double}
      */
-    OptionalDouble getAsDouble(String key) throws ClassCastException;
+    OptionalDouble getAsDouble(String key);
 
     /**
      * Returns the {@code int} mapped to the specified key, or an empty 
@@ -121,7 +121,7 @@ public interface Document {
      * @return     the mapped value or an empty {@code OptionalInt}
      * @throws ClassCastException  if the mapped value was not a {@code Integer}
      */
-    OptionalInt getAsInt(String key) throws ClassCastException;
+    OptionalInt getAsInt(String key);
 
     /**
      * Returns the {@code String} mapped to the specified key, or an empty 
@@ -133,7 +133,7 @@ public interface Document {
      * @return     the mapped value or an empty {@code Optional}
      * @throws ClassCastException  if the mapped value was not a {@code String}
      */
-    Optional<String> getAsString(String key) throws ClassCastException;
+    Optional<String> getAsString(String key);
 
     /**
      * Stores the specified value on the specified key in this document. If a 

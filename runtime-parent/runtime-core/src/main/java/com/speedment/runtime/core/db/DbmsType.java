@@ -16,11 +16,6 @@
  */
 package com.speedment.runtime.core.db;
 
-import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-
-import java.util.Optional;
-import java.util.Set;
-
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms
  * types. By implementing a new {@code DbmsType} and perhaps a new

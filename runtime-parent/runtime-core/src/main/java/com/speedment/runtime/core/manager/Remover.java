@@ -48,7 +48,7 @@ public interface Remover<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY>
      * (e.g. SQLException)
      */
     @Override
-    ENTITY apply(ENTITY entity) throws SpeedmentException;
+    ENTITY apply(ENTITY entity);
 
     /**
      * Removes the entity from the data store. The specified instance might be

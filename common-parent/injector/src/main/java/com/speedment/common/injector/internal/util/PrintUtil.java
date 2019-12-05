@@ -23,10 +23,8 @@ package com.speedment.common.injector.internal.util;
  */
 public final class PrintUtil {
 
-    public static String horizontalLine() {
-        return "+---------------------------------------------------------------------------------+";
-    }
-    
+    public static final String HORIZONTAL_LINE = "+---------------------------------------------------------------------------------+";
+
     public static String limit(String in, int length) {
         if (in.length() < length) {
             return in;

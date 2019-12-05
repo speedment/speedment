@@ -29,7 +29,7 @@ import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
 @FunctionalInterface
 public interface LongCountTerminator<ENTITY> extends LongTerminator {
 
-    <T> long apply(
+    long apply(
         SqlStreamOptimizerInfo<ENTITY> info,
         SqlStreamTerminator<ENTITY> sqlStreamTerminator,
         LongPipeline pipeline

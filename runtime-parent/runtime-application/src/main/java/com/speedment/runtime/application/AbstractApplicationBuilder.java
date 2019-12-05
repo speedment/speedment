@@ -75,7 +75,7 @@ public abstract class AbstractApplicationBuilder<
         BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
 > implements ApplicationBuilder<APP, BUILDER> {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(
+    private static final Logger LOGGER = LoggerManager.getLogger(
         LogType.APPLICATION_BUILDER.getLoggerName());
     
     private final InjectorBuilder injectorBuilder;
@@ -513,16 +513,6 @@ public abstract class AbstractApplicationBuilder<
                 JvmVersion.getImplementationTitle(), JvmVersion.getImplementationVersion(), JvmVersion.getImplementationVendor()
             );
 
-
-
-//            final Package package_ = Runtime.class.getPackage();
-//            final String javaMsg = package_.getSpecificationTitle()
-//                + " " + package_.getSpecificationVersion()
-//                + " by " + package_.getSpecificationVendor()
-//                + ". Implementation "
-//                + package_.getImplementationVendor()
-//                + " " + package_.getImplementationVersion()
-//                + " by " + package_.getImplementationVendor();
             LOGGER.info(javaMsg);
 
             final String versionString = JvmVersion.getImplementationVersion();
@@ -572,10 +562,8 @@ public abstract class AbstractApplicationBuilder<
         if (majorVersion < 8) {
             return Optional.of(Boolean.FALSE);
         }
-        if (majorVersion == 8) {
-            if (securityVersion < 40) {
-                return Optional.of(Boolean.FALSE);
-            }
+        if (majorVersion == 8 && securityVersion < 40) {
+            return Optional.of(Boolean.FALSE);
         }
         return Optional.of(Boolean.TRUE);
     }

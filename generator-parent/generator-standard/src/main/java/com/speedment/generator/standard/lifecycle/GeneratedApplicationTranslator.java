@@ -18,6 +18,7 @@ package com.speedment.generator.standard.lifecycle;
 
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.application.AbstractApplicationBuilder;
 import com.speedment.runtime.config.Project;
@@ -31,8 +32,8 @@ import com.speedment.runtime.core.Speedment;
  */
 public final class GeneratedApplicationTranslator extends AbstractJavaClassTranslator<Project, Interface> {
 
-    public GeneratedApplicationTranslator(Project project) {
-        super(project, Interface::of);
+    public GeneratedApplicationTranslator(Injector injector, Project project) {
+        super(injector, project, Interface::of);
     }
 
     @Override
@@ -48,9 +49,9 @@ public final class GeneratedApplicationTranslator extends AbstractJavaClassTrans
     @Override
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
-            .forEveryProject((clazz, project) -> {
-                clazz.public_().add(Speedment.class);
-            }).build();
+            .forEveryProject((clazz, project) ->
+                clazz.public_().add(Speedment.class)
+            ).build();
     }
 
     @Override

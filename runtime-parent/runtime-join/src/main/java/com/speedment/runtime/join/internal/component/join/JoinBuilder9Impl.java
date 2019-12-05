@@ -56,11 +56,6 @@ final class JoinBuilder9Impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.RIGHT_JOIN, joinedField));
     }
 
-//    @Override
-//    public <T6> AfterJoin<T1, T2, T3, T4, T5, T6> fullOuterJoinOn(HasComparableOperators<T6, ?> joinedField) {
-//        return new AfterJoinImpl<>(addStageBeanOf(JoinType.FULL_OUTER_JOIN, joinedField));
-//    }
-
     @Override
     public <T9> JoinBuilder10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> crossJoin(TableIdentifier<T9> joinedTable) {
         return new JoinBuilder10Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
@@ -80,7 +75,6 @@ final class JoinBuilder9Impl<T0, T1, T2, T3, T4, T5, T6, T7, T8>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(Function9<T0, T1, T2, T3, T4, T5, T6, T7, T8, T> constructor) {
         requireNonNull(constructor);
-//        assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
             stages,

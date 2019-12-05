@@ -26,14 +26,12 @@ import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
@@ -189,11 +187,9 @@ final class TranslatorSupportTest extends SimpleModel {
     }
 
     @Test
-    @Disabled
     void testFullyQualifiedTypeName_String_String() {
-        // Todo: implement this test
-        String result = instance.fullyQualifiedTypeName("subPath", "filePrefix");
-        fail("The test case is a prototype.");
+        final String result = instance.fullyQualifiedTypeName("subPath", "filePrefix");
+        assertEquals(PATH + ".subPath." + "FilePrefix" + instance.typeName(table), result);
     }
 
     @Test

@@ -352,7 +352,7 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public Stream<T> unordered() {
-        return this; // Todo: may convey to singletonSpliterator()
+        return this;
     }
 
     @Override

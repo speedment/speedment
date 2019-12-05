@@ -19,10 +19,10 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasComment;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -44,9 +44,9 @@ public interface HasCommentView<M extends HasComment<M>> extends Transform<M, St
      */
     default String renderComment(Generator gen, M model) {
         return model.getComment().map(comment -> 
-            Stream.of(comment.split(nl()))
+            Stream.of(comment.split(Formatting.nl()))
                 .map(row -> "// " + row)
-                .collect(joining(nl()))
+                .collect(joining(Formatting.nl()))
         ).orElse("");
     }
 }

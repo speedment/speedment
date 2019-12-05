@@ -24,9 +24,7 @@ import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.provider.BaseDocument;
 import com.speedment.runtime.config.trait.HasEnabled;
@@ -34,6 +32,7 @@ import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.component.InfoComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -70,12 +69,20 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
     private final Function<String, T> mainModelConstructor;
     private final List<BiConsumer<File, Builder<T>>> listeners;
 
-    @Inject public Generator generator;
-    @Inject public InfoComponent infoComponent;
-    @Inject public TypeMapperComponent typeMappers;
-    @Inject public Injector injector;
+    private final Generator generator;
+    private final InfoComponent infoComponent;
+    private final TypeMapperComponent typeMappers;
+    private final Injector injector;
 
-    protected AbstractJavaClassTranslator(D document, Function<String, T> mainModelConstructor) {
+    protected AbstractJavaClassTranslator(
+        final Injector injector,
+        final D document,
+        final Function<String, T> mainModelConstructor
+    ) {
+        this.injector             = requireNonNull(injector);
+        this.generator            = injector.getOrThrow(Generator.class);
+        this.infoComponent        = injector.getOrThrow(InfoComponent.class);
+        this.typeMappers          = injector.getOrThrow(TypeMapperComponent.class);
         this.document             = requireNonNull(document);
         this.mainModelConstructor = requireNonNull(mainModelConstructor);
         this.listeners            = new CopyOnWriteArrayList<>();
@@ -323,11 +330,7 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
                             // map the stream so that every value in the list
                             // becomes an element of the stream.
                             .filterValue(List.class::isInstance)
-                            .mapValue(v -> {
-                                @SuppressWarnings("unchecked")
-                                final List<Map<String, Object>> val = (List<Map<String, Object>>) v;
-                                return val;
-                            })
+                            .mapValue(AbstractJavaClassTranslator::castToListOfMap)
                             .flatMapValue(List::stream)
 
                             // The foreignKeys-property is special in that only
@@ -410,7 +413,6 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
         private void processDocument(T model, Phase phase, String key, Document doc) {
             // Recursively invoke on the children
             if (aboveTable.contains(key)) {
-                /*System.out.println(model + " " + phase + " " + key);*/
                 namedChildren(doc)
                     .forEach(e ->
                         // Tables and below has already been handled.
@@ -426,6 +428,12 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         }
 
+    }
+
+    private static List<Map<String, Object>> castToListOfMap(Object v) {
+        @SuppressWarnings("unchecked")
+        final List<Map<String, Object>> val = (List<Map<String, Object>>)v;
+        return val;
     }
 
     protected final Builder<T> newBuilder(File file, String className) {
@@ -458,33 +466,12 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         columns().forEachOrdered(c -> {
             switch (mode) {
-                case FIELD: {
-                    constructor.add(
-                        "this." + support.variableName(c) + 
-                        " = " + support.variableName() + 
-                        "." + GETTER_METHOD_PREFIX + 
-                        support.typeName(c) + "();");
+                case FIELD:
+                    defineField(support, constructor, c);
                     break;
-                }
-                case SETTER: {
-                    if (c.isNullable()) {
-                        constructor.add(
-                            support.variableName() + "."
-                            + GETTER_METHOD_PREFIX + support.typeName(c)
-                            + "().ifPresent(this::"
-                            + SETTER_METHOD_PREFIX + support.typeName(c)
-                            + ");"
-                        );
-                    } else {
-                        constructor.add(
-                            SETTER_METHOD_PREFIX + support.typeName(c)
-                            + "(" + support.variableName()
-                            + ".get" + support.typeName(c)
-                            + "());"
-                        );
-                    }
+                case SETTER:
+                    addSetter(support, constructor, c);
                     break;
-                }
                 default:
                     throw new UnsupportedOperationException(
                         "Unknown mode '" + mode + "'."
@@ -494,7 +481,34 @@ public abstract class AbstractJavaClassTranslator<D extends Document & HasId & H
 
         return constructor;
     }
-    
+
+    private void addSetter(TranslatorSupport<D> support, Constructor constructor, Column c) {
+        if (c.isNullable()) {
+            constructor.add(
+                support.variableName() + "."
+                + GETTER_METHOD_PREFIX + support.typeName(c)
+                + "().ifPresent(this::"
+                + SETTER_METHOD_PREFIX + support.typeName(c)
+                + ");"
+            );
+        } else {
+            constructor.add(
+                SETTER_METHOD_PREFIX + support.typeName(c)
+                + "(" + support.variableName()
+                + ".get" + support.typeName(c)
+                + "());"
+            );
+        }
+    }
+
+    private void defineField(TranslatorSupport<D> support, Constructor constructor, Column c) {
+        constructor.add(
+            "this." + support.variableName(c) +
+            " = " + support.variableName() +
+            "." + GETTER_METHOD_PREFIX +
+            support.typeName(c) + "();");
+    }
+
     protected String getGeneratedJavadocMessage() {
         return "\n<p>\nThis file has been automatically generated by " + 
             infoComponent.getTitle() + ". Any changes made to it will be overwritten.";

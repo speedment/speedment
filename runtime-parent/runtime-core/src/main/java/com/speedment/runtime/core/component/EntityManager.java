@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.core.exception.SpeedmentException;
 
 /**
  * An Entity Manager is be used to handle persistence for any Entity. This
@@ -39,7 +38,7 @@ public interface EntityManager  {
      * @param <ENTITY> the type of the Entity
      * @param entity to persist
      */
-    <ENTITY> void persist(ENTITY entity) throws SpeedmentException;
+    <ENTITY> void persist(ENTITY entity);
 
     /**
      * Updates the given Entity and returns a new {@code Optional<Entity>} that
@@ -48,7 +47,7 @@ public interface EntityManager  {
      * @param <ENTITY> the type of the Entity
      * @param entity to update
      */
-    <ENTITY> void update(ENTITY entity) throws SpeedmentException;
+    <ENTITY> void update(ENTITY entity);
 
     /**
      * Updates the given Entity and returns a new {@code Optional<Entity>} that
@@ -57,5 +56,5 @@ public interface EntityManager  {
      * @param <ENTITY> the type of the Entity
      * @param entity to remove
      */
-    <ENTITY> void remove(ENTITY entity) throws SpeedmentException;
+    <ENTITY> void remove(ENTITY entity);
 }

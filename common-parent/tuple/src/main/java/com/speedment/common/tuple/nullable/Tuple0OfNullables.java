@@ -19,7 +19,6 @@ package com.speedment.common.tuple.nullable;
 import com.speedment.common.tuple.MutableTuple;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
-import com.speedment.common.tuple.getter.TupleGetter;
 
 import java.util.Optional;
 
@@ -47,10 +46,6 @@ public interface Tuple0OfNullables extends TupleOfNullables {
     
     @SuppressWarnings("unchecked")
     default Optional<Object> get(int index) {
-        switch (index) {
-            
-            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
-            ));
-        }
+        throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
     }
 }

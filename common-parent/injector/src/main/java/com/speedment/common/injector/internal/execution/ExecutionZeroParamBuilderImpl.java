@@ -19,7 +19,6 @@ package com.speedment.common.injector.internal.execution;
 import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.DependencyGraph;
-import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.injector.execution.ExecutionOneParamBuilder;

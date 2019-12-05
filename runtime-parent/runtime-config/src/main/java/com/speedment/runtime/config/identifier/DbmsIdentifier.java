@@ -19,6 +19,7 @@ package com.speedment.runtime.config.identifier;
 import com.speedment.runtime.config.identifier.trait.HasDbmsId;
 import com.speedment.runtime.config.internal.identifier.DbmsIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,6 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface DbmsIdentifier<ENTITY> extends HasDbmsId {
 
     class Hidden {
+        private Hidden() {}
 
         private static final Map<DbmsIdentifier<?>, DbmsIdentifier<?>> INTERNED = new ConcurrentHashMap<>();
 

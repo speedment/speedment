@@ -45,7 +45,7 @@ implements FieldToDouble<ENTITY, V> {
     }
 
     @Override
-    public double applyAsDouble(ENTITY object) throws NullPointerException {
+    public double applyAsDouble(ENTITY object) {
         return mapper.applyAsDouble(field.get(object));
     }
 }

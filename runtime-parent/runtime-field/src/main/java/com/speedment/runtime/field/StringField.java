@@ -42,7 +42,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  */
 public interface StringField<ENTITY, D> extends
     ComparableField<ENTITY, D, String>, 
-    HasStringOperators<ENTITY, D>,
+    HasStringOperators<ENTITY>,
     ToStringNullable<ENTITY> {
 
     /**

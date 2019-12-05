@@ -56,11 +56,11 @@ public final class JsonComponentImpl implements JsonComponent {
         final JsonEncoder<ENTITY> formatter = noneOf(manager);
 
         manager.fields()
-            .forEachOrdered(f -> {
+            .forEachOrdered(f ->
                 formatter.put(jsonField(projectComponent.getProject(), f.identifier()),
                     f.getter()::apply
-                );
-            });
+                )
+            );
 
         return formatter;
     }

@@ -20,7 +20,6 @@ import com.speedment.runtime.core.internal.stream.builder.pipeline.IntPipeline;
 
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -30,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  */
 public interface IntStreamTerminator extends BaseStreamTerminator {
 
-    default <T> void forEach(IntPipeline pipeline, IntConsumer action) {
+    default void forEach(IntPipeline pipeline, IntConsumer action) {
         requireNonNull(pipeline);
         requireNonNull(action);
         optimize(pipeline).getAsIntStream().forEach(action);

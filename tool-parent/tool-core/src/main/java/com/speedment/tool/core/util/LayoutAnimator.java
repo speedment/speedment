@@ -55,9 +55,7 @@ public final class LayoutAnimator implements ChangeListener<Number>, ListChangeL
      * @param nodes  the nodes to observe
      */
     public void observe(ObservableList<Node> nodes) {
-        nodes.forEach((node) -> {
-            this.observe(node);
-        });
+        nodes.forEach(this::observe);
         nodes.addListener(this);
     }
 
@@ -82,27 +80,24 @@ public final class LayoutAnimator implements ChangeListener<Number>, ListChangeL
         final Node node = (Node) doubleProperty.getBean();
 
         TranslateTransition t;
-        switch (doubleProperty.getName()) {
-            case "layoutX":
-                t = nodeXTransitions.get(node);
-                if (t == null) {
-                    t = new TranslateTransition(Duration.millis(150), node);
-                    t.setToX(0);
-                    nodeXTransitions.put(node, t);
-                }
-                t.setFromX(node.getTranslateX() - delta);
-                node.setTranslateX(node.getTranslateX() - delta);
-                break;
-
-            default: // "layoutY"
-                t = nodeYTransitions.get(node);
-                if (t == null) {
-                    t = new TranslateTransition(Duration.millis(150), node);
-                    t.setToY(0);
-                    nodeYTransitions.put(node, t);
-                }
-                t.setFromY(node.getTranslateY() - delta);
-                node.setTranslateY(node.getTranslateY() - delta);
+        if (doubleProperty.getName().equals("layoutX")) {
+            t = nodeXTransitions.get(node);
+            if (t == null) {
+                t = new TranslateTransition(Duration.millis(150), node);
+                t.setToX(0);
+                nodeXTransitions.put(node, t);
+            }
+            t.setFromX(node.getTranslateX() - delta);
+            node.setTranslateX(node.getTranslateX() - delta);
+        } else { //layout Y
+            t = nodeYTransitions.get(node);
+            if (t == null) {
+                t = new TranslateTransition(Duration.millis(150), node);
+                t.setToY(0);
+                nodeYTransitions.put(node, t);
+            }
+            t.setFromY(node.getTranslateY() - delta);
+            node.setTranslateY(node.getTranslateY() - delta);
         }
 
         t.playFromStart();

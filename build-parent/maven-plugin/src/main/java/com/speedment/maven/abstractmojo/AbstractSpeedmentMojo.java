@@ -20,6 +20,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.maven.component.MavenPathComponent;
+import com.speedment.maven.internal.util.ConfigUtil;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.application.ApplicationBuilders;
@@ -41,7 +42,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -149,23 +149,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
      * @return {@code true} if available, else {@code false}
      */
     protected final boolean hasConfigFile(Path file) {
-        if (file == null) {
-            final String msg = "The expected .json-file is null.";
-            getLog().info(msg);
-            return false;
-        } else if (!file.toFile().exists()) {
-            final String msg = "The expected .json-file '"
-                + file + "' does not exist.";
-            getLog().info(msg);
-            return false;
-        } else if (!Files.isReadable(file)) {
-            final String err = "The expected .json-file '"
-                + file + "' is not readable.";
-            getLog().error(err);
-            return false;
-        } else {
-            return true;
-        }
+        return ConfigUtil.hasConfigFile(file, getLog());
     }
 
     @SuppressWarnings("unchecked")
@@ -265,33 +249,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         configureBuilder(result); // Add MOJO specific components (if any)
 
         // Add any extra type mappers requested by the user
-        TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.
-
-        result.withComponent(TypeMapperInstaller.class);
+        result.withComponent(TypeMapperInstaller.class, () -> new TypeMapperInstaller(typeMappers()));
 
         // Add extra components requested by the user
         final String[] components = components();
         if (components != null) {
             for (final String component : components) {
-                try {
-                    final Class<?> uncasted = classLoader.loadClass(component);
-
-                    if (InjectBundle.class.isAssignableFrom(uncasted)) {
-                        @SuppressWarnings("unchecked")
-                        final Class<? extends InjectBundle> casted
-                            = (Class<? extends InjectBundle>) uncasted;
-                        result.withBundle(casted);
-                    } else {
-                        result.withComponent(uncasted);
-                    }
-
-                } catch (final ClassNotFoundException ex) {
-                    throw new MojoExecutionException(
-                        SPECIFIED_CLASS + "'" + component + "' could not be "
-                        + "found on class path. Has the dependency been "
-                        + "configured properly?", ex
-                    );
-                }
+                tryAddExtraComponent(result, classLoader, component);
             }
         }
 
@@ -305,6 +269,28 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
         // Return the resulting builder.
         return result;
+    }
+
+    private void tryAddExtraComponent(ApplicationBuilder<?, ?> result, ClassLoader classLoader, String component) throws MojoExecutionException {
+        try {
+            final Class<?> uncasted = classLoader.loadClass(component);
+
+            if (InjectBundle.class.isAssignableFrom(uncasted)) {
+                @SuppressWarnings("unchecked")
+                final Class<? extends InjectBundle> casted
+                    = (Class<? extends InjectBundle>) uncasted;
+                result.withBundle(casted);
+            } else {
+                result.withComponent(uncasted);
+            }
+
+        } catch (final ClassNotFoundException ex) {
+            throw new MojoExecutionException(
+                SPECIFIED_CLASS + "'" + component + "' could not be "
+                + "found on class path. Has the dependency been "
+                + "configured properly?", ex
+            );
+        }
     }
 
     protected void configureBuilder( ApplicationBuilder<?, ?>  builder) {}

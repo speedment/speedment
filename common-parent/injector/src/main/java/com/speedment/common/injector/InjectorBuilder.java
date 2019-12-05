@@ -54,8 +54,7 @@ public interface InjectorBuilder {
      * @throws NoDefaultConstructorException if the specified type does not
      * have a default constructor.
      */
-    InjectorBuilder withComponent(Class<?> injectableClass)
-    throws NoDefaultConstructorException;
+    InjectorBuilder withComponent(Class<?> injectableClass);
 
     /**
      * Appends a class that can be automatically dependency injected into
@@ -93,8 +92,7 @@ public interface InjectorBuilder {
      * @throws NoDefaultConstructorException if the specified type does not
      * have a default constructor.
      */
-    InjectorBuilder withBundle(Class<? extends InjectBundle> bundleClass) 
-    throws NoDefaultConstructorException;
+    InjectorBuilder withBundle(Class<? extends InjectBundle> bundleClass);
 
     /**
      * Overrides a particular configuration parameter in the config file

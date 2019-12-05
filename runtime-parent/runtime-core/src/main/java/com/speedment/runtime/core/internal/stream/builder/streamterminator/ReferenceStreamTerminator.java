@@ -107,13 +107,11 @@ public interface ReferenceStreamTerminator extends BaseStreamTerminator {
     }
 
     default <T> long count(ReferencePipeline<T> pipeline) {
-        //return count(pipeline, p -> p.getAsReferenceStream().count());
         requireNonNull(pipeline);
         return optimize(pipeline).getAsReferenceStream().count();
     }
 
     default <T> boolean anyMatch(ReferencePipeline<T> pipeline, Predicate<? super T> predicate) {
-        //return anyMatch(pipeline, (pip, pre) -> pip.getAsReferenceStream().anyMatch(pre), predicate);
         requireNonNull(pipeline);
         requireNonNull(predicate);
         return optimize(pipeline).getAsReferenceStream().anyMatch(predicate);

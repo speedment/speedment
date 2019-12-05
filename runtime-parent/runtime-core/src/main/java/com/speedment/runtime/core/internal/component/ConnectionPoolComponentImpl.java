@@ -40,7 +40,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -258,7 +257,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
     private Deque<PoolableConnection> acquireDeque(String key) {
         requireNonNull(key);
-        return pools.computeIfAbsent(key, $ -> new ConcurrentLinkedDeque<>());
+        return pools.computeIfAbsent(key, unused -> new ConcurrentLinkedDeque<>());
     }
 
     @Override

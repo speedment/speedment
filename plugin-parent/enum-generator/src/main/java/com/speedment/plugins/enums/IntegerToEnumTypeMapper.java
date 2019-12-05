@@ -111,7 +111,7 @@ public final class IntegerToEnumTypeMapper<T extends Enum<T>>
         try {
             values = enumClass.getMethod("values");
         } catch (final NoSuchMethodException ex) {
-            throw new RuntimeException(
+            throw new IllegalArgumentException(
                 "Could not find 'values()'-method in enum class '" +
                     enumClass.getName() + "'.", ex
             );
@@ -123,7 +123,7 @@ public final class IntegerToEnumTypeMapper<T extends Enum<T>>
         } catch (final IllegalAccessException
             | IllegalArgumentException
             | InvocationTargetException ex) {
-            throw new RuntimeException(
+            throw new IllegalArgumentException(
                 "Error executing 'values()' in generated enum class '" +
                     enumClass.getName() + "'.", ex
             );
@@ -141,7 +141,7 @@ public final class IntegerToEnumTypeMapper<T extends Enum<T>>
             try {
                 ordinal = enumClass.getMethod("ordinal");
             } catch (final NoSuchMethodException ex) {
-                throw new RuntimeException(
+                throw new IllegalArgumentException(
                     "Could not find generated 'ordinal()'-method in enum " +
                         "class '" + constant.getClass().getName() + "'.", ex
                 );
@@ -155,7 +155,7 @@ public final class IntegerToEnumTypeMapper<T extends Enum<T>>
                 | IllegalArgumentException
                 | InvocationTargetException ex) {
 
-                throw new RuntimeException(
+                throw new IllegalArgumentException(
                     "Error executing 'ordinal()' in generated enum class '" +
                         constant.getClass().getName() + "'.", ex
                 );

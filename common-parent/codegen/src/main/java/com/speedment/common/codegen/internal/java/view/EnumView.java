@@ -24,8 +24,6 @@ import java.util.List;
 
 import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.common.codegen.util.Formatting.dnl;
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -65,7 +63,7 @@ public final class EnumView extends ClassOrInterfaceView<Enum> {
 					(!model.getConstants().isEmpty()
 					&& (!model.getConstants().get(0).getValues().isEmpty()
 					||  !model.getConstants().get(0).getAnnotations().isEmpty()))
-                        ? "," + nl() : ", ", 
+                        ? "," + Formatting.nl() : ", ",
 					"", 
 					";"
 				)
@@ -77,6 +75,6 @@ public final class EnumView extends ClassOrInterfaceView<Enum> {
         requireNonNulls(gen, model);
         
         return gen.onEach(model.getConstructors())
-            .collect(joining(dnl()));
+            .collect(joining(Formatting.dnl()));
     }
 }

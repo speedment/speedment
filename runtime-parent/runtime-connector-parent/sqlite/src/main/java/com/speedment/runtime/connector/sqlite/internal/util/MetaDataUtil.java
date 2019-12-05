@@ -41,7 +41,6 @@ public final class MetaDataUtil {
      * @return  {@code true} if nullable, else {@code false}
      */
     public static boolean isNullable(ColumnMetaData metaData) {
-        final boolean nullable;
         switch (metaData.getNullable()) {
             case DatabaseMetaData.columnNullable:
             case DatabaseMetaData.columnNullableUnknown: return true;

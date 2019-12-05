@@ -54,7 +54,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToDoubleOrElseThrowImpl<T>
+    private static final class ToDoubleOrElseThrowImpl<T>
     extends AbstractNonNullable<T, ToDoubleNullable<T>>
     implements ToDoubleOrThrow<T> {
         private ToDoubleOrElseThrowImpl(ToDoubleNullable<T> inner) {
@@ -86,7 +86,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToFloatOrElseThrowImpl<T>
+    private static final class ToFloatOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToFloatNullable<T>>
         implements ToFloatOrThrow<T> {
         private ToFloatOrElseThrowImpl(ToFloatNullable<T> inner) {
@@ -118,7 +118,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToLongOrElseThrowImpl<T>
+    private static final class ToLongOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToLongNullable<T>>
         implements ToLongOrThrow<T> {
         private ToLongOrElseThrowImpl(ToLongNullable<T> inner) {
@@ -150,7 +150,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToIntOrElseThrowImpl<T>
+    private static final class ToIntOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToIntNullable<T>>
         implements ToIntOrThrow<T> {
         private ToIntOrElseThrowImpl(ToIntNullable<T> inner) {
@@ -182,7 +182,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToShortOrElseThrowImpl<T>
+    private static final class ToShortOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToShortNullable<T>>
         implements ToShortOrThrow<T> {
         private ToShortOrElseThrowImpl(ToShortNullable<T> inner) {
@@ -214,7 +214,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToByteOrElseThrowImpl<T>
+    private static final class ToByteOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToByteNullable<T>>
         implements ToByteOrThrow<T> {
         private ToByteOrElseThrowImpl(ToByteNullable<T> inner) {
@@ -246,7 +246,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToCharOrElseThrowImpl<T>
+    private static final class ToCharOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToCharNullable<T>>
         implements ToCharOrThrow<T> {
         private ToCharOrElseThrowImpl(ToCharNullable<T> inner) {
@@ -278,7 +278,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToBooleanOrElseThrowImpl<T>
+    private static final class ToBooleanOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToBooleanNullable<T>>
         implements ToBooleanOrThrow<T> {
         private ToBooleanOrElseThrowImpl(ToBooleanNullable<T> inner) {
@@ -310,7 +310,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToStringOrElseThrowImpl<T>
+    private static final class ToStringOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToStringNullable<T>>
         implements ToStringOrThrow<T> {
         private ToStringOrElseThrowImpl(ToStringNullable<T> inner) {
@@ -343,7 +343,7 @@ public final class OrElseThrowUtil {
      *
      * @param <T>  the input entity type
      */
-    private final static class ToBigDecimalOrElseThrowImpl<T>
+    private static final class ToBigDecimalOrElseThrowImpl<T>
         extends AbstractNonNullable<T, ToBigDecimalNullable<T>>
         implements ToBigDecimalOrThrow<T> {
         private ToBigDecimalOrElseThrowImpl(ToBigDecimalNullable<T> inner) {
@@ -377,7 +377,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      * @param <E>  the enum type
      */
-    private final static class ToEnumOrElseThrowImpl<T, E extends Enum<E>>
+    private static final class ToEnumOrElseThrowImpl<T, E extends Enum<E>>
     extends AbstractNonNullable<T, ToEnumNullable<T, E>>
     implements ToEnumOrThrow<T, E> {
 
@@ -397,7 +397,7 @@ public final class OrElseThrowUtil {
      * @param <T>     the input type
      * @param <INNER> the wrapped nullable expression type
      */
-    private static abstract class AbstractNonNullable<T, INNER extends Expression<T>>
+    private abstract static class AbstractNonNullable<T, INNER extends Expression<T>>
     implements OrElseThrowExpression<T, INNER> {
         final INNER inner;
 

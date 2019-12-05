@@ -17,7 +17,7 @@
 package com.speedment.generator.standard.util;
 
 import com.speedment.generator.standard.internal.util.InternalColumnUtil;
-import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 
 import java.util.Optional;

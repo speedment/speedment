@@ -18,9 +18,8 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.util.Formatting;
 
-import static com.speedment.common.codegen.util.Formatting.dnl;
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -50,7 +49,7 @@ public final class ClassView extends ClassOrInterfaceView<Class> {
 			final StringBuilder result = new StringBuilder();
 
 			if (!model.getInterfaces().isEmpty()) {
-				result.append(nl());
+				result.append(Formatting.nl());
 			}
 
 			return result.append(EXTENDS_STRING)
@@ -66,6 +65,6 @@ public final class ClassView extends ClassOrInterfaceView<Class> {
         requireNonNull(model);
         
 		return gen.onEach(model.getConstructors())
-            .collect(joining(dnl()));
+            .collect(joining(Formatting.dnl()));
     }
 }

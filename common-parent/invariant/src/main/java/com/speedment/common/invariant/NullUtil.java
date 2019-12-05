@@ -30,7 +30,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class NullUtil {
 
-    private NullUtil() {};
+    private NullUtil() {}
 
     private static final String IS_NULL = "is null";
     private static final String FIRST_ARG_IS_NULL = "First argument is null";

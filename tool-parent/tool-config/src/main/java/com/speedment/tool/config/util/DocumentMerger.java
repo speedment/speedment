@@ -127,7 +127,9 @@ public final class DocumentMerger {
             ||  setPropertyIf(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
             ||  setPropertyIf(Byte.class,    proposedValue, casted -> existing.integerPropertyOf(key,  () -> casted))
             ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.integerPropertyOf(key,  () -> casted)))
-        {} else {
+        {
+            // Do nothing
+        } else {
             throw new SpeedmentConfigException(
                 "Property was not of any known type."
             );
@@ -284,7 +286,7 @@ public final class DocumentMerger {
      * An ordered collection of tasks that can be executed to merge a set of
      * changes into an ObservableList without destroying any observables.
      */
-    private final static class MergeTaskManager {
+    private static final class MergeTaskManager {
         
         private final List<MergeTask> tasks = new LinkedList<>();
         
@@ -326,7 +328,7 @@ public final class DocumentMerger {
      * Merges two documents into one without moving neither or checking for
      * existance. This is done when both sources agree on the documents position.
      */
-    private final static class MergeWithoutMovingTask implements MergeTask {
+    private static final class MergeWithoutMovingTask implements MergeTask {
 
         private final DocumentProperty existing;
         private final Document proposed;
@@ -359,7 +361,7 @@ public final class DocumentMerger {
      * If it does not yet exist in the source, merge it into the end. This is 
      * done with the submissive document.
      */
-    private final static class MergeIntoExistingTask implements MergeTask {
+    private static final class MergeIntoExistingTask implements MergeTask {
 
         private final DocumentProperty document;
         private final String id;
@@ -409,7 +411,7 @@ public final class DocumentMerger {
      * exists, move the existing to the end and merge into it. This is done with
      * the superior document.
      */
-    private final static class MergeByMovingTask implements MergeTask {
+    private static final class MergeByMovingTask implements MergeTask {
         
         private final DocumentProperty parent;
         private final Document document;

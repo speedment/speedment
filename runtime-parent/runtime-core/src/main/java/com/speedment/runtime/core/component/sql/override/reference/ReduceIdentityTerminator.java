@@ -20,7 +20,6 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import static com.speedment.runtime.core.internal.component.sql.override.def.reference.DefaultReduceIdentityTerminator.DEFAULT;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
-import java.util.Optional;
 import java.util.function.BinaryOperator;
 
 /**

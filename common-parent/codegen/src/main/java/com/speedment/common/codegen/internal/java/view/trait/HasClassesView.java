@@ -19,8 +19,8 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasClasses;
+import com.speedment.common.codegen.util.Formatting;
 
-import static com.speedment.common.codegen.util.Formatting.dnl;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -42,6 +42,7 @@ public interface HasClassesView<M extends HasClasses<M>> extends Transform<M, St
      */
     default String renderClasses(Generator gen, M model) {
         return gen.onEach(model.getClasses())
-            .collect(joining(dnl()));
+            .collect(joining(Formatting.dnl()));
     }
+
 }

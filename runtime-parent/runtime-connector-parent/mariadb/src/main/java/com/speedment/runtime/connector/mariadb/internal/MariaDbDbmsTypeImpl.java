@@ -233,12 +233,12 @@ public final class MariaDbDbmsTypeImpl implements DbmsType {
         return support.getSortByNullOrderInsertion();
     }
 
-    private final static class MariaDbNamingConvention extends AbstractDatabaseNamingConvention {
+    private static final class MariaDbNamingConvention extends AbstractDatabaseNamingConvention {
 
-        private final static String ENCLOSER = "`";
-        private final static String QUOTE = "'";
+        private static final String ENCLOSER = "`";
+        private static final String QUOTE = "'";
 
-        private final static Set<String> EXCLUDE_SET = Stream.of(
+        private static final Set<String> EXCLUDE_SET = Stream.of(
             "information_schema"
         ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
 
@@ -268,7 +268,7 @@ public final class MariaDbDbmsTypeImpl implements DbmsType {
         }
     }
 
-    private final static class MariaDbConnectionUrlGenerator implements ConnectionUrlGenerator {
+    private static final class MariaDbConnectionUrlGenerator implements ConnectionUrlGenerator {
 
         private final String collationName;
 
@@ -289,7 +289,6 @@ public final class MariaDbDbmsTypeImpl implements DbmsType {
                 .append("&useServerPrepStmts=true&useCursorFetch=true")
                 .append("&zeroDateTimeBehavior=convertToNull")
                 .append("&sessionVariables=collation_connection=").append(collationName); // Fix #804
-            ;
 
             return result.toString();
         }

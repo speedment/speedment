@@ -21,12 +21,13 @@
  */
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.stage.JoinOperator;
 import com.speedment.runtime.join.trait.HasOnPredicates;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.BiFunction;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

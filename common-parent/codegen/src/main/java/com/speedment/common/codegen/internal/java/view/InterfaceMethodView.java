@@ -20,13 +20,12 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.InterfaceMethod;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.util.Optional;
 
 import static com.speedment.common.codegen.model.modifier.Modifier.DEFAULT;
 import static com.speedment.common.codegen.model.modifier.Modifier.STATIC;
-import static com.speedment.common.codegen.util.Formatting.nl;
-import static com.speedment.common.codegen.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -64,7 +63,7 @@ implements Transform<InterfaceMethod, String>,
 			renderModifiers(gen, model, STATIC, DEFAULT) +
             renderGenerics(gen, model) +
             renderType(gen, model) +
-            renderName(gen, model) + ((model.getFields().size() > 3) ? "(" + nl() : "(") +
+            renderName(gen, model) + ((model.getFields().size() > 3) ? "(" + Formatting.nl() : "(") +
             renderFields(gen, model) + ")" + spacing +
             renderThrows(gen, model) + 
             body.orElse(";")
@@ -74,7 +73,7 @@ implements Transform<InterfaceMethod, String>,
     @Override
     public String fieldSeparator(InterfaceMethod model) {
         if (model.getFields().size() > 3) {
-            return "," + nl() + tab() + tab();
+            return "," + Formatting.nl() + Formatting.tab() + Formatting.tab();
         } else return ", ";
     }
 

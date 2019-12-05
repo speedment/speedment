@@ -19,6 +19,7 @@ package com.speedment.generator.standard.lifecycle;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.application.AbstractApplicationBuilder;
 import com.speedment.runtime.application.AbstractSpeedment;
@@ -34,8 +35,8 @@ import java.lang.reflect.Type;
  */
 public final class GeneratedApplicationImplTranslator extends AbstractJavaClassTranslator<Project, Class> {
 
-    public GeneratedApplicationImplTranslator(Project project) {
-        super(project, Class::of);
+    public GeneratedApplicationImplTranslator(Injector injector, Project project) {
+        super(injector, project, Class::of);
     }
 
     @Override
@@ -51,11 +52,11 @@ public final class GeneratedApplicationImplTranslator extends AbstractJavaClassT
     @Override
     protected Class makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
-            .forEveryProject((clazz, project) -> {
+            .forEveryProject((clazz, project) ->
                 clazz.public_()
                     .setSupertype(AbstractSpeedment.class)
-                    .add(generatedType());
-            }).build();
+                    .add(generatedType())
+            ).build();
     }
     
     @Override

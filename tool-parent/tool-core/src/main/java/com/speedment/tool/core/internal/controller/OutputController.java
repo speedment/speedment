@@ -21,8 +21,6 @@ import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.MaterialIcon;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;

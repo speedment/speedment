@@ -19,9 +19,9 @@ package com.speedment.runtime.field.internal.predicate.shorts;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.predicate.trait.HasInclusion;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
+import com.speedment.runtime.field.predicate.trait.HasInclusion;
 import com.speedment.runtime.field.trait.HasShortValue;
 import static java.util.Objects.requireNonNull;
 

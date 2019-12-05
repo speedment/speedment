@@ -92,14 +92,17 @@ public final class CombinationUtil {
         switch (limit) {
             case 0 : return emptyList();
             case 1 : return singletonList(array[0]);
-            default : {
-                final List<T> list = new ArrayList<>(limit);
-                for (int i = 0; i < limit; i++) {
-                    list.add(array[i]);
-                }
-                return list;
-            }
+            default :
+                return list(array, limit);
         }
+    }
+
+    private static <T> List<T> list(T[] array, int limit) {
+        final List<T> list = new ArrayList<>(limit);
+        for (int i = 0; i < limit; i++) {
+            list.add(array[i]);
+        }
+        return list;
     }
 
     /**

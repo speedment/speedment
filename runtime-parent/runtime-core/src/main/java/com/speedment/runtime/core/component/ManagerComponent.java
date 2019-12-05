@@ -53,10 +53,10 @@ public interface ManagerComponent {
      * @param entityClass  the entity interface {@code Class}
      * @return             the currently associated {@link Manager} 
      *                     implementation for the given Entity interface Class
-     * 
+     *
      * @throws SpeedmentException if no Manager exists for the given entityClass
      */
-    <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException;
+    <E> Manager<E> managerOf(Class<E> entityClass);
 
     /**
      * Returns a {@link Stream} of all {@link Manager Managers} associated with

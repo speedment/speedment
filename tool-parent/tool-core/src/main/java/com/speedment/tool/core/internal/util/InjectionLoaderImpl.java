@@ -52,8 +52,8 @@ import static javafx.stage.Modality.APPLICATION_MODAL;
  */
 public final class InjectionLoaderImpl implements InjectionLoader {
     
-    private final static String FXML_PREFIX = "/fxml/";
-    private final static String FXML_SUFFIX = ".fxml";
+    private static final String FXML_PREFIX = "/fxml/";
+    private static final String FXML_SUFFIX = ".fxml";
     
     private final Map<Class<?>, Supplier<? extends Initializable>> constructors;
     private final InfoComponent infoComponent;

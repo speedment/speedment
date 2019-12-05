@@ -42,19 +42,6 @@ public final class InternalStreamUtil {
 
     private InternalStreamUtil() {}
 
-/*    public static <T> Stream<T> streamOfOptional(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> element) {
-        return Stream.of(element.orElse(null)).filter(Objects::nonNull);
-    }
-
-    public static <T> Stream<T> streamOfNullable(T element) {
-        // Needless to say, element is nullable...
-        if (element == null) {
-            return Stream.empty();
-        } else {
-            return Stream.of(element);
-        }
-    } */
-
     public static <T> Stream<T> asStream(Iterator<T> iterator) {
         requireNonNull(iterator);
         return asStream(iterator, false);
@@ -66,24 +53,13 @@ public final class InternalStreamUtil {
         return StreamSupport.stream(iterable.spliterator(), parallel);
     }
 
-    /*
-    public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper) {
-         return asStream(resultSet, mapper, ParallelStrategy.computeIntensityDefault());
-    } */
-    
     public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper, ParallelStrategy parallelStrategy) {
         requireNonNull(resultSet);
         requireNonNull(mapper);
         final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
         return StreamSupport.stream(parallelStrategy.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
     }
-
-/*
-    public static <T> Stream<T> from(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> optional) {
-        requireNonNull(optional);
-        return optional.map(Stream::of).orElseGet(Stream::empty);
-    } */
-
+    
     /**
      * Specialized read-only {@link Iterator} for consuming
      * {@link ResultSet ResultSets} by mapping them to an entity using an
@@ -91,9 +67,9 @@ public final class InternalStreamUtil {
      *
      * @param <T>  the type of the entity
      */
-    final static class ResultSetIterator<T> implements Iterator<T> {
+    static final class ResultSetIterator<T> implements Iterator<T> {
 
-        private final String NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE = "The method next() was invoked even though hasNext() returns false.";
+        private static final String NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE = "The method next() was invoked even though hasNext() returns false.";
 
         /**
          * The current state of the {@code ResultSetIterator}.
@@ -143,20 +119,8 @@ public final class InternalStreamUtil {
             switch (state) {
                 case NEXT    : return true;
                 case NO_NEXT : return false;
-                case NOT_DETERMINED : {
-                    try {
-                        if (!resultSet.next()) {
-                            state = State.NO_NEXT;
-                            return false;
-                        }
-                    } catch (final SQLException ex) {
-                        state = State.NO_NEXT;
-                        return false;
-                    }
-
-                    state = State.NEXT;
-                    return true;
-                }
+                case NOT_DETERMINED :
+                    return setState();
 
                 default : throw new IllegalStateException(
                     "Unknown state '" + state + "'."
@@ -164,12 +128,25 @@ public final class InternalStreamUtil {
             }
         }
 
+        private boolean setState() {
+            try {
+                if (!resultSet.next()) {
+                    state = State.NO_NEXT;
+                    return false;
+                }
+            } catch (final SQLException ex) {
+                state = State.NO_NEXT;
+                return false;
+            }
+
+            state = State.NEXT;
+            return true;
+        }
+
         @Override
         public T next() {
-            if (state == State.NOT_DETERMINED) {
-                if (!hasNext()) {
-                    throw new NoSuchElementException(NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE);
-                }
+            if (state == State.NOT_DETERMINED && !hasNext()) {
+                throw new NoSuchElementException(NEXT_INVOKED_BUT_HAS_NEXT_WAS_FALSE);
             }
 
             if (state == State.NO_NEXT) {
@@ -187,10 +164,8 @@ public final class InternalStreamUtil {
 
         @Override
         public void forEachRemaining(Consumer<? super T> action) {
-            if (state == State.NOT_DETERMINED) {
-                if (!hasNext()) {
-                    return;
-                }
+            if (state == State.NOT_DETERMINED && !hasNext()) {
+                return;
             }
 
             if (state == State.NO_NEXT) {

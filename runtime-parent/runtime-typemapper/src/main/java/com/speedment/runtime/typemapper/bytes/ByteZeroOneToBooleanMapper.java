@@ -51,6 +51,10 @@ public final class ByteZeroOneToBooleanMapper implements TypeMapper<Byte, Boolea
 
     @Override
     public Byte toDatabaseType(Boolean value) {
-        return value == null ? null : (value ? (byte) 1 : (byte) 0);
+        if (value == null) {
+            return null;
+        } else {
+            return value ? (byte) 1 : (byte) 0;
+        }
     }
 }

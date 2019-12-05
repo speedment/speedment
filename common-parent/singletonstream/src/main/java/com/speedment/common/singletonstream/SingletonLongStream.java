@@ -300,7 +300,7 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public LongStream unordered() {
-        return this; // Todo: may convey to singletonSpliterator()
+        return this;
     }
 
     @Override

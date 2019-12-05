@@ -19,7 +19,6 @@ package com.speedment.common.injector.internal.execution;
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
-import com.speedment.common.injector.exception.NotInjectableException;
 import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
 
@@ -35,13 +34,12 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
- * An implementation of {@link Execution} that uses reflection to invoke a 
+ * An implementation of {@link Execution} that uses reflection to invoke a
  * method.
- * 
- * @param <T>  the component to execute on
- * 
- * @author  Emil Forslund
- * @since   1.2.0
+ *
+ * @param <T> the component to execute on
+ * @author Emil Forslund
+ * @since 1.2.0
  */
 public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
@@ -71,22 +69,19 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
 
     @Override
     public boolean invoke(T component, ClassMapper classMapper)
-    throws IllegalAccessException, 
-           IllegalArgumentException, 
-           InvocationTargetException, 
-           NotInjectableException {
+        throws IllegalAccessException,
+        InvocationTargetException {
 
         if (method.getParameterCount() > 0
-        &&  getMissingArgumentStrategy() == SKIP_INVOCATION) {
+            && getMissingArgumentStrategy() == SKIP_INVOCATION
+            && Stream.of(method.getParameters())
+            .map(Parameter::getType)
+            .map(classMapper::applyOrNull)
+            .anyMatch(Objects::isNull)) {
+            // Do not invoke if all arguments are optional
+            // and the arguments are all null
 
-            if (Stream.of(method.getParameters())
-                .map(Parameter::getType)
-                .map(classMapper::applyOrNull)
-                .anyMatch(Objects::isNull)) {
-                // Do not invoke if all arguments are optional
-                // and the arguments are all null
-                return false;
-            }
+            return false;
         }
 
         final Object[] args = Stream.of(method.getParameters())
@@ -95,7 +90,6 @@ public final class ReflectionExecutionImpl<T> extends AbstractExecution<T> {
             .toArray();
 
         injectorProxy.invoke(method, component, args);
-        //method.invoke(component, args);
 
         return true;
     }

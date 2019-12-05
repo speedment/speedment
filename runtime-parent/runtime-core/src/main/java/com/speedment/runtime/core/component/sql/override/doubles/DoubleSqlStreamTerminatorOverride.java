@@ -23,9 +23,6 @@ package com.speedment.runtime.core.component.sql.override.doubles;
  */
 public interface DoubleSqlStreamTerminatorOverride {
 
-//    ForEachTerminator<ENTITY> getForEachHandler();
-//
-//    void setForEachHandler(ForEachTerminator<ENTITY> forEach);
     <ENTITY> DoubleCountTerminator<ENTITY> getDoubleCountTerminator();
 
     <ENTITY> void setDoubleCountTerminator(DoubleCountTerminator<ENTITY> count);

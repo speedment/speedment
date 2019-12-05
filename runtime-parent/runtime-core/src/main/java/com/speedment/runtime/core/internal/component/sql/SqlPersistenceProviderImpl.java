@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasColumn;
@@ -35,26 +34,25 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.core.util.DatabaseUtil;
+import com.speedment.runtime.core.util.MergeUtil;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static java.util.Collections.singleton;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.function.UnaryOperator.identity;
+import static java.util.stream.Collectors.*;
 
 /**
  * Default implementation of the {@link SqlPersistence}-interface.
@@ -76,6 +74,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
     private final boolean hasPrimaryKeyColumns;
     private final DatabaseNamingConvention naming;
     private final DbmsOperationHandler operationHandler;
+    private final ManagerComponent managerComponent;
     private final Class<ENTITY> entityClass;
     
     private final String insertStatement;
@@ -93,7 +92,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         final ProjectComponent projectComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final ManagerComponent managerComponent,
-        final  ResultSetMapperComponent resultSetMapperComponent
+        final ResultSetMapperComponent resultSetMapperComponent
     ) {
         requireNonNull(tableInfo);
         requireNonNull(projectComponent);
@@ -103,13 +102,13 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
 
         final Project project = projectComponent.getProject();
 
-        TableIdentifier<ENTITY> tableId = tableInfo.getTableIdentifier();
+        final TableIdentifier<ENTITY> tableId = tableInfo.getTableIdentifier();
         this.table = DocumentDbUtil.referencedTable(project, tableId);
         this.dbms  = DocumentDbUtil.referencedDbms(project, tableId);
-        DbmsType dbmsType = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
+        final DbmsType dbmsType = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
         this.naming           = dbmsType.getDatabaseNamingConvention();
         this.operationHandler = dbmsType.getOperationHandler();
-        DbmsColumnHandler columnHandler = dbmsType.getColumnHandler();
+        final DbmsColumnHandler columnHandler = dbmsType.getColumnHandler();
         
         this.primaryKeyFields = tableInfo::primaryKeyFields;
         this.fields           = tableInfo::fields;
@@ -126,9 +125,11 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         this.deleteStatement = "DELETE FROM " + sqlTableReference + " WHERE " +
             sqlPrimaryKeyColumnList(pk -> pk + " = ?");
 
-        this.columnsByFields = MapStream.fromKeys(fields.get(), f ->
-            DocumentDbUtil.referencedColumn(project, f.identifier())
-        ).toMap();
+         this.columnsByFields = fields.get()
+            .collect(toMap(
+                Function.identity(),
+                f -> DocumentDbUtil.referencedColumn(project, f.identifier())
+            ));
 
         this.generatedFieldSupports = columnsByFields.entrySet().stream().filter(e -> e.getValue().isAutoIncrement())
         .map(e -> new GeneratedFieldSupport<>(
@@ -139,6 +140,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         this.generatedFields = generatedFieldSupports.stream()
             .map(GeneratedFieldSupport::getField).collect(toList());
 
+        this.managerComponent = requireNonNull(managerComponent);
     }
 
     private String getInsertStatement(Predicate<Column> includedInInsert) {
@@ -159,7 +161,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         return entity -> persist(entity, f -> columns.test(columnsByFields.get(f)), statement);
     }
 
-    private ENTITY persist(ENTITY entity, Predicate<Field<ENTITY>> includedFields, String insertStatement) throws SpeedmentException {
+    private ENTITY persist(ENTITY entity, Predicate<Field<ENTITY>> includedFields, String insertStatement) {
         final List<Object> values = fields.get()
             .filter(includedFields)
             .map(f -> toDatabaseType(f, entity))
@@ -193,7 +195,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         return entity -> update(entity, f -> columns.test(columnsByFields.get(f)), statement);
     }
 
-    private ENTITY update(ENTITY entity, Predicate<Field<ENTITY>> includedFields, String updateStatement) throws SpeedmentException {
+    private ENTITY update(ENTITY entity, Predicate<Field<ENTITY>> includedFields, String updateStatement) {
         final List<Object> values = Stream.concat(
             fields.get().filter(includedFields),
             primaryKeyFields.get()
@@ -215,7 +217,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         return this::remove;
     }
 
-    private ENTITY remove(ENTITY entity) throws SpeedmentException {
+    private ENTITY remove(ENTITY entity) {
         final List<Object> values = primaryKeyFields.get()
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
@@ -227,7 +229,22 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
             throw new SpeedmentException(ex);
         }
     }
-    
+
+    @Override
+    public Merger<ENTITY> merger() {
+        assertHasPrimaryKeyColumns();
+        final Manager<ENTITY> manager = managerComponent.managerOf(entityClass);
+        return entity -> merge(manager, entity);
+    }
+
+    private ENTITY merge(Manager<ENTITY> manager, ENTITY entity) {
+        final Set<ENTITY> result = MergeUtil.merge(manager, singleton(entity));
+        if (result.size() != 1) {
+            throw new SpeedmentException("Unable to merge entity of type " + entity.getClass().getName());
+        }
+        return result.iterator().next();
+    }
+
     private Consumer<List<Long>> newGeneratedKeyConsumer(ENTITY entity) {
         return l -> {
             if (!l.isEmpty()) {
@@ -260,7 +277,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         return dbValue;
     }
     
-    private String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
+    private String sqlPrimaryKeyColumnList(UnaryOperator<String> postMapper) {
         requireNonNull(postMapper);
         return table.primaryKeyColumns()
             .sorted(comparing(PrimaryKeyColumn::getOrdinalPosition))
@@ -271,7 +288,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
             .collect(joining(" AND "));
     }
 
-    private String sqlColumnList(Predicate<Column> preFilter, Function<String, String> postMapper) {
+    private String sqlColumnList(Predicate<Column> preFilter, UnaryOperator<String> postMapper) {
         return table.columns()
             .sorted(comparing(Column::getOrdinalPosition))
             .filter(Column::isEnabled)
@@ -293,7 +310,7 @@ final class SqlPersistenceProviderImpl<ENTITY> implements PersistenceProvider<EN
         }
     }
 
-    private final static class GeneratedFieldSupport<ENTITY, T> {
+    private static final class GeneratedFieldSupport<ENTITY, T> {
 
         private final Field<ENTITY> field;
         private final Column column;

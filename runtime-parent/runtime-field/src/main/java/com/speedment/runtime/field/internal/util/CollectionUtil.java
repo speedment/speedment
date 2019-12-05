@@ -71,12 +71,15 @@ public final class CollectionUtil {
             case 1 : return singletonList(
                 original.isEmpty() ? element[0] : original.get(0)
             );
-            default : {
-                final List<T> copy = new ArrayList<>(original);
-                addAll(copy, element);
-                return unmodifiableList(copy);
-            }
+            default :
+                return asUnmodifiableList(original, element);
         }
+    }
+
+    private static <T> List<T> asUnmodifiableList(List<T> original, T[] element) {
+        final List<T> copy = new ArrayList<>(original);
+        addAll(copy, element);
+        return unmodifiableList(copy);
     }
 
     /**

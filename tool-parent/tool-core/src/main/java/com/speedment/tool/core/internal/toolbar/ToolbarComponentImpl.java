@@ -18,7 +18,6 @@ package com.speedment.tool.core.internal.toolbar;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.toolbar.ToolbarComponent;
 import com.speedment.tool.core.toolbar.ToolbarItem;
 import javafx.collections.ObservableList;

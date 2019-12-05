@@ -42,7 +42,7 @@ import static java.util.Arrays.asList;
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
 final class CharFieldTest {
     
-    private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarChar();
+    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarChar();
     private CharField<BasicEntity, Character> field;
     private List<BasicEntity> entities;
     private BasicEntity a;

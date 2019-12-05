@@ -42,7 +42,7 @@ import static java.util.Arrays.asList;
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
 final class ByteFieldTest {
     
-    private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarByte();
+    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarByte();
     private ByteField<BasicEntity, Byte> field;
     private List<BasicEntity> entities;
     private BasicEntity a;

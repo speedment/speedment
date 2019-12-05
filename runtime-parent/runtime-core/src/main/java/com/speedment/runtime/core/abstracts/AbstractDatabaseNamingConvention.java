@@ -26,8 +26,8 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
  */
 public abstract class AbstractDatabaseNamingConvention implements DatabaseNamingConvention {
 
-    private final static String DEFAULT_DELIMITER = ".";
-    private final static String DEFAULT_QUOTE = "'";
+    private static final String DEFAULT_DELIMITER = ".";
+    private static final String DEFAULT_QUOTE = "'";
 
     @Override
     public String fullNameOf(String schemaName, String tableName, String columnName) {

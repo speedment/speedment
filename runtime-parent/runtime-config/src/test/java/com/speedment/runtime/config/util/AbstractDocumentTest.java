@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.util;
 
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +23,8 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.AbstractMap;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+
 import java.util.stream.Stream;
 
 /**
@@ -251,6 +252,7 @@ public abstract class AbstractDocumentTest {
     @SafeVarargs
     @SuppressWarnings("varargs")
     private static Map<String, Object> map(Map.Entry<String, Object>... entries) {
-        return MapStream.of(Stream.of(entries)).toMap();
+        return Stream.of(entries)
+            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

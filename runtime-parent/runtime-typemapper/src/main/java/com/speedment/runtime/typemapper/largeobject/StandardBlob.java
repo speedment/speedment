@@ -45,7 +45,7 @@ public final class StandardBlob implements Blob {
     }
 
     @Override
-    public long length() throws SQLException {
+    public long length()  {
         assertNotFreed();
         return len;
     }
@@ -55,7 +55,7 @@ public final class StandardBlob implements Blob {
         assertNotFreed();
         final int actualLength = Math.min(length, (int) len);
         if (posOrdinal < 1 || len - posOrdinal < 0 ) {
-            throw new IllegalArgumentException("posOrdinal must be in [1, " + len + "] but was " + posOrdinal);
+            throw newIllegalArgumentExceptionRange("posOrdinal", 1, len,  posOrdinal);
         }
 
         final byte[] bytes = new byte[actualLength];
@@ -68,13 +68,13 @@ public final class StandardBlob implements Blob {
     }
 
     @Override
-    public InputStream getBinaryStream() throws SQLException {
+    public InputStream getBinaryStream() {
         assertNotFreed();
         return new ByteArrayInputStream(buf);
     }
 
     @Override
-    public long position(byte[] pattern, long startOrdinal) throws SQLException {
+    public long position(byte[] pattern, long startOrdinal) {
         assertNotFreed();
         if (startOrdinal < 1 || startOrdinal > len) {
             return -1;
@@ -113,11 +113,11 @@ public final class StandardBlob implements Blob {
     public int setBytes(long posOrdinal, byte[] bytes, int offset, int length) throws SQLException {
         assertNotFreed();
         if (offset < 0 || offset > bytes.length) {
-            throw new IllegalArgumentException("The provided offset must be [0, " + bytes.length + "] but was " + offset);
+            throw newIllegalArgumentExceptionRange("offset", 0, bytes.length, offset);
         }
 
         if (posOrdinal < 1 || posOrdinal > len) {
-            throw new IllegalArgumentException("The provided pos must be in [1, " + length() + "] but was " + posOrdinal);
+            throw newIllegalArgumentExceptionRange("pos", 1, length(), posOrdinal);
         }
 
         if ((long) (length) > origLen) {
@@ -146,7 +146,7 @@ public final class StandardBlob implements Blob {
     public void truncate(long length) throws SQLException {
         assertNotFreed();
         if (length > len) {
-            throw new IllegalArgumentException("Length must be in the range [0, " + len + "] but was " + length);
+            throw newIllegalArgumentExceptionRange("Length", 0, len, length);
         } else if ((int) length == 0) {
             buf = new byte[0];
             len = length;
@@ -166,10 +166,10 @@ public final class StandardBlob implements Blob {
     public InputStream getBinaryStream(long pos, long length) throws SQLException {
         assertNotFreed();
         if (pos < 1 || pos > length) {
-            throw new IllegalArgumentException("pos must be in [1, " + length + "] but was " + pos);
+            throw newIllegalArgumentExceptionRange("pos",1, length, pos );
         }
         if (length > len - pos + 1) {
-            throw new IllegalArgumentException("length must be in [1, " + (len - pos + 1) + "] but was " + length);
+            throw newIllegalArgumentExceptionRange("length", 1, (len - pos + 1), length);
         }
         return new ByteArrayInputStream(buf, (int) pos - 1, (int) length);
     }
@@ -179,4 +179,11 @@ public final class StandardBlob implements Blob {
             throw new IllegalStateException("Cannot call a method after free() has been called.");
         }
     }
+
+    private IllegalArgumentException newIllegalArgumentExceptionRange(String name, long startInclusive, long endInclusive, long actual) {
+        return new IllegalArgumentException(
+            "The " + name + " must be in the range [" + startInclusive + ", " + endInclusive + "] but was " + actual + "."
+        );
+    }
+
 }

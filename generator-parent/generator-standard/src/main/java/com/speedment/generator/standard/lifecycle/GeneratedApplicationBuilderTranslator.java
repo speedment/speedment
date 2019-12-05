@@ -20,6 +20,7 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.mapstream.MapStream;
@@ -44,7 +45,6 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.common.codegen.util.Formatting.nl;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator.METADATA;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
@@ -60,8 +60,8 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
 
     private static final String CLASS = "class";
 
-    public GeneratedApplicationBuilderTranslator(Project doc) {
-        super(doc, Class::of);
+    public GeneratedApplicationBuilderTranslator(Injector injector, Project doc) {
+        super(injector, doc, Class::of);
     }
 
     @Override
@@ -118,9 +118,9 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
 
                 final StringBuilder constructorBody = new StringBuilder("super(");
                 constructorBody.append(getSupport().typeName(getSupport().projectOrThrow())).append("ApplicationImpl." + CLASS + ", ");
-                constructorBody.append("Generated").append(getSupport().typeName(getSupport().projectOrThrow())).append(METADATA).append("." + CLASS + ");").append(nl());
+                constructorBody.append("Generated").append(getSupport().typeName(getSupport().projectOrThrow())).append(METADATA).append("." + CLASS + ");").append(Formatting.nl());
 
-                final String separator = nl();
+                final String separator = Formatting.nl();
                 if (!managerImpls.isEmpty()) {
 
                     constructorBody.append(
@@ -141,7 +141,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                 }
 
                 databaseBundleClassNames(project)
-                    .map(cn -> nl() + "withBundle(" + shortName(cn) + "." + CLASS + ");")
+                    .map(cn -> Formatting.nl() + "withBundle(" + shortName(cn) + "." + CLASS + ");")
                     .forEach(constructorBody::append);
 
                 databaseBundleClassNames(project)
@@ -149,7 +149,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                     .forEach(file::add);
 
                 final Type injectorProxyType = injectorProxyType();
-                constructorBody.append(nl()).append("withInjectorProxy(new ").append(shortName(injectorProxyType.getTypeName())).append("());");
+                constructorBody.append(Formatting.nl()).append("withInjectorProxy(new ").append(shortName(injectorProxyType.getTypeName())).append("());");
                 file.add(Import.of(injectorProxyType()));
 
                 constr.add(constructorBody.toString());

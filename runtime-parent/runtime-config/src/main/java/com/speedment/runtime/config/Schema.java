@@ -70,16 +70,6 @@ public interface Schema extends
      * @return  tables
      */
     Stream<Table> tables();
-//
-//    default Stream<? extends Table> tables() {
-//        return children(TABLES, tableConstructor());
-//    }
-//
-//    default Table addNewTable() {
-//        return tableConstructor().apply(this, newDocument(this, TABLES));
-//    }
-//
-//    BiFunction<Schema, Map<String, Object>, ? extends Table> tableConstructor();
 
     @Override
     default Class<Schema> mainInterface() {

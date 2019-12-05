@@ -50,6 +50,8 @@ import static java.util.stream.Collectors.toList;
  */
 public final class StreamTerminatorUtil {
 
+    private StreamTerminatorUtil() {}
+
     public static <T extends Pipeline, ENTITY> List<FieldPredicate<ENTITY>> topLevelAndPredicates(T initialPipeline) {
         final List<FieldPredicate<ENTITY>> andPredicateBuilders = new ArrayList<>();
 
@@ -194,7 +196,6 @@ public final class StreamTerminatorUtil {
 
         List<Object> getValues();
 
-        //Pipeline getPipeline();
     }
 
     private static final class RenderResultImpl implements RenderResult {
@@ -223,7 +224,7 @@ public final class StreamTerminatorUtil {
         }
     }
 
-    public static <T extends Pipeline, ENTITY> RenderResult renderSqlWhere(
+    public static <ENTITY> RenderResult renderSqlWhere(
         final DbmsType dbmsType,
         final Function<Field<ENTITY>, String> columnNamer,
         final Function<Field<ENTITY>, Class<?>> columnDbTypeFunction,
@@ -254,7 +255,7 @@ public final class StreamTerminatorUtil {
 
     // See JoinSqlUtil::renderPredicateHelper for JOIN streams
 
-    private static <T extends Pipeline, ENTITY> void renderSqlWhereHelper(
+    private static <ENTITY> void renderSqlWhereHelper(
         final FieldPredicateView spv,
         final Function<Field<ENTITY>, String> columnNamer,
         final Function<Field<ENTITY>, Class<?>> columnDbTypeFunction,
@@ -298,7 +299,4 @@ public final class StreamTerminatorUtil {
         }
     }
 
-    private StreamTerminatorUtil() {
-        throw new UnsupportedOperationException();
-    }
 }

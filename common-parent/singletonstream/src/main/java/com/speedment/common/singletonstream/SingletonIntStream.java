@@ -305,7 +305,7 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public IntStream unordered() {
-        return this; // Todo: may convey to singletonSpliterator()
+        return this;
     }
 
     @Override

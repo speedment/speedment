@@ -30,6 +30,8 @@ import java.util.function.IntToDoubleFunction;
 import java.util.function.IntUnaryOperator;
 import java.util.function.ToIntFunction;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Expression that given an entity returns an {@code int} value, or
  * {@code null}. This expression can be implemented using a lamdda, or it can be
@@ -70,7 +72,10 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
+    // Note that Function<T, Integer> is not the same as ToIntFunction<T>
+    // since the former returns Integer and the later int
     static <T> ToIntNullable<T> of(Function<T, Integer> lambda) {
+        requireNonNull(lambda);
         if (lambda instanceof ToIntNullable) {
             return (ToIntNullable<T>) lambda;
         } else {
@@ -84,12 +89,12 @@ extends Expression<T>,
     }
 
     @Override
-    default int applyAsInt(T object) throws NullPointerException {
+    default int applyAsInt(T object) {
         return apply(object);
     }
 
     @Override
-    default ToInt<T> orThrow() throws NullPointerException {
+    default ToInt<T> orThrow() {
         return OrElseThrowUtil.intOrElseThrow(this);
     }
 
@@ -134,7 +139,7 @@ extends Expression<T>,
             }
 
             @Override
-            public double applyAsDouble(T object) throws NullPointerException {
+            public double applyAsDouble(T object) {
                 return mapper.applyAsDouble(delegate.applyAsInt(object));
             }
 
@@ -175,7 +180,7 @@ extends Expression<T>,
             }
 
             @Override
-            public int applyAsInt(T object) throws NullPointerException {
+            public int applyAsInt(T object) {
                 return mapper.applyAsInt(delegate.applyAsInt(object));
             }
 

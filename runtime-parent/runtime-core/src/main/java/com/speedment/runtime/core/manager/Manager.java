@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.field.trait.HasNullableFinder;
 
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -232,6 +233,41 @@ public interface Manager<ENTITY> extends PersistenceProvider<ENTITY>, Persistenc
      */
     default ENTITY remove(ENTITY entity) {
         return remover().apply(entity);
+    }
+
+    /**
+     * If the provided entity does not exists; Persists the provided entity to
+     * the underlying database and returns a potentially updated entity, otherwise
+     * updates the provided entity in the underlying database and returns a
+     * potentially updated entity. If the persistence fails for any reason, an
+     * unchecked {@link SpeedmentException} is thrown.
+     * <p>
+     * Note: Merge is only supported for entities with exactly one primary key.
+     * <p>
+     * It is unspecified if the returned updated entity is the same provided
+     * entity instance or another entity instance. It is erroneous to assume
+     * either, so you should use only the returned entity after the method has
+     * been called. However, it is guaranteed that the provided entity is
+     * untouched if an exception is thrown.
+     * <p>
+     * The fields of returned entity instance may differ from the provided
+     * entity fields due to auto generated column(s) or because of any other
+     * modification that the underlying database imposed on the persisted
+     * entity.
+     * <p>
+     * If several entities are to be merged, it may be more efficient to
+     * use the method {@link com.speedment.runtime.core.util.MergeUtil#merge(Manager, Set)}
+     *
+     * @param entity to merge
+     * @return an entity reflecting the result of the persisted/updated entity
+     *
+     * @throws SpeedmentException if the underlying database throws an exception
+     * (e.g. SQLException)
+     * @throws UnsupportedOperationException if the provided entity does not
+     * have exactly one primary key.
+     */
+    default ENTITY merge(ENTITY entity) {
+        return merger().apply(entity);
     }
 
     /**

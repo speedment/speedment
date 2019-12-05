@@ -43,7 +43,7 @@ import java.util.function.ToDoubleFunction;
  */
 public interface EnumField<ENTITY, D, E extends Enum<E>>
 extends ComparableField<ENTITY, D, E>,
-        HasStringOperators<ENTITY, D>,
+        HasStringOperators<ENTITY>,
         ToEnumNullable<ENTITY, E> {
 
 

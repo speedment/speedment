@@ -53,7 +53,6 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     private static final Logger LOGGER_UPDATE = LoggerManager.getLogger(ApplicationBuilder.LogType.UPDATE.getLoggerName());
     private static final Logger LOGGER_REMOVE = LoggerManager.getLogger(ApplicationBuilder.LogType.REMOVE.getLoggerName());
     private static final Logger LOGGER_SQL_RETRY = LoggerManager.getLogger(ApplicationBuilder.LogType.SQL_RETRY.getLoggerName());
-    private static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private final ConnectionPoolComponent connectionPoolComponent;
     private final TransactionComponent transactionComponent;
@@ -207,8 +206,6 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         preparedStatementConfigurator.accept(statement);
     }
 
-    // Todo: Rewrite the method below.
-
     private void execute(Dbms dbms, SqlStatement sqlStatement) throws SQLException {
         final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
         if (connectionInfo.isInTransaction()) {
@@ -229,14 +226,14 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
 
         assertNotClosed();
         int retryCount = INITIAL_RETRY_COUNT;
-        boolean transactionCompleted = false;
+        boolean complete = false;
         do {
             try {
                 conn.setAutoCommit(false);
                 executeSqlStatement(sqlStatement, dbms, conn);
                 conn.commit();
                 conn.close();
-                transactionCompleted = true;
+                complete = true;
             } catch (SQLException sqlEx) {
                 if (retryCount < INITIAL_RETRY_COUNT) {
                     LOGGER_SQL_RETRY.error("SqlStatementList: " + sqlStatement);
@@ -252,26 +249,28 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
                     throw sqlEx; // Finally will be executed...
                 }
             } finally {
-
-                if (!transactionCompleted) {
-                    try {
-                        // If we got here the transaction should be rolled back, as not
-                        // all work has been done
-                        conn.rollback();
-                    } catch (SQLException sqlEx) {
-                        // If we got an exception here, something
-                        // pretty serious is going on
-                        LOGGER.error(sqlEx, "Rollback error! connection:" + sqlEx.getMessage());
-                        retryCount = 0;
-                    } finally {
-                        conn.close();
-                    }
-                }
+                cleanup(conn, complete);
             }
-        } while (!transactionCompleted && (retryCount > 0));
+        } while (!complete && (retryCount > 0));
 
-        if (transactionCompleted) {
+        if (complete) {
             postSuccessfulTransaction(sqlStatement);
+        }
+    }
+
+    private void cleanup(Connection conn, boolean transactionCompleted) throws SQLException {
+        if (!transactionCompleted) {
+            try {
+                // If we got here the transaction should be rolled back, as not
+                // all work has been done
+                conn.rollback();
+            } catch (SQLException sqlEx) {
+                // If we got an exception here, something
+                // pretty serious is going on
+                throw new SpeedmentException("Rollback error! connection:", sqlEx);
+            } finally {
+                conn.close();
+            }
         }
     }
 
@@ -289,15 +288,11 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         postSuccessfulTransaction(sqlStatement);
     }
 
-     private void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement sqlStatement) throws SQLException {
-        insertHandler.accept(dbms,conn,sqlStatement);
-    }
-
-    private void handleSqlStatement(Dbms dbms, Connection conn, SqlUpdateStatement sqlStatement) throws SQLException {
+    private void handleSqlStatement(Connection conn, SqlUpdateStatement sqlStatement) throws SQLException {
         handleSqlStatementHelper(conn, sqlStatement);
     }
 
-    private void handleSqlStatement(Dbms dbms, Connection conn, SqlDeleteStatement sqlStatement) throws SQLException {
+    private void handleSqlStatement(Connection conn, SqlDeleteStatement sqlStatement) throws SQLException {
         handleSqlStatementHelper(conn, sqlStatement);
     }
 
@@ -325,22 +320,31 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
     private void executeSqlStatement(SqlStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
         assertNotClosed();
         switch (sqlStatement.getType()) {
-            case INSERT: {
-                final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
-                insertHandler.accept(dbms,conn,s);
+            case INSERT:
+                insert((SqlInsertStatement) sqlStatement, dbms, conn);
                 break;
-            }
-            case UPDATE: {
-                final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
-                handleSqlStatement(dbms, conn, s);
+            case UPDATE:
+                update((SqlUpdateStatement) sqlStatement, dbms, conn);
                 break;
-            }
-            case DELETE: {
-                final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
-                handleSqlStatement(dbms, conn, s);
+            case DELETE:
+                delete((SqlDeleteStatement) sqlStatement, dbms, conn);
                 break;
-            }
         }
+    }
+
+    private void delete(SqlDeleteStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
+        final SqlDeleteStatement s = sqlStatement;
+        handleSqlStatement(conn, s);
+    }
+
+    private void update(SqlUpdateStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
+        final SqlUpdateStatement s = sqlStatement;
+        handleSqlStatement(conn, s);
+    }
+
+    private void insert(SqlInsertStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
+        final SqlInsertStatement s = sqlStatement;
+        insertHandler.accept(dbms,conn,s);
     }
 
     private <T> T applyOnConnection(Dbms dbms, SqlFunction<Connection, T> mapper) throws SQLException {
@@ -379,7 +383,6 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
         try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
             while (generatedKeys.next()) {
                 longConsumer.accept(generatedKeys.getLong(1));
-                //sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
             }
         }
     }

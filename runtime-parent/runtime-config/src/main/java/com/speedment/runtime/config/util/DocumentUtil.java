@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.util;
 
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.internal.util.Trees;
 import com.speedment.runtime.config.trait.HasAlias;
@@ -29,6 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
@@ -61,7 +61,7 @@ public final class DocumentUtil {
         
         return Trees.traverse(
             document,
-            d -> d.children(),
+            Document::children,
             Trees.TraversalOrder.DEPTH_FIRST_PRE
         );
     }
@@ -199,7 +199,7 @@ public final class DocumentUtil {
      */
     public static <T extends Document & HasName, D extends Document & HasName>
         String relativeName(D document, Class<T> from, Name name) {
-        return relativeName(document, from, name, Function.identity());
+        return relativeName(document, from, name, UnaryOperator.identity());
     }
 
     /**
@@ -224,7 +224,7 @@ public final class DocumentUtil {
             D document,
             Class<T> from,
             Name name,
-            Function<String, String> nameMapper) {
+            UnaryOperator<String> nameMapper) {
 
         return relativeName(document, from, name, ".", nameMapper);
     }
@@ -254,7 +254,7 @@ public final class DocumentUtil {
             final Class<T> from,
             final Name name,
             final CharSequence separator,
-            final Function<String, String> nameMapper) {
+            final UnaryOperator<String> nameMapper) {
         
         requireNonNull(document);
         requireNonNull(from);
@@ -343,13 +343,17 @@ public final class DocumentUtil {
 
         return document.getClass().getSimpleName()
             + " {"
-            + MapStream.of(document.getData())
-            .mapValue(VALUE_MAPPER)
-            .map((k, v) -> "\"" + k + "\": " + (v == null ? "null" : (v instanceof String ? ("\"" + v + "\"") : v.toString())))
+            + document.getData().entrySet().stream()
+            .map(e -> new AbstractMap.SimpleImmutableEntry<>(e.getKey(), VALUE_MAPPER.apply(e.getValue())))
+            .map(e -> "\"" + e.getKey() + "\": " + (e.getValue() == null ? "null" : quoteIfString(e.getValue())))
             .collect(joining(", "))
             + "}";
     }
-    
+
+    private static String quoteIfString(Object o) {
+        return (o instanceof String ? ("\"" + o + "\"") : o.toString());
+    }
+
     /**
      * Casts the specified object to a {@code List<Map<String, Object>>}.
      * <p>
@@ -368,9 +372,9 @@ public final class DocumentUtil {
     private static <K, V> Map<K, V> deepCopyMap(Map<K, V> original) {
         final Map<K, V> copy = new ConcurrentSkipListMap<>();
 
-        MapStream.of(original)
-            .mapValue(DocumentUtil::deepCopyObject)
-            .forEachOrdered(copy::put);
+        original.entrySet().stream()
+            .map(e -> new AbstractMap.SimpleImmutableEntry<>(e.getKey(), deepCopyObject(e.getValue())))
+            .forEach(e -> copy.put(e.getKey(), e.getValue()));
 
         return copy;
     }
@@ -406,9 +410,9 @@ public final class DocumentUtil {
         }
     }
 
-    private static final Function<Object, Object> VALUE_MAPPER = o -> {
+    private static final UnaryOperator<Object> VALUE_MAPPER = o -> {
         if (o instanceof List) {
-            return "[" + ((List) o).size() + "]";
+            return "[" + ((List<?>) o).size() + "]";
         } else {
             return o;
         }

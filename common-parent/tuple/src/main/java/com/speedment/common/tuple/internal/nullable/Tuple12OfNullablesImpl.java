@@ -16,9 +16,6 @@
  */
 package com.speedment.common.tuple.internal.nullable;
 
-import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple12;
-import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.internal.AbstractTupleOfNullables;
 import com.speedment.common.tuple.nullable.Tuple12OfNullables;

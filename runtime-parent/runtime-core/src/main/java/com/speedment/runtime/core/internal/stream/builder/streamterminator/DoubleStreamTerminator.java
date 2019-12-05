@@ -17,12 +17,14 @@
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
+
 import java.util.DoubleSummaryStatistics;
-import static java.util.Objects.requireNonNull;
 import java.util.OptionalDouble;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.function.*;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -30,7 +32,7 @@ import java.util.function.*;
  */
 public interface DoubleStreamTerminator extends BaseStreamTerminator {
 
-    default <T> void forEach(DoublePipeline pipeline, DoubleConsumer action) {
+    default void forEach(DoublePipeline pipeline, DoubleConsumer action) {
         requireNonNull(pipeline);
         requireNonNull(action);
         optimize(pipeline).getAsDoubleStream().forEach(action);
@@ -133,11 +135,6 @@ public interface DoubleStreamTerminator extends BaseStreamTerminator {
         requireNonNull(pipeline);
         return optimize(pipeline).getAsDoubleStream().findAny();
     }
-//
-//    default Stream<Double> boxed(DoublePipeline pipeline) {
-//        requireNonNull(pipeline);
-//        return optimize(pipeline).getAsDoubleStream().boxed();
-//    }
 
     default PrimitiveIterator.OfDouble iterator(DoublePipeline pipeline) {
         requireNonNull(pipeline);

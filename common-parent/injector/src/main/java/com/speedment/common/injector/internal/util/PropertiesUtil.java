@@ -18,14 +18,14 @@ package com.speedment.common.injector.internal.util;
 
 import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.logger.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.lang.reflect.Field;
 import java.util.Properties;
 
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
@@ -50,7 +50,7 @@ public final class PropertiesUtil {
                 final String err = "Error loading default settings from "
                     + configFile.getAbsolutePath() + "-file.";
                 logger.error(ex, err);
-                throw new RuntimeException(err, ex);
+                throw new InjectorException(err, ex);
             }
         } else {
             logger.info(
@@ -69,76 +69,35 @@ public final class PropertiesUtil {
 
         traverseFields(instance.getClass())
             .filter(f -> f.isAnnotationPresent(Config.class))
-            .forEach(f -> {
-                final Config config = f.getAnnotation(Config.class);
+            .forEach(f -> configure(instance, properties, injectorProxy, f));
+    }
 
-                final String serialized;
-                if (properties.containsKey(config.name())) {
-                    serialized = properties.getProperty(config.name());
-                } else {
-                    serialized = config.value();
-                }
+    private static <T> void configure(T instance, Properties properties, InjectorProxy injectorProxy, Field f) {
+        final Config config = f.getAnnotation(Config.class);
 
-                final Object object;
+        final String serialized;
+        if (properties.containsKey(config.name())) {
+            serialized = properties.getProperty(config.name());
+        } else {
+            serialized = config.value();
+        }
+
+        trySetField(instance, f, serialized, injectorProxy, config);
+    }
+
+    private static <T> void trySetField(T instance, Field f, String serialized, InjectorProxy injectorProxy, Config config) {
+        ReflectionUtil.parse(f.getType(), serialized)
+            .ifPresent(object -> {
                 try {
-                    if (boolean.class == f.getType() 
-                    || Boolean.class.isAssignableFrom(f.getType())) {
-                        object = Boolean.parseBoolean(serialized);
-                    } else if (byte.class == f.getType()
-                    || Byte.class.isAssignableFrom(f.getType())) {
-                        object = Byte.parseByte(serialized);
-                    } else if (short.class == f.getType()
-                    || Short.class.isAssignableFrom(f.getType())) {
-                        object = Short.parseShort(serialized);
-                    } else if (int.class == f.getType()
-                    || Integer.class.isAssignableFrom(f.getType())) {
-                        object = Integer.parseInt(serialized);
-                    } else if (long.class == f.getType()
-                    || Long.class.isAssignableFrom(f.getType())) {
-                        object = Long.parseLong(serialized);
-                    } else if (float.class == f.getType()
-                    || Float.class.isAssignableFrom(f.getType())) {
-                        object = Float.parseFloat(serialized);
-                    } else if (double.class == f.getType()
-                    || Double.class.isAssignableFrom(f.getType())) {
-                        object = Double.parseDouble(serialized);
-                    } else if (String.class.isAssignableFrom(f.getType())) {
-                        object = serialized;
-                    } else if (char.class == f.getType()
-                    || Character.class.isAssignableFrom(f.getType())) {
-                        if (serialized.length() == 1) {
-                            object = serialized.charAt(0);
-                        } else {
-                            throw new IllegalArgumentException(
-                                "Value '" + serialized + "' is to long to be " + 
-                                "parsed into a field of type '" +
-                                f.getType().getName() + "'."
-                            );
-                        }
-                    } else if (File.class.isAssignableFrom(f.getType())) {
-                        object = new File(serialized);
-                    } else if (URL.class.isAssignableFrom(f.getType())) {
-                        try {
-                            object = new URL(serialized);
-                        } catch (final MalformedURLException ex) {
-                            throw new IllegalArgumentException(
-                                "Specified URL '" + serialized + "' is " + 
-                                "malformed.", ex
-                            );
-                        }
-                    } else {
-                        // No op
-                        return;
-                    }
                     injectorProxy.set(f, instance, object);
                 } catch (final ReflectiveOperationException ex) {
-                    throw new RuntimeException(
+                    throw new InjectorException(
                         "Failed to set config parameter '" + config.name() +
-                        "' in class '" + instance.getClass().getName() + 
-                        "'.", ex
+                            "' in class '" + instance.getClass().getName() +
+                            "'.", ex
                     );
                 }
             });
     }
-    
+
 }

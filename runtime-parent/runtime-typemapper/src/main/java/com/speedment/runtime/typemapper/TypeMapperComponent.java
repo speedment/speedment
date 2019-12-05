@@ -14,12 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.translator.component;
+package com.speedment.runtime.typemapper;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasTypeMapper;
-import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.lang.reflect.Type;
 import java.util.Optional;
@@ -27,8 +26,12 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * Stores the currently installed {@link TypeMapper TypeMappers}.
- * 
+ * Stores the currently installed {@link TypeMapper TypeMappers}. This
+ * component is needed at code generation time.
+ * <p>
+ * The TypeMapperComponent is not needed at application run-time but is
+ * nevertheless defined here to reduce dependency complexity.
+ *
  * @author  Emil Forslund
  * @since   2.2.0
  */

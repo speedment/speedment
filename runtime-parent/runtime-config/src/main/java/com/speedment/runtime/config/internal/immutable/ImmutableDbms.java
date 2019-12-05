@@ -67,6 +67,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
         return enabled;
     }
 
+    @Override
     public String getId() {
         return id;
     }

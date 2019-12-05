@@ -47,10 +47,10 @@ import java.util.regex.Pattern;
  */
 public final class MailPromptController implements Initializable {
 
-    private final static Pattern INVALID_MAIL = 
+    private static final Pattern INVALID_MAIL =
         Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
     
-    private final static Predicate<String> IS_INVALID_MAIL = 
+    private static final Predicate<String> IS_INVALID_MAIL =
         mail -> !INVALID_MAIL.matcher(mail).find();
     
     public @Inject ProjectComponent projects;

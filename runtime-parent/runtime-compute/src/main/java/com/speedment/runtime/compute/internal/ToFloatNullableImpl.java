@@ -59,12 +59,12 @@ implements NullableExpression<T, ToFloat<T>>, ToFloatNullable<T> {
     }
 
     @Override
-    public float applyAsFloat(T t) throws NullPointerException {
+    public float applyAsFloat(T t) {
         return original.applyAsFloat(t);
     }
 
     @Override
-    public ToFloat<T> orThrow() throws NullPointerException {
+    public ToFloat<T> orThrow() {
         return original;
     }
 

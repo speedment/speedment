@@ -17,10 +17,8 @@
 package com.speedment.common.codegen.controller;
 
 import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.trait.HasMethods;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;

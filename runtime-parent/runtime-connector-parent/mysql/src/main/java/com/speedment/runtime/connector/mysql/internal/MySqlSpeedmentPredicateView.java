@@ -230,7 +230,7 @@ public final class MySqlSpeedmentPredicateView
         }
 
         return of("(" + cn + " IN (" +
-            set.stream().map($ -> "?").collect(joining(",")) +
+            set.stream().map(unused -> "?").collect(joining(",")) +
             " COLLATE "+ binaryCollationName +"))", negated
         ).addAll(set);
     }
@@ -239,33 +239,23 @@ public final class MySqlSpeedmentPredicateView
     betweenStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
         final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
-            case START_EXCLUSIVE_END_EXCLUSIVE: {
-                return of(
-                    "(" + greaterThanString(cn) + AND + lessThanString(cn) + ")",
-                    negated
-                ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
-            }
-            case START_INCLUSIVE_END_EXCLUSIVE: {
-                return of(
-                    "(" + greaterOrEqualString(cn) + AND + lessThanString(cn) + ")",
-                    negated
-                ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
-            }
-            case START_EXCLUSIVE_END_INCLUSIVE: {
-
-                return of(
-                    "(" + greaterThanString(cn) + AND + lessOrEqualString(cn) + ")",
-                    negated
-                ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
-            }
-            case START_INCLUSIVE_END_INCLUSIVE: {
-                return of(
-                    "(" + greaterOrEqualString(cn) + AND + lessOrEqualString(cn) + ")",
-                    negated
-                ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
-            }
+            case START_EXCLUSIVE_END_EXCLUSIVE:
+                return predicate(model, negated, greaterThanString(cn), lessThanString(cn));
+            case START_INCLUSIVE_END_EXCLUSIVE:
+                return predicate(model, negated, greaterOrEqualString(cn), lessThanString(cn));
+            case START_EXCLUSIVE_END_INCLUSIVE:
+                return predicate(model, negated, greaterThanString(cn), lessOrEqualString(cn));
+            case START_INCLUSIVE_END_INCLUSIVE:
+                return predicate(model, negated, greaterOrEqualString(cn), lessOrEqualString(cn));
         }
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
+    }
+
+    private SqlPredicateFragment predicate(FieldPredicate<?> model, boolean negated, String s, String s2) {
+        return of(
+            "(" + s + AND + s2 + ")",
+            negated
+        ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
     }
 
     private SqlPredicateFragment

@@ -17,7 +17,6 @@
 package com.speedment.common.tuple;
 
 import com.speedment.common.tuple.getter.TupleGetter;
-import com.speedment.common.tuple.getter.TupleGetter0;
 
 import java.util.stream.IntStream;
 import java.util.stream.Stream;

@@ -48,7 +48,7 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class PostgresDbmsTypeImpl implements DbmsType {
 
-    private final static FieldPredicateView PREDICATE_VIEW = new PostgresSpeedmentPredicateView();
+    private static final FieldPredicateView PREDICATE_VIEW = new PostgresSpeedmentPredicateView();
 
     private final DbmsTypeDefault support;
     private final DriverComponent driverComponent;
@@ -147,12 +147,12 @@ public final class PostgresDbmsTypeImpl implements DbmsType {
         return isSupported(getDriverName());
     }
 
-    private final static class PostgresNamingConvention extends AbstractDatabaseNamingConvention {
+    private static final class PostgresNamingConvention extends AbstractDatabaseNamingConvention {
 
-        private final static String ENCLOSER = "\"",
-            QUOTE = "'";
+        private static final String ENCLOSER = "\"";
+        private static final String QUOTE = "'";
 
-        private final static Set<String> EXCLUDE_SET = Stream.of(
+        private static final Set<String> EXCLUDE_SET = Stream.of(
             "pg_catalog",
             "information_schema"
         ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
@@ -188,7 +188,7 @@ public final class PostgresDbmsTypeImpl implements DbmsType {
         return SortByNullOrderInsertion.POST;
     }
 
-    private final static class PostgresConnectionUrlGenerator implements ConnectionUrlGenerator {
+    private static final class PostgresConnectionUrlGenerator implements ConnectionUrlGenerator {
 
         @Override
         public String from(Dbms dbms) {

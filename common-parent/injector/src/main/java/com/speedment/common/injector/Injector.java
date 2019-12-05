@@ -151,7 +151,7 @@ public interface Injector {
      * @param instance  the instance to configure (must not be null)
      * @return          the instance created
      */
-    <T> T inject(T instance) throws IllegalArgumentException;
+    <T> T inject(T instance);
     
     /**
      * Stop all installed components by calling their 

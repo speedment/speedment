@@ -178,9 +178,9 @@ extends Document,
             );
         }
 
-        final String dbmsId = parts[0],
-            schemaId = parts[1],
-            tableId = parts[2];
+        final String dbmsId = parts[0];
+        final String schemaId = parts[1];
+        final String tableId = parts[2];
        
         return dbmses()
             .filter(d -> dbmsId.equals(d.getId()))

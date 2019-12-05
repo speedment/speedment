@@ -20,11 +20,13 @@ import com.speedment.runtime.core.internal.stream.builder.action.reference.*;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
+import com.speedment.runtime.core.stream.java9.Java9StreamAdditions;
+
 import java.util.*;
-import static java.util.Objects.requireNonNull;
 import java.util.function.*;
 import java.util.stream.*;
-import com.speedment.runtime.core.stream.java9.Java9StreamAdditions;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -419,7 +421,6 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Iterator<T> iterator() {
         assertNotLinkedOrConsumedAndSet();
-        //throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
         return streamTerminator.iterator(pipeline());
     }
 
@@ -436,7 +437,6 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Spliterator<T> spliterator() {
         assertNotLinkedOrConsumedAndSet();
-        //throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
         return streamTerminator.spliterator(pipeline());
     }
 }

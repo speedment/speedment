@@ -233,8 +233,6 @@ public final class SqliteMetadataHandlerImpl implements DbmsMetadataHandler {
     private CompletableFuture<Project> readSchemaMetadata(
             Project project, Dbms dbms, ProgressMeasure progress) {
 
-        //final DbmsType dbmsType = dbmsTypeOf(dbmsHandlerComponent, dbms);
-
         progress.setCurrentAction(describe(dbms));
         LOGGER.info(describe(dbms));
 
@@ -246,7 +244,7 @@ public final class SqliteMetadataHandlerImpl implements DbmsMetadataHandler {
         schema.mutator().setName(SCHEMA);
 
         return readTableMetadata(schema, typeMappingTask, progress)
-            .thenApplyAsync($ -> project);
+            .thenApplyAsync(unused -> project);
     }
 
     private CompletableFuture<Schema> readTableMetadata(
@@ -258,7 +256,7 @@ public final class SqliteMetadataHandlerImpl implements DbmsMetadataHandler {
             tablesTask(schema)
         );
 
-        return tablesTask.thenComposeAsync($ -> typeMappingTask)
+        return tablesTask.thenComposeAsync(unused -> typeMappingTask)
             .thenComposeAsync(sqlTypeMappings -> {
                 final Dbms dbms = schema.getParentOrThrow();
                 final AtomicInteger cnt = new AtomicInteger();
@@ -659,7 +657,7 @@ public final class SqliteMetadataHandlerImpl implements DbmsMetadataHandler {
 
             return sb.toString();
         } catch (NoSuchAlgorithmException ex) {
-            throw new RuntimeException("MD5 algorithm not supported.", ex);
+            throw new IllegalArgumentException("MD5 algorithm not supported.", ex);
         }
     }
 

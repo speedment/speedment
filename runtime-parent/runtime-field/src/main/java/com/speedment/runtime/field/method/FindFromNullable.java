@@ -102,7 +102,7 @@ extends Function<ENTITY, Stream<FK_ENTITY>> {
      *
      * @throws IllegalArgumentException  if no foreign entity was referenced
      */
-    FK_ENTITY applyOrThrow(ENTITY entity) throws IllegalArgumentException;
+    FK_ENTITY applyOrThrow(ENTITY entity);
 
     /**
      * Applies this method, locating the referenced entity and returning it as a

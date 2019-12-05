@@ -16,7 +16,6 @@
  */
 package com.speedment.generator.standard.manager;
 
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
@@ -27,7 +26,6 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -36,7 +34,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
@@ -52,6 +49,7 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -71,18 +69,19 @@ import static java.util.stream.Collectors.*;
  * @author Emil Forslund
  * @since 3.0.1
  */
-public final class GeneratedSqlAdapterTranslator
-    extends AbstractEntityAndManagerTranslator<Class> {
+public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String CREATE_HELPERS_METHOD_NAME = "createHelpers";
-    public final static String INSTALL_METHOD_NAME = "installMethodName";
-    public final static String OFFSET_PARAMETER_NAME = "offset";
+    public static final String CREATE_HELPERS_METHOD_NAME = "createHelpers";
+    public static final String INSTALL_METHOD_NAME = "installMethodName";
+    public static final String OFFSET_PARAMETER_NAME = "offset";
 
-    @Inject public ResultSetMapperComponent resultSetMapperComponent;
-    @Inject public DbmsHandlerComponent dbmsHandlerComponent;
+    private final ResultSetMapperComponent resultSetMapperComponent;
+    private final DbmsHandlerComponent dbmsHandlerComponent;
 
-    public GeneratedSqlAdapterTranslator(Table table) {
-        super(table, Class::of);
+    public GeneratedSqlAdapterTranslator(Injector injector, Table table) {
+        super(injector, table, Class::of);
+        this.resultSetMapperComponent = injector.getOrThrow(ResultSetMapperComponent.class);
+        this.dbmsHandlerComponent     = injector.getOrThrow(DbmsHandlerComponent.class);
     }
 
     @Override
@@ -156,9 +155,7 @@ public final class GeneratedSqlAdapterTranslator
                             .add(Field.of(OFFSET_PARAMETER_NAME, int.class))
                             .add("return rs -> apply(rs, offset);")
                     )
-                    .call(() -> {
-                        //file.add(Import.of(State.class).setStaticMember("RESOLVED").static_());
-
+                    .call(() ->
                         // Operate on enabled columns that has a type mapper
                         // that is not either empty, an identity mapper or a
                         // primitive mapper.
@@ -204,8 +201,8 @@ public final class GeneratedSqlAdapterTranslator
                                         + "." + getSupport().namer().javaStaticFieldName(col.getJavaName())
                                         + ", " + getSupport().entityName() + ".class);"
                                     );
-                            });
-                    });
+                            })
+                    );
             })
             .build();
     }
@@ -248,7 +245,7 @@ public final class GeneratedSqlAdapterTranslator
             ));
     }
 
-    private static Set<java.lang.Class<?>> NULL_AWARE_GETTERS = Stream.of(
+    private static final Set<java.lang.Class<?>> NULL_AWARE_GETTERS = Stream.of(
         String.class,
         BigDecimal.class,
         java.sql.Time.class,
@@ -257,7 +254,7 @@ public final class GeneratedSqlAdapterTranslator
         Blob.class,
         Clob.class,
         Object.class
-    ).collect(toSet());
+    ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
 
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();

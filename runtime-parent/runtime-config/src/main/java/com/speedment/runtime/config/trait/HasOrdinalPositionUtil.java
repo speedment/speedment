@@ -18,8 +18,6 @@ package com.speedment.runtime.config.trait;
 
 import java.util.Comparator;
 
-import static com.speedment.common.mapstream.MapStream.comparing;
-
 public final class HasOrdinalPositionUtil {
 
     private HasOrdinalPositionUtil() {}
@@ -35,7 +33,6 @@ public final class HasOrdinalPositionUtil {
      * based on the natural ordering of their {@link HasOrdinalPosition#getOrdinalPosition()}
      * result.
      */
-    public static final Comparator<HasOrdinalPosition> COMPARATOR = comparing(HasOrdinalPosition::getOrdinalPosition);
-
+    public static final Comparator<HasOrdinalPosition> COMPARATOR = Comparator.comparing(HasOrdinalPosition::getOrdinalPosition);
 
 }

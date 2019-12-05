@@ -59,12 +59,12 @@ implements NullableExpression<T, ToBoolean<T>>, ToBooleanNullable<T> {
     }
 
     @Override
-    public boolean applyAsBoolean(T t) throws NullPointerException {
+    public boolean applyAsBoolean(T t) {
         return original.applyAsBoolean(t);
     }
 
     @Override
-    public ToBoolean<T> orThrow() throws NullPointerException {
+    public ToBoolean<T> orThrow() {
         return original;
     }
 
@@ -94,8 +94,11 @@ implements NullableExpression<T, ToBoolean<T>>, ToBooleanNullable<T> {
 
     @Override
     public long hash(T object) {
-        return isNull.test(object)
-            ? 2 : (original.applyAsBoolean(object) ? 1 : 0);
+        if (isNull.test(object)) {
+            return 2;
+        } else {
+            return original.applyAsBoolean(object) ? 1 : 0;
+        }
     }
 
     @Override

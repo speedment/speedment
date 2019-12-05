@@ -33,7 +33,9 @@ import static java.util.Objects.requireNonNull;
  */
 public final class JoiningExpressionImpl<T> implements JoiningExpression<T> {
 
-    private final CharSequence separator, prefix, suffix;
+    private final CharSequence separator;
+    private final CharSequence prefix;
+    private final CharSequence suffix;
     private final List<ToString<T>> expressions;
 
     public JoiningExpressionImpl(

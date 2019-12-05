@@ -18,7 +18,6 @@ package com.speedment.tool.actions.provider;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.tool.actions.ProjectTreeComponent;
-import com.speedment.tool.actions.internal.menues.ToggleColumnsEnabledActionImpl;
 import com.speedment.tool.actions.internal.menues.ToggleExpandedActionImpl;
 import com.speedment.tool.actions.menues.ToggleExpandedAction;
 import com.speedment.tool.actions.menues.ToggleTablesEnabledAction;

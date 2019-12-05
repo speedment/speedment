@@ -49,6 +49,7 @@ public interface SchemaIdentifier<ENTITY> extends HasDbmsId, HasSchemaId {
     }
     
     class Hidden {
+        private Hidden() {}
 
         private static final Map<SchemaIdentifier<?>, SchemaIdentifier<?>> INTERNED = new ConcurrentHashMap<>();
 

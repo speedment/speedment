@@ -16,13 +16,9 @@
  */
 package com.speedment.common.tuple.internal.nonnullable;
 
-import com.speedment.common.tuple.MutableTuple;
 import com.speedment.common.tuple.Tuple0;
 import com.speedment.common.tuple.Tuple;
-import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.internal.AbstractTuple;
-
-import java.util.Optional;
 
 /**
  * An implementation class of a {@link Tuple0}.
@@ -35,7 +31,7 @@ public final class Tuple0Impl
 extends AbstractTuple 
 implements Tuple0 {
     
-    public final static Tuple0 EMPTY_TUPLE = new Tuple0Impl();
+    public static final Tuple0 EMPTY_TUPLE = new Tuple0Impl();
     
     /**
      * Constructs a {@link Tuple} of type {@link Tuple0}.

@@ -29,7 +29,7 @@ import static com.speedment.runtime.core.internal.stream.builder.action.Standard
 public final class IntSortedAction extends Action<IntStream, IntStream> {
 
     public IntSortedAction() {
-        super(s -> s.sorted(), IntStream.class, SORTED);
+        super(IntStream::sorted, IntStream.class, SORTED);
     }
 
 }

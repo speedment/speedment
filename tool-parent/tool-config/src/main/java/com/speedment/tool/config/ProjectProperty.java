@@ -127,7 +127,7 @@ implements Project,
         return singletonList(key);
     }
 
-    private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {
+    private static final StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {
         @Override
         public String toString(Path p) {
             if (p == null) {

@@ -56,5 +56,5 @@ final class SqliteNamingConvention implements DatabaseNamingConvention {
         return EXCLUDE_SET;
     }
 
-    private final static Set<String> EXCLUDE_SET = emptySet();
+    private static final Set<String> EXCLUDE_SET = emptySet();
 }

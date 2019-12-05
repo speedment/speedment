@@ -45,7 +45,7 @@ public final class MetricsImpl implements Metrics {
         this.sqlWhileCount = requireNonNegative(sqlWhileCount);
         this.sqlOrderCount = requireNonNegative(sqlOrderCount);
         this.sqlSkipCount = requireNonNegative(sqlSkipCount);
-        this.sqlLimitCount = requireNonNegative(sqlSkipCount);
+        this.sqlLimitCount = requireNonNegative(sqlLimitCount);
     }
 
     @Override

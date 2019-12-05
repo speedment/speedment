@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.util.document;
 
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasAliasUtil;
 import com.speedment.runtime.config.trait.HasEnableUtil;
@@ -29,6 +28,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -250,6 +250,7 @@ public abstract class AbstractDocumentTest {
     @SafeVarargs
     @SuppressWarnings("varargs")
     private static Map<String, Object> map(Map.Entry<String, Object>... entries) {
-        return MapStream.of(Stream.of(entries)).toMap();
+        return Stream.of(entries)
+            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

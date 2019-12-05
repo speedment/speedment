@@ -18,7 +18,6 @@ package com.speedment.runtime.core.internal.component.sql.override.def.reference
 
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.IteratorTerminator;
-import com.speedment.runtime.core.component.sql.override.reference.SpliteratorTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
 import java.util.Iterator;

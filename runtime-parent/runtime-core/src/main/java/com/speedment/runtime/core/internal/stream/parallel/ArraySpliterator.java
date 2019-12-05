@@ -66,16 +66,19 @@ final class ArraySpliterator<T> implements Spliterator<T> {
     public Spliterator<T> trySplit() {
         final int lo = index;
         final int mid = (lo + size) >>> 1;
-        return (lo >= mid)
-                ? null
-                : new ArraySpliterator<>(array, lo, index = mid, characteristics);
+        if (lo >= mid) {
+            return null;
+        } else {
+            return new ArraySpliterator<>(array, lo, index = mid, characteristics);
+        }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void forEachRemaining(Consumer<? super T> action) {
         requireNonNull(action);
-        int i, hi;
+        int i;
+        int hi;
         if (array.length >= (hi = size) && (i = index) >= 0 && i < (index = hi)) {
             do {
                 action.accept((T) array[i]);
