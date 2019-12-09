@@ -70,10 +70,7 @@ git pull
 git merge develop
 
 echo "** Setting versions to $VERSION"
-mvn versions:set -DnewVersion="$VERSION"
-RETURN_BODY="return \"$VERSION\";"
-echo $RETURN_BODY;
-sed -i tmp "s/getImplementationVersion.*\}/getImplementationVersion() \{ $RETURN_BODY \}/g" runtime-parent/runtime-core/src/main/java/com/speedment/runtime/core/internal/component/InfoComponentImpl.java
+./set_version "$VERSION"
 mvn speedmentversion:check
 
 echo "** Building version $VERSION"
