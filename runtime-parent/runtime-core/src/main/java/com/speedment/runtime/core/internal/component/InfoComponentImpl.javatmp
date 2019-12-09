@@ -42,7 +42,9 @@ public final class InfoComponentImpl implements InfoComponent {
     }
 
     @Override
-    public String getImplementationVersion() { $RETURN_BODY }
+    // This method must be formatted like this (in a single line) in order
+    // to work with the version update script
+    public String getImplementationVersion() { return "3.2.5"; }
 
     @Override
     public String getVendor() {
