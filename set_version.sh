@@ -33,4 +33,4 @@ mvn versions:set -DnewVersion="$VERSION"
 RETURN_BODY="return \"$VERSION\";"
 echo $RETURN_BODY;
 sed -i tmp "s/getImplementationVersion.*\}/getImplementationVersion() \{ $RETURN_BODY \}/g" runtime-parent/runtime-core/src/main/java/com/speedment/runtime/core/internal/component/InfoComponentImpl.java
-
+rm runtime-parent/runtime-core/src/main/java/com/speedment/runtime/core/internal/component/InfoComponentImpl.javatmp
