@@ -876,6 +876,61 @@
                 </plugins>
             </build>
         </profile>
+
+
+        <profile>
+            <id>license-check</id>
+            <build>
+                <plugins>
+                    <!--The license-maven-plugin plugin MUST BE COMMENTED OUT DURING DEPLOYMENT, otherwise nexus-staging-maven-plugin will fail (sic!)-->
+                    <plugin>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <version>3.0</version>
+
+                        <configuration>
+                            <header>license_header.txt</header>
+                            <properties>
+                                <currentYear>2019</currentYear>
+                            </properties>
+                            <headerDefinitions>
+                                <headerDefinition>license_header_def.xml</headerDefinition>
+                            </headerDefinitions>
+                            <excludes>
+                                <exclude>**/README</exclude>
+                                <exclude>**/README.md</exclude>
+                                <exclude>**/package-info.java</exclude>
+                                <exclude>**/nbactions.xml</exclude>
+                                <exclude>**/nb-configuration.xml</exclude>
+                                <exclude>**/*.versionsBackup</exclude>
+                                <exclude>CONTRIBUTOR_LICENSE_AGREEMENT</exclude>
+                                <exclude>LICENSE</exclude>
+                                <exclude>DISCLAIMER</exclude>
+                                <exclude>THIRD_PARTY_LICENSES</exclude>
+                                <exclude>src/test/resources/**</exclude>
+                                <exclude>src/main/resources/**</exclude>
+                                <exclude>nbproject/**</exclude>
+                                <exclude>src/main/java/com/company/sakila/db0/**</exclude>
+                                <exclude>
+                                    /Users/pemi/Documents/orm/speedment/example-parent/basic-example/src/main/java/com/company/sakila/db0
+                                </exclude>
+                                <exclude>build.gradle</exclude>
+                            </excludes>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
     </profiles>
     
     <dependencyManagement>
