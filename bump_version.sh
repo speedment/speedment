@@ -56,11 +56,21 @@ fi
 
 UPDATED_FILES=`git status | grep -e 'new file:' -e 'modified:' | wc -l`
 echo "** There are $UPDATED_FILES files to commit"
-if [ $UPDATED_FILES -gt 0 ]
+if [ "$UPDATED_FILES" -gt 0 ]
  then
-   echo "** Push with Git"
+   echo "** Push changes to GitHub"
    git add --all
-   git commit -m "Preparing for version bump to $VERSION"
+   git commit -m "Prepare for version bump to $VERSION"
    git push
 fi
+
+echo "** Performing checkout master, pull and merge with develop"
+git checkout master
+git pull
+git merge develop
+
+echo "** Setting versions to $VERSION"
+mvn versions:set -DnewVersion="$VERSION"
+sed -i tmp 's/getImplementationVersion.*\}/getImplementationVersion() \{ return \"$VERSION\";\}/g' runtime-parent/runtime-core/src/main/java/com/speedment/runtime/core/internal/component/InfoComponentImpl.java
+
 

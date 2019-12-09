@@ -42,7 +42,7 @@ public final class InfoComponentImpl implements InfoComponent {
     }
 
     @Override
-    public String getImplementationVersion() { return "$VERSION";}
+    public String getImplementationVersion() { return ;}
 
     @Override
     public String getVendor() {
