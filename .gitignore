@@ -27,3 +27,5 @@ m\.sh
 .project
 
 webshop.db
+
+runtime-parent/runtime-core/src/main/java/com/speedment/runtime/core/internal/component/InfoComponentImpl.javatmp
