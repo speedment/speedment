@@ -16,7 +16,6 @@
  */
 package com.speedment.common.combinatorics.internal;
 
-import com.speedment.common.combinatorics.*;
 import java.util.*;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -28,6 +27,8 @@ import java.util.stream.Stream;
  * @author Per Minborg
  */
 public final class PermutationUtil {
+
+    private PermutationUtil() {}
 
     public static long factorial(final int n) {
         if (n > 20 || n < 0) {
@@ -57,10 +58,6 @@ public final class PermutationUtil {
         final List<T> itemList = Arrays.asList(items);
         return LongStream.range(0, factorial(items.length))
             .mapToObj(no -> permutation(no, itemList).stream());
-    }
-
-    private PermutationUtil() {
-        throw new UnsupportedOperationException();
     }
 
 }

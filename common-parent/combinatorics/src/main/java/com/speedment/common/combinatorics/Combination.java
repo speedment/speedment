@@ -17,7 +17,8 @@
 package com.speedment.common.combinatorics;
 
 import com.speedment.common.combinatorics.internal.CombinationUtil;
-import java.util.*;
+
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -26,6 +27,8 @@ import java.util.stream.Stream;
  * @author Per Minborg
  */
 public final class Combination {
+
+    private Combination() {}
 
     /**
      * Creates and returns all possible combinations of the given elements.
@@ -40,10 +43,6 @@ public final class Combination {
     @SuppressWarnings("varargs") // Creating a List from an array is safe
     public static <T> Stream<List<T>> of(final T... items) {
         return CombinationUtil.of(items);
-    }
-
-    private Combination() {
-        throw new UnsupportedOperationException();
     }
 
 }

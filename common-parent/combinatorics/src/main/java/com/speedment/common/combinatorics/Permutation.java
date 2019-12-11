@@ -17,7 +17,8 @@
 package com.speedment.common.combinatorics;
 
 import com.speedment.common.combinatorics.internal.PermutationUtil;
-import java.util.*;
+
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -28,10 +29,31 @@ import java.util.stream.Stream;
  */
 public final class Permutation {
 
+    private Permutation() {}
+
+    /**
+     * Returns the factorial (n!) for the given {@code n} value.
+     *
+     * @param n parameter
+     * @return the factorial (n!) for the given {@code n} value
+     */
     public static long factorial(final int n) {
         return PermutationUtil.factorial(n);
     }
 
+    /**
+     * Returns the given {@code no} (of n!) permutation variant of the
+     * given {@code items}.
+     * <p>
+     * Note that the number of permutations increases very rapidly as the length of
+     * the provided {@code items} array increases.
+     *
+     * @param no index to get permutations for
+     * @param items to create permutations for
+     * @param <T> type of the elements
+     * @return the given {@code no} (of n!) permutation variant of the
+     *         given {@code items}
+     */
     public static <T> List<T> permutation(final long no, final List<T> items) {
         return PermutationUtil.permutation(no, items);
     }
@@ -51,10 +73,6 @@ public final class Permutation {
     @SuppressWarnings("varargs")
     public static <T> Stream<Stream<T>> of(final T... items) {
         return PermutationUtil.of(items);
-    }
-
-    private Permutation() {
-        throw new UnsupportedOperationException();
     }
 
 }
