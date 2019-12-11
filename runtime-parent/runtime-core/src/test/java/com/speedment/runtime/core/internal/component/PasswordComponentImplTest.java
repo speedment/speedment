@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 class PasswordComponentImplTest {
 
-    private PasswordComponentImpl instance = new PasswordComponentImpl();
+    private final PasswordComponentImpl instance = new PasswordComponentImpl();
 
     @Test
     void put() {

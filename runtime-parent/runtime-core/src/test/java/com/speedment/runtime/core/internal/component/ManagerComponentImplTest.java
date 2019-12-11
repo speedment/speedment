@@ -46,7 +46,7 @@ final class ManagerComponentImplTest {
         assertThrows(NullPointerException.class, () -> instance.managerOf(null));
         assertThrows(SpeedmentException.class, () -> instance.managerOf(Integer.class));
 
-        Manager<String> manager = new MockStringManager();
+        final Manager<String> manager = new MockStringManager();
         instance.put(manager);
 
         assertDoesNotThrow(() -> instance.managerOf(manager.getEntityClass()));
@@ -54,7 +54,7 @@ final class ManagerComponentImplTest {
 
     @Test
     void stream() {
-        Manager<String> manager = new MockStringManager();
+        final Manager<String> manager = new MockStringManager();
         instance.put(manager);
 
         assertEquals(1, instance.stream().count());
