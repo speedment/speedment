@@ -63,6 +63,8 @@ final class MutableTuplesTest {
     
     void test0(final MutableTuple0 tuple) {
         assertTuple(tuple, 0);
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(0));
     }
     
     @Test
@@ -80,6 +82,10 @@ final class MutableTuplesTest {
     void test1(final MutableTuple1<Integer> tuple) {
         tuple.set0(0);
         assertTuple(tuple, 1);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(1));
     }
     
     @Test
@@ -98,6 +104,12 @@ final class MutableTuplesTest {
         tuple.set0(0);
         tuple.set1(1);
         assertTuple(tuple, 2);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(2));
     }
     
     @Test
@@ -117,6 +129,14 @@ final class MutableTuplesTest {
         tuple.set1(1);
         tuple.set2(2);
         assertTuple(tuple, 3);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(3));
     }
     
     @Test
@@ -137,6 +157,16 @@ final class MutableTuplesTest {
         tuple.set2(2);
         tuple.set3(3);
         assertTuple(tuple, 4);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(4));
     }
     
     @Test
@@ -158,6 +188,18 @@ final class MutableTuplesTest {
         tuple.set3(3);
         tuple.set4(4);
         assertTuple(tuple, 5);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(5));
     }
     
     @Test
@@ -180,6 +222,20 @@ final class MutableTuplesTest {
         tuple.set4(4);
         tuple.set5(5);
         assertTuple(tuple, 6);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(6));
     }
     
     @Test
@@ -203,6 +259,22 @@ final class MutableTuplesTest {
         tuple.set5(5);
         tuple.set6(6);
         assertTuple(tuple, 7);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(7));
     }
     
     @Test
@@ -227,6 +299,24 @@ final class MutableTuplesTest {
         tuple.set6(6);
         tuple.set7(7);
         assertTuple(tuple, 8);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(8));
     }
     
     @Test
@@ -252,6 +342,26 @@ final class MutableTuplesTest {
         tuple.set7(7);
         tuple.set8(8);
         assertTuple(tuple, 9);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(9));
     }
     
     @Test
@@ -278,6 +388,28 @@ final class MutableTuplesTest {
         tuple.set8(8);
         tuple.set9(9);
         assertTuple(tuple, 10);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(10));
     }
     
     @Test
@@ -305,6 +437,30 @@ final class MutableTuplesTest {
         tuple.set9(9);
         tuple.set10(10);
         assertTuple(tuple, 11);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(11));
     }
     
     @Test
@@ -333,6 +489,32 @@ final class MutableTuplesTest {
         tuple.set10(10);
         tuple.set11(11);
         assertTuple(tuple, 12);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(12));
     }
     
     @Test
@@ -362,6 +544,34 @@ final class MutableTuplesTest {
         tuple.set11(11);
         tuple.set12(12);
         assertTuple(tuple, 13);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(13));
     }
     
     @Test
@@ -392,6 +602,36 @@ final class MutableTuplesTest {
         tuple.set12(12);
         tuple.set13(13);
         assertTuple(tuple, 14);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(14));
     }
     
     @Test
@@ -423,6 +663,38 @@ final class MutableTuplesTest {
         tuple.set13(13);
         tuple.set14(14);
         assertTuple(tuple, 15);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(15));
     }
     
     @Test
@@ -455,6 +727,40 @@ final class MutableTuplesTest {
         tuple.set14(14);
         tuple.set15(15);
         assertTuple(tuple, 16);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get15().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(16));
     }
     
     @Test
@@ -488,6 +794,42 @@ final class MutableTuplesTest {
         tuple.set15(15);
         tuple.set16(16);
         assertTuple(tuple, 17);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get15().orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get16().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(17));
     }
     
     @Test
@@ -522,6 +864,44 @@ final class MutableTuplesTest {
         tuple.set16(16);
         tuple.set17(17);
         assertTuple(tuple, 18);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get15().orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get16().orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get17().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(18));
     }
     
     @Test
@@ -557,6 +937,46 @@ final class MutableTuplesTest {
         tuple.set17(17);
         tuple.set18(18);
         assertTuple(tuple, 19);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get15().orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get16().orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get17().orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get18().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(19));
     }
     
     @Test
@@ -593,6 +1013,48 @@ final class MutableTuplesTest {
         tuple.set18(18);
         tuple.set19(19);
         assertTuple(tuple, 20);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get15().orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get16().orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get17().orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get18().orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get19().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(20));
     }
     
     @Test
@@ -630,6 +1092,50 @@ final class MutableTuplesTest {
         tuple.set19(19);
         tuple.set20(20);
         assertTuple(tuple, 21);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get15().orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get16().orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get17().orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get18().orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get19().orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get20().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get(20).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(21));
     }
     
     @Test
@@ -668,6 +1174,52 @@ final class MutableTuplesTest {
         tuple.set20(20);
         tuple.set21(21);
         assertTuple(tuple, 22);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get15().orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get16().orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get17().orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get18().orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get19().orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get20().orElseThrow(NoSuchElementException::new));
+        assertEquals(21, tuple.get21().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get(20).orElseThrow(NoSuchElementException::new));
+        assertEquals(21, tuple.get(21).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(22));
     }
     
     @Test
@@ -707,6 +1259,54 @@ final class MutableTuplesTest {
         tuple.set21(21);
         tuple.set22(22);
         assertTuple(tuple, 23);
+        assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get1().orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get2().orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get3().orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get4().orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get5().orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get6().orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get7().orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get8().orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get9().orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get10().orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get11().orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get12().orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get13().orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get14().orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get15().orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get16().orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get17().orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get18().orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get19().orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get20().orElseThrow(NoSuchElementException::new));
+        assertEquals(21, tuple.get21().orElseThrow(NoSuchElementException::new));
+        assertEquals(22, tuple.get22().orElseThrow(NoSuchElementException::new));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get(20).orElseThrow(NoSuchElementException::new));
+        assertEquals(21, tuple.get(21).orElseThrow(NoSuchElementException::new));
+        assertEquals(22, tuple.get(22).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(23));
     }
     
     private void assertTuple(MutableTuple tuple, int degree) {

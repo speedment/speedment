@@ -17,6 +17,9 @@
 package com.speedment.common.tuple.internal.nonnullable;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.stream.IntStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 final class Tuple11ImplTest<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> extends AbstractTupleImplTest<Tuple11Impl<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> {
@@ -78,5 +81,12 @@ final class Tuple11ImplTest<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> extends
     @Test
     void get10Test() {
         assertEquals(10, (int) instance.get10());
+    }
+    
+    @Test
+    void get() {
+        IntStream.range(0, 11).forEach(i -> assertEquals(i, instance.get(i)));
+        assertThrows(IndexOutOfBoundsException.class, () -> instance.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> instance.get(11));
     }
 }
