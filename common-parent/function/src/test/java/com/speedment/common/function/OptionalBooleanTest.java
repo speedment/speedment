@@ -18,6 +18,7 @@ package com.speedment.common.function;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,6 +51,7 @@ class OptionalBooleanTest {
         assertFalse(obF.getAsBoolean());
         OptionalBoolean obN = OptionalBoolean.ofNullable(null);
         assertFalse(obN.isPresent());
+        assertThrows(NoSuchElementException.class, obN::getAsBoolean);
     }
 
     @Test
