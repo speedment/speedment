@@ -14,54 +14,55 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.internal.nonnullable;
+package com.speedment.common.tuple.internal.nullable;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class Tuple6ImplTest<T0, T1, T2, T3, T4, T5> extends AbstractTupleImplTest<Tuple6Impl<Integer, Integer, Integer, Integer, Integer, Integer>> {
+final class Tuple3OfNullablesImplTest<T0, T1, T2> extends AbstractTupleImplTest<Tuple3OfNullablesImpl<Integer, Integer, Integer>> {
     
-    Tuple6ImplTest() {
-        super(() -> new Tuple6Impl<>(0, 1, 2, 3, 4, 5), 6);
+    Tuple3OfNullablesImplTest() {
+        super(() -> new Tuple3OfNullablesImpl<>(0, 1, 2), 3);
     }
     
     @Test
     void get0Test() {
-        assertEquals(0, (int) instance.get0());
+        assertEquals(0, (int) instance.get0().orElseThrow(NoSuchElementException::new));
     }
     
     @Test
     void get1Test() {
-        assertEquals(1, (int) instance.get1());
+        assertEquals(1, (int) instance.get1().orElseThrow(NoSuchElementException::new));
     }
     
     @Test
     void get2Test() {
-        assertEquals(2, (int) instance.get2());
+        assertEquals(2, (int) instance.get2().orElseThrow(NoSuchElementException::new));
     }
     
     @Test
-    void get3Test() {
-        assertEquals(3, (int) instance.get3());
+    void getOrNull0Test() {
+        assertEquals(0, (int) instance.getOrNull0());
     }
     
     @Test
-    void get4Test() {
-        assertEquals(4, (int) instance.get4());
+    void getOrNull1Test() {
+        assertEquals(1, (int) instance.getOrNull1());
     }
     
     @Test
-    void get5Test() {
-        assertEquals(5, (int) instance.get5());
+    void getOrNull2Test() {
+        assertEquals(2, (int) instance.getOrNull2());
     }
     
     @Test
     void get() {
-        IntStream.range(0, 6).forEach(i -> assertEquals(i, instance.get(i)));
+        IntStream.range(0, 3).forEach(i -> assertEquals(i, instance.get(i).orElseThrow(NoSuchElementException::new)));
         assertThrows(IndexOutOfBoundsException.class, () -> instance.get(-1));
-        assertThrows(IndexOutOfBoundsException.class, () -> instance.get(6));
+        assertThrows(IndexOutOfBoundsException.class, () -> instance.get(3));
     }
 }

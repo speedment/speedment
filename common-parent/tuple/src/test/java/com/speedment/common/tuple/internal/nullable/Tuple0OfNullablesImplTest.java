@@ -14,44 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.internal.nonnullable;
+package com.speedment.common.tuple.internal.nullable;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class Tuple4ImplTest<T0, T1, T2, T3> extends AbstractTupleImplTest<Tuple4Impl<Integer, Integer, Integer, Integer>> {
+final class Tuple0OfNullablesImplTest extends AbstractTupleImplTest<Tuple0OfNullablesImpl> {
     
-    Tuple4ImplTest() {
-        super(() -> new Tuple4Impl<>(0, 1, 2, 3), 4);
-    }
-    
-    @Test
-    void get0Test() {
-        assertEquals(0, (int) instance.get0());
-    }
-    
-    @Test
-    void get1Test() {
-        assertEquals(1, (int) instance.get1());
-    }
-    
-    @Test
-    void get2Test() {
-        assertEquals(2, (int) instance.get2());
-    }
-    
-    @Test
-    void get3Test() {
-        assertEquals(3, (int) instance.get3());
+    Tuple0OfNullablesImplTest() {
+        super(() -> (Tuple0OfNullablesImpl) Tuple0OfNullablesImpl.EMPTY_TUPLE, 0);
     }
     
     @Test
     void get() {
-        IntStream.range(0, 4).forEach(i -> assertEquals(i, instance.get(i)));
+        IntStream.range(0, 0).forEach(i -> assertEquals(i, instance.get(i).orElseThrow(NoSuchElementException::new)));
         assertThrows(IndexOutOfBoundsException.class, () -> instance.get(-1));
-        assertThrows(IndexOutOfBoundsException.class, () -> instance.get(4));
+        assertThrows(IndexOutOfBoundsException.class, () -> instance.get(0));
     }
 }
