@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.function.Function;
 
-class ToCharNullableTest {
+final class ToCharNullableTest {
 
     private static final ToCharNullable<String> DEFAULT_NULLABLE = string -> string.toCharArray()[0];
 

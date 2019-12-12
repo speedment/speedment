@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.function.Predicate;
 
-class ToBooleanTest {
+final class ToBooleanTest {
 
     private static final ToBoolean<String> DEFAULT_TO = string -> string.length() > 2;
 

@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.function.Function;
 
-class ToByteNullableTest {
+final class ToByteNullableTest {
 
     private static final ToByteNullable<String> DEFAULT_NULLABLE = string -> string.getBytes()[0];
 

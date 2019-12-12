@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.function.Function;
 
-class ToDoubleNullableTest {
+final class ToDoubleNullableTest {
 
     private static final ToDoubleNullable<String> DEFAULT_NULLABLE = string -> (double) string
             .length();

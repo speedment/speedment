@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.function.Function;
 
-class ToLongNullableTest {
+final class ToLongNullableTest {
 
     private static final ToLongNullable<String> DEFAULT_NULLABLE = string -> (long) string.length();
 

@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.function.Function;
 
-class ToFloatNullableTest {
+final class ToFloatNullableTest {
 
     private static final ToFloatNullable<String> DEFAULT_NULLABLE = string -> (float) string
             .length();
