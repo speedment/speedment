@@ -53,7 +53,6 @@ public abstract class AbstractMutableTuple extends BasicAbstractTuple<AbstractMu
         requireNonNull(clazz);
         return Stream.of(values)
             .filter(clazz::isInstance)
-            .filter(clazz::isInstance)
             .map(clazz::cast);
     }
 
