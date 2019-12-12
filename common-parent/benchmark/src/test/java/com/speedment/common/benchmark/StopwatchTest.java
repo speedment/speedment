@@ -143,14 +143,49 @@ final class StopwatchTest {
         assertNotEquals("0.00 ns", actual);
     }
 
+    @Test
+    void toStringNano() {
+        sw.start();
+        sleep(1);
+        final String actual = sw.toString();
+        assertNotNull(actual);
+    }
+
+    @Test
+    void toStringMicro() {
+        sw.start();
+        sleep(1 * 2_000);
+        final String actual = sw.toString();
+        assertNotNull(actual);
+    }
+
+    @Test
+    void toStringMilli() {
+        sw.start();
+        sleep(1 * 2_000_000);
+        final String actual = sw.toString();
+        assertNotNull(actual);
+    }
+
+    @Test
+    void toStringSecond() {
+        sw.start();
+        sleep(1 * 2_000_000_000);
+        final String actual = sw.toString();
+        assertNotNull(actual);
+    }
+
+
 
     private void shortSleep() {
-        try {
-            Thread.sleep(10);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        sleep(10 * 1_000_000);
+    }
 
+    private void sleep(long durationNs) {
+        final long until = System.nanoTime() + durationNs;
+        while (System.nanoTime() < until) {
+            /* spin wait */
+        }
     }
 
 }
