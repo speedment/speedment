@@ -17,25 +17,168 @@
 package com.speedment.common.tuple;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-/**
- *
- * @author Per Minborg
- */
 final class TupleBuilderTest {
-
+    
     @Test
-    void testBuilder() {
-        final Tuple3<Integer, String, Long> expected = Tuples.of(1, "Olle", Long.MAX_VALUE);
-        final Tuple3<Integer, String, Long> actual = TupleBuilder.builder().add(1).add("Olle").add(Long.MAX_VALUE).build();
+    void builder1() {
+        final Tuple expected = Tuples.of(0);
+        final Tuple actual = TupleBuilder.builder().add(0).build();
         assertEquals(expected, actual);
-        
-        Tuples.of(1,3,4,4,"Arne");
-        
-        TupleBuilder.builder().add(1).add("Arne").build();
-
     }
-
+    
+    @Test
+    void builder2() {
+        final Tuple expected = Tuples.of(0, 1);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder3() {
+        final Tuple expected = Tuples.of(0, 1, 2);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder4() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder5() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder6() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder7() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder8() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder9() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder10() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder11() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder12() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder13() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder14() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder15() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder16() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).add(15).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder17() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).add(15).add(16).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder18() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).add(15).add(16).add(17).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder19() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).add(15).add(16).add(17).add(18).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder20() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).add(15).add(16).add(17).add(18).add(19).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder21() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).add(15).add(16).add(17).add(18).add(19).add(20).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder22() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).add(15).add(16).add(17).add(18).add(19).add(20).add(21).build();
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void builder23() {
+        final Tuple expected = Tuples.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22);
+        final Tuple actual = TupleBuilder.builder().add(0).add(1).add(2).add(3).add(4).add(5).add(6).add(7).add(8).add(9).add(10).add(11).add(12).add(13).add(14).add(15).add(16).add(17).add(18).add(19).add(20).add(21).add(22).build();
+        assertEquals(expected, actual);
+    }
 }

@@ -43,6 +43,7 @@ import com.speedment.common.tuple.mutable.MutableTuple9;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,16 +53,22 @@ final class MutableTuplesTest {
     @Test
     void create0() {
         final MutableTuple0 tuple = MutableTuples.create0();
-        test0(tuple);
+        test(tuple);
+        final MutableTuple0 defaultTuple = new MutableTuple0() 
+        {
+            
+            
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor0() {
         final Supplier<MutableTuple0> constructor = MutableTuples.constructor();
-        test0(constructor.get());
+        test(constructor.get());
     }
     
-    void test0(final MutableTuple0 tuple) {
+    void test(final MutableTuple0 tuple) {
         assertTuple(tuple, 0);
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(0));
@@ -70,16 +77,29 @@ final class MutableTuplesTest {
     @Test
     void create1() {
         final MutableTuple1<Integer> tuple = MutableTuples.create1();
-        test1(tuple);
+        test(tuple);
+        final MutableTuple1<Integer> defaultTuple = new MutableTuple1<Integer>() 
+        {
+            private Integer t0;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor1() {
         final Supplier<MutableTuple1<Integer>> constructor = MutableTuples.constructor(Integer.class);
-        test1(constructor.get());
+        test(constructor.get());
     }
     
-    void test1(final MutableTuple1<Integer> tuple) {
+    void test(final MutableTuple1<Integer> tuple) {
         tuple.set0(0);
         assertTuple(tuple, 1);
         assertEquals(0, tuple.get0().orElseThrow(NoSuchElementException::new));
@@ -91,16 +111,38 @@ final class MutableTuplesTest {
     @Test
     void create2() {
         final MutableTuple2<Integer, Integer> tuple = MutableTuples.create2();
-        test2(tuple);
+        test(tuple);
+        final MutableTuple2<Integer, Integer> defaultTuple = new MutableTuple2<Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor2() {
         final Supplier<MutableTuple2<Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class);
-        test2(constructor.get());
+        test(constructor.get());
     }
     
-    void test2(final MutableTuple2<Integer, Integer> tuple) {
+    void test(final MutableTuple2<Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         assertTuple(tuple, 2);
@@ -115,16 +157,47 @@ final class MutableTuplesTest {
     @Test
     void create3() {
         final MutableTuple3<Integer, Integer, Integer> tuple = MutableTuples.create3();
-        test3(tuple);
+        test(tuple);
+        final MutableTuple3<Integer, Integer, Integer> defaultTuple = new MutableTuple3<Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor3() {
         final Supplier<MutableTuple3<Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class);
-        test3(constructor.get());
+        test(constructor.get());
     }
     
-    void test3(final MutableTuple3<Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple3<Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -142,16 +215,56 @@ final class MutableTuplesTest {
     @Test
     void create4() {
         final MutableTuple4<Integer, Integer, Integer, Integer> tuple = MutableTuples.create4();
-        test4(tuple);
+        test(tuple);
+        final MutableTuple4<Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple4<Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor4() {
         final Supplier<MutableTuple4<Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class);
-        test4(constructor.get());
+        test(constructor.get());
     }
     
-    void test4(final MutableTuple4<Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple4<Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -172,16 +285,65 @@ final class MutableTuplesTest {
     @Test
     void create5() {
         final MutableTuple5<Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create5();
-        test5(tuple);
+        test(tuple);
+        final MutableTuple5<Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple5<Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor5() {
         final Supplier<MutableTuple5<Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test5(constructor.get());
+        test(constructor.get());
     }
     
-    void test5(final MutableTuple5<Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple5<Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -205,16 +367,74 @@ final class MutableTuplesTest {
     @Test
     void create6() {
         final MutableTuple6<Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create6();
-        test6(tuple);
+        test(tuple);
+        final MutableTuple6<Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple6<Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor6() {
         final Supplier<MutableTuple6<Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test6(constructor.get());
+        test(constructor.get());
     }
     
-    void test6(final MutableTuple6<Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple6<Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -241,16 +461,83 @@ final class MutableTuplesTest {
     @Test
     void create7() {
         final MutableTuple7<Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create7();
-        test7(tuple);
+        test(tuple);
+        final MutableTuple7<Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple7<Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor7() {
         final Supplier<MutableTuple7<Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test7(constructor.get());
+        test(constructor.get());
     }
     
-    void test7(final MutableTuple7<Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple7<Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -280,16 +567,92 @@ final class MutableTuplesTest {
     @Test
     void create8() {
         final MutableTuple8<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create8();
-        test8(tuple);
+        test(tuple);
+        final MutableTuple8<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple8<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor8() {
         final Supplier<MutableTuple8<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test8(constructor.get());
+        test(constructor.get());
     }
     
-    void test8(final MutableTuple8<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple8<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -322,16 +685,101 @@ final class MutableTuplesTest {
     @Test
     void create9() {
         final MutableTuple9<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create9();
-        test9(tuple);
+        test(tuple);
+        final MutableTuple9<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple9<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor9() {
         final Supplier<MutableTuple9<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test9(constructor.get());
+        test(constructor.get());
     }
     
-    void test9(final MutableTuple9<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple9<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -367,16 +815,110 @@ final class MutableTuplesTest {
     @Test
     void create10() {
         final MutableTuple10<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create10();
-        test10(tuple);
+        test(tuple);
+        final MutableTuple10<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple10<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor10() {
         final Supplier<MutableTuple10<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test10(constructor.get());
+        test(constructor.get());
     }
     
-    void test10(final MutableTuple10<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple10<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -415,16 +957,119 @@ final class MutableTuplesTest {
     @Test
     void create11() {
         final MutableTuple11<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create11();
-        test11(tuple);
+        test(tuple);
+        final MutableTuple11<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple11<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor11() {
         final Supplier<MutableTuple11<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test11(constructor.get());
+        test(constructor.get());
     }
     
-    void test11(final MutableTuple11<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple11<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -466,16 +1111,128 @@ final class MutableTuplesTest {
     @Test
     void create12() {
         final MutableTuple12<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create12();
-        test12(tuple);
+        test(tuple);
+        final MutableTuple12<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple12<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor12() {
         final Supplier<MutableTuple12<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test12(constructor.get());
+        test(constructor.get());
     }
     
-    void test12(final MutableTuple12<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple12<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -520,16 +1277,137 @@ final class MutableTuplesTest {
     @Test
     void create13() {
         final MutableTuple13<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create13();
-        test13(tuple);
+        test(tuple);
+        final MutableTuple13<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple13<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor13() {
         final Supplier<MutableTuple13<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test13(constructor.get());
+        test(constructor.get());
     }
     
-    void test13(final MutableTuple13<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple13<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -577,16 +1455,146 @@ final class MutableTuplesTest {
     @Test
     void create14() {
         final MutableTuple14<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create14();
-        test14(tuple);
+        test(tuple);
+        final MutableTuple14<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple14<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor14() {
         final Supplier<MutableTuple14<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test14(constructor.get());
+        test(constructor.get());
     }
     
-    void test14(final MutableTuple14<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple14<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -637,16 +1645,155 @@ final class MutableTuplesTest {
     @Test
     void create15() {
         final MutableTuple15<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create15();
-        test15(tuple);
+        test(tuple);
+        final MutableTuple15<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple15<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor15() {
         final Supplier<MutableTuple15<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test15(constructor.get());
+        test(constructor.get());
     }
     
-    void test15(final MutableTuple15<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple15<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -700,16 +1847,164 @@ final class MutableTuplesTest {
     @Test
     void create16() {
         final MutableTuple16<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create16();
-        test16(tuple);
+        test(tuple);
+        final MutableTuple16<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple16<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            private Integer t15;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public void set15(Integer val) {
+                t15 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor16() {
         final Supplier<MutableTuple16<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test16(constructor.get());
+        test(constructor.get());
     }
     
-    void test16(final MutableTuple16<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple16<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -766,16 +2061,173 @@ final class MutableTuplesTest {
     @Test
     void create17() {
         final MutableTuple17<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create17();
-        test17(tuple);
+        test(tuple);
+        final MutableTuple17<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple17<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            private Integer t15;
+            private Integer t16;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public void set15(Integer val) {
+                t15 = val;
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public void set16(Integer val) {
+                t16 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor17() {
         final Supplier<MutableTuple17<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test17(constructor.get());
+        test(constructor.get());
     }
     
-    void test17(final MutableTuple17<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple17<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -835,16 +2287,182 @@ final class MutableTuplesTest {
     @Test
     void create18() {
         final MutableTuple18<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create18();
-        test18(tuple);
+        test(tuple);
+        final MutableTuple18<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple18<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            private Integer t15;
+            private Integer t16;
+            private Integer t17;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public void set15(Integer val) {
+                t15 = val;
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public void set16(Integer val) {
+                t16 = val;
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public void set17(Integer val) {
+                t17 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor18() {
         final Supplier<MutableTuple18<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test18(constructor.get());
+        test(constructor.get());
     }
     
-    void test18(final MutableTuple18<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple18<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -907,16 +2525,191 @@ final class MutableTuplesTest {
     @Test
     void create19() {
         final MutableTuple19<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create19();
-        test19(tuple);
+        test(tuple);
+        final MutableTuple19<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple19<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            private Integer t15;
+            private Integer t16;
+            private Integer t17;
+            private Integer t18;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public void set15(Integer val) {
+                t15 = val;
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public void set16(Integer val) {
+                t16 = val;
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public void set17(Integer val) {
+                t17 = val;
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public void set18(Integer val) {
+                t18 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor19() {
         final Supplier<MutableTuple19<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test19(constructor.get());
+        test(constructor.get());
     }
     
-    void test19(final MutableTuple19<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple19<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -982,16 +2775,200 @@ final class MutableTuplesTest {
     @Test
     void create20() {
         final MutableTuple20<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create20();
-        test20(tuple);
+        test(tuple);
+        final MutableTuple20<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple20<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            private Integer t15;
+            private Integer t16;
+            private Integer t17;
+            private Integer t18;
+            private Integer t19;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public void set15(Integer val) {
+                t15 = val;
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public void set16(Integer val) {
+                t16 = val;
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public void set17(Integer val) {
+                t17 = val;
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public void set18(Integer val) {
+                t18 = val;
+            }
+            @Override
+            public Optional<Integer> get19() {
+                return Optional.of(19);
+            }
+            @Override
+            public void set19(Integer val) {
+                t19 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor20() {
         final Supplier<MutableTuple20<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test20(constructor.get());
+        test(constructor.get());
     }
     
-    void test20(final MutableTuple20<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple20<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -1060,16 +3037,209 @@ final class MutableTuplesTest {
     @Test
     void create21() {
         final MutableTuple21<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create21();
-        test21(tuple);
+        test(tuple);
+        final MutableTuple21<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple21<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            private Integer t15;
+            private Integer t16;
+            private Integer t17;
+            private Integer t18;
+            private Integer t19;
+            private Integer t20;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public void set15(Integer val) {
+                t15 = val;
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public void set16(Integer val) {
+                t16 = val;
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public void set17(Integer val) {
+                t17 = val;
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public void set18(Integer val) {
+                t18 = val;
+            }
+            @Override
+            public Optional<Integer> get19() {
+                return Optional.of(19);
+            }
+            @Override
+            public void set19(Integer val) {
+                t19 = val;
+            }
+            @Override
+            public Optional<Integer> get20() {
+                return Optional.of(20);
+            }
+            @Override
+            public void set20(Integer val) {
+                t20 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor21() {
         final Supplier<MutableTuple21<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test21(constructor.get());
+        test(constructor.get());
     }
     
-    void test21(final MutableTuple21<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple21<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -1141,16 +3311,218 @@ final class MutableTuplesTest {
     @Test
     void create22() {
         final MutableTuple22<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create22();
-        test22(tuple);
+        test(tuple);
+        final MutableTuple22<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple22<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            private Integer t15;
+            private Integer t16;
+            private Integer t17;
+            private Integer t18;
+            private Integer t19;
+            private Integer t20;
+            private Integer t21;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public void set15(Integer val) {
+                t15 = val;
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public void set16(Integer val) {
+                t16 = val;
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public void set17(Integer val) {
+                t17 = val;
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public void set18(Integer val) {
+                t18 = val;
+            }
+            @Override
+            public Optional<Integer> get19() {
+                return Optional.of(19);
+            }
+            @Override
+            public void set19(Integer val) {
+                t19 = val;
+            }
+            @Override
+            public Optional<Integer> get20() {
+                return Optional.of(20);
+            }
+            @Override
+            public void set20(Integer val) {
+                t20 = val;
+            }
+            @Override
+            public Optional<Integer> get21() {
+                return Optional.of(21);
+            }
+            @Override
+            public void set21(Integer val) {
+                t21 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor22() {
         final Supplier<MutableTuple22<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test22(constructor.get());
+        test(constructor.get());
     }
     
-    void test22(final MutableTuple22<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple22<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
@@ -1225,16 +3597,227 @@ final class MutableTuplesTest {
     @Test
     void create23() {
         final MutableTuple23<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = MutableTuples.create23();
-        test23(tuple);
+        test(tuple);
+        final MutableTuple23<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new MutableTuple23<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            private Integer t0;
+            private Integer t1;
+            private Integer t2;
+            private Integer t3;
+            private Integer t4;
+            private Integer t5;
+            private Integer t6;
+            private Integer t7;
+            private Integer t8;
+            private Integer t9;
+            private Integer t10;
+            private Integer t11;
+            private Integer t12;
+            private Integer t13;
+            private Integer t14;
+            private Integer t15;
+            private Integer t16;
+            private Integer t17;
+            private Integer t18;
+            private Integer t19;
+            private Integer t20;
+            private Integer t21;
+            private Integer t22;
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public void set0(Integer val) {
+                t0 = val;
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public void set1(Integer val) {
+                t1 = val;
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public void set2(Integer val) {
+                t2 = val;
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public void set3(Integer val) {
+                t3 = val;
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public void set4(Integer val) {
+                t4 = val;
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public void set5(Integer val) {
+                t5 = val;
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public void set6(Integer val) {
+                t6 = val;
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public void set7(Integer val) {
+                t7 = val;
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public void set8(Integer val) {
+                t8 = val;
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public void set9(Integer val) {
+                t9 = val;
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public void set10(Integer val) {
+                t10 = val;
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public void set11(Integer val) {
+                t11 = val;
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public void set12(Integer val) {
+                t12 = val;
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public void set13(Integer val) {
+                t13 = val;
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public void set14(Integer val) {
+                t14 = val;
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public void set15(Integer val) {
+                t15 = val;
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public void set16(Integer val) {
+                t16 = val;
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public void set17(Integer val) {
+                t17 = val;
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public void set18(Integer val) {
+                t18 = val;
+            }
+            @Override
+            public Optional<Integer> get19() {
+                return Optional.of(19);
+            }
+            @Override
+            public void set19(Integer val) {
+                t19 = val;
+            }
+            @Override
+            public Optional<Integer> get20() {
+                return Optional.of(20);
+            }
+            @Override
+            public void set20(Integer val) {
+                t20 = val;
+            }
+            @Override
+            public Optional<Integer> get21() {
+                return Optional.of(21);
+            }
+            @Override
+            public void set21(Integer val) {
+                t21 = val;
+            }
+            @Override
+            public Optional<Integer> get22() {
+                return Optional.of(22);
+            }
+            @Override
+            public void set22(Integer val) {
+                t22 = val;
+            }
+        };
+        test(defaultTuple);
     }
     
     @Test
     void constructor23() {
         final Supplier<MutableTuple23<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> constructor = MutableTuples.constructor(Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class, Integer.class);
-        test23(constructor.get());
+        test(constructor.get());
     }
     
-    void test23(final MutableTuple23<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
+    void test(final MutableTuple23<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         tuple.set0(0);
         tuple.set1(1);
         tuple.set2(2);
