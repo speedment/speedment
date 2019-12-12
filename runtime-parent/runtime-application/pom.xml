@@ -44,12 +44,16 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <!--Fix peculiar error-->
 <!--                    <source>8</source>-->
                     <failOnError>false</failOnError>
                     <docfilessubdirs>true</docfilessubdirs>
+                    <sourceFileIncludes>
+                        <sourceFileInclude>**/*.java</sourceFileInclude>
+                    </sourceFileIncludes>
 <!--                    <includeDependencySources>true</includeDependencySources>-->
 <!--                    <additionalOptions combine.self="override"/>-->
 
