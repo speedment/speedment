@@ -52,16 +52,1349 @@ final class TupleOfNullablesTest {
     @Test
     void tuple1() {
         final Tuple1OfNullables<Integer> tuple = TuplesOfNullables.ofNullables(0);
-        TupleGetter<Tuple1OfNullables<Integer>, Optional<Integer>> getter0 = Tuple1OfNullables.getter0();
-        TupleGetter<Tuple1OfNullables<Integer>, Integer> getterOrNull0 = Tuple1OfNullables.getterOrNull0();
-        assertEquals(0, getter0.index());
-        assertEquals(0, getter0.apply(tuple).orElseThrow(NoSuchElementException::new));
-        assertEquals(0, getterOrNull0.apply(tuple));
+        tupleTest(tuple);
+        final Tuple1OfNullables<Integer> defaultTuple = new Tuple1OfNullables<Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+        };
+        tupleTest(defaultTuple);
     }
     
     @Test
     void tuple2() {
         final Tuple2OfNullables<Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1);
+        tupleTest(tuple);
+        final Tuple2OfNullables<Integer, Integer> defaultTuple = new Tuple2OfNullables<Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple3() {
+        final Tuple3OfNullables<Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2);
+        tupleTest(tuple);
+        final Tuple3OfNullables<Integer, Integer, Integer> defaultTuple = new Tuple3OfNullables<Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple4() {
+        final Tuple4OfNullables<Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3);
+        tupleTest(tuple);
+        final Tuple4OfNullables<Integer, Integer, Integer, Integer> defaultTuple = new Tuple4OfNullables<Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple5() {
+        final Tuple5OfNullables<Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4);
+        tupleTest(tuple);
+        final Tuple5OfNullables<Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple5OfNullables<Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple6() {
+        final Tuple6OfNullables<Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5);
+        tupleTest(tuple);
+        final Tuple6OfNullables<Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple6OfNullables<Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple7() {
+        final Tuple7OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6);
+        tupleTest(tuple);
+        final Tuple7OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple7OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple8() {
+        final Tuple8OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7);
+        tupleTest(tuple);
+        final Tuple8OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple8OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple9() {
+        final Tuple9OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8);
+        tupleTest(tuple);
+        final Tuple9OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple9OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple10() {
+        final Tuple10OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        tupleTest(tuple);
+        final Tuple10OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple10OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple11() {
+        final Tuple11OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        tupleTest(tuple);
+        final Tuple11OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple11OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple12() {
+        final Tuple12OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+        tupleTest(tuple);
+        final Tuple12OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple12OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple13() {
+        final Tuple13OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+        tupleTest(tuple);
+        final Tuple13OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple13OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple14() {
+        final Tuple14OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
+        tupleTest(tuple);
+        final Tuple14OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple14OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple15() {
+        final Tuple15OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
+        tupleTest(tuple);
+        final Tuple15OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple15OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple16() {
+        final Tuple16OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        tupleTest(tuple);
+        final Tuple16OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple16OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple17() {
+        final Tuple17OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+        tupleTest(tuple);
+        final Tuple17OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple17OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple18() {
+        final Tuple18OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
+        tupleTest(tuple);
+        final Tuple18OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple18OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple19() {
+        final Tuple19OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
+        tupleTest(tuple);
+        final Tuple19OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple19OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple20() {
+        final Tuple20OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
+        tupleTest(tuple);
+        final Tuple20OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple20OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public Optional<Integer> get19() {
+                return Optional.of(19);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple21() {
+        final Tuple21OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+        tupleTest(tuple);
+        final Tuple21OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple21OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public Optional<Integer> get19() {
+                return Optional.of(19);
+            }
+            @Override
+            public Optional<Integer> get20() {
+                return Optional.of(20);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple22() {
+        final Tuple22OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+        tupleTest(tuple);
+        final Tuple22OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple22OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public Optional<Integer> get19() {
+                return Optional.of(19);
+            }
+            @Override
+            public Optional<Integer> get20() {
+                return Optional.of(20);
+            }
+            @Override
+            public Optional<Integer> get21() {
+                return Optional.of(21);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    @Test
+    void tuple23() {
+        final Tuple23OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22);
+        tupleTest(tuple);
+        final Tuple23OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> defaultTuple = new Tuple23OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>() 
+        {
+            @Override
+            public Optional<Integer> get0() {
+                return Optional.of(0);
+            }
+            @Override
+            public Optional<Integer> get1() {
+                return Optional.of(1);
+            }
+            @Override
+            public Optional<Integer> get2() {
+                return Optional.of(2);
+            }
+            @Override
+            public Optional<Integer> get3() {
+                return Optional.of(3);
+            }
+            @Override
+            public Optional<Integer> get4() {
+                return Optional.of(4);
+            }
+            @Override
+            public Optional<Integer> get5() {
+                return Optional.of(5);
+            }
+            @Override
+            public Optional<Integer> get6() {
+                return Optional.of(6);
+            }
+            @Override
+            public Optional<Integer> get7() {
+                return Optional.of(7);
+            }
+            @Override
+            public Optional<Integer> get8() {
+                return Optional.of(8);
+            }
+            @Override
+            public Optional<Integer> get9() {
+                return Optional.of(9);
+            }
+            @Override
+            public Optional<Integer> get10() {
+                return Optional.of(10);
+            }
+            @Override
+            public Optional<Integer> get11() {
+                return Optional.of(11);
+            }
+            @Override
+            public Optional<Integer> get12() {
+                return Optional.of(12);
+            }
+            @Override
+            public Optional<Integer> get13() {
+                return Optional.of(13);
+            }
+            @Override
+            public Optional<Integer> get14() {
+                return Optional.of(14);
+            }
+            @Override
+            public Optional<Integer> get15() {
+                return Optional.of(15);
+            }
+            @Override
+            public Optional<Integer> get16() {
+                return Optional.of(16);
+            }
+            @Override
+            public Optional<Integer> get17() {
+                return Optional.of(17);
+            }
+            @Override
+            public Optional<Integer> get18() {
+                return Optional.of(18);
+            }
+            @Override
+            public Optional<Integer> get19() {
+                return Optional.of(19);
+            }
+            @Override
+            public Optional<Integer> get20() {
+                return Optional.of(20);
+            }
+            @Override
+            public Optional<Integer> get21() {
+                return Optional.of(21);
+            }
+            @Override
+            public Optional<Integer> get22() {
+                return Optional.of(22);
+            }
+        };
+        tupleTest(defaultTuple);
+    }
+    
+    private void tupleTest(final Tuple1OfNullables<Integer> tuple) {
+        TupleGetter<Tuple1OfNullables<Integer>, Optional<Integer>> getter0 = Tuple1OfNullables.getter0();
+        TupleGetter<Tuple1OfNullables<Integer>, Integer> getterOrNull0 = Tuple1OfNullables.getterOrNull0();
+        assertEquals(0, getter0.index());
+        assertEquals(0, getter0.apply(tuple).orElseThrow(NoSuchElementException::new));
+        assertEquals(0, getterOrNull0.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(1));
+    }
+    
+    private void tupleTest(final Tuple2OfNullables<Integer, Integer> tuple) {
         TupleGetter<Tuple2OfNullables<Integer, Integer>, Optional<Integer>> getter0 = Tuple2OfNullables.getter0();
         TupleGetter<Tuple2OfNullables<Integer, Integer>, Optional<Integer>> getter1 = Tuple2OfNullables.getter1();
         TupleGetter<Tuple2OfNullables<Integer, Integer>, Integer> getterOrNull0 = Tuple2OfNullables.getterOrNull0();
@@ -72,11 +1405,13 @@ final class TupleOfNullablesTest {
         assertEquals(1, getter1.apply(tuple).orElseThrow(NoSuchElementException::new));
         assertEquals(0, getterOrNull0.apply(tuple));
         assertEquals(1, getterOrNull1.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(2));
     }
     
-    @Test
-    void tuple3() {
-        final Tuple3OfNullables<Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2);
+    private void tupleTest(final Tuple3OfNullables<Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple3OfNullables<Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple3OfNullables.getter0();
         TupleGetter<Tuple3OfNullables<Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple3OfNullables.getter1();
         TupleGetter<Tuple3OfNullables<Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple3OfNullables.getter2();
@@ -92,11 +1427,14 @@ final class TupleOfNullablesTest {
         assertEquals(0, getterOrNull0.apply(tuple));
         assertEquals(1, getterOrNull1.apply(tuple));
         assertEquals(2, getterOrNull2.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(3));
     }
     
-    @Test
-    void tuple4() {
-        final Tuple4OfNullables<Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3);
+    private void tupleTest(final Tuple4OfNullables<Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple4OfNullables<Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple4OfNullables.getter0();
         TupleGetter<Tuple4OfNullables<Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple4OfNullables.getter1();
         TupleGetter<Tuple4OfNullables<Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple4OfNullables.getter2();
@@ -117,11 +1455,15 @@ final class TupleOfNullablesTest {
         assertEquals(1, getterOrNull1.apply(tuple));
         assertEquals(2, getterOrNull2.apply(tuple));
         assertEquals(3, getterOrNull3.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(4));
     }
     
-    @Test
-    void tuple5() {
-        final Tuple5OfNullables<Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4);
+    private void tupleTest(final Tuple5OfNullables<Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple5OfNullables<Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple5OfNullables.getter0();
         TupleGetter<Tuple5OfNullables<Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple5OfNullables.getter1();
         TupleGetter<Tuple5OfNullables<Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple5OfNullables.getter2();
@@ -147,11 +1489,16 @@ final class TupleOfNullablesTest {
         assertEquals(2, getterOrNull2.apply(tuple));
         assertEquals(3, getterOrNull3.apply(tuple));
         assertEquals(4, getterOrNull4.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(5));
     }
     
-    @Test
-    void tuple6() {
-        final Tuple6OfNullables<Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5);
+    private void tupleTest(final Tuple6OfNullables<Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple6OfNullables<Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple6OfNullables.getter0();
         TupleGetter<Tuple6OfNullables<Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple6OfNullables.getter1();
         TupleGetter<Tuple6OfNullables<Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple6OfNullables.getter2();
@@ -182,11 +1529,17 @@ final class TupleOfNullablesTest {
         assertEquals(3, getterOrNull3.apply(tuple));
         assertEquals(4, getterOrNull4.apply(tuple));
         assertEquals(5, getterOrNull5.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(6));
     }
     
-    @Test
-    void tuple7() {
-        final Tuple7OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6);
+    private void tupleTest(final Tuple7OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple7OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple7OfNullables.getter0();
         TupleGetter<Tuple7OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple7OfNullables.getter1();
         TupleGetter<Tuple7OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple7OfNullables.getter2();
@@ -222,11 +1575,18 @@ final class TupleOfNullablesTest {
         assertEquals(4, getterOrNull4.apply(tuple));
         assertEquals(5, getterOrNull5.apply(tuple));
         assertEquals(6, getterOrNull6.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(7));
     }
     
-    @Test
-    void tuple8() {
-        final Tuple8OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7);
+    private void tupleTest(final Tuple8OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple8OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple8OfNullables.getter0();
         TupleGetter<Tuple8OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple8OfNullables.getter1();
         TupleGetter<Tuple8OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple8OfNullables.getter2();
@@ -267,11 +1627,19 @@ final class TupleOfNullablesTest {
         assertEquals(5, getterOrNull5.apply(tuple));
         assertEquals(6, getterOrNull6.apply(tuple));
         assertEquals(7, getterOrNull7.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(8));
     }
     
-    @Test
-    void tuple9() {
-        final Tuple9OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8);
+    private void tupleTest(final Tuple9OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple9OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple9OfNullables.getter0();
         TupleGetter<Tuple9OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple9OfNullables.getter1();
         TupleGetter<Tuple9OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple9OfNullables.getter2();
@@ -317,11 +1685,20 @@ final class TupleOfNullablesTest {
         assertEquals(6, getterOrNull6.apply(tuple));
         assertEquals(7, getterOrNull7.apply(tuple));
         assertEquals(8, getterOrNull8.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(9));
     }
     
-    @Test
-    void tuple10() {
-        final Tuple10OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    private void tupleTest(final Tuple10OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple10OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple10OfNullables.getter0();
         TupleGetter<Tuple10OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple10OfNullables.getter1();
         TupleGetter<Tuple10OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple10OfNullables.getter2();
@@ -372,11 +1749,21 @@ final class TupleOfNullablesTest {
         assertEquals(7, getterOrNull7.apply(tuple));
         assertEquals(8, getterOrNull8.apply(tuple));
         assertEquals(9, getterOrNull9.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(10));
     }
     
-    @Test
-    void tuple11() {
-        final Tuple11OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+    private void tupleTest(final Tuple11OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple11OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple11OfNullables.getter0();
         TupleGetter<Tuple11OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple11OfNullables.getter1();
         TupleGetter<Tuple11OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple11OfNullables.getter2();
@@ -432,11 +1819,22 @@ final class TupleOfNullablesTest {
         assertEquals(8, getterOrNull8.apply(tuple));
         assertEquals(9, getterOrNull9.apply(tuple));
         assertEquals(10, getterOrNull10.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(11));
     }
     
-    @Test
-    void tuple12() {
-        final Tuple12OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+    private void tupleTest(final Tuple12OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple12OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple12OfNullables.getter0();
         TupleGetter<Tuple12OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple12OfNullables.getter1();
         TupleGetter<Tuple12OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple12OfNullables.getter2();
@@ -497,11 +1895,23 @@ final class TupleOfNullablesTest {
         assertEquals(9, getterOrNull9.apply(tuple));
         assertEquals(10, getterOrNull10.apply(tuple));
         assertEquals(11, getterOrNull11.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(12));
     }
     
-    @Test
-    void tuple13() {
-        final Tuple13OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+    private void tupleTest(final Tuple13OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple13OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple13OfNullables.getter0();
         TupleGetter<Tuple13OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple13OfNullables.getter1();
         TupleGetter<Tuple13OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple13OfNullables.getter2();
@@ -567,11 +1977,24 @@ final class TupleOfNullablesTest {
         assertEquals(10, getterOrNull10.apply(tuple));
         assertEquals(11, getterOrNull11.apply(tuple));
         assertEquals(12, getterOrNull12.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(13));
     }
     
-    @Test
-    void tuple14() {
-        final Tuple14OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13);
+    private void tupleTest(final Tuple14OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple14OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple14OfNullables.getter0();
         TupleGetter<Tuple14OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple14OfNullables.getter1();
         TupleGetter<Tuple14OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple14OfNullables.getter2();
@@ -642,11 +2065,25 @@ final class TupleOfNullablesTest {
         assertEquals(11, getterOrNull11.apply(tuple));
         assertEquals(12, getterOrNull12.apply(tuple));
         assertEquals(13, getterOrNull13.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(14));
     }
     
-    @Test
-    void tuple15() {
-        final Tuple15OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
+    private void tupleTest(final Tuple15OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple15OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple15OfNullables.getter0();
         TupleGetter<Tuple15OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple15OfNullables.getter1();
         TupleGetter<Tuple15OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple15OfNullables.getter2();
@@ -722,11 +2159,26 @@ final class TupleOfNullablesTest {
         assertEquals(12, getterOrNull12.apply(tuple));
         assertEquals(13, getterOrNull13.apply(tuple));
         assertEquals(14, getterOrNull14.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(15));
     }
     
-    @Test
-    void tuple16() {
-        final Tuple16OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+    private void tupleTest(final Tuple16OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple16OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple16OfNullables.getter0();
         TupleGetter<Tuple16OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple16OfNullables.getter1();
         TupleGetter<Tuple16OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple16OfNullables.getter2();
@@ -807,11 +2259,27 @@ final class TupleOfNullablesTest {
         assertEquals(13, getterOrNull13.apply(tuple));
         assertEquals(14, getterOrNull14.apply(tuple));
         assertEquals(15, getterOrNull15.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(16));
     }
     
-    @Test
-    void tuple17() {
-        final Tuple17OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+    private void tupleTest(final Tuple17OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple17OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple17OfNullables.getter0();
         TupleGetter<Tuple17OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple17OfNullables.getter1();
         TupleGetter<Tuple17OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple17OfNullables.getter2();
@@ -897,11 +2365,28 @@ final class TupleOfNullablesTest {
         assertEquals(14, getterOrNull14.apply(tuple));
         assertEquals(15, getterOrNull15.apply(tuple));
         assertEquals(16, getterOrNull16.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(17));
     }
     
-    @Test
-    void tuple18() {
-        final Tuple18OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17);
+    private void tupleTest(final Tuple18OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple18OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple18OfNullables.getter0();
         TupleGetter<Tuple18OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple18OfNullables.getter1();
         TupleGetter<Tuple18OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple18OfNullables.getter2();
@@ -992,11 +2477,29 @@ final class TupleOfNullablesTest {
         assertEquals(15, getterOrNull15.apply(tuple));
         assertEquals(16, getterOrNull16.apply(tuple));
         assertEquals(17, getterOrNull17.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(18));
     }
     
-    @Test
-    void tuple19() {
-        final Tuple19OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
+    private void tupleTest(final Tuple19OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple19OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple19OfNullables.getter0();
         TupleGetter<Tuple19OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple19OfNullables.getter1();
         TupleGetter<Tuple19OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple19OfNullables.getter2();
@@ -1092,11 +2595,30 @@ final class TupleOfNullablesTest {
         assertEquals(16, getterOrNull16.apply(tuple));
         assertEquals(17, getterOrNull17.apply(tuple));
         assertEquals(18, getterOrNull18.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(19));
     }
     
-    @Test
-    void tuple20() {
-        final Tuple20OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
+    private void tupleTest(final Tuple20OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple20OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple20OfNullables.getter0();
         TupleGetter<Tuple20OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple20OfNullables.getter1();
         TupleGetter<Tuple20OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple20OfNullables.getter2();
@@ -1197,11 +2719,31 @@ final class TupleOfNullablesTest {
         assertEquals(17, getterOrNull17.apply(tuple));
         assertEquals(18, getterOrNull18.apply(tuple));
         assertEquals(19, getterOrNull19.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(20));
     }
     
-    @Test
-    void tuple21() {
-        final Tuple21OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+    private void tupleTest(final Tuple21OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple21OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple21OfNullables.getter0();
         TupleGetter<Tuple21OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple21OfNullables.getter1();
         TupleGetter<Tuple21OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple21OfNullables.getter2();
@@ -1307,11 +2849,32 @@ final class TupleOfNullablesTest {
         assertEquals(18, getterOrNull18.apply(tuple));
         assertEquals(19, getterOrNull19.apply(tuple));
         assertEquals(20, getterOrNull20.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get(20).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(21));
     }
     
-    @Test
-    void tuple22() {
-        final Tuple22OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21);
+    private void tupleTest(final Tuple22OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple22OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple22OfNullables.getter0();
         TupleGetter<Tuple22OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple22OfNullables.getter1();
         TupleGetter<Tuple22OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple22OfNullables.getter2();
@@ -1422,11 +2985,33 @@ final class TupleOfNullablesTest {
         assertEquals(19, getterOrNull19.apply(tuple));
         assertEquals(20, getterOrNull20.apply(tuple));
         assertEquals(21, getterOrNull21.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get(20).orElseThrow(NoSuchElementException::new));
+        assertEquals(21, tuple.get(21).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(22));
     }
     
-    @Test
-    void tuple23() {
-        final Tuple23OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22);
+    private void tupleTest(final Tuple23OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> tuple) {
         TupleGetter<Tuple23OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter0 = Tuple23OfNullables.getter0();
         TupleGetter<Tuple23OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter1 = Tuple23OfNullables.getter1();
         TupleGetter<Tuple23OfNullables<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>, Optional<Integer>> getter2 = Tuple23OfNullables.getter2();
@@ -1542,5 +3127,30 @@ final class TupleOfNullablesTest {
         assertEquals(20, getterOrNull20.apply(tuple));
         assertEquals(21, getterOrNull21.apply(tuple));
         assertEquals(22, getterOrNull22.apply(tuple));
+        assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
+        assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
+        assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
+        assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
+        assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
+        assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
+        assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
+        assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
+        assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
+        assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
+        assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
+        assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
+        assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
+        assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
+        assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
+        assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
+        assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
+        assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
+        assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
+        assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
+        assertEquals(20, tuple.get(20).orElseThrow(NoSuchElementException::new));
+        assertEquals(21, tuple.get(21).orElseThrow(NoSuchElementException::new));
+        assertEquals(22, tuple.get(22).orElseThrow(NoSuchElementException::new));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(23));
     }
 }

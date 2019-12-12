@@ -45,6 +45,6 @@ public interface MutableTuple0 extends MutableTuple {
     
     @SuppressWarnings("unchecked")
     default Optional<Object> get(int index) {
-        throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
+        throw new IndexOutOfBoundsException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
     }
 }

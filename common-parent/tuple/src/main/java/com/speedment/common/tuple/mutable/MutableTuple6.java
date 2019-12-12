@@ -151,7 +151,7 @@ public interface MutableTuple6<T0, T1, T2, T3, T4, T5> extends MutableTuple {
             case 3 : return (Optional<Object>)get3();
             case 4 : return (Optional<Object>)get4();
             case 5 : return (Optional<Object>)get5();
-            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
+            default : throw new IndexOutOfBoundsException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
         }
     }
     

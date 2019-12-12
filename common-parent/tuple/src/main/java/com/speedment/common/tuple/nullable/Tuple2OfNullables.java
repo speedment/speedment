@@ -69,7 +69,7 @@ public interface Tuple2OfNullables<T0, T1> extends TupleOfNullables {
         switch (index) {
             case 0 : return (Optional<Object>)get0();
             case 1 : return (Optional<Object>)get1();
-            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
+            default : throw new IndexOutOfBoundsException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
         }
     }
     

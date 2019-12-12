@@ -154,7 +154,7 @@ public interface Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> extends Tu
             case 8 : return get8();
             case 9 : return get9();
             case 10 : return get10();
-            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
+            default : throw new IndexOutOfBoundsException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
         }
     }
     

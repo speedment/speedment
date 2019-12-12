@@ -270,7 +270,7 @@ public interface MutableTuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
             case 10 : return (Optional<Object>)get10();
             case 11 : return (Optional<Object>)get11();
             case 12 : return (Optional<Object>)get12();
-            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
+            default : throw new IndexOutOfBoundsException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()));
         }
     }
     
