@@ -1392,9 +1392,9 @@ final class TupleOfNullablesTest {
         assertEquals(0, tuple.get(0).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(1));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(0, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(0, expectedSum2);
     }
     
@@ -1413,9 +1413,9 @@ final class TupleOfNullablesTest {
         assertEquals(1, tuple.get(1).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(2));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(1, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(1, expectedSum2);
     }
     
@@ -1440,9 +1440,9 @@ final class TupleOfNullablesTest {
         assertEquals(2, tuple.get(2).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(3));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(3, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(3, expectedSum2);
     }
     
@@ -1473,9 +1473,9 @@ final class TupleOfNullablesTest {
         assertEquals(3, tuple.get(3).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(4));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(6, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(6, expectedSum2);
     }
     
@@ -1512,9 +1512,9 @@ final class TupleOfNullablesTest {
         assertEquals(4, tuple.get(4).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(5));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(10, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(10, expectedSum2);
     }
     
@@ -1557,9 +1557,9 @@ final class TupleOfNullablesTest {
         assertEquals(5, tuple.get(5).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(6));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(15, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(15, expectedSum2);
     }
     
@@ -1608,9 +1608,9 @@ final class TupleOfNullablesTest {
         assertEquals(6, tuple.get(6).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(7));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(21, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(21, expectedSum2);
     }
     
@@ -1665,9 +1665,9 @@ final class TupleOfNullablesTest {
         assertEquals(7, tuple.get(7).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(8));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(28, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(28, expectedSum2);
     }
     
@@ -1728,9 +1728,9 @@ final class TupleOfNullablesTest {
         assertEquals(8, tuple.get(8).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(9));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(36, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(36, expectedSum2);
     }
     
@@ -1797,9 +1797,9 @@ final class TupleOfNullablesTest {
         assertEquals(9, tuple.get(9).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(10));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(45, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(45, expectedSum2);
     }
     
@@ -1872,9 +1872,9 @@ final class TupleOfNullablesTest {
         assertEquals(10, tuple.get(10).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(11));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(55, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(55, expectedSum2);
     }
     
@@ -1953,9 +1953,9 @@ final class TupleOfNullablesTest {
         assertEquals(11, tuple.get(11).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(12));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(66, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(66, expectedSum2);
     }
     
@@ -2040,9 +2040,9 @@ final class TupleOfNullablesTest {
         assertEquals(12, tuple.get(12).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(13));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(78, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(78, expectedSum2);
     }
     
@@ -2133,9 +2133,9 @@ final class TupleOfNullablesTest {
         assertEquals(13, tuple.get(13).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(14));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(91, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(91, expectedSum2);
     }
     
@@ -2232,9 +2232,9 @@ final class TupleOfNullablesTest {
         assertEquals(14, tuple.get(14).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(15));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(105, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(105, expectedSum2);
     }
     
@@ -2337,9 +2337,9 @@ final class TupleOfNullablesTest {
         assertEquals(15, tuple.get(15).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(16));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(120, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(120, expectedSum2);
     }
     
@@ -2448,9 +2448,9 @@ final class TupleOfNullablesTest {
         assertEquals(16, tuple.get(16).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(17));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(136, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(136, expectedSum2);
     }
     
@@ -2565,9 +2565,9 @@ final class TupleOfNullablesTest {
         assertEquals(17, tuple.get(17).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(18));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(153, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(153, expectedSum2);
     }
     
@@ -2688,9 +2688,9 @@ final class TupleOfNullablesTest {
         assertEquals(18, tuple.get(18).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(19));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(171, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(171, expectedSum2);
     }
     
@@ -2817,9 +2817,9 @@ final class TupleOfNullablesTest {
         assertEquals(19, tuple.get(19).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(20));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(190, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(190, expectedSum2);
     }
     
@@ -2952,9 +2952,9 @@ final class TupleOfNullablesTest {
         assertEquals(20, tuple.get(20).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(21));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(210, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(210, expectedSum2);
     }
     
@@ -3093,9 +3093,9 @@ final class TupleOfNullablesTest {
         assertEquals(21, tuple.get(21).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(22));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(231, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(231, expectedSum2);
     }
     
@@ -3240,9 +3240,9 @@ final class TupleOfNullablesTest {
         assertEquals(22, tuple.get(22).orElseThrow(NoSuchElementException::new));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> tuple.get(23));
-        final long expectedSum = tuple.stream().mapToInt(i -> i).sum();
+        final long expectedSum = tuple.stream().map(Integer.class::cast).mapToInt(i -> i).sum();
         assertEquals(253, expectedSum);
-        final long expectedSum2 = tuple.stream(Integer.class).mapToInt(i -> i).sum();
+        final long expectedSum2 = tuple.streamOf(Integer.class).mapToInt(i -> i).sum();
         assertEquals(253, expectedSum2);
     }
 }
