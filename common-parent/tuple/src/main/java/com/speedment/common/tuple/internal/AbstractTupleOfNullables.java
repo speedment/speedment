@@ -21,6 +21,8 @@ import com.speedment.common.tuple.TupleOfNullables;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  *
  * @author pemi
@@ -43,6 +45,15 @@ public abstract class AbstractTupleOfNullables extends BasicAbstractTuple<Abstra
 
     @Override
     public Stream<Optional<Object>> stream() {
-        return Stream.of(values).map(Optional::ofNullable);
+        return Stream.of(values)
+            .map(Optional::ofNullable);
+    }
+
+    @Override
+    public <C> Stream<C> streamOf(Class<C> clazz) {
+        requireNonNull(clazz);
+        return Stream.of(values)
+            .filter(clazz::isInstance)
+            .map(clazz::cast);
     }
 }

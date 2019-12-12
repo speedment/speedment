@@ -21,6 +21,8 @@ import com.speedment.common.tuple.MutableTuple;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  *
  * @author pemi
@@ -45,4 +47,14 @@ public abstract class AbstractMutableTuple extends BasicAbstractTuple<AbstractMu
     public Stream<Optional<Object>> stream() {
         return Stream.of(values).map(Optional::ofNullable);
     }
+
+    @Override
+    public <C> Stream<C> streamOf(Class<C> clazz) {
+        requireNonNull(clazz);
+        return Stream.of(values)
+            .filter(clazz::isInstance)
+            .filter(clazz::isInstance)
+            .map(clazz::cast);
+    }
+
 }

@@ -46,6 +46,8 @@ public interface MutableTuple extends BasicTuple<Optional<Object>> {
     @Override
     default <T> Stream<T> streamOf(Class<T> clazz) {
         return stream()
+            .filter(Optional::isPresent)
+            .map(Optional::get)
             .filter(clazz::isInstance)
             .map(clazz::cast);
     }
