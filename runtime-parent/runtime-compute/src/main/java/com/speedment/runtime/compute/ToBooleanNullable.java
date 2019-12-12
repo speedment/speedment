@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.compute;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.function.BooleanToDoubleFunction;
 import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.ToBooleanFunction;
@@ -33,8 +35,6 @@ import com.speedment.runtime.compute.trait.HasMapToDoubleIfPresent;
 import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.util.function.Function;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Expression that given an entity returns a {@code boolean} value, or
@@ -191,7 +191,7 @@ extends Expression<T>,
 
     @Override
     default long hash(T object) {
-        if (isNotNull(object)) {
+        if (isNull(object)) {
             return 0;
         }
         return applyAsBoolean(object) ? 1 : 2;
