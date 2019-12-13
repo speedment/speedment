@@ -662,12 +662,12 @@ final class IntForeignKeyFieldTest {
     }
     
     void comparator(final boolean reversed) {
-        final IntFieldComparator<BasicEntity, Integer> comparator = reversed ? field.reversed() : field.comparator();
-        final List<BasicEntity> actual = new ArrayList<>(entities);
-        actual.sort(comparator);
         final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarInt);
         final List<BasicEntity> expected = new ArrayList<>(entities);
         expected.sort(reversed ? comparatorExpected.reversed() : comparatorExpected);
+        final IntFieldComparator<BasicEntity, Integer> comparator = reversed ? field.reversed() : field.comparator();
+        final List<BasicEntity> actual = new ArrayList<>(entities);
+        actual.sort(comparator);
         assertEquals(expected, actual);
     }
     

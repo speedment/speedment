@@ -655,12 +655,12 @@ final class ShortFieldTest {
     }
     
     void comparator(final boolean reversed) {
-        final ShortFieldComparator<BasicEntity, Short> comparator = reversed ? field.reversed() : field.comparator();
-        final List<BasicEntity> actual = new ArrayList<>(entities);
-        actual.sort(comparator);
         final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarShort);
         final List<BasicEntity> expected = new ArrayList<>(entities);
         expected.sort(reversed ? comparatorExpected.reversed() : comparatorExpected);
+        final ShortFieldComparator<BasicEntity, Short> comparator = reversed ? field.reversed() : field.comparator();
+        final List<BasicEntity> actual = new ArrayList<>(entities);
+        actual.sort(comparator);
         assertEquals(expected, actual);
     }
     

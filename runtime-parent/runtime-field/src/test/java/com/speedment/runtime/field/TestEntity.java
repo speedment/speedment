@@ -56,10 +56,24 @@ public interface TestEntity {
     }
 
     ComparableField<TestEntity, Integer, Integer> ID = ComparableField.create(Identifier.ID, TestEntity::getId, TestEntity::setId, TypeMapper.identity(), true);
+
     StringField<TestEntity, String> NAME = StringField.create(
         Identifier.NAME, 
         TestEntity::getName,
-        TestEntity::setName, TypeMapper.identity(), false);
+        TestEntity::setName,
+        TypeMapper.identity(),
+        false
+    );
+
+    StringField<TestEntity, String> FK_NAME = StringForeignKeyField.create(
+        Identifier.NAME,
+        TestEntity::getName,
+        TestEntity::setName,
+        NAME,
+        TypeMapper.identity(),
+        false
+    );
+
 
     Integer getId();
 

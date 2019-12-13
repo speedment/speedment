@@ -662,12 +662,12 @@ final class ByteForeignKeyFieldTest {
     }
     
     void comparator(final boolean reversed) {
-        final ByteFieldComparator<BasicEntity, Byte> comparator = reversed ? field.reversed() : field.comparator();
-        final List<BasicEntity> actual = new ArrayList<>(entities);
-        actual.sort(comparator);
         final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarByte);
         final List<BasicEntity> expected = new ArrayList<>(entities);
         expected.sort(reversed ? comparatorExpected.reversed() : comparatorExpected);
+        final ByteFieldComparator<BasicEntity, Byte> comparator = reversed ? field.reversed() : field.comparator();
+        final List<BasicEntity> actual = new ArrayList<>(entities);
+        actual.sort(comparator);
         assertEquals(expected, actual);
     }
     

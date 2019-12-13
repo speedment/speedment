@@ -655,12 +655,12 @@ final class LongFieldTest {
     }
     
     void comparator(final boolean reversed) {
-        final LongFieldComparator<BasicEntity, Long> comparator = reversed ? field.reversed() : field.comparator();
-        final List<BasicEntity> actual = new ArrayList<>(entities);
-        actual.sort(comparator);
         final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarLong);
         final List<BasicEntity> expected = new ArrayList<>(entities);
         expected.sort(reversed ? comparatorExpected.reversed() : comparatorExpected);
+        final LongFieldComparator<BasicEntity, Long> comparator = reversed ? field.reversed() : field.comparator();
+        final List<BasicEntity> actual = new ArrayList<>(entities);
+        actual.sort(comparator);
         assertEquals(expected, actual);
     }
     
