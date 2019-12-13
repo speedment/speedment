@@ -6,10 +6,16 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.speedment.runtime.typemapper.TypeMapper.Category;
+
 final class StringToLocaleMapperTest extends AbstractTypeMapperTest<String, Locale, StringToLocaleMapper> {
 
     StringToLocaleMapperTest() {
-        super(String.class, Locale.class, StringToLocaleMapper::new);
+        super(
+            String.class,
+            Locale.class,
+            Category.REFERENCE,
+            StringToLocaleMapper::new);
     }
 
     @Override
@@ -21,4 +27,5 @@ final class StringToLocaleMapperTest extends AbstractTypeMapperTest<String, Loca
         map.put(null, null);
         return map;
     }
+
 }

@@ -1,30 +1,22 @@
 package com.speedment.runtime.typemapper.string;
 
 import com.speedment.runtime.typemapper.AbstractTypeMapperTest;
-import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.speedment.runtime.typemapper.TypeMapper.Category;
+import static com.speedment.runtime.typemapper.TypeMapper.Ordering;
 
-class StringToBigIntegerMapperTest extends AbstractTypeMapperTest<String, BigInteger, StringToBigIntegerMapper> {
+final class StringToBigIntegerMapperTest extends AbstractTypeMapperTest<String, BigInteger, StringToBigIntegerMapper> {
 
-
-    public StringToBigIntegerMapperTest() {
-        super(String.class, BigInteger.class, StringToBigIntegerMapper::new);
-    }
-
-    @Test
-    void getOrdering() {
-        assertEquals(TypeMapper.Ordering.UNSPECIFIED, typeMapper().getOrdering());
-    }
-
-    @Test
-    void getJavaTypeCategory() {
-        assertEquals(TypeMapper.Category.COMPARABLE, typeMapper().getJavaTypeCategory(column()));
+    StringToBigIntegerMapperTest() {
+        super(String.class,
+            BigInteger.class,
+            Category.COMPARABLE,
+            Ordering.UNSPECIFIED,
+            StringToBigIntegerMapper::new);
     }
 
     @Override
@@ -37,4 +29,5 @@ class StringToBigIntegerMapperTest extends AbstractTypeMapperTest<String, BigInt
         map.put(null, null);
         return map;
     }
+
 }

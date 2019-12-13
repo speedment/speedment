@@ -1,23 +1,22 @@
 package com.speedment.runtime.typemapper.shorts;
 
 import com.speedment.runtime.typemapper.AbstractTypeMapperTest;
-import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.speedment.runtime.typemapper.TypeMapper.Category;
+import static com.speedment.runtime.typemapper.TypeMapper.Ordering;
 
 final class ShortToByteMapperTest extends AbstractTypeMapperTest<Short, Byte, ShortToByteMapper> {
 
     ShortToByteMapperTest() {
-        super(Short.class, Byte.class, ShortToByteMapper::new);
-    }
-
-    @Test
-    void getOrdering() {
-        assertEquals(TypeMapper.Ordering.RETAIN, typeMapper().getOrdering());
+        super(
+            Short.class,
+            Byte.class,
+            Category.COMPARABLE,
+            Ordering.RETAIN,
+            ShortToByteMapper::new);
     }
 
     @Override
@@ -27,4 +26,5 @@ final class ShortToByteMapperTest extends AbstractTypeMapperTest<Short, Byte, Sh
         map.put(null, null);
         return map;
     }
+
 }

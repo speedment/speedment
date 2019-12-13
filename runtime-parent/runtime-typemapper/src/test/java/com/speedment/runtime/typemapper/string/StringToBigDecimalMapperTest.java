@@ -2,28 +2,23 @@ package com.speedment.runtime.typemapper.string;
 
 import com.speedment.runtime.typemapper.AbstractTypeMapperTest;
 import com.speedment.runtime.typemapper.TypeMapper;
-import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.speedment.runtime.typemapper.TypeMapper.*;
+import static com.speedment.runtime.typemapper.TypeMapper.Category;
 
 final class StringToBigDecimalMapperTest extends AbstractTypeMapperTest<String, BigDecimal, StringToBigDecimalMapper> {
 
     StringToBigDecimalMapperTest() {
-        super(String.class, BigDecimal.class, StringToBigDecimalMapper::new);
-    }
-
-    @Test
-    void getOrdering() {
-        assertEquals(TypeMapper.Ordering.UNSPECIFIED, typeMapper().getOrdering());
-    }
-
-    @Test
-    void getJavaTypeCategory() {
-        assertEquals(TypeMapper.Category.COMPARABLE, typeMapper().getJavaTypeCategory(column()));
+        super(
+            String.class,
+            BigDecimal.class,
+            Category.COMPARABLE,
+            Ordering.UNSPECIFIED,
+            StringToBigDecimalMapper::new);
     }
 
     @Override
@@ -38,4 +33,5 @@ final class StringToBigDecimalMapperTest extends AbstractTypeMapperTest<String, 
         map.put(null, null);
         return map;
     }
+
 }
