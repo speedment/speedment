@@ -25,6 +25,7 @@ import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
@@ -38,56 +39,56 @@ final class IntRangeUtilTest {
     private static final IntPredicate IS_ZERO = l -> l == 0;
 
     @Test
-    void testRequirePositive() {
+    void requirePositive() {
         testHelper(IS_POSITIVE, IntRangeUtil::requirePositive);
     }
 
     @Test
-    void testRequireNegative() {
+    void requireNegative() {
         testHelper(IS_NEGATIVE, IntRangeUtil::requireNegative);
     }
 
     @Test
-    void testRequireZero() {
+    void requireZero() {
         testHelper(IS_ZERO, IntRangeUtil::requireZero);
     }
 
     @Test
-    void testRequireNonPositive() {
+    void requireNonPositive() {
         testHelper(IS_POSITIVE.negate(), IntRangeUtil::requireNonPositive);
     }
 
     @Test
-    void testRequireNonNegative() {
+    void requireNonNegative() {
         testHelper(IS_NEGATIVE.negate(), IntRangeUtil::requireNonNegative);
     }
 
     @Test
-    void testRequireNonZero() {
+    void requireNonZero() {
         testHelper(IS_ZERO.negate(), IntRangeUtil::requireNonZero);
     }
 
     @Test
-    void testRequireEquals() {
+    void requireEquals() {
         final int otherVal = 3;
         testHelper(l -> l == otherVal, l -> IntRangeUtil.requireEquals(l, otherVal));
     }
 
     @Test
-    void testRequireNotEquals() {
+    void requireNotEquals() {
         final int otherVal = 3;
         testHelper(l -> l != otherVal, l -> IntRangeUtil.requireNotEquals(l, otherVal));
     }
 
     @Test
-    void testRequireInRange() {
+    void requireInRange() {
         final int first = -1;
         final int lastExclusive = 4;
         testHelper(l -> l >= first && l < lastExclusive, l -> IntRangeUtil.requireInRange(l, first, lastExclusive));
     }
 
     @Test
-    void testRequireInRangeClosed() {
+    void requireInRangeClosed() {
         final int first = -1;
         final int lastInclusive = 4;
         testHelper(l -> l >= first && l <= lastInclusive, l -> IntRangeUtil.requireInRangeClosed(l, first, lastInclusive));
@@ -107,5 +108,188 @@ final class IntRangeUtilTest {
             }
         });
     }
+    @Test
+    void testRequirePositive() {
+        assertEquals(1, IntRangeUtil.requirePositive(1, RuntimeException::new));
+    }
+    @Test
+    void testRequirePositive2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requirePositive(-1, RuntimeException::new));
+    }
+    @Test
+    void testRequirePositive3() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requirePositive(0, RuntimeException::new));
+    }
 
+    @Test
+    void testRequireNegative() {
+        assertEquals(-1, IntRangeUtil.requireNegative(-1, RuntimeException::new));
+    }
+    @Test
+    void testRequireNegative2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireNegative(1, RuntimeException::new));
+    }
+    @Test
+    void testRequireNegative3() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireNegative(0, RuntimeException::new));
+    }
+
+    @Test
+    void testRequireZero() {
+        assertEquals(0, IntRangeUtil.requireZero(0, RuntimeException::new));
+    }
+    @Test
+    void testRequireZero2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireZero(1, RuntimeException::new));
+    }
+    @Test
+    void testRequireZero3() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireZero(-1, RuntimeException::new));
+    }
+    @Test
+    void testRequireNonPositive() {
+        assertEquals(-1.0, IntRangeUtil.requireNonPositive(-1, RuntimeException::new));
+    }
+    @Test
+    void testRequireNonPositive2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireNonPositive(1, RuntimeException::new));
+    }
+    @Test
+    void testRequireNonPositive3() {
+        assertEquals(0.0, IntRangeUtil.requireNonPositive(0, RuntimeException::new));
+    }
+
+    @Test
+    void testRequireNonNegative() {
+        assertEquals(1, IntRangeUtil.requireNonNegative(1, RuntimeException::new));
+    }
+    @Test
+    void testRequireNonNegative2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireNonNegative(-1, RuntimeException::new));
+    }
+    @Test
+    void testRequireNonNegative3() {
+        assertEquals(0.0, IntRangeUtil.requireNonNegative(0, RuntimeException::new));
+    }
+
+    @Test
+    void testRequireNonZero() {
+        assertEquals(1, IntRangeUtil.requireNonZero(1, RuntimeException::new));
+    }
+    @Test
+    void testRequireNonZero2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireNonZero(0, RuntimeException::new));
+    }
+    @Test
+    void testRequireNonZero3() {
+        assertEquals(-1, IntRangeUtil.requireNonZero(-1, RuntimeException::new));
+    }
+
+    @Test
+    void testRequireEquals() {
+        assertEquals(0, IntRangeUtil.requireEquals(0, 0, RuntimeException::new));
+    }
+    @Test
+    void testRequireEquals2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireEquals(0,-1, RuntimeException::new));
+    }
+    @Test
+    void testRequireEquals3() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireEquals(0,1, RuntimeException::new));
+    }
+    @Test
+    void testRequireEquals4() {
+        assertEquals(1.0, IntRangeUtil.requireEquals(1, 1, RuntimeException::new));
+    }
+    @Test
+    void testRequireEquals5() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireEquals(1,0, RuntimeException::new));
+    }
+    @Test
+    void testRequireEquals6() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireEquals(1,-1, RuntimeException::new));
+    }
+    @Test
+    void testRequireEquals7() {
+        assertEquals(-1.0, IntRangeUtil.requireEquals(-1, -1, RuntimeException::new));
+    }
+    @Test
+    void testRequireEquals8() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireEquals(-1,0, RuntimeException::new));
+    }
+    @Test
+    void testRequireEquals9() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireEquals(-1,1, RuntimeException::new));
+    }
+
+    @Test
+    void testRestRequireNotEquals() {
+        assertEquals(0.0, IntRangeUtil.requireNotEquals(0, -1, RuntimeException::new));
+    }
+    @Test
+    void testRestRequireNotEquals2() {
+        assertEquals(0.0, IntRangeUtil.requireNotEquals(0, 1, RuntimeException::new));
+    }
+    @Test
+    void testRestRequireNotEquals3() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireNotEquals(0,0, RuntimeException::new));
+    }
+    @Test
+    void testRestRequireNotEquals4() {
+        assertEquals(1.0, IntRangeUtil.requireNotEquals(1, 0, RuntimeException::new));
+    }
+    @Test
+    void testRestRequireNotEquals5() {
+        assertEquals(1.0, IntRangeUtil.requireNotEquals(1, -1, RuntimeException::new));
+    }
+    @Test
+    void testRestRequireNotEquals6() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireNotEquals(1,1, RuntimeException::new));
+    }
+    @Test
+    void testRestRequireNotEquals7() {
+        assertEquals(-1.0, IntRangeUtil.requireNotEquals(-1, 0, RuntimeException::new));
+    }
+    @Test
+    void testRestRequireNotEquals8() {
+        assertEquals(-1.0, IntRangeUtil.requireNotEquals(-1, 1, RuntimeException::new));
+    }
+    @Test
+    void testRestRequireNotEquals9() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireNotEquals(-1,-1, RuntimeException::new));
+    }
+
+    @Test
+    void testRequireInRange() {
+        assertEquals(0.0, IntRangeUtil.requireInRange(0, -1,1, RuntimeException::new));
+    }
+    @Test
+    void testRequireInRange2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireInRange(-1,0,1, RuntimeException::new));
+    }
+    @Test
+    void testRequireInRange3() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireInRange(1,-1,0, RuntimeException::new));
+    }
+    @Test
+    void testRequireInRange4() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireInRange(0,-1,0, RuntimeException::new));
+    }
+
+    @Test
+    void testRequireInRangeClosed() {
+        assertEquals(0.0, IntRangeUtil.requireInRangeClosed(0, -1,1, RuntimeException::new));
+    }
+    @Test
+    void testRequireInRangeClosed2() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireInRangeClosed(-1,0,1, RuntimeException::new));
+    }
+    @Test
+    void testRequireInRangeClosed3() {
+        assertThrows(RuntimeException.class, () -> IntRangeUtil.requireInRangeClosed(1,-1,0, RuntimeException::new));
+    }
+    @Test
+    void testRequireInRangeClosed4() {
+        assertEquals(0.0, IntRangeUtil.requireInRangeClosed(0, -1,0, RuntimeException::new));
+    }
 }
