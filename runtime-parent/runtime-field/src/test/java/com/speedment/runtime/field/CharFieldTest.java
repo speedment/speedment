@@ -17,19 +17,29 @@
 package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.field.comparator.CharFieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.*;
 
 /**
  * JUnit tests for the primitive {@code char} field class.
@@ -40,10 +50,13 @@ import static java.util.Arrays.asList;
  * @see CharField
  */
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
+@ExtendWith(value = org.mockito.junit.jupiter.MockitoExtension.class)
 final class CharFieldTest {
     
     private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarChar();
     private CharField<BasicEntity, Character> field;
+    private CharField<BasicEntity, Character> fkField;
+    private @Mock Column column;
     private List<BasicEntity> entities;
     private BasicEntity a;
     private BasicEntity b;
@@ -60,6 +73,7 @@ final class CharFieldTest {
     
     @BeforeEach
     void setUp() {
+        fkField = null;
         field = CharField.create(
             BasicEntity.Identifier.VAR_CHAR,
             BasicEntity::getVarChar,
@@ -103,12 +117,12 @@ final class CharFieldTest {
         final List<BasicEntity> e5 = asList(a, c, d, e, f, i, l);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: between(0, 2):",                                a0, e0, FORMATTER);
@@ -144,15 +158,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList();
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: equal(/):",        a0, e0, FORMATTER);
@@ -191,15 +205,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList(k);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: greaterOrEqual(/):",        a0, e0, FORMATTER);
@@ -238,15 +252,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList(k);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: greaterThan(/):",        a0, e0, FORMATTER);
@@ -285,15 +299,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList();
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: in():",                        a0, e0, FORMATTER);
@@ -312,12 +326,12 @@ final class CharFieldTest {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.in(Collections.singleton('0'));
-        final Predicate<BasicEntity> t2 = field.in(Stream.of('0', '1').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t3 = field.in(Stream.of('0', '1', '1').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t4 = field.in(Stream.of('/', '1', '2', '3').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t5 = field.in(Stream.of(' ', '}').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t6 = field.in(Stream.of('1', '2', '3', '4', '5').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t7 = field.in(Stream.of('m', 'n', 'o', 'p', 'q').collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t2 = field.in(Stream.of('0', '1').collect(toSet()));
+        final Predicate<BasicEntity> t3 = field.in(Stream.of('0', '1', '1').collect(toSet()));
+        final Predicate<BasicEntity> t4 = field.in(Stream.of('/', '1', '2', '3').collect(toSet()));
+        final Predicate<BasicEntity> t5 = field.in(Stream.of(' ', '}').collect(toSet()));
+        final Predicate<BasicEntity> t6 = field.in(Stream.of('1', '2', '3', '4', '5').collect(toSet()));
+        final Predicate<BasicEntity> t7 = field.in(Stream.of('m', 'n', 'o', 'p', 'q').collect(toSet()));
         final Predicate<BasicEntity> t8 = field.in(Collections.singleton('k'));
         
         // Create a number of expected results
@@ -332,15 +346,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList();
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: inSet():",                        a0, e0, FORMATTER);
@@ -379,15 +393,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList(a, b, c, d, e, f, g, h, i, j, l);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: lessThan(/):",        a0, e0, FORMATTER);
@@ -426,15 +440,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList(a, b, c, d, e, f, g, h, i, j, l);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: lessOrEqual(/):",        a0, e0, FORMATTER);
@@ -467,12 +481,12 @@ final class CharFieldTest {
         final List<BasicEntity> e5 = asList(b, g, h, j, k);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: notBetween(0, 2):",                                a0, e0, FORMATTER);
@@ -508,15 +522,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: notEqual(/):",        a0, e0, FORMATTER);
@@ -555,15 +569,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: notIn():",                        a0, e0, FORMATTER);
@@ -582,12 +596,12 @@ final class CharFieldTest {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn(Collections.emptySet());
         final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton('0'));
-        final Predicate<BasicEntity> t2 = field.notIn(Stream.of('0', '1').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t3 = field.notIn(Stream.of('0', '1', '1').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t4 = field.notIn(Stream.of('/', '1', '2', '3').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t5 = field.notIn(Stream.of(' ', '}').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t6 = field.notIn(Stream.of('1', '2', '3', '4', '5').collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t7 = field.notIn(Stream.of('m', 'n', 'o', 'p', 'q').collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t2 = field.notIn(Stream.of('0', '1').collect(toSet()));
+        final Predicate<BasicEntity> t3 = field.notIn(Stream.of('0', '1', '1').collect(toSet()));
+        final Predicate<BasicEntity> t4 = field.notIn(Stream.of('/', '1', '2', '3').collect(toSet()));
+        final Predicate<BasicEntity> t5 = field.notIn(Stream.of(' ', '}').collect(toSet()));
+        final Predicate<BasicEntity> t6 = field.notIn(Stream.of('1', '2', '3', '4', '5').collect(toSet()));
+        final Predicate<BasicEntity> t7 = field.notIn(Stream.of('m', 'n', 'o', 'p', 'q').collect(toSet()));
         final Predicate<BasicEntity> t8 = field.notIn(Collections.singleton('k'));
         
         // Create a number of expected results
@@ -602,15 +616,15 @@ final class CharFieldTest {
         final List<BasicEntity> e8 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
         
         // Create a number of actual results
-        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(Collectors.toList());
-        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(Collectors.toList());
-        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(Collectors.toList());
-        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(Collectors.toList());
-        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(Collectors.toList());
-        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(Collectors.toList());
-        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(Collectors.toList());
-        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(Collectors.toList());
-        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(Collectors.toList());
+        final List<BasicEntity> a0 = entities.stream().filter(t0).collect(toList());
+        final List<BasicEntity> a1 = entities.stream().filter(t1).collect(toList());
+        final List<BasicEntity> a2 = entities.stream().filter(t2).collect(toList());
+        final List<BasicEntity> a3 = entities.stream().filter(t3).collect(toList());
+        final List<BasicEntity> a4 = entities.stream().filter(t4).collect(toList());
+        final List<BasicEntity> a5 = entities.stream().filter(t5).collect(toList());
+        final List<BasicEntity> a6 = entities.stream().filter(t6).collect(toList());
+        final List<BasicEntity> a7 = entities.stream().filter(t7).collect(toList());
+        final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
         TestUtil.assertListEqual("Test 0: notInSet():",                        a0, e0, FORMATTER);
@@ -622,5 +636,73 @@ final class CharFieldTest {
         TestUtil.assertListEqual("Test 6: notInSet(1, 2, 3, 4, 5):",           a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: notInSet(100, 101, 102, 103, 104):", a7, e7, FORMATTER);
         TestUtil.assertListEqual("Test 8: notInSet(-100):",                    a8, e8, FORMATTER);
+    }
+    
+    @Test
+    void getField() {
+        final CharField<BasicEntity, Character> other = field.getField();
+        assertNotNull(other);
+    }
+    
+    @Test
+    void comparator() {
+        comparator(false);
+    }
+    
+    @Test
+    void comparatorReversed() {
+        comparator(true);
+    }
+    
+    void comparator(final boolean reversed) {
+        final CharFieldComparator<BasicEntity, Character> comparator = reversed ? field.reversed() : field.comparator();
+        final List<BasicEntity> actual = new ArrayList<>(entities);
+        actual.sort(comparator);
+        final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarChar);
+        final List<BasicEntity> expected = new ArrayList<>(entities);
+        expected.sort(reversed ? comparatorExpected.reversed() : comparatorExpected);
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    void typemapper() {
+        when(column.getDatabaseType()).thenReturn(Character.class.getName());
+        final Type fieldType = field.typeMapper().getJavaType(column);
+        assertEquals(char.class.getSimpleName(), fieldType.getTypeName());
+    }
+    
+    @Test
+    void isUnique() {
+        assertFalse(field.isUnique());
+    }
+    
+    @Test
+    void tableAlias() {
+        assertNotNull(field.tableAlias());
+    }
+    
+    @Test
+    void setTableAlias() {
+        final String name = "tryggve";
+        assertEquals(name, field.tableAlias(name).tableAlias());
+        assertEquals(field.identifier().getColumnId(), field.tableAlias(name).identifier().getColumnId());
+    }
+    
+    @Test
+    void getNullOrder() {
+        assertEquals(NullOrder.LAST, field.getNullOrder());
+    }
+    
+    @Test
+    void isReversed() {
+        assertFalse(field.isReversed());
+    }
+    
+    @Test
+    void setter() {
+        final char expected = (char) 1;
+        final BasicEntity entity = new BasicEntity();
+        field.setter().set(entity, expected);
+        assertEquals(expected, entity.getVarChar());
     }
 }

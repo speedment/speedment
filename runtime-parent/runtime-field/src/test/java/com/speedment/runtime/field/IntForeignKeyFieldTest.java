@@ -18,7 +18,7 @@ package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.field.comparator.DoubleFieldComparator;
+import com.speedment.runtime.field.comparator.IntFieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -42,20 +42,20 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.*;
 
 /**
- * JUnit tests for the primitive {@code double} field class.
+ * JUnit tests for the primitive {@code int} field class.
  * 
  * @author Emil Forslund
  * @since  3.0.3
  * 
- * @see DoubleField
+ * @see IntField
  */
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
 @ExtendWith(value = org.mockito.junit.jupiter.MockitoExtension.class)
-final class DoubleFieldTest {
+final class IntForeignKeyFieldTest {
     
-    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarDouble();
-    private DoubleField<BasicEntity, Double> field;
-    private DoubleField<BasicEntity, Double> fkField;
+    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarInt();
+    private IntField<BasicEntity, Integer> field;
+    private IntField<BasicEntity, Integer> fkField;
     private @Mock Column column;
     private List<BasicEntity> entities;
     private BasicEntity a;
@@ -73,27 +73,34 @@ final class DoubleFieldTest {
     
     @BeforeEach
     void setUp() {
-        fkField = null;
-        field = DoubleField.create(
-            BasicEntity.Identifier.VAR_DOUBLE,
-            BasicEntity::getVarDouble,
-            BasicEntity::setVarDouble,
+        fkField = IntField.create(
+            BasicEntity.Identifier.VAR_INT,
+            BasicEntity::getVarInt,
+            BasicEntity::setVarInt,
+            TypeMapper.primitive(),
+            false
+        );
+        field = IntForeignKeyField.create(
+            BasicEntity.Identifier.VAR_INT,
+            BasicEntity::getVarInt,
+            BasicEntity::setVarInt,
+            fkField,
             TypeMapper.primitive(),
             false
         );
         
-        a = new BasicEntity().setVarDouble(0d);
-        b = new BasicEntity().setVarDouble(-1d);
-        c = new BasicEntity().setVarDouble(1d);
-        d = new BasicEntity().setVarDouble(1d);
-        e = new BasicEntity().setVarDouble(2d);
-        f = new BasicEntity().setVarDouble(2d);
-        g = new BasicEntity().setVarDouble(3d);
-        h = new BasicEntity().setVarDouble(-5d);
-        i = new BasicEntity().setVarDouble(1d);
-        j = new BasicEntity().setVarDouble(-Double.MAX_VALUE);
-        k = new BasicEntity().setVarDouble(Double.MAX_VALUE);
-        l = new BasicEntity().setVarDouble(0d);
+        a = new BasicEntity().setVarInt(0);
+        b = new BasicEntity().setVarInt(-1);
+        c = new BasicEntity().setVarInt(1);
+        d = new BasicEntity().setVarInt(1);
+        e = new BasicEntity().setVarInt(2);
+        f = new BasicEntity().setVarInt(2);
+        g = new BasicEntity().setVarInt(3);
+        h = new BasicEntity().setVarInt(-5);
+        i = new BasicEntity().setVarInt(1);
+        j = new BasicEntity().setVarInt(Integer.MIN_VALUE);
+        k = new BasicEntity().setVarInt(Integer.MAX_VALUE);
+        l = new BasicEntity().setVarInt(0);
         
         entities = asList(a, b, c, d, e, f, g, h, i, j, k, l);
     }
@@ -101,12 +108,12 @@ final class DoubleFieldTest {
     @Test
     void testBetween() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.between(0d, 2d);
-        final Predicate<BasicEntity> t1 = field.between(-2d, 2d);
-        final Predicate<BasicEntity> t2 = field.between(0d, 2d, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t3 = field.between(0d, 2d, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t4 = field.between(0d, 2d, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
-        final Predicate<BasicEntity> t5 = field.between(0d, 2d, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t0 = field.between(0, 2);
+        final Predicate<BasicEntity> t1 = field.between(-2, 2);
+        final Predicate<BasicEntity> t2 = field.between(0, 2, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t3 = field.between(0, 2, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t4 = field.between(0, 2, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t5 = field.between(0, 2, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, i, l);
@@ -136,15 +143,15 @@ final class DoubleFieldTest {
     @Test
     void testEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.equal(-1d);
-        final Predicate<BasicEntity> t1 = field.equal(0d);
-        final Predicate<BasicEntity> t2 = field.equal(1d);
-        final Predicate<BasicEntity> t3 = field.equal(2d);
-        final Predicate<BasicEntity> t4 = field.equal(3d);
-        final Predicate<BasicEntity> t5 = field.equal(-5d);
-        final Predicate<BasicEntity> t6 = field.equal(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.equal(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.equal(100d);
+        final Predicate<BasicEntity> t0 = field.equal(-1);
+        final Predicate<BasicEntity> t1 = field.equal(0);
+        final Predicate<BasicEntity> t2 = field.equal(1);
+        final Predicate<BasicEntity> t3 = field.equal(2);
+        final Predicate<BasicEntity> t4 = field.equal(3);
+        final Predicate<BasicEntity> t5 = field.equal(-5);
+        final Predicate<BasicEntity> t6 = field.equal(Integer.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.equal(Integer.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.equal(100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b);
@@ -183,15 +190,15 @@ final class DoubleFieldTest {
     @Test
     void testGreaterOrEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.greaterOrEqual(-1d);
-        final Predicate<BasicEntity> t1 = field.greaterOrEqual(0d);
-        final Predicate<BasicEntity> t2 = field.greaterOrEqual(1d);
-        final Predicate<BasicEntity> t3 = field.greaterOrEqual(2d);
-        final Predicate<BasicEntity> t4 = field.greaterOrEqual(3d);
-        final Predicate<BasicEntity> t5 = field.greaterOrEqual(-5d);
-        final Predicate<BasicEntity> t6 = field.greaterOrEqual(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.greaterOrEqual(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.greaterOrEqual(100d);
+        final Predicate<BasicEntity> t0 = field.greaterOrEqual(-1);
+        final Predicate<BasicEntity> t1 = field.greaterOrEqual(0);
+        final Predicate<BasicEntity> t2 = field.greaterOrEqual(1);
+        final Predicate<BasicEntity> t3 = field.greaterOrEqual(2);
+        final Predicate<BasicEntity> t4 = field.greaterOrEqual(3);
+        final Predicate<BasicEntity> t5 = field.greaterOrEqual(-5);
+        final Predicate<BasicEntity> t6 = field.greaterOrEqual(Integer.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.greaterOrEqual(Integer.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.greaterOrEqual(100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, i, k, l);
@@ -230,15 +237,15 @@ final class DoubleFieldTest {
     @Test
     void testGreaterThan() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.greaterThan(-1d);
-        final Predicate<BasicEntity> t1 = field.greaterThan(0d);
-        final Predicate<BasicEntity> t2 = field.greaterThan(1d);
-        final Predicate<BasicEntity> t3 = field.greaterThan(2d);
-        final Predicate<BasicEntity> t4 = field.greaterThan(3d);
-        final Predicate<BasicEntity> t5 = field.greaterThan(-5d);
-        final Predicate<BasicEntity> t6 = field.greaterThan(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.greaterThan(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.greaterThan(100d);
+        final Predicate<BasicEntity> t0 = field.greaterThan(-1);
+        final Predicate<BasicEntity> t1 = field.greaterThan(0);
+        final Predicate<BasicEntity> t2 = field.greaterThan(1);
+        final Predicate<BasicEntity> t3 = field.greaterThan(2);
+        final Predicate<BasicEntity> t4 = field.greaterThan(3);
+        final Predicate<BasicEntity> t5 = field.greaterThan(-5);
+        final Predicate<BasicEntity> t6 = field.greaterThan(Integer.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.greaterThan(Integer.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.greaterThan(100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, e, f, g, i, k, l);
@@ -278,14 +285,14 @@ final class DoubleFieldTest {
     void testIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in();
-        final Predicate<BasicEntity> t1 = field.in(0d);
-        final Predicate<BasicEntity> t2 = field.in(0d, 1d);
-        final Predicate<BasicEntity> t3 = field.in(0d, 1d, 1d);
-        final Predicate<BasicEntity> t4 = field.in(-1d, 1d, 2d, 3d);
-        final Predicate<BasicEntity> t5 = field.in(-Double.MAX_VALUE, Double.MAX_VALUE);
-        final Predicate<BasicEntity> t6 = field.in(1d, 2d, 3d, 4d, 5d);
-        final Predicate<BasicEntity> t7 = field.in(100d, 101d, 102d, 103d, 104d);
-        final Predicate<BasicEntity> t8 = field.in(-100d);
+        final Predicate<BasicEntity> t1 = field.in(0);
+        final Predicate<BasicEntity> t2 = field.in(0, 1);
+        final Predicate<BasicEntity> t3 = field.in(0, 1, 1);
+        final Predicate<BasicEntity> t4 = field.in(-1, 1, 2, 3);
+        final Predicate<BasicEntity> t5 = field.in(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        final Predicate<BasicEntity> t6 = field.in(1, 2, 3, 4, 5);
+        final Predicate<BasicEntity> t7 = field.in(100, 101, 102, 103, 104);
+        final Predicate<BasicEntity> t8 = field.in(-100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList();
@@ -325,14 +332,14 @@ final class DoubleFieldTest {
     void testInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in(Collections.emptySet());
-        final Predicate<BasicEntity> t1 = field.in(Collections.singleton(0d));
-        final Predicate<BasicEntity> t2 = field.in(Stream.of(0d, 1d).collect(toSet()));
-        final Predicate<BasicEntity> t3 = field.in(Stream.of(0d, 1d, 1d).collect(toSet()));
-        final Predicate<BasicEntity> t4 = field.in(Stream.of(-1d, 1d, 2d, 3d).collect(toSet()));
-        final Predicate<BasicEntity> t5 = field.in(Stream.of(-Double.MAX_VALUE, Double.MAX_VALUE).collect(toSet()));
-        final Predicate<BasicEntity> t6 = field.in(Stream.of(1d, 2d, 3d, 4d, 5d).collect(toSet()));
-        final Predicate<BasicEntity> t7 = field.in(Stream.of(100d, 101d, 102d, 103d, 104d).collect(toSet()));
-        final Predicate<BasicEntity> t8 = field.in(Collections.singleton(-100d));
+        final Predicate<BasicEntity> t1 = field.in(Collections.singleton(0));
+        final Predicate<BasicEntity> t2 = field.in(Stream.of(0, 1).collect(toSet()));
+        final Predicate<BasicEntity> t3 = field.in(Stream.of(0, 1, 1).collect(toSet()));
+        final Predicate<BasicEntity> t4 = field.in(Stream.of(-1, 1, 2, 3).collect(toSet()));
+        final Predicate<BasicEntity> t5 = field.in(Stream.of(Integer.MIN_VALUE, Integer.MAX_VALUE).collect(toSet()));
+        final Predicate<BasicEntity> t6 = field.in(Stream.of(1, 2, 3, 4, 5).collect(toSet()));
+        final Predicate<BasicEntity> t7 = field.in(Stream.of(100, 101, 102, 103, 104).collect(toSet()));
+        final Predicate<BasicEntity> t8 = field.in(Collections.singleton(-100));
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList();
@@ -371,15 +378,15 @@ final class DoubleFieldTest {
     @Test
     void testLessThan() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.lessThan(-1d);
-        final Predicate<BasicEntity> t1 = field.lessThan(0d);
-        final Predicate<BasicEntity> t2 = field.lessThan(1d);
-        final Predicate<BasicEntity> t3 = field.lessThan(2d);
-        final Predicate<BasicEntity> t4 = field.lessThan(3d);
-        final Predicate<BasicEntity> t5 = field.lessThan(-5d);
-        final Predicate<BasicEntity> t6 = field.lessThan(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.lessThan(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.lessThan(100d);
+        final Predicate<BasicEntity> t0 = field.lessThan(-1);
+        final Predicate<BasicEntity> t1 = field.lessThan(0);
+        final Predicate<BasicEntity> t2 = field.lessThan(1);
+        final Predicate<BasicEntity> t3 = field.lessThan(2);
+        final Predicate<BasicEntity> t4 = field.lessThan(3);
+        final Predicate<BasicEntity> t5 = field.lessThan(-5);
+        final Predicate<BasicEntity> t6 = field.lessThan(Integer.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.lessThan(Integer.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.lessThan(100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(h, j);
@@ -418,15 +425,15 @@ final class DoubleFieldTest {
     @Test
     void testLessOrEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.lessOrEqual(-1d);
-        final Predicate<BasicEntity> t1 = field.lessOrEqual(0d);
-        final Predicate<BasicEntity> t2 = field.lessOrEqual(1d);
-        final Predicate<BasicEntity> t3 = field.lessOrEqual(2d);
-        final Predicate<BasicEntity> t4 = field.lessOrEqual(3d);
-        final Predicate<BasicEntity> t5 = field.lessOrEqual(-5d);
-        final Predicate<BasicEntity> t6 = field.lessOrEqual(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.lessOrEqual(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.lessOrEqual(100d);
+        final Predicate<BasicEntity> t0 = field.lessOrEqual(-1);
+        final Predicate<BasicEntity> t1 = field.lessOrEqual(0);
+        final Predicate<BasicEntity> t2 = field.lessOrEqual(1);
+        final Predicate<BasicEntity> t3 = field.lessOrEqual(2);
+        final Predicate<BasicEntity> t4 = field.lessOrEqual(3);
+        final Predicate<BasicEntity> t5 = field.lessOrEqual(-5);
+        final Predicate<BasicEntity> t6 = field.lessOrEqual(Integer.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.lessOrEqual(Integer.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.lessOrEqual(100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b, h, j);
@@ -465,12 +472,12 @@ final class DoubleFieldTest {
     @Test
     void testNotBetween() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.notBetween(0d, 2d);
-        final Predicate<BasicEntity> t1 = field.notBetween(-2d, 2d);
-        final Predicate<BasicEntity> t2 = field.notBetween(0d, 2d, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t3 = field.notBetween(0d, 2d, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t4 = field.notBetween(0d, 2d, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
-        final Predicate<BasicEntity> t5 = field.notBetween(0d, 2d, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t0 = field.notBetween(0, 2);
+        final Predicate<BasicEntity> t1 = field.notBetween(-2, 2);
+        final Predicate<BasicEntity> t2 = field.notBetween(0, 2, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t3 = field.notBetween(0, 2, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t4 = field.notBetween(0, 2, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t5 = field.notBetween(0, 2, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b, e, f, g, h, j, k);
@@ -500,15 +507,15 @@ final class DoubleFieldTest {
     @Test
     void testNotEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.notEqual(-1d);
-        final Predicate<BasicEntity> t1 = field.notEqual(0d);
-        final Predicate<BasicEntity> t2 = field.notEqual(1d);
-        final Predicate<BasicEntity> t3 = field.notEqual(2d);
-        final Predicate<BasicEntity> t4 = field.notEqual(3d);
-        final Predicate<BasicEntity> t5 = field.notEqual(-5d);
-        final Predicate<BasicEntity> t6 = field.notEqual(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.notEqual(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.notEqual(100d);
+        final Predicate<BasicEntity> t0 = field.notEqual(-1);
+        final Predicate<BasicEntity> t1 = field.notEqual(0);
+        final Predicate<BasicEntity> t2 = field.notEqual(1);
+        final Predicate<BasicEntity> t3 = field.notEqual(2);
+        final Predicate<BasicEntity> t4 = field.notEqual(3);
+        final Predicate<BasicEntity> t5 = field.notEqual(-5);
+        final Predicate<BasicEntity> t6 = field.notEqual(Integer.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.notEqual(Integer.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.notEqual(100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, e, f, g, h, i, j, k, l);
@@ -548,14 +555,14 @@ final class DoubleFieldTest {
     void testNotIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn();
-        final Predicate<BasicEntity> t1 = field.notIn(0d);
-        final Predicate<BasicEntity> t2 = field.notIn(0d, 1d);
-        final Predicate<BasicEntity> t3 = field.notIn(0d, 1d, 1d);
-        final Predicate<BasicEntity> t4 = field.notIn(-1d, 1d, 2d, 3d);
-        final Predicate<BasicEntity> t5 = field.notIn(-Double.MAX_VALUE, Double.MAX_VALUE);
-        final Predicate<BasicEntity> t6 = field.notIn(1d, 2d, 3d, 4d, 5d);
-        final Predicate<BasicEntity> t7 = field.notIn(100d, 101d, 102d, 103d, 104d);
-        final Predicate<BasicEntity> t8 = field.notIn(-100d);
+        final Predicate<BasicEntity> t1 = field.notIn(0);
+        final Predicate<BasicEntity> t2 = field.notIn(0, 1);
+        final Predicate<BasicEntity> t3 = field.notIn(0, 1, 1);
+        final Predicate<BasicEntity> t4 = field.notIn(-1, 1, 2, 3);
+        final Predicate<BasicEntity> t5 = field.notIn(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        final Predicate<BasicEntity> t6 = field.notIn(1, 2, 3, 4, 5);
+        final Predicate<BasicEntity> t7 = field.notIn(100, 101, 102, 103, 104);
+        final Predicate<BasicEntity> t8 = field.notIn(-100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
@@ -595,14 +602,14 @@ final class DoubleFieldTest {
     void testNotInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn(Collections.emptySet());
-        final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton(0d));
-        final Predicate<BasicEntity> t2 = field.notIn(Stream.of(0d, 1d).collect(toSet()));
-        final Predicate<BasicEntity> t3 = field.notIn(Stream.of(0d, 1d, 1d).collect(toSet()));
-        final Predicate<BasicEntity> t4 = field.notIn(Stream.of(-1d, 1d, 2d, 3d).collect(toSet()));
-        final Predicate<BasicEntity> t5 = field.notIn(Stream.of(-Double.MAX_VALUE, Double.MAX_VALUE).collect(toSet()));
-        final Predicate<BasicEntity> t6 = field.notIn(Stream.of(1d, 2d, 3d, 4d, 5d).collect(toSet()));
-        final Predicate<BasicEntity> t7 = field.notIn(Stream.of(100d, 101d, 102d, 103d, 104d).collect(toSet()));
-        final Predicate<BasicEntity> t8 = field.notIn(Collections.singleton(-100d));
+        final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton(0));
+        final Predicate<BasicEntity> t2 = field.notIn(Stream.of(0, 1).collect(toSet()));
+        final Predicate<BasicEntity> t3 = field.notIn(Stream.of(0, 1, 1).collect(toSet()));
+        final Predicate<BasicEntity> t4 = field.notIn(Stream.of(-1, 1, 2, 3).collect(toSet()));
+        final Predicate<BasicEntity> t5 = field.notIn(Stream.of(Integer.MIN_VALUE, Integer.MAX_VALUE).collect(toSet()));
+        final Predicate<BasicEntity> t6 = field.notIn(Stream.of(1, 2, 3, 4, 5).collect(toSet()));
+        final Predicate<BasicEntity> t7 = field.notIn(Stream.of(100, 101, 102, 103, 104).collect(toSet()));
+        final Predicate<BasicEntity> t8 = field.notIn(Collections.singleton(-100));
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
@@ -640,7 +647,7 @@ final class DoubleFieldTest {
     
     @Test
     void getField() {
-        final DoubleField<BasicEntity, Double> other = field.getField();
+        final IntField<BasicEntity, Integer> other = field.getField();
         assertNotNull(other);
     }
     
@@ -655,10 +662,10 @@ final class DoubleFieldTest {
     }
     
     void comparator(final boolean reversed) {
-        final DoubleFieldComparator<BasicEntity, Double> comparator = reversed ? field.reversed() : field.comparator();
+        final IntFieldComparator<BasicEntity, Integer> comparator = reversed ? field.reversed() : field.comparator();
         final List<BasicEntity> actual = new ArrayList<>(entities);
         actual.sort(comparator);
-        final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarDouble);
+        final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarInt);
         final List<BasicEntity> expected = new ArrayList<>(entities);
         expected.sort(reversed ? comparatorExpected.reversed() : comparatorExpected);
         assertEquals(expected, actual);
@@ -666,9 +673,9 @@ final class DoubleFieldTest {
     
     @Test
     void typemapper() {
-        when(column.getDatabaseType()).thenReturn(Double.class.getName());
+        when(column.getDatabaseType()).thenReturn(Integer.class.getName());
         final Type fieldType = field.typeMapper().getJavaType(column);
-        assertEquals(double.class.getSimpleName(), fieldType.getTypeName());
+        assertEquals(int.class.getSimpleName(), fieldType.getTypeName());
     }
     
     @Test
@@ -700,9 +707,9 @@ final class DoubleFieldTest {
     
     @Test
     void setter() {
-        final double expected = (double) 1;
+        final int expected = (int) 1;
         final BasicEntity entity = new BasicEntity();
         field.setter().set(entity, expected);
-        assertEquals(expected, entity.getVarDouble());
+        assertEquals(expected, entity.getVarInt());
     }
 }

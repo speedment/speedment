@@ -18,7 +18,7 @@ package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.field.comparator.DoubleFieldComparator;
+import com.speedment.runtime.field.comparator.CharFieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -42,20 +42,20 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.*;
 
 /**
- * JUnit tests for the primitive {@code double} field class.
+ * JUnit tests for the primitive {@code char} field class.
  * 
  * @author Emil Forslund
  * @since  3.0.3
  * 
- * @see DoubleField
+ * @see CharField
  */
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
 @ExtendWith(value = org.mockito.junit.jupiter.MockitoExtension.class)
-final class DoubleFieldTest {
+final class CharForeignKeyFieldTest {
     
-    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarDouble();
-    private DoubleField<BasicEntity, Double> field;
-    private DoubleField<BasicEntity, Double> fkField;
+    private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarChar();
+    private CharField<BasicEntity, Character> field;
+    private CharField<BasicEntity, Character> fkField;
     private @Mock Column column;
     private List<BasicEntity> entities;
     private BasicEntity a;
@@ -73,27 +73,34 @@ final class DoubleFieldTest {
     
     @BeforeEach
     void setUp() {
-        fkField = null;
-        field = DoubleField.create(
-            BasicEntity.Identifier.VAR_DOUBLE,
-            BasicEntity::getVarDouble,
-            BasicEntity::setVarDouble,
+        fkField = CharField.create(
+            BasicEntity.Identifier.VAR_CHAR,
+            BasicEntity::getVarChar,
+            BasicEntity::setVarChar,
+            TypeMapper.primitive(),
+            false
+        );
+        field = CharForeignKeyField.create(
+            BasicEntity.Identifier.VAR_CHAR,
+            BasicEntity::getVarChar,
+            BasicEntity::setVarChar,
+            fkField,
             TypeMapper.primitive(),
             false
         );
         
-        a = new BasicEntity().setVarDouble(0d);
-        b = new BasicEntity().setVarDouble(-1d);
-        c = new BasicEntity().setVarDouble(1d);
-        d = new BasicEntity().setVarDouble(1d);
-        e = new BasicEntity().setVarDouble(2d);
-        f = new BasicEntity().setVarDouble(2d);
-        g = new BasicEntity().setVarDouble(3d);
-        h = new BasicEntity().setVarDouble(-5d);
-        i = new BasicEntity().setVarDouble(1d);
-        j = new BasicEntity().setVarDouble(-Double.MAX_VALUE);
-        k = new BasicEntity().setVarDouble(Double.MAX_VALUE);
-        l = new BasicEntity().setVarDouble(0d);
+        a = new BasicEntity().setVarChar('0');
+        b = new BasicEntity().setVarChar('/');
+        c = new BasicEntity().setVarChar('1');
+        d = new BasicEntity().setVarChar('1');
+        e = new BasicEntity().setVarChar('2');
+        f = new BasicEntity().setVarChar('2');
+        g = new BasicEntity().setVarChar('3');
+        h = new BasicEntity().setVarChar('+');
+        i = new BasicEntity().setVarChar('1');
+        j = new BasicEntity().setVarChar(' ');
+        k = new BasicEntity().setVarChar('}');
+        l = new BasicEntity().setVarChar('0');
         
         entities = asList(a, b, c, d, e, f, g, h, i, j, k, l);
     }
@@ -101,12 +108,12 @@ final class DoubleFieldTest {
     @Test
     void testBetween() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.between(0d, 2d);
-        final Predicate<BasicEntity> t1 = field.between(-2d, 2d);
-        final Predicate<BasicEntity> t2 = field.between(0d, 2d, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t3 = field.between(0d, 2d, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t4 = field.between(0d, 2d, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
-        final Predicate<BasicEntity> t5 = field.between(0d, 2d, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t0 = field.between('0', '2');
+        final Predicate<BasicEntity> t1 = field.between('.', '2');
+        final Predicate<BasicEntity> t2 = field.between('0', '2', Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t3 = field.between('0', '2', Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t4 = field.between('0', '2', Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t5 = field.between('0', '2', Inclusion.START_INCLUSIVE_END_INCLUSIVE);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, i, l);
@@ -126,7 +133,7 @@ final class DoubleFieldTest {
         
         // Test the results
         TestUtil.assertListEqual("Test 0: between(0, 2):",                                a0, e0, FORMATTER);
-        TestUtil.assertListEqual("Test 1: between(-2, 2):",                               a1, e1, FORMATTER);
+        TestUtil.assertListEqual("Test 1: between(., 2):",                               a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: between(0, 2, START_EXCLUSIVE_END_EXCLUSIVE):", a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: between(0, 2, START_INCLUSIVE_END_EXCLUSIVE):", a3, e3, FORMATTER);
         TestUtil.assertListEqual("Test 4: between(0, 2, START_EXCLUSIVE_END_INCLUSIVE):", a4, e4, FORMATTER);
@@ -136,15 +143,15 @@ final class DoubleFieldTest {
     @Test
     void testEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.equal(-1d);
-        final Predicate<BasicEntity> t1 = field.equal(0d);
-        final Predicate<BasicEntity> t2 = field.equal(1d);
-        final Predicate<BasicEntity> t3 = field.equal(2d);
-        final Predicate<BasicEntity> t4 = field.equal(3d);
-        final Predicate<BasicEntity> t5 = field.equal(-5d);
-        final Predicate<BasicEntity> t6 = field.equal(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.equal(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.equal(100d);
+        final Predicate<BasicEntity> t0 = field.equal('/');
+        final Predicate<BasicEntity> t1 = field.equal('0');
+        final Predicate<BasicEntity> t2 = field.equal('1');
+        final Predicate<BasicEntity> t3 = field.equal('2');
+        final Predicate<BasicEntity> t4 = field.equal('3');
+        final Predicate<BasicEntity> t5 = field.equal('+');
+        final Predicate<BasicEntity> t6 = field.equal(' ');
+        final Predicate<BasicEntity> t7 = field.equal('}');
+        final Predicate<BasicEntity> t8 = field.equal('m');
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b);
@@ -169,29 +176,29 @@ final class DoubleFieldTest {
         final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
-        TestUtil.assertListEqual("Test 0: equal(-1):",        a0, e0, FORMATTER);
+        TestUtil.assertListEqual("Test 0: equal(/):",        a0, e0, FORMATTER);
         TestUtil.assertListEqual("Test 1: equal(0):",         a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: equal(1):",         a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: equal(2):",         a3, e3, FORMATTER);
         TestUtil.assertListEqual("Test 4: equal(3):",         a4, e4, FORMATTER);
-        TestUtil.assertListEqual("Test 5: equal(-5):",        a5, e5, FORMATTER);
+        TestUtil.assertListEqual("Test 5: equal(+):",        a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: equal(MIN_VALUE):", a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: equal(MAX_VALUE):", a7, e7, FORMATTER);
-        TestUtil.assertListEqual("Test 8: equal(100):",       a8, e8, FORMATTER);
+        TestUtil.assertListEqual("Test 8: equal(m):",       a8, e8, FORMATTER);
     }
     
     @Test
     void testGreaterOrEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.greaterOrEqual(-1d);
-        final Predicate<BasicEntity> t1 = field.greaterOrEqual(0d);
-        final Predicate<BasicEntity> t2 = field.greaterOrEqual(1d);
-        final Predicate<BasicEntity> t3 = field.greaterOrEqual(2d);
-        final Predicate<BasicEntity> t4 = field.greaterOrEqual(3d);
-        final Predicate<BasicEntity> t5 = field.greaterOrEqual(-5d);
-        final Predicate<BasicEntity> t6 = field.greaterOrEqual(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.greaterOrEqual(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.greaterOrEqual(100d);
+        final Predicate<BasicEntity> t0 = field.greaterOrEqual('/');
+        final Predicate<BasicEntity> t1 = field.greaterOrEqual('0');
+        final Predicate<BasicEntity> t2 = field.greaterOrEqual('1');
+        final Predicate<BasicEntity> t3 = field.greaterOrEqual('2');
+        final Predicate<BasicEntity> t4 = field.greaterOrEqual('3');
+        final Predicate<BasicEntity> t5 = field.greaterOrEqual('+');
+        final Predicate<BasicEntity> t6 = field.greaterOrEqual(' ');
+        final Predicate<BasicEntity> t7 = field.greaterOrEqual('}');
+        final Predicate<BasicEntity> t8 = field.greaterOrEqual('m');
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, i, k, l);
@@ -216,29 +223,29 @@ final class DoubleFieldTest {
         final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
-        TestUtil.assertListEqual("Test 0: greaterOrEqual(-1):",        a0, e0, FORMATTER);
+        TestUtil.assertListEqual("Test 0: greaterOrEqual(/):",        a0, e0, FORMATTER);
         TestUtil.assertListEqual("Test 1: greaterOrEqual(0):",         a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: greaterOrEqual(1):",         a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: greaterOrEqual(2):",         a3, e3, FORMATTER);
         TestUtil.assertListEqual("Test 4: greaterOrEqual(3):",         a4, e4, FORMATTER);
-        TestUtil.assertListEqual("Test 5: greaterOrEqual(-5):",        a5, e5, FORMATTER);
+        TestUtil.assertListEqual("Test 5: greaterOrEqual(+):",        a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: greaterOrEqual(MIN_VALUE):", a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: greaterOrEqual(MAX_VALUE):", a7, e7, FORMATTER);
-        TestUtil.assertListEqual("Test 8: greaterOrEqual(100):",       a8, e8, FORMATTER);
+        TestUtil.assertListEqual("Test 8: greaterOrEqual(m):",       a8, e8, FORMATTER);
     }
     
     @Test
     void testGreaterThan() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.greaterThan(-1d);
-        final Predicate<BasicEntity> t1 = field.greaterThan(0d);
-        final Predicate<BasicEntity> t2 = field.greaterThan(1d);
-        final Predicate<BasicEntity> t3 = field.greaterThan(2d);
-        final Predicate<BasicEntity> t4 = field.greaterThan(3d);
-        final Predicate<BasicEntity> t5 = field.greaterThan(-5d);
-        final Predicate<BasicEntity> t6 = field.greaterThan(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.greaterThan(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.greaterThan(100d);
+        final Predicate<BasicEntity> t0 = field.greaterThan('/');
+        final Predicate<BasicEntity> t1 = field.greaterThan('0');
+        final Predicate<BasicEntity> t2 = field.greaterThan('1');
+        final Predicate<BasicEntity> t3 = field.greaterThan('2');
+        final Predicate<BasicEntity> t4 = field.greaterThan('3');
+        final Predicate<BasicEntity> t5 = field.greaterThan('+');
+        final Predicate<BasicEntity> t6 = field.greaterThan(' ');
+        final Predicate<BasicEntity> t7 = field.greaterThan('}');
+        final Predicate<BasicEntity> t8 = field.greaterThan('m');
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, e, f, g, i, k, l);
@@ -263,29 +270,29 @@ final class DoubleFieldTest {
         final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
-        TestUtil.assertListEqual("Test 0: greaterThan(-1):",        a0, e0, FORMATTER);
+        TestUtil.assertListEqual("Test 0: greaterThan(/):",        a0, e0, FORMATTER);
         TestUtil.assertListEqual("Test 1: greaterThan(0):",         a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: greaterThan(1):",         a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: greaterThan(2):",         a3, e3, FORMATTER);
         TestUtil.assertListEqual("Test 4: greaterThan(3):",         a4, e4, FORMATTER);
-        TestUtil.assertListEqual("Test 5: greaterThan(-5):",        a5, e5, FORMATTER);
+        TestUtil.assertListEqual("Test 5: greaterThan(+):",        a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: greaterThan(MIN_VALUE):", a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: greaterThan(MAX_VALUE):", a7, e7, FORMATTER);
-        TestUtil.assertListEqual("Test 8: greaterThan(100):",       a8, e8, FORMATTER);
+        TestUtil.assertListEqual("Test 8: greaterThan(m):",       a8, e8, FORMATTER);
     }
     
     @Test
     void testIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in();
-        final Predicate<BasicEntity> t1 = field.in(0d);
-        final Predicate<BasicEntity> t2 = field.in(0d, 1d);
-        final Predicate<BasicEntity> t3 = field.in(0d, 1d, 1d);
-        final Predicate<BasicEntity> t4 = field.in(-1d, 1d, 2d, 3d);
-        final Predicate<BasicEntity> t5 = field.in(-Double.MAX_VALUE, Double.MAX_VALUE);
-        final Predicate<BasicEntity> t6 = field.in(1d, 2d, 3d, 4d, 5d);
-        final Predicate<BasicEntity> t7 = field.in(100d, 101d, 102d, 103d, 104d);
-        final Predicate<BasicEntity> t8 = field.in(-100d);
+        final Predicate<BasicEntity> t1 = field.in('0');
+        final Predicate<BasicEntity> t2 = field.in('0', '1');
+        final Predicate<BasicEntity> t3 = field.in('0', '1', '1');
+        final Predicate<BasicEntity> t4 = field.in('/', '1', '2', '3');
+        final Predicate<BasicEntity> t5 = field.in(' ', '}');
+        final Predicate<BasicEntity> t6 = field.in('1', '2', '3', '4', '5');
+        final Predicate<BasicEntity> t7 = field.in('m', 'n', 'o', 'p', 'q');
+        final Predicate<BasicEntity> t8 = field.in('k');
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList();
@@ -314,7 +321,7 @@ final class DoubleFieldTest {
         TestUtil.assertListEqual("Test 1: in(0):",                       a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: in(0, 1):",                    a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: in(0, 1, 1):",                 a3, e3, FORMATTER);
-        TestUtil.assertListEqual("Test 4: in(-1, 1, 2, 3):",             a4, e4, FORMATTER);
+        TestUtil.assertListEqual("Test 4: in(/, 1, 2, 3):",             a4, e4, FORMATTER);
         TestUtil.assertListEqual("Test 5: in(MIN_VALUE, MAX_VALUE):",    a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: in(1, 2, 3, 4, 5):",           a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: in(100, 101, 102, 103, 104):", a7, e7, FORMATTER);
@@ -325,14 +332,14 @@ final class DoubleFieldTest {
     void testInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in(Collections.emptySet());
-        final Predicate<BasicEntity> t1 = field.in(Collections.singleton(0d));
-        final Predicate<BasicEntity> t2 = field.in(Stream.of(0d, 1d).collect(toSet()));
-        final Predicate<BasicEntity> t3 = field.in(Stream.of(0d, 1d, 1d).collect(toSet()));
-        final Predicate<BasicEntity> t4 = field.in(Stream.of(-1d, 1d, 2d, 3d).collect(toSet()));
-        final Predicate<BasicEntity> t5 = field.in(Stream.of(-Double.MAX_VALUE, Double.MAX_VALUE).collect(toSet()));
-        final Predicate<BasicEntity> t6 = field.in(Stream.of(1d, 2d, 3d, 4d, 5d).collect(toSet()));
-        final Predicate<BasicEntity> t7 = field.in(Stream.of(100d, 101d, 102d, 103d, 104d).collect(toSet()));
-        final Predicate<BasicEntity> t8 = field.in(Collections.singleton(-100d));
+        final Predicate<BasicEntity> t1 = field.in(Collections.singleton('0'));
+        final Predicate<BasicEntity> t2 = field.in(Stream.of('0', '1').collect(toSet()));
+        final Predicate<BasicEntity> t3 = field.in(Stream.of('0', '1', '1').collect(toSet()));
+        final Predicate<BasicEntity> t4 = field.in(Stream.of('/', '1', '2', '3').collect(toSet()));
+        final Predicate<BasicEntity> t5 = field.in(Stream.of(' ', '}').collect(toSet()));
+        final Predicate<BasicEntity> t6 = field.in(Stream.of('1', '2', '3', '4', '5').collect(toSet()));
+        final Predicate<BasicEntity> t7 = field.in(Stream.of('m', 'n', 'o', 'p', 'q').collect(toSet()));
+        final Predicate<BasicEntity> t8 = field.in(Collections.singleton('k'));
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList();
@@ -361,7 +368,7 @@ final class DoubleFieldTest {
         TestUtil.assertListEqual("Test 1: inSet(0):",                       a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: inSet(0, 1):",                    a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: inSet(0, 1, 1):",                 a3, e3, FORMATTER);
-        TestUtil.assertListEqual("Test 4: inSet(-1, 1, 2, 3):",             a4, e4, FORMATTER);
+        TestUtil.assertListEqual("Test 4: inSet(/, 1, 2, 3):",             a4, e4, FORMATTER);
         TestUtil.assertListEqual("Test 5: inSet(MIN_VALUE, MAX_VALUE):",    a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: inSet(1, 2, 3, 4, 5):",           a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: inSet(100, 101, 102, 103, 104):", a7, e7, FORMATTER);
@@ -371,15 +378,15 @@ final class DoubleFieldTest {
     @Test
     void testLessThan() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.lessThan(-1d);
-        final Predicate<BasicEntity> t1 = field.lessThan(0d);
-        final Predicate<BasicEntity> t2 = field.lessThan(1d);
-        final Predicate<BasicEntity> t3 = field.lessThan(2d);
-        final Predicate<BasicEntity> t4 = field.lessThan(3d);
-        final Predicate<BasicEntity> t5 = field.lessThan(-5d);
-        final Predicate<BasicEntity> t6 = field.lessThan(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.lessThan(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.lessThan(100d);
+        final Predicate<BasicEntity> t0 = field.lessThan('/');
+        final Predicate<BasicEntity> t1 = field.lessThan('0');
+        final Predicate<BasicEntity> t2 = field.lessThan('1');
+        final Predicate<BasicEntity> t3 = field.lessThan('2');
+        final Predicate<BasicEntity> t4 = field.lessThan('3');
+        final Predicate<BasicEntity> t5 = field.lessThan('+');
+        final Predicate<BasicEntity> t6 = field.lessThan(' ');
+        final Predicate<BasicEntity> t7 = field.lessThan('}');
+        final Predicate<BasicEntity> t8 = field.lessThan('m');
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(h, j);
@@ -404,29 +411,29 @@ final class DoubleFieldTest {
         final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
-        TestUtil.assertListEqual("Test 0: lessThan(-1):",        a0, e0, FORMATTER);
+        TestUtil.assertListEqual("Test 0: lessThan(/):",        a0, e0, FORMATTER);
         TestUtil.assertListEqual("Test 1: lessThan(0):",         a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: lessThan(1):",         a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: lessThan(2):",         a3, e3, FORMATTER);
         TestUtil.assertListEqual("Test 4: lessThan(3):",         a4, e4, FORMATTER);
-        TestUtil.assertListEqual("Test 5: lessThan(-5):",        a5, e5, FORMATTER);
+        TestUtil.assertListEqual("Test 5: lessThan(+):",        a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: lessThan(MIN_VALUE):", a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: lessThan(MAX_VALUE):", a7, e7, FORMATTER);
-        TestUtil.assertListEqual("Test 8: lessThan(100):",       a8, e8, FORMATTER);
+        TestUtil.assertListEqual("Test 8: lessThan(m):",       a8, e8, FORMATTER);
     }
     
     @Test
     void testLessOrEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.lessOrEqual(-1d);
-        final Predicate<BasicEntity> t1 = field.lessOrEqual(0d);
-        final Predicate<BasicEntity> t2 = field.lessOrEqual(1d);
-        final Predicate<BasicEntity> t3 = field.lessOrEqual(2d);
-        final Predicate<BasicEntity> t4 = field.lessOrEqual(3d);
-        final Predicate<BasicEntity> t5 = field.lessOrEqual(-5d);
-        final Predicate<BasicEntity> t6 = field.lessOrEqual(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.lessOrEqual(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.lessOrEqual(100d);
+        final Predicate<BasicEntity> t0 = field.lessOrEqual('/');
+        final Predicate<BasicEntity> t1 = field.lessOrEqual('0');
+        final Predicate<BasicEntity> t2 = field.lessOrEqual('1');
+        final Predicate<BasicEntity> t3 = field.lessOrEqual('2');
+        final Predicate<BasicEntity> t4 = field.lessOrEqual('3');
+        final Predicate<BasicEntity> t5 = field.lessOrEqual('+');
+        final Predicate<BasicEntity> t6 = field.lessOrEqual(' ');
+        final Predicate<BasicEntity> t7 = field.lessOrEqual('}');
+        final Predicate<BasicEntity> t8 = field.lessOrEqual('m');
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b, h, j);
@@ -451,26 +458,26 @@ final class DoubleFieldTest {
         final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
-        TestUtil.assertListEqual("Test 0: lessOrEqual(-1):",        a0, e0, FORMATTER);
+        TestUtil.assertListEqual("Test 0: lessOrEqual(/):",        a0, e0, FORMATTER);
         TestUtil.assertListEqual("Test 1: lessOrEqual(0):",         a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: lessOrEqual(1):",         a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: lessOrEqual(2):",         a3, e3, FORMATTER);
         TestUtil.assertListEqual("Test 4: lessOrEqual(3):",         a4, e4, FORMATTER);
-        TestUtil.assertListEqual("Test 5: lessOrEqual(-5):",        a5, e5, FORMATTER);
+        TestUtil.assertListEqual("Test 5: lessOrEqual(+):",        a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: lessOrEqual(MIN_VALUE):", a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: lessOrEqual(MAX_VALUE):", a7, e7, FORMATTER);
-        TestUtil.assertListEqual("Test 8: lessOrEqual(100):",       a8, e8, FORMATTER);
+        TestUtil.assertListEqual("Test 8: lessOrEqual(m):",       a8, e8, FORMATTER);
     }
     
     @Test
     void testNotBetween() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.notBetween(0d, 2d);
-        final Predicate<BasicEntity> t1 = field.notBetween(-2d, 2d);
-        final Predicate<BasicEntity> t2 = field.notBetween(0d, 2d, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t3 = field.notBetween(0d, 2d, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t4 = field.notBetween(0d, 2d, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
-        final Predicate<BasicEntity> t5 = field.notBetween(0d, 2d, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t0 = field.notBetween('0', '2');
+        final Predicate<BasicEntity> t1 = field.notBetween('.', '2');
+        final Predicate<BasicEntity> t2 = field.notBetween('0', '2', Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t3 = field.notBetween('0', '2', Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t4 = field.notBetween('0', '2', Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t5 = field.notBetween('0', '2', Inclusion.START_INCLUSIVE_END_INCLUSIVE);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b, e, f, g, h, j, k);
@@ -490,7 +497,7 @@ final class DoubleFieldTest {
         
         // Test the results
         TestUtil.assertListEqual("Test 0: notBetween(0, 2):",                                a0, e0, FORMATTER);
-        TestUtil.assertListEqual("Test 1: notBetween(-2, 2):",                               a1, e1, FORMATTER);
+        TestUtil.assertListEqual("Test 1: notBetween(., 2):",                               a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: notBetween(0, 2, START_EXCLUSIVE_END_EXCLUSIVE):", a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: notBetween(0, 2, START_INCLUSIVE_END_EXCLUSIVE):", a3, e3, FORMATTER);
         TestUtil.assertListEqual("Test 4: notBetween(0, 2, START_EXCLUSIVE_END_INCLUSIVE):", a4, e4, FORMATTER);
@@ -500,15 +507,15 @@ final class DoubleFieldTest {
     @Test
     void testNotEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.notEqual(-1d);
-        final Predicate<BasicEntity> t1 = field.notEqual(0d);
-        final Predicate<BasicEntity> t2 = field.notEqual(1d);
-        final Predicate<BasicEntity> t3 = field.notEqual(2d);
-        final Predicate<BasicEntity> t4 = field.notEqual(3d);
-        final Predicate<BasicEntity> t5 = field.notEqual(-5d);
-        final Predicate<BasicEntity> t6 = field.notEqual(-Double.MAX_VALUE);
-        final Predicate<BasicEntity> t7 = field.notEqual(Double.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.notEqual(100d);
+        final Predicate<BasicEntity> t0 = field.notEqual('/');
+        final Predicate<BasicEntity> t1 = field.notEqual('0');
+        final Predicate<BasicEntity> t2 = field.notEqual('1');
+        final Predicate<BasicEntity> t3 = field.notEqual('2');
+        final Predicate<BasicEntity> t4 = field.notEqual('3');
+        final Predicate<BasicEntity> t5 = field.notEqual('+');
+        final Predicate<BasicEntity> t6 = field.notEqual(' ');
+        final Predicate<BasicEntity> t7 = field.notEqual('}');
+        final Predicate<BasicEntity> t8 = field.notEqual('m');
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, e, f, g, h, i, j, k, l);
@@ -533,29 +540,29 @@ final class DoubleFieldTest {
         final List<BasicEntity> a8 = entities.stream().filter(t8).collect(toList());
         
         // Test the results
-        TestUtil.assertListEqual("Test 0: notEqual(-1):",        a0, e0, FORMATTER);
+        TestUtil.assertListEqual("Test 0: notEqual(/):",        a0, e0, FORMATTER);
         TestUtil.assertListEqual("Test 1: notEqual(0):",         a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: notEqual(1):",         a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: notEqual(2):",         a3, e3, FORMATTER);
         TestUtil.assertListEqual("Test 4: notEqual(3):",         a4, e4, FORMATTER);
-        TestUtil.assertListEqual("Test 5: notEqual(-5):",        a5, e5, FORMATTER);
+        TestUtil.assertListEqual("Test 5: notEqual(+):",        a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: notEqual(MIN_VALUE):", a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: notEqual(MAX_VALUE):", a7, e7, FORMATTER);
-        TestUtil.assertListEqual("Test 8: notEqual(100):",       a8, e8, FORMATTER);
+        TestUtil.assertListEqual("Test 8: notEqual(m):",       a8, e8, FORMATTER);
     }
     
     @Test
     void testNotIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn();
-        final Predicate<BasicEntity> t1 = field.notIn(0d);
-        final Predicate<BasicEntity> t2 = field.notIn(0d, 1d);
-        final Predicate<BasicEntity> t3 = field.notIn(0d, 1d, 1d);
-        final Predicate<BasicEntity> t4 = field.notIn(-1d, 1d, 2d, 3d);
-        final Predicate<BasicEntity> t5 = field.notIn(-Double.MAX_VALUE, Double.MAX_VALUE);
-        final Predicate<BasicEntity> t6 = field.notIn(1d, 2d, 3d, 4d, 5d);
-        final Predicate<BasicEntity> t7 = field.notIn(100d, 101d, 102d, 103d, 104d);
-        final Predicate<BasicEntity> t8 = field.notIn(-100d);
+        final Predicate<BasicEntity> t1 = field.notIn('0');
+        final Predicate<BasicEntity> t2 = field.notIn('0', '1');
+        final Predicate<BasicEntity> t3 = field.notIn('0', '1', '1');
+        final Predicate<BasicEntity> t4 = field.notIn('/', '1', '2', '3');
+        final Predicate<BasicEntity> t5 = field.notIn(' ', '}');
+        final Predicate<BasicEntity> t6 = field.notIn('1', '2', '3', '4', '5');
+        final Predicate<BasicEntity> t7 = field.notIn('m', 'n', 'o', 'p', 'q');
+        final Predicate<BasicEntity> t8 = field.notIn('k');
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
@@ -584,7 +591,7 @@ final class DoubleFieldTest {
         TestUtil.assertListEqual("Test 1: notIn(0):",                       a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: notIn(0, 1):",                    a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: notIn(0, 1, 1):",                 a3, e3, FORMATTER);
-        TestUtil.assertListEqual("Test 4: notIn(-1, 1, 2, 3):",             a4, e4, FORMATTER);
+        TestUtil.assertListEqual("Test 4: notIn(/, 1, 2, 3):",             a4, e4, FORMATTER);
         TestUtil.assertListEqual("Test 5: notIn(MIN_VALUE, MAX_VALUE):",    a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: notIn(1, 2, 3, 4, 5):",           a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: notIn(100, 101, 102, 103, 104):", a7, e7, FORMATTER);
@@ -595,14 +602,14 @@ final class DoubleFieldTest {
     void testNotInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn(Collections.emptySet());
-        final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton(0d));
-        final Predicate<BasicEntity> t2 = field.notIn(Stream.of(0d, 1d).collect(toSet()));
-        final Predicate<BasicEntity> t3 = field.notIn(Stream.of(0d, 1d, 1d).collect(toSet()));
-        final Predicate<BasicEntity> t4 = field.notIn(Stream.of(-1d, 1d, 2d, 3d).collect(toSet()));
-        final Predicate<BasicEntity> t5 = field.notIn(Stream.of(-Double.MAX_VALUE, Double.MAX_VALUE).collect(toSet()));
-        final Predicate<BasicEntity> t6 = field.notIn(Stream.of(1d, 2d, 3d, 4d, 5d).collect(toSet()));
-        final Predicate<BasicEntity> t7 = field.notIn(Stream.of(100d, 101d, 102d, 103d, 104d).collect(toSet()));
-        final Predicate<BasicEntity> t8 = field.notIn(Collections.singleton(-100d));
+        final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton('0'));
+        final Predicate<BasicEntity> t2 = field.notIn(Stream.of('0', '1').collect(toSet()));
+        final Predicate<BasicEntity> t3 = field.notIn(Stream.of('0', '1', '1').collect(toSet()));
+        final Predicate<BasicEntity> t4 = field.notIn(Stream.of('/', '1', '2', '3').collect(toSet()));
+        final Predicate<BasicEntity> t5 = field.notIn(Stream.of(' ', '}').collect(toSet()));
+        final Predicate<BasicEntity> t6 = field.notIn(Stream.of('1', '2', '3', '4', '5').collect(toSet()));
+        final Predicate<BasicEntity> t7 = field.notIn(Stream.of('m', 'n', 'o', 'p', 'q').collect(toSet()));
+        final Predicate<BasicEntity> t8 = field.notIn(Collections.singleton('k'));
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
@@ -631,7 +638,7 @@ final class DoubleFieldTest {
         TestUtil.assertListEqual("Test 1: notInSet(0):",                       a1, e1, FORMATTER);
         TestUtil.assertListEqual("Test 2: notInSet(0, 1):",                    a2, e2, FORMATTER);
         TestUtil.assertListEqual("Test 3: notInSet(0, 1, 1):",                 a3, e3, FORMATTER);
-        TestUtil.assertListEqual("Test 4: notInSet(-1, 1, 2, 3):",             a4, e4, FORMATTER);
+        TestUtil.assertListEqual("Test 4: notInSet(/, 1, 2, 3):",             a4, e4, FORMATTER);
         TestUtil.assertListEqual("Test 5: notInSet(MIN_VALUE, MAX_VALUE):",    a5, e5, FORMATTER);
         TestUtil.assertListEqual("Test 6: notInSet(1, 2, 3, 4, 5):",           a6, e6, FORMATTER);
         TestUtil.assertListEqual("Test 7: notInSet(100, 101, 102, 103, 104):", a7, e7, FORMATTER);
@@ -640,7 +647,7 @@ final class DoubleFieldTest {
     
     @Test
     void getField() {
-        final DoubleField<BasicEntity, Double> other = field.getField();
+        final CharField<BasicEntity, Character> other = field.getField();
         assertNotNull(other);
     }
     
@@ -655,10 +662,10 @@ final class DoubleFieldTest {
     }
     
     void comparator(final boolean reversed) {
-        final DoubleFieldComparator<BasicEntity, Double> comparator = reversed ? field.reversed() : field.comparator();
+        final CharFieldComparator<BasicEntity, Character> comparator = reversed ? field.reversed() : field.comparator();
         final List<BasicEntity> actual = new ArrayList<>(entities);
         actual.sort(comparator);
-        final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarDouble);
+        final Comparator<BasicEntity> comparatorExpected = Comparator.comparing(BasicEntity::getVarChar);
         final List<BasicEntity> expected = new ArrayList<>(entities);
         expected.sort(reversed ? comparatorExpected.reversed() : comparatorExpected);
         assertEquals(expected, actual);
@@ -666,9 +673,9 @@ final class DoubleFieldTest {
     
     @Test
     void typemapper() {
-        when(column.getDatabaseType()).thenReturn(Double.class.getName());
+        when(column.getDatabaseType()).thenReturn(Character.class.getName());
         final Type fieldType = field.typeMapper().getJavaType(column);
-        assertEquals(double.class.getSimpleName(), fieldType.getTypeName());
+        assertEquals(char.class.getSimpleName(), fieldType.getTypeName());
     }
     
     @Test
@@ -700,9 +707,9 @@ final class DoubleFieldTest {
     
     @Test
     void setter() {
-        final double expected = (double) 1;
+        final char expected = (char) 1;
         final BasicEntity entity = new BasicEntity();
         field.setter().set(entity, expected);
-        assertEquals(expected, entity.getVarDouble());
+        assertEquals(expected, entity.getVarChar());
     }
 }

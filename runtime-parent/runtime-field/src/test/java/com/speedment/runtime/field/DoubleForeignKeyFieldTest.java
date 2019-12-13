@@ -51,7 +51,7 @@ import static java.util.stream.Collectors.*;
  */
 @GeneratedCode(value = "com.speedment.sources.pattern.FieldTestPattern")
 @ExtendWith(value = org.mockito.junit.jupiter.MockitoExtension.class)
-final class DoubleFieldTest {
+final class DoubleForeignKeyFieldTest {
     
     private static final Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarDouble();
     private DoubleField<BasicEntity, Double> field;
@@ -73,11 +73,18 @@ final class DoubleFieldTest {
     
     @BeforeEach
     void setUp() {
-        fkField = null;
-        field = DoubleField.create(
+        fkField = DoubleField.create(
             BasicEntity.Identifier.VAR_DOUBLE,
             BasicEntity::getVarDouble,
             BasicEntity::setVarDouble,
+            TypeMapper.primitive(),
+            false
+        );
+        field = DoubleForeignKeyField.create(
+            BasicEntity.Identifier.VAR_DOUBLE,
+            BasicEntity::getVarDouble,
+            BasicEntity::setVarDouble,
+            fkField,
             TypeMapper.primitive(),
             false
         );
