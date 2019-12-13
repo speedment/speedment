@@ -1351,7 +1351,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                     reduction
      * @throws NullPointerException if the result of the reduction is null
      * 
-     * @see #reduce(Object, BinaryOperator)
+     * @see #reduce(BinaryOperator)
      * @see #min(Comparator)
      * @see #max(Comparator)
      */
@@ -1400,7 +1400,6 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return             the result of the reduction
      * 
      * @see #reduce(BinaryOperator)
-     * @see #reduce(Object, BinaryOperator)
      */
     @Override
     public <U> U reduce(U identity, BiFunction<U, ? super Map.Entry<K, V>, U> accumulator, BinaryOperator<U> combiner) {
@@ -1420,7 +1419,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *     return result;
      * }</pre>
      * <p>
-     * Like {@link #reduce(Object, BinaryOperator)}, {@code collect} operations
+     * Like {@link #reduce(BinaryOperator)} , {@code collect} operations
      * can be parallelized without requiring additional synchronization.
      * <p>
      * This is a terminal operation.

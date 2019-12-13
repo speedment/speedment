@@ -36,4 +36,41 @@ final class LongCacheTest {
         assertTrue(lc.toString().contains("Olle"));
         assertTrue(lc.toString().contains("42"));
     }
+
+    @Test
+    void getOrComputeMany() {
+        final LongCache<String> lc = new LongCache<>(2);
+        final long actual1 = lc.getOrCompute("one", () -> 1L);
+        assertEquals(1L, actual1);
+        final long actual2 = lc.getOrCompute("two", () -> 2L);
+        assertEquals(2L, actual2);
+        final long actual3 = lc.getOrCompute("three", () -> 3L);
+        assertEquals(3L, actual3);
+    }
+
+
+    @Test
+    void getOrComputeSlow() throws InterruptedException {
+        final LongCache<String> lc = new LongCache<>(10);
+        Thread t1 = new Thread(() -> lc.getOrCompute("t1", () -> {
+            pause(1000);
+            return 1L;
+        }));
+
+        t1.start();
+        pause(100);
+        lc.getOrCompute("main", () -> 2L);
+        t1.join();
+    }
+
+    private void pause(long ms)  {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
