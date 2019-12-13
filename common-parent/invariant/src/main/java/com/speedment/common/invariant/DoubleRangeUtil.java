@@ -172,7 +172,7 @@ public final class DoubleRangeUtil {
 
     public static <E extends RuntimeException> double
     requireNegative(double val, Function<String, E> exceptionConstructor) {
-        if (val > 0) {
+        if (val >= 0) {
             throw exceptionConstructor.apply(val + IS_NOT_NEGATIVE);
         }
         return val;
