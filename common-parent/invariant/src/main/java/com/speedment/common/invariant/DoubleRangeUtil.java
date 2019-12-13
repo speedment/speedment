@@ -70,7 +70,7 @@ public final class DoubleRangeUtil {
      * @throws IllegalArgumentException if the given value is not 0
      */
     public static double requireZero(double val) {
-        if (Double.compare(val, 0d) == 0) {
+        if (Double.compare(val, 0d) != 0) {
             throw new IllegalArgumentException(val + IS_NOT_ZERO);
         }
         return val;
@@ -117,14 +117,14 @@ public final class DoubleRangeUtil {
      * @throws IllegalArgumentException if the given value is zero
      */
     public static double requireNonZero(double val) {
-        if (Double.compare(val, 0d) != 0) {
+        if (Double.compare(val, 0d) == 0) {
             throw new IllegalArgumentException(val + IS_ZERO);
         }
         return val;
     }
 
     public static double requireEquals(double val, double otherVal) {
-        if (Double.compare(val, otherVal) == 0) {
+        if (Double.compare(val, otherVal) != 0) {
             throw new IllegalArgumentException(val + IS_NOT_EQUAL_TO + otherVal);
         }
         return val;
