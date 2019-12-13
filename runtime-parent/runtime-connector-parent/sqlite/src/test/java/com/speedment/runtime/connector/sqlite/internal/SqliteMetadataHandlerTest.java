@@ -36,12 +36,12 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import static com.speedment.common.mapbuilder.MapBuilder.mapBuilderTyped;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toMap;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
@@ -88,13 +88,13 @@ class SqliteMetadataHandlerTest {
                     .beforeInitialized(MockProjectComponent.class,
                         projects -> projects.setProject(Project.create(
                             mapBuilderTyped(String.class, Object.class)
-                                .key(HasIdUtil.ID).value("test_project")
-                                .key(HasNameUtil.NAME).value("test_project")
-                                .key(ProjectUtil.DBMSES).value(singletonList(mapBuilderTyped(String.class, Object.class)
-                                    .key(HasIdUtil.ID).value("test_dbms")
-                                    .key(HasNameUtil.NAME).value("test_dbms")
-                                    .key(DbmsUtil.CONNECTION_URL).value(URL)
-                                    .key(DbmsUtil.TYPE_NAME).value(SqliteDbmsTypeImpl.SQLITE)
+                                .add(HasIdUtil.ID,"test_project")
+                                .add(HasNameUtil.NAME,"test_project")
+                                .add(ProjectUtil.DBMSES,singletonList(mapBuilderTyped(String.class, Object.class)
+                                    .add(HasIdUtil.ID,"test_dbms")
+                                    .add(HasNameUtil.NAME,"test_dbms")
+                                    .add(DbmsUtil.CONNECTION_URL,URL)
+                                    .add(DbmsUtil.TYPE_NAME,SqliteDbmsTypeImpl.SQLITE)
                                     .build()
                                 ))
                                 .build()
@@ -109,6 +109,31 @@ class SqliteMetadataHandlerTest {
                 "Error connecting to in-memory SQLite-database.", ex);
         }
     }
+
+    private <K, V> MapBuilder<K, V> mapBuilderTyped(Class<K> kClass, Class<V> vClass) {
+        return new MapBuilder<>(kClass, vClass);
+    }
+
+    private static final class MapBuilder<K, V> {
+
+        private final List<Map.Entry<K, V>> entries;
+
+        public MapBuilder(Class<K> kClass, Class<V> vClass) {
+            this.entries = new ArrayList<>();
+        }
+
+        public MapBuilder<K, V> add(K key,V value) {
+            entries.add(new AbstractMap.SimpleImmutableEntry<>(key, value));
+            return this;
+        }
+
+        public Map<K, V> build() {
+            return entries.stream()
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+        }
+
+    }
+
 
     @AfterEach
     void tearDown() {

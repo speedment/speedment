@@ -84,12 +84,6 @@
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
-                <artifactId>mapbuilder</artifactId>
-                <version>${speedment.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.speedment.common</groupId>
                 <artifactId>codegen</artifactId>
                 <version>${speedment.version}</version>
             </dependency>

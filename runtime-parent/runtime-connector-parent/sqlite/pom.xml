@@ -82,10 +82,5 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>mapbuilder</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>

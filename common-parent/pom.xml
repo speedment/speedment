@@ -50,7 +50,6 @@
         <module>injector</module>
         <module>rest</module>
         <module>mapstream</module>
-        <module>mapbuilder</module>
         <module>singletonstream</module>
         <module>common-all</module>
         <module>annotation</module>
