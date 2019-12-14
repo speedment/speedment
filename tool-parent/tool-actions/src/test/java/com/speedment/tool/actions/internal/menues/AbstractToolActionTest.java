@@ -4,13 +4,13 @@ import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.actions.ProjectTreeComponent;
 import com.speedment.tool.config.*;
+import javafx.event.ActionEvent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import org.junit.jupiter.api.*;
 import org.testfx.framework.junit5.ApplicationTest;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 abstract class AbstractToolActionTest extends ApplicationTest {
 
-    private MockProjectTreeComponent projectTree;
+    MockProjectTreeComponent projectTree;
     ProjectProperty project;
     DbmsProperty dbms;
     SchemaProperty schema;
@@ -108,10 +108,6 @@ abstract class AbstractToolActionTest extends ApplicationTest {
 
     abstract AbstractToolAction newToolAction();
 
-    final ProjectTreeComponent projectTree() {
-        return projectTree;
-    }
-
     final void installContextMenu() {
         final AbstractToolAction action = newToolAction();
         action.installMenuItems(projectTree);
@@ -145,13 +141,24 @@ abstract class AbstractToolActionTest extends ApplicationTest {
             () -> format("No context menu showed up for property: %s", property.getName()));
     }
 
-    final void assertMenuExistsFor(DocumentProperty property, String menu) {
+    final void assertMenuExistsFor(DocumentProperty property, String buttonText) {
         installContextMenu();
-        assertTrue(projectTree.buildMenu(property).anyMatch(e -> menu.equals(e.getText())),
-            () -> format("No context menu with text '%s' showed up for property: %s", menu, property.getName()));
+        assertTrue(projectTree.buildMenu(property).anyMatch(e -> buttonText.equals(e.getText())),
+            () -> format("No context menu with text '%s' showed up for property: %s",
+                buttonText, property.getName()));
     }
 
-    private final static class MockProjectTreeComponent
+    final void clickOnMenuButton(DocumentProperty property, String buttonText) {
+        Optional<MenuItem> found = projectTree.buildMenu(property)
+            .filter(mi -> buttonText.equals(mi.getText()))
+            .findFirst();
+
+        assertTrue(found.isPresent(), format("No button with text '%s' was found.", buttonText));
+
+        found.get().getOnAction().handle(new ActionEvent());
+    }
+
+    final static class MockProjectTreeComponent
     implements ProjectTreeComponent {
 
         private final List<Class<?>> nodeTypes;
@@ -193,7 +200,7 @@ abstract class AbstractToolActionTest extends ApplicationTest {
         @Override
         public <DOC extends DocumentProperty & HasMainInterface>
         Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc) {
-            throw new NotImplementedException();
+            throw new RuntimeException();
         }
     }
 }

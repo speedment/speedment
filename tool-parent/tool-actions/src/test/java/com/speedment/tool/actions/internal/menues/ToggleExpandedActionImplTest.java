@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.speedment.tool.actions.internal.menues.ToggleExpandedActionImpl.COLLAPSE_ALL;
 import static com.speedment.tool.actions.internal.menues.ToggleExpandedActionImpl.EXPAND_ALL;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Emil Forslund
@@ -57,5 +59,41 @@ class ToggleExpandedActionImplTest extends AbstractToolActionTest {
     void testMenuItemShowsUpForDbms() {
         assertMenuExistsFor(dbms, EXPAND_ALL);
         assertMenuExistsFor(dbms, COLLAPSE_ALL);
+    }
+
+    @Test
+    @DisplayName("Test clicking on 'Expand/Collapse' for table")
+    void testToggleTable() {
+        installContextMenu();
+
+        clickOnMenuButton(table1, EXPAND_ALL);
+        assertTrue(table1.isExpanded(), "Table is not expanded");
+
+        clickOnMenuButton(table1, COLLAPSE_ALL);
+        assertFalse(table1.isExpanded(), "Table is expanded");
+    }
+
+    @Test
+    @DisplayName("Test clicking on 'Expand/Collapse' for schema")
+    void testToggleSchema() {
+        installContextMenu();
+
+        clickOnMenuButton(schema, EXPAND_ALL);
+        assertTrue(schema.isExpanded(), "Schema is not expanded");
+
+        clickOnMenuButton(schema, COLLAPSE_ALL);
+        assertFalse(schema.isExpanded(), "Schema is expanded");
+    }
+
+    @Test
+    @DisplayName("Test clicking on 'Expand/Collapse' for schema")
+    void testToggleDbms() {
+        installContextMenu();
+
+        clickOnMenuButton(dbms, EXPAND_ALL);
+        assertTrue(dbms.isExpanded(), "Dbms is not expanded");
+
+        clickOnMenuButton(dbms, COLLAPSE_ALL);
+        assertFalse(dbms.isExpanded(), "Dbms is expanded");
     }
 }
