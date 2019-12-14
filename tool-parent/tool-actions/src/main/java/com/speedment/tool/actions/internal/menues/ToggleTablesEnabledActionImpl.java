@@ -34,8 +34,8 @@ import java.util.stream.Stream;
 public final class ToggleTablesEnabledActionImpl
     implements AbstractToolAction, ToggleTablesEnabledAction {
 
-    final static String ENABLE_ALL_TABLES  = "Enable All Tables";
-    final static String DISABLE_ALL_TABLES = "Disable All Tables";
+    static final String ENABLE_ALL_TABLES  = "Enable All Tables";
+    static final String DISABLE_ALL_TABLES = "Disable All Tables";
 
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {

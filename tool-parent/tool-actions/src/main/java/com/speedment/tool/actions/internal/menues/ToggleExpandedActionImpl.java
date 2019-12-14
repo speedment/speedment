@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 public final class ToggleExpandedActionImpl
     implements AbstractToolAction, ToggleExpandedAction {
 
-    final static String
+    static final String
         EXPAND_ALL   = "Expand All",
         COLLAPSE_ALL = "Collapse All";
 

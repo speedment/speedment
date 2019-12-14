@@ -35,8 +35,8 @@ import java.util.stream.Stream;
 public final class ToggleColumnsEnabledActionImpl
     implements AbstractToolAction, ToggleColumnsEnabledAction {
 
-    final static String ENABLE_ALL_COLUMNS = "Enable All Columns";
-    final static String DISABLE_ALL_COLUMNS = "Disable All Columns";
+    static final String ENABLE_ALL_COLUMNS = "Enable All Columns";
+    static final String DISABLE_ALL_COLUMNS = "Disable All Columns";
 
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {
