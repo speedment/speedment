@@ -70,7 +70,7 @@ final class ToEnumNullableTest {
         assertDoesNotThrow(DEFAULT_NULLABLE::orThrow);
 
         final ToEnum<String, TestEnum> toEnum = DEFAULT_NULLABLE.orThrow();
-        assertThrows(IllegalArgumentException.class, () -> toEnum.apply(""));
+        assertThrows(NullPointerException.class, () -> toEnum.apply(null));
 
     }
 
