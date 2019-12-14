@@ -10,16 +10,16 @@ import java.util.List;
  * @author Emil Forslund
  * @since  3.2.5
  */
-class AbstractDocumentTest extends AbstractTest {
+public class AbstractDocumentTest extends AbstractTest {
 
-    ProjectProperty project;
-    DbmsProperty dbms;
-    SchemaProperty schema;
-    TableProperty table1;
-    TableProperty table2;
-    ColumnProperty table1Column1;
-    ColumnProperty table1Column2;
-    ColumnProperty table1Column3;
+    public ProjectProperty project;
+    public DbmsProperty dbms;
+    public SchemaProperty schema;
+    public TableProperty table1;
+    public TableProperty table2;
+    public ColumnProperty table1Column1;
+    public ColumnProperty table1Column2;
+    public ColumnProperty table1Column3;
     ColumnProperty table2Column1;
     ColumnProperty table2Column2;
     ColumnProperty table2Column3;

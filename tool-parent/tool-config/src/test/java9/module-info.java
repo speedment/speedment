@@ -30,6 +30,7 @@ open module com.speedment.tool.config {
     requires transitive com.speedment.common.function;
     requires transitive com.speedment.common.injector;
     requires transitive com.speedment.common.mapstream;
+    requires transitive com.speedment.common.json;
     requires transitive com.speedment.runtime.core;
     requires transitive com.speedment.runtime.config;
 }

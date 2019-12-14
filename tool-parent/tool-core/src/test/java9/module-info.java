@@ -39,6 +39,7 @@ open module com.speedment.tool.core {
 
     requires com.speedment.tool.actions;
 
+    requires transitive java.prefs;
     requires transitive javafx.base;
     requires transitive javafx.controls;
     requires transitive javafx.fxml;
