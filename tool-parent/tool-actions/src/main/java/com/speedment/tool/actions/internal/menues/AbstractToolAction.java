@@ -38,6 +38,6 @@ interface AbstractToolAction {
      * @param projectTree  the project tree component
      */
     @ExecuteBefore(RESOLVED)
-    public abstract void installMenuItems(ProjectTreeComponent projectTree);
+    void installMenuItems(ProjectTreeComponent projectTree);
 
 }

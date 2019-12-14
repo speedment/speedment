@@ -35,11 +35,14 @@ import java.util.stream.Stream;
 public final class ToggleColumnsEnabledActionImpl
     implements AbstractToolAction, ToggleColumnsEnabledAction {
 
+    final static String ENABLE_ALL_COLUMNS = "Enable All Columns";
+    final static String DISABLE_ALL_COLUMNS = "Disable All Columns";
+
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {
         projectTree.installContextMenu(TableProperty.class, (treeCell, node) -> {
-            final MenuItem enableColumns  = new MenuItem("Enable All Columns");
-            final MenuItem disableColumns = new MenuItem("Disable All Columns");
+            final MenuItem enableColumns  = new MenuItem(ENABLE_ALL_COLUMNS);
+            final MenuItem disableColumns = new MenuItem(DISABLE_ALL_COLUMNS);
 
             enableColumns.setOnAction(ev ->
                 DocumentUtil.traverseOver(node)

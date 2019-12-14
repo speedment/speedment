@@ -34,11 +34,14 @@ import java.util.stream.Stream;
 public final class ToggleTablesEnabledActionImpl
     implements AbstractToolAction, ToggleTablesEnabledAction {
 
+    final static String ENABLE_ALL_TABLES  = "Enable All Tables";
+    final static String DISABLE_ALL_TABLES = "Disable All Tables";
+
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {
         projectTree.installContextMenu(SchemaProperty.class, (treeCell, node) -> {
-            final MenuItem enableTables  = new MenuItem("Enable All Tables");
-            final MenuItem disableTables = new MenuItem("Disable All Tables");
+            final MenuItem enableTables  = new MenuItem(ENABLE_ALL_TABLES);
+            final MenuItem disableTables = new MenuItem(DISABLE_ALL_TABLES);
 
             enableTables.setOnAction(ev ->
                 DocumentUtil.traverseOver(node)

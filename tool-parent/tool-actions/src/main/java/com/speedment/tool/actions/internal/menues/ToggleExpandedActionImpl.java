@@ -39,6 +39,10 @@ import java.util.stream.Stream;
 public final class ToggleExpandedActionImpl
     implements AbstractToolAction, ToggleExpandedAction {
 
+    final static String
+        EXPAND_ALL   = "Expand All",
+        COLLAPSE_ALL = "Collapse All";
+
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {
         projectTree.installContextMenu(DbmsProperty.class, this::installForDocumentType);
@@ -48,8 +52,8 @@ public final class ToggleExpandedActionImpl
 
     private <DOC extends DocumentProperty> Stream<MenuItem>
     installForDocumentType(TreeCell<DocumentProperty> treeCell, DOC node) {
-        final MenuItem expandAll   = new MenuItem("Expand All", ProjectTreeIcon.BOOK_OPEN.view());
-        final MenuItem collapseAll = new MenuItem("Collapse All", ProjectTreeIcon.BOOK.view());
+        final MenuItem expandAll   = new MenuItem(EXPAND_ALL, ProjectTreeIcon.BOOK_OPEN.view());
+        final MenuItem collapseAll = new MenuItem(COLLAPSE_ALL, ProjectTreeIcon.BOOK.view());
 
         expandAll.setOnAction(ev ->
             DocumentUtil.traverseOver(node)
