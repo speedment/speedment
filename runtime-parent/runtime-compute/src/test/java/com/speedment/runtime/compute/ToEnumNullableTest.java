@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class ToEnumNullableTest {
+final class ToEnumNullableTest {
 
     private static final ToEnumNullable<String, TestEnum> DEFAULT_NULLABLE =
             ToEnumNullable.of(TestEnum.class, string -> string == null ? null : TestEnum.valueOf(string));
