@@ -700,7 +700,7 @@ final class IntFieldTest {
     
     @Test
     void setter() {
-        final int expected = (int) 1;
+        final int expected = 1;
         final BasicEntity entity = new BasicEntity();
         field.setter().set(entity, expected);
         assertEquals(expected, entity.getVarInt());
