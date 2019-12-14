@@ -18,8 +18,6 @@ package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.comparator.IntFieldComparator;
-import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.predicate.Inclusion;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +26,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.unmodifiableSet;
@@ -49,10 +46,17 @@ abstract class AbstractStringFieldTest extends BaseFieldTest {
         .collect(toSet()));
 
     protected StringField<TestEntity, String> field;
+    private final RerferenceFieldTestSupport support;
     private @Mock Column column;
 
     public AbstractStringFieldTest(StringField<TestEntity, String> field) {
         this.field = requireNonNull(field);
+        this.support = new RerferenceFieldTestSupport(field);
+    }
+
+    @Test
+    void testSupportMethods() {
+        support.testAll();
     }
 
     @Test
@@ -271,10 +275,10 @@ abstract class AbstractStringFieldTest extends BaseFieldTest {
     }
 
     @Test
+    @SuppressWarnings({"raw", "unchecked"})
     void typemapper() {
         when(column.findDatabaseType()).thenReturn((Class) String.class);
         final Type fieldType = field.typeMapper().getJavaType(column);
-        final Type actual = fieldType;
         assertEquals(String.class, fieldType);
     }
 

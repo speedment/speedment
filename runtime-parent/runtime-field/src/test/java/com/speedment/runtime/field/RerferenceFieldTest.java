@@ -16,65 +16,31 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.field.method.ReferenceGetter;
-import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.typemapper.TypeMapper;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static com.speedment.runtime.field.TestEntity.NAME;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author pemi
  */
-final class RerferenceFieldTest extends BaseFieldTest {
+final class RerferenceFieldTest {
 
-    @Test
-    void testGetter() throws Exception {
-        final ReferenceGetter<TestEntity, String> result = NAME.getter();
-        final ReferenceGetter<TestEntity, String> expected = (TestEntity e) -> e.getName();
-        final TestEntity e = new TestEntityImpl(45, "Arne");
-        assertEquals(expected.apply(e), result.apply(e));
-    }
+    private final ReferenceField<TestEntity, String, String> field;
 
-    @Test
-    void testSetter() throws Exception {
-        final ReferenceSetter<TestEntity, String> result = NAME.setter();
-        final TestEntity e = new TestEntityImpl(45, "Arne");
-        result.accept(e, "Tryggve");
-        assertEquals("Tryggve", e.getName());
+    public RerferenceFieldTest() {
+        field = ReferenceField.create(
+            TestEntity.Identifier.NAME,
+            TestEntity::getName,
+            TestEntity::setName,
+            TypeMapper.identity(),
+            false
+        );
     }
 
     @Test
-    void testIsNull() throws Exception {
-        final List<TestEntity> result = collect(NAME.isNull());
-        final List<TestEntity> expected = collect(e -> e.getName() == null);
-        assertEquals(expected, result);
+    void testAll() {
+        final RerferenceFieldTestSupport support = new RerferenceFieldTestSupport(field);
+        support.testAll();
     }
-
-    @Test
-    void testIsNotNull() throws Exception {
-        final List<TestEntity> result = collect(NAME.isNotNull());
-        final List<TestEntity> expected = collect(e -> e.getName() != null);
-        assertEquals(expected, result);
-    }
-    
-    
-    
-    @Test
-    void testIsNullNegated() throws Exception {
-        final List<TestEntity> result = collect(NAME.isNull().negate());
-        final List<TestEntity> expected = collect(e -> e.getName() != null);
-        assertEquals(expected, result);
-    }
-    
-    @Test
-    void testIsNotNullNegated() throws Exception {
-        final List<TestEntity> result = collect(NAME.isNotNull().negate());
-        final List<TestEntity> expected = collect(e -> e.getName() == null);
-        assertEquals(expected, result);
-    }    
 
 }

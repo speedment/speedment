@@ -18,6 +18,7 @@
 package com.speedment.runtime.compute.expression.orelse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.speedment.runtime.compute.ToEnumNullable;
 import org.junit.jupiter.api.Test;
@@ -25,29 +26,24 @@ import org.junit.jupiter.api.Test;
 final class ToEnumOrThrowTest {
 
     @Test
-    void nullStrategy() {
-        assertEquals(TestEnum.class, new DummyToEnumOrThrowTest().enumClass());
-    }
+    void enumClass() {
+        ToEnumOrThrow<Integer, TestEnum> toEnumOrThrow = new ToEnumOrThrow<Integer, TestEnum>() {
+            @Override
+            public TestEnum apply(Integer integer) {
+                return null;
+            }
 
-    private static final class DummyToEnumOrThrowTest implements ToEnumOrThrow<Integer, TestEnum> {
+            @Override
+            public ToEnumNullable<Integer, TestEnum> innerNullable() {
+                return ToEnumNullable.of(TestEnum.class, integer -> TestEnum.A);
+            }
+        };
 
-        @Override
-        public Class<TestEnum> enumClass() {
-            return TestEnum.class;
-        }
-
-        @Override
-        public TestEnum apply(Integer integer) {
-            return null;
-        }
-
-        @Override
-        public ToEnumNullable<Integer, TestEnum> innerNullable() {
-            return null;
-        }
+        assertNotNull(toEnumOrThrow.enumClass());
+        assertEquals(TestEnum.class, toEnumOrThrow.enumClass());
     }
 
     private enum TestEnum {
-
+        A
     }
 }

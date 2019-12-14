@@ -19,21 +19,26 @@ package com.speedment.runtime.compute.expression.predicate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.speedment.runtime.compute.ToIntNullable;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.trait.ToNullable;
 import org.junit.jupiter.api.Test;
 
 final class IsNullTest {
 
+    private final IsNull<Integer, Integer> instance = new DummyIsNull();
+
     @Test
     void nullPredicateType() {
-        assertEquals(NullPredicateType.IS_NULL, new DummyIsNull().nullPredicateType());
+        assertEquals(NullPredicateType.IS_NULL, instance.nullPredicateType());
     }
 
     @Test
     void test() {
-        assertFalse(new DummyIsNull().test(1));
+        assertTrue(instance.test(null));
+        assertFalse(instance.test(1));
     }
 
     private static final class DummyIsNotNull implements IsNotNull<Integer, Integer> {
@@ -58,7 +63,7 @@ final class IsNullTest {
 
         @Override
         public ToNullable<Integer, Integer, ?> expression() {
-            return Expressions.absOrNull(Integer::intValue);
+            return Expressions.absOrNull(ToIntNullable.of(integer -> integer));
         }
     }
 

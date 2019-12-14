@@ -71,7 +71,7 @@ final class ToShortNullableImplTest {
 
     @Test
     void orElseGet() {
-        ToShort<String> toShort = instance.orElseGet(string -> (short) 0);
+        final ToShort<String> toShort = instance.orElseGet(string -> (short) 0);
 
         assertNotNull(toShort);
         assertEquals("three".length(), toShort.applyAsShort("three"));
@@ -80,7 +80,7 @@ final class ToShortNullableImplTest {
 
     @Test
     void orElse() {
-        ToShort<String> toShort = instance.orElse((short) 0);
+        final ToShort<String> toShort = instance.orElse((short) 0);
 
         assertNotNull(toShort);
         assertEquals("three".length(), toShort.applyAsShort("three"));
@@ -89,19 +89,21 @@ final class ToShortNullableImplTest {
 
     @Test
     void mapToDoubleIfPresent() {
-        ToDoubleNullable<String> toDoubleNullable = instance
+        final ToDoubleNullable<String> toDoubleNullable = instance
                 .mapToDoubleIfPresent(i -> 1);
 
         assertNotNull(toDoubleNullable);
         assertEquals(1, toDoubleNullable.applyAsDouble("three"));
+        assertNull(toDoubleNullable.apply(null));
     }
 
     @Test
     void mapIfPresent() {
-        ToShortNullable<String> toShortNullable = instance.mapIfPresent(i -> (short) 0);
+        final ToShortNullable<String> toShortNullable = instance.mapIfPresent(i -> (short) 0);
 
         assertNotNull(toShortNullable);
         assertEquals(0, toShortNullable.applyAsShort("1"));
+        assertNull(toShortNullable.apply(null));
     }
 
     @ParameterizedTest
@@ -124,11 +126,13 @@ final class ToShortNullableImplTest {
     @Test
     void isNull() {
         assertTrue(instance.isNull(null));
+        assertFalse(instance.isNull("test"));
     }
 
     @Test
     void isNotNull() {
         assertTrue(instance.isNotNull("test"));
+        assertFalse(instance.isNotNull(null));
     }
 
     @Test
@@ -137,12 +141,24 @@ final class ToShortNullableImplTest {
         assertTrue(instance.equals(copy));
         assertFalse(instance.equals(null));
 
-        final ToShortNullableImpl<String> another = new ToShortNullableImpl<>(
-                instance.inner(),
-                instance.isNullPredicate()
+        final ToShortNullable<String> another = new ToShortNullableImpl<>(
+            instance.inner(),
+            instance.isNullPredicate()
+        );
+
+        final ToShortNullable<String> originalSame = new ToShortNullableImpl<>(
+            instance.inner(),
+            Objects::isNull
+        );
+
+        final ToShortNullable<String> isNullSame = new ToShortNullableImpl<>(
+            string -> (short) string.length(),
+            instance.isNullPredicate()
         );
 
         assertTrue(instance.equals(another));
+        assertFalse(instance.equals(originalSame));
+        assertFalse(instance.equals(isNullSame));
     }
 
     @Test

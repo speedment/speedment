@@ -93,6 +93,7 @@ final class ToByteNullableImplTest {
 
         assertNotNull(toDoubleNullable);
         assertEquals(1, toDoubleNullable.applyAsDouble("three"));
+        assertNull(toDoubleNullable.apply(null));
     }
 
     @Test
@@ -101,6 +102,7 @@ final class ToByteNullableImplTest {
 
         assertNotNull(toByteNullable);
         assertEquals(0, toByteNullable.applyAsByte("1"));
+        assertNull(toByteNullable.apply(null));
     }
 
     @ParameterizedTest
@@ -125,11 +127,13 @@ final class ToByteNullableImplTest {
     @Test
     void isNull() {
         assertTrue(instance.isNull(null));
+        assertFalse(instance.isNull("test"));
     }
 
     @Test
     void isNotNull() {
         assertTrue(instance.isNotNull("test"));
+        assertFalse(instance.isNotNull(null));
     }
 
     @Test
@@ -138,12 +142,24 @@ final class ToByteNullableImplTest {
         assertTrue(instance.equals(copy));
         assertFalse(instance.equals(null));
 
-        final ToByteNullableImpl<String> another = new ToByteNullableImpl<>(
-                instance.inner(),
-                instance.isNullPredicate()
+        final ToByteNullable<String> another = new ToByteNullableImpl<>(
+            instance.inner(),
+            instance.isNullPredicate()
+        );
+
+        final ToByteNullable<String> originalSame = new ToByteNullableImpl<>(
+            instance.inner(),
+            Objects::isNull
+        );
+
+        final ToByteNullable<String> isNullSame = new ToByteNullableImpl<>(
+            string -> string.getBytes()[0],
+            instance.isNullPredicate()
         );
 
         assertTrue(instance.equals(another));
+        assertFalse(instance.equals(originalSame));
+        assertFalse(instance.equals(isNullSame));
     }
 
     @Test

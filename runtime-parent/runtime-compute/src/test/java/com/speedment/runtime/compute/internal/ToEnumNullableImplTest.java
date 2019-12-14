@@ -59,15 +59,16 @@ final class ToEnumNullableImplTest {
     @ParameterizedTest
     @ValueSource(strings = {"FIRST", "SECOND"})
     void hash(String input) {
+        assertEquals(0, instance.hash(null));
         assertNotEquals(0, instance.hash(input));
     }
 
     @Test
     void compare() {
-        Pair<String, String> pair1 = new Pair<>(null, null);
-        Pair<String, String> pair2 = new Pair<>("FIRST", null);
-        Pair<String, String> pair3 = new Pair<>(null, "FIRST");
-        Pair<String, String> pair4 = new Pair<>("SECOND", "SECOND");
+        final Pair<String, String> pair1 = new Pair<>(null, null);
+        final Pair<String, String> pair2 = new Pair<>("FIRST", null);
+        final Pair<String, String> pair3 = new Pair<>(null, "FIRST");
+        final Pair<String, String> pair4 = new Pair<>("SECOND", "SECOND");
 
         assertEquals(0, instance.compare(pair1.getFirst(), pair1.getSecond()));
         assertEquals(-1, instance.compare(pair2.getFirst(), pair2.getSecond()));

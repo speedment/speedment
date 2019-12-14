@@ -71,7 +71,7 @@ final class ToLongNullableImplTest {
 
     @Test
     void orElseGet() {
-        ToLong<String> toLong = instance.orElseGet(string -> 0);
+        final ToLong<String> toLong = instance.orElseGet(string -> 0);
 
         assertNotNull(toLong);
         assertEquals("three".length(), toLong.applyAsLong("three"));
@@ -80,7 +80,7 @@ final class ToLongNullableImplTest {
 
     @Test
     void orElse() {
-        ToLong<String> toLong = instance.orElse((long) 0);
+        final ToLong<String> toLong = instance.orElse((long) 0);
 
         assertNotNull(toLong);
         assertEquals("three".length(), toLong.applyAsLong("three"));
@@ -89,19 +89,21 @@ final class ToLongNullableImplTest {
 
     @Test
     void mapToDoubleIfPresent() {
-        ToDoubleNullable<String> toDoubleNullable = instance
+        final ToDoubleNullable<String> toDoubleNullable = instance
                 .mapToDoubleIfPresent(i -> 1);
 
         assertNotNull(toDoubleNullable);
         assertEquals(1, toDoubleNullable.applyAsDouble("three"));
+        assertNull(toDoubleNullable.apply(null));
     }
 
     @Test
     void mapIfPresent() {
-        ToLongNullable<String> toLongNullable = instance.mapIfPresent(i -> 0);
+        final ToLongNullable<String> toLongNullable = instance.mapIfPresent(i -> 0);
 
         assertNotNull(toLongNullable);
         assertEquals(0, toLongNullable.applyAsLong("1"));
+        assertNull(toLongNullable.apply(null));
     }
 
     @ParameterizedTest
@@ -124,11 +126,13 @@ final class ToLongNullableImplTest {
     @Test
     void isNull() {
         assertTrue(instance.isNull(null));
+        assertFalse(instance.isNull("test"));
     }
 
     @Test
     void isNotNull() {
         assertTrue(instance.isNotNull("test"));
+        assertFalse(instance.isNotNull(null));
     }
 
     @Test
@@ -137,12 +141,24 @@ final class ToLongNullableImplTest {
         assertTrue(instance.equals(copy));
         assertFalse(instance.equals(null));
 
-        final ToLongNullableImpl<String> another = new ToLongNullableImpl<>(
-                instance.inner(),
-                instance.isNullPredicate()
+        final ToLongNullable<String> another = new ToLongNullableImpl<>(
+            instance.inner(),
+            instance.isNullPredicate()
+        );
+
+        final ToLongNullable<String> originalSame = new ToLongNullableImpl<>(
+            instance.inner(),
+            Objects::isNull
+        );
+
+        final ToLongNullable<String> isNullSame = new ToLongNullableImpl<>(
+            String::length,
+            instance.isNullPredicate()
         );
 
         assertTrue(instance.equals(another));
+        assertFalse(instance.equals(originalSame));
+        assertFalse(instance.equals(isNullSame));
     }
 
     @Test
