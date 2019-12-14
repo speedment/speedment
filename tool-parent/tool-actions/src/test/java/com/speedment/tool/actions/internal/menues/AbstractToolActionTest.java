@@ -23,12 +23,25 @@ import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+import static org.testfx.api.FxToolkit.registerPrimaryStage;
 
 /**
  * @author Emil Forslund
  * @since  3.2.5
  */
 abstract class AbstractToolActionTest extends ApplicationTest {
+
+    @BeforeAll
+    static void setupSpec() throws Exception {
+        if (Boolean.getBoolean("headless")) {
+            System.setProperty("testfx.robot", "glass");
+            System.setProperty("testfx.headless", "true");
+            System.setProperty("prism.order", "sw");
+            System.setProperty("prism.text", "t2k");
+            System.setProperty("java.awt.headless", "true");
+        }
+        registerPrimaryStage();
+    }
 
     MockProjectTreeComponent projectTree;
     ProjectProperty project;

@@ -119,19 +119,29 @@
     <profiles>
         <profile>
             <id>openjfx</id>
+
             <activation>
                 <jdk>[10</jdk>
             </activation>
+
             <dependencies>
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-controls</artifactId>
                     <version>${org.openjfx.version}</version>
                 </dependency>
+
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-fxml</artifactId>
                     <version>${org.openjfx.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.testfx</groupId>
+                    <artifactId>openjfx-monocle</artifactId>
+                    <version>jdk-11+26</version>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
         </profile>

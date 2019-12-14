@@ -32,7 +32,6 @@ import javafx.util.StringConverter;
  * @author Emil Forslund
  * @since 2.3.0
  */
-
 public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
 
     default ObjectProperty<OrderType> orderTypeProperty() {
