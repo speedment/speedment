@@ -21,11 +21,11 @@
  */
 package com.speedment.runtime.compute;
 
-import com.speedment.runtime.compute.expression.ExpressionType;
-import org.junit.jupiter.api.Test;
-
 import static com.speedment.runtime.compute.TestUtil.strings;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.speedment.runtime.compute.expression.ExpressionType;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -84,6 +84,9 @@ final class ToFloatTest extends AbstractToTest<ToFloat<String>> {
         strings().forEach(s -> {
             final ToFloat<String> created = ToFloat.of(String::length);
             assertEquals(s.length(), created.applyAsFloat(s), EPSILON);
+
+            final ToFloat<String> fromToFloat = ToFloat.of(created);
+            assertEquals(s.length(), fromToFloat.applyAsFloat(s), EPSILON);
         });
     }
 

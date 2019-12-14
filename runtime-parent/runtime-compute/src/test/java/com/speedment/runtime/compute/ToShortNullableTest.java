@@ -20,9 +20,12 @@ package com.speedment.runtime.compute;
 import static com.speedment.runtime.compute.expression.ExpressionType.SHORT_NULLABLE;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.speedment.runtime.compute.util.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -34,19 +37,20 @@ import java.util.function.Function;
 
 final class ToShortNullableTest {
 
-    private static final ToShortNullable<String> DEFAULT_NULLABLE = string -> (short) string.length();
+    private static final ToShortNullable<String> DEFAULT_NULLABLE = string -> string == null ?
+            null : (short) string.length();
 
     @ParameterizedTest
     @ValueSource(strings = "test")
     void of(String input) {
-        Function<String, Short> function = string -> (short) string.length();
-        ToShortNullable<String> fromFunction = ToShortNullable.of(function);
+        final Function<String, Short> function = string -> (short) string.length();
+        final ToShortNullable<String> fromFunction = ToShortNullable.of(function);
 
         assertNotNull(fromFunction);
         assertEquals(function.apply(input), fromFunction.apply(input));
 
-        ToShortNullable<String> raw = DEFAULT_NULLABLE;
-        ToShortNullable<String> fromRaw = ToShortNullable.of(raw);
+        final ToShortNullable<String> raw = DEFAULT_NULLABLE;
+        final ToShortNullable<String> fromRaw = ToShortNullable.of(raw);
 
         assertNotNull(fromFunction);
         assertEquals(raw.apply(input), fromRaw.apply(input));
@@ -54,17 +58,15 @@ final class ToShortNullableTest {
 
     @Test
     void expressionType() {
-        ToShortNullable<String> toLongNullable = string -> null;
-
-        Assertions.assertEquals(SHORT_NULLABLE, toLongNullable.expressionType());
+        Assertions.assertEquals(SHORT_NULLABLE, DEFAULT_NULLABLE.expressionType());
     }
 
     @Test
     void orThrow() {
-        ToShortNullable<String> nullValue = string -> null;
+        final ToShortNullable<String> nullValue = string -> null;
         assertDoesNotThrow(nullValue::orThrow);
 
-        ToShort<String> toFloat = nullValue.orThrow();
+        final ToShort<String> toFloat = nullValue.orThrow();
         assertThrows(NullPointerException.class, () -> toFloat.applyAsShort(""));
 
         assertDoesNotThrow(DEFAULT_NULLABLE::orThrow);
@@ -73,7 +75,7 @@ final class ToShortNullableTest {
     @ParameterizedTest
     @ValueSource(strings = {"a", "foo", "test"})
     void orElseGet(String input) {
-        ToShortNullable<String> nullValue = string -> null;
+        final ToShortNullable<String> nullValue = string -> null;
         ToShort<String> toFloat = nullValue.orElseGet(string -> (short) string.length());
 
         assertEquals(input.length(), toFloat.applyAsShort(input));
@@ -86,7 +88,7 @@ final class ToShortNullableTest {
     @ParameterizedTest
     @ValueSource(strings = {"test", "foo"})
     void orElse(String input) {
-        ToShortNullable<String> nullValue = string -> null;
+        final ToShortNullable<String> nullValue = string -> null;
         ToShort<String> toFloat = nullValue.orElse((short) 0);
 
         assertEquals(0d, toFloat.applyAsShort(input));
@@ -118,25 +120,59 @@ final class ToShortNullableTest {
 
     @Test
     void mapToDoubleIfPresent() {
-        ToDoubleNullable<String> toDoubleNullable = DEFAULT_NULLABLE
-                .mapToDoubleIfPresent(c -> 1);
+        final ToDoubleNullable<String> toDoubleNullable = DEFAULT_NULLABLE
+                .mapToDoubleIfPresent(s -> 1);
 
         assertNotNull(toDoubleNullable);
-        assertEquals(1, toDoubleNullable.applyAsDouble("three"));
+        assertEquals(1, toDoubleNullable.applyAsDouble("test"));
+
+        assertNull(toDoubleNullable.apply(null));
+        assertEquals(1, toDoubleNullable.apply("test"));
+
+        final ToDouble<String> orElseGet = toDoubleNullable.orElseGet(d -> 0);
+        assertEquals(1, orElseGet.applyAsDouble("test"));
+        assertEquals(0, orElseGet.applyAsDouble(null));
+
+        final ToDouble<String> orElse = toDoubleNullable.orElse((double) 0);
+        assertEquals(1, orElse.applyAsDouble("test"));
+        assertEquals(0, orElse.applyAsDouble(null));
+
+        assertTrue(toDoubleNullable.isNotNull("test"));
+        assertFalse(toDoubleNullable.isNotNull(null));
+
+        assertTrue(toDoubleNullable.isNull(null));
+        assertFalse(toDoubleNullable.isNull("test"));
     }
     
     @Test
     void mapIfPresent() {
-        ToShortNullable<String> toFloatNullable = DEFAULT_NULLABLE.mapIfPresent(f -> f);
+        final ToShortNullable<String> toShortNullable = DEFAULT_NULLABLE.mapIfPresent(s -> (short) 1);
 
-        assertNotNull(toFloatNullable);
-        assertEquals("1".length(), toFloatNullable.applyAsShort("1"));
+        assertNotNull(toShortNullable);
+        assertEquals(1, toShortNullable.applyAsShort("1"));
+
+        assertNull(toShortNullable.apply(null));
+        assertEquals((short) 1, toShortNullable.apply("test"));
+
+        final ToShort<String> orElseGet = toShortNullable.orElseGet(s -> (short) 0);
+        assertEquals(1, orElseGet.applyAsShort("test"));
+        assertEquals(0, orElseGet.applyAsShort(null));
+
+        final ToShort<String> orElse = toShortNullable.orElse((short) 0);
+        assertEquals(1, orElse.applyAsShort("test"));
+        assertEquals(0, orElse.applyAsShort(null));
+
+        assertTrue(toShortNullable.isNotNull("test"));
+        assertFalse(toShortNullable.isNotNull(null));
+
+        assertTrue(toShortNullable.isNull(null));
+        assertFalse(toShortNullable.isNull("test"));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"test", "foo"})
     void hash(String input) {
-        ToShortNullable<String> nullValue = string -> null;
+        final ToShortNullable<String> nullValue = string -> null;
         assertEquals(0, nullValue.hash(input));
 
         assertNotEquals(0, DEFAULT_NULLABLE.hash(input));
@@ -144,12 +180,12 @@ final class ToShortNullableTest {
 
     @Test
     void compare() {
-        ToShortNullable<String> raw = string -> string.length() > 4 ? (short) 1 : null;
+        final ToShortNullable<String> raw = string -> string.length() > 4 ? (short) 1 : null;
 
-        Pair<String, String> nullNull = new Pair<>("foo", "bar");
-        Pair<String, String> nullHas = new Pair<>("foo", "longer");
-        Pair<String, String> hasNull = new Pair<>("longer", "foo");
-        Pair<String, String> hasHas = new Pair<>("longer", "longer");
+        final Pair<String, String> nullNull = new Pair<>("foo", "bar");
+        final Pair<String, String> nullHas = new Pair<>("foo", "longer");
+        final Pair<String, String> hasNull = new Pair<>("longer", "foo");
+        final Pair<String, String> hasHas = new Pair<>("longer", "longer");
 
         assertEquals(0, raw.compare(nullNull.getFirst(), nullNull.getSecond()));
         assertEquals(1, raw.compare(nullHas.getFirst(), nullHas.getSecond()));

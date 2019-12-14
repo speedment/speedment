@@ -21,11 +21,11 @@
  */
 package com.speedment.runtime.compute;
 
-import com.speedment.runtime.compute.expression.ExpressionType;
-import org.junit.jupiter.api.Test;
-
 import static com.speedment.runtime.compute.TestUtil.strings;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.speedment.runtime.compute.expression.ExpressionType;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -84,6 +84,9 @@ final class ToByteTest extends AbstractToTest<ToByte<String>> {
         strings().forEach(s -> {
             final ToByte<String> created = ToByte.of(str -> (byte) str.length());
             assertEquals(s.length(), created.applyAsByte(s));
+
+            final ToByte<String> fromToByte = ToByte.of(created);
+            assertEquals(s.length(), fromToByte.applyAsByte(s));
         });
     }
 

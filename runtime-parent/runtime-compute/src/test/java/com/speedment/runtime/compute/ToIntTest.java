@@ -21,11 +21,11 @@
  */
 package com.speedment.runtime.compute;
 
-import com.speedment.runtime.compute.expression.ExpressionType;
-import org.junit.jupiter.api.Test;
-
 import static com.speedment.runtime.compute.TestUtil.strings;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.speedment.runtime.compute.expression.ExpressionType;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -84,6 +84,9 @@ final class ToIntTest extends AbstractToTest<ToInt<String>> {
         strings().forEach(s -> {
             final ToInt<String> created = ToInt.of(String::length);
             assertEquals(s.length(), created.applyAsInt(s));
+
+            final ToInt<String> fromToInt = ToInt.of(created);
+            assertEquals(s.length(), fromToInt.applyAsInt(s));
         });
     }
 

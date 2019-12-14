@@ -20,9 +20,12 @@ package com.speedment.runtime.compute;
 import static com.speedment.runtime.compute.expression.ExpressionType.DOUBLE_NULLABLE;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.speedment.runtime.compute.util.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -34,21 +37,21 @@ import java.util.function.Function;
 
 final class ToDoubleNullableTest {
 
-    private static final ToDoubleNullable<String> DEFAULT_NULLABLE = string -> (double) string
-            .length();
+    private static final ToDoubleNullable<String> DEFAULT_NULLABLE = string -> string == null ?
+            null : (double) string.length();
 
 
     @ParameterizedTest
     @ValueSource(strings = "test")
     void of(String input) {
-        Function<String, Double> function = string -> (double) string.length();
-        ToDoubleNullable<String> fromFunction = ToDoubleNullable.of(function);
+        final Function<String, Double> function = string -> (double) string.length();
+        final ToDoubleNullable<String> fromFunction = ToDoubleNullable.of(function);
 
         assertNotNull(fromFunction);
         assertEquals(function.apply(input), fromFunction.apply(input));
 
-        ToDoubleNullable<String> raw = DEFAULT_NULLABLE;
-        ToDoubleNullable<String> fromRaw = ToDoubleNullable.of(raw);
+        final ToDoubleNullable<String> raw = DEFAULT_NULLABLE;
+        final ToDoubleNullable<String> fromRaw = ToDoubleNullable.of(raw);
 
         assertNotNull(fromFunction);
         assertEquals(raw.apply(input), fromRaw.apply(input));
@@ -56,17 +59,15 @@ final class ToDoubleNullableTest {
 
     @Test
     void expressionType() {
-        ToDoubleNullable<String> toDoubleNullable = string -> null;
-
-        Assertions.assertEquals(DOUBLE_NULLABLE, toDoubleNullable.expressionType());
+        Assertions.assertEquals(DOUBLE_NULLABLE, DEFAULT_NULLABLE.expressionType());
     }
 
     @Test
     void orThrow() {
-        ToDoubleNullable<String> nullValue = string -> null;
+        final ToDoubleNullable<String> nullValue = string -> null;
         assertDoesNotThrow(nullValue::orThrow);
 
-        ToDouble<String> toDouble = nullValue.orThrow();
+        final ToDouble<String> toDouble = nullValue.orThrow();
         assertThrows(NullPointerException.class, () -> toDouble.applyAsDouble(""));
 
         assertDoesNotThrow(DEFAULT_NULLABLE::orThrow);
@@ -75,7 +76,7 @@ final class ToDoubleNullableTest {
     @ParameterizedTest
     @ValueSource(strings = {"a", "foo", "test"})
     void orElseGet(String input) {
-        ToDoubleNullable<String> nullValue = string -> null;
+        final ToDoubleNullable<String> nullValue = string -> null;
         ToDouble<String> toDouble = nullValue.orElseGet(String::length);
 
         assertEquals(input.length(), toDouble.applyAsDouble(input));
@@ -88,7 +89,7 @@ final class ToDoubleNullableTest {
     @ParameterizedTest
     @ValueSource(strings = {"test", "foo"})
     void orElse(String input) {
-        ToDoubleNullable<String> nullValue = string -> null;
+        final ToDoubleNullable<String> nullValue = string -> null;
         ToDouble<String> toDouble = nullValue.orElse(0d);
 
         assertEquals(0d, toDouble.applyAsDouble(input));
@@ -120,16 +121,41 @@ final class ToDoubleNullableTest {
 
     @Test
     void mapIfPresent() {
-        ToDoubleNullable<String> toDoubleNullable = DEFAULT_NULLABLE.mapIfPresent(d -> d);
+        final ToDoubleNullable<String> toDoubleNullable = DEFAULT_NULLABLE.mapIfPresent(d -> 1);
 
         assertNotNull(toDoubleNullable);
-        assertEquals("1".length(), toDoubleNullable.applyAsDouble("1"));
+        assertEquals(1, toDoubleNullable.applyAsDouble("1"));
+
+        assertNotNull(toDoubleNullable);
+        assertEquals(1, toDoubleNullable.applyAsDouble("test"));
+
+        assertNull(toDoubleNullable.apply(null));
+        assertEquals(1, toDoubleNullable.apply("test"));
+
+        final ToDouble<String> orElseGet = toDoubleNullable.orElseGet(d -> 0);
+        assertEquals(1, orElseGet.applyAsDouble("test"));
+        assertEquals(0, orElseGet.applyAsDouble(null));
+
+        final ToDouble<String> orElse = toDoubleNullable.orElse((double) 0);
+        assertEquals(1, orElse.applyAsDouble("test"));
+        assertEquals(0, orElse.applyAsDouble(null));
+
+        assertTrue(toDoubleNullable.isNotNull("test"));
+        assertFalse(toDoubleNullable.isNotNull(null));
+
+        assertTrue(toDoubleNullable.isNull(null));
+        assertFalse(toDoubleNullable.isNull("test"));
+
+        final ToDoubleNullable<String> anotherToDoubleNullable = toDoubleNullable.mapIfPresent(d -> 1);
+
+        assertNotNull(anotherToDoubleNullable);
+        assertEquals(1, anotherToDoubleNullable.applyAsDouble("1"));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"test", "foo"})
     void hash(String input) {
-        ToDoubleNullable<String> nullValue = string -> null;
+        final ToDoubleNullable<String> nullValue = string -> null;
         assertEquals(0, nullValue.hash(input));
 
         assertNotEquals(0, DEFAULT_NULLABLE.hash(input));
@@ -137,12 +163,12 @@ final class ToDoubleNullableTest {
 
     @Test
     void compare() {
-        ToDoubleNullable<String> raw = string -> string.length() > 4 ? 1d : null;
+        final ToDoubleNullable<String> raw = string -> string.length() > 4 ? 1d : null;
 
-        Pair<String, String> nullNull = new Pair<>("foo", "bar");
-        Pair<String, String> nullHas = new Pair<>("foo", "longer");
-        Pair<String, String> hasNull = new Pair<>("longer", "foo");
-        Pair<String, String> hasHas = new Pair<>("longer", "longer");
+        final Pair<String, String> nullNull = new Pair<>("foo", "bar");
+        final Pair<String, String> nullHas = new Pair<>("foo", "longer");
+        final Pair<String, String> hasNull = new Pair<>("longer", "foo");
+        final Pair<String, String> hasHas = new Pair<>("longer", "longer");
 
         assertEquals(0, raw.compare(nullNull.getFirst(), nullNull.getSecond()));
         assertEquals(1, raw.compare(nullHas.getFirst(), nullHas.getSecond()));
@@ -154,7 +180,7 @@ final class ToDoubleNullableTest {
     void compose() {
         assertThrows(NullPointerException.class, () -> DEFAULT_NULLABLE.compose(null));
 
-        ToDoubleNullable<Boolean> composed = DEFAULT_NULLABLE.compose(Object::toString);
+        final ToDoubleNullable<Boolean> composed = DEFAULT_NULLABLE.compose(Object::toString);
 
         assertNotNull(composed);
     }

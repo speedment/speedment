@@ -21,13 +21,13 @@
  */
 package com.speedment.runtime.compute;
 
+import static com.speedment.runtime.compute.TestUtil.strings;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.speedment.runtime.compute.expression.ExpressionType;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-
-import static com.speedment.runtime.compute.TestUtil.strings;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
@@ -86,6 +86,9 @@ final class ToBigDecimalTest extends AbstractToTest<ToBigDecimal<String>> {
         strings().forEach(s -> {
             final ToBigDecimal<String> created = ToBigDecimal.of(str -> BigDecimal.valueOf(str.length()));
             assertEquals(BigDecimal.valueOf(s.length()), created.apply(s));
+
+            final ToBigDecimal<String> fromToBigDecimal = ToBigDecimal.of(created);
+            assertEquals(BigDecimal.valueOf(s.length()), fromToBigDecimal.apply(s));
         });
     }
 
