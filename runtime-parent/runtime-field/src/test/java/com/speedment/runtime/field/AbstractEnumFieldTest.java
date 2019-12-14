@@ -17,43 +17,38 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.predicate.Inclusion;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.function.Function;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  *
  * @author pemi
  */
 @ExtendWith(MockitoExtension.class)
-abstract class AbstractStringFieldTest extends BaseFieldTest {
+abstract class AbstractEnumFieldTest extends BaseFieldTest {
 
     private final Set<String> SAMPLES = unmodifiableSet(Stream.of("a", "b", "AbCd", "aQhAj!wgW")
         .collect(toSet()));
 
-    protected StringField<TestEntity, String> field;
-    private final RerferenceFieldTestSupport<String> support;
+    protected EnumField<TestEntity, String, TestEntity.TestEnum> field;
+    private final RerferenceFieldTestSupport<TestEntity.TestEnum> support;
     private @Mock Column column;
 
-    public AbstractStringFieldTest(StringField<TestEntity, String> field) {
+    public AbstractEnumFieldTest(EnumField<TestEntity, String, TestEntity.TestEnum> field) {
         this.field = requireNonNull(field);
-        this.support = new RerferenceFieldTestSupport<>(field, Function.identity(), TestEntity::getName, TestEntity::setName, RerferenceFieldTestSupport.NAME, "Sven");
-/*        this.support = new RerferenceFieldTestSupport<>(field);*/
+        this.support = new RerferenceFieldTestSupport<>(field, Object::toString, TestEntity::getEnum, TestEntity::setEnum, TestEntity.TestEnum.TRYGGVE, TestEntity.TestEnum.SVEN);
     }
 
     @Test
@@ -63,16 +58,20 @@ abstract class AbstractStringFieldTest extends BaseFieldTest {
 
     @Test
     void equalIgnoreCase() {
-        final List<TestEntity> expected = collect(e -> e.getName() != null && e.getName().equalsIgnoreCase("abcdef"));
-        final List<TestEntity> result = collect(field.equalIgnoreCase("abcdef"));
+        final List<TestEntity> expected = collect(e -> e.getEnum() != null && e.getEnum().toString().equalsIgnoreCase(TestEntity.TestEnum.GLENN.toString()));
+        final List<TestEntity> result = collect(field.equalIgnoreCase(TestEntity.TestEnum.GLENN.toString().toLowerCase()));
 
         assertEquals(expected, result);
-        assertEquals(4, collect(field.isNull()).size());
+        final long nulls = entities.stream().filter(e -> e.getEnum() == null).count();
+        assertEquals(nulls, collect(field.isNull()).size());
         assertThrows(NullPointerException.class, () ->
             collect(field.equalIgnoreCase(null))
         );
 
     }
+
+    /*
+
 
     @Test
     void notEqualIgnoreCase() {
@@ -238,30 +237,13 @@ abstract class AbstractStringFieldTest extends BaseFieldTest {
         assertNotNull(field.toString());
     }
 
-
-
-    /*
-    @Test
-    void getField() {
-        final StringField<TestEntity, String> other = field.getField();
-        assertNotNull(other);
-    }
-*/
     @Test
     void comparator() {
         comparator(false);
     }
 
-    /*
-    @Test
-    void comparatorReversed() {
-        comparator(true);
-    }
-    */
-
-
     void comparator(final boolean reversed) {
-        final List<TestEntity> list = Arrays.asList(new TestEntityImpl(3, "C", null), new TestEntityImpl(2, "A", null), new TestEntityImpl(2, "B", null));
+        final List<TestEntity> list = Arrays.asList(new TestEntityImpl(3, "C"), new TestEntityImpl(2, "A"), new TestEntityImpl(2, "B"));
 
         final Comparator<TestEntity> comparatorExpected = Comparator.comparing(TestEntity::getName);
         final List<TestEntity> expected = new ArrayList<>(list);
@@ -300,23 +282,8 @@ abstract class AbstractStringFieldTest extends BaseFieldTest {
         assertEquals(name, field.tableAlias(name).tableAlias());
         assertEquals(field.identifier().getColumnId(), field.tableAlias(name).identifier().getColumnId());
     }
-/*
-    @Test
-    void getNullOrder() {
-        assertEquals(NullOrder.LAST, field.getNullOrder());
-    }
 
-    @Test
-    void isReversed() {
-        assertFalse(field.isReversed());
-    }
-*/
-    @Test
-    void setter() {
-        final String expected = "Olle";
-        final TestEntity entity = new TestEntityImpl(1, "A", null);
-        field.setter().set(entity, expected);
-        assertEquals(expected, entity.getName());
-    }
+
+   */
 
 }

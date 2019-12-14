@@ -24,9 +24,11 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @author pemi
  */
 public interface TestEntity {
-    
+
+    enum TestEnum { OLLE, SVEN, GLENN, TRYGGVE };
+
     enum Identifier implements ColumnIdentifier<TestEntity> {
-        ID("id"), NAME("name");
+        ID("id"), NAME("name"), ENUM("enum");
         
         private final String columnName;
         
@@ -75,12 +77,40 @@ public interface TestEntity {
     );
 
 
+    EnumField<TestEntity, String, TestEntity.TestEnum> ENUM = EnumField.create(
+        Identifier.ENUM,
+        TestEntity::getEnum,
+        TestEntity::setEnum,
+        new TestEnumTypeMapper(),
+        Enum::toString,
+        TestEnum::valueOf,
+        TestEnum.class
+    );
+
+    EnumForeignKeyField<TestEntity, String, TestEnum, ?> FK_ENUM = EnumForeignKeyField.create(
+        Identifier.ENUM,
+        TestEntity::getEnum,
+        TestEntity::setEnum,
+        new TestEnumTypeMapper(),
+        ENUM,
+        Enum::toString,
+        TestEnum::valueOf,
+        TestEnum.class
+    );
+
+
     Integer getId();
 
     String getName();
 
+    TestEnum getEnum();
+
     TestEntity setId(Integer id);
 
     TestEntity setName(String name);
+
+    TestEntity setEnum(TestEnum testEnum);
+
+    TestEntity copy();
 
 }

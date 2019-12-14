@@ -43,8 +43,11 @@ public abstract class BaseFieldTest {
             ""
         ).collect(toList());
 
-        final AtomicInteger id = new AtomicInteger();
-        entities = names.stream().map(name -> new TestEntityImpl(id.getAndIncrement(), name)).collect(toList());
+        final AtomicInteger idCnt = new AtomicInteger();
+        final AtomicInteger enumCnt = new AtomicInteger();
+        final TestEntity.TestEnum[] values = Stream.concat(Stream.of(TestEntity.TestEnum.values()), Stream.of((TestEntity.TestEnum) null)).toArray(TestEntity.TestEnum[]::new);
+
+        entities = names.stream().map(name -> new TestEntityImpl(idCnt.getAndIncrement(), name, values[enumCnt.getAndIncrement() % values.length])).collect(toList());
     }
 
     public List<TestEntity> collect(Predicate<TestEntity> predicate) {

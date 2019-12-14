@@ -19,6 +19,8 @@ package com.speedment.runtime.field;
 import com.speedment.runtime.typemapper.TypeMapper;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Function;
+
 /**
  *
  * @author pemi
@@ -39,7 +41,7 @@ final class RerferenceFieldTest {
 
     @Test
     void testAll() {
-        final RerferenceFieldTestSupport support = new RerferenceFieldTestSupport(field);
+        final RerferenceFieldTestSupport<String> support = new RerferenceFieldTestSupport<>(field, Function.identity(), TestEntity::getName, TestEntity::setName, RerferenceFieldTestSupport.NAME, "Sven");
         support.testAll();
     }
 

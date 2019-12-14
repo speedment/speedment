@@ -24,10 +24,12 @@ public class TestEntityImpl implements TestEntity {
 
     private Integer id;
     private String name;
+    private TestEnum testEnum;
 
-    public TestEntityImpl(Integer id, String name) {
+    public TestEntityImpl(Integer id, String name, TestEnum testEnum) {
         this.id = id;
         this.name = name;
+        this.testEnum = testEnum;
     }
 
     @Override
@@ -38,6 +40,10 @@ public class TestEntityImpl implements TestEntity {
     @Override
     public String getName() {
         return name;
+    }
+
+    public TestEnum getEnum() {
+        return testEnum;
     }
 
     @Override
@@ -52,9 +58,22 @@ public class TestEntityImpl implements TestEntity {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return TestEntityImpl.class.getSimpleName() + " { id: " + id + ", name: \"" + name + "\"}";
+    public TestEntity setEnum(TestEnum testEnum) {
+        this.testEnum = testEnum;
+        return this;
     }
 
+    @Override
+    public String toString() {
+        return "TestEntityImpl{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", testEnum=" + testEnum +
+            '}';
+    }
+
+    @Override
+    public TestEntity copy() {
+        return new TestEntityImpl(id, name, testEnum);
+    }
 }
