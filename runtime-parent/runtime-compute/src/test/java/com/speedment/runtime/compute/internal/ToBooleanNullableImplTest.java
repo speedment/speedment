@@ -70,7 +70,7 @@ final class ToBooleanNullableImplTest {
 
     @Test
     void orElseGet() {
-        ToBoolean<String> toBoolean = instance.orElseGet(string -> true);
+        final ToBoolean<String> toBoolean = instance.orElseGet(string -> true);
 
         assertNotNull(toBoolean);
         assertTrue(toBoolean.applyAsBoolean("three"));
@@ -79,7 +79,7 @@ final class ToBooleanNullableImplTest {
 
     @Test
     void orElse() {
-        ToBoolean<String> toBoolean = instance.orElse(true);
+        final ToBoolean<String> toBoolean = instance.orElse(true);
 
         assertNotNull(toBoolean);
         assertTrue(toBoolean.applyAsBoolean("three"));
@@ -88,28 +88,31 @@ final class ToBooleanNullableImplTest {
 
     @Test
     void mapToDoubleIfPresent() {
-        ToDoubleNullable<String> toDoubleNullable = instance
+        final ToDoubleNullable<String> toDoubleNullable = instance
                 .mapToDoubleIfPresent(bool -> bool ? 1 : 0);
 
         assertNotNull(toDoubleNullable);
         assertEquals(1, toDoubleNullable.applyAsDouble("three"));
         assertEquals(0, toDoubleNullable.applyAsDouble("1"));
+        assertNull(toDoubleNullable.apply(null));
     }
 
     @Test
     void mapIfPresent() {
-        ToBooleanNullable<String> toBooleanNullable = instance.mapIfPresent(bool -> !bool);
+        final ToBooleanNullable<String> toBooleanNullable = instance.mapIfPresent(bool -> !bool);
 
         assertNotNull(toBooleanNullable);
         assertTrue(toBooleanNullable.applyAsBoolean("1"));
         assertFalse(toBooleanNullable.applyAsBoolean("three"));
+        assertNull(toBooleanNullable.apply(null));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"test", "foo"})
     void hash(String input) {
         assertEquals(2, instance.hash(null));
-        assertNotEquals(0, instance.hash(input));
+        assertEquals(1, instance.hash(input));
+        assertEquals(0, instance.hash("a"));
     }
 
     @Test
@@ -125,11 +128,13 @@ final class ToBooleanNullableImplTest {
     @Test
     void isNull() {
         assertTrue(instance.isNull(null));
+        assertFalse(instance.isNull("test"));
     }
 
     @Test
     void isNotNull() {
         assertTrue(instance.isNotNull("test"));
+        assertFalse(instance.isNotNull(null));
     }
 
     @Test
@@ -138,12 +143,24 @@ final class ToBooleanNullableImplTest {
         assertTrue(instance.equals(copy));
         assertFalse(instance.equals(null));
 
-        final ToBooleanNullableImpl<String> another = new ToBooleanNullableImpl<>(
-                instance.inner(),
-                instance.isNullPredicate()
+        final ToBooleanNullable<String> another = new ToBooleanNullableImpl<>(
+            instance.inner(),
+            instance.isNullPredicate()
+        );
+
+        final ToBooleanNullable<String> originalSame = new ToBooleanNullableImpl<>(
+            instance.inner(),
+            Objects::isNull
+        );
+
+        final ToBooleanNullable<String> isNullSame = new ToBooleanNullableImpl<>(
+            string -> string.length() > 2,
+            instance.isNullPredicate()
         );
 
         assertTrue(instance.equals(another));
+        assertFalse(instance.equals(originalSame));
+        assertFalse(instance.equals(isNullSame));
     }
 
     @Test

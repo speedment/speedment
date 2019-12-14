@@ -71,7 +71,7 @@ final class ToIntNullableImplTest {
 
     @Test
     void orElseGet() {
-        ToInt<String> toInt = instance.orElseGet(string -> 0);
+        final ToInt<String> toInt = instance.orElseGet(string -> 0);
 
         assertNotNull(toInt);
         assertEquals("three".length(), toInt.applyAsInt("three"));
@@ -80,7 +80,7 @@ final class ToIntNullableImplTest {
 
     @Test
     void orElse() {
-        ToInt<String> toInt = instance.orElse(0);
+        final ToInt<String> toInt = instance.orElse(0);
 
         assertNotNull(toInt);
         assertEquals("three".length(), toInt.applyAsInt("three"));
@@ -89,19 +89,21 @@ final class ToIntNullableImplTest {
 
     @Test
     void mapToDoubleIfPresent() {
-        ToDoubleNullable<String> toDoubleNullable = instance
+        final ToDoubleNullable<String> toDoubleNullable = instance
                 .mapToDoubleIfPresent(i -> 1);
 
         assertNotNull(toDoubleNullable);
         assertEquals(1, toDoubleNullable.applyAsDouble("three"));
+        assertNull(toDoubleNullable.apply(null));
     }
 
     @Test
     void mapIfPresent() {
-        ToIntNullable<String> toIntNullable = instance.mapIfPresent(i -> 0);
+        final ToIntNullable<String> toIntNullable = instance.mapIfPresent(i -> 0);
 
         assertNotNull(toIntNullable);
         assertEquals(0, toIntNullable.applyAsInt("1"));
+        assertNull(toIntNullable.apply(null));
     }
 
     @ParameterizedTest
@@ -124,11 +126,13 @@ final class ToIntNullableImplTest {
     @Test
     void isNull() {
         assertTrue(instance.isNull(null));
+        assertFalse(instance.isNull("test"));
     }
 
     @Test
     void isNotNull() {
         assertTrue(instance.isNotNull("test"));
+        assertFalse(instance.isNotNull(null));
     }
 
     @Test
@@ -137,12 +141,24 @@ final class ToIntNullableImplTest {
         assertTrue(instance.equals(copy));
         assertFalse(instance.equals(null));
 
-        final ToIntNullableImpl<String> another = new ToIntNullableImpl<>(
-                instance.inner(),
-                instance.isNullPredicate()
+        final ToIntNullable<String> another = new ToIntNullableImpl<>(
+            instance.inner(),
+            instance.isNullPredicate()
+        );
+
+        final ToIntNullable<String> originalSame = new ToIntNullableImpl<>(
+            instance.inner(),
+            Objects::isNull
+        );
+
+        final ToIntNullable<String> isNullSame = new ToIntNullableImpl<>(
+            String::length,
+            instance.isNullPredicate()
         );
 
         assertTrue(instance.equals(another));
+        assertFalse(instance.equals(originalSame));
+        assertFalse(instance.equals(isNullSame));
     }
 
     @Test

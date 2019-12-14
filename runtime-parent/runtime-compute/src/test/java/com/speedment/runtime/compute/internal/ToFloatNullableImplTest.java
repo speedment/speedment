@@ -71,7 +71,7 @@ final class ToFloatNullableImplTest {
 
     @Test
     void orElseGet() {
-        ToFloat<String> toFloat = instance.orElseGet(string -> 0);
+        final ToFloat<String> toFloat = instance.orElseGet(string -> 0);
 
         assertNotNull(toFloat);
         assertEquals("three".length(), toFloat.applyAsFloat("three"));
@@ -80,7 +80,7 @@ final class ToFloatNullableImplTest {
 
     @Test
     void orElse() {
-        ToFloat<String> toFloat = instance.orElse((float) 0);
+        final ToFloat<String> toFloat = instance.orElse((float) 0);
 
         assertNotNull(toFloat);
         assertEquals("three".length(), toFloat.applyAsFloat("three"));
@@ -89,19 +89,21 @@ final class ToFloatNullableImplTest {
 
     @Test
     void mapToDoubleIfPresent() {
-        ToDoubleNullable<String> toDoubleNullable = instance
+        final ToDoubleNullable<String> toDoubleNullable = instance
                 .mapToDoubleIfPresent(f -> 1);
 
         assertNotNull(toDoubleNullable);
         assertEquals(1, toDoubleNullable.applyAsDouble("three"));
+        assertNull(toDoubleNullable.apply(null));
     }
 
     @Test
     void mapIfPresent() {
-        ToFloatNullable<String> toFloatNullable = instance.mapIfPresent(f -> 0);
+        final ToFloatNullable<String> toFloatNullable = instance.mapIfPresent(f -> 0);
 
         assertNotNull(toFloatNullable);
         assertEquals(0, toFloatNullable.applyAsFloat("1"));
+        assertNull(toFloatNullable.apply(null));
     }
 
     @ParameterizedTest
@@ -124,11 +126,13 @@ final class ToFloatNullableImplTest {
     @Test
     void isNull() {
         assertTrue(instance.isNull(null));
+        assertFalse(instance.isNull("test"));
     }
 
     @Test
     void isNotNull() {
         assertTrue(instance.isNotNull("test"));
+        assertFalse(instance.isNotNull(null));
     }
 
     @Test
@@ -137,12 +141,24 @@ final class ToFloatNullableImplTest {
         assertTrue(instance.equals(copy));
         assertFalse(instance.equals(null));
 
-        final ToFloatNullableImpl<String> another = new ToFloatNullableImpl<>(
-                instance.inner(),
-                instance.isNullPredicate()
+        final ToFloatNullable<String> another = new ToFloatNullableImpl<>(
+            instance.inner(),
+            instance.isNullPredicate()
+        );
+
+        final ToFloatNullable<String> originalSame = new ToFloatNullableImpl<>(
+            instance.inner(),
+            Objects::isNull
+        );
+
+        final ToFloatNullable<String> isNullSame = new ToFloatNullableImpl<>(
+            String::length,
+            instance.isNullPredicate()
         );
 
         assertTrue(instance.equals(another));
+        assertFalse(instance.equals(originalSame));
+        assertFalse(instance.equals(isNullSame));
     }
 
     @Test
