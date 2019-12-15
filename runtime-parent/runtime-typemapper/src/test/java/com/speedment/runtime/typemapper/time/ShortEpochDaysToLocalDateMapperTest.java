@@ -2,7 +2,6 @@ package com.speedment.runtime.typemapper.time;
 
 import com.speedment.runtime.typemapper.AbstractTypeMapperTest;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,7 @@ final class ShortEpochDaysToLocalDateMapperTest extends AbstractTypeMapperTest<S
     protected Map<Short, LocalDate> testVector() {
         Map<Short, LocalDate> map = new HashMap<>();
         map.put(Short.valueOf("9133"), LocalDate.of(1995,01,03));
-        map.put(Short.valueOf("0"), LocalDate.EPOCH);
+        map.put(Short.valueOf("0"), LocalDate.of(1970, 1, 1));
         map.put(null, null);
         return map;
     }

@@ -23,7 +23,7 @@ final class IntEpochDaysToLocalDateMapperTest extends AbstractTypeMapperTest<Int
     protected Map<Integer, LocalDate> testVector() {
         Map<Integer, LocalDate> map = new HashMap<>();
         map.put(9133, LocalDate.of(1995,01,03));
-        map.put(0, LocalDate.EPOCH);
+        map.put(0, LocalDate.of(1970, 1, 1));
         map.put(null, null);
         return map;
     }
