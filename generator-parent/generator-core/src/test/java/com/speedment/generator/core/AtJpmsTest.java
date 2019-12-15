@@ -15,7 +15,7 @@
  * the License.
  */
 
-package com.speedment.generator;
+package com.speedment.generator.core;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
