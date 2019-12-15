@@ -1,15 +1,15 @@
 package com.speedment.common.mapstream;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.*;
 import java.util.stream.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 final class MapStreamTest {
 
@@ -304,256 +304,492 @@ final class MapStreamTest {
 
     @Test
     void distinct() {
+        final MapStream<String, Integer> ms = MapStream.of(entry("Eins", 1), entry("Eins", 1));
+        assertEquals(1, ms.distinct().count());
     }
 
     @Test
     void distinctKeys() {
+        final MapStream<String, Integer> ms = MapStream.of(entry("Car", 1), entry("Car", 2));
+        assertEquals(1, ms.distinctKeys().count());
     }
 
     @Test
     void distinctValues() {
+        final MapStream<String, Integer> ms = MapStream.of(entry("jedan", 1), entry("Eins", 1));
+        assertEquals(1, ms.distinctValues().count());
     }
 
     @Test
     void testDistinctKeys() {
+        final MapStream<String, Integer> ms = MapStream.of(entry("Car", 1), entry("Car", 2));
+        assertEquals(3, ms.distinctKeys(Integer::sum).values().mapToInt(i -> i).sum());
     }
 
     @Test
     void testDistinctValues() {
+        final Map<String, Integer> expected = MapStream.of(entry("Einsjedan", 1)).toMap();
+        final MapStream<String, Integer> ms = MapStream.of(entry("jedan", 1), entry("Eins", 1));
+        final Map<String, Integer> actual = ms.distinctValues((a, b) -> a + b).toMap();
+        assertEquals(expected, actual);
     }
 
     @Test
     void sorted() {
+        final List<Map.Entry<String, Integer>> expected = refStream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = instance.sorted().toList();
+        assertEquals(expected, actual);
     }
 
     @Test
     void testSorted() {
+        final List<Map.Entry<String, Integer>> expected = refStream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = instance.sorted(Map.Entry.comparingByValue()).toList();
+        assertEquals(expected, actual);
     }
 
     @Test
     void sortedByKey() {
+        final Comparator<Map.Entry<String, Integer>> comparator = Map.Entry.comparingByKey(); // Java's type inference can be improved...
+        final List<Map.Entry<String, Integer>> expected = refStream().sorted(comparator.reversed()).collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = instance.sortedByKey(Comparator.reverseOrder()).toList();
+        assertEquals(expected, actual);
     }
 
     @Test
     void sortedByValue() {
+        final Comparator<Map.Entry<String, Integer>> comparator = Map.Entry.comparingByValue(); // Java's type inference can be improved...
+        final List<Map.Entry<String, Integer>> expected = refStream().sorted(comparator.reversed()).collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = instance.sortedByValue(Comparator.reverseOrder()).toList();
+        assertEquals(expected, actual);
     }
 
     @Test
     void peek() {
+        final List<Map.Entry<String, Integer>> entries = new ArrayList<>();
+        instance
+            .peek((Consumer<Map.Entry<String, Integer>>) entries::add)
+            .forEach(unused -> {});
+        assertEquals(refStream().collect(Collectors.toList()), entries);
     }
 
     @Test
     void testPeek() {
+        final List<Map.Entry<String, Integer>> entries = new ArrayList<>();
+        instance
+            .peek((k, v) -> entries.add(entry(k, v)))
+            .forEach(unused -> {});
+        assertEquals(refStream().collect(Collectors.toList()), entries);
     }
 
     @Test
     void limit() {
+        assertEquals(1L, instance.limit(1).count());
     }
 
     @Test
     void skip() {
+        assertEquals(refStream().skip(1).count(), instance.skip(1).count());
     }
 
     @Test
     void forEach() {
+        final Set<Map.Entry<String, Integer>> entries = new HashSet<>();
+        instance
+            .forEach((Consumer<Map.Entry<String, Integer>>) entries::add);
+        assertEquals(refStream().collect(Collectors.toSet()), entries);
     }
 
     @Test
     void testForEach() {
+        final Set<Map.Entry<String, Integer>> entries = new HashSet<>();
+        instance
+            .forEach((k, v) -> entries.add(entry(k, v)));
+        assertEquals(refStream().collect(Collectors.toSet()), entries);
     }
 
     @Test
     void forEachOrdered() {
+        final List<Map.Entry<String, Integer>> entries = new ArrayList<>();
+        instance
+            .forEach((Consumer<Map.Entry<String, Integer>>) entries::add);
+        assertEquals(refStream().collect(Collectors.toList()), entries);
     }
 
     @Test
     void testForEachOrdered() {
+        final List<Map.Entry<String, Integer>> entries = new ArrayList<>();
+        instance
+            .forEach((k, v) -> entries.add(entry(k, v)));
+        assertEquals(refStream().collect(Collectors.toList()), entries);
     }
 
     @Test
     void toArray() {
+        final Object[] expected = refStream().toArray();
+        final Object[] actual = instance.toArray();
+        assertArrayEquals(expected, actual);
     }
 
     @Test
     void testToArray() {
+        final Map.Entry[] expected = refStream().toArray(Map.Entry[]::new);
+        final Map.Entry[] actual = instance.toArray(Map.Entry[]::new);
+        assertArrayEquals(expected, actual);
     }
 
     @Test
     void reduce() {
+        final Optional<Map.Entry<String, Integer>> expected = Optional.of(entry("jedandvatri", 1 + 2 + 3));
+        final Optional<Map.Entry<String, Integer>> actual = instance.reduce((e0, e1) -> entry(e0.getKey()+e1.getKey() , e0.getValue()+e1.getValue()));
+        assertEquals(expected, actual);
     }
 
     @Test
     void testReduce() {
+        final Map.Entry<String, Integer> expected = entry("jedandvatri", 1 + 2 + 3);
+        final Map.Entry<String, Integer> actual = instance.reduce(entry("", 0), (e0, e1) -> entry(e0.getKey()+e1.getKey() , e0.getValue()+e1.getValue()));
+        assertEquals(expected, actual);
     }
 
     @Test
     void testReduce1() {
+        final Map.Entry<String, Integer> expected = entry("jedandvatri", 1 + 2 + 3);
+        final Map.Entry<String, Integer> actual = instance.reduce(entry("", 0), (e0, e1) -> entry(e0.getKey()+e1.getKey() , e0.getValue()+e1.getValue()), (e0, e1) -> entry(e0.getKey()+e1.getKey() , e0.getValue()+e1.getValue()));
+        assertEquals(expected, actual);
     }
 
     @Test
     void collect() {
+        final List<Map.Entry<String, Integer>> expected = refStream().collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = instance.collect(Collectors.toList());
+        assertEquals(expected, actual);
     }
 
     @Test
     void testCollect() {
+        final Supplier<List<Map.Entry<String, Integer>>> supplier =  ArrayList::new;
+        final BiConsumer<List<Map.Entry<String, Integer>>, Map.Entry<String, Integer>> accumulator = List::add;
+        final BiConsumer<List<Map.Entry<String, Integer>>, List<Map.Entry<String, Integer>>> combiner = List::addAll;
+        final List<Map.Entry<String, Integer>> expected = refStream().collect(supplier, accumulator, combiner);
+        final List<Map.Entry<String, Integer>> actual = instance.collect(supplier, accumulator, combiner);
+        assertEquals(expected, actual);
     }
 
     @Test
     void groupingBy() {
+        final Function<Map.Entry<String, Integer>, Integer> classifier = (Map.Entry<String, Integer> e) -> e.getValue() % 2;
+        final Map<Integer, List<Integer>> expected = refStream()
+            .collect(Collectors.groupingBy(
+                classifier,
+                Collectors.mapping(Map.Entry::getValue, Collectors.toList()))
+            );
+        final Map<Integer, List<Integer>> actual = instance.groupingBy(v -> v % 2).toMap();
+        assertEquals(expected, actual);
     }
 
     @Test
     void min() {
+        final Optional<Map.Entry<String, Integer>> expected = refStream().min(Map.Entry.comparingByValue());
+        final Optional<Map.Entry<String, Integer>> actual = instance.min(Map.Entry.comparingByValue());
+        assertEquals(expected, actual);
     }
 
     @Test
     void minByKey() {
+        final Optional<Map.Entry<String, Integer>> expected = refStream().min(Map.Entry.comparingByKey());
+        final Optional<Map.Entry<String, Integer>> actual = instance.minByKey(Comparator.naturalOrder());
+        assertEquals(expected, actual);
     }
 
     @Test
     void minByValue() {
+        final Optional<Map.Entry<String, Integer>> expected = refStream().min(Map.Entry.comparingByValue());
+        final Optional<Map.Entry<String, Integer>> actual = instance.minByValue(Comparator.naturalOrder());
+        assertEquals(expected, actual);
     }
 
     @Test
     void max() {
+        final Optional<Map.Entry<String, Integer>> expected = refStream().max(Map.Entry.comparingByValue());
+        final Optional<Map.Entry<String, Integer>> actual = instance.max(Map.Entry.comparingByValue());
+        assertEquals(expected, actual);
     }
 
     @Test
     void maxByKey() {
+        final Optional<Map.Entry<String, Integer>> expected = refStream().max(Map.Entry.comparingByKey());
+        final Optional<Map.Entry<String, Integer>> actual = instance.maxByKey(Comparator.naturalOrder());
+        assertEquals(expected, actual);
     }
 
     @Test
     void maxByValue() {
+        final Optional<Map.Entry<String, Integer>> expected = refStream().max(Map.Entry.comparingByValue());
+        final Optional<Map.Entry<String, Integer>> actual = instance.maxByValue(Comparator.naturalOrder());
+        assertEquals(expected, actual);
     }
 
     @Test
     void count() {
+        final long expected = refStream().count();
+        final long actual = instance.count();
+        assertEquals(expected, actual);
     }
 
     @Test
     void anyMatch() {
+        final Predicate<Map.Entry<String, Integer>> predicate = e -> e.getKey().contains("a");
+        final boolean expected = refStream().anyMatch(predicate);
+        final boolean actual = instance.anyMatch(predicate);
+        assertEquals(expected, actual);
     }
 
     @Test
     void testAnyMatch() {
+        final Predicate<Map.Entry<String, Integer>> predicate = e -> e.getKey().contains("a");
+        final boolean expected = refStream().anyMatch(predicate);
+        final boolean actual = instance.anyMatch((k, v) -> k.contains("a"));
+        assertEquals(expected, actual);
     }
 
     @Test
     void allMatch() {
+        final Predicate<Map.Entry<String, Integer>> predicate = e -> !e.getKey().isEmpty();
+        final boolean expected = refStream().anyMatch(predicate);
+        final boolean actual = instance.anyMatch(predicate);
+        assertEquals(expected, actual);
     }
 
     @Test
     void testAllMatch() {
+        final Predicate<Map.Entry<String, Integer>> predicate = e -> !e.getKey().isEmpty();
+        final boolean expected = refStream().anyMatch(predicate);
+        final boolean actual = instance.anyMatch((k, v) -> !k.isEmpty());
+        assertEquals(expected, actual);
     }
 
     @Test
     void noneMatch() {
+        final Predicate<Map.Entry<String, Integer>> predicate = e -> e.getKey().isEmpty();
+        final boolean expected = refStream().anyMatch(predicate);
+        final boolean actual = instance.anyMatch(predicate);
+        assertEquals(expected, actual);
     }
 
     @Test
     void testNoneMatch() {
+        final Predicate<Map.Entry<String, Integer>> predicate = e -> e.getKey().isEmpty();
+        final boolean expected = refStream().anyMatch(predicate);
+        final boolean actual = instance.anyMatch((k, v) -> k.isEmpty());
+        assertEquals(expected, actual);
     }
 
     @Test
     void findFirst() {
+        final Optional<Map.Entry<String, Integer>> expected = refStream().findFirst();
+        final Optional<Map.Entry<String, Integer>> actual = instance.findFirst();
+        assertEquals(expected, actual);
     }
 
     @Test
     void findAny() {
+        assertTrue(instance.findAny().isPresent());
     }
 
     @Test
     void iterator() {
+        final List<Map.Entry<String, Integer>> expected = refStream().collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = new ArrayList<>();
+        final Iterator<Map.Entry<String, Integer>> iterator = instance.iterator();
+        while (iterator.hasNext()) {
+            actual.add(iterator.next());
+        }
+        assertEquals(expected, actual);
     }
 
     @Test
     void spliterator() {
+        final List<Map.Entry<String, Integer>> expected = refStream().collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = new ArrayList<>();
+        final Spliterator<Map.Entry<String, Integer>> spliterator = instance.spliterator();
+        spliterator.forEachRemaining(actual::add);
+        assertEquals(expected, actual);
     }
 
     @Test
     void isParallel() {
+        assertFalse(instance.isParallel());
+        assertTrue(MapStream.of(stringToint, true).isParallel());
     }
 
     @Test
     void sequential() {
+        assertNotNull(instance.sequential());
     }
 
     @Test
     void parallel() {
+        assertFalse(instance.isParallel());
+        assertTrue(instance.parallel().isParallel());
     }
 
     @Test
     void unordered() {
+        assertNotNull(instance.unordered());
     }
 
     @Test
     void onClose() {
+        final AtomicInteger cnt = new AtomicInteger();
+        instance.onClose(cnt::incrementAndGet);
+        instance.close();
+        assertEquals(1, cnt.get());
     }
 
     @Test
     void close() {
+        assertDoesNotThrow(instance::close);
     }
 
     @Test
     void toMap() {
+        final Map<String, Integer> expected = refStream().collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toMap();
+        assertEquals(expected, actual);
     }
 
     @Test
     void testToMap() {
+        final Map<String, Integer> expected = refStream().collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toMap(MapStream.throwingMerger());
+        assertEquals(expected, actual);
+        assertThrows(IllegalStateException.class, () -> {
+            final Object o = MapStream.of(entry("Olle", 1), entry("Olle", 2))
+                .toMap(MapStream.throwingMerger());
+        });
     }
 
     @Test
     void toConcurrentMap() {
+        final Map<String, Integer> expected = refStream().collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toConcurrentMap();
+        assertEquals(expected, actual);
+        assertTrue(actual instanceof ConcurrentMap);
     }
 
     @Test
     void testToConcurrentMap() {
+        final Map<String, Integer> expected = refStream().collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toConcurrentMap(MapStream.throwingMerger());
+        assertEquals(expected, actual);
+        assertTrue(actual instanceof ConcurrentMap);
+        assertThrows(IllegalStateException.class, () -> {
+            final Object o = MapStream.of(entry("Olle", 1), entry("Olle", 2))
+                .toConcurrentMap(MapStream.throwingMerger());
+        });
     }
 
     @Test
     void toSortedMap() {
+        final Map<String, Integer> expected = refStream().collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toSortedMap();
+        assertEquals(expected, actual);
+        assertTrue(actual instanceof NavigableMap);
     }
 
     @Test
     void toSortedMapByKey() {
+        final Comparator<String> keyComparator = Comparator.reverseOrder();
+        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToint.get(k))).collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toSortedMapByKey(keyComparator);
+        assertEquals(expected, actual);
+        assertTrue(actual instanceof NavigableMap);
     }
 
     @Test
     void testToSortedMap() {
+        final Map<String, Integer> expected = refStream().collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toSortedMap(MapStream.throwingMerger());
+        assertEquals(expected, actual);
+        assertTrue(actual instanceof NavigableMap);
+        assertThrows(IllegalStateException.class, () -> {
+            final Object o = MapStream.of(entry("Olle", 1), entry("Olle", 2))
+                .toSortedMap(MapStream.throwingMerger());
+        });
     }
 
     @Test
     void testToSortedMap1() {
+        final Comparator<String> keyComparator = Comparator.reverseOrder();
+        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToint.get(k))).collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toSortedMap(keyComparator, MapStream.throwingMerger());
+        assertEquals(expected, actual);
+        assertTrue(actual instanceof NavigableMap);
+        assertThrows(IllegalStateException.class, () -> {
+            final Object o = MapStream.of(entry("Olle", 1), entry("Olle", 2))
+                .toSortedMap(keyComparator, MapStream.throwingMerger());
+        });
     }
 
     @Test
     void toConcurrentNavigableMap() {
+        final Map<String, Integer> expected = refStream().collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toConcurrentNavigableMap();
+        assertEquals(expected, actual);
     }
 
     @Test
     void toConcurrentNavigableMapByKey() {
+        final Comparator<String> keyComparator = Comparator.reverseOrder();
+        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToint.get(k))).collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toConcurrentNavigableMapByKey(keyComparator);
+        assertEquals(expected, actual);
     }
 
     @Test
     void testToConcurrentNavigableMap() {
+        final Map<String, Integer> expected = refStream().collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toConcurrentNavigableMap(MapStream.throwingMerger());
+        assertEquals(expected, actual);
+        assertThrows(IllegalStateException.class, () -> {
+            final Object o = MapStream.of(entry("Olle", 1), entry("Olle", 2))
+                .toConcurrentNavigableMap(MapStream.throwingMerger());
+        });
     }
 
     @Test
     void testToConcurrentNavigableMap1() {
+        final Comparator<String> keyComparator = Comparator.reverseOrder();
+        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToint.get(k))).collect(TO_MAP);
+        final Map<String, Integer> actual = instance.toConcurrentNavigableMap(keyComparator, MapStream.throwingMerger());
+        assertEquals(expected, actual);
+        assertThrows(IllegalStateException.class, () -> {
+            final Object o = MapStream.of(entry("Olle", 1), entry("Olle", 2))
+                .toConcurrentNavigableMap(keyComparator, MapStream.throwingMerger());
+        });
     }
 
     @Test
     void toList() {
+        final List<Map.Entry<String, Integer>> expected = refStream().collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = instance.toList();
+        assertEquals(expected, actual);
     }
 
     @Test
     void comparing() {
+        final Comparator<String> comparator = MapStream.comparing(s -> s.charAt(0), s -> s.charAt(1), s -> s.charAt(2));
+        final List<Map.Entry<String, Integer>> expected = refStream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
+        final List<Map.Entry<String, Integer>> actual = instance.sortedByKey(comparator).collect(Collectors.toList());
+        assertEquals(expected, actual);
     }
 
     @Test
     void throwingMerger() {
+        final BinaryOperator<Integer> merger = MapStream.throwingMerger();
+        assertThrows(IllegalStateException.class, () -> merger.apply(42, 42));
     }
-
 
     private static Stream<Map.Entry<String, Integer>> refStream() {
         return Stream.of(
