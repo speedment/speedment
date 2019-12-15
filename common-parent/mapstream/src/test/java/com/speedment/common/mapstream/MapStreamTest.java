@@ -29,6 +29,7 @@ final class MapStreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void of() {
         final MapStream<String, Integer> ms = MapStream.of(refStream().toArray(Map.Entry[]::new));
         assertEquals(stringToint, ms.toMap());
@@ -342,11 +343,11 @@ final class MapStreamTest {
         final List<Map.Entry<String, Integer>> actual = instance.sorted().toList();
         assertEquals(expected, actual);
 
-        final MapStream<Object, Integer> ms = MapStream.of(entry(new Object(), 1));
-        assertThrows(UnsupportedOperationException.class, ms::sorted);
+        final MapStream<Object, Integer> ms = MapStream.of(entry(new Object(), 1), entry(new Object(), 2));
+        assertThrows(UnsupportedOperationException.class, () -> ms.sorted().forEach(e -> {}));
 
         final MapStream<String, Integer> ms2 = MapStream.of(entry(null, 1), entry(null, 2));
-        assertThrows(UnsupportedOperationException.class, ms::sorted);
+        assertDoesNotThrow(() -> ms2.sorted().forEach(e -> {}));
 
         // Todo: Test values with both null and string values
 
@@ -443,6 +444,7 @@ final class MapStreamTest {
     }
 
     @Test
+    @SuppressWarnings("rawtypes")
     void testToArray() {
         final Map.Entry[] expected = refStream().toArray(Map.Entry[]::new);
         final Map.Entry[] actual = instance.toArray(Map.Entry[]::new);
