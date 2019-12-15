@@ -26,6 +26,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import static java.util.Collections.newSetFromMap;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A java {@code Stream} wrapper that stream over Key-Value pairs. With this
@@ -52,7 +53,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return       created {@code MapStream}
      */
     public static <K, V> MapStream<K, V> of(Map.Entry<K, V> entry) {
-        return new MapStream<>(Stream.of(entry));
+        return new MapStream<>(requireNonNull(Stream.of(entry)));
     }
 
     /**
@@ -62,11 +63,12 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param <V>      value type
      * @param entries  elements to stream over
      * @return         created {@code MapStream}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @SafeVarargs // Creating a Stream of an array is safe.
     @SuppressWarnings({"unchecked", "varargs"})
     public static <K, V> MapStream<K, V> of(Map.Entry<K, V>... entries) {
-        return new MapStream<>(Stream.of(entries));
+        return new MapStream<>(Stream.of(requireNonNull(entries)));
     }
 
     /**
@@ -80,9 +82,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param <V>  value type
      * @param map  elements to stream over
      * @return     created {@code MapStream}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public static <K, V> MapStream<K, V> of(Map<K, V> map) {
-        return of(map, false);
+        return of(requireNonNull(map), false);
     }
     
     /**
@@ -98,9 +101,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param map       elements to stream over
      * @param parallel  if the new stream should be executed in parallel
      * @return          created {@code MapStream}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public static <K, V> MapStream<K, V> of(Map<K, V> map, boolean parallel) {
-        final MapStream<K, V> stream = new MapStream<>(map.entrySet().stream());
+        final MapStream<K, V> stream = new MapStream<>(requireNonNull(map).entrySet().stream());
         if (parallel) stream.inner = stream.inner.parallel();
         return stream;
     }
@@ -114,9 +118,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param <V>     value type
      * @param stream  stream to wrap
      * @return        created {@code MapStream}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public static <K, V> MapStream<K, V> of(Stream<Map.Entry<K, V>> stream) {
-        return new MapStream<>(stream);
+        return new MapStream<>(requireNonNull(stream));
     }
 
     /**
@@ -128,8 +133,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param keys          stream of keys to wrap
      * @param valueFromKey  method for calculating values from keys
      * @return              created {@code MapStream}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public static <K, V> MapStream<K, V> fromKeys(Stream<K> keys, Function<K, V> valueFromKey) {
+        requireNonNull(keys);
+        requireNonNull(valueFromKey);
         return new MapStream<>(keys.map(k -> new AbstractMap.SimpleEntry<>(k, valueFromKey.apply(k))));
     }
 
@@ -142,8 +150,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param values        stream of values to wrap
      * @param keyFromValue  method for calculating keys from values
      * @return              created {@code MapStream}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public static <K, V> MapStream<K, V> fromValues(Stream<V> values, Function<V, K> keyFromValue) {
+        requireNonNull(values);
+        requireNonNull(keyFromValue);
         return new MapStream<>(values.map(v -> new AbstractMap.SimpleEntry<>(keyFromValue.apply(v), v)));
     }
 
@@ -158,8 +169,12 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param keyMapper    method for calculating keys
      * @param valueMapper  method for calculating values
      * @return             created {@code MapStream}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public static <E, K, V> MapStream<K, V> fromStream(Stream<E> stream, Function<E, K> keyMapper, Function<E, V> valueMapper) {
+        requireNonNull(stream);
+        requireNonNull(keyMapper);
+        requireNonNull(valueMapper);
         return new MapStream<>(stream.map(
             e -> new AbstractMap.SimpleEntry<>(
                 keyMapper.apply(e),
@@ -188,10 +203,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param <V>       original value type
      * @param original  original MapStream
      * @return          new MapStream with keys and values flipped
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public static <K, V> MapStream<V, K> flip(MapStream<K, V> original) {
         return MapStream.fromStream(
-            original, 
+            requireNonNull(original),
             Map.Entry::getValue, 
             Map.Entry::getKey
         );
@@ -206,10 +222,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param predicate  a non-interfering, stateless predicate to apply to each 
      *                   element to determine if it should be included
      * @return           the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public MapStream<K, V> filter(Predicate<? super Map.Entry<K, V>> predicate) {
-        inner = inner.filter(predicate);
+        inner = inner.filter(requireNonNull(predicate));
         return this;
     }
 
@@ -222,8 +239,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param predicate  a non-interfering, stateless predicate to apply to each 
      *                   key-value pair to determine if it should be included
      * @return           the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public MapStream<K, V> filter(BiPredicate<? super K, ? super V> predicate) {
+        requireNonNull(predicate);
         return filter(e -> predicate.test(e.getKey(), e.getValue()));
     }
 
@@ -236,8 +255,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param predicate  a non-interfering, stateless predicate to apply to each 
      *                   key to determine if the entry should be included
      * @return           the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public MapStream<K, V> filterKey(Predicate<? super K> predicate) {
+        requireNonNull(predicate);
         return filter(e -> predicate.test(e.getKey()));
     }
     
@@ -250,8 +271,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param predicate  a non-interfering, stateless predicate to apply to each 
      *                   value to determine if the entry should be included
      * @return           the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public MapStream<K, V> filterValue(Predicate<? super V> predicate) {
+        requireNonNull(predicate);
         return filter(e -> predicate.test(e.getValue()));
     }
     
@@ -265,10 +288,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper a non-interfering, stateless function to apply to each 
      *               element
      * @return       the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public <R> Stream<R> map(Function<? super Map.Entry<K, V>, ? extends R> mapper) {
-        return inner.map(mapper);
+        return inner.map(requireNonNull(mapper));
     }
 
     /**
@@ -281,8 +305,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key-value pair
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> Stream<R> map(BiFunction<? super K, ? super V, ? extends R> mapper) {
+        requireNonNull(mapper);
         return map(e -> mapper.apply(e.getKey(), e.getValue()));
     }
 
@@ -296,8 +322,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key in the stream
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> MapStream<R, V> mapKey(BiFunction<? super K, ? super V, ? extends R> mapper) {
+        requireNonNull(mapper);
         return new MapStream<>(inner.map(e
             -> new AbstractMap.SimpleEntry<>(
                 mapper.apply(e.getKey(), e.getValue()),
@@ -316,8 +344,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key in the stream
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> MapStream<R, V> mapKey(Function<? super K, ? extends R> mapper) {
+        requireNonNull(mapper);
         return new MapStream<>(inner.map(e
             -> new AbstractMap.SimpleEntry<>(
                 mapper.apply(e.getKey()),
@@ -336,8 +366,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                value in the stream
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> MapStream<K, R> mapValue(BiFunction<? super K, ? super V, ? extends R> mapper) {
+        requireNonNull(mapper);
         return new MapStream<>(inner.map(e
             -> new AbstractMap.SimpleEntry<>(
                 e.getKey(),
@@ -356,8 +388,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                value in the stream
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> MapStream<K, R> mapValue(Function<? super V, ? extends R> mapper) {
+        requireNonNull(mapper);
         return new MapStream<>(inner.map(e
             -> new AbstractMap.SimpleEntry<>(
                 e.getKey(),
@@ -375,6 +409,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public IntStream mapToInt(ToIntFunction<? super Map.Entry<K, V>> mapper) {
@@ -390,8 +425,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public IntStream mapToInt(ToIntBiFunction<? super K, ? super V> mapper) {
+        requireNonNull(mapper);
         return inner.mapToInt(e -> mapper.applyAsInt(e.getKey(), e.getValue()));
     }
 
@@ -404,10 +441,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public LongStream mapToLong(ToLongFunction<? super Map.Entry<K, V>> mapper) {
-        return inner.mapToLong(mapper);
+        return inner.mapToLong(requireNonNull(mapper));
     }
 
     /**
@@ -419,8 +457,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public LongStream mapToLong(ToLongBiFunction<? super K, ? super V> mapper) {
+        requireNonNull(mapper);
         return inner.mapToLong(e -> mapper.applyAsLong(e.getKey(), e.getValue()));
     }
 
@@ -433,10 +473,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public DoubleStream mapToDouble(ToDoubleFunction<? super Map.Entry<K, V>> mapper) {
-        return inner.mapToDouble(mapper);
+        return inner.mapToDouble(requireNonNull(mapper));
     }
 
     /**
@@ -448,8 +489,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public DoubleStream mapToDouble(ToDoubleBiFunction<? super K, ? super V> mapper) {
+        requireNonNull(mapper);
         return inner.mapToDouble(e -> mapper.applyAsDouble(e.getKey(), e.getValue()));
     }
 
@@ -491,10 +534,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element which produces a stream of new elements
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public <R> Stream<R> flatMap(Function<? super Map.Entry<K, V>, ? extends Stream<? extends R>> mapper) {
-        return inner.flatMap(mapper);
+        return inner.flatMap(requireNonNull(mapper));
     }
 
     /**
@@ -535,8 +579,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element which produces a stream of new elements
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> Stream<R> flatMap(BiFunction<? super K, ? super V, ? extends Stream<? extends R>> mapper) {
+        requireNonNull(mapper);
         return inner.flatMap(e -> mapper.apply(e.getKey(), e.getValue()));
     }
     
@@ -558,8 +604,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key-value pair which produces a stream of new keys
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> MapStream<R, V> flatMapKey(BiFunction<? super K, ? super V, ? extends Stream<? extends R>> mapper) {
+        requireNonNull(mapper);
         return new MapStream<>(inner.flatMap(e
             -> mapper.apply(e.getKey(), e.getValue())
             .map(k
@@ -589,8 +637,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key-value pair which produces a stream of new keys
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> MapStream<R, V> flatMapKey(Function<? super K, ? extends Stream<? extends R>> mapper) {
+        requireNonNull(mapper);
         return new MapStream<>(inner.flatMap(e
             -> mapper.apply(e.getKey())
             .map(k
@@ -621,8 +671,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key-value pair which produces a stream of new values
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> MapStream<K, R> flatMapValue(BiFunction<? super K, ? super V, ? extends Stream<? extends R>> mapper) {
+        requireNonNull(mapper);
         return new MapStream<>(inner.flatMap(e
             -> mapper.apply(e.getKey(), e.getValue())
             .map(v
@@ -653,8 +705,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key-value pair which produces a stream of new values
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <R> MapStream<K, R> flatMapValue(Function<? super V, ? extends Stream<? extends R>> mapper) {
+        requireNonNull(mapper);
         return new MapStream<>(inner.flatMap(e
             -> mapper.apply(e.getValue())
             .map(v
@@ -679,12 +733,13 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element which produces a stream of new elements
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      * 
      * @see #flatMap(Function)
      */
     @Override
     public IntStream flatMapToInt(Function<? super Map.Entry<K, V>, ? extends IntStream> mapper) {
-        return inner.flatMapToInt(mapper);
+        return inner.flatMapToInt(requireNonNull(mapper));
     }
 
     /**
@@ -702,8 +757,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return        the new stream
      * 
      * @see #flatMap(Function)
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public IntStream flatMapToInt(BiFunction<? super K, ? super V, ? extends IntStream> mapper) {
+        requireNonNull(mapper);
         return inner.flatMapToInt(e -> mapper.apply(e.getKey(), e.getValue()));
     }
 
@@ -722,10 +779,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return        the new stream
      * 
      * @see #flatMap(Function)
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public LongStream flatMapToLong(Function<? super Map.Entry<K, V>, ? extends LongStream> mapper) {
-        return inner.flatMapToLong(mapper);
+        return inner.flatMapToLong(requireNonNull(mapper));
     }
 
     /**
@@ -741,10 +799,12 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key-value pair which produces a stream of new elements
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      * 
      * @see #flatMap(Function)
      */
     public LongStream flatMapToLong(BiFunction<? super K, ? super V, ? extends LongStream> mapper) {
+        requireNonNull(mapper);
         return inner.flatMapToLong(e -> mapper.apply(e.getKey(), e.getValue()));
     }
 
@@ -761,12 +821,13 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                element which produces a stream of new elements
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      * 
      * @see #flatMap(Function)
      */
     @Override
     public DoubleStream flatMapToDouble(Function<? super Map.Entry<K, V>, ? extends DoubleStream> mapper) {
-        return inner.flatMapToDouble(mapper);
+        return inner.flatMapToDouble(requireNonNull(mapper));
     }
 
     /**
@@ -782,10 +843,12 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param mapper  a non-interfering, stateless function to apply to each 
      *                key-value pair which produces a stream of new elements
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      * 
      * @see #flatMap(Function)
      */
     public DoubleStream flatMapToDouble(BiFunction<? super K, ? super V, ? extends DoubleStream> mapper) {
+        requireNonNull(mapper);
         return inner.flatMapToDouble(e -> mapper.apply(e.getKey(), e.getValue()));
     }
 
@@ -900,8 +963,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *
      * @param merger  the merging operation to use
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public MapStream<K, V> distinctKeys(BinaryOperator<V> merger) {
+        requireNonNull(merger);
         final boolean parallel = isParallel();
         final Map<K, V> result = parallel
             ? Collections.synchronizedMap(new LinkedHashMap<>())
@@ -930,8 +995,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *
      * @param merger  the merging operation to use
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public MapStream<K, V> distinctValues(BinaryOperator<K> merger) {
+        requireNonNull(merger);
         return MapStream.flip(MapStream.flip(this).distinctKeys(merger));
     }
 
@@ -947,6 +1014,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * This is a stateful intermediate operation.
      *
      * @return the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public MapStream<K, V> sorted() {
@@ -979,10 +1047,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param comparator  a non-interfering, stateless {@code Comparator} to be 
      *                    used to compare stream elements
      * @return            the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public MapStream<K, V> sorted(Comparator<? super Map.Entry<K, V>> comparator) {
-        inner = inner.sorted(comparator);
+        inner = inner.sorted(requireNonNull(comparator));
         return this;
     }
 
@@ -999,9 +1068,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param comparator  a non-interfering, stateless {@code Comparator} to be 
      *                    used to compare entity keys
      * @return            the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public MapStream<K, V> sortedByKey(Comparator<K> comparator) {
-        inner = inner.sorted(byKeyOnly(comparator));
+        inner = inner.sorted(byKeyOnly(requireNonNull(comparator)));
         return this;
     }
 
@@ -1018,9 +1088,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param comparator  a non-interfering, stateless {@code Comparator} to be 
      *                    used to compare entity values
      * @return            the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public MapStream<K, V> sortedByValue(Comparator<V> comparator) {
-        inner = inner.sorted(byValueOnly(comparator));
+        inner = inner.sorted(byValueOnly(requireNonNull(comparator)));
         return this;
     }
 
@@ -1050,10 +1121,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param action  a non-interfering action to perform on the elements as
      *                they are consumed from the stream
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public MapStream<K, V> peek(Consumer<? super Map.Entry<K, V>> action) {
-        inner = inner.peek(action);
+        inner = inner.peek(requireNonNull(action));
         return this;
     }
 
@@ -1083,8 +1155,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param action  a non-interfering action to perform on the key-value pairs 
      *                as they are consumed from the stream
      * @return        the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public MapStream<K, V> peek(BiConsumer<? super K, ? super V> action) {
+        requireNonNull(action);
         inner = inner.peek(e -> action.accept(e.getKey(), e.getValue()));
         return this;
     }
@@ -1165,10 +1239,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * responsible for providing the required synchronization.
      *
      * @param action a non-interfering action to perform on the elements
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public void forEach(Consumer<? super Map.Entry<K, V>> action) {
-        inner.forEach(action);
+        inner.forEach(requireNonNull(action));
     }
 
     /**
@@ -1185,8 +1260,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * responsible for providing the required synchronization.
      *
      * @param action a non-interfering action to perform on the key-value pairs
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public void forEach(BiConsumer<? super K, ? super V> action) {
+        requireNonNull(action);
         inner.forEach(e -> action.accept(e.getKey(), e.getValue()));
     }
 
@@ -1203,11 +1280,12 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * library chooses.
      *
      * @param action  a non-interfering action to perform on the elements
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      * @see #forEach(Consumer)
      */
     @Override
     public void forEachOrdered(Consumer<? super Map.Entry<K, V>> action) {
-        inner.forEachOrdered(action);
+        inner.forEachOrdered(requireNonNull(action));
     }
 
     /**
@@ -1224,9 +1302,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * thread the library chooses.
      *
      * @param action  a non-interfering action to perform on the key-value pairs
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      * @see #forEach(Consumer)
      */
     public void forEachOrdered(BiConsumer<? super K, ? super V> action) {
+        requireNonNull(action);
         inner.forEachOrdered(e -> action.accept(e.getKey(), e.getValue()));
     }
 
@@ -1267,6 +1347,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @throws           ArrayStoreException if the runtime type of the array 
      *                   returned from the array generator is not a supertype of 
      *                   the runtime type of every element in this stream
+     * @throws           NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
@@ -1315,10 +1396,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param accumulator  an associative, non-interfering stateless function 
      *                     for combining two values
      * @return             the result of the reduction
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public Map.Entry<K, V> reduce(Map.Entry<K, V> identity, BinaryOperator<Map.Entry<K, V>> accumulator) {
-        return inner.reduce(identity, accumulator);
+        return inner.reduce(requireNonNull(identity), requireNonNull(accumulator));
     }
 
     /**
@@ -1349,7 +1431,8 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                     for combining two values
      * @return             an {@link Optional} describing the result of the 
      *                     reduction
-     * @throws NullPointerException if the result of the reduction is null
+     * @throws NullPointerException if the result of the reduction is null or
+     * if any of the provided parameters are {@code null}
      * 
      * @see #reduce(BinaryOperator)
      * @see #min(Comparator)
@@ -1357,7 +1440,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      */
     @Override
     public Optional<Map.Entry<K, V>> reduce(BinaryOperator<Map.Entry<K, V>> accumulator) {
-        return inner.reduce(accumulator);
+        return inner.reduce(requireNonNull(accumulator));
     }
 
     /**
@@ -1398,11 +1481,15 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                     function for combining two values, which must be
      *                     compatible with the accumulator function
      * @return             the result of the reduction
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      * 
      * @see #reduce(BinaryOperator)
      */
     @Override
     public <U> U reduce(U identity, BiFunction<U, ? super Map.Entry<K, V>, U> accumulator, BinaryOperator<U> combiner) {
+        // identity is nullable
+        requireNonNull(accumulator);
+        requireNonNull(combiner);
         return inner.reduce(identity, accumulator, combiner);
     }
 
@@ -1451,10 +1538,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                     for combining two values, which must be compatible 
      *                     with the accumulator function
      * @return             the result of the reduction
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super Map.Entry<K, V>> accumulator, BiConsumer<R, R> combiner) {
-        return inner.collect(supplier, accumulator, combiner);
+        return inner.collect(requireNonNull(supplier), requireNonNull(accumulator), requireNonNull(combiner));
     }
 
     /**
@@ -1504,13 +1592,14 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                   {@code Collector}
      * @param collector  the {@code Collector} describing the reduction
      * @return           the result of the reduction
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      * 
      * @see #collect(Supplier, BiConsumer, BiConsumer)
      * @see Collectors
      */
     @Override
     public <R, A> R collect(Collector<? super Map.Entry<K, V>, A, R> collector) {
-        return inner.collect(collector);
+        return inner.collect(requireNonNull(collector));
     }
 
     /**
@@ -1524,8 +1613,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param <K2>     the type of the new key
      * @param grouper  the function to use for grouping entries
      * @return         the new stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public <K2> MapStream<K2, List<V>> groupingBy(Function<V, K2> grouper) {
+        requireNonNull(grouper);
         return inner.map(Map.Entry::getValue)
             .collect(CollectorUtil.groupBy(grouper));
     }
@@ -1542,11 +1633,12 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                    this stream, or an empty {@code Optional} if the 
      *                    stream is empty
      * 
-     * @throws NullPointerException if the minimum element is null
+     * @throws NullPointerException if the minimum element is null or if any of the
+     * provided parameters are {@code null}
      */
     @Override
     public Optional<Map.Entry<K, V>> min(Comparator<? super Map.Entry<K, V>> comparator) {
-        return inner.min(comparator);
+        return inner.min(requireNonNull(comparator));
     }
 
     /**
@@ -1562,10 +1654,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                    this stream, or an empty {@code Optional} if the 
      *                    stream is empty
      * 
-     * @throws NullPointerException if the minimum element is null
+     * @throws NullPointerException if the minimum element is null or if any of the
+     *      * provided parameters are {@code null}
      */
     public Optional<Map.Entry<K, V>> minByKey(Comparator<K> comparator) {
-        return inner.min(byKeyOnly(comparator));
+        return inner.min(byKeyOnly(requireNonNull(comparator)));
     }
 
     /**
@@ -1581,10 +1674,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                    this stream, or an empty {@code Optional} if the 
      *                    stream is empty
      * 
-     * @throws NullPointerException if the minimum element is null
+     * @throws NullPointerException if the minimum element is null or if any of the
+     *         provided parameters are {@code null}
      */
     public Optional<Map.Entry<K, V>> minByValue(Comparator<V> comparator) {
-        return inner.min(byValueOnly(comparator));
+        return inner.min(byValueOnly(requireNonNull(comparator)));
     }
 
     /**
@@ -1599,11 +1693,12 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                    this stream, or an empty {@code Optional} if the 
      *                    stream is empty
      * 
-     * @throws NullPointerException if the maximum element is null
+     * @throws NullPointerException if the maximum element is null or if any of the
+     *         provided parameters are {@code null}
      */
     @Override
     public Optional<Map.Entry<K, V>> max(Comparator<? super Map.Entry<K, V>> comparator) {
-        return inner.max(comparator);
+        return inner.max(requireNonNull(comparator));
     }
 
     /**
@@ -1619,10 +1714,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                    this stream, or an empty {@code Optional} if the 
      *                    stream is empty
      * 
-     * @throws NullPointerException if the maximum element is null
+     * @throws NullPointerException if the maximum element is null or if any of the
+     *         provided parameters are {@code null}
      */
     public Optional<Map.Entry<K, V>> maxByKey(Comparator<K> comparator) {
-        return inner.max(byKeyOnly(comparator));
+        return inner.max(byKeyOnly(requireNonNull(comparator)));
     }
 
     /**
@@ -1638,10 +1734,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                    this stream, or an empty {@code Optional} if the 
      *                    stream is empty
      * 
-     * @throws NullPointerException if the maximum element is null
+     * @throws NullPointerException if the maximum element is null or if any of the
+     *        provided parameters are {@code null}
      */
     public Optional<Map.Entry<K, V>> maxByValue(Comparator<V> comparator) {
-        return inner.max(byValueOnly(comparator));
+        return inner.max(byValueOnly(requireNonNull(comparator)));
     }
 
     /**
@@ -1676,10 +1773,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                   elements of this stream
      * @return           {@code true} if any elements of the stream match the 
      *                   provided predicate, otherwise {@code false}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public boolean anyMatch(Predicate<? super Map.Entry<K, V>> predicate) {
-        return inner.anyMatch(predicate);
+        return inner.anyMatch(requireNonNull(predicate));
     }
 
     /**
@@ -1698,8 +1796,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                   key-value pairs of this stream
      * @return           {@code true} if any key-value pairs of the stream match 
      *                   the provided predicate, otherwise {@code false}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public boolean anyMatch(BiPredicate<? super K, ? super V> predicate) {
+        requireNonNull(predicate);
         return inner.anyMatch(e -> predicate.test(e.getKey(), e.getValue()));
     }
 
@@ -1722,10 +1822,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return           {@code true} if either all elements of the stream match 
      *                   the provided predicate or the stream is empty, 
      *                   otherwise {@code false}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public boolean allMatch(Predicate<? super Map.Entry<K, V>> predicate) {
-        return inner.allMatch(predicate);
+        return inner.allMatch(requireNonNull(predicate));
     }
 
     /**
@@ -1747,8 +1848,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return           {@code true} if either all key-value pairs of the 
      *                   stream match the provided predicate or the stream is 
      *                   empty, otherwise {@code false}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public boolean allMatch(BiPredicate<? super K, ? super V> predicate) {
+        requireNonNull(predicate);
         return inner.allMatch(e -> predicate.test(e.getKey(), e.getValue()));
     }
 
@@ -1771,10 +1874,11 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return           {@code true} if either no elements of the stream match 
      *                   the provided predicate or the stream is empty, 
      *                   otherwise {@code false}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @Override
     public boolean noneMatch(Predicate<? super Map.Entry<K, V>> predicate) {
-        return inner.noneMatch(predicate);
+        return inner.noneMatch(requireNonNull(predicate));
     }
 
     /**
@@ -1796,8 +1900,10 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return           {@code true} if either no key-value pairs of the 
      *                   stream match the provided predicate or the stream is 
      *                   empty, otherwise {@code false}
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     public boolean noneMatch(BiPredicate<? super K, ? super V> predicate) {
+        requireNonNull(predicate);
         return inner.noneMatch(e -> predicate.test(e.getKey(), e.getValue()));
     }
 
@@ -1943,7 +2049,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      */
     @Override
     public MapStream<K, V> onClose(Runnable closeHandler) {
-        inner = inner.onClose(closeHandler);
+        inner = inner.onClose(requireNonNull(closeHandler));
         return this;
     }
 
@@ -2015,11 +2121,13 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return               a {@code Map} whose keys and values are identical 
      *                       to the entries of this stream with any collisions 
      *                       handled
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      *
      * @see #toMap()
      * @see #toConcurrentMap(BinaryOperator)
      */
     public Map<K, V> toMap(BinaryOperator<V> mergeFunction) {
+        requireNonNull(mergeFunction);
         return inner.collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2075,11 +2183,13 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      *                      values associated with the same key, as supplied
      *                      to {@link Map#merge(Object, Object, BiFunction)}
      * @return  a {@code ConcurrentMap} whose keys are taken from this stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      *
      * @see #toConcurrentMap()
      * @see #toMap(BinaryOperator)
      */
     public Map<K, V> toConcurrentMap(BinaryOperator<V> mergeFunction) {
+        requireNonNull(mergeFunction);
         return inner.collect(Collectors.toConcurrentMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2140,12 +2250,14 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param keyComparator  the comparator to use when sorting the keys
      * @return               a {@code SortedMap} whose keys and values are 
      *                       identical to the entries of this stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      *
      * @see #toMap(BinaryOperator)
      * @see #toConcurrentMap()
      * @see #toSortedMap()
      */
     public SortedMap<K, V> toSortedMapByKey(Comparator<K> keyComparator) {
+        requireNonNull(keyComparator);
         return inner.collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2182,12 +2294,14 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return               a {@code SortedMap} whose keys and values are identical 
      *                       to the entries of this stream with any collisions 
      *                       handled
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      *
      * @see #toMap()
      * @see #toSortedMap()
      * @see #toConcurrentMap(BinaryOperator)
      */
     public SortedMap<K, V> toSortedMap(BinaryOperator<V> mergeFunction) {
+        requireNonNull(mergeFunction);
         return inner.collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2227,12 +2341,15 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return               a {@code SortedMap} whose keys and values are identical 
      *                       to the entries of this stream with any collisions 
      *                       handled
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      *
      * @see #toMap()
      * @see #toSortedMap()
      * @see #toConcurrentMap(BinaryOperator)
      */
     public SortedMap<K, V> toSortedMap(Comparator<K> keyComparator, BinaryOperator<V> mergeFunction) {
+        requireNonNull(keyComparator);
+        requireNonNull(mergeFunction);
         return inner.collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2286,12 +2403,14 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param keyComparator  the comparator to use when sorting the keys
      * @return               a {@code ConcurrentNavigableMap} whose keys and 
      *                       values are identical to the entries of this stream
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      *
      * @see #toMap(BinaryOperator)
      * @see #toConcurrentMap()
      * @see #toSortedMap()
      */
     public ConcurrentNavigableMap<K, V> toConcurrentNavigableMapByKey(Comparator<K> keyComparator) {
+        requireNonNull(keyComparator);
         return inner.collect(Collectors.toConcurrentMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2320,12 +2439,14 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return               a {@code ConcurrentNavigableMap} whose keys and 
      *                       values are identical to the entries of this stream 
      *                       with any collisions handled
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      *
      * @see #toMap()
      * @see #toSortedMap()
      * @see #toConcurrentMap(BinaryOperator)
      */
     public ConcurrentNavigableMap<K, V> toConcurrentNavigableMap(BinaryOperator<V> mergeFunction) {
+        requireNonNull(mergeFunction);
         return inner.collect(Collectors.toConcurrentMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2357,12 +2478,15 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return               a {@code ConcurrentNavigableMap} whose keys and 
      *                       values are identical to the entries of this stream 
      *                       with any collisions handled
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      *
      * @see #toMap()
      * @see #toSortedMap()
      * @see #toConcurrentMap(BinaryOperator)
      */
     public ConcurrentNavigableMap<K, V> toConcurrentNavigableMap(Comparator<K> keyComparator, BinaryOperator<V> mergeFunction) {
+        requireNonNull(keyComparator);
+        requireNonNull(mergeFunction);
         return inner.collect(Collectors.toConcurrentMap(
             Map.Entry::getKey,
             Map.Entry::getValue,
@@ -2391,10 +2515,15 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @param methods  methods for comparing the key ordered by priority
      * @return         a composite comparator that checks the key using the
      *                 supplied methods in order
+     * @throws NullPointerException if any of the provided parameters are {@code null}
      */
     @SuppressWarnings("varargs")
     @SafeVarargs // Iterating over an array is safe.
     public static <K> Comparator<K> comparing(Function<K, ? extends Comparable<?>>... methods) {
+        requireNonNull(methods);
+        if (Stream.of(methods).anyMatch(Objects::isNull)) {
+            throw new NullPointerException("One of the methods was null");
+        }
         return (a, b) -> {
             for (Function<K, ? extends Comparable<?>> method : methods) {
                 @SuppressWarnings(value = "unchecked")
