@@ -16,15 +16,35 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
-import com.speedment.runtime.compute.*;
+import static java.util.Objects.requireNonNull;
+
+import com.speedment.runtime.compute.ToBigDecimalNullable;
+import com.speedment.runtime.compute.ToBooleanNullable;
+import com.speedment.runtime.compute.ToByteNullable;
+import com.speedment.runtime.compute.ToCharNullable;
+import com.speedment.runtime.compute.ToDoubleNullable;
+import com.speedment.runtime.compute.ToEnumNullable;
+import com.speedment.runtime.compute.ToFloatNullable;
+import com.speedment.runtime.compute.ToIntNullable;
+import com.speedment.runtime.compute.ToLongNullable;
+import com.speedment.runtime.compute.ToShortNullable;
+import com.speedment.runtime.compute.ToStringNullable;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.NonNullableExpression;
-import com.speedment.runtime.compute.expression.orelse.*;
+import com.speedment.runtime.compute.expression.orelse.ToBigDecimalOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToBooleanOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToByteOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToCharOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToDoubleOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToEnumOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToFloatOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToIntOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToLongOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToShortOrElse;
+import com.speedment.runtime.compute.expression.orelse.ToStringOrElse;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class used to create expressions that wrap a nullable expression and
@@ -55,12 +75,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToDoubleOrElseImpl<T>
+    static final class ToDoubleOrElseImpl<T>
     extends AbstractNonNullable<T, ToDoubleNullable<T>>
     implements ToDoubleOrElse<T> {
         private final double value;
 
-        private ToDoubleOrElseImpl(ToDoubleNullable<T> inner, double value) {
+        ToDoubleOrElseImpl(ToDoubleNullable<T> inner, double value) {
             super(inner);
             this.value = value;
         }
@@ -111,12 +131,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToFloatOrElseImpl<T>
+    static final class ToFloatOrElseImpl<T>
         extends AbstractNonNullable<T, ToFloatNullable<T>>
         implements ToFloatOrElse<T> {
         private final float value;
 
-        private ToFloatOrElseImpl(ToFloatNullable<T> inner, float value) {
+        ToFloatOrElseImpl(ToFloatNullable<T> inner, float value) {
             super(inner);
             this.value = value;
         }
@@ -167,12 +187,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToLongOrElseImpl<T>
+    static final class ToLongOrElseImpl<T>
         extends AbstractNonNullable<T, ToLongNullable<T>>
         implements ToLongOrElse<T> {
         private final long value;
 
-        private ToLongOrElseImpl(ToLongNullable<T> inner, long value) {
+        ToLongOrElseImpl(ToLongNullable<T> inner, long value) {
             super(inner);
             this.value = value;
         }
@@ -223,12 +243,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToIntOrElseImpl<T>
+    static final class ToIntOrElseImpl<T>
         extends AbstractNonNullable<T, ToIntNullable<T>>
         implements ToIntOrElse<T> {
         private final int value;
 
-        private ToIntOrElseImpl(ToIntNullable<T> inner, int value) {
+        ToIntOrElseImpl(ToIntNullable<T> inner, int value) {
             super(inner);
             this.value = value;
         }
@@ -279,12 +299,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToShortOrElseImpl<T>
+    static final class ToShortOrElseImpl<T>
         extends AbstractNonNullable<T, ToShortNullable<T>>
         implements ToShortOrElse<T> {
         private final short value;
 
-        private ToShortOrElseImpl(ToShortNullable<T> inner, short value) {
+        ToShortOrElseImpl(ToShortNullable<T> inner, short value) {
             super(inner);
             this.value = value;
         }
@@ -335,12 +355,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToByteOrElseImpl<T>
+    static final class ToByteOrElseImpl<T>
         extends AbstractNonNullable<T, ToByteNullable<T>>
         implements ToByteOrElse<T> {
         private final byte value;
 
-        private ToByteOrElseImpl(ToByteNullable<T> inner, byte value) {
+        ToByteOrElseImpl(ToByteNullable<T> inner, byte value) {
             super(inner);
             this.value = value;
         }
@@ -391,12 +411,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToCharOrElseImpl<T>
+    static final class ToCharOrElseImpl<T>
         extends AbstractNonNullable<T, ToCharNullable<T>>
         implements ToCharOrElse<T> {
         private final char value;
 
-        private ToCharOrElseImpl(ToCharNullable<T> inner, char value) {
+        ToCharOrElseImpl(ToCharNullable<T> inner, char value) {
             super(inner);
             this.value = value;
         }
@@ -447,12 +467,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToBooleanOrElseImpl<T>
+    static final class ToBooleanOrElseImpl<T>
         extends AbstractNonNullable<T, ToBooleanNullable<T>>
         implements ToBooleanOrElse<T> {
         private final boolean value;
 
-        private ToBooleanOrElseImpl(ToBooleanNullable<T> inner, boolean value) {
+        ToBooleanOrElseImpl(ToBooleanNullable<T> inner, boolean value) {
             super(inner);
             this.value = value;
         }
@@ -503,12 +523,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToStringOrElseImpl<T>
+    static final class ToStringOrElseImpl<T>
     extends AbstractNonNullable<T, ToStringNullable<T>>
     implements ToStringOrElse<T> {
         private final String value;
 
-        private ToStringOrElseImpl(ToStringNullable<T> inner, String value) {
+        ToStringOrElseImpl(ToStringNullable<T> inner, String value) {
             super(inner);
             this.value = value;
         }
@@ -560,12 +580,12 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToEnumOrElseImpl<T, E extends Enum<E>>
+    static final class ToEnumOrElseImpl<T, E extends Enum<E>>
     extends AbstractNonNullable<T, ToEnumNullable<T, E>>
     implements ToEnumOrElse<T, E> {
         private final E value;
 
-        private ToEnumOrElseImpl(ToEnumNullable<T, E> inner, E value) {
+        ToEnumOrElseImpl(ToEnumNullable<T, E> inner, E value) {
             super(inner);
             this.value = value;
         }
@@ -621,13 +641,13 @@ public final class OrElseUtil {
      *
      * @param <T>  the input entity type
      */
-    private static final class ToBigDecimalOrElseImpl<T>
+    static final class ToBigDecimalOrElseImpl<T>
     extends AbstractNonNullable<T, ToBigDecimalNullable<T>>
     implements ToBigDecimalOrElse<T> {
 
         private final BigDecimal value;
 
-        private ToBigDecimalOrElseImpl(ToBigDecimalNullable<T> inner, BigDecimal value) {
+        ToBigDecimalOrElseImpl(ToBigDecimalNullable<T> inner, BigDecimal value) {
             super(inner);
             this.value = value;
         }
