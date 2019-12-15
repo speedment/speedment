@@ -2,29 +2,30 @@ package com.speedment.runtime.typemapper.time;
 
 import com.speedment.runtime.typemapper.AbstractTypeMapperTest;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.speedment.runtime.typemapper.TypeMapper.Category;
 import static com.speedment.runtime.typemapper.TypeMapper.Ordering;
 
-final class DateToLocalDateMapperTest extends AbstractTypeMapperTest<Date, LocalDate, DateToLocalDateMapper> {
+final class TimeToLocalTimeMapperTest extends AbstractTypeMapperTest<Time, LocalTime, TimeToLocalTimeMapper> {
 
-    DateToLocalDateMapperTest() {
+
+    TimeToLocalTimeMapperTest() {
         super(
-            Date.class,
-            LocalDate.class,
+            Time.class,
+            LocalTime.class,
             Category.COMPARABLE,
             Ordering.RETAIN,
-            DateToLocalDateMapper::new
+            TimeToLocalTimeMapper::new
         );
     }
 
     @Override
-    protected Map<Date, LocalDate> testVector() {
-        Map<Date, LocalDate> map = new HashMap<>();
+    protected Map<Time, LocalTime> testVector() {
+        Map<Time, LocalTime> map = new HashMap<>();
         return map;
     }
 }

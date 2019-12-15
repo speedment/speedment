@@ -20,7 +20,6 @@ final class DateIntToShortMapperTest extends AbstractTypeMapperTest<Integer, Sho
 
     @Override
     protected Map<Integer, Short> testVector() {
-        // IntStream
         Map<Integer, Short> map = new HashMap<>();
         map.put(19700101, Short.valueOf("9133"));
         map.put(19700101, Short.valueOf("0"));

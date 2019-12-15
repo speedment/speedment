@@ -51,7 +51,7 @@ public abstract class AbstractTypeMapperTest<D, V, T extends TypeMapper<D, V>> {
     protected abstract Map<D,V> testVector();
 
     @TestFactory
-    Stream<DynamicTest> dynamicGetJavaType() {
+    Stream<DynamicTest> dynamicToJavaType() {
         return testVector().entrySet().stream()
             .map((e -> DynamicTest.dynamicTest("Mapping: " + e.getKey(),
                 () -> assertEquals(e.getValue(), typeMapper().toJavaType(column(), ENTITY_TYPE, e.getKey())))));

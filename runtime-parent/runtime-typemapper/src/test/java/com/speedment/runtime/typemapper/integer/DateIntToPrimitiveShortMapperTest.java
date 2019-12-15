@@ -7,11 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.speedment.runtime.typemapper.TypeMapper.Category;
-import static com.speedment.runtime.typemapper.TypeMapper.Ordering;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class DateIntToPrimitiveShortMapperTest extends AbstractTypeMapperTest<Integer, Short, DateIntToPrimitiveShortMapper> {
-
 
     DateIntToPrimitiveShortMapperTest() {
         super(Integer.class,
