@@ -16,10 +16,11 @@
  */
 package com.speedment.generator.translator;
 
-import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.provider.StandardJavaGenerator;
 import com.speedment.common.injector.Injector;
+import com.speedment.generator.translator.provider.StandardJavaLanguageNamer;
 import com.speedment.generator.translator.provider.StandardTypeMapperComponent;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.provider.BaseDocument;
@@ -42,8 +43,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toMap;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 final class AbstractJavaClassTranslatorTest {
 
@@ -121,6 +121,7 @@ final class AbstractJavaClassTranslatorTest {
     private void testWithEmptyProject(UnaryOperator<Translator.Builder<Class>> operator, Runnable assertor) {
         MyProject project = new MyProject();
         MyTranslator translator = new MyTranslator(project, operator);
+        test(translator);
         MyFile file = new MyFile();
         translator.makeCodeGenModel(file);
         assertor.run();
@@ -132,6 +133,7 @@ final class AbstractJavaClassTranslatorTest {
         addDbms(doc, "dbms0");
         MyProject project = new MyProject(doc);
         MyTranslator translator = new MyTranslator(project, operator);
+        test(translator);
         MyFile file = new MyFile();
         translator.makeCodeGenModel(file);
         assertor.run();
@@ -144,9 +146,23 @@ final class AbstractJavaClassTranslatorTest {
         addDbms(doc, "dbms1");
         MyProject project = new MyProject(doc);
         MyTranslator translator = new MyTranslator(project, operator);
+        test(translator);
         MyFile file = new MyFile();
         translator.makeCodeGenModel(file);
         assertor.run();
+    }
+
+    private void test(MyTranslator translator) {
+        assertNotNull(translator.injector());
+        assertNotNull(translator.infoComponent());
+        assertNotNull(translator.typeMappers());
+        assertNotNull(translator.generator());
+        assertNotNull(translator.getSupport());
+        assertNotNull(translator.generated());
+        assertNotNull(translator.getClassOrInterfaceName());
+        assertNotNull(translator.getJavaDoc());
+        assertNotNull(translator.getCodeGenerator());
+        assertNotNull(translator.emptyConstructor());
     }
 
     private void addDbms(Map<String, Object> map, String dbmsId) {
@@ -350,6 +366,7 @@ final class AbstractJavaClassTranslatorTest {
                 .withComponent(DelegateInfoComponent.class)
                 .withComponent(StandardJavaGenerator.class)
                 .withComponent(StandardTypeMapperComponent.class)
+                .withComponent(StandardJavaLanguageNamer.class)
                 .build();
         } catch (InstantiationException ie) {
             throw new SpeedmentException(ie);

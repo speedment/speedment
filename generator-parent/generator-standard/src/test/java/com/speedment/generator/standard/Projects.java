@@ -18,7 +18,8 @@ public enum Projects {
     SPEEDMENT_JSON("speedment.json"),
     SPRING_PLUGIN("spring-plugin.json"),
     DATA_STORE("data-store.json"),
-    FOREIGN_KEY("foreign-key.json")
+    FOREIGN_KEY("foreign-key.json"),
+    TYPE_MAPPER("type-mapper.json")
     ;
 
     private final String fileName;

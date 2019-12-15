@@ -43,6 +43,11 @@ final class TableTranslatorsTest {
         test(Projects.FOREIGN_KEY);
     }
 
+    @Test
+    void typeMapper() {
+        test(Projects.TYPE_MAPPER);
+    }
+
 
     void test(Projects projectHolder) {
         Stream.of(projectHolder)

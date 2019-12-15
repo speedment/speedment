@@ -38,6 +38,11 @@ final class ProjectTranslatorsTest {
         test(Projects.FOREIGN_KEY);
     }
 
+    @Test
+    void typeMapper() {
+        test(Projects.TYPE_MAPPER);
+    }
+
     void test(Projects projectHolder) {
         Stream.of(projectHolder)
             .map(Projects::project)

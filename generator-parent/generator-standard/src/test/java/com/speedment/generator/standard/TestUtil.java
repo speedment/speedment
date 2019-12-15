@@ -2,6 +2,7 @@ package com.speedment.generator.standard;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.TranslatorBundle;
+import com.speedment.generator.translator.provider.StandardJavaLanguageNamer;
 import com.speedment.runtime.application.RuntimeBundle;
 import com.speedment.runtime.application.provider.EmptyApplicationMetadata;
 import com.speedment.runtime.connector.mysql.MySqlBundle;
@@ -16,6 +17,7 @@ public final class TestUtil {
         try {
             return Injector.builder()
                 .withComponent(DelegateInfoComponent.class)
+                .withComponent(StandardJavaLanguageNamer.class)
                 .withBundle(TranslatorBundle.class)
                 .withBundle(StandardTranslatorBundle.class)
                 .withBundle(RuntimeBundle.class)
