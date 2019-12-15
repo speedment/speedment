@@ -28,7 +28,6 @@ import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.component.InfoComponentImpl;
 import com.speedment.runtime.core.provider.DelegateInfoComponent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,8 +85,8 @@ final class AbstractJavaClassTranslatorTest {
     }
 
     @Test
-    void testProjectWihtOneDbmsForEveryProject() {
-        testWitOneDbms(b ->
+    void testProjectWithOneDbmsForEveryProject() {
+        testWithOneDbms(b ->
                 b.forEveryProject((clazz, p) -> {
                     visit(p);
                 }),
@@ -97,8 +96,8 @@ final class AbstractJavaClassTranslatorTest {
 
 
     @Test
-    void testProjectWihtOneDbmsForEveryDbms() {
-        testWitOneDbms(b ->
+    void testProjectWithOneDbmsForEveryDbms() {
+        testWithOneDbms(b ->
                 b.forEveryDbms((clazz, d) -> {
                     visit(d);
                 }),
@@ -107,8 +106,8 @@ final class AbstractJavaClassTranslatorTest {
     }
 
     @Test
-    void testProjectWihtTwoDbmsesForEveryDbms() {
-        testWitTwoDbms(b ->
+    void testProjectWithTwoDbmsesForEveryDbms() {
+        testWithTwoDbms(b ->
                 b.forEveryDbms((clazz, d) -> {
                     visit(d);
                 }),
@@ -119,7 +118,6 @@ final class AbstractJavaClassTranslatorTest {
         );
     }
 
-
     private void testWithEmptyProject(UnaryOperator<Translator.Builder<Class>> operator, Runnable assertor) {
         MyProject project = new MyProject();
         MyTranslator translator = new MyTranslator(project, operator);
@@ -128,7 +126,7 @@ final class AbstractJavaClassTranslatorTest {
         assertor.run();
     }
 
-    private void testWitOneDbms(UnaryOperator<Translator.Builder<Class>> operator, Runnable assertor) {
+    private void testWithOneDbms(UnaryOperator<Translator.Builder<Class>> operator, Runnable assertor) {
         Map<String, Object> doc = new HashMap<>();
         doc.put(HasIdUtil.ID, MY_PROJECT_NAME);
         addDbms(doc, "dbms0");
@@ -139,7 +137,7 @@ final class AbstractJavaClassTranslatorTest {
         assertor.run();
     }
 
-    private void testWitTwoDbms(UnaryOperator<Translator.Builder<Class>> operator, Runnable assertor) {
+    private void testWithTwoDbms(UnaryOperator<Translator.Builder<Class>> operator, Runnable assertor) {
         Map<String, Object> doc = new HashMap<>();
         doc.put(HasIdUtil.ID, MY_PROJECT_NAME);
         addDbms(doc, "dbms0");
@@ -150,8 +148,6 @@ final class AbstractJavaClassTranslatorTest {
         translator.makeCodeGenModel(file);
         assertor.run();
     }
-
-
 
     private void addDbms(Map<String, Object> map, String dbmsId) {
         @SuppressWarnings("unchecked")
