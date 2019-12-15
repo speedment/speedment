@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.generator;
+package com.speedment.generator.translator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -19,12 +19,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.generator;
+package com.speedment.generator.translator;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
+import com.speedment.generator.translator.provider.StandardJavaLanguageNamer;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.core.exception.SpeedmentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,20 +41,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 final class TranslatorSupportTest extends SimpleModel {
 
     private static final String PATH = "com.company.myproject.mydbms.myschema.user";
+    private static final Injector INJECTOR = injector();
+
 
     private TranslatorSupport<Table> instance;
 
     @BeforeEach
-    void setUp() {
-        instance = new TranslatorSupport<>(
-            speedment.getOrThrow(Injector.class), table
-        );
+    void setUp() throws InstantiationException {
+        instance = new TranslatorSupport<>(INJECTOR, table);
     }
-
 
     @Test
     void testNamer() {
-        assertEquals(speedment.getOrThrow(JavaLanguageNamer.class), instance.namer());
+        assertEquals(INJECTOR.getOrThrow(JavaLanguageNamer.class), instance.namer());
     }
 
     @Test
@@ -254,10 +254,7 @@ final class TranslatorSupportTest extends SimpleModel {
 
     @Test
     void testShortTableName() {
-        final TranslatorSupport<Table> support = new TranslatorSupport<>(
-            speedment.getOrThrow(Injector.class), table2
-        );
-        
+        final TranslatorSupport<Table> support = new TranslatorSupport<>(injector(), table2);
         assertEquals("sP", support.variableName());
     }
 
@@ -268,4 +265,15 @@ final class TranslatorSupportTest extends SimpleModel {
     private String fullNameGen(String s) {
         return PATH + ".generated." + s;
     }
+
+    private static Injector injector() {
+        try {
+            return Injector.builder()
+                .withComponent(StandardJavaLanguageNamer.class)
+                .build();
+        } catch (InstantiationException e) {
+            throw new SpeedmentException(e);
+        }
+    }
+
 }
