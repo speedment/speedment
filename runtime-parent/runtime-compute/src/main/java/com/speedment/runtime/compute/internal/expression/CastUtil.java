@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.compute.ToBigDecimal;
 import com.speedment.runtime.compute.ToBoolean;
 import com.speedment.runtime.compute.ToByte;
@@ -29,8 +31,6 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class for creating expression that casts the result of another
@@ -660,7 +660,7 @@ public final class CastUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class AbstractCast<T, INNER extends Expression<T>>
+    abstract static class AbstractCast<T, INNER extends Expression<T>>
     implements UnaryExpression<T, INNER> {
 
         final INNER inner;

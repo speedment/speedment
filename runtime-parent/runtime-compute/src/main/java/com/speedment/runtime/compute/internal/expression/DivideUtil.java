@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.compute.ToByte;
 import com.speedment.runtime.compute.ToDouble;
 import com.speedment.runtime.compute.ToFloat;
@@ -27,8 +29,6 @@ import com.speedment.runtime.compute.expression.BinaryObjExpression;
 import com.speedment.runtime.compute.expression.Expression;
 
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class for creating expressions that computes the result of a wrapped
@@ -879,7 +879,7 @@ public final class DivideUtil {
      * @param <FIRST>   the first expression type
      * @param <SECOND>  the second expression type
      */
-    private abstract static class DivideToDouble
+    abstract static class DivideToDouble
         <T, FIRST extends Expression<T>, SECOND extends Expression<T>>
     extends Divide<T, FIRST, SECOND> implements ToDouble<T> {
         DivideToDouble(FIRST first, SECOND second) {
@@ -945,7 +945,7 @@ public final class DivideUtil {
      * @param <INNER>  the first expression type
      * @param <N>      the second expression type
      */
-    private abstract static class DivideObjToDouble
+    abstract static class DivideObjToDouble
         <T, INNER extends Expression<T>, N>
     extends DivideObj<T, INNER, N> implements ToDouble<T> {
 
@@ -965,7 +965,6 @@ public final class DivideUtil {
             else if (!(o instanceof BinaryObjExpression)) return false;
             final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(first, that.first()) &&
-                Objects.equals(second(), that.second()) &&
                 Objects.equals(operator(), that.operator());
         }
 

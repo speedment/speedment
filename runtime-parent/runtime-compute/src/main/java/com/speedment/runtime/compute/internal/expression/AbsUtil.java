@@ -16,7 +16,21 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
-import com.speedment.runtime.compute.*;
+import static java.util.Objects.requireNonNull;
+
+import com.speedment.runtime.compute.ToBigDecimal;
+import com.speedment.runtime.compute.ToByte;
+import com.speedment.runtime.compute.ToByteNullable;
+import com.speedment.runtime.compute.ToDouble;
+import com.speedment.runtime.compute.ToDoubleNullable;
+import com.speedment.runtime.compute.ToFloat;
+import com.speedment.runtime.compute.ToFloatNullable;
+import com.speedment.runtime.compute.ToInt;
+import com.speedment.runtime.compute.ToIntNullable;
+import com.speedment.runtime.compute.ToLong;
+import com.speedment.runtime.compute.ToLongNullable;
+import com.speedment.runtime.compute.ToShort;
+import com.speedment.runtime.compute.ToShortNullable;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 import com.speedment.runtime.compute.internal.ToByteNullableImpl;
@@ -28,8 +42,6 @@ import com.speedment.runtime.compute.internal.ToShortNullableImpl;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class used to construct expression that gives the absolute value of
@@ -315,12 +327,12 @@ public final class AbsUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class AbstractAbs<T, INNER extends Expression<T>>
+    abstract static class AbstractAbs<T, INNER extends Expression<T>>
     implements UnaryExpression<T, INNER> {
 
         final INNER inner;
 
-        private AbstractAbs(INNER inner) {
+        AbstractAbs(INNER inner) {
             this.inner = requireNonNull(inner);
         }
 

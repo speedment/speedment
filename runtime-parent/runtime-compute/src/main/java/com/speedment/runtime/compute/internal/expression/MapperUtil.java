@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.function.BooleanToDoubleFunction;
 import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.ByteToDoubleFunction;
@@ -25,7 +27,17 @@ import com.speedment.common.function.FloatToDoubleFunction;
 import com.speedment.common.function.FloatUnaryOperator;
 import com.speedment.common.function.ShortToDoubleFunction;
 import com.speedment.common.function.ShortUnaryOperator;
-import com.speedment.runtime.compute.*;
+import com.speedment.runtime.compute.ToBigDecimal;
+import com.speedment.runtime.compute.ToBoolean;
+import com.speedment.runtime.compute.ToByte;
+import com.speedment.runtime.compute.ToChar;
+import com.speedment.runtime.compute.ToDouble;
+import com.speedment.runtime.compute.ToEnum;
+import com.speedment.runtime.compute.ToFloat;
+import com.speedment.runtime.compute.ToInt;
+import com.speedment.runtime.compute.ToLong;
+import com.speedment.runtime.compute.ToShort;
+import com.speedment.runtime.compute.ToString;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.MapperExpression;
 
@@ -38,8 +50,6 @@ import java.util.function.LongToDoubleFunction;
 import java.util.function.LongUnaryOperator;
 import java.util.function.ToDoubleFunction;
 import java.util.function.UnaryOperator;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class used to create expressions that map from one value to another.
@@ -493,7 +503,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToByteMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToByteMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToByte<T> {
         ToByteMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -507,7 +517,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToShortMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToShortMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToShort<T> {
         ToShortMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -521,7 +531,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToIntMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToIntMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToInt<T> {
         ToIntMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -535,7 +545,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToLongMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToLongMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToLong<T> {
         ToLongMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -549,7 +559,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToFloatMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToFloatMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToFloat<T> {
         ToFloatMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -563,7 +573,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToDoubleMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToDoubleMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToDouble<T> {
         ToDoubleMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -577,7 +587,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToCharMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToCharMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToChar<T> {
         ToCharMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -591,7 +601,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToBooleanMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToBooleanMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToBoolean<T> {
         ToBooleanMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -606,7 +616,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToEnumMapper<T, E extends Enum<E>, INNER extends Expression<T>, MAPPER>
+    abstract static class ToEnumMapper<T, E extends Enum<E>, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToEnum<T, E> {
         ToEnumMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -620,7 +630,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToStringMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToStringMapper<T, INNER extends Expression<T>, MAPPER>
     extends AbstractMapper<T, INNER, MAPPER> implements ToString<T> {
         ToStringMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -634,7 +644,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class ToBigDecimalMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class ToBigDecimalMapper<T, INNER extends Expression<T>, MAPPER>
         extends AbstractMapper<T, INNER, MAPPER> implements ToBigDecimal<T> {
         ToBigDecimalMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
@@ -648,7 +658,7 @@ public final class MapperUtil {
      * @param <INNER>   the inner expression type
      * @param <MAPPER>  the mapping functional interface
      */
-    private abstract static class AbstractMapper<T, INNER extends Expression<T>, MAPPER>
+    abstract static class AbstractMapper<T, INNER extends Expression<T>, MAPPER>
     implements MapperExpression<T, INNER, MAPPER> {
         final INNER inner;
         final MAPPER mapper;
