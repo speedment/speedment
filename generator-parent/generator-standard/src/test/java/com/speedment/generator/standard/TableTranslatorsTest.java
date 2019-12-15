@@ -25,17 +25,28 @@ final class TableTranslatorsTest {
 
     @Test
     void speedmentJson() {
-        test(ProjectHolder.SPEEDMENT_JSON);
+        test(Projects.SPEEDMENT_JSON);
     }
 
     @Test
     void spring() {
-        test(ProjectHolder.SPRING_PLUGIN);
+        test(Projects.SPRING_PLUGIN);
     }
 
-    void test(ProjectHolder projectHolder) {
+    @Test
+    void dataStore() {
+        test(Projects.DATA_STORE);
+    }
+
+    @Test
+    void foreignKey() {
+        test(Projects.FOREIGN_KEY);
+    }
+
+
+    void test(Projects projectHolder) {
         Stream.of(projectHolder)
-            .map(ProjectHolder::project)
+            .map(Projects::project)
             .flatMap(p -> DocumentDbUtil.traverseOver(p, Table.class))
             .flatMap(this::translators)
             .forEach(this::test);

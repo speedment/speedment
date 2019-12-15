@@ -14,15 +14,17 @@ import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
-public enum ProjectHolder {
+public enum Projects {
     SPEEDMENT_JSON("speedment.json"),
-    SPRING_PLUGIN("spring-plugin.json")
+    SPRING_PLUGIN("spring-plugin.json"),
+    DATA_STORE("data-store.json"),
+    FOREIGN_KEY("foreign-key.json")
     ;
 
     private final String fileName;
     private final Project project;
 
-    ProjectHolder(String fileName) {
+    Projects(String fileName) {
         this.fileName = requireNonNull(fileName);
         project = projectHelper();
     }

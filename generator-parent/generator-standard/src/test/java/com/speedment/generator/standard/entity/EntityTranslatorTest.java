@@ -3,7 +3,7 @@ package com.speedment.generator.standard.entity;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.standard.ProjectHolder;
+import com.speedment.generator.standard.Projects;
 import com.speedment.generator.standard.StandardTranslatorBundle;
 import com.speedment.generator.translator.TranslatorBundle;
 import com.speedment.runtime.config.Table;
@@ -25,7 +25,7 @@ final class EntityTranslatorTest {
             .withBundle(StandardTranslatorBundle.class)
             .build();
 
-        Table table = DocumentDbUtil.traverseOver(ProjectHolder.SPEEDMENT_JSON.project(), Table.class).findFirst().orElseThrow(NoSuchElementException::new);
+        Table table = DocumentDbUtil.traverseOver(Projects.SPEEDMENT_JSON.project(), Table.class).findFirst().orElseThrow(NoSuchElementException::new);
 
         EntityTranslator translator = new EntityTranslator(injector,table);
 

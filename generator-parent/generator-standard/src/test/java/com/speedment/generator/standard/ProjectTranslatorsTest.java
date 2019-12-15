@@ -3,18 +3,9 @@ package com.speedment.generator.standard;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.standard.entity.EntityImplTranslator;
-import com.speedment.generator.standard.entity.EntityTranslator;
-import com.speedment.generator.standard.entity.GeneratedEntityImplTranslator;
-import com.speedment.generator.standard.entity.GeneratedEntityTranslator;
 import com.speedment.generator.standard.lifecycle.*;
-import com.speedment.generator.standard.manager.*;
 import com.speedment.generator.translator.Translator;
-import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.util.DocumentDbUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
@@ -29,17 +20,27 @@ final class ProjectTranslatorsTest {
 
     @Test
     void speedmentJson() {
-        test(ProjectHolder.SPEEDMENT_JSON);
+        test(Projects.SPEEDMENT_JSON);
     }
 
     @Test
     void spring() {
-        test(ProjectHolder.SPRING_PLUGIN);
+        test(Projects.SPRING_PLUGIN);
     }
 
-    void test(ProjectHolder projectHolder) {
+    @Test
+    void dataStore() {
+        test(Projects.DATA_STORE);
+    }
+
+    @Test
+    void foreignKey() {
+        test(Projects.FOREIGN_KEY);
+    }
+
+    void test(Projects projectHolder) {
         Stream.of(projectHolder)
-            .map(ProjectHolder::project)
+            .map(Projects::project)
             .flatMap(this::translators)
             .forEach(this::test);
     }
