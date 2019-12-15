@@ -312,6 +312,8 @@ final class MapStreamTest {
     void distinctKeys() {
         final MapStream<String, Integer> ms = MapStream.of(entry("Car", 1), entry("Car", 2));
         assertEquals(1, ms.distinctKeys().count());
+        final MapStream<String, Integer> ms2 = MapStream.of(entry("Car", 1), entry("Car", 2)).parallel();
+        assertEquals(1, ms2.distinctKeys().count());
     }
 
     @Test
@@ -339,6 +341,15 @@ final class MapStreamTest {
         final List<Map.Entry<String, Integer>> expected = refStream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
         final List<Map.Entry<String, Integer>> actual = instance.sorted().toList();
         assertEquals(expected, actual);
+
+        final MapStream<Object, Integer> ms = MapStream.of(entry(new Object(), 1));
+        assertThrows(UnsupportedOperationException.class, ms::sorted);
+
+        final MapStream<String, Integer> ms2 = MapStream.of(entry(null, 1), entry(null, 2));
+        assertThrows(UnsupportedOperationException.class, ms::sorted);
+
+        // Todo: Test values with both null and string values
+
     }
 
     @Test
@@ -412,7 +423,7 @@ final class MapStreamTest {
     void forEachOrdered() {
         final List<Map.Entry<String, Integer>> entries = new ArrayList<>();
         instance
-            .forEach((Consumer<Map.Entry<String, Integer>>) entries::add);
+            .forEachOrdered((Consumer<Map.Entry<String, Integer>>) entries::add);
         assertEquals(refStream().collect(Collectors.toList()), entries);
     }
 
@@ -420,7 +431,7 @@ final class MapStreamTest {
     void testForEachOrdered() {
         final List<Map.Entry<String, Integer>> entries = new ArrayList<>();
         instance
-            .forEach((k, v) -> entries.add(entry(k, v)));
+            .forEachOrdered((k, v) -> entries.add(entry(k, v)));
         assertEquals(refStream().collect(Collectors.toList()), entries);
     }
 
@@ -556,32 +567,32 @@ final class MapStreamTest {
     @Test
     void allMatch() {
         final Predicate<Map.Entry<String, Integer>> predicate = e -> !e.getKey().isEmpty();
-        final boolean expected = refStream().anyMatch(predicate);
-        final boolean actual = instance.anyMatch(predicate);
+        final boolean expected = refStream().allMatch(predicate);
+        final boolean actual = instance.allMatch(predicate);
         assertEquals(expected, actual);
     }
 
     @Test
     void testAllMatch() {
         final Predicate<Map.Entry<String, Integer>> predicate = e -> !e.getKey().isEmpty();
-        final boolean expected = refStream().anyMatch(predicate);
-        final boolean actual = instance.anyMatch((k, v) -> !k.isEmpty());
+        final boolean expected = refStream().allMatch(predicate);
+        final boolean actual = instance.allMatch((k, v) -> !k.isEmpty());
         assertEquals(expected, actual);
     }
 
     @Test
     void noneMatch() {
         final Predicate<Map.Entry<String, Integer>> predicate = e -> e.getKey().isEmpty();
-        final boolean expected = refStream().anyMatch(predicate);
-        final boolean actual = instance.anyMatch(predicate);
+        final boolean expected = refStream().noneMatch(predicate);
+        final boolean actual = instance.noneMatch(predicate);
         assertEquals(expected, actual);
     }
 
     @Test
     void testNoneMatch() {
         final Predicate<Map.Entry<String, Integer>> predicate = e -> e.getKey().isEmpty();
-        final boolean expected = refStream().anyMatch(predicate);
-        final boolean actual = instance.anyMatch((k, v) -> k.isEmpty());
+        final boolean expected = refStream().noneMatch(predicate);
+        final boolean actual = instance.noneMatch((k, v) -> k.isEmpty());
         assertEquals(expected, actual);
     }
 
@@ -783,6 +794,8 @@ final class MapStreamTest {
         final List<Map.Entry<String, Integer>> expected = refStream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList());
         final List<Map.Entry<String, Integer>> actual = instance.sortedByKey(comparator).collect(Collectors.toList());
         assertEquals(expected, actual);
+
+        assertThrows(NullPointerException.class, () -> MapStream.comparing(Function.identity(), null));
     }
 
     @Test
