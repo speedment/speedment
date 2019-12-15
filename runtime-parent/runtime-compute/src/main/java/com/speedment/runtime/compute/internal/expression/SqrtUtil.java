@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.compute.ToByte;
 import com.speedment.runtime.compute.ToDouble;
 import com.speedment.runtime.compute.ToFloat;
@@ -26,8 +28,6 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class for creating expressions that give the positive square root of
@@ -183,7 +183,7 @@ public final class SqrtUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the inner expression type to take the square root of
      */
-    private abstract static class AbstractSqrt<T, INNER extends Expression<T>>
+    abstract static class AbstractSqrt<T, INNER extends Expression<T>>
     implements UnaryExpression<T, INNER>, ToDouble<T> {
 
         final INNER inner;

@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.compute.ToByte;
 import com.speedment.runtime.compute.ToDouble;
 import com.speedment.runtime.compute.ToFloat;
@@ -27,8 +29,6 @@ import com.speedment.runtime.compute.expression.BinaryObjExpression;
 import com.speedment.runtime.compute.expression.Expression;
 
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class for creating expressions that takes the value of another
@@ -733,7 +733,7 @@ public final class PowUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class IntPower<T, INNER extends Expression<T>>
+    abstract static class IntPower<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Integer>, ToDouble<T> {
 
         final INNER inner;
@@ -782,7 +782,7 @@ public final class PowUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class DoublePower<T, INNER extends Expression<T>>
+    abstract static class DoublePower<T, INNER extends Expression<T>>
         implements BinaryObjExpression<T, INNER, Double>, ToDouble<T> {
 
         final INNER inner;
@@ -831,7 +831,7 @@ public final class PowUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class ToIntPower<T, INNER extends Expression<T>>
+    abstract static class ToIntPower<T, INNER extends Expression<T>>
     implements BinaryExpression<T, INNER, ToInt<T>>, ToDouble<T> {
 
         final INNER inner;
@@ -880,7 +880,7 @@ public final class PowUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class ToDoublePower<T, INNER extends Expression<T>>
+    abstract static class ToDoublePower<T, INNER extends Expression<T>>
     implements BinaryExpression<T, INNER, ToDouble<T>>, ToDouble<T> {
 
         final INNER inner;
