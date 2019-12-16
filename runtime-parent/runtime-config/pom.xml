@@ -26,7 +26,11 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
+<<<<<<< HEAD
         <version>3.2.6-SNAPSHOT</version>
+=======
+        <version>3.2.5</version>
+>>>>>>> master
     </parent>
     
     <artifactId>runtime-config</artifactId>
