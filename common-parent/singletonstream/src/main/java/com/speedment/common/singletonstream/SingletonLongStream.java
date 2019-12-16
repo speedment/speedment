@@ -17,8 +17,6 @@
 package com.speedment.common.singletonstream;
 
 import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
-import static com.speedment.common.singletonstream.internal.SingletonUtil.TRIPWIRE_ENABLED;
-import static com.speedment.common.singletonstream.internal.SingletonUtil.trip;
 import java.util.LongSummaryStatistics;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -347,9 +345,6 @@ public class SingletonLongStream implements LongStream {
 
             @Override
             public Long next() {
-                if (TRIPWIRE_ENABLED) {
-                    trip(getClass(), "{0} calling SingletonLongStream.singletonIterator.next()");
-                }
                 if (!hasNext) {
                     throw new NoSuchElementException();
                 }

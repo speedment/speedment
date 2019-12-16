@@ -16,31 +16,15 @@
  */
 package com.speedment.common.singletonstream;
 
-import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
-import static com.speedment.common.singletonstream.internal.SingletonUtil.TRIPWIRE_ENABLED;
-import static com.speedment.common.singletonstream.internal.SingletonUtil.trip;
-import java.util.IntSummaryStatistics;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.PrimitiveIterator;
-import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
-import java.util.function.IntPredicate;
-import java.util.function.IntToDoubleFunction;
-import java.util.function.IntToLongFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.ObjIntConsumer;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An implementation of an IntStream that takes exactly one element as its
@@ -352,9 +336,6 @@ public class SingletonIntStream implements IntStream {
 
             @Override
             public Integer next() {
-                if (TRIPWIRE_ENABLED) {
-                    trip(getClass(), "{0} calling SingletonIntStream.singletonIterator.next()");
-                }
                 if (!hasNext) {
                     throw new NoSuchElementException();
                 }

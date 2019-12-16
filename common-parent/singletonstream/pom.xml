@@ -46,8 +46,9 @@
         <!-- Speedment Common Dependencies -->
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>logger</artifactId>
+            <artifactId>combinatorics</artifactId>
             <version>${speedment.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

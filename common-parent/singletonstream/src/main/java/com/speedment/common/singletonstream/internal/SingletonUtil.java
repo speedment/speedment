@@ -16,11 +16,6 @@
  */
 package com.speedment.common.singletonstream.internal;
 
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 /**
  *
  * @author Per Minborg
@@ -32,18 +27,4 @@ public final class SingletonUtil {
 
     public static final boolean STRICT = true;
 
-    public static void trip(Class<?> trippingClass, String msg) {
-        LOGGER.warn(trippingClass.getName() + ", " + msg);
-    }
-    
-    private static final String TRIPWIRE_PROPERTY = "org.openjdk.java.util.stream.tripwire";
-    private static final Logger LOGGER = LoggerManager.getLogger(SingletonUtil.class);
-    
-    /**
-     * Should debugging checks be enabled?
-     */
-    public static final boolean TRIPWIRE_ENABLED = 
-        AccessController.doPrivileged(
-            (PrivilegedAction<Boolean>) () -> Boolean.getBoolean(TRIPWIRE_PROPERTY)
-        );
 }

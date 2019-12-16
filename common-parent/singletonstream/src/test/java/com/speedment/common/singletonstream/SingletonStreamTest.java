@@ -22,15 +22,17 @@
 package com.speedment.common.singletonstream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -38,33 +40,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 final class SingletonStreamTest {
 
+    private static final Double EPSILON = 1e-9;
+    private static String ELEMENT = "A";
+    private static String OTHER_ELEMENT = "B";
+
     private SingletonStream<String> instance;
 
     @BeforeEach
     void setUp() {
-        instance = SingletonStream.of("A");
+        instance = SingletonStream.of(ELEMENT);
     }
 
 
     @Test
     void testSome() {
-        final List<Integer> expected = Collections.singletonList(0);
-        final List<Integer> actual = instance.map("A"::indexOf).distinct().unordered().collect(toList());
+        final List<Integer> expected = singletonList(0);
+        final List<Integer> actual = instance.map(ELEMENT::indexOf).distinct().unordered().collect(toList());
         assertEquals(expected, actual);
     }
 
-    private <T> Consumer<T> blackHole() {
-        return (T t) -> {};
-    }
 
     /**
      * Test of of method, of class SingletonStream.
      */
     @Test
     void testOf() {
-        final SingletonStream<String> ss = SingletonStream.of("B");
+        final SingletonStream<String> ss = SingletonStream.of(OTHER_ELEMENT);
         final List<String> s = ss.collect(toList());
-        assertEquals(Collections.singletonList("B"), s);
+        assertEquals(singletonList(OTHER_ELEMENT), s);
     }
 
     /**
@@ -72,9 +75,9 @@ final class SingletonStreamTest {
      */
     @Test
     void testOfNullableElement() {
-        final Stream<String> ss = SingletonStream.ofNullable("B");
+        final Stream<String> ss = SingletonStream.ofNullable(OTHER_ELEMENT);
         final List<String> s = ss.collect(toList());
-        assertEquals(Collections.singletonList("B"), s);
+        assertEquals(singletonList(OTHER_ELEMENT), s);
     }
 
     @Test
@@ -89,8 +92,8 @@ final class SingletonStreamTest {
      */
     @Test
     void testFilter() {
-        assertEquals(1L, instance.filter("A"::equals).count());
-        assertEquals(1L, instance.filter("A"::equals).filter(Objects::nonNull).count());
+        assertEquals(1L, instance.filter(ELEMENT::equals).count());
+        assertEquals(1L, instance.filter(ELEMENT::equals).filter(Objects::nonNull).count());
     }
 
     /**
@@ -110,622 +113,235 @@ final class SingletonStreamTest {
      * Test of mapToInt method, of class SingletonStream.
      */
     @Test
-    void testMapToInt() {
+    void mapToInt() {
         assertEquals(1, instance.mapToInt(String::length).sum());
     }
 
-    // TODO: Implement the test cases below!
-//    @Test
-//    public void testMapToLong() {
-//        System.out.println("mapToLong");
-//        ToLongFunction mapper = null;
-//        SingletonStream instance = null;
-//        LongStream expResult = null;
-//        LongStream result = instance.mapToLong(mapper);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of mapToDouble method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testMapToDouble() {
-//        System.out.println("mapToDouble");
-//        ToDoubleFunction mapper = null;
-//        SingletonStream instance = null;
-//        DoubleStream expResult = null;
-//        DoubleStream result = instance.mapToDouble(mapper);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of flatMap method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testFlatMap() {
-//        System.out.println("flatMap");
-//        Function mapper = null;
-//        SingletonStream instance = null;
-//        Stream expResult = null;
-//        Stream result = instance.flatMap(mapper);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of flatMapToInt method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testFlatMapToInt() {
-//        System.out.println("flatMapToInt");
-//        Function mapper = null;
-//        SingletonStream instance = null;
-//        IntStream expResult = null;
-//        IntStream result = instance.flatMapToInt(mapper);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of flatMapToLong method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testFlatMapToLong() {
-//        System.out.println("flatMapToLong");
-//        Function mapper = null;
-//        SingletonStream instance = null;
-//        LongStream expResult = null;
-//        LongStream result = instance.flatMapToLong(mapper);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of flatMapToDouble method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testFlatMapToDouble() {
-//        System.out.println("flatMapToDouble");
-//        Function mapper = null;
-//        SingletonStream instance = null;
-//        DoubleStream expResult = null;
-//        DoubleStream result = instance.flatMapToDouble(mapper);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of distinct method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testDistinct() {
-//        System.out.println("distinct");
-//        SingletonStream instance = null;
-//        SingletonStream expResult = null;
-//        SingletonStream result = instance.distinct();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of sorted method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testSorted_0args() {
-//        System.out.println("sorted");
-//        SingletonStream instance = null;
-//        SingletonStream expResult = null;
-//        SingletonStream result = instance.sorted();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of sorted method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testSorted_Comparator() {
-//        System.out.println("sorted");
-//        Comparator comparator = null;
-//        SingletonStream instance = null;
-//        SingletonStream expResult = null;
-//        SingletonStream result = instance.sorted(comparator);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of peek method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testPeek() {
-//        System.out.println("peek");
-//        Consumer action = null;
-//        SingletonStream instance = null;
-//        Stream expResult = null;
-//        Stream result = instance.peek(action);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of limit method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testLimit() {
-//        System.out.println("limit");
-//        long maxSize = 0L;
-//        SingletonStream instance = null;
-//        Stream expResult = null;
-//        Stream result = instance.limit(maxSize);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of skip method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testSkip() {
-//        System.out.println("skip");
-//        long n = 0L;
-//        SingletonStream instance = null;
-//        Stream expResult = null;
-//        Stream result = instance.skip(n);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of forEach method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testForEach() {
-//        System.out.println("forEach");
-//        Consumer action = null;
-//        SingletonStream instance = null;
-//        instance.forEach(action);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of forEachOrdered method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testForEachOrdered() {
-//        System.out.println("forEachOrdered");
-//        Consumer action = null;
-//        SingletonStream instance = null;
-//        instance.forEachOrdered(action);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of toArray method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testToArray_0args() {
-//        System.out.println("toArray");
-//        SingletonStream instance = null;
-//        Object[] expResult = null;
-//        Object[] result = instance.toArray();
-//        assertArrayEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of toArray method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testToArray_IntFunction() {
-//        System.out.println("toArray");
-//        IntFunction generator = null;
-//        SingletonStream instance = null;
-//        Object[] expResult = null;
-//        Object[] result = instance.toArray(generator);
-//        assertArrayEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of reduce method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testReduce_GenericType_BinaryOperator() {
-//        System.out.println("reduce");
-//        SingletonStream instance = null;
-//        Object expResult = null;
-//        Object result = instance.reduce(null);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of reduce method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testReduce_BinaryOperator() {
-//        System.out.println("reduce");
-//        SingletonStream instance = null;
-//        Optional expResult = null;
-//        Optional result = instance.reduce(null);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of reduce method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testReduce_3args() {
-//        System.out.println("reduce");
-//        SingletonStream instance = null;
-//        Object expResult = null;
-//        Object result = instance.reduce(null);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of collect method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testCollect_3args() {
-//        System.out.println("collect");
-//        SingletonStream instance = null;
-//        Object expResult = null;
-//        Object result = instance.collect(null);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of collect method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testCollect_Collector() {
-//        System.out.println("collect");
-//        SingletonStream instance = null;
-//        Object expResult = null;
-//        Object result = instance.collect(null);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of min method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testMin() {
-//        System.out.println("min");
-//        Comparator comparator = null;
-//        SingletonStream instance = null;
-//        Optional expResult = null;
-//        Optional result = instance.min(comparator);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of max method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testMax() {
-//        System.out.println("max");
-//        Comparator comparator = null;
-//        SingletonStream instance = null;
-//        Optional expResult = null;
-//        Optional result = instance.max(comparator);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of count method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testCount() {
-//        System.out.println("count");
-//        SingletonStream instance = null;
-//        long expResult = 0L;
-//        long result = instance.count();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of anyMatch method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testAnyMatch() {
-//        System.out.println("anyMatch");
-//        Predicate predicate = null;
-//        SingletonStream instance = null;
-//        boolean expResult = false;
-//        boolean result = instance.anyMatch(predicate);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of allMatch method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testAllMatch() {
-//        System.out.println("allMatch");
-//        Predicate predicate = null;
-//        SingletonStream instance = null;
-//        boolean expResult = false;
-//        boolean result = instance.allMatch(predicate);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of noneMatch method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testNoneMatch() {
-//        System.out.println("noneMatch");
-//        Predicate predicate = null;
-//        SingletonStream instance = null;
-//        boolean expResult = false;
-//        boolean result = instance.noneMatch(predicate);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of findFirst method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testFindFirst() {
-//        System.out.println("findFirst");
-//        SingletonStream instance = null;
-//        Optional expResult = null;
-//        Optional result = instance.findFirst();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of findAny method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testFindAny() {
-//        System.out.println("findAny");
-//        SingletonStream instance = null;
-//        Optional expResult = null;
-//        Optional result = instance.findAny();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of iterator method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testIterator() {
-//        System.out.println("iterator");
-//        SingletonStream instance = null;
-//        Iterator expResult = null;
-//        Iterator result = instance.iterator();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of spliterator method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testSpliterator() {
-//        System.out.println("spliterator");
-//        SingletonStream instance = null;
-//        Spliterator expResult = null;
-//        Spliterator result = instance.spliterator();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of isParallel method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testIsParallel() {
-//        System.out.println("isParallel");
-//        SingletonStream instance = null;
-//        boolean expResult = false;
-//        boolean result = instance.isParallel();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of sequential method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testSequential() {
-//        System.out.println("sequential");
-//        SingletonStream instance = null;
-//        SingletonStream expResult = null;
-//        SingletonStream result = instance.sequential();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of parallel method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testParallel() {
-//        System.out.println("parallel");
-//        SingletonStream instance = null;
-//        Stream expResult = null;
-//        Stream result = instance.parallel();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of unordered method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testUnordered() {
-//        System.out.println("unordered");
-//        SingletonStream instance = null;
-//        Stream expResult = null;
-//        Stream result = instance.unordered();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of onClose method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testOnClose() {
-//        System.out.println("onClose");
-//        Runnable closeHandler = null;
-//        SingletonStream instance = null;
-//        Stream expResult = null;
-//        Stream result = instance.onClose(closeHandler);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of close method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testClose() {
-//        System.out.println("close");
-//        SingletonStream instance = null;
-//        instance.close();
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of get method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testGet() {
-//        System.out.println("get");
-//        SingletonStream instance = null;
-//        Object expResult = null;
-//        Object result = instance.get();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of isPresent method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testIsPresent() {
-//        System.out.println("isPresent");
-//        SingletonStream instance = null;
-//        boolean expResult = false;
-//        boolean result = instance.isPresent();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of ifPresent method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testIfPresent() {
-//        System.out.println("ifPresent");
-//        Consumer consumer = null;
-//        SingletonStream instance = null;
-//        instance.ifPresent(consumer);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getOrElse method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testGetOrElse() {
-//        System.out.println("getOrElse");
-//        Object other = null;
-//        SingletonStream instance = null;
-//        Object expResult = null;
-//        Object result = instance.getOrElse(other);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getOrElseFrom method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testGetOrElseFrom() {
-//        System.out.println("getOrElseFrom");
-//        Supplier other = null;
-//        SingletonStream instance = null;
-//        Object expResult = null;
-//        Object result = instance.getOrElseFrom(other);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
-//    /**
-//     * Test of getOrElseThrow method, of class SingletonStream.
-//     */
-//    @Test
-//    public void testGetOrElseThrow() throws Exception {
-//        System.out.println("getOrElseThrow");
-//        Supplier exceptionSupplier = null;
-//        SingletonStream instance = null;
-//        Object expResult = null;
-//        Object result = instance.getOrElseThrow(exceptionSupplier);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+
+    @Test
+    void mapToLong() {
+        assertEquals(1, instance.mapToLong(String::length).sum());
+    }
+
+    @Test
+    void mapToDouble() {
+        assertEquals(1, instance.mapToDouble(String::length).sum(), EPSILON);
+    }
+
+    @Test
+    void flatMap() {
+        assertEquals(1, instance.flatMap(s -> s.chars().boxed()).count());
+    }
+
+    @Test
+    void flatMapToInt() {
+        assertEquals(1, instance.flatMapToInt(s -> IntStream.range(0, s.length())).count());
+    }
+
+    @Test
+    void flatMapToLong() {
+        assertEquals(1, instance.flatMapToLong(s -> LongStream.range(0, s.length())).count());
+    }
+
+    @Test
+    void flatMapToDouble() {
+        assertEquals(2, instance.flatMapToDouble(s -> DoubleStream.of(0, s.length())).count());
+    }
+
+
+    @Test
+    void distinct() {
+        assertEquals(1, instance.distinct().count());
+    }
+
+    @Test
+    void sorted() {
+        assertEquals(1, instance.sorted().count());
+    }
+
+    @Test
+    void sortedArg() {
+        assertEquals(1, instance.sorted(Comparator.reverseOrder()).count());
+    }
+
+    @Test
+    void peek() {
+        final AtomicInteger cnt = new AtomicInteger();
+        instance.peek(unused -> cnt.getAndIncrement()).forEach(blackHole());
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void limit() {
+        assertEquals(1, instance.limit(1).count());
+    }
+
+    @Test
+    void skip() {
+        assertEquals(0, instance.skip(1).count());
+    }
+
+    @Test
+    void forEach() {
+        final List<String> strings = new ArrayList<>();
+        instance.forEach(strings::add);
+        assertEquals(1, strings.size());
+    }
+
+    @Test
+    void forEachOrdered() {
+        final List<String> strings = new ArrayList<>();
+        instance.forEachOrdered(strings::add);
+        assertEquals(1, strings.size());
+    }
+
+    @Test
+    void toArray() {
+        assertEquals(1, instance.toArray().length);
+    }
+
+    @Test
+    void toArrayGenerator() {
+        assertEquals(1, instance.toArray(String[]::new).length);
+    }
+
+    @Test
+    void reduce() {
+        assertEquals(Optional.of(ELEMENT), instance.reduce((a, b) -> a + b));
+    }
+
+    @Test
+    void reduce2Arg() {
+        assertEquals(OTHER_ELEMENT + ELEMENT, instance.reduce(OTHER_ELEMENT, (a, b) -> a + b));
+    }
+
+    @Test
+    void reduce3Arg() {
+        assertEquals(OTHER_ELEMENT + ELEMENT, instance.reduce(OTHER_ELEMENT, (a, b) -> a + b, (a, b) -> a + b));
+    }
+
+    @Test
+    void collect() {
+        assertEquals(ELEMENT, instance.collect(Collectors.joining()));
+    }
+
+    @Test
+    void collect3Arg() {
+        assertEquals(singletonList(ELEMENT), instance.collect(ArrayList::new, List::add, ArrayList::addAll));
+    }
+
+    @Test
+    void min() {
+        assertEquals(Optional.of(ELEMENT), instance.min(Comparator.naturalOrder()));
+    }
+
+    @Test
+    void max() {
+        assertEquals(Optional.of(ELEMENT), instance.max(Comparator.naturalOrder()));
+    }
+
+    @Test
+    void count() {
+        assertEquals(1, instance.count());
+    }
+
+    @Test
+    void anyMatch() {
+        assertTrue(instance.anyMatch(ELEMENT::equals));
+        assertFalse(SingletonStream.of(OTHER_ELEMENT).anyMatch(ELEMENT::equals));
+    }
+
+    @Test
+    void allMatch() {
+        assertTrue(instance.allMatch(ELEMENT::equals));
+        assertFalse(SingletonStream.of(OTHER_ELEMENT).allMatch(ELEMENT::equals));
+    }
+
+    @Test
+    void noneMatch() {
+        assertFalse(instance.noneMatch(ELEMENT::equals));
+        assertTrue(SingletonStream.of(OTHER_ELEMENT).noneMatch(ELEMENT::equals));
+    }
+
+    @Test
+    void findFirst() {
+        assertEquals(Optional.of(ELEMENT), instance.findFirst());
+    }
+
+    @Test
+    void findAny() {
+        assertEquals(Optional.of(ELEMENT), instance.findAny());
+    }
+
+
+    @Test
+    void iterator() {
+        final AtomicInteger cnt = new AtomicInteger();
+        instance.iterator().forEachRemaining(s -> cnt.incrementAndGet());
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void spliterator() {
+        final AtomicInteger cnt = new AtomicInteger();
+        instance.spliterator().forEachRemaining(s -> cnt.incrementAndGet());
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void isParallel() {
+        assertFalse(instance.isParallel());
+        final Stream<String> newStream = instance.parallel();
+        assertTrue(newStream.isParallel());
+    }
+
+    @Test
+    @Disabled("https://github.com/speedment/speedment/issues/851")
+    void mutableParallel() {
+        instance.parallel();
+        assertTrue(instance.isParallel());
+    }
+
+    @Test
+    void parallel() {
+        final Stream<String> newStream = instance.parallel();
+        assertFalse(instance.isParallel());
+    }
+
+    @Test
+    void sequential() {
+        assertSame(instance, instance.sequential());
+    }
+
+    @Test
+    void unordered() {
+        assertSame(instance, instance.unordered());
+    }
+
+    @Test
+    @Disabled("https://github.com/speedment/speedment/issues/851")
+    void mutableOnClose() {
+        final AtomicInteger cnt = new AtomicInteger();
+        instance.onClose(cnt::incrementAndGet);
+        instance.close();
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void onClose() {
+        final AtomicInteger cnt = new AtomicInteger();
+        final Stream<String> newStream = instance.onClose(cnt::incrementAndGet);
+        newStream.close();
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void close() {
+        assertDoesNotThrow(instance::close);
+    }
+
+    private <T> Consumer<T> blackHole() {
+        return (T t) -> {};
+    }
+
 }

@@ -362,7 +362,7 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public void close() {
-        // do nothing. OnClose createa a real Stream
+        // do nothing. OnClose creates a real Stream
     }
 
     /**
