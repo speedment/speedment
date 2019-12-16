@@ -26,11 +26,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment-parent</artifactId>
-<<<<<<< HEAD
         <version>3.2.6-SNAPSHOT</version>
-=======
-        <version>3.2.5</version>
->>>>>>> master
     </parent>
     
     <groupId>com.speedment.build</groupId>
