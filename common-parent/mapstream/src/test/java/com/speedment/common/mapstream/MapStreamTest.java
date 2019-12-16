@@ -15,7 +15,7 @@ final class MapStreamTest {
 
     private final double EPSILON = 1e-9;
 
-    private  Map<String, Integer> stringToint;
+    private  Map<String, Integer> stringToInt;
     private  Map<Integer, String> intToString;
     private final Collector<Map.Entry<String, Integer>, ?, Map<String, Integer>> TO_MAP = Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue);
     private final Predicate<Map.Entry<String, Integer>> KEY_STARTS_WITH_D = e -> e.getKey().startsWith("d");
@@ -23,7 +23,7 @@ final class MapStreamTest {
 
     @BeforeEach
     void setup() {
-        stringToint = refStream().collect(TO_MAP);
+        stringToInt = refStream().collect(TO_MAP);
         intToString = refStream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
         instance    = MapStream.of(refStream());
     }
@@ -32,13 +32,13 @@ final class MapStreamTest {
     @SuppressWarnings("unchecked")
     void of() {
         final MapStream<String, Integer> ms = MapStream.of(refStream().toArray(Map.Entry[]::new));
-        assertEquals(stringToint, ms.toMap());
+        assertEquals(stringToInt, ms.toMap());
     }
 
     @Test
     void testOf() {
-        final MapStream<String, Integer> ms = MapStream.of(stringToint);
-        assertEquals(stringToint, ms.toMap());
+        final MapStream<String, Integer> ms = MapStream.of(stringToInt);
+        assertEquals(stringToInt, ms.toMap());
     }
 
     @Test
@@ -52,33 +52,33 @@ final class MapStreamTest {
     @Test
     void testOf2() {
         final MapStream<String, Integer> ms = MapStream.of(refStream());
-        assertEquals(stringToint, ms.toMap());
+        assertEquals(stringToInt, ms.toMap());
     }
 
     @Test
     void testOf3() {
-        final MapStream<String, Integer> msSequential = MapStream.of(stringToint, false);
-        assertEquals(stringToint, msSequential.toMap());
-        final MapStream<String, Integer> msParallel = MapStream.of(stringToint, true);
-        assertEquals(stringToint, msParallel.toMap());
+        final MapStream<String, Integer> msSequential = MapStream.of(stringToInt, false);
+        assertEquals(stringToInt, msSequential.toMap());
+        final MapStream<String, Integer> msParallel = MapStream.of(stringToInt, true);
+        assertEquals(stringToInt, msParallel.toMap());
     }
 
     @Test
     void fromKeys() {
-        final MapStream<String, Integer> ms = MapStream.fromKeys(stringToint.keySet().stream(), stringToint::get);
-        assertEquals(stringToint, ms.toMap());
+        final MapStream<String, Integer> ms = MapStream.fromKeys(stringToInt.keySet().stream(), stringToInt::get);
+        assertEquals(stringToInt, ms.toMap());
     }
 
     @Test
     void fromValues() {
-        final MapStream<String, Integer> ms = MapStream.fromValues(stringToint.values().stream(), intToString::get);
-        assertEquals(stringToint, ms.toMap());
+        final MapStream<String, Integer> ms = MapStream.fromValues(stringToInt.values().stream(), intToString::get);
+        assertEquals(stringToInt, ms.toMap());
     }
 
     @Test
     void fromStream() {
-        final MapStream<String, Integer> ms = MapStream.fromStream(stringToint.keySet().stream(), Function.identity(), stringToint::get);
-        assertEquals(stringToint, ms.toMap());
+        final MapStream<String, Integer> ms = MapStream.fromStream(stringToInt.keySet().stream(), Function.identity(), stringToInt::get);
+        assertEquals(stringToInt, ms.toMap());
     }
 
     @Test
@@ -123,14 +123,14 @@ final class MapStreamTest {
 
     @Test
     void map() {
-        final Set<String> expected = new HashSet<>(stringToint.keySet());
+        final Set<String> expected = new HashSet<>(stringToInt.keySet());
         final Set<String> actual = instance.map(Map.Entry::getKey).collect(Collectors.toSet());
         assertEquals(expected, actual);
     }
 
     @Test
     void testMap() {
-        final Set<String> expected = new HashSet<>(stringToint.keySet());
+        final Set<String> expected = new HashSet<>(stringToInt.keySet());
         final Set<String> actual = instance.map((k, v) -> k).collect(Collectors.toSet());
         assertEquals(expected, actual);
     }
@@ -633,7 +633,7 @@ final class MapStreamTest {
     @Test
     void isParallel() {
         assertFalse(instance.isParallel());
-        assertTrue(MapStream.of(stringToint, true).isParallel());
+        assertTrue(MapStream.of(stringToInt, true).isParallel());
     }
 
     @Test
@@ -714,7 +714,7 @@ final class MapStreamTest {
     @Test
     void toSortedMapByKey() {
         final Comparator<String> keyComparator = Comparator.reverseOrder();
-        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToint.get(k))).collect(TO_MAP);
+        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToInt.get(k))).collect(TO_MAP);
         final Map<String, Integer> actual = instance.toSortedMapByKey(keyComparator);
         assertEquals(expected, actual);
         assertTrue(actual instanceof NavigableMap);
@@ -735,7 +735,7 @@ final class MapStreamTest {
     @Test
     void testToSortedMap1() {
         final Comparator<String> keyComparator = Comparator.reverseOrder();
-        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToint.get(k))).collect(TO_MAP);
+        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToInt.get(k))).collect(TO_MAP);
         final Map<String, Integer> actual = instance.toSortedMap(keyComparator, MapStream.throwingMerger());
         assertEquals(expected, actual);
         assertTrue(actual instanceof NavigableMap);
@@ -755,7 +755,7 @@ final class MapStreamTest {
     @Test
     void toConcurrentNavigableMapByKey() {
         final Comparator<String> keyComparator = Comparator.reverseOrder();
-        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToint.get(k))).collect(TO_MAP);
+        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToInt.get(k))).collect(TO_MAP);
         final Map<String, Integer> actual = instance.toConcurrentNavigableMapByKey(keyComparator);
         assertEquals(expected, actual);
     }
@@ -774,7 +774,7 @@ final class MapStreamTest {
     @Test
     void testToConcurrentNavigableMap1() {
         final Comparator<String> keyComparator = Comparator.reverseOrder();
-        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToint.get(k))).collect(TO_MAP);
+        final Map<String, Integer> expected = refStream().map(Map.Entry::getKey).sorted(keyComparator).map(k -> entry(k, stringToInt.get(k))).collect(TO_MAP);
         final Map<String, Integer> actual = instance.toConcurrentNavigableMap(keyComparator, MapStream.throwingMerger());
         assertEquals(expected, actual);
         assertThrows(IllegalStateException.class, () -> {
