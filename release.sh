@@ -70,7 +70,7 @@ git pull
 git merge develop
 
 echo "** Setting versions to $VERSION"
-./set_version "$VERSION"
+./set_version.sh "$VERSION"
 mvn speedmentversion:check
 
 echo "** Building version $VERSION"
