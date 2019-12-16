@@ -44,11 +44,7 @@ public final class InfoComponentImpl implements InfoComponent {
     @Override
     // This method must be formatted like this (in a single line) in order
     // to work with the version update script
-<<<<<<< HEAD
     public String getImplementationVersion() { return "3.2.6-SNAPSHOT"; }
-=======
-    public String getImplementationVersion() { return "3.2.5"; }
->>>>>>> master
 
     @Override
     public String getVendor() {
