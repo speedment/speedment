@@ -18,6 +18,7 @@ package com.speedment.common.combinatorics;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -87,5 +88,20 @@ final class CombinationTest {
         ));
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testOfTwoList() {
+        final Set<List<String>> actual = Combination.of(Arrays.asList("a", "b"))
+            .collect(toSet());
+
+        final Set<List<String>> expected = new HashSet<>(asList(
+            singletonList("a"),
+            singletonList("b"),
+            asList("a", "b")
+        ));
+
+        assertEquals(expected, actual);
+
     }
 }

@@ -99,8 +99,28 @@ final class PermutationTest {
 
     @Test
     void of() {
-        final List<List<Integer>> expected =
-        Stream.of(
+        final List<List<Integer>> expected = expectedFor123();
+        final List<List<Integer>> actual =
+            Permutation.of(1,2,3)
+            .map(s -> s.collect(toList()))
+            .collect(toList());
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void ofList() {
+        final List<List<Integer>> expected = expectedFor123();
+        final List<List<Integer>> actual =
+            Permutation.of(LIST)
+                .map(s -> s.collect(toList()))
+                .collect(toList());
+
+        assertEquals(expected, actual);
+    }
+
+    private List<List<Integer>> expectedFor123() {
+        return Stream.of(
             Arrays.asList(1,2,3),
             Arrays.asList(1,3,2),
             Arrays.asList(2,1,3),
@@ -108,13 +128,6 @@ final class PermutationTest {
             Arrays.asList(3,1,2),
             Arrays.asList(3,2,1)
         ).collect(toList());
-
-        final List<List<Integer>> actual =
-            Permutation.of(1,2,3)
-            .map(s -> s.collect(toList()))
-            .collect(toList());
-
-        assertEquals(expected, actual);
     }
 
     private long fac(int i) {

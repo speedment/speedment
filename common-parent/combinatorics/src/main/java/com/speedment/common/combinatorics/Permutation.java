@@ -75,4 +75,19 @@ public final class Permutation {
         return PermutationUtil.of(items);
     }
 
+    /**
+     * Creates and returns a Stream of all permutations of the provided {@code items} list.
+     * <p>
+     * Note that the number of permutations increases very rapidly as the length of
+     * the provided {@code items} list increases.
+     *
+     * @param items to create permutations for
+     * @param <T> type of the elements
+     * @return a Stream of all permutations of the provided {@code items} list
+     * @throws NullPointerException is the provided {@code items} list is {@code null}.
+     */
+    public static <T> Stream<Stream<T>> of(final List<T> items) {
+        return PermutationUtil.of(items);
+    }
+
 }

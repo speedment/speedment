@@ -16,6 +16,7 @@
  */
 package com.speedment.common.combinatorics.internal;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -50,6 +51,20 @@ public final class CombinationUtil {
                 final T[] data = (T[]) new Object[r];
                 return combinationHelper(items, data, 0, items.length - 1, 0, r);
             }).flatMap(identity());
+    }
+
+    /**
+     * Creates and returns all possible combinations of the given elements.
+     *
+     * The order of the combinations in the stream is unspecified.
+     *
+     * @param <T> element type
+     * @param items to combine
+     * @return all possible combinations of the given elements
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Stream<List<T>> of(final Collection<T> items) {
+        return of((T[]) items.toArray());
     }
 
     private static <T> Stream<List<T>> combinationHelper(

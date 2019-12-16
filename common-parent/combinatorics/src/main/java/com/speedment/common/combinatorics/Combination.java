@@ -18,6 +18,7 @@ package com.speedment.common.combinatorics;
 
 import com.speedment.common.combinatorics.internal.CombinationUtil;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -42,6 +43,19 @@ public final class Combination {
     @SafeVarargs
     @SuppressWarnings("varargs") // Creating a List from an array is safe
     public static <T> Stream<List<T>> of(final T... items) {
+        return CombinationUtil.of(items);
+    }
+
+    /**
+     * Creates and returns all possible combinations of the given elements.
+     *
+     * The order of the combinations in the stream is unspecified.
+     *
+     * @param <T> element type
+     * @param items to combine
+     * @return all possible combinations of the given elements
+     */
+    public static <T> Stream<List<T>> of(final Collection<T> items) {
         return CombinationUtil.of(items);
     }
 
