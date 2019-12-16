@@ -44,7 +44,7 @@ echo "** Pulling updates from GitHub"
 git pull
 echo "** Checking license headers"
 mvn -Prelease com.mycila:license-maven-plugin:3.0:format -Plicense-check
-if [ $2 == 'skip' ]
+if [ "$2" == 'skip' ]
  then
   echo "** Skipping build of the enterprise project"
  else
