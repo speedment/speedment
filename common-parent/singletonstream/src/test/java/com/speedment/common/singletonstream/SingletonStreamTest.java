@@ -177,9 +177,30 @@ final class SingletonStreamTest {
     }
 
     @Test
+    void limit0() {
+        assertEquals(0, instance.limit(0).count());
+    }
+
+    @Test
+    void limitNegative() {
+        assertThrows(IllegalArgumentException.class, () -> instance.limit(-1).count());
+    }
+
+    @Test
     void skip() {
         assertEquals(0, instance.skip(1).count());
     }
+
+    @Test
+    void skip0() {
+        assertEquals(1, instance.skip(0).count());
+    }
+
+    @Test
+    void skipNegative() {
+        assertThrows(IllegalArgumentException.class, () -> instance.skip(-1).count());
+    }
+
 
     @Test
     void forEach() {
@@ -273,7 +294,6 @@ final class SingletonStreamTest {
         assertEquals(Optional.of(ELEMENT), instance.findAny());
     }
 
-
     @Test
     void iterator() {
         final AtomicInteger cnt = new AtomicInteger();
@@ -282,11 +302,72 @@ final class SingletonStreamTest {
     }
 
     @Test
+    void iteratorNext() {
+        final AtomicInteger cnt = new AtomicInteger();
+        final Iterator<String> iterator = instance.iterator();
+        while (iterator.hasNext()) {
+            String element = iterator.next();
+            cnt.incrementAndGet();
+        }
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void iteratorOutOfRange() {
+        final Iterator<String> iterator = instance.iterator();
+        String element = iterator.next();
+        assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Test
+    void iteratorRemove() {
+        assertThrows(UnsupportedOperationException.class, () -> instance.iterator().remove());
+    }
+
+    @Test
     void spliterator() {
         final AtomicInteger cnt = new AtomicInteger();
         instance.spliterator().forEachRemaining(s -> cnt.incrementAndGet());
         assertEquals(1, cnt.get());
     }
+
+    @Test
+    void spliteratorCharacteristics() {
+        final int c = instance.spliterator().characteristics();
+        assertHasFlag(c, Spliterator.DISTINCT);
+        assertHasFlag(c, Spliterator.IMMUTABLE);
+        assertHasFlag(c, Spliterator.ORDERED);
+        assertHasFlag(c, Spliterator.SIZED);
+        assertHasFlag(c, Spliterator.SUBSIZED);
+    }
+
+    private void assertHasFlag(int c, int flag) {
+        assertTrue((c & flag) > 0);
+    }
+
+    @Test
+    void spliteratorEstimateSize() {
+        final AtomicInteger cnt = new AtomicInteger();
+        final Spliterator<String> spliterator = instance.spliterator();
+        assertEquals(1, spliterator.estimateSize());
+        spliterator.tryAdvance(e -> cnt.incrementAndGet());
+        assertEquals(0, spliterator.estimateSize());
+        assertEquals(1, cnt.get());
+    }
+
+    @Test
+    void spliteratorTrySplit() {
+        assertNull(instance.spliterator().trySplit());
+    }
+
+    @Test
+    void spliteratorTryAdvance() {
+        final Spliterator<String> spliterator = instance.spliterator();
+        final AtomicInteger cnt = new AtomicInteger();
+        assertTrue(spliterator.tryAdvance(e -> cnt.incrementAndGet()));
+        assertFalse(spliterator.tryAdvance(e -> cnt.incrementAndGet()));
+    }
+
 
     @Test
     void isParallel() {
