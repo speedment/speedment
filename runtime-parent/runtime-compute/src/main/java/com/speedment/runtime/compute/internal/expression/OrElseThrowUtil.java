@@ -16,15 +16,36 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
-import com.speedment.runtime.compute.*;
+import static java.util.Objects.requireNonNull;
+
+import com.speedment.runtime.compute.ToBigDecimalNullable;
+import com.speedment.runtime.compute.ToBooleanNullable;
+import com.speedment.runtime.compute.ToByteNullable;
+import com.speedment.runtime.compute.ToCharNullable;
+import com.speedment.runtime.compute.ToDoubleNullable;
+import com.speedment.runtime.compute.ToEnumNullable;
+import com.speedment.runtime.compute.ToFloatNullable;
+import com.speedment.runtime.compute.ToIntNullable;
+import com.speedment.runtime.compute.ToLongNullable;
+import com.speedment.runtime.compute.ToShortNullable;
+import com.speedment.runtime.compute.ToStringNullable;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.NonNullableExpression;
-import com.speedment.runtime.compute.expression.orelse.*;
+import com.speedment.runtime.compute.expression.orelse.OrElseThrowExpression;
+import com.speedment.runtime.compute.expression.orelse.ToBigDecimalOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToBooleanOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToByteOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToCharOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToDoubleOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToEnumOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToFloatOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToIntOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToLongOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToShortOrThrow;
+import com.speedment.runtime.compute.expression.orelse.ToStringOrThrow;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class used to create expressions that wrap a nullable expression and
@@ -397,7 +418,7 @@ public final class OrElseThrowUtil {
      * @param <T>     the input type
      * @param <INNER> the wrapped nullable expression type
      */
-    private abstract static class AbstractNonNullable<T, INNER extends Expression<T>>
+    abstract static class AbstractNonNullable<T, INNER extends Expression<T>>
     implements OrElseThrowExpression<T, INNER> {
         final INNER inner;
 

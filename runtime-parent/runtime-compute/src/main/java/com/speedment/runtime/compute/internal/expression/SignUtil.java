@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.compute.ToBigDecimal;
 import com.speedment.runtime.compute.ToByte;
 import com.speedment.runtime.compute.ToDouble;
@@ -27,8 +29,6 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class for creating expressions that gives the sign ({@code 1},
@@ -248,7 +248,7 @@ public final class SignUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class AbstractSign<T, INNER extends Expression<T>>
+    abstract static class AbstractSign<T, INNER extends Expression<T>>
     implements UnaryExpression<T, INNER>, ToByte<T> {
         final INNER inner;
 
