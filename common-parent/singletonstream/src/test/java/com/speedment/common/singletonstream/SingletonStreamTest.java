@@ -51,14 +51,12 @@ final class SingletonStreamTest {
         instance = SingletonStream.of(ELEMENT);
     }
 
-
     @Test
     void testSome() {
         final List<Integer> expected = singletonList(0);
         final List<Integer> actual = instance.map(ELEMENT::indexOf).distinct().unordered().collect(toList());
         assertEquals(expected, actual);
     }
-
 
     /**
      * Test of of method, of class SingletonStream.
@@ -302,6 +300,15 @@ final class SingletonStreamTest {
     }
 
     @Test
+    void iteratorNextAndThenForEachRemaining() {
+        final AtomicInteger cnt = new AtomicInteger();
+        final Iterator<String> iterator = instance.iterator();
+        iterator.next();
+        iterator.forEachRemaining(s -> cnt.incrementAndGet());
+        assertEquals(0, cnt.get());
+    }
+
+    @Test
     void iteratorNext() {
         final AtomicInteger cnt = new AtomicInteger();
         final Iterator<String> iterator = instance.iterator();
@@ -332,6 +339,13 @@ final class SingletonStreamTest {
     }
 
     @Test
+    void spliteratorCharacteristicsOfNullElement() {
+        final SingletonStream containsNull = SingletonStream.of(null);
+        final Spliterator<String> spliterator = containsNull.spliterator();
+        assertEquals(0, spliterator.characteristics() & Spliterator.NONNULL);
+    }
+
+    @Test
     void spliteratorCharacteristics() {
         final int c = instance.spliterator().characteristics();
         assertHasFlag(c, Spliterator.DISTINCT);
@@ -339,6 +353,7 @@ final class SingletonStreamTest {
         assertHasFlag(c, Spliterator.ORDERED);
         assertHasFlag(c, Spliterator.SIZED);
         assertHasFlag(c, Spliterator.SUBSIZED);
+        assertHasFlag(c, Spliterator.NONNULL);
     }
 
     private void assertHasFlag(int c, int flag) {
@@ -419,6 +434,18 @@ final class SingletonStreamTest {
     @Test
     void close() {
         assertDoesNotThrow(instance::close);
+    }
+
+    @Test
+    void takeWhile() {
+        assertEquals(1, instance.takeWhile(ELEMENT::equals).count());
+        assertEquals(0, instance.takeWhile(OTHER_ELEMENT::equals).count());
+    }
+
+    @Test
+    void dropWhile() {
+        assertEquals(0, instance.dropWhile(ELEMENT::equals).count());
+        assertEquals(1, instance.dropWhile(OTHER_ELEMENT::equals).count());
     }
 
     private <T> Consumer<T> blackHole() {
