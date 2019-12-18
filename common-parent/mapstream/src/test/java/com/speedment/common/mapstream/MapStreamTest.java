@@ -353,6 +353,12 @@ final class MapStreamTest {
     }
 
     @Test
+    void testDistinctKeysParallel() {
+        final MapStream<String, Integer> ms = MapStream.of(entry("Car", 1), entry("Car", 2)).parallel();
+        assertEquals(3, ms.distinctKeys(Integer::sum).values().mapToInt(i -> i).sum());
+    }
+
+    @Test
     void testDistinctValues() {
         final Map<String, Integer> expected = MapStream.of(entry("Einsjedan", 1)).toMap();
         final MapStream<String, Integer> ms = MapStream.of(entry("jedan", 1), entry("Eins", 1));
