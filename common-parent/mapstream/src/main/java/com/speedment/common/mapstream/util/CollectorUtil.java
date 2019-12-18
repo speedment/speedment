@@ -54,14 +54,14 @@ public final class CollectorUtil {
         );
     }
 
-    private static class GroupHolder<C, T> {
+    protected static class GroupHolder<C, T> {
 
         private final Function<T, C> grouper;
         private final Map<C, List<T>> elements;
 
         private final Function<C, List<T>> createList = c -> new ArrayList<>();
 
-        public GroupHolder(Function<T, C> grouper) {
+        protected GroupHolder(Function<T, C> grouper) {
             this.grouper = grouper;
             this.elements = new HashMap<>();
         }
