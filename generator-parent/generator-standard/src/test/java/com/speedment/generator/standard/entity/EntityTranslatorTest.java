@@ -29,40 +29,24 @@ import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
-final class EntityTranslatorTest {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+final class EntityTranslatorTest {
 
     @Test
     void makeCodeGenModel() throws InstantiationException {
         final Injector injector = Injector.builder()
-/*            .withComponent(StandardJavaGenerator.class)*/
             .withComponent(DelegateInfoComponent.class)
             .withBundle(TranslatorBundle.class)
             .withBundle(StandardTranslatorBundle.class)
             .build();
 
-        Table table = DocumentDbUtil.traverseOver(Projects.SPEEDMENT_JSON.project(), Table.class).findFirst().orElseThrow(NoSuchElementException::new);
-
-        EntityTranslator translator = new EntityTranslator(injector,table);
-
-        File file = translator.get();
-
-        System.out.println("file = " + file);
-
+        final Table table = DocumentDbUtil.traverseOver(Projects.SPEEDMENT_JSON.project(), Table.class).findFirst().orElseThrow(NoSuchElementException::new);
+        final EntityTranslator translator = new EntityTranslator(injector,table);
+        final File file = translator.get();
         Generator generator = injector.get(Generator.class).orElseThrow(NoSuchElementException::new);
-
         final String code = generator.on(file).orElseThrow(NoSuchElementException::new);
-
-        System.out.println(code);
-
-
+        assertNotNull(code);
     }
 
-    @Test
-    void getClassOrInterfaceName() {
-    }
-
-    @Test
-    void getJavadocRepresentText() {
-    }
 }
