@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.compute.internal.expression;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.compute.ToByte;
 import com.speedment.runtime.compute.ToDouble;
 import com.speedment.runtime.compute.ToFloat;
@@ -27,8 +29,6 @@ import com.speedment.runtime.compute.expression.BinaryObjExpression;
 import com.speedment.runtime.compute.expression.Expression;
 
 import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class used to construct expression that gives the sum of two
@@ -779,13 +779,13 @@ public final class MinusUtil {
      * @param <FIRST>   the first operand expression type
      * @param <SECOND>  the second operand expression type
      */
-    private abstract static class AbstractMinus<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
+    abstract static class AbstractMinus<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
     implements BinaryExpression<T, FIRST, SECOND> {
 
         final FIRST firstInner;
         final SECOND secondInner;
 
-        private AbstractMinus(FIRST first, SECOND second) {
+        AbstractMinus(FIRST first, SECOND second) {
             this.firstInner  = requireNonNull(first);
             this.secondInner = requireNonNull(second);
         }
@@ -829,13 +829,13 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private abstract static class AbstractMinusByte<T, INNER extends Expression<T>>
+    abstract static class AbstractMinusByte<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Byte> {
 
         final INNER firstInner;
         final byte secondInner;
 
-        private AbstractMinusByte(INNER first, byte second) {
+        AbstractMinusByte(INNER first, byte second) {
             this.firstInner  = requireNonNull(first);
             this.secondInner = second;
         }
@@ -879,13 +879,13 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private abstract static class AbstractMinusInt<T, INNER extends Expression<T>>
+    abstract static class AbstractMinusInt<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Integer> {
 
         final INNER firstInner;
         final int secondInner;
 
-        private AbstractMinusInt(INNER first, int second) {
+        AbstractMinusInt(INNER first, int second) {
             this.firstInner  = requireNonNull(first);
             this.secondInner = second;
         }
@@ -929,13 +929,13 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private abstract static class AbstractMinusLong<T, INNER extends Expression<T>>
+    abstract static class AbstractMinusLong<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Long> {
 
         final INNER firstInner;
         final long secondInner;
 
-        private AbstractMinusLong(INNER first, long second) {
+        AbstractMinusLong(INNER first, long second) {
             this.firstInner  = requireNonNull(first);
             this.secondInner = second;
         }
@@ -979,13 +979,13 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private abstract static class AbstractMinusFloat<T, INNER extends Expression<T>>
+    abstract static class AbstractMinusFloat<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Float> {
 
         final INNER firstInner;
         final float secondInner;
 
-        private AbstractMinusFloat(INNER first, float second) {
+        AbstractMinusFloat(INNER first, float second) {
             this.firstInner  = requireNonNull(first);
             this.secondInner = second;
         }
@@ -1029,13 +1029,13 @@ public final class MinusUtil {
      * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private abstract static class AbstractMinusDouble<T, INNER extends Expression<T>>
+    abstract static class AbstractMinusDouble<T, INNER extends Expression<T>>
     implements BinaryObjExpression<T, INNER, Double> {
 
         final INNER firstInner;
         final double secondInner;
 
-        private AbstractMinusDouble(INNER first, double second) {
+        AbstractMinusDouble(INNER first, double second) {
             this.firstInner  = requireNonNull(first);
             this.secondInner = second;
         }
