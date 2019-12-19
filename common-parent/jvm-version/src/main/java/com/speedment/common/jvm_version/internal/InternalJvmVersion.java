@@ -28,7 +28,7 @@ public final class InternalJvmVersion {
     private final String specificationTitle;
     private final String specificationVersion;
     private final String specificationVendor;
-    //
+
     private final String implementationTitle;
     private final String implementationVersion;
     private final String implementationVendor;
@@ -38,13 +38,9 @@ public final class InternalJvmVersion {
     private final int security;
 
     public InternalJvmVersion() {
-
         specificationTitle = System.getProperty("java.vm.specification.name");
         specificationVersion = System.getProperty("java.vm.specification.version");
         specificationVendor = System.getProperty("java.vm.specification.vendor");
-//        specificationTitle = package_.getSpecificationTitle();
-        //specificationVersion = package_.getSpecificationVersion();
-        //specificationVendor = package_.getSpecificationVendor();
 
         implementationTitle = System.getProperty("java.specification.name");
         major = version("major", 1);
@@ -52,7 +48,6 @@ public final class InternalJvmVersion {
         security = version("security", 3);
         implementationVersion = String.format("%d.%d.%d", major, minor, security);
         implementationVendor = System.getProperty("java.specification.vendor");
-        //implementationVendor = package_.getImplementationVendor();
     }
 
     public String getSpecificationTitle() {
@@ -115,10 +110,9 @@ public final class InternalJvmVersion {
             if (method != null) {
                 final Object version = method.invoke(Runtime.getRuntime());
                 final Class<?> clazz = Class.forName("java.lang.Runtime$Version");
-                return ((Integer) clazz.getDeclaredMethod(java9Name).invoke(version)).intValue();
-
+                return (Integer) clazz.getDeclaredMethod(java9Name).invoke(version);
             }
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | ClassNotFoundException unused) {
             // we are pre Java 9
         }
         try {

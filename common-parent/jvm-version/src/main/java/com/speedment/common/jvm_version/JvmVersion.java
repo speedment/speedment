@@ -26,9 +26,7 @@ public final class JvmVersion {
 
     private static final InternalJvmVersion INTERNAL = new InternalJvmVersion();
 
-    private JvmVersion() {
-        throw new UnsupportedOperationException();
-    }
+    private JvmVersion() {}
 
     public static String getSpecificationTitle() {
         return INTERNAL.getSpecificationTitle();
