@@ -16,6 +16,9 @@
  */
 package com.speedment.common.singletonstream;
 
+import com.speedment.common.singletonstream.internal.SingletonPrimitiveIteratorOfLong;
+import com.speedment.common.singletonstream.internal.SingletonPrimitiveSpliteratorOfLong;
+
 import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
 import java.util.LongSummaryStatistics;
 import java.util.NoSuchElementException;
@@ -283,12 +286,12 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public PrimitiveIterator.OfLong iterator() {
-        return singletonLongIterator(element);
+        return new SingletonPrimitiveIteratorOfLong(element);
     }
 
     @Override
     public Spliterator.OfLong spliterator() {
-        return singletonLongSpliterator(element);
+        return new SingletonPrimitiveSpliteratorOfLong(element);
     }
 
     @Override
@@ -323,86 +326,6 @@ public class SingletonLongStream implements LongStream {
 
     private static LongStream empty() {
         return LongStream.empty();
-    }
-
-    private static PrimitiveIterator.OfLong singletonLongIterator(final long e) {
-        return new PrimitiveIterator.OfLong() {
-            private boolean hasNext = true;
-
-            @Override
-            public boolean hasNext() {
-                return hasNext;
-            }
-
-            @Override
-            public long nextLong() {
-                if (hasNext) {
-                    hasNext = false;
-                    return e;
-                }
-                throw new NoSuchElementException();
-            }
-
-            @Override
-            public Long next() {
-                if (!hasNext) {
-                    throw new NoSuchElementException();
-                }
-                return nextLong();
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forEachRemaining(LongConsumer action) {
-                requireNonNull(action);
-                if (hasNext) {
-                    action.accept(e);
-                    hasNext = false;
-                }
-            }
-        };
-    }
-
-    private static Spliterator.OfLong singletonLongSpliterator(final long element) {
-        return new Spliterator.OfLong() {
-            long estimatedSize = 1;
-
-            @Override
-            public Spliterator.OfLong trySplit() {
-                return null;
-            }
-
-            @Override
-            public boolean tryAdvance(LongConsumer consumer) {
-                Objects.requireNonNull(consumer);
-                if (estimatedSize > 0) {
-                    estimatedSize--;
-                    consumer.accept(element);
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void forEachRemaining(LongConsumer consumer) {
-                tryAdvance(consumer);
-            }
-
-            @Override
-            public long estimateSize() {
-                return estimatedSize;
-            }
-
-            @Override
-            public int characteristics() {
-                return Spliterator.NONNULL | Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.IMMUTABLE
-                    | Spliterator.DISTINCT | Spliterator.ORDERED;
-            }
-        };
     }
 
     // Java 9 Stream features

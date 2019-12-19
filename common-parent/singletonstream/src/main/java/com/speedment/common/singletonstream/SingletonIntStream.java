@@ -16,6 +16,9 @@
  */
 package com.speedment.common.singletonstream;
 
+import com.speedment.common.singletonstream.internal.SingletonPrimitiveIteratorOfInt;
+import com.speedment.common.singletonstream.internal.SingletonPrimitiveSpliteratorOfInt;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.DoubleStream;
@@ -274,12 +277,12 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public PrimitiveIterator.OfInt iterator() {
-        return singletonIntIterator(element);
+        return new SingletonPrimitiveIteratorOfInt(element);
     }
 
     @Override
     public Spliterator.OfInt spliterator() {
-        return singletonIntSpliterator(element);
+        return new SingletonPrimitiveSpliteratorOfInt(element);
     }
 
     @Override
@@ -299,7 +302,7 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public void close() {
-       // do nothing. OnClose createa a real Stream
+       // do nothing. OnClose creates a real Stream
     }
 
     private IntStream toStream() {
@@ -314,86 +317,6 @@ public class SingletonIntStream implements IntStream {
 
     private static IntStream empty() {
         return IntStream.empty();
-    }
-
-    private static PrimitiveIterator.OfInt singletonIntIterator(final int e) {
-        return new PrimitiveIterator.OfInt() {
-            private boolean hasNext = true;
-
-            @Override
-            public boolean hasNext() {
-                return hasNext;
-            }
-
-            @Override
-            public int nextInt() {
-                if (hasNext) {
-                    hasNext = false;
-                    return e;
-                }
-                throw new NoSuchElementException();
-            }
-
-            @Override
-            public Integer next() {
-                if (!hasNext) {
-                    throw new NoSuchElementException();
-                }
-                return nextInt();
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forEachRemaining(IntConsumer action) {
-                requireNonNull(action);
-                if (hasNext) {
-                    action.accept(e);
-                    hasNext = false;
-                }
-            }
-        };
-    }
-
-    private static Spliterator.OfInt singletonIntSpliterator(final int element) {
-        return new Spliterator.OfInt() {
-            long estimatedSize = 1;
-
-            @Override
-            public Spliterator.OfInt trySplit() {
-                return null;
-            }
-
-            @Override
-            public boolean tryAdvance(IntConsumer consumer) {
-                Objects.requireNonNull(consumer);
-                if (estimatedSize > 0) {
-                    estimatedSize--;
-                    consumer.accept(element);
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void forEachRemaining(IntConsumer consumer) {
-                tryAdvance(consumer);
-            }
-
-            @Override
-            public long estimateSize() {
-                return estimatedSize;
-            }
-
-            @Override
-            public int characteristics() {
-                return Spliterator.NONNULL | Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.IMMUTABLE
-                        | Spliterator.DISTINCT | Spliterator.ORDERED;
-            }
-        };
     }
 
     // Java 9 Stream features
