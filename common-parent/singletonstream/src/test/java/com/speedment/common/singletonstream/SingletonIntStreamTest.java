@@ -125,7 +125,7 @@ final class SingletonIntStreamTest {
 
     @Test
     void forEachOrdered() {
-        instance.forEach(i -> cnt.incrementAndGet());
+        instance.forEachOrdered(i -> cnt.incrementAndGet());
         assertEquals(1, cnt.get());
     }
 
@@ -268,6 +268,7 @@ final class SingletonIntStreamTest {
 
     @Test
     void unordered() {
+        assertEqualsApplying(IntStream::unordered);
     }
 
     @Test

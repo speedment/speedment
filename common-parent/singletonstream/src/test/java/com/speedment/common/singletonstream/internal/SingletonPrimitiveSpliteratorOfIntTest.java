@@ -79,7 +79,6 @@ final class SingletonPrimitiveSpliteratorOfIntTest {
         assertEquals(0, cnt.get());
     }
 
-
     @Test
     void estimateSize() {
         assertEquals(1L, instance.estimateSize());
@@ -90,7 +89,6 @@ final class SingletonPrimitiveSpliteratorOfIntTest {
         instance.tryAdvance((Consumer<Integer>) i -> {});
         assertEquals(0L, instance.estimateSize());
     }
-
 
     @Test
     void characteristics() {

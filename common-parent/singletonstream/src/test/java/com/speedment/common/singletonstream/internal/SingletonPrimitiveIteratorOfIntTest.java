@@ -39,6 +39,12 @@ final class SingletonPrimitiveIteratorOfIntTest {
     }
 
     @Test
+    void nextIntAfterNext() {
+        instance.next();
+        assertThrows(NoSuchElementException.class, instance::nextInt);
+    }
+
+    @Test
     void next() {
         assertEquals(ELEMENT, instance.next());
     }
@@ -66,7 +72,6 @@ final class SingletonPrimitiveIteratorOfIntTest {
         assertEquals(1, cnt.get());
     }
 
-
     @Test
     void forEachRemainingIntConsumerAfterNext() {
         instance.next();
@@ -80,6 +85,5 @@ final class SingletonPrimitiveIteratorOfIntTest {
         instance.forEachRemaining((Consumer<Integer>) i -> cnt.incrementAndGet());
         assertEquals(0, cnt.get());
     }
-
 
 }
