@@ -16,11 +16,13 @@
  */
 package com.speedment.common.singletonstream;
 
+import com.speedment.common.singletonstream.internal.SingletonIterator;
+import com.speedment.common.singletonstream.internal.SingletonSpliterator;
+
 import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -327,12 +329,12 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return singletonIterator(element);
+        return new SingletonIterator<>(element);
     }
 
     @Override
     public Spliterator<T> spliterator() {
-        return singletonSpliterator(element);
+        return new SingletonSpliterator<>(element);
     }
 
     @Override
@@ -382,80 +384,6 @@ public final class SingletonStream<T> implements Stream<T> {
 
     private static <T> Stream<T> empty() {
         return Stream.empty();
-    }
-
-    public static <E> Iterator<E> singletonIterator(final E e) {
-        return new Iterator<E>() {
-            private boolean hasNext = true;
-
-            @Override
-            public boolean hasNext() {
-                return hasNext;
-            }
-
-            @Override
-            public E next() {
-                if (hasNext) {
-                    hasNext = false;
-                    return e;
-                }
-                throw new NoSuchElementException();
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void forEachRemaining(Consumer<? super E> action) {
-                Objects.requireNonNull(action);
-                if (hasNext) {
-                    action.accept(e);
-                    hasNext = false;
-                }
-            }
-        };
-    }
-
-    private static <T> Spliterator<T> singletonSpliterator(final T element) {
-        return new Spliterator<T>() {
-            long estimatedSize = 1;
-
-            @Override
-            public Spliterator<T> trySplit() {
-                return null;
-            }
-
-            @Override
-            public boolean tryAdvance(Consumer<? super T> consumer) {
-                Objects.requireNonNull(consumer);
-                if (estimatedSize > 0) {
-                    estimatedSize--;
-                    consumer.accept(element);
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public void forEachRemaining(Consumer<? super T> consumer) {
-                tryAdvance(consumer);
-            }
-
-            @Override
-            public long estimateSize() {
-                return estimatedSize;
-            }
-
-            @Override
-            public int characteristics() {
-                int value = (element != null) ? Spliterator.NONNULL : 0;
-                // ORDERED can be derived from member flag 
-                return value | Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.IMMUTABLE
-                    | Spliterator.DISTINCT | Spliterator.ORDERED;
-            }
-        };
     }
 
     // Java 9 Stream features
