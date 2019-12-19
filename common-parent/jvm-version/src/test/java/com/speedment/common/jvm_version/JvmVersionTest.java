@@ -18,7 +18,7 @@ final class JvmVersionTest {
 
     @Test
     void getSpecificationVersion() {
-        assertNotNull(JvmVersion.getSpecificationVendor());
+        assertNotNull(JvmVersion.getSpecificationVersion());
     }
 
     @Test
