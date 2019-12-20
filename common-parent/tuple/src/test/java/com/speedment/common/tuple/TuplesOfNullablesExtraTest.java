@@ -16,13 +16,19 @@
  */
 package com.speedment.common.tuple;
 
+import com.speedment.common.tuple.getter.TupleGetter;
+import com.speedment.common.tuple.nullable.Tuple3OfNullables;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.speedment.common.tuple.TuplesTestUtil.SIZE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Emil Forslund
@@ -46,4 +52,12 @@ final class TuplesOfNullablesExtraTest {
         });
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2})
+    void getter(int index) {
+        final Tuple3OfNullables<Integer, Integer, Integer> tuple = TuplesOfNullables.ofNullables(0, 1, 2);
+        final TupleGetter<Tuple3OfNullables<Integer, Integer, Integer>, Optional<Integer>> getter = TupleOfNullables.getter(index);
+        assertEquals(index, getter.index());
+        assertEquals(index, getter.apply(tuple).orElseThrow(NoSuchElementException::new));
+    }
 }
