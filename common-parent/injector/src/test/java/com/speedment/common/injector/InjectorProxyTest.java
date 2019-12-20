@@ -1,6 +1,6 @@
 package com.speedment.common.injector;
 
-import com.speedment.common.injector.internal.Bazz;
+import com.speedment.common.injector.internal.ClassUsedForTestingInternalPackage;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Predicate;
@@ -8,10 +8,6 @@ import java.util.function.Predicate;
 import static org.junit.jupiter.api.Assertions.*;
 
 final class InjectorProxyTest {
-
-    private final class Foo {
-        private final class Bar {}
-    }
 
     @Test
     void samePackageOrBelow() {
@@ -43,9 +39,9 @@ final class InjectorProxyTest {
         assertFalse(predicate.test(String.class));
         assertThrows(NullPointerException.class, () -> predicate.test(null));
         if (excludeInternal) {
-            assertFalse(predicate.test(Bazz.class));
+            assertFalse(predicate.test(ClassUsedForTestingInternalPackage.class));
         } else {
-            assertTrue(predicate.test(Bazz.class));
+            assertTrue(predicate.test(ClassUsedForTestingInternalPackage.class));
         }
     }
 }
