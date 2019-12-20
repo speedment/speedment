@@ -20,6 +20,7 @@ package com.speedment.common.logger;
  *
  * @author pemi
  */
+@FunctionalInterface
 public interface LoggerFormatter {
 
     String apply(Level level, String name, String message);

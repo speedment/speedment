@@ -28,7 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -128,7 +127,8 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
 
     @Override
     public void setLevel(String path, Level level) {
-        requireNonNulls(path, level);
+        requireNonNull(path);
+        requireNonNull(level);
         loggers()
             .filter(e
                 -> e.getKey().startsWith(path)
@@ -140,7 +140,8 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
 
     @Override
     public void setLevel(Class<?> binding, Level level) {
-        requireNonNulls(binding, level);
+        requireNonNull(binding);
+        requireNonNull(level);
         setLevel(makeNameFrom(binding), level);
     }
 
