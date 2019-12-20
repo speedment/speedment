@@ -91,9 +91,12 @@ final class AbstractLoggerTest {
     @Test
     void addListener() {
         final AtomicReference<LoggerEvent> event = new AtomicReference<>();
-        instance.addListener(event::set);
+        final LoggerEventListener listener = event::set;
+        instance.addListener(listener);
         instance.fatal("Olle");
         assertNotNull(event.get());
+        // Add again
+        instance.addListener(listener);
     }
 
     @Test
@@ -104,6 +107,8 @@ final class AbstractLoggerTest {
         instance.removeListener(listener);
         instance.fatal("Olle");
         assertNull(event.get());
+        // Remove again
+        instance.removeListener(listener);
     }
 
     // Trace
