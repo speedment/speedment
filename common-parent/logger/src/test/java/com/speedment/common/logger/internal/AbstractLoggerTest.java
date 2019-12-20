@@ -585,28 +585,4 @@ final class AbstractLoggerTest {
         assertTrue(output.contains(RuntimeException.class.getName()));
         assertTrue(output.contains(FORMATTING_MESSAGE_PREFIX + "|" + MESSAGE + "|" + MESSAGE2 + "|" + MESSAGE3 + "|" + MESSAGE4));
     }
-
-    @Test
-    void log() {
-    }
-
-    @Test
-    void testLog() {
-    }
-
-    @Test
-    void testLog1() {
-    }
-
-    @Test
-    void testLog2() {
-    }
-
-    @Test
-    void testLog3() {
-    }
-
-    @Test
-    void testLog4() {
-    }
 }
