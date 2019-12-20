@@ -35,20 +35,46 @@ public interface InjectBundle {
      */
     Stream<Class<?>> injectables();
 
+    /**
+     * Returns an InjectBundle that is empty.
+     *
+     * @return an InjectBundle that is empty.
+     */
     static InjectBundle empty() {
         return Stream::empty;
     }
 
+    /**
+     * Creates and returns a new InjectBundle that contains the given classes.
+     *
+     * @return a new InjectBundle that contains the given classes.
+     */
     static InjectBundle of(Class<?>... classes) {
         requireNonNull(classes);
         return () -> Stream.of(classes);
     }
 
+    /**
+     * Creates and returns a new InjectBundle that contains the classes
+     * in this InjectBundle plus the classes in the given {@code next} InjectBundle.
+     *
+     * @return a new InjectBundle that contains the classes
+     *         in this InjectBundle plus the classes in the given {@code next} InjectBundle
+     * @throws NullPointerException if the provided {@code next} is {@code null}
+     */
     default InjectBundle withBundle(InjectBundle next) {
         requireNonNull(next);
         return () -> Stream.concat(injectables(), next.injectables());
     }
 
+    /**
+     * Creates and returns a new InjectBundle that contains the classes
+     * in this InjectBundle plus the class in the given {@code nextClass}.
+     *
+     * @return a new InjectBundle that contains the classes
+     *         in this InjectBundle plus the class in the given {@code nextClass}
+     * @throws NullPointerException if the provided {@code nextClass} is {@code null}
+     */
     default InjectBundle withComponent(Class<?> nextClass) {
         requireNonNull(nextClass);
         return withBundle(of(nextClass));
