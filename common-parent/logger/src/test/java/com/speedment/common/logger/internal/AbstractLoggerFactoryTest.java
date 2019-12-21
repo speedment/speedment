@@ -3,9 +3,7 @@ package com.speedment.common.logger.internal;
 import com.speedment.common.logger.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
-import java.lang.ref.PhantomReference;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;

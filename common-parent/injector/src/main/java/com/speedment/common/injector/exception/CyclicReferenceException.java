@@ -36,16 +36,11 @@ public final class CyclicReferenceException extends RuntimeException {
     public CyclicReferenceException(Collection<Class<?>> stack) {
         this.stack = new LinkedList<>(stack);
     }
-    
-    public CyclicReferenceException(Collection<Class<?>> stack, Throwable thrw) {
-        super(thrw);
-        this.stack = new LinkedList<>(stack);
-    }
-    
+
     public CyclicReferenceException(Class<?> referencedClass) {
         this.stack = Collections.singletonList(referencedClass);
     }
-    
+
     public CyclicReferenceException(Class<?> referencingClass, CyclicReferenceException cause) {
         final LinkedList<Class<?>> list = new LinkedList<>(cause.stack);
         list.addFirst(referencingClass);

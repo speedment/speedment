@@ -1,6 +1,7 @@
 package com.speedment.common.injector.internal.util;
 
 import com.speedment.common.injector.MissingArgumentStrategy;
+import com.speedment.common.injector.MyInjectorProxy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;

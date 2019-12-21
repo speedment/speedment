@@ -1,4 +1,4 @@
-package com.speedment.common.injector.internal.util;
+package com.speedment.common.injector;
 
 import com.speedment.common.injector.InjectorProxy;
 
@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-final class MyInjectorProxy implements InjectorProxy {
+public final class MyInjectorProxy implements InjectorProxy {
     @Override
     public boolean isApplicable(Class<?> clazz) {
         return false;

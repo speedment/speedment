@@ -1,5 +1,6 @@
 package com.speedment.common.injector.internal.util;
 
+import com.speedment.common.injector.MyInjectorProxy;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.logger.Logger;
