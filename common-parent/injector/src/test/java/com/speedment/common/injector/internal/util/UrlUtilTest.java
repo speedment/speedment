@@ -20,4 +20,10 @@ final class UrlUtilTest {
             fail(object.getClass().getName() + " does not extend " + URL.class.getName());
         }
     }
+
+    @Test
+    void tryCreateURLIllegal() {
+        assertThrows(IllegalArgumentException.class, () -> UrlUtil.tryCreateURL("a"));
+    }
+
 }
