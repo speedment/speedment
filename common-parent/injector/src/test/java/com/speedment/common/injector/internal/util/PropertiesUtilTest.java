@@ -1,6 +1,5 @@
 package com.speedment.common.injector.internal.util;
 
-import com.speedment.common.injector.InjectorProxy;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.logger.Logger;
@@ -9,10 +8,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.util.Properties;
@@ -71,28 +66,6 @@ final class PropertiesUtilTest {
     private File file(String name) {
         final URL resourceUrl = PropertiesUtilTest.class.getResource(FileSystems.getDefault().getSeparator() + name);
         return new File(resourceUrl.getFile());
-    }
-
-    private static final class MyInjectorProxy implements InjectorProxy {
-        @Override
-        public boolean isApplicable(Class<?> clazz) {
-            return false;
-        }
-
-        @Override
-        public void set(Field field, Object instance, Object value) throws IllegalAccessException {
-            field.set(instance, value);
-        }
-
-        @Override
-        public <T> T newInstance(Constructor<T> constructor, Object... args) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Object invoke(Method method, Object obj, Object... args) throws IllegalAccessException, InvocationTargetException {
-            throw new UnsupportedOperationException();
-        }
     }
 
 }

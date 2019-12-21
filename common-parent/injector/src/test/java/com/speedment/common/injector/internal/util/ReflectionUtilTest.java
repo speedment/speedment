@@ -4,16 +4,16 @@ import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.InjectKey;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +30,7 @@ final class ReflectionUtilTest {
         public int bar() {return foo;}
     }
 
+    @InjectKey(Baz.class)
     private final static class Baz extends Bar {
         public int baz;
 
@@ -93,7 +94,9 @@ final class ReflectionUtilTest {
     }
 
     @Test
-    void tryToCreate() {
+    void tryToCreate() throws InstantiationException {
+        final Optional<Integer> actual = ReflectionUtil.tryToCreate(Integer.class, new Properties(), emptyList(), emptySet(), new MyInjectorProxy());
+        assertFalse(actual.isPresent());
     }
 
     @Test
@@ -102,7 +105,6 @@ final class ReflectionUtilTest {
         assertTrue(actual.contains(Baz.class.getName()));
         assertTrue(actual.contains(Foo.class.getSimpleName()));
         assertTrue(actual.contains("Missing"));
-        System.out.println(actual);
     }
 
     @Test
