@@ -23,17 +23,39 @@ package com.speedment.common.injector.internal.util;
  */
 public final class PrintUtil {
 
-    public static final String HORIZONTAL_LINE = "+---------------------------------------------------------------------------------+";
+    private PrintUtil() {}
 
+    public static final String HORIZONTAL_LINE = "+---------------------------------------------------------------------------------+";
+    private static final String DOTS = "...";
+
+
+    /**
+     * Returns a String that is shortened to at most {@code length} by omitting characters in the given
+     * {@code in } String middle and replacing these with "...".
+     * <p>
+     * If the given {@code length } is smaller than 5, then just limits to the first 5 characters.
+     *
+     * @param in String to limit
+     * @param length the maximum resulting length
+     * @return a String that is shortened by omitting characters in the middle and replacing these
+     *         with "..."
+     */
     public static String limit(String in, int length) {
-        if (in.length() < length) {
+
+        if (in.length() <= length) {
             return in;
         } else {
-            final int breakpoint = (length - 3) / 2;
-            return in.substring(0, breakpoint) + 
-                "..." + in.substring(length - breakpoint - 3);
+            if (length < 5) {
+                return in.substring(0, length);
+            }
+            final int breakpoint = (length - DOTS.length()) / 2;
+            final StringBuilder sb = new StringBuilder();
+            sb.append(in.substring(0, breakpoint));
+            sb.append(DOTS);
+            final int suffixLength = length - sb.length();
+            sb.append(in.substring(in.length() - suffixLength));
+            return sb.toString();
         }
     }
     
-    private PrintUtil() {}
 }
