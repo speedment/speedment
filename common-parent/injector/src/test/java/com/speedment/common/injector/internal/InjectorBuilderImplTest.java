@@ -235,28 +235,6 @@ final class InjectorBuilderImplTest {
         assertThrows(InjectorException.class, () ->instance.withComponent(ClassWithPrivateConstructor.class).build());
     }
 
-
-    public static final class NotApplicableInjectorProxy implements InjectorProxy {
-        @Override
-        public boolean isApplicable(Class<?> clazz) {
-            return false;
-        }
-
-        @Override
-        public void set(Field field, Object instance, Object value) { throw new UnsupportedOperationException(); }
-
-        @Override
-        public <T> T newInstance(Constructor<T> constructor, Object... args) { throw new UnsupportedOperationException(); }
-
-        @Override
-        public Object invoke(Method method, Object obj, Object... args) { throw new UnsupportedOperationException(); }
-    }
-
-    @Test
-    void noProxy() throws InstantiationException {
-        assertThrows(NoSuchElementException.class, () ->instance.withComponent(NotApplicableInjectorProxy.class).withComponent(Bar.class).build());
-    }
-
     private interface ThrowingRunnable  {
         void run() throws InstantiationException;
     }
