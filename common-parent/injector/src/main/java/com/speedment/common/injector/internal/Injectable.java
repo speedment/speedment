@@ -52,8 +52,13 @@ final class Injectable<T> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Injectable<?> that = (Injectable<?>) o;
+        if (o == null) {
+            return false;
+        }
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+        final Injectable<?> that = (Injectable<?>) o;
         return cls.equals(that.cls) &&
             Objects.equals(supplier, that.supplier);
     }

@@ -2,10 +2,13 @@ package com.speedment.common.injector.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.MissingArgumentStrategy;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -35,6 +38,12 @@ final class InjectorImplTest {
             stopped = true;
         }
     };
+    public static final class Unstoppable {
+        @ExecuteBefore(State.STOPPED) void stop(Foo foo){}
+    }
+    public static final class Stoppable {
+        @ExecuteBefore(value = State.STOPPED, missingArgument = MissingArgumentStrategy.SKIP_INVOCATION) void stop(Foo foo){}
+    }
 
     @BeforeEach
     void setup() throws InstantiationException {
@@ -107,6 +116,15 @@ final class InjectorImplTest {
     }
 
     @Test
+    void injectIllegal() {
+        final class Bez {
+            @Inject private int a; // private field
+        }
+        final Bez bez = new Bez();
+        assertThrows(IllegalArgumentException.class, () -> injector.inject(bez));
+    }
+
+    @Test
     void classLoader() {
         assertSame(Injector.class.getClassLoader(),injector.classLoader());
     }
@@ -120,6 +138,32 @@ final class InjectorImplTest {
             final Baz baz = injector.getOrThrow(Baz.class);
             injector.stop();
             assertTrue(baz.stopped);
+        } finally {
+            logger.setLevel(level);
+        }
+    }
+
+    @Test
+    void stopFailed() throws InstantiationException {
+        final Logger logger = LoggerManager.getLogger(InjectorImpl.class);
+        final Level level = logger.getLevel();
+        logger.setLevel(Level.DEBUG);
+        final Injector newInjector = Injector.builder().withComponent(Unstoppable.class).build();
+        try {
+            assertThrows(InjectorException.class, newInjector::stop);
+        } finally {
+            logger.setLevel(level);
+        }
+    }
+
+    @Test
+    void stopSkipInvocation() throws InstantiationException {
+        final Logger logger = LoggerManager.getLogger(InjectorImpl.class);
+        final Level level = logger.getLevel();
+        logger.setLevel(Level.DEBUG);
+        final Injector newInjector = Injector.builder().withComponent(Stoppable.class).build();
+        try {
+            assertDoesNotThrow(newInjector::stop);
         } finally {
             logger.setLevel(level);
         }
