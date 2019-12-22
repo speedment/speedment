@@ -16,10 +16,11 @@
  */
 package com.speedment.common.injector.execution;
 
-import com.speedment.common.injector.State;
 import com.speedment.common.injector.MissingArgumentStrategy;
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.dependency.Dependency;
 import com.speedment.common.injector.exception.NotInjectableException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
