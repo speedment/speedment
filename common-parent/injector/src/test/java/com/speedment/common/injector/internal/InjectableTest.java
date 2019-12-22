@@ -60,6 +60,7 @@ final class InjectableTest {
         assertNotEquals(1, injectable1);
         assertNotEquals( injectable1, 1);
         assertNotEquals( null, injectable1);
+        assertFalse(injectable1.equals(null));
     }
 
     @Test
