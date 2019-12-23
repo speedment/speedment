@@ -32,4 +32,8 @@ open module com.speedment.plugins.enums {
     requires com.speedment.tool.core;
     requires com.speedment.tool.config;
     requires com.speedment.tool.propertyeditor;
+
+    // Test requirements
+    requires com.speedment.common.json;
+
 }
