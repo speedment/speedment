@@ -61,7 +61,6 @@ public enum Projects {
         };
     }
 
-
     private Project projectHelper() throws SpeedmentException {
         final Project p = DocumentTranscoder.load(path(), this::fromJson);
         return p;
@@ -72,7 +71,5 @@ public enum Projects {
         final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
         return parsed;
     }
-
-
 
 }
