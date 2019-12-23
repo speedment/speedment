@@ -38,6 +38,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class DocumentTranscoder {
 
+    private DocumentTranscoder() {}
+
     /**
      * The element name of the root node in the JSON configuration file. Every 
      * setting should be located in this element.
@@ -83,7 +85,7 @@ public final class DocumentTranscoder {
      * @param encoder  the encoder to use
      * @return         the JSON representation
      * 
-     * @throws SpeedmentConfigException  if the inputed object is not valid
+     * @throws SpeedmentConfigException  if the input object is not valid
      */
     public static String save(Project project, Encoder encoder) {
         
@@ -174,10 +176,4 @@ public final class DocumentTranscoder {
         }
     }
 
-    /**
-     * Utility classes should never be instantiated.
-     */
-    private DocumentTranscoder() {
-        throw new UnsupportedOperationException();
-    }
 }
