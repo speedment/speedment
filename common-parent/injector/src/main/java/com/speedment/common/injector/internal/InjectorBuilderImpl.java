@@ -381,7 +381,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         }
     }
 
-    private void throwInjectorException(DependencyGraph graph, Execution<Object> exec, Exception ex) {
+    static void throwInjectorException(DependencyGraph graph, Execution<Object> exec, Exception ex) {
         INTERNAL_LOGGER.error("Exception thrown by method invoked by Injector:");
         if (ex.getCause() != null) {
             INTERNAL_LOGGER.error("Exception: " + ex.getCause().getClass().getSimpleName());
@@ -407,7 +407,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         throw new InjectorException(ex);
     }
 
-    private String formatParameter(DependencyGraph graph, Parameter param) {
+    static private String formatParameter(DependencyGraph graph, Parameter param) {
         final Config config = param.getAnnotation(Config.class);
         final WithState withState = param.getAnnotation(WithState.class);
         if (config != null) {

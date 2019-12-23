@@ -5,9 +5,13 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.injector.dependency.DependencyGraph;
+import com.speedment.common.injector.dependency.DependencyNode;
 import com.speedment.common.injector.exception.ConstructorResolutionException;
 import com.speedment.common.injector.exception.InjectorException;
 import com.speedment.common.injector.exception.MisusedAnnotationException;
+import com.speedment.common.injector.execution.Execution;
+import com.speedment.common.injector.execution.ExecutionBuilder;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -233,6 +237,22 @@ final class InjectorBuilderImplTest {
     @Test
     void withClassWithPrivateConstructor() throws InstantiationException {
         assertThrows(InjectorException.class, () ->instance.withComponent(ClassWithPrivateConstructor.class).build());
+    }
+
+    @Test
+    void throwInjectorException() {
+        try {
+            final RuntimeException runtimeException = new RuntimeException("AnyReason");
+            final InjectorProxy injectorProxy = new MyInjectorProxy();
+            final DependencyGraph dependencyGraph = DependencyGraph.create(Stream.of(Bar.class, BarConsumerThrows.class), c -> injectorProxy);
+            dependencyGraph.getOrCreate(Bar.class);
+            final DependencyNode n = dependencyGraph.getOrCreate(BarConsumerThrows.class);
+            final Execution ex = n.getExecutions().iterator().next();
+            InjectorBuilderImpl.throwInjectorException(dependencyGraph, ex, runtimeException);
+        } catch (InjectorException e) {
+            final String msg = e.getMessage();
+            assertTrue(msg.contains("AnyReason"));
+        }
     }
 
     private interface ThrowingRunnable  {
