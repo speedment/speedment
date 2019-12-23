@@ -161,10 +161,7 @@ public final class ReflectionUtil {
             // before we know which one to select
             final Set<Class<?>> needed = allInjectableTypes.stream()
                 .filter(c -> traverseAncestors(c)
-                    .anyMatch(a ->
-                        a.isAnnotationPresent(InjectKey.class) &&
-                            a.getAnnotation(InjectKey.class).value().equals(injectKeyClass.get())
-                    )
+                    .anyMatch(a -> a.isAnnotationPresent(InjectKey.class) && a.getAnnotation(InjectKey.class).value().equals(injectKeyClass.get()))
                 )
                 .collect(toSet());
 
@@ -187,12 +184,7 @@ public final class ReflectionUtil {
         if (value.isPresent()) {
             return value.get();
         } else {
-            throw new IllegalArgumentException(String.format(
-                "No instance found that match the required type " +
-                "'%s' in the constructor for injected class '%s'.",
-                param.getClass().getName(),
-                clazz.getName()
-            ));
+            throw new IllegalArgumentException(String.format("No instance found that match the required type '%s' in the constructor for injected class '%s'.", param.getClass().getName(), clazz.getName()));
         }
     }
 
@@ -265,10 +257,7 @@ public final class ReflectionUtil {
             // If the annotation is present then only if none of the
             // types listed have an implementation in the set should
             // the constructor be considered.
-        else return Stream.of(missing.value()).noneMatch(missingType ->
-            allInjectableTypes.stream()
-                .anyMatch(missingType::isAssignableFrom)
-        );
+        else return Stream.of(missing.value()).noneMatch(missingType -> allInjectableTypes.stream().anyMatch(missingType::isAssignableFrom));
     }
 
     private static final Map<Class<?>, Function<String, Object>> PARSER_MAP;

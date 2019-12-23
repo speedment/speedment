@@ -5,6 +5,8 @@ import com.speedment.common.injector.State;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 final class InjectorDependencyNodeTest {
@@ -40,7 +42,7 @@ final class InjectorDependencyNodeTest {
 
     @Test
     void setState() {
-
+        Stream.of(State.values()).forEach(instance::setState);
     }
 
     @Test
@@ -50,6 +52,12 @@ final class InjectorDependencyNodeTest {
         assertFalse(instance.canBe(State.RESOLVED));
         assertFalse(instance.canBe(State.STARTED));
         assertTrue(instance.canBe(State.STOPPED));
+        instance.setState(State.STOPPED);
+        assertFalse(instance.canBe(State.CREATED));
+        assertFalse(instance.canBe(State.INITIALIZED));
+        assertFalse(instance.canBe(State.RESOLVED));
+        assertFalse(instance.canBe(State.STARTED));
+        assertFalse(instance.canBe(State.STOPPED));
     }
 
     @Test

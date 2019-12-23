@@ -47,8 +47,7 @@ public final class PropertiesUtil {
             try (final InputStream in = new FileInputStream(configFile)) {
                 properties.load(in);
             } catch (final IOException ex) {
-                final String err = "Error loading default settings from "
-                    + configFile.getAbsolutePath() + "-file.";
+                final String err = "Error loading default settings from " + configFile.getAbsolutePath() + "-file.";
                 logger.error(ex, err);
                 throw new InjectorException(err, ex);
             }

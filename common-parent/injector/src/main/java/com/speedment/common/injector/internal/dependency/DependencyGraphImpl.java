@@ -138,11 +138,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
                 }
             }
         } catch (final CyclicReferenceException ex) {
-            throw new IllegalStateException(
-                "Could not execute method " + methodName(m) + 
-                " since one of its dependencies had not been injected.",
-                ex
-            );
+            throw new IllegalStateException("Could not execute method " + methodName(m) + " since one of its dependencies had not been injected.", ex);
         }
 
         return new ReflectionExecutionImpl<>(
@@ -163,15 +159,9 @@ public final class DependencyGraphImpl implements DependencyGraph {
                 )
             );
         } catch (final CyclicReferenceException ex) {
-            throw new CyclicReferenceException(
-                m.getDeclaringClass(), ex
-            );
+            throw new CyclicReferenceException(m.getDeclaringClass(), ex);
         } catch (final IllegalArgumentException iae) {
-            throw new IllegalStateException(
-                "Unable to resolve " + m.toString() + " (" + type.toString() + ") at state " + state.toString()
-                ,
-                iae
-            );
+            throw new IllegalStateException("Unable to resolve " + m.toString() + " (" + type.toString() + ") at state " + state.toString(), iae);
         }
     }
 
