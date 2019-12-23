@@ -47,5 +47,12 @@
             <artifactId>json</artifactId>
             <version>${speedment.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-netty</artifactId>
+            <version>5.8.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

@@ -16,6 +16,8 @@
  */
 package com.speedment.common.rest;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.json.Json;
 
 import java.util.Collection;
@@ -23,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A response from the server than can be parsed into json, or just read to get
@@ -66,7 +66,7 @@ public final class Response {
     }
     
     public Optional<Object> decodeJson() {
-        if (text == null || !success()) {
+        if (!success()) {
             return Optional.empty();
         } else {
             return Optional.ofNullable(Json.fromJson(text));
