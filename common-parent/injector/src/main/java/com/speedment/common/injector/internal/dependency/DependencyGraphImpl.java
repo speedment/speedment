@@ -115,7 +115,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
         return nodes.values().stream();
     }
     
-    private static String methodName(Method m) {
+    static String methodName(Method m) {
         return m.getDeclaringClass().getName() + "#" + 
             m.getName() + "(" + 
             Stream.of(m.getParameterTypes())

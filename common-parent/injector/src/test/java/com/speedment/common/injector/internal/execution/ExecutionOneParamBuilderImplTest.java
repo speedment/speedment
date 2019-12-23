@@ -10,9 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,10 +46,18 @@ final class ExecutionOneParamBuilderImplTest {
     }
 
     @Test
-    void build() {
+    void build() throws InvocationTargetException, IllegalAccessException {
         builder.withExecute((i, s) -> {});
         when(dependencyGraph.get(String.class)).thenReturn(dependencyNode);
         final Execution<Integer> e = builder.build(dependencyGraph);
         assertNotNull(e);
+        final Execution.ClassMapper classMapper = new Execution.ClassMapper() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public <T> T apply(Class<T> type) {
+                return (T) "Arne";
+            }
+        };
+        assertTrue(e.invoke(1, classMapper));
     }
 }
