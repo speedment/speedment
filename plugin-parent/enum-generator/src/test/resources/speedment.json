@@ -2215,6 +2215,7 @@
                   {
                     "databaseType" : "java.lang.String",
                     "expanded" : false,
+                    "typeMapper" : "com.speedment.plugins.enums.StringToEnumTypeMapper",
                     "nullable" : false,
                     "name" : "name",
                     "id" : "name",

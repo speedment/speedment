@@ -5,6 +5,7 @@ import com.speedment.common.json.Json;
 import com.speedment.generator.translator.provider.StandardJavaLanguageNamer;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.ProjectUtil;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -15,9 +16,9 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Type;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 final class StringToEnumTypeMapperTest {
 
@@ -27,15 +28,63 @@ final class StringToEnumTypeMapperTest {
     private Injector injector;
     private Project project;
 
-    private StringToEnumTypeMapper<TestEnum> instance;
+    private StringToEnumTypeMapper<User.Name> instance;
 
-    public enum TestEnum {ONE {
-        public String toDatabase() { return "One";};
-    }, TWO, THREE}
+    public static final class User {
+        public enum Name {
+            ONE {
+                public String toDatabase() {
+                    return "One";
+                }
+            },
+            TWO,
+            THREE {
+                private String toDatabase() {
+                    return "WillNotBeInvokedBecausePrivate";
+                }
+            };
+
+            public static Name fromDatabase(final String databaseName) {
+                if (databaseName == null) {
+                    return null;
+                }
+                switch (databaseName) {
+                    case "ONE":
+                        return Name.ONE;
+                    case "TWO":
+                        return Name.TWO;
+                    case "THREE":
+                        return Name.THREE;
+                    default:
+                        throw new UnsupportedOperationException();
+                }
+            }
+        }
+    }
+
+    public static final class A {
+
+        // Used to simulate enum without a "fromDatabase" methods
+        public enum NamE {
+            ONE
+        }
+    }
+
+    public static final class B {
+        // Used to simulate enum with a "fromDatabase" method that cannot be accessed
+        public enum NaMe {
+            ONE;
+
+            public static NaMe fromDatabase(final String databaseName) throws IllegalAccessException {
+                throw new IllegalAccessException("Can't run me!");
+            }
+
+        }
+    }
 
     @BeforeEach
     void setup() throws InstantiationException {
-        project = projectHelper();
+        project = TestUtil.project();
         column = DocumentDbUtil.referencedColumn(project,"speedment_test","speedment_test", "user", COLUMN_NAME);
 
         injector = Injector.builder().withComponent(StandardJavaLanguageNamer.class).build();
@@ -55,7 +104,13 @@ final class StringToEnumTypeMapperTest {
 
     @Test
     void getJavaType() {
-        injector.inject(instance);
+        final Type type = instance.getJavaType(column);
+        assertTrue(type.getTypeName().toLowerCase().contains(COLUMN_NAME.toLowerCase()));
+    }
+
+    @Test
+    void getJavaTypeNull() {
+        assertThrows(NullPointerException.class, () ->  instance.getJavaType(null));
     }
 
     @Test
@@ -65,24 +120,49 @@ final class StringToEnumTypeMapperTest {
 
     @Test
     void toJavaType() {
-        final Type type = instance.getJavaType(column);
-        assertTrue(type.getTypeName().toLowerCase().contains(COLUMN_NAME.toLowerCase()));
+        final User.Name actual = instance.toJavaType(column, User.class, "ONE");
+        assertEquals(User.Name.ONE,  actual);
+        // Test again if cached
+        assertEquals(User.Name.ONE,  instance.toJavaType(column, User.class, "ONE"));
+    }
+
+    @Test
+    void toJavaTypeNull() {
+        assertNull(instance.toJavaType(column, User.class, null));
+    }
+
+    @Test
+    void toJavaTypeNoToDatabaseMethod() {
+        final StringToEnumTypeMapper<A.NamE> tm = new StringToEnumTypeMapper<>();
+        injector.inject(tm);
+        assertThrows(NoSuchElementException.class, () -> tm.toJavaType(column, A.class, "ONE"));
+    }
+
+    @Test
+    void toJavaTypeUnableToAccessToDatabaseMethod() {
+        final StringToEnumTypeMapper<B.NaMe> tm = new StringToEnumTypeMapper<>();
+        injector.inject(tm);
+        assertThrows(IllegalArgumentException.class, () -> tm.toJavaType(column, B.class, "ONE"));
     }
 
     @Test
     void toDatabaseType() {
-        assertEquals("One", instance.toDatabaseType(TestEnum.ONE));
+        assertEquals("One", instance.toDatabaseType(User.Name.ONE));
     }
 
-    private Project projectHelper() throws SpeedmentException {
-        final Project p = DocumentTranscoder.load(Paths.get("src", "test", "resources", "speedment.json"), this::fromJson);
-        return p;
+    @Test
+    void toDatabaseTypeNull() {
+        assertNull(instance.toDatabaseType(null));
     }
 
-    private Map<String, Object> fromJson(String json) {
-        @SuppressWarnings("unchecked")
-        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
-        return parsed;
+    @Test
+    void toDatabaseTypeNoSuchMethod() {
+        assertThrows(IllegalArgumentException.class, () -> instance.toDatabaseType(User.Name.TWO));
+    }
+
+    @Test
+    void toDatabaseTypeIllegalAccess() {
+        assertThrows(IllegalArgumentException.class, () -> instance.toDatabaseType(User.Name.THREE));
     }
 
 }

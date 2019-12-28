@@ -60,10 +60,7 @@ implements PropertyEditor<HasEnumConstantsProperty> {
             final DOC doc = (DOC) column;
             document = doc;
         } catch (final ClassCastException ex) {
-            throw new SpeedmentException(
-                "Expected document to be a valid column, but was a '" +
-                column.getClass().getName() + "'."
-            );
+            throw new SpeedmentException("Expected document to be a valid column, but was a '" + column.getClass().getName() + "'.");
         }
 
         return Stream.of(
@@ -71,7 +68,7 @@ implements PropertyEditor<HasEnumConstantsProperty> {
                 document,
                 "Enum Constants", 
                 document.enumConstantsProperty(),
-                "Used for defining what contants the generated enum can have",
+                "Used for defining what constants the generated enum can have",
                 Bindings.equal(
                     document.typeMapperProperty(),
                     StringToEnumTypeMapper.class.getName()

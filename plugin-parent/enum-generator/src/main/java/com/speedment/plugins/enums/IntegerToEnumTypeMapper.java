@@ -111,22 +111,14 @@ public final class IntegerToEnumTypeMapper<T extends Enum<T>>
         try {
             values = enumClass.getMethod("values");
         } catch (final NoSuchMethodException ex) {
-            throw new IllegalArgumentException(
-                "Could not find 'values()'-method in enum class '" +
-                    enumClass.getName() + "'.", ex
-            );
+            throw new IllegalArgumentException("Could not find 'values()'-method in enum class '" + enumClass.getName() + "'.", ex);
         }
 
         try {
             @SuppressWarnings("unchecked") final T[] result = (T[]) values.invoke(null);
             return result;
-        } catch (final IllegalAccessException
-            | IllegalArgumentException
-            | InvocationTargetException ex) {
-            throw new IllegalArgumentException(
-                "Error executing 'values()' in generated enum class '" +
-                    enumClass.getName() + "'.", ex
-            );
+        } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            throw new IllegalArgumentException("Error executing 'values()' in generated enum class '" + enumClass.getName() + "'.", ex);
         }
     }
 
@@ -141,24 +133,14 @@ public final class IntegerToEnumTypeMapper<T extends Enum<T>>
             try {
                 ordinal = enumClass.getMethod("ordinal");
             } catch (final NoSuchMethodException ex) {
-                throw new IllegalArgumentException(
-                    "Could not find generated 'ordinal()'-method in enum " +
-                        "class '" + constant.getClass().getName() + "'.", ex
-                );
+                throw new IllegalArgumentException("Could not find generated 'ordinal()'-method in enum class '" + constant.getClass().getName() + "'.", ex);
             }
 
             try {
                 @SuppressWarnings("unchecked") final Integer result = (Integer) ordinal.invoke(constant);
                 return result;
-
-            } catch (final IllegalAccessException
-                | IllegalArgumentException
-                | InvocationTargetException ex) {
-
-                throw new IllegalArgumentException(
-                    "Error executing 'ordinal()' in generated enum class '" +
-                        constant.getClass().getName() + "'.", ex
-                );
+            } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                throw new IllegalArgumentException("Error executing 'ordinal()' in generated enum class '" + constant.getClass().getName() + "'.", ex);
             }
         }
     }

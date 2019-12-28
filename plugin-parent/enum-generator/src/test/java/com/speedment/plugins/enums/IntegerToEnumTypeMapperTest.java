@@ -1,24 +1,18 @@
 package com.speedment.plugins.enums;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.json.Json;
 import com.speedment.generator.translator.provider.StandardJavaLanguageNamer;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.util.DocumentDbUtil;
-import com.speedment.runtime.config.util.DocumentTranscoder;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.typemapper.TypeMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
-import java.nio.file.Paths;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 final class IntegerToEnumTypeMapperTest {
 
@@ -28,15 +22,44 @@ final class IntegerToEnumTypeMapperTest {
     private Injector injector;
     private Project project;
 
-    private IntegerToEnumTypeMapper<TestEnum> instance;
+    private IntegerToEnumTypeMapper<User.Name> instance;
 
-    public enum TestEnum {ONE {
-        public Integer toDatabase() { return 0;};
-    }, TWO, THREE}
+    public static final class User {
+        public enum Name {
+            ZERO {
+                public Integer toDatabase() {
+                    return 0;
+                }
+            },
+            ONE,
+            TWO {
+                private Integer toDatabase() {
+                    return -999;
+                }
+            };
+
+            public static User.Name fromDatabase(final Integer databaseName) {
+                if (databaseName == null) {
+                    return null;
+                }
+                switch (databaseName) {
+                    case 0:
+                        return Name.ZERO;
+                    case 1:
+                        return Name.ONE;
+                    case 2:
+                        return Name.TWO;
+                    default:
+                        throw new UnsupportedOperationException();
+                }
+            }
+        }
+    }
+
 
     @BeforeEach
     void setup() throws InstantiationException {
-        project = projectHelper();
+        project = TestUtil.project();
         column = DocumentDbUtil.referencedColumn(project,"speedment_test","speedment_test", "user", COLUMN_NAME);
 
         injector = Injector.builder().withComponent(StandardJavaLanguageNamer.class).build();
@@ -57,7 +80,13 @@ final class IntegerToEnumTypeMapperTest {
 
     @Test
     void getJavaType() {
-        injector.inject(instance);
+        final Type type = instance.getJavaType(column);
+        assertTrue(type.getTypeName().toLowerCase().contains(COLUMN_NAME.toLowerCase()));
+    }
+
+    @Test
+    void getJavaTypeNull() {
+        assertThrows(NullPointerException.class, () ->  instance.getJavaType(null));
     }
 
     @Test
@@ -67,24 +96,31 @@ final class IntegerToEnumTypeMapperTest {
 
     @Test
     void toJavaType() {
-        final Type type = instance.getJavaType(column);
-        assertTrue(type.getTypeName().toLowerCase().contains(COLUMN_NAME.toLowerCase()));
+        final User.Name actual = instance.toJavaType(column, User.class, 0);
+        assertEquals(User.Name.ZERO,  actual);
+        // Test again if cached
+        assertEquals(User.Name.ZERO,  instance.toJavaType(column, User.class, 0));
+    }
+
+    @Test
+    void toJavaTypeNull() {
+        assertNull(instance.toJavaType(column, User.class, null));
+    }
+
+    @Test
+    void toJavaTypeOutOfBounds() {
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> instance.toJavaType(column, User.class, 43));
     }
 
     @Test
     void toDatabaseType() {
-        assertEquals(0, instance.toDatabaseType(TestEnum.ONE));
+        assertEquals(0, instance.toDatabaseType(User.Name.ZERO));
     }
 
-    private Project projectHelper() throws SpeedmentException {
-        final Project p = DocumentTranscoder.load(Paths.get("src", "test", "resources", "speedment.json"), this::fromJson);
-        return p;
+    @Test
+    void toDatabaseTypeNull() {
+        assertNull(instance.toDatabaseType(null));
     }
 
-    private Map<String, Object> fromJson(String json) {
-        @SuppressWarnings("unchecked")
-        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
-        return parsed;
-    }
 
 }

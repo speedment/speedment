@@ -93,10 +93,8 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
             try {
                 fromDatabase = enumClass.getMethod(FROM_DATABASE_METHOD, String.class);
             } catch (final NoSuchMethodException ex) {
-                throw new IllegalArgumentException(
-                    "Could not find generated '" + FROM_DATABASE_METHOD + 
-                    "'-method in enum class '" + enumClass.getName() + "'.", ex
-                );
+                // This cannot happen because we ensure that this method actually do exist above.
+                throw new IllegalArgumentException("Could not find generated '" + FROM_DATABASE_METHOD + "'-method in enum class '" + enumClass.getName() + "'.", ex);
             }
 
             try {
@@ -139,7 +137,8 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
 
             // Return it as the enumClass or throw an exception.
             .findAny()
-            .orElseThrow(() -> new NoSuchElementException("No enum class found for " + column.getId() + " entityType " + entityType));
+                .orElseThrow(() -> new NoSuchElementException("No enum class with a '" + FROM_DATABASE_METHOD +
+                        "' method found for " + column.getId() + " entityType " + entityType));
 
     }
 
@@ -153,7 +152,6 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
             final Method toDatabase;
             try {
                 toDatabase = enumClass.getMethod(TO_DATABASE_METHOD);
-
             } catch (final NoSuchMethodException ex) {
                 throw new IllegalArgumentException(
                     "Could not find generated '" + TO_DATABASE_METHOD + 
@@ -167,10 +165,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                 final String result = (String) toDatabase.invoke(constant);
                 return result;
             } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                throw new IllegalArgumentException(
-                    "Error executing '" + TO_DATABASE_METHOD + 
-                    "' in generated enum class '" + constant.getClass().getName() + "'.", ex
-                );
+                throw new IllegalArgumentException("Error executing '" + TO_DATABASE_METHOD + "' in generated enum class '" + constant.getClass().getName() + "'.", ex);
             }
         }
     }

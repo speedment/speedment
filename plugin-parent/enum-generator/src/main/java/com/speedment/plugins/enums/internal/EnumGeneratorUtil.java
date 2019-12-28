@@ -22,6 +22,8 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -60,18 +62,22 @@ public final class EnumGeneratorUtil {
      * If no enum constants was specified in the column, an exception is
      * thrown.
      * 
-     * @param column  the column to retreive the constants from
+     * @param column  the column to retrieve the constants from
      * @return        list of the constants
      */
     public static List<String> enumConstantsOf(Column column) {
-        return Stream.of(column.getEnumConstants()
-            .orElseThrow(() -> new RuntimeException(
-                "Column '" + column.getId() + 
-                "' in table '" + column.getParentOrThrow().getId() + 
-                "' was marked as an enum but no enum constants was specified."
-            ))
-            .split(",")
-        ).sorted().collect(toList());
+        final Optional<String> ec = column.getEnumConstants();
+        final String[] enumConstants = ec
+                .orElseThrow(() -> new NoSuchElementException(
+                        "Column '" + column.getId() +
+                                "' in table '" + column.getParentOrThrow().getId() +
+                                "' was marked as an enum but no enum constants was specified."
+                ))
+                .split(",");
+
+        return Stream.of(enumConstants)
+        .sorted()
+        .collect(toList());
     }
 
     /**
