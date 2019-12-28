@@ -12,7 +12,7 @@ final class EnumGeneratorBundleTest {
 
     @Test
     void injectables() {
-        final Set<Class<?>> classes = new EnumGeneratorBundle().injectables().map(Object::getClass).collect(toSet());
+        final Set<Class<?>> classes = new EnumGeneratorBundle().injectables().collect(toSet());
         assertTrue(classes.contains(EnumGeneratorComponent.class));
     }
 }
