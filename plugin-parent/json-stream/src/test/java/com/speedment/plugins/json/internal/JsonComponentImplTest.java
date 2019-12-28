@@ -71,7 +71,7 @@ final class JsonComponentImplTest {
     @BeforeEach
     @SuppressWarnings("unchecked")
     void init() {
-        final Stream<Person> personStream = IntStream.range(0, 8).mapToObj(i -> new Person(i));
+        final Stream<Person> personStream = IntStream.range(0, 8).mapToObj(Person::new);
         when(persons.stream()).thenReturn(personStream);
         when(projectComponent.getProject()).thenReturn(project);
     }

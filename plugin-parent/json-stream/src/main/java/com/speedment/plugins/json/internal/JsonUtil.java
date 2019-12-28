@@ -30,6 +30,8 @@ import static com.speedment.runtime.config.util.DocumentDbUtil.referencedColumn;
  */
 public final class JsonUtil {
 
+    private JsonUtil() {}
+
     /**
      * Determines the JSON label for the specified field identifier. This will
      * be the result of {@link Column#getJavaName()}.
@@ -43,5 +45,4 @@ public final class JsonUtil {
         return referencedColumn(project, identifier).getJavaName();
     }
     
-    private JsonUtil() {}
 }
