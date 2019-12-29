@@ -1,6 +1,6 @@
 package com.speedment.plugins.json;
 
-public class UserImpl implements User {
+public final class LanguageImpl implements Language {
 
     private int id;
     private String name;
@@ -11,7 +11,7 @@ public class UserImpl implements User {
     }
 
     @Override
-    public User setId(int id) {
+    public Language setId(int id) {
         this.id = id;
         return this;
     }
@@ -22,8 +22,9 @@ public class UserImpl implements User {
     }
 
     @Override
-    public User setName(String name) {
+    public Language setName(String name) {
         this.name = name;
         return this;
     }
+
 }

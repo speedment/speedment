@@ -25,4 +25,7 @@ open module com.speedment.plugins.json {
     requires com.speedment.runtime.config;
     requires com.speedment.runtime.field;
     requires com.speedment.runtime.typemapper;
+
+    // Test requirements
+    requires com.speedment.common.json;
 }

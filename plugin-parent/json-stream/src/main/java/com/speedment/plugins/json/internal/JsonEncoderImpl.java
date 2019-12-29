@@ -28,13 +28,16 @@ import com.speedment.runtime.field.trait.HasFinder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -47,6 +50,7 @@ import static java.util.stream.Collectors.joining;
  */
 final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     
+    private static final Set<Class<?>> NON_STRING_CLASSES = Stream.of(Byte.class, Short.class, Integer.class, Long.class, Boolean.class, Float.class, Double.class).collect(toSet());
     private final Map<String, Function<ENTITY, String>> getters;
     private final Project project;
     private final Manager<ENTITY> manager;
@@ -379,23 +383,16 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
         // in is nullable, a field can certainly be null
         final String value;
 
-        if (in instanceof Optional<?>) {
+        if (in == null) {
+            value = "null";
+        } else if (in instanceof Optional<?>) {
             final Optional<?> o = (Optional<?>) in;
             return o.map(JsonEncoderImpl::jsonValue).orElse("null");
-        } else if (in == null) {
-            value = "null";
-        } else if (in instanceof Byte
-            || in instanceof Short
-            || in instanceof Integer
-            || in instanceof Long
-            || in instanceof Boolean
-            || in instanceof Float
-            || in instanceof Double) {
+        } else if (NON_STRING_CLASSES.contains(in.getClass())) {
             value = String.valueOf(in);
         } else {
             value = "\"" + String.valueOf(in).replace("\"", "\\\"") + "\"";
         }
-
         return value;
     }
 }
