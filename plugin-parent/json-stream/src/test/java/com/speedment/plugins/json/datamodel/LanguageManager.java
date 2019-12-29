@@ -1,4 +1,4 @@
-package com.speedment.plugins.json;
+package com.speedment.plugins.json.datamodel;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.*;
@@ -10,7 +10,17 @@ public final class LanguageManager implements Manager<Language> {
 
     @Override
     public Stream<Language> stream() {
-        return Stream.empty();
+        return Stream.of(
+                new LanguageImpl()
+                        .setId(1)
+                        .setName("English"),
+                new LanguageImpl()
+                        .setId(2)
+                        .setName("German"),
+                new LanguageImpl()
+                        .setId(3)
+                        .setName("Swedish")
+        );
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.speedment.plugins.json;
+package com.speedment.plugins.json.datamodel;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.*;
@@ -17,6 +17,8 @@ public interface User {
     DoubleField<User, Double> DOUBLE_FIELD = DoubleField.create(ColumnIdentifier.of("speedment_test","speedment_test", "user", "id"), User::getDouble, User::setDouble, TypeMapper.primitive(), false);
     CharField<User, Character> CHAR_FIELD = CharField.create(ColumnIdentifier.of("speedment_test","speedment_test", "user", "id"), User::getChar, User::setChar, TypeMapper.primitive(), false);
     BooleanField<User, Boolean> BOOLEAN_FIELD = BooleanField.create(ColumnIdentifier.of("speedment_test","speedment_test", "user", "id"), User::getBoolean, User::setBoolean, TypeMapper.primitive(), false);
+
+    IntForeignKeyField<User, Integer, Language> LANGUAGE = IntForeignKeyField.create(ColumnIdentifier.of("speedment_test","speedment_test", "user", "id"), User::getId, User::setId, Language.ID, TypeMapper.primitive(), true);
 
     int getId();
 
@@ -53,5 +55,9 @@ public interface User {
     boolean getBoolean();
 
     User setBoolean(boolean val);
+
+    int getLanguage();
+
+    User setLanguage(int val);
 
 }

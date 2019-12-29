@@ -1,6 +1,5 @@
-package com.speedment.plugins.json;
+package com.speedment.plugins.json.datamodel;
 
-import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.*;
 import com.speedment.runtime.field.Field;

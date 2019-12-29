@@ -1,4 +1,4 @@
-package com.speedment.plugins.json;
+package com.speedment.plugins.json.datamodel;
 
 public final class UserImpl implements User {
 
@@ -11,6 +11,7 @@ public final class UserImpl implements User {
     private double aDouble;
     private char aChar;
     private boolean aBoolean;
+    private int language;
 
     @Override
     public int getId() {
@@ -108,6 +109,17 @@ public final class UserImpl implements User {
     @Override
     public User setBoolean(boolean val) {
         aBoolean = val;
+        return this;
+    }
+
+    @Override
+    public int getLanguage() {
+        return language;
+    }
+
+    @Override
+    public User setLanguage(int val) {
+        language = val;
         return this;
     }
 }

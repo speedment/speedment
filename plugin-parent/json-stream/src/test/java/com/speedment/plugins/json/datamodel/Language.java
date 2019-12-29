@@ -1,4 +1,4 @@
-package com.speedment.plugins.json;
+package com.speedment.plugins.json.datamodel;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.*;

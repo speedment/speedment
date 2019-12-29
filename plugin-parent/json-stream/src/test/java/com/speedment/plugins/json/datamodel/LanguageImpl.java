@@ -1,4 +1,4 @@
-package com.speedment.plugins.json;
+package com.speedment.plugins.json.datamodel;
 
 public final class LanguageImpl implements Language {
 
