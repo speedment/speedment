@@ -80,6 +80,7 @@ public final class SetGetAdd implements Consumer<File> {
      */
     @Override
     public void accept(File file) {
+        requireNonNull(file);
         file.getClasses().stream()
             .filter(Class.class::isInstance)
             .map(Class.class::cast)
@@ -87,21 +88,21 @@ public final class SetGetAdd implements Consumer<File> {
     }
 
     private void accept(File file, Class model) {
-
+        requireNonNull(model);
         final Type self;
 
         if (model.getGenerics().isEmpty()) {
-            self = SimpleType.create(file, model);
+            self = SimpleType.create(model.getName());
         } else {
             self = SimpleParameterizedType.create(
-                file, model,
+                model.getName(),
                 model.getGenerics().stream()
                     .map(Generic::asType)
                     .toArray(Type[]::new)
             );
         }
 
-        requireNonNull(model).getFields().forEach(f -> {
+        model.getFields().forEach(f -> {
             f.private_();
 
             if (isCollection(f.getType())) {
