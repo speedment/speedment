@@ -23,6 +23,7 @@ import com.speedment.common.codegen.model.trait.HasCopy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -158,5 +159,25 @@ public final class EnumConstantImpl implements EnumConstant {
 		return new EnumConstantImpl(this);
 	}
 
-    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EnumConstantImpl that = (EnumConstantImpl) o;
+        return Objects.equals(parent, that.parent) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(javadoc, that.javadoc) &&
+                Objects.equals(imports, that.imports) &&
+                Objects.equals(classes, that.classes) &&
+                Objects.equals(initializers, that.initializers) &&
+                Objects.equals(methods, that.methods) &&
+                Objects.equals(fields, that.fields) &&
+                Objects.equals(values, that.values) &&
+                Objects.equals(annotations, that.annotations);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parent, name, javadoc, imports, classes, initializers, methods, fields, values, annotations);
+    }
 }
