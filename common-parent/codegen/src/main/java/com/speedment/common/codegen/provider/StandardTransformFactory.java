@@ -29,9 +29,7 @@ public final class StandardTransformFactory implements TransformFactory {
 
     private final TransformFactoryImpl transformFactory;
 
-    public StandardTransformFactory(
-        final String name
-    ) {
+    public StandardTransformFactory(final String name) {
         this.transformFactory = new TransformFactoryImpl(name);
     }
 

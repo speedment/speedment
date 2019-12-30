@@ -29,6 +29,8 @@ import static com.speedment.common.codegen.model.modifier.Modifier.*;
  */
 public final class Keyword {
 
+    private Keyword() {}
+
     /**
      * Specialization of the {@link HasModifiers}-trait that adds methods for
      * adding and removing the particular keyword.
@@ -400,8 +402,4 @@ public final class Keyword {
         }
     }
 
-    /**
-     * Utility classes should not be instantiated.
-     */
-    private Keyword() {}
 }
