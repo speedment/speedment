@@ -151,6 +151,7 @@ public final class ConstructorImpl implements Constructor {
     public int hashCode() {
         int hash = 5;
         hash = 43 * hash + Objects.hashCode(this.javadoc);
+        hash = 43 * hash + Objects.hashCode(this.imports);
         hash = 43 * hash + Objects.hashCode(this.annotations);
         hash = 43 * hash + Objects.hashCode(this.generics);
         hash = 43 * hash + Objects.hashCode(this.params);
@@ -173,6 +174,9 @@ public final class ConstructorImpl implements Constructor {
         }
         final ConstructorImpl other = (ConstructorImpl) obj;
         if (!Objects.equals(this.javadoc, other.javadoc)) {
+            return false;
+        }
+        if (!Objects.equals(this.imports, other.imports)) {
             return false;
         }
         if (!Objects.equals(this.annotations, other.annotations)) {
