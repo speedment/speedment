@@ -16,15 +16,28 @@
  */
 package com.speedment.common.json;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.stream.Stream;
 
 /**
  *
@@ -164,4 +177,54 @@ final class JsonTest {
         assertNotNull(map);
         assertEquals("Hello, \"World\"!\n", map.get("message"));
     }
+
+    @TestFactory
+    Stream<DynamicTest> toJson() {
+        final Map<String, Object> testCases = toJsonTestCases();
+
+        assertThrows(IllegalArgumentException.class, () -> Json.toJson(new RuntimeException()));
+
+        return testCases.entrySet().stream().map(testCase -> dynamicTest(testCase.getKey(), () -> {
+            final Object value = testCase.getValue();
+
+            final String pretty = Json.toJson(value);
+            assertNotNull(pretty);
+
+            final String compressed = Json.toJson(value, false);
+            assertNotNull(compressed);
+
+            final OutputStream prettyOutput = new DataOutputStream(new ByteArrayOutputStream());
+            final OutputStream compressedOutput = new DataOutputStream(new ByteArrayOutputStream());
+
+            Json.toJson(value, prettyOutput);
+            Json.toJson(value, compressedOutput, false);
+        }));
+    }
+
+    private Map<String, Object> toJsonTestCases() {
+        final Map<String, Object> testCases = new HashMap<>();
+
+        final Map<String, Object> map = new HashMap<>();
+        map.put("id", 1);
+        map.put("name", "Michael");
+
+        final List<Map<String, Object>> list = new ArrayList<>();
+        list.add(map);
+        list.add(map);
+
+        testCases.put("testing null serialization", null);
+        testCases.put("testing map serialization", map);
+        testCases.put("testing list serialization", list);
+        testCases.put("testing double serialization", 1d);
+        testCases.put("testing float serialization", 1f);
+        testCases.put("testing long serialization", 1L);
+        testCases.put("testing integer serialization", 1);
+        testCases.put("testing short serialization", (short) 1);
+        testCases.put("testing byte serialization", (byte) 1);
+        testCases.put("testing true serialization", true);
+        testCases.put("testing false serialization", false);
+
+        return testCases;
+    }
+
 }
