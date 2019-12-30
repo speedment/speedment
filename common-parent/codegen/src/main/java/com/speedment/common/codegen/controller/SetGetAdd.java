@@ -190,9 +190,9 @@ public final class SetGetAdd implements Consumer<File> {
         final ParameterizedType paramType = (ParameterizedType) f.getType();
 
         final Field param = Field.of(singular(f.getName()), paramType.getActualTypeArguments()[0]);
-        final Method add = Method.of("add", self)
+        final Method add = Method.of("addTo" + ucfirst(f.getName()), self)
             .set(Javadoc.of()
-                .setText("Adds the specified " + lcfirst(shortName(param.getType().getTypeName())) + " to this " + shortName(model.getName()) + ".")
+                .setText("Adds the specified " + lcfirst(shortName(param.getType().getTypeName())) + " to the " + f.getName() + " of this " + shortName(model.getName()) + ".")
                 .add(JavadocTag.of("param", param.getName(), "the new value"))
                 .add(JavadocTag.of(RETURN, "a reference to this object"))
             ).public_()
@@ -212,10 +212,10 @@ public final class SetGetAdd implements Consumer<File> {
      * @return <code>true</code> if collection, else <code>false</code>
      */
     private boolean isCollection(Type type) {
-        if (type instanceof java.lang.Class<?>) {
-            final java.lang.Class<?> clazz = (java.lang.Class<?>) type;
+        try {
+            final java.lang.Class<?> clazz = java.lang.Class.forName(type.getTypeName());
             return Collection.class.isAssignableFrom(clazz);
-        } else {
+        } catch (ClassNotFoundException e) {
             return false;
         }
     }
