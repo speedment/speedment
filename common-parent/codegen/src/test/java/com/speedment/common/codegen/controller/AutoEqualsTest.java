@@ -35,11 +35,17 @@ final class AutoEqualsTest extends AbstractControllerTest {
                 "import java.util.Objects;\n" +
                 "import java.util.Optional;\n" +
                 "\n" +
-                "public class Point {\n" +
+                "public class Holder {\n" +
                 "    \n" +
-                "    private final int x;\n" +
-                "    private final int y;\n" +
-                "    private final String label;\n" +
+                "    private final byte b;\n" +
+                "    private final short s;\n" +
+                "    private final int i;\n" +
+                "    private final long l;\n" +
+                "    private final float f;\n" +
+                "    private final double d;\n" +
+                "    private final boolean bool;\n" +
+                "    private final char ch;\n" +
+                "    private final String string;\n" +
                 "    \n" +
                 "    /**\n" +
                 "     * Compares this object with the specified one for equality. The other\n" +
@@ -53,10 +59,16 @@ final class AutoEqualsTest extends AbstractControllerTest {
                 "    public boolean equals(Object other) {\n" +
                 "        return Optional.ofNullable(other)\n" +
                 "            .filter(o -> getClass().equals(o.getClass()))\n" +
-                "            .map(o -> (Point) o)\n" +
-                "            .filter(o -> (this.x == o.x))\n" +
-                "            .filter(o -> (this.y == o.y))\n" +
-                "            .filter(o -> Objects.equals(this.label, o.label))\n" +
+                "            .map(o -> (Holder) o)\n" +
+                "            .filter(o -> (this.b == o.b))\n" +
+                "            .filter(o -> (this.s == o.s))\n" +
+                "            .filter(o -> (this.i == o.i))\n" +
+                "            .filter(o -> (this.l == o.l))\n" +
+                "            .filter(o -> (this.f == o.f))\n" +
+                "            .filter(o -> (this.d == o.d))\n" +
+                "            .filter(o -> (this.bool == o.bool))\n" +
+                "            .filter(o -> (this.ch == o.ch))\n" +
+                "            .filter(o -> Objects.equals(this.string, o.string))\n" +
                 "            .isPresent();\n" +
                 "    }\n" +
                 "    \n" +
@@ -71,9 +83,15 @@ final class AutoEqualsTest extends AbstractControllerTest {
                 "    @Override\n" +
                 "    public int hashCode() {\n" +
                 "        int hash = 7;\n" +
-                "        hash = 31 * hash + (Integer.hashCode(this.x));\n" +
-                "        hash = 31 * hash + (Integer.hashCode(this.y));\n" +
-                "        hash = 31 * hash + (Objects.hashCode(this.label));\n" +
+                "        hash = 31 * hash + (Byte.hashCode(this.b));\n" +
+                "        hash = 31 * hash + (Short.hashCode(this.s));\n" +
+                "        hash = 31 * hash + (Integer.hashCode(this.i));\n" +
+                "        hash = 31 * hash + (Long.hashCode(this.l));\n" +
+                "        hash = 31 * hash + (Float.hashCode(this.f));\n" +
+                "        hash = 31 * hash + (Double.hashCode(this.d));\n" +
+                "        hash = 31 * hash + (Boolean.hashCode(this.bool));\n" +
+                "        hash = 31 * hash + (Character.hashCode(this.ch));\n" +
+                "        hash = 31 * hash + (Objects.hashCode(this.string));\n" +
                 "        return hash;\n" +
                 "    }\n" +
                 "}";
