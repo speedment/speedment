@@ -21,6 +21,7 @@ import com.speedment.common.codegen.model.value.ReferenceValue;
 import com.speedment.common.codegen.util.Formatting;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -80,7 +81,7 @@ public final class AlignTabs<T> implements Consumer<T> {
                 .map(ReferenceValue.class::cast)
                 .map(ReferenceValue::getValue)
                 .orElse(null),
-                (field, value) -> ((ReferenceValue) field.getValue().get())
+                    (field, value) -> ((ReferenceValue) field.getValue().orElseThrow(NoSuchElementException::new))
                     .setValue(value)
             );
         }
