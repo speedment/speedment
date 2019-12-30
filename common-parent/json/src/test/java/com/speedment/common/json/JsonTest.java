@@ -16,6 +16,7 @@
  */
 package com.speedment.common.json;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -201,6 +202,28 @@ final class JsonTest {
         }));
     }
 
+    @TestFactory
+    Stream<DynamicTest> fromJson() {
+        final Map<String, String> testCases = fromJsonTestCases();
+        final Map<String, String> invalidTestCases = fromJsonInvalidTestCases();
+
+        Stream<DynamicTest> validTests =
+            testCases.entrySet().stream().map(testCase -> dynamicTest(testCase.getKey(), () -> {
+                final String value = testCase.getValue();
+
+                assertDoesNotThrow(() -> Json.fromJson(value));
+            }));
+
+        Stream<DynamicTest> invalidTests =
+            invalidTestCases.entrySet().stream().map(testCase -> dynamicTest(testCase.getKey(), () -> {
+                final String value = testCase.getValue();
+
+                assertThrows(JsonSyntaxException.class, () -> Json.fromJson(value));
+            }));
+
+        return Stream.concat(validTests, invalidTests);
+    }
+
     private Map<String, Object> toJsonTestCases() {
         final Map<String, Object> testCases = new HashMap<>();
 
@@ -223,6 +246,111 @@ final class JsonTest {
         testCases.put("testing byte serialization", (byte) 1);
         testCases.put("testing true serialization", true);
         testCases.put("testing false serialization", false);
+
+        return testCases;
+    }
+
+    private Map<String, String> fromJsonTestCases() {
+        final Map<String, String> testCases = new HashMap<>();
+
+        final String emptyJsonObject = "{}";
+        final String emptyJsonArray = "[]";
+
+        final String jsonNull = "null";
+        final String jsonObject = "{\"id\":1,\n \"attributes\":{\"name\":\"Michael\"},\n \"key\":\"value\"}";
+        final String jsonArray_object = "[{}]";
+        final String jsonArray_objectWith = "[{}, {}]";
+        final String jsonArray_array = "[[]]";
+        final String jsonArray_arrayWith = "[[], []]";
+        final String jsonArray_string = "[\"string\"]";
+        final String jsonArray_strings = "[\"string\", \"\", \"hello\"]";
+        final String jsonArray_null = "[null]";
+        final String jsonArray_nullWith = "[null, null]";
+        final String jsonArray_true = "[true]";
+        final String jsonArray_trueWith = "[true, false]";
+        final String jsonArray_false = "[false]";
+        final String jsonArray_falseWith = "[false, true]";
+        final String jsonArray_number = "[1]";
+        final String jsonArray_numberWith = "[1, 2]";
+        final String jsonString = "\"string\b\f\n\r\t\"";
+        final String jsonTrue = "true";
+        final String jsonFalse = "false";
+
+        testCases.put("testing json null deserialization", jsonNull);
+        testCases.put("testing json object deserialization", jsonObject);
+        testCases.put("testing json array array deserialization (1)", jsonArray_array);
+        testCases.put("testing json array array deserialization (2)", jsonArray_arrayWith);
+        testCases.put("testing json object array deserialization (1)", jsonArray_object);
+        testCases.put("testing json object array deserialization (2)", jsonArray_objectWith);
+        testCases.put("testing json string array deserialization (1)", jsonArray_string);
+        testCases.put("testing json string array deserialization (2)", jsonArray_strings);
+        testCases.put("testing json null array deserialization (1)", jsonArray_null);
+        testCases.put("testing json null array deserialization (2)", jsonArray_nullWith);
+        testCases.put("testing json boolean array deserialization (1)", jsonArray_true);
+        testCases.put("testing json boolean array deserialization (2)", jsonArray_trueWith);
+        testCases.put("testing json boolean array deserialization (3)", jsonArray_false);
+        testCases.put("testing json boolean array deserialization (4)", jsonArray_falseWith);
+        testCases.put("testing json number array deserialization (1)", jsonArray_number);
+        testCases.put("testing json number array deserialization (2)", jsonArray_numberWith);
+        testCases.put("testing empty json object deserialization", emptyJsonObject);
+        testCases.put("testing empty json array deserialization", emptyJsonArray);
+        testCases.put("testing json string deserialization", jsonString);
+        testCases.put("testing json true deserialization", jsonTrue);
+        testCases.put("testing json false deserialization", jsonFalse);
+
+        return testCases;
+    }
+
+    private Map<String, String> fromJsonInvalidTestCases() {
+        final Map<String, String> testCases = new HashMap<>();
+
+        final String jsonObject_notClosed = "{\"id\":1";
+        final String jsonObject_missingKey = "{: 1}";
+        final String jsonObject_missingValue = "{\"id\": }";
+        final String jsonObject_missingColon = "{\"id\" 1}";
+        final String jsonObject_keyNotClosed = "{\"id:1}";
+        final String jsonObject_invalidEnding = "{\"a\"";
+        final String jsonArray_notClosed = "[{}";
+
+        testCases.put("testing non-closed json object deserialization", jsonObject_notClosed);
+        testCases.put("testing missing key json object deserialization", jsonObject_missingKey);
+        testCases.put("testing missing value json object deserialization", jsonObject_missingValue);
+        testCases.put("testing missing colon json object deserialization", jsonObject_missingColon);
+        testCases.put("testing non-closed key json object deserialization", jsonObject_keyNotClosed);
+        testCases.put("testing invalid ending json object deserialization", jsonObject_invalidEnding);
+        testCases.put("testing non-closed json array deserialization", jsonArray_notClosed);
+
+        final String invalidNull_1 = "nul-";
+        final String invalidNull_2 = "nu-";
+        final String invalidNull_3 = "n-";
+        final String invalidNull_4 = "n";
+
+        testCases.put("testing invalid null serialization (1)", invalidNull_1);
+        testCases.put("testing invalid null serialization (2)", invalidNull_2);
+        testCases.put("testing invalid null serialization (3)", invalidNull_3);
+        testCases.put("testing invalid null serialization (4)", invalidNull_4);
+
+        final String invalidTrue_1 = "tru-";
+        final String invalidTrue_2 = "tr-";
+        final String invalidTrue_3 = "t-";
+        final String invalidTrue_4 = "t";
+
+        testCases.put("testing invalid true serialization (1)", invalidTrue_1);
+        testCases.put("testing invalid true serialization (2)", invalidTrue_2);
+        testCases.put("testing invalid true serialization (3)", invalidTrue_3);
+        testCases.put("testing invalid true serialization (4)", invalidTrue_4);
+
+        final String invalidFalse_1 = "fals-";
+        final String invalidFalse_2 = "fal-";
+        final String invalidFalse_3 = "fa-";
+        final String invalidFalse_4 = "f-";
+        final String invalidFalse_5 = "f";
+
+        testCases.put("testing invalid false serialization (1)", invalidFalse_1);
+        testCases.put("testing invalid false serialization (2)", invalidFalse_2);
+        testCases.put("testing invalid false serialization (3)", invalidFalse_3);
+        testCases.put("testing invalid false serialization (4)", invalidFalse_4);
+        testCases.put("testing invalid false serialization (5)", invalidFalse_5);
 
         return testCases;
     }
