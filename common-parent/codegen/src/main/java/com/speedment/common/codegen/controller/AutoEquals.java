@@ -259,7 +259,7 @@ implements Consumer<T> {
     }
     
     /**
-     * Returns the a method with the specified signature exists.
+     * Returns if a method with the specified signature exists.
      * 
      * @param model   the model
      * @param method  the method name to look for
@@ -270,17 +270,11 @@ implements Consumer<T> {
         requireNonNull(model);
         requireNonNull(method);
         requireNonNull(params);
-        
-        Method found = null;
-        
         for (Method m : model.getMethods()) {
-            if (method.equals(m.getName())
-                && m.getFields().size() == params) {
-                found = m;
-                break;
+            if (method.equals(m.getName()) && m.getFields().size() == params) {
+                return true;
             }
         }
-        
-        return found != null;
+        return false;
     }
 }
