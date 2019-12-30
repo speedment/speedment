@@ -42,13 +42,13 @@ public interface HasLicenseTerm<T extends HasLicenseTerm<T>> {
      * Sets the {@link LicenseTerm} of this model. This method is a synonym for
      * {@link #set(LicenseTerm)}.
      *
-     * @param doc  the licenseterm
+     * @param text  the licenseterm
      * @return     a reference to this
      *
      * @since 3.1.18
      */
-    default T licenseTerm(final LicenseTerm doc) {
-        return set(doc);
+    default T licenseTerm(final String text) {
+        return set(LicenseTerm.of(text));
     }
 
     /**
