@@ -58,27 +58,6 @@ public final class AnnotationUsageImpl extends AnnotationUsageBase {
         super(requireNonNull(prototype));
     }
 
-    public static final class AnnotationUsageConst extends AnnotationUsageBase {
-
-        public AnnotationUsageConst(Type type) {
-            super(type);
-        }
-
-        @Override
-        public AnnotationUsage set(Value<?> val) {
-            return copy().set(val);
-        }
-
-        @Override
-        public AnnotationUsage put(String key, Value<?> val) {
-            return copy().put(key, val);
-        }
-
-        @Override
-        public AnnotationUsage set(Type type) {
-            return copy().set(type);
-        }
-    }
 }
 
 abstract class AnnotationUsageBase implements AnnotationUsage {

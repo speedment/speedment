@@ -98,7 +98,6 @@ public final class ClassImpl extends ClassOrInterfaceImpl<Class> implements Clas
 		if (!super.equals(obj)) {
         	return false;
 		}
-
         final ClassImpl other = (ClassImpl) obj;
         if (!Objects.equals(this.superType, other.superType)) {
             return false;

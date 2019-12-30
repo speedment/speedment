@@ -49,7 +49,8 @@ public final class AnnotationImpl implements Annotation {
      * 
      * @param name  the name
      */
-	public AnnotationImpl(String name) {
+	public
+	AnnotationImpl(String name) {
 		this.name        = requireNonNull(name);
 		this.javadoc     = null;
 		this.annotations = new ArrayList<>();

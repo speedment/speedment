@@ -172,6 +172,7 @@ implements ClassOrInterface<T> {
         int hash = 7;
         hash = 37 * hash + Objects.hashCode(this.name);
         hash = 37 * hash + Objects.hashCode(this.javadoc);
+        hash = 37 * hash + Objects.hashCode(this.imports);
         hash = 37 * hash + Objects.hashCode(this.annotations);
         hash = 37 * hash + Objects.hashCode(this.generics);
         hash = 37 * hash + Objects.hashCode(this.interfaces);
@@ -201,6 +202,9 @@ implements ClassOrInterface<T> {
         if (!Objects.equals(this.javadoc, other.javadoc)) {
             return false;
         }
+        if (!Objects.equals(this.imports, other.imports)) {
+            return false;
+        }
         if (!Objects.equals(this.annotations, other.annotations)) {
             return false;
         }
@@ -225,5 +229,4 @@ implements ClassOrInterface<T> {
         return Objects.equals(this.modifiers, other.modifiers);
     }
 
-  
 }
