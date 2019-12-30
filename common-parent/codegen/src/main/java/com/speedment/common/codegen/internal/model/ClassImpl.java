@@ -87,7 +87,7 @@ public final class ClassImpl extends ClassOrInterfaceImpl<Class> implements Clas
 
     @Override
     public int hashCode() {
-        int hash = 5;
+        int hash = super.hashCode();
         hash = 11 * hash + Objects.hashCode(this.superType);
         hash = 11 * hash + Objects.hashCode(this.constructors);
         return hash;
@@ -95,15 +95,10 @@ public final class ClassImpl extends ClassOrInterfaceImpl<Class> implements Clas
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+		if (!super.equals(obj)) {
+        	return false;
+		}
+
         final ClassImpl other = (ClassImpl) obj;
         if (!Objects.equals(this.superType, other.superType)) {
             return false;
