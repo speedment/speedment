@@ -32,6 +32,7 @@ final class CommaSeparatedStringEditorTest {
         final CommaSeparatedStringEditor<ColumnProperty> editor = new CommaSeparatedStringEditor<>();
         injector.inject(editor);
 
+        when(hasEnumConstantsProperty.enumConstantsProperty())
         assertThrows(Exception.class, () -> editor.fieldsFor(hasEnumConstantsProperty));
 
     }

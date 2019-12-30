@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 final class GeneratedEnumTypeTest {
 
@@ -40,6 +39,8 @@ final class GeneratedEnumTypeTest {
         assertNotEquals(instance, null);
         assertNotEquals(1, instance);
         assertNotEquals(instance, 1);
+        assertNotEquals(Integer.class, instance);
+        assertNotEquals(instance, Integer.class);
         assertNotEquals(null, instance);
         assertNotEquals(instance, other);
         assertNotEquals(other, instance);

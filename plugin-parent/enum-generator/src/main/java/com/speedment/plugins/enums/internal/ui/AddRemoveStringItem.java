@@ -20,47 +20,24 @@ import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.stream.Collectors.joining;
-import static javafx.application.Platform.requestNextPulse;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.common.singletonstream.SingletonStream;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
-import com.speedment.runtime.core.ApplicationMetadata;
-import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.component.SqlAdapter;
-import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
-import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
-import com.speedment.runtime.core.manager.HasLabelSet;
-import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.core.manager.Persister;
-import com.speedment.runtime.core.manager.Remover;
-import com.speedment.runtime.core.manager.Updater;
-import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.core.util.ProgressMeasure;
-import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.StringField;
-import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.trait.HasEnumConstantsProperty;
 import com.speedment.tool.config.trait.HasTypeMapperProperty;
@@ -79,18 +56,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 
-import java.sql.ResultSet;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -361,316 +333,6 @@ extends AbstractLabelTooltipItem {
         });
 
         return button;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    //                            Internal Class                              //
-    ////////////////////////////////////////////////////////////////////////////
-
-    private static final class TempApplicationMetadata implements ApplicationMetadata {
-
-        private final String json;
-
-        public TempApplicationMetadata(@Config(name="temp.json", value="") String json) {
-            this.json = requireNonNull(json);
-        }
-
-        @Override
-        public Project makeProject() {
-            try {
-                @SuppressWarnings("unchecked") final Map<String, Object> data =
-                    (Map<String, Object>) Json.fromJson(json);
-                return Project.create(data);
-            } catch (final ClassCastException ex) {
-                throw new SpeedmentToolException(
-                    "Error deserializing temporary project JSON.", ex
-                );
-            }
-        }
-    }
-
-    private static final class TempColumnIdentifier implements ColumnIdentifier<String> {
-        private final String dbms;
-        private final String schema;
-        private final String table;
-        private final String column;
-
-        TempColumnIdentifier(String dbms,
-                             String schema,
-                             String table,
-                             String column) {
-
-            this.dbms   = requireNonNull(dbms);
-            this.schema = requireNonNull(schema);
-            this.table  = requireNonNull(table);
-            this.column = requireNonNull(column);
-        }
-
-        @Override
-        public String getDbmsId() {
-            return dbms;
-        }
-
-        @Override
-        public String getTableId() {
-            return table;
-        }
-
-        @Override
-        public String getColumnId() {
-            return column;
-        }
-
-        @Override
-        public String getSchemaId() {
-            return schema;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof ColumnIdentifier)) return false;
-
-            final ColumnIdentifier<?> that = (ColumnIdentifier<?>) o;
-            return dbms.equals(that.getDbmsId())
-                && schema.equals(that.getSchemaId())
-                && table.equals(that.getTableId())
-                && column.equals(that.getColumnId());
-        }
-
-        @Override
-        public int hashCode() {
-            int result = dbms.hashCode();
-            result = 31 * result + schema.hashCode();
-            result = 31 * result + table.hashCode();
-            result = 31 * result + column.hashCode();
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return "TempColumnIdentifier{" +
-                "dbms='" + dbms + '\'' +
-                ", schema='" + schema + '\'' +
-                ", table='" + table + '\'' +
-                ", column='" + column + '\'' +
-                '}';
-        }
-    }
-
-    private static final class SingleColumnSqlAdapter implements SqlAdapter<String> {
-        
-        private final TableIdentifier<String> tableId;
-        private final String column;
-
-        public SingleColumnSqlAdapter(
-            @Config(name = "temp.dbms", value = "") final String dbms,
-            @Config(name = "temp.schema", value = "") final String schema,
-            @Config(name = "temp.table", value = "") final String table,
-            @Config(name = "temp.column", value = "") final String column
-        ) {
-            this.column = requireNonNull(column);
-            this.tableId = TableIdentifier.of(
-                requireNonNull(dbms),
-                requireNonNull(schema),
-                requireNonNull(table)
-            );
-        }
-
-        @Override
-        public TableIdentifier<String> identifier() {
-            return tableId;
-        }
-
-        @Override
-        public SqlFunction<ResultSet, String> entityMapper() {
-            return in -> in.getString(column);
-        }
-
-        @Override
-        public SqlFunction<ResultSet, String> entityMapper(int offset) {
-            return entityMapper(); // We do not use index and offset
-        }
-        
-    }
-    
-    private static final class SingleColumnManager implements Manager<String> {
-
-        private final StreamSupplierComponent streamSupplierComponent;
-        private final StringField<String, String> field;
-        private final TableIdentifier<String> tableId;
-
-        SingleColumnManager(
-            final StreamSupplierComponent streamSupplierComponent,
-            @Config(name="temp.dbms", value="") final String dbms,
-            @Config(name="temp.schema", value="") final String schema,
-            @Config(name="temp.table", value="") final String table,
-            @Config(name="temp.column", value="") final String column
-        ) {
-            this.streamSupplierComponent = requireNonNull(streamSupplierComponent);
-            requireNonNull(dbms);
-            requireNonNull(schema);
-            requireNonNull(table);
-            requireNonNull(column);
-            this.tableId = TableIdentifier.of(dbms, schema, table);
-            this.field   = StringField.create(
-                new TempColumnIdentifier(dbms, schema, table, column),
-                e -> e, (e, s) -> {},
-                TypeMapper.identity(),
-                false
-            );
-        }
-
-        @ExecuteBefore(State.INITIALIZED)
-        public void configureManagerComponent(@WithState(State.INITIALIZED) ManagerComponent managerComponent) {
-            managerComponent.put(this);
-        }
-
-        @Override
-        public TableIdentifier<String> getTableIdentifier() {
-            return tableId;
-        }
-
-        @Override
-        public Class<String> getEntityClass() {
-            return String.class;
-        }
-
-        @Override
-        public Stream<Field<String>> fields() {
-            return SingletonStream.of(field);
-        }
-
-        @Override
-        public Stream<Field<String>> primaryKeyFields() {
-            return SingletonStream.of(field);
-        }
-
-        @Override
-        public Stream<String> stream() {
-            return streamSupplierComponent.stream(
-                getTableIdentifier(),
-                ParallelStrategy.computeIntensityDefault()
-            );
-        }
-
-        @Override
-        public String create() {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public final String persist(String entity) {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public Persister<String> persister() {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public Persister<String> persister(HasLabelSet<String> fields) {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public final String update(String entity) {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public Updater<String> updater() {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public Updater<String> updater(HasLabelSet<String> fields) {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public final String remove(String entity) {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public Remover<String> remover() {
-            throw newUnsupportedOperationExceptionReadOnly();
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() + "{tableId: " +
-                tableId.toString()
-                + "}";
-        }
-
-        private static UnsupportedOperationException newUnsupportedOperationExceptionReadOnly() {
-            return new UnsupportedOperationException("This manager is read-only.");
-        }
-
-    }
-
-    private static final class EnumCell extends TextFieldListCell<String> {
-
-        private final ObservableList<String> strings;
-        private String labelString;
-
-        private EnumCell(ObservableList<String> strings) {
-            super();
-            this.strings = requireNonNull(strings);
-            setConverter(myConverter());
-        }
-
-        @Override
-        public void startEdit() {
-            labelString = getText();
-            super.startEdit();
-        }
-
-        private StringConverter<String> myConverter() {
-            return new StringConverter<String>() {
-               
-                @Override
-                public String toString(String value) {
-                    return (value != null) ? value : "";
-                }
-
-                @Override
-                public String fromString(String value) {
-                    // Avoid false positives (ie showing an error that we match ourselves)
-                    if (value.equalsIgnoreCase(labelString)) {
-                        return value;
-                    } else if (value.isEmpty()) {
-                        LOGGER.info("An enum field cannot be empty. Please remove the field instead.");
-                        return labelString;
-                    }
-                    
-                    // Make sure this is not a duplicate entry
-                    final AtomicBoolean duplicate = new AtomicBoolean(false);
-                    strings.stream()
-                        .filter(elem -> elem.equalsIgnoreCase(value))
-                        .forEach(elem -> duplicate.set(true));
-                    if (duplicate.get()){
-                        LOGGER.info("Enum cannot contain the same constant twice");
-                        return labelString;
-                        
-                    // Make sure this entry contains only legal characters
-                    } else if ( !value.matches("([\\w\\-\\_\\ ]+)")) {
-                        LOGGER.info("Enum should only contain letters, number, underscore and/or dashes");
-                        return labelString;
-                        
-                    // Warn if it contains a space
-                    } else if (value.contains(" ")) {
-                        LOGGER.warn("Enum spaces will be converted to underscores in Java");
-                        return value;
-                    } else {
-                        return value; 
-                    }
-                }
-            };
-        }
     }
 
 }

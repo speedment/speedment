@@ -120,10 +120,7 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
         } else if (hasTypeMapper(col, IntegerToEnumTypeMapper.class)) {
             dbType = int.class;
         } else {
-            throw new UnsupportedOperationException(format(
-                "Unknown enum type mapper '%s' in column '%s'.",
-                col.getTypeMapper().orElse(null), col
-            ));
+            throw new UnsupportedOperationException(format("Unknown enum type mapper '%s' in column '%s'.", col.getTypeMapper().orElse(null), col));
         }
 
         final Enum colEnum = Enum.of(shortName(colEnumName))

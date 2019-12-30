@@ -69,10 +69,7 @@ implements PropertyEditor<HasEnumConstantsProperty> {
                 "Enum Constants", 
                 document.enumConstantsProperty(),
                 "Used for defining what constants the generated enum can have",
-                Bindings.equal(
-                    document.typeMapperProperty(),
-                    StringToEnumTypeMapper.class.getName()
-                )
+                Bindings.equal(document.typeMapperProperty(), StringToEnumTypeMapper.class.getName())
             )
         ).map(injector::inject);
     }
