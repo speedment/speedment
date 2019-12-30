@@ -307,15 +307,14 @@ public final class Formatting {
     }
 	
 	public static Optional<String> fileToClassName(String fileName) {
-		Optional<String> result = Optional.empty();
 		if (fileName.endsWith(".java")) {
 			String className = fileName;
 			className = className.replace('/', '.');
 			className = className.replace('\\', '.');
 			className = className.substring(0, className.length() - 5);
-			result = Optional.of(className);
+			return Optional.of(className);
 		}
-		return result;
+		return Optional.empty();
 	}
     
     public static String classToJavaFileName(String longName) {
@@ -490,9 +489,9 @@ public final class Formatting {
 
     public static String replaceIfJavaUsedWord(final String word) {
         requireNonNull(word);
-        // We need to replace regardless of case because we do not know how the retuned string is to be used
+        // We need to replace regardless of case because we do not know how the returned string is to be used
         if (JAVA_USED_WORDS_LOWER_CASE.contains(word.toLowerCase())) {
-            // If it is a java reseved/literal/class, add a "_" at the end to avoid naming conflics
+            // If it is a java reserved/literal/class, add a "_" at the end to avoid naming conflicts
             return word + "_";
         }
         return word;
@@ -505,7 +504,7 @@ public final class Formatting {
         }
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < word.length(); i++) {
-            Character c = word.charAt(i);
+            char c = word.charAt(i);
             if (i == 0) {
                 if (Character.isJavaIdentifierStart(c)) {
                     // Fine! Just add the first character
@@ -528,9 +527,9 @@ public final class Formatting {
         }
         return sb.toString();
         /*
-           We need to replace regardless of case because we do not know how the retuned string is to be used
+           We need to replace regardless of case because we do not know how the return string is to be used
            if (JAVA_USED_WORDS_LOWER_CASE.contains(word.toLowerCase())) {
-           If it is a java reseved/literal/class, add a "_" at the end to avoid naming conflics
+           If it is a java reserved/literal/class, add a "_" at the end to avoid naming conflicts
               return word + "_";
           }
           return word; */
@@ -643,6 +642,5 @@ public final class Formatting {
     private static final Set<String> JAVA_USED_WORDS_LOWER_CASE = unmodifiableSet(JAVA_USED_WORDS.stream()
         .map(String::toLowerCase)
         .collect(toSet()));
-
 
 }
