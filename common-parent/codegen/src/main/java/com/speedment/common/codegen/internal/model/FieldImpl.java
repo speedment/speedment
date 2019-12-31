@@ -171,6 +171,7 @@ public final class FieldImpl implements Field {
         hash = 29 * hash + Objects.hashCode(this.type);
         hash = 29 * hash + Objects.hashCode(this.value);
         hash = 29 * hash + Objects.hashCode(this.javadoc);
+        hash = 29 * hash + Objects.hashCode(this.imports);
         hash = 29 * hash + Objects.hashCode(this.annotations);
         hash = 29 * hash + Objects.hashCode(this.modifiers);
         return hash;
@@ -198,6 +199,9 @@ public final class FieldImpl implements Field {
             return false;
         }
         if (!Objects.equals(this.javadoc, other.javadoc)) {
+            return false;
+        }
+        if (!Objects.equals(this.imports, other.imports)) {
             return false;
         }
         if (!Objects.equals(this.annotations, other.annotations)) {

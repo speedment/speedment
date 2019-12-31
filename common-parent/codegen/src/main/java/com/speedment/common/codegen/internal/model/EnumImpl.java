@@ -82,6 +82,7 @@ public final class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
     @Override
     public int hashCode() {
         int hash = 5;
+        hash = 13 * super.hashCode();
         hash = 13 * hash + Objects.hashCode(this.constants);
         hash = 13 * hash + Objects.hashCode(this.constructors);
         return hash;
@@ -89,13 +90,7 @@ public final class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (!super.equals(obj)) {
             return false;
         }
         final EnumImpl other = (EnumImpl) obj;
