@@ -123,6 +123,7 @@ public final class FileImpl implements File {
         int hash = 7;
         hash = 37 * hash + Objects.hashCode(this.name);
         hash = 37 * hash + Objects.hashCode(this.doc);
+        hash = 37 * hash + Objects.hashCode(this.lic);
         hash = 37 * hash + Objects.hashCode(this.imports);
         hash = 37 * hash + Objects.hashCode(this.classes);
         return hash;
@@ -144,6 +145,9 @@ public final class FileImpl implements File {
             return false;
         }
         if (!Objects.equals(this.doc, other.doc)) {
+            return false;
+        }
+        if (!Objects.equals(this.lic, other.lic)) {
             return false;
         }
         if (!Objects.equals(this.imports, other.imports)) {

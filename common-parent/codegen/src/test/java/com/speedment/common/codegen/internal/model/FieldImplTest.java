@@ -26,7 +26,7 @@ final class FieldImplTest extends AbstractTest<Field> {
                 Field::public_
         );
     }
-    
+
     @Test
     void setParent() {
         instance().setParent(Class.of(NAME));

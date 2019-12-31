@@ -137,7 +137,7 @@ public final class GenericImpl implements Generic {
 	    if (lowerBound == null || "?".equals(lowerBound)) {
 	        if (upperBounds.isEmpty()) {
 	            throw new UnsupportedOperationException(
-	                "This generic has neighter lower or upper bound, so it " +
+	                "This generic has neither lower or upper bound, so it " +
                     "can't be parsed into a Type.");
             } else if (upperBounds.size() > 1) {
                 throw new UnsupportedOperationException(
@@ -185,6 +185,5 @@ public final class GenericImpl implements Generic {
         }
         return this.type == other.type;
     }
-
 
 }
