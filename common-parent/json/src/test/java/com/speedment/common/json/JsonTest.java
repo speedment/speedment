@@ -272,7 +272,14 @@ final class JsonTest {
         final String jsonArray_falseWith = "[false, true]";
         final String jsonArray_number = "[1]";
         final String jsonArray_numberWith = "[1, 2]";
-        final String jsonString = "\"string\b\f\n\r\t\"";
+        final String jsonArray_decimal = "[1.1]";
+        final String jsonArray_decimalWith = "[1.1, 2.2]";
+        final String jsonString_raw = "\"string\"";
+        final String jsonString_b = "\"\\b\"";
+        final String jsonString_f = "\"\\f\"";
+        final String jsonString_n = "\"\\n\"";
+        final String jsonString_r = "\"\\r\"";
+        final String jsonString_t = "\"\\t\"";
         final String jsonTrue = "true";
         final String jsonFalse = "false";
 
@@ -292,11 +299,18 @@ final class JsonTest {
         testCases.put("testing json boolean array deserialization (4)", jsonArray_falseWith);
         testCases.put("testing json number array deserialization (1)", jsonArray_number);
         testCases.put("testing json number array deserialization (2)", jsonArray_numberWith);
+        testCases.put("testing json decimal array deserialization (1)", jsonArray_decimal);
+        testCases.put("testing json decimal array deserialization (2)", jsonArray_decimalWith);
         testCases.put("testing empty json object deserialization", emptyJsonObject);
         testCases.put("testing empty json array deserialization", emptyJsonArray);
-        testCases.put("testing json string deserialization", jsonString);
-        testCases.put("testing json true deserialization", jsonTrue);
-        testCases.put("testing json false deserialization", jsonFalse);
+        testCases.put("testing json string deserialization (1)", jsonString_raw);
+        testCases.put("testing json string deserialization (2)", jsonString_b);
+        testCases.put("testing json string deserialization (3)", jsonString_f);
+        testCases.put("testing json string deserialization (4)", jsonString_n);
+        testCases.put("testing json string deserialization (5)", jsonString_r);
+        testCases.put("testing json string deserialization (6)", jsonString_t);
+        testCases.put("testing json boolean deserialization (1)", jsonTrue);
+        testCases.put("testing json boolean deserialization (2)", jsonFalse);
 
         return testCases;
     }
