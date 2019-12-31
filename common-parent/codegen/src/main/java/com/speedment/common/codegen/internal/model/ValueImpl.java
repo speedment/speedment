@@ -80,5 +80,4 @@ public abstract class ValueImpl<V> implements Value<V> {
         return Objects.equals(this.value, other.value);
     }
 
-
 }
