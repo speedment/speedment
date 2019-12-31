@@ -177,10 +177,12 @@ public final class MethodImpl implements Method {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 71 * hash + HashUtil.identityHashForParent(this);
         hash = 71 * hash + Objects.hashCode(this.name);
         hash = 71 * hash + Objects.hashCode(this.type);
         hash = 71 * hash + Objects.hashCode(this.javadoc);
         hash = 71 * hash + Objects.hashCode(this.annotations);
+        hash = 71 * hash + Objects.hashCode(this.imports);
         hash = 71 * hash + Objects.hashCode(this.generics);
         hash = 71 * hash + Objects.hashCode(this.params);
         hash = 71 * hash + Objects.hashCode(this.code);
@@ -201,6 +203,9 @@ public final class MethodImpl implements Method {
             return false;
         }
         final MethodImpl other = (MethodImpl) obj;
+        if (!Objects.equals(this.parent, other.parent)) {
+            return false;
+        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
@@ -211,6 +216,9 @@ public final class MethodImpl implements Method {
             return false;
         }
         if (!Objects.equals(this.annotations, other.annotations)) {
+            return false;
+        }
+        if (!Objects.equals(this.imports, other.imports)) {
             return false;
         }
         if (!Objects.equals(this.generics, other.generics)) {

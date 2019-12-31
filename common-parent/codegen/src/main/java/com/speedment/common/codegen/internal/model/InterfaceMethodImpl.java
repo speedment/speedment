@@ -33,7 +33,6 @@ import static java.util.Objects.requireNonNull;
  */
 public final class InterfaceMethodImpl implements InterfaceMethod {
 
-    private Interface parent;
     private final Method m;
 	
     /**
@@ -47,13 +46,13 @@ public final class InterfaceMethodImpl implements InterfaceMethod {
 
     @Override
     public InterfaceMethod setParent(Interface parent) {
-        this.parent = parent;
+        m.setParent(parent);
         return this;
     }
 
     @Override
     public Optional<Interface> getParent() {
-        return Optional.ofNullable(parent);
+        return m.getParent().map(Interface.class::cast);
     }
 
     @Override
@@ -151,6 +150,5 @@ public final class InterfaceMethodImpl implements InterfaceMethod {
         final InterfaceMethodImpl other = (InterfaceMethodImpl) obj;
         return Objects.equals(this.m, other.m);
     }
-    
 
 }

@@ -88,46 +88,6 @@ public final class JavadocTagImpl extends JavadocTagBase {
     protected JavadocTagImpl(JavadocTag prototype) {
         super(prototype);
     }
-
-    public static final class JavadocTagConst extends JavadocTagBase {
-
-        public JavadocTagConst(String name) {
-            super(name);
-        }
-
-        public JavadocTagConst(String name, String value) {
-            super(name, value);
-        }
-
-        public JavadocTagConst(String name, String value, String text) {
-            super(name, value, text);
-        }
-
-        @Override
-        public JavadocTag add(Import dep) {
-            return copy().add(dep);
-        }
-
-        @Override
-        public JavadocTag setValue(String value) {
-            return copy().setValue(value);
-        }
-
-        @Override
-        public JavadocTag setText(String text) {
-            return copy().setText(text);
-        }
-
-        @Override
-        public JavadocTag setName(String name) {
-            return copy().setName(name);
-        }
-
-        @Override
-        public JavadocTagImpl copy() {
-            return new JavadocTagImpl(this);
-        }
-    }
 }
 
 abstract class JavadocTagBase implements JavadocTag {
@@ -215,6 +175,7 @@ abstract class JavadocTagBase implements JavadocTag {
         hash = 67 * hash + Objects.hashCode(this.name);
         hash = 67 * hash + Objects.hashCode(this.value);
         hash = 67 * hash + Objects.hashCode(this.text);
+        hash = 67 * hash + Objects.hashCode(this.imports);
         return hash;
     }
 
@@ -234,6 +195,9 @@ abstract class JavadocTagBase implements JavadocTag {
             return false;
         }
         if (!Objects.equals(this.value, other.value)) {
+            return false;
+        }
+        if (!Objects.equals(this.imports, other.imports)) {
             return false;
         }
         return Objects.equals(this.text, other.text);

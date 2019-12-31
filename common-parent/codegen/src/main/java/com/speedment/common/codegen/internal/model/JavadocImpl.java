@@ -123,7 +123,9 @@ public final class JavadocImpl implements Javadoc {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 29 * hash + HashUtil.identityHashForParent(this);
         hash = 29 * hash + Objects.hashCode(this.text);
+        hash = 29 * hash + Objects.hashCode(this.imports);
         hash = 29 * hash + Objects.hashCode(this.tags);
         return hash;
     }
@@ -140,7 +142,13 @@ public final class JavadocImpl implements Javadoc {
             return false;
         }
         final JavadocImpl other = (JavadocImpl) obj;
+        if (!Objects.equals(this.parent, other.parent)) {
+            return false;
+        }
         if (!Objects.equals(this.text, other.text)) {
+            return false;
+        }
+        if (!Objects.equals(this.imports, other.imports)) {
             return false;
         }
         return Objects.equals(this.tags, other.tags);
