@@ -10,13 +10,13 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-final class InterfaceMethodImplTest extends AbstractTest<InterfaceMethod> {
+final class MethodImplTest extends AbstractTest<Method> {
 
     private final static String NAME = "A";
     private final static Type TYPE = int.class;
 
-    public InterfaceMethodImplTest() {
-        super(() -> new InterfaceMethodImpl(Method.of(NAME, TYPE)),
+    public MethodImplTest() {
+        super(() -> new MethodImpl(Method.of(NAME, TYPE)),
                 a -> a.setName("Z"),
                 a -> a.setParent(Interface.of("C")),
                 a -> a.javadoc(Javadoc.of("A")),
@@ -28,9 +28,14 @@ final class InterfaceMethodImplTest extends AbstractTest<InterfaceMethod> {
                 a -> a.add(NullPointerException.class),
                 a -> a.set(long.class),
                 a -> a.add("a++;"),
-                InterfaceMethod::default_
+                Method::default_
         );
     }
+
+/*    @Test
+    void constructor() {
+        final Method method = new MethodImpl()
+    }*/
 
     @Test
     void setParent() {

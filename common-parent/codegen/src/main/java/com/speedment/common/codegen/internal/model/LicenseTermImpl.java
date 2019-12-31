@@ -45,7 +45,7 @@ public final class LicenseTermImpl implements LicenseTerm {
      * the {@link LicenseTerm#of()} method!
      */
     public LicenseTermImpl() {
-        text    = "";
+        this("");
     }
 
     /**
@@ -100,6 +100,7 @@ public final class LicenseTermImpl implements LicenseTerm {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 29 * hash + HashUtil.identityHashForParent(this);
         hash = 29 * hash + Objects.hashCode(this.text);
         return hash;
     }
@@ -116,6 +117,9 @@ public final class LicenseTermImpl implements LicenseTerm {
             return false;
         }
         final LicenseTermImpl other = (LicenseTermImpl) obj;
+        if (!Objects.equals(this.parent, other.parent)) {
+            return false;
+        }
         return Objects.equals(this.text, other.text);
     }
 
