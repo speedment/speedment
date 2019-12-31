@@ -178,6 +178,7 @@ public final class EnumConstantImpl implements EnumConstant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, javadoc, imports, classes, initializers, methods, fields, values, annotations) + HashUtil.identityHashForParent(this);
+        return Objects.hash(name, javadoc, imports, classes, initializers, methods, fields, values, annotations)
+                + HashUtil.identityHashForParent(this);
     }
 }

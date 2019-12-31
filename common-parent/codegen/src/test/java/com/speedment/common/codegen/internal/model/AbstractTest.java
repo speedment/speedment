@@ -35,8 +35,6 @@ abstract class AbstractTest<T extends HasCopy<T>> {
     @BeforeEach
     void setup() {
         instance = constructor.get();
-        T otherInstance = constructor.get();
-        mutators[0].apply(otherInstance);
     }
 
     @Test
