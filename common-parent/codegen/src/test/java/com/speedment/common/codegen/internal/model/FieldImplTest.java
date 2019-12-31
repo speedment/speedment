@@ -17,6 +17,7 @@ final class FieldImplTest extends AbstractTest<Field> {
 
     public FieldImplTest() {
         super(() -> new FieldImpl(NAME, int.class),
+                a -> a.setParent(Class.of("A")),
                 a -> a.setName("Z"),
                 a -> a.set(Long.class),
                 a -> a.set(Value.ofNumber(1)),

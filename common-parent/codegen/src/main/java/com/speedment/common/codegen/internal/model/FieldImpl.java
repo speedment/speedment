@@ -167,6 +167,7 @@ public final class FieldImpl implements Field {
     @Override
     public int hashCode() {
         int hash = 3;
+        hash = 29 * hash + HashUtil.identityHashForParent(this);
         hash = 29 * hash + Objects.hashCode(this.name);
         hash = 29 * hash + Objects.hashCode(this.type);
         hash = 29 * hash + Objects.hashCode(this.value);
@@ -189,6 +190,9 @@ public final class FieldImpl implements Field {
             return false;
         }
         final FieldImpl other = (FieldImpl) obj;
+        if (!Objects.equals(this.parent, other.parent)) {
+            return false;
+        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }

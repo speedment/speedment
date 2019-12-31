@@ -150,6 +150,7 @@ public final class ConstructorImpl implements Constructor {
     @Override
     public int hashCode() {
         int hash = 5;
+        hash = 43 * hash + HashUtil.identityHashForParent(this); // Avoid stack overflow
         hash = 43 * hash + Objects.hashCode(this.javadoc);
         hash = 43 * hash + Objects.hashCode(this.imports);
         hash = 43 * hash + Objects.hashCode(this.annotations);
@@ -173,6 +174,9 @@ public final class ConstructorImpl implements Constructor {
             return false;
         }
         final ConstructorImpl other = (ConstructorImpl) obj;
+        if (!Objects.equals(this.parent, other.parent)) {
+            return false;
+        }
         if (!Objects.equals(this.javadoc, other.javadoc)) {
             return false;
         }

@@ -13,6 +13,7 @@ final class ConstructorImplTest extends AbstractTest<Constructor> {
 
     public ConstructorImplTest() {
         super(ConstructorImpl::new,
+                a -> a.setParent(Class.of("A")),
                 a -> a.javadoc(Javadoc.of("A")),
                 a -> a.imports(List.class),
                 a -> a.annotate(Integer.class),

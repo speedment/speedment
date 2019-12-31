@@ -100,5 +100,4 @@ public final class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
         return Objects.equals(this.constructors, other.constructors);
     }
 
-
 }

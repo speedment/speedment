@@ -170,6 +170,7 @@ implements ClassOrInterface<T> {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 37 * hash + HashUtil.identityHashForParent(this); // Avoid stack overflow
         hash = 37 * hash + Objects.hashCode(this.name);
         hash = 37 * hash + Objects.hashCode(this.javadoc);
         hash = 37 * hash + Objects.hashCode(this.imports);

@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
 final class GenericImplTest extends AbstractTest<Generic> {
@@ -16,8 +18,28 @@ final class GenericImplTest extends AbstractTest<Generic> {
     public GenericImplTest() {
         super(GenericImpl::new,
                 a -> a.setBoundType(Generic.BoundType.SUPER),
+                a -> a.setLowerBound("?"),
                 a -> a.add(Integer.class)
         );
+    }
+
+    @Test
+    void construct() {
+        final GenericImpl generic = new GenericImpl("T");
+        assertEquals("T", generic.getLowerBound().orElseThrow(NoSuchElementException::new));
+    }
+
+    @Test
+    void construct2() {
+        final GenericImpl generic = new GenericImpl(int.class, long.class);
+        assertEquals(Stream.of(int.class, long.class).collect(toList()), generic.getUpperBounds());
+    }
+
+    @Test
+    void construct3() {
+        final GenericImpl generic = new GenericImpl("T", int.class, long.class);
+        assertEquals(Stream.of(int.class, long.class).collect(toList()), generic.getUpperBounds());
+        assertEquals("T", generic.getLowerBound().orElseThrow(NoSuchElementException::new));
     }
 
     @Test
@@ -67,5 +89,11 @@ final class GenericImplTest extends AbstractTest<Generic> {
         instance().add(List.class);
         final Type type = instance().asType();
         assertTrue(type.getTypeName().contains("T"));
+    }
+
+    @Test
+    void asTypeWildcard() {
+        instance().setLowerBound("?");
+        assertThrows(UnsupportedOperationException.class, instance()::asType);
     }
 }

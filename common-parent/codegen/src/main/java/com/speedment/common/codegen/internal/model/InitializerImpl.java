@@ -105,6 +105,8 @@ public final class InitializerImpl implements Initializer {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 67 * hash + HashUtil.identityHashForParent(this);
+        hash = 67 * hash + Objects.hashCode(this.imports);
         hash = 67 * hash + Objects.hashCode(this.code);
         hash = 67 * hash + Objects.hashCode(this.modifiers);
         return hash;
@@ -122,6 +124,12 @@ public final class InitializerImpl implements Initializer {
             return false;
         }
         final InitializerImpl other = (InitializerImpl) obj;
+        if (!Objects.equals(this.parent, other.parent)) {
+            return false;
+        }
+        if (!Objects.equals(this.imports, other.imports)) {
+            return false;
+        }
         if (!Objects.equals(this.code, other.code)) {
             return false;
         }

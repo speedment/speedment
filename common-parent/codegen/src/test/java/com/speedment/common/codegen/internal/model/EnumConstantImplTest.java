@@ -16,8 +16,9 @@ final class EnumConstantImplTest extends AbstractTest<EnumConstant> {
 
     public EnumConstantImplTest() {
         super(() -> new EnumConstantImpl(NAME),
+                a -> a.setParent(Enum.of("A")),
                 a -> a.setName("Z"),
-                //a -> a.javadoc(Javadoc.of("A")),
+                a -> a.javadoc(Javadoc.of("A")),
                 a -> a.add(Class.of("C")),
                 a -> a.add(Initializer.of()),
                 a -> a.add(Method.of("a", int.class)),

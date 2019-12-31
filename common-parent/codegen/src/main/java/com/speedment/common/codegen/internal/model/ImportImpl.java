@@ -115,6 +115,7 @@ public final class ImportImpl implements Import {
     @Override
     public int hashCode() {
         int hash = 5;
+        hash = 29 * hash + HashUtil.identityHashForParent(this);
         hash = 29 * hash + Objects.hashCode(this.type);
         hash = 29 * hash + Objects.hashCode(this.staticMember);
         hash = 29 * hash + Objects.hashCode(this.modifiers);
@@ -133,6 +134,9 @@ public final class ImportImpl implements Import {
             return false;
         }
         final ImportImpl other = (ImportImpl) obj;
+        if (!Objects.equals(this.parent, other.parent)) {
+            return false;
+        }
         if (!Objects.equals(this.staticMember, other.staticMember)) {
             return false;
         }

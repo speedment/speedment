@@ -125,6 +125,7 @@ public final class InterfaceFieldImpl implements InterfaceField {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 41 * hash + HashUtil.identityHashForParent(this);
         hash = 41 * hash + Objects.hashCode(this.f);
         return hash;
     }
@@ -141,6 +142,9 @@ public final class InterfaceFieldImpl implements InterfaceField {
             return false;
         }
         final InterfaceFieldImpl other = (InterfaceFieldImpl) obj;
+        if (!Objects.equals(this.parent, other.parent)) {
+            return false;
+        }
         return Objects.equals(this.f, other.f);
     }
 

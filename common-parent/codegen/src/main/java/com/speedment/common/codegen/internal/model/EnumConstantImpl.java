@@ -163,7 +163,7 @@ public final class EnumConstantImpl implements EnumConstant {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EnumConstantImpl that = (EnumConstantImpl) o;
+        final EnumConstantImpl that = (EnumConstantImpl) o;
         return Objects.equals(parent, that.parent) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(javadoc, that.javadoc) &&
@@ -178,6 +178,6 @@ public final class EnumConstantImpl implements EnumConstant {
 
     @Override
     public int hashCode() {
-        return Objects.hash(parent, name, javadoc, imports, classes, initializers, methods, fields, values, annotations);
+        return Objects.hash(name, javadoc, imports, classes, initializers, methods, fields, values, annotations) + HashUtil.identityHashForParent(this);
     }
 }

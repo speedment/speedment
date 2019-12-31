@@ -65,8 +65,14 @@ final class HasImportsViewTest {
         // When
         final Import[] actual = importsOf(file).toArray(new Import[0]);
 
+        assertEquals(expected.length, actual.length);
+
         // Then
-        assertArrayEquals(expected, actual);
+        for (int i = 0; i < expected.length ; i++) {
+            assertEquals(expected[i].getType(), actual[i].getType());
+            assertEquals(expected[i].getModifiers(), actual[i].getModifiers());
+        }
+
     }
 
     @Test

@@ -26,7 +26,8 @@ final class EnumImplTest extends AbstractTest<Enum> {
                 a -> a.add(Initializer.of()),
                 a -> a.add(Class.of("c")),
                 Enum::public_,
-                a -> a.add(Constructor.of())
+                a -> a.add(Constructor.of()),
+                a -> a.add(EnumConstant.of("Z"))
         );
     }
 
