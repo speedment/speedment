@@ -24,6 +24,7 @@ import com.speedment.common.codegen.model.value.AnonymousValue;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Default implementation of the {@link AnonymousValue} interface.
@@ -31,8 +32,7 @@ import java.util.List;
  * @author Emil Forslund
  * @since  2.4.6
  */
-public final class AnonymousValueImpl
-implements AnonymousValue {
+public final class AnonymousValueImpl implements AnonymousValue {
 
     private final List<Value<?>> args;
     private final List<Import> imports;
@@ -118,27 +118,20 @@ implements AnonymousValue {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AnonymousValue)) return false;
-
-        AnonymousValue that = (AnonymousValue) o;
-
-        if (args != null ? !args.equals(that.getValue()) : that.getValue() != null)
-            return false;
-        if (!typeParams.equals(that.getTypeParameters())) return false;
-        if (!getFields().equals(that.getFields())) return false;
-        if (!getMethods().equals(that.getMethods())) return false;
-        if (!getInitializers().equals(that.getInitializers())) return false;
-        return innerClasses.equals(that.getClasses());
+        if (o == null || getClass() != o.getClass()) return false;
+        final AnonymousValueImpl that = (AnonymousValueImpl) o;
+        return Objects.equals(args, that.args) &&
+                Objects.equals(imports, that.imports) &&
+                Objects.equals(typeParams, that.typeParams) &&
+                Objects.equals(fields, that.fields) &&
+                Objects.equals(methods, that.methods) &&
+                Objects.equals(initializers, that.initializers) &&
+                Objects.equals(innerClasses, that.innerClasses) &&
+                Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-        int result = args != null ? args.hashCode() : 0;
-        result = 31 * result + typeParams.hashCode();
-        result = 31 * result + getFields().hashCode();
-        result = 31 * result + getMethods().hashCode();
-        result = 31 * result + getInitializers().hashCode();
-        result = 31 * result + innerClasses.hashCode();
-        return result;
+        return Objects.hash(args, imports, typeParams, fields, methods, initializers, innerClasses, value);
     }
 }

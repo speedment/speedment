@@ -58,24 +58,18 @@ public final class EnumValueImpl extends ValueImpl<String> implements EnumValue 
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 79 * hash + super.hashCode();
         hash = 79 * hash + Objects.hashCode(this.type);
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+		if (!super.equals(obj)) {
+			return false;
+		}
         final EnumValue other = (EnumValue) obj;
         return Objects.equals(this.type, other.getType());
     }
-
 
 }

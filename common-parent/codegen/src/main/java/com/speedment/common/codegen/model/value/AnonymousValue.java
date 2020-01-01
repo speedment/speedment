@@ -17,12 +17,7 @@
 package com.speedment.common.codegen.model.value;
 
 import com.speedment.common.codegen.model.Value;
-import com.speedment.common.codegen.model.trait.HasClasses;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasImports;
-import com.speedment.common.codegen.model.trait.HasInitializers;
-import com.speedment.common.codegen.model.trait.HasMethods;
-import com.speedment.common.codegen.model.trait.HasValues;
+import com.speedment.common.codegen.model.trait.*;
 
 import java.lang.reflect.Type;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.speedment.common.codegen.internal.model;
+package com.speedment.common.codegen.internal.model.value;
 
 import com.speedment.common.codegen.model.trait.HasCopy;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,21 +11,18 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-abstract class AbstractTest<T extends HasCopy<T>> {
+public abstract class AbstractValueTest<V, T extends HasCopy<?>> {
 
-    private final Function<T, T>[] mutators;
+    private final Function<T, ?>[] mutators;
     private final Supplier<T> constructor;
 
     private T instance;
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public AbstractTest(Supplier<T> constructor, Function<T, T>... mutators) {
+    public AbstractValueTest(Supplier<T> constructor, Function<T, ?>... mutators) {
         this.constructor = requireNonNull(constructor);
         this.mutators = requireNonNull(mutators);
-        if (mutators.length == 0) {
-            throw new IllegalArgumentException("Array must not be of length zero");
-        }
     }
 
     public T instance() {
@@ -43,8 +40,8 @@ abstract class AbstractTest<T extends HasCopy<T>> {
             final T copy = (T) instance.copy();
             assertEquals(instance, copy);
         }
-        for (Function<T, T> mutator : mutators) {
-            final T copy = instance.copy();
+        for (Function<T, ?> mutator : mutators) {
+            final T copy = (T) instance.copy();
             assertEquals(instance, copy);
             mutator.apply(copy);
             assertNotEquals(instance, copy);
@@ -54,9 +51,10 @@ abstract class AbstractTest<T extends HasCopy<T>> {
     @Test
     void testHashCode() {
         assertNotEquals(0, instance.hashCode());
-        for (Function<T, T> mutator : mutators) {
-            final T copy = mutator.apply(instance.copy());
-            assertNotEquals(copy.hashCode(), instance.hashCode());
+        for (Function<T, ?> mutator:mutators) {
+            final T copy = (T) instance.copy();
+            final T mutatedCopy = (T) mutator.apply(copy);
+            assertNotEquals(mutatedCopy.hashCode(), instance.hashCode());
         }
     }
 
@@ -68,10 +66,12 @@ abstract class AbstractTest<T extends HasCopy<T>> {
         assertNotEquals(1, instance);
         assertNotEquals(instance, 1);
 
-        for (Function<T, T> mutator : mutators) {
-            final T copy = mutator.apply(instance.copy());
-            assertNotEquals(copy, instance);
-            assertNotEquals(instance, copy);
+        for (Function<T, ?> mutator:mutators) {
+            System.out.println(mutator);
+            final T copy = (T) instance.copy();
+            final T mutatedCopy = (T) mutator.apply(copy);
+            assertNotEquals(mutatedCopy, instance);
+            assertNotEquals(instance, mutatedCopy);
         }
     }
 }
