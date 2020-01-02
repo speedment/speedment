@@ -18,12 +18,10 @@ final class StandardTransformFactoryTest {
 
     private static final String NAME = "A";
     private StandardTransformFactory instance;
-    private Transform<Integer, String> transform;
 
     @BeforeEach
     void setup() {
         instance = new StandardTransformFactory(NAME);
-        transform = (g, i) -> Optional.of(Integer.toString(i));
     }
 
     @Test

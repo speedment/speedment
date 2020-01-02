@@ -27,6 +27,7 @@ import java.util.Optional;
  * @param <T>  the resulting model
  * @since  2.0
  */
+@FunctionalInterface
 public interface Transform<F, T> {
     
     /**

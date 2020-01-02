@@ -13,7 +13,15 @@ final class InterfaceExampleTest extends AbstractExample {
     void onFile(File file) {
         final Interface anInterface = Interface.of(simpleName())
                 .public_()
-                .set(Javadoc.of("This is a test interface.").add(DefaultJavadocTag.AUTHOR.setValue("tester").setText("the one and only")))
+                .set(Javadoc.of("This is a test interface.")
+                        .add(DefaultJavadocTag.AUTHOR
+                                        .setValue("tester")
+                                        .setText("the one and only"))
+                        .add(JavadocTag.of("apiNote")
+                                .setValue("Use with care")
+                                .setValue("always")
+                        )
+                )
                 .add(SimpleParameterizedType.create(List.class, String.class))
                 .add(Field.of("NAME", String.class).set(Value.ofText("John")))
                 .add(Method.of("three", int.class).default_().add("return 3;"))

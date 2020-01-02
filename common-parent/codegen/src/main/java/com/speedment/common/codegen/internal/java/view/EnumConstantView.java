@@ -22,10 +22,13 @@ import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.EnumConstant;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.common.codegen.util.Formatting.*;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Transforms from an {@link EnumConstant} to java code.
@@ -61,19 +64,22 @@ implements Transform<EnumConstant, String>,
         requireNonNulls(gen, model);
         
         final String inner;
-        if (model.getMethods().isEmpty()
-        &&  model.getFields().isEmpty()
-        &&  model.getInitializers().isEmpty()) {
+
+        if (model.getFields().isEmpty()
+                && model.getInitializers().isEmpty()
+                && model.getClasses().isEmpty()
+                && model.getMethods().isEmpty()
+        ) {
             inner = "";
         } else {
             inner = " " + block(separate(
-                renderFields(gen, model),
-                renderInitalizers(gen, model),
-                renderMethods(gen, model),
-                renderClasses(gen, model)
-            ));
+                    renderFields(gen, model),
+                    renderInitalizers(gen, model),
+                    renderClasses(gen, model),
+                    renderMethods(gen, model)
+                    ));
         }
-        
+
 		return Optional.of(
             renderJavadoc(gen, model) +
             renderAnnotations(gen, model) +
@@ -84,4 +90,15 @@ implements Transform<EnumConstant, String>,
 			) + inner
 		);
 	}
+
+
+    private String separate(Object... strings) {
+        requireNonNullElements(strings);
+
+        return Stream.of(strings)
+                .map(Object::toString)
+                .filter(s -> s.length() > 0)
+                .collect(joining(dnl()));
+    }
+
 }

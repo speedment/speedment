@@ -37,7 +37,7 @@ extends HasParent<Enum, EnumConstant>,
         HasClasses<EnumConstant>,
         HasInitializers<EnumConstant>,
         HasAnnotationUsage<EnumConstant>,
-        HasMethods<EnumConstant>, 
+        HasMethods<EnumConstant>,
         HasFields<EnumConstant> {
 
     /**

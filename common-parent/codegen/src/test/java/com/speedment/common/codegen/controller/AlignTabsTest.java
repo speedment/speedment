@@ -14,8 +14,8 @@ final class AlignTabsTest extends AbstractControllerTest {
                         .add(Field.of("x", int.class))
                         .add(Method.of("x", void.class)
                                 .add(Field.of("x", int.class))
-                                .add("this.x\t= x;")
-                                .add("this.someotherlonger\t= x;")
+                                .add("this.x\t= x;\t// Comment")
+                                .add("this.someotherlonger\t= someOtherEvenLongerValue;\t// Comment")
                                 .set(Javadoc.of("a\t1"+ Formatting.nl()+"abcdefghijklm\t2"))
                         )
 
@@ -35,11 +35,10 @@ final class AlignTabsTest extends AbstractControllerTest {
                 "     * abcdefghijklm2\n" +
                 "     */\n" +
                 "    void x(int x) {\n" +
-                "        this.x              = x;\n" +
-                "        this.someotherlonger= x;\n" +
+                "        this.x              = x;                       // Comment\n" +
+                "        this.someotherlonger= someOtherEvenLongerValue;// Comment\n" +
                 "    }\n" +
                 "}";
     }
-
 
 }
