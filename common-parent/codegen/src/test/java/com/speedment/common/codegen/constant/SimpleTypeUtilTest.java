@@ -20,8 +20,6 @@ final class SimpleTypeUtilTest {
         final File file = File.of("com.company.module.Foo.java");
         final Class clazz = Class.of("Bar");
         assertThrows(RuntimeException.class, () -> SimpleTypeUtil.nameOf(file, clazz));
-        final String name = SimpleTypeUtil.nameOf(file, clazz);
-        System.out.println("name = " + name);
     }
 
     @Test

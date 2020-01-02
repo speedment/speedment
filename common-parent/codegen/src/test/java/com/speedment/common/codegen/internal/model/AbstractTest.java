@@ -40,7 +40,7 @@ abstract class AbstractTest<T extends HasCopy<T>> {
     @Test
     void copy() {
         {
-            final T copy = (T) instance.copy();
+            final T copy = instance.copy();
             assertEquals(instance, copy);
         }
         for (Function<T, T> mutator : mutators) {

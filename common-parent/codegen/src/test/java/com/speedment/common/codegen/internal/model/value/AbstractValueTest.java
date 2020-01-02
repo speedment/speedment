@@ -35,6 +35,7 @@ public abstract class AbstractValueTest<V, T extends HasCopy<?>> {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void copy() {
         {
             final T copy = (T) instance.copy();
@@ -49,6 +50,7 @@ public abstract class AbstractValueTest<V, T extends HasCopy<?>> {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void testHashCode() {
         assertNotEquals(0, instance.hashCode());
         for (Function<T, ?> mutator:mutators) {
@@ -59,6 +61,7 @@ public abstract class AbstractValueTest<V, T extends HasCopy<?>> {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void testEquals() {
         assertEquals(instance, instance);
         assertNotEquals(null, instance);

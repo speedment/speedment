@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 final class TransformTest {
 
-    private static final Transform INSTANCE = (g, m) -> Optional.empty();
-
     @Test
     void is() {
         final Transform<String, String> t1 = new T1();
