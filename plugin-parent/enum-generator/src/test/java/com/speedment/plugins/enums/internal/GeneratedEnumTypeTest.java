@@ -36,12 +36,9 @@ final class GeneratedEnumTypeTest {
         otherConstants.add("Z");
         final GeneratedEnumType other = new GeneratedEnumType(TYPE_NAME, otherConstants);
         assertEquals(instance, instance);
-        assertNotEquals(instance, null);
-        assertNotEquals(1, instance);
-        assertNotEquals(instance, 1);
-        assertNotEquals(Integer.class, instance);
-        assertNotEquals(instance, Integer.class);
-        assertNotEquals(null, instance);
+        assertFalse(instance.equals(null));
+        assertFalse(instance.equals(1));
+        assertFalse(instance.equals(Integer.class));
         assertNotEquals(instance, other);
         assertNotEquals(other, instance);
     }

@@ -19,29 +19,15 @@ package com.speedment.common.singletonstream;
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveIteratorOfLong;
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveSpliteratorOfLong;
 
-import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
-import java.util.LongSummaryStatistics;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
-import java.util.OptionalDouble;
-import java.util.OptionalLong;
-import java.util.PrimitiveIterator;
-import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.LongBinaryOperator;
-import java.util.function.LongConsumer;
-import java.util.function.LongFunction;
-import java.util.function.LongPredicate;
-import java.util.function.LongToDoubleFunction;
-import java.util.function.LongToIntFunction;
-import java.util.function.LongUnaryOperator;
-import java.util.function.ObjLongConsumer;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An implementation of a LongStream that takes exactly one element as its

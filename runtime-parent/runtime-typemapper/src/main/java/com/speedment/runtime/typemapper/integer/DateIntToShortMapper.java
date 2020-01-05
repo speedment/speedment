@@ -31,8 +31,7 @@ import java.time.temporal.ChronoUnit;
  * @author Emil Forslund
  * @since  3.0.11
  */
-public final class DateIntToShortMapper
-implements TypeMapper<Integer, Short> {
+public final class DateIntToShortMapper implements TypeMapper<Integer, Short> {
     
     @Override
     public String getLabel() {
@@ -48,20 +47,19 @@ implements TypeMapper<Integer, Short> {
     public Short toJavaType(Column column, Class<?> entityType, Integer date) {
         if (date == null) return null;
 
-        int day = date % 100;
-        int month = (date % 10_000 - day) / 100;
-        int year = date / 10_000;
+        final int day = date % 100;
+        final int month = (date % 10_000 - day) / 100;
+        final int year = date / 10_000;
 
-        LocalDate localDate = LocalDate.of(year, month, day);
-        short daysSinceEpoch = (short) ChronoUnit.DAYS.between(localDate, LocalDate.of(1970, 1,1));
-        return daysSinceEpoch;
+        final LocalDate localDate = LocalDate.of(year, month, day);
+        return  (short) ChronoUnit.DAYS.between(localDate, LocalDate.of(1970, 1,1));
     }
 
     @Override
     public Integer toDatabaseType(Short encoded) {
         if (encoded == null) return null;
 
-        LocalDate date = LocalDate.ofEpochDay(encoded);
+        final LocalDate date = LocalDate.ofEpochDay(encoded);
         return date.getYear() * 10_000 + date.getMonthValue() * 100 + date.getDayOfMonth();
     }
 }

@@ -407,7 +407,7 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         throw new InjectorException(ex);
     }
 
-    static private String formatParameter(DependencyGraph graph, Parameter param) {
+    private static String formatParameter(DependencyGraph graph, Parameter param) {
         final Config config = param.getAnnotation(Config.class);
         final WithState withState = param.getAnnotation(WithState.class);
         if (config != null) {

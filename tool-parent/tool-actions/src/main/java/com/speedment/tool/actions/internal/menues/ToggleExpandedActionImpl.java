@@ -39,9 +39,8 @@ import java.util.stream.Stream;
 public final class ToggleExpandedActionImpl
     implements AbstractToolAction, ToggleExpandedAction {
 
-    static final String
-        EXPAND_ALL   = "Expand All",
-        COLLAPSE_ALL = "Collapse All";
+    static final String EXPAND_ALL   = "Expand All";
+    static final String  COLLAPSE_ALL = "Collapse All";
 
     @Override
     public void installMenuItems(ProjectTreeComponent projectTree) {

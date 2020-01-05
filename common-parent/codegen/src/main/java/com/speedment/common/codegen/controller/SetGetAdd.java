@@ -41,6 +41,7 @@ public final class SetGetAdd implements Consumer<File> {
 
     private static final String RETURN = "return";
     private static final String THIS = "this";
+    public static final String OF_THIS = " of this ";
 
     private final BiPredicate<Field, Method> onlyInclude;
 
@@ -113,7 +114,7 @@ public final class SetGetAdd implements Consumer<File> {
 
             final Method get = Method.of("get" + ucfirst(f.getName()), f.getType())
                 .set(Javadoc.of()
-                    .setText("Gets the " + f.getName() + " of this " + shortName(model.getName()) + ".")
+                    .setText("Gets the " + f.getName() + OF_THIS + shortName(model.getName()) + ".")
                     .add(JavadocTag.of(RETURN, "the " + f.getName()))
                 ).public_()
                 .add(RETURN + " " + THIS + "." + f.getName() + ";");
@@ -148,7 +149,7 @@ public final class SetGetAdd implements Consumer<File> {
     private void generateSetter(Class model, Type self, Field f) {
         final Method set = Method.of("set" + ucfirst(f.getName()), self)
             .set(Javadoc.of()
-                .setText("Sets the " + f.getName() + " of this " + shortName(model.getName()) + ".")
+                .setText("Sets the " + f.getName() + OF_THIS + shortName(model.getName()) + ".")
                 .add(JavadocTag.of("param", f.getName(), "the new value"))
                 .add(JavadocTag.of(RETURN, "a reference to this object"))
             ).public_();
@@ -192,7 +193,7 @@ public final class SetGetAdd implements Consumer<File> {
         final Field param = Field.of(singular(f.getName()), paramType.getActualTypeArguments()[0]);
         final Method add = Method.of("addTo" + ucfirst(f.getName()), self)
             .set(Javadoc.of()
-                .setText("Adds the specified " + lcfirst(shortName(param.getType().getTypeName())) + " to the " + f.getName() + " of this " + shortName(model.getName()) + ".")
+                .setText("Adds the specified " + lcfirst(shortName(param.getType().getTypeName())) + " to the " + f.getName() + OF_THIS + shortName(model.getName()) + ".")
                 .add(JavadocTag.of("param", param.getName(), "the new value"))
                 .add(JavadocTag.of(RETURN, "a reference to this object"))
             ).public_()

@@ -31,14 +31,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * The default implementation of the {@link JsonEncoder} interface.

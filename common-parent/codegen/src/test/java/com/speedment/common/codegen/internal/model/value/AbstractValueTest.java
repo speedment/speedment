@@ -8,8 +8,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public abstract class AbstractValueTest<V, T extends HasCopy<?>> {
 
@@ -64,10 +64,8 @@ public abstract class AbstractValueTest<V, T extends HasCopy<?>> {
     @SuppressWarnings("unchecked")
     void testEquals() {
         assertEquals(instance, instance);
-        assertNotEquals(null, instance);
-        assertNotEquals(instance, null);
-        assertNotEquals(1, instance);
-        assertNotEquals(instance, 1);
+        assertFalse(instance.equals(null));
+        assertFalse(instance.equals(1));
 
         for (Function<T, ?> mutator:mutators) {
             System.out.println(mutator);

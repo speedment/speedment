@@ -8,8 +8,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 abstract class AbstractTest<T extends HasCopy<T>> {
 
@@ -63,10 +62,8 @@ abstract class AbstractTest<T extends HasCopy<T>> {
     @Test
     void testEquals() {
         assertEquals(instance, instance);
-        assertNotEquals(null, instance);
-        assertNotEquals(instance, null);
-        assertNotEquals(1, instance);
-        assertNotEquals(instance, 1);
+        assertFalse(instance.equals(null));
+        assertFalse(instance.equals(1));
 
         for (Function<T, T> mutator : mutators) {
             final T copy = mutator.apply(instance.copy());

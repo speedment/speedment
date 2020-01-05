@@ -19,11 +19,13 @@ package com.speedment.runtime.config.util;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.AbstractMap;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.stream.Stream;
 
@@ -210,6 +212,11 @@ public abstract class AbstractDocumentTest {
         foreignKeyB2_D1 = tableB.children(TableUtil.FOREIGN_KEYS, ForeignKey::create).findFirst().get();
         foreignKeyColumnA2_C1 = foreignKeyA2_C1.children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ForeignKeyColumn::create).findFirst().get();
         foreignKeyColumnB2_D1 = foreignKeyB2_D1.children(ForeignKeyUtil.FOREIGN_KEY_COLUMNS, ForeignKeyColumn::create).findFirst().get();
+    }
+
+    @Test
+    void assertSetup() {
+        assertNotNull(project);
     }
 
     public Stream<Document> stream() {

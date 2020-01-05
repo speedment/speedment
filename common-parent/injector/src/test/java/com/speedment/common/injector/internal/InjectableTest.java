@@ -57,9 +57,7 @@ final class InjectableTest {
         assertNotEquals(injectable1, injectable3);
         assertNotEquals(injectable3, injectable4);
         assertNotEquals(injectable1, injectable4);
-        assertNotEquals(1, injectable1);
-        assertNotEquals( injectable1, 1);
-        assertNotEquals( null, injectable1);
+        assertFalse(injectable1.equals(1));
         assertFalse(injectable1.equals(null));
     }
 

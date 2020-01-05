@@ -37,10 +37,8 @@ final class TempColumnIdentifierTest {
     void testEquals() {
         final TempColumnIdentifier other = new TempColumnIdentifier(DB, SCHEMA, TABLE, COLUMN + "X");
         assertEquals(INSTANCE, INSTANCE);
-        assertNotEquals(null, INSTANCE);
-        assertNotEquals(INSTANCE, null);
-        assertNotEquals(1, INSTANCE);
-        assertNotEquals(INSTANCE, 1);
+        assertFalse(INSTANCE.equals(null));
+        assertFalse(INSTANCE.equals(1));
         assertNotEquals(INSTANCE, other);
         assertNotEquals(other, INSTANCE);
     }
