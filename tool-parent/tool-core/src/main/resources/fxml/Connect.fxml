@@ -41,6 +41,7 @@
             <RowConstraints fx:id="passRow" minHeight="10.0" vgrow="SOMETIMES" />   <!-- Password -->
             <RowConstraints fx:id="dbmsRow" minHeight="10.0" vgrow="SOMETIMES" />   <!-- Dbms Name -->
             <RowConstraints fx:id="schemaRow" minHeight="10.0" vgrow="SOMETIMES" /> <!-- Schema Name -->
+            <RowConstraints fx:id="serverRow" minHeight="10.0" vgrow="SOMETIMES" /> <!-- Server Name -->
             <RowConstraints minHeight="10.0" vgrow="ALWAYS" />                      <!-- Connection URL -->
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />                   <!-- Connect Button -->
         </rowConstraints>
@@ -158,8 +159,22 @@
             </GridPane.margin>
         </TextField>
 
+        <!-- Server name -->
+        <Label styleClass="form-label" text="Server Name" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+            <GridPane.margin>
+                <Insets right="8.0" />
+            </GridPane.margin></Label>
+        <TextField fx:id="fieldServer" promptText="Server name" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            <tooltip>
+                <Tooltip text="The database server to generate code from." />
+            </tooltip>
+            <GridPane.margin>
+                <Insets bottom="4.0" top="4.0" />
+            </GridPane.margin>
+        </TextField>
+
         <!-- Connection URL -->
-        <CheckBox fx:id="enableConnectionUrl" mnemonicParsing="false" text="Use Connection URL" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="TOP">
+        <CheckBox fx:id="enableConnectionUrl" mnemonicParsing="false" text="Use Connection URL" GridPane.halignment="RIGHT" GridPane.rowIndex="8" GridPane.valignment="TOP">
             <GridPane.margin>
                 <Insets right="8.0" top="8.0" />
             </GridPane.margin>
@@ -167,7 +182,7 @@
                 <Tooltip text="If a custom connection URL should be specified or if it should be generated automatically." />
             </tooltip>
         </CheckBox>
-        <TextArea fx:id="areaConnectionUrl" prefRowCount="3" prefWidth="240.0" promptText="Connection URL" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7">
+        <TextArea fx:id="areaConnectionUrl" prefRowCount="3" prefWidth="240.0" promptText="Connection URL" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8">
             <tooltip>
                 <Tooltip text="Connection URL to use when connecting to the database." />
             </tooltip>
@@ -177,7 +192,7 @@
         </TextArea>
 
         <!-- Connect Button -->
-        <Button fx:id="buttonConnect" defaultButton="true" disable="true" mnemonicParsing="false" text="Connect" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
+        <Button fx:id="buttonConnect" defaultButton="true" disable="true" mnemonicParsing="false" text="Connect" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
             <padding>
                 <Insets bottom="4.0" left="16.0" right="16.0" top="4.0" />
             </padding>

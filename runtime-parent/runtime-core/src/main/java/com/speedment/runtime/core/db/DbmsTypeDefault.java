@@ -172,6 +172,19 @@ public interface DbmsTypeDefault {
     Optional<String> getDefaultDbmsName();
 
     /**
+     * Returns the default server name for this {@link DbmsType}.
+     * <p>
+     * By default, {@code getDefaultServerName()} returns an empty {@link Optional},
+     * since most database implementations don't use the server name. Implementations
+     * that do require a server name, like Informix, should override this method.
+     *
+     * @return the default server name
+     */
+    default Optional<String> getDefaultServerName() {
+        return Optional.empty();
+    }
+
+    /**
      * Returns a pre-defined Set for the TypeInfoMetaData for this database
      * type. Some databases meta data retrieval functions (like PostgreSQL) ate
      * very slow so this is a short cut.
