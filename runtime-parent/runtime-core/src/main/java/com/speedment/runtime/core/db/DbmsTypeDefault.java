@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.db;
 
+import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
+
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
@@ -24,8 +26,6 @@ import com.speedment.runtime.core.internal.db.DbmsTypeDefaultImpl;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 
 /**
  * The {@code DbmsTypeDefaults} interface defines common properties for different Dbms
@@ -117,6 +117,17 @@ public interface DbmsTypeDefault {
         return true;
     }
 
+    /**
+     * Returns {@code true} if this {@link DbmsTypeDefault} uses a server name as a
+     * part of its connection url and {@code false} otherwise. Some database
+     * implementations, such as Informix, require a server name to be a part of
+     * their connection url.
+     *
+     * @return {@code true} if server name is required, otherwise {@code false}
+     */
+    default boolean hasServerNames() {
+        return false;
+    }
     // Implementation specifics
 
     /**
