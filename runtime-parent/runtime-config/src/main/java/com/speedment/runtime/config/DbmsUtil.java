@@ -27,5 +27,6 @@ public final class DbmsUtil {
     public static final String CONNECTION_URL = "connectionUrl";
     public static final String USERNAME       = "username";
     public static final String SCHEMAS        = "schemas";
+    public static final String SERVER_NAME    = "serverName";
 
 }

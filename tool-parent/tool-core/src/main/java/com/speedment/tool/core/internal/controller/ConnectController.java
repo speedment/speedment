@@ -227,6 +227,7 @@ public final class ConnectController implements Initializable {
         fieldPort.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
         fieldFile.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
         fieldName.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
+        fieldServer.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
 
         fieldHost.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldHost));
 
@@ -382,7 +383,8 @@ public final class ConnectController implements Initializable {
                     fieldName.getText(),
                     fieldFile.getText(),
                     fieldHost.getText(),
-                    fieldPort.getText().isEmpty() ? 0 : Integer.parseInt(fieldPort.getText())
+                    fieldPort.getText().isEmpty() ? 0 : Integer.parseInt(fieldPort.getText()),
+                    fieldServer.getText()
                 )
             );
             generatedConnUrl.set(url);
@@ -503,15 +505,16 @@ public final class ConnectController implements Initializable {
 
     private static final class TemporaryDbms implements Dbms {
 
-        public static TemporaryDbms create(Project project, String name, String file, String ip, int port) {
+        public static TemporaryDbms create(Project project, String name, String file, String ip, int port, String serverName) {
             final Map<String, Object> data = new LinkedHashMap<>();
-            data.put(HasIdUtil.ID,         name);
-            data.put(HasNameUtil.NAME,       name);
+            data.put(HasIdUtil.ID, name);
+            data.put(HasNameUtil.NAME, name);
             data.put(DbmsUtil.IP_ADDRESS, ip);
             if (port != 0) {
                 data.put(DbmsUtil.PORT, port);
             }
             data.put(DbmsUtil.LOCAL_PATH, file);
+            data.put(DbmsUtil.SERVER_NAME, serverName);
             return new TemporaryDbms(project, data);
         }
 
