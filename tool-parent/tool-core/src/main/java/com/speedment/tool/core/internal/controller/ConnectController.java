@@ -262,14 +262,16 @@ public final class ConnectController implements Initializable {
             ||     (fieldFile.textProperty().isEmpty().get() && dbmsType.get().getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE)
             ||      fieldType.getSelectionModel().isEmpty()
             ||     (fieldName.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseNames())
-            ||     (fieldUser.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseUsers()),
+            ||     (fieldUser.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseUsers())
+            ||     (fieldServer.textProperty().isEmpty().get() && dbmsType.get().hasServerNames()),
 
             fieldHost.textProperty(),
             fieldPort.textProperty(),
             fieldFile.textProperty(),
             fieldType.selectionModelProperty(),
             fieldName.textProperty(),
-            fieldUser.textProperty()
+            fieldUser.textProperty(),
+            fieldServer.textProperty()
         ));
     }
 
@@ -343,6 +345,10 @@ public final class ConnectController implements Initializable {
 
         if (type.hasDatabaseUsers()) {
             dbms.usernameProperty().set(fieldUser.getText());
+        }
+
+        if (type.hasServerNames()) {
+            dbms.serverNameProperty().set(fieldServer.getText());
         }
 
         dbms.nameProperty().set(Optional.of(fieldName.getText())

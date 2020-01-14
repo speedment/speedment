@@ -37,7 +37,6 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-
 public interface Dbms extends 
         Document,
         HasParent<Project>,
@@ -116,6 +115,19 @@ public interface Dbms extends
      */
     default Optional<String> getUsername() {
         return getAsString(DbmsUtil.USERNAME);
+    }
+
+    /**
+     * Returns the server name to use when connecting to the {@code Dbms}. If no
+     * server name is specified, {@code empty} is returned.
+     * <p>
+     * Some database implementations, such as Informix, require the server name as a
+     * part of the connection url.
+     *
+     * @return the server name or {@code empty}
+     */
+    default Optional<String> getServerName() {
+        return getAsString(DbmsUtil.SERVER_NAME);
     }
     
     /**
