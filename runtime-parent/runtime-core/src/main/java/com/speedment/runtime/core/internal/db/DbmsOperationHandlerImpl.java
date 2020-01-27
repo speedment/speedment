@@ -42,6 +42,7 @@ import java.util.function.LongConsumer;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.core.internal.db.SqlQueryLoggerUtil.logOperation;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
@@ -311,10 +312,6 @@ final class DbmsOperationHandlerImpl implements DbmsOperationHandler {
             final SqlInsertStatement sqlInsertStatement = (SqlInsertStatement)sqlStatement;
             sqlInsertStatement.notifyGeneratedKeyListener();
         }
-    }
-
-    private void logOperation(Logger logger, final String sql, final List<?> values) {
-        logger.debug("%s, values:%s", sql, values);
     }
 
     private void executeSqlStatement(SqlStatement sqlStatement, Dbms dbms, Connection conn) throws SQLException {
