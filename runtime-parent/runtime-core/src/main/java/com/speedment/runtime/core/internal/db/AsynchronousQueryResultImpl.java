@@ -84,7 +84,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     public Stream<T> stream() {
         setState(State.ESTABLISH);
         try {
-            LOGGER_STREAM.debug("%s, values:%s", getSql(), getValues());
+            SqlQueryLoggerUtil.logOperation(LOGGER_STREAM, getSql(), getValues());
 
             connectionInfo = connectionInfoSupplier.get();
             connectionInfo.ifNotInTransaction(c -> c.setAutoCommit(false)); // Streaming results must be autocommit false for PostgreSQL
