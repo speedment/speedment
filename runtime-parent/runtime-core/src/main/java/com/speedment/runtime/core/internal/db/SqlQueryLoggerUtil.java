@@ -13,7 +13,9 @@ public final class SqlQueryLoggerUtil {
     public static void logOperation(Logger logger, final String sql, final List<?> values) {
         if (logger.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
             final String text = sql + " " + values.stream()
-                    .map(o -> o.getClass().getSimpleName() + " " + o.toString())
+                    .map(o -> o == null
+                            ? "null"
+                            : o.getClass().getSimpleName() + " " + o.toString())
                     .collect(Collectors.joining(", ", "[", "]"));
             logger.debug(text);
         }
