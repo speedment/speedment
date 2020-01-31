@@ -16,6 +16,8 @@
  */
 package com.speedment.tool.config;
 
+import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
+
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.DbmsUtil;
 import com.speedment.runtime.config.Project;
@@ -26,7 +28,12 @@ import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.tool.config.component.DocumentPropertyComponentUtil;
 import com.speedment.tool.config.mutator.DbmsPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
-import com.speedment.tool.config.trait.*;
+import com.speedment.tool.config.trait.HasAliasProperty;
+import com.speedment.tool.config.trait.HasEnabledProperty;
+import com.speedment.tool.config.trait.HasExpandedProperty;
+import com.speedment.tool.config.trait.HasIdProperty;
+import com.speedment.tool.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.HasNameProtectedProperty;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.StringBinding;
@@ -38,8 +45,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
-
-import static com.speedment.tool.config.internal.util.ImmutableListUtil.concat;
 
 /**
  *
@@ -129,7 +134,16 @@ implements Dbms,
     public Optional<String> getUsername() {
         return Optional.ofNullable(usernameProperty().get());
     }
-    
+
+    public StringProperty serverNameProperty() {
+        return stringPropertyOf(DbmsUtil.SERVER_NAME, () -> Dbms.super.getServerName().orElse(null));
+    }
+
+    @Override
+    public Optional<String> getServerName() {
+        return Optional.ofNullable(serverNameProperty().get());
+    }
+
     public ObservableList<SchemaProperty> schemasProperty() {
         return observableListOf(DbmsUtil.SCHEMAS);
     }

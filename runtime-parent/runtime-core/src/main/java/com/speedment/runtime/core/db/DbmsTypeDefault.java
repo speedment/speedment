@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.db;
 
+import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
+
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
@@ -24,8 +26,6 @@ import com.speedment.runtime.core.internal.db.DbmsTypeDefaultImpl;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
 
 /**
  * The {@code DbmsTypeDefaults} interface defines common properties for different Dbms
@@ -117,6 +117,17 @@ public interface DbmsTypeDefault {
         return true;
     }
 
+    /**
+     * Returns {@code true} if this {@link DbmsTypeDefault} uses a server name as a
+     * part of its connection url and {@code false} otherwise. Some database
+     * implementations, such as Informix, require a server name to be a part of
+     * their connection url.
+     *
+     * @return {@code true} if server name is required, otherwise {@code false}
+     */
+    default boolean hasServerNames() {
+        return false;
+    }
     // Implementation specifics
 
     /**
@@ -159,6 +170,19 @@ public interface DbmsTypeDefault {
      * @return the default dbms name
      */
     Optional<String> getDefaultDbmsName();
+
+    /**
+     * Returns the default server name for this {@link DbmsType}.
+     * <p>
+     * By default, {@code getDefaultServerName()} returns an empty {@link Optional},
+     * since most database implementations don't use the server name. Implementations
+     * that do require a server name, like Informix, should override this method.
+     *
+     * @return the default server name
+     */
+    default Optional<String> getDefaultServerName() {
+        return Optional.empty();
+    }
 
     /**
      * Returns a pre-defined Set for the TypeInfoMetaData for this database

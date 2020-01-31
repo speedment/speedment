@@ -16,10 +16,19 @@
  */
 package com.speedment.tool.core.internal.controller;
 
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toCollection;
+import static javafx.beans.binding.Bindings.createBooleanBinding;
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
-import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.DbmsUtil;
+import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -39,7 +48,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.FileChooser;
@@ -48,15 +63,16 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toCollection;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 /**
  *
@@ -81,6 +97,7 @@ public final class ConnectController implements Initializable {
     @FXML private ComboBox<String> fieldType;
     @FXML private TextField fieldName;
     @FXML private TextField fieldSchema;
+    @FXML private TextField fieldServer;
     @FXML private TextField fieldUser;
     @FXML private PasswordField fieldPass;
     @FXML private Button buttonConnect;
@@ -92,6 +109,7 @@ public final class ConnectController implements Initializable {
     @FXML private RowConstraints fileRow;
     @FXML private RowConstraints dbmsRow;
     @FXML private RowConstraints schemaRow;
+    @FXML private RowConstraints serverRow;
     @FXML private RowConstraints userRow;
     @FXML private RowConstraints passRow;
 
@@ -104,6 +122,7 @@ public final class ConnectController implements Initializable {
         final FilteredList<Node> passRowChildren = inRow(passRow);
         final FilteredList<Node> dbmsRowChildren = inRow(dbmsRow);
         final FilteredList<Node> schemaRowChildren = inRow(schemaRow);
+        final FilteredList<Node> serverRowChildren = inRow(serverRow);
 
         fieldFileBtn.setGraphic(FontAwesome.FOLDER_OPEN.view());
         buttonConnect.setGraphic(FontAwesome.SIGN_IN.view());
@@ -120,6 +139,7 @@ public final class ConnectController implements Initializable {
         final AtomicReference<String> generatedUser = new AtomicReference<>("");
         final AtomicReference<String> generatedName = new AtomicReference<>("");
         final AtomicReference<String> generatedSchema = new AtomicReference<>("");
+        final AtomicReference<String> generatedServer = new AtomicReference<>("");
         final AtomicReference<String> generatedConnUrl = new AtomicReference<>("");
 
         // Use this method reference to recalculate any default values in text fields.
@@ -133,6 +153,7 @@ public final class ConnectController implements Initializable {
             toggleVisibility(passRow, passRowChildren, item.hasDatabaseUsers());
             toggleVisibility(dbmsRow, dbmsRowChildren, item.hasDatabaseNames());
             toggleVisibility(schemaRow, schemaRowChildren, item.hasSchemaNames());
+            toggleVisibility(serverRow, serverRowChildren, item.hasServerNames());
 
             if (fieldHost.getText().isEmpty()
                 || fieldHost.getText().equals(generatedHost.get())) {
@@ -144,7 +165,7 @@ public final class ConnectController implements Initializable {
             disableDbmsUserPropertyForDbmsesThatDoesNotUseIt(generatedUser, item);
 
             // Disable Dbms Name-property for database types that doesn't use it
-            disableDbmsNamePropertyForDmbsesThatDoesNotUseIt(generatedPort, generatedName, generatedSchema, item);
+            disableDbmsNamePropertyForDmbsesThatDoesNotUseIt(generatedPort, generatedName, generatedSchema, generatedServer, item);
 
         };
 
@@ -206,6 +227,7 @@ public final class ConnectController implements Initializable {
         fieldPort.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
         fieldFile.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
         fieldName.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
+        fieldServer.textProperty().addListener((ob, o, n) -> recalculateConnUrl.run());
 
         fieldHost.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldHost));
 
@@ -222,6 +244,8 @@ public final class ConnectController implements Initializable {
         fieldName.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldName));
 
         fieldSchema.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldSchema));
+
+        fieldServer.focusedProperty().addListener((ob, o, n) -> recalculateOnLostFocusAndEmptyField(recalculateFields, o, fieldServer));
     }
 
     private void recalculateOnLostFocusAndEmptyField(Runnable recalculateFields, Boolean oldValue, TextField field) {
@@ -238,14 +262,16 @@ public final class ConnectController implements Initializable {
             ||     (fieldFile.textProperty().isEmpty().get() && dbmsType.get().getConnectionType() == DbmsType.ConnectionType.DBMS_AS_FILE)
             ||      fieldType.getSelectionModel().isEmpty()
             ||     (fieldName.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseNames())
-            ||     (fieldUser.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseUsers()),
+            ||     (fieldUser.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseUsers())
+            ||     (fieldServer.textProperty().isEmpty().get() && dbmsType.get().hasServerNames()),
 
             fieldHost.textProperty(),
             fieldPort.textProperty(),
             fieldFile.textProperty(),
             fieldType.selectionModelProperty(),
             fieldName.textProperty(),
-            fieldUser.textProperty()
+            fieldUser.textProperty(),
+            fieldServer.textProperty()
         ));
     }
 
@@ -321,6 +347,10 @@ public final class ConnectController implements Initializable {
             dbms.usernameProperty().set(fieldUser.getText());
         }
 
+        if (type.hasServerNames()) {
+            dbms.serverNameProperty().set(fieldServer.getText());
+        }
+
         dbms.nameProperty().set(Optional.of(fieldName.getText())
             .filter(s -> dbmsType.get().hasDatabaseNames())
             .filter(s -> !s.isEmpty())
@@ -359,7 +389,8 @@ public final class ConnectController implements Initializable {
                     fieldName.getText(),
                     fieldFile.getText(),
                     fieldHost.getText(),
-                    fieldPort.getText().isEmpty() ? 0 : Integer.parseInt(fieldPort.getText())
+                    fieldPort.getText().isEmpty() ? 0 : Integer.parseInt(fieldPort.getText()),
+                    fieldServer.getText()
                 )
             );
             generatedConnUrl.set(url);
@@ -367,7 +398,7 @@ public final class ConnectController implements Initializable {
         }
     }
 
-    private void disableDbmsNamePropertyForDmbsesThatDoesNotUseIt(AtomicReference<String> generatedPort, AtomicReference<String> generatedName, AtomicReference<String> generatedSchema, DbmsType item) {
+    private void disableDbmsNamePropertyForDmbsesThatDoesNotUseIt(AtomicReference<String> generatedPort, AtomicReference<String> generatedName, AtomicReference<String> generatedSchema, AtomicReference<String> generatedServer, DbmsType item) {
         if (item.hasDatabaseNames()) {
             fieldName.setDisable(false);
 
@@ -395,6 +426,20 @@ public final class ConnectController implements Initializable {
             }
         } else {
             fieldSchema.setDisable(true);
+        }
+
+        if (item.hasServerNames()) {
+            fieldServer.setDisable(false);
+
+            if (fieldServer.getText().isEmpty()
+                || fieldServer.getText().equals(generatedServer.get())) {
+                item.getDefaultServerName().ifPresent(name -> {
+                    fieldServer.textProperty().setValue(name);
+                    generatedServer.set(name);
+                });
+            }
+        } else {
+            fieldServer.setDisable(true);
         }
 
         fieldName.getTooltip().setText(item.getDbmsNameMeaning());
@@ -466,15 +511,16 @@ public final class ConnectController implements Initializable {
 
     private static final class TemporaryDbms implements Dbms {
 
-        public static TemporaryDbms create(Project project, String name, String file, String ip, int port) {
+        public static TemporaryDbms create(Project project, String name, String file, String ip, int port, String serverName) {
             final Map<String, Object> data = new LinkedHashMap<>();
-            data.put(HasIdUtil.ID,         name);
-            data.put(HasNameUtil.NAME,       name);
+            data.put(HasIdUtil.ID, name);
+            data.put(HasNameUtil.NAME, name);
             data.put(DbmsUtil.IP_ADDRESS, ip);
             if (port != 0) {
                 data.put(DbmsUtil.PORT, port);
             }
             data.put(DbmsUtil.LOCAL_PATH, file);
+            data.put(DbmsUtil.SERVER_NAME, serverName);
             return new TemporaryDbms(project, data);
         }
 
