@@ -85,9 +85,9 @@ public abstract class AbstractApplicationBuilder<
     private boolean skipLogoPrintout;
     
     protected AbstractApplicationBuilder(
-        Class<? extends APP> applicationImplClass,
-        Class<? extends ApplicationMetadata> metadataClass) {
-
+        final Class<? extends APP> applicationImplClass,
+        final Class<? extends ApplicationMetadata> metadataClass
+    ) {
         this(Injector.builder()
             .withBundle(RuntimeBundle.class)
             .withComponent(applicationImplClass)
@@ -96,9 +96,10 @@ public abstract class AbstractApplicationBuilder<
     }
     
     protected AbstractApplicationBuilder(
-        ClassLoader classLoader,
-        Class<? extends APP> applicationImplClass,
-        Class<? extends ApplicationMetadata> metadataClass) {
+        final ClassLoader classLoader,
+        final Class<? extends APP> applicationImplClass,
+        final Class<? extends ApplicationMetadata> metadataClass
+    ) {
 
         this(Injector.builder(classLoader)
             .withBundle(RuntimeBundle.class)
@@ -107,7 +108,7 @@ public abstract class AbstractApplicationBuilder<
         );
     }
 
-    protected AbstractApplicationBuilder(InjectorBuilder injectorBuilder) {
+    protected AbstractApplicationBuilder(final InjectorBuilder injectorBuilder) {
         this.injectorBuilder                   = requireNonNull(injectorBuilder);
         this.skipCheckDatabaseConnectivity     = false;
         this.skipValidateRuntimeConfig         = false;
@@ -141,8 +142,9 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public <C extends Document & HasEnabled> BUILDER with(
-            Class<C> type, BiConsumer<Injector, C> consumer) {
-        
+        final Class<C> type,
+        final BiConsumer<Injector, C> consumer
+    ) {
         requireNonNull(type);
         requireNonNull(consumer);
         
@@ -159,8 +161,9 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public <C extends Document & HasEnabled> BUILDER with(
-            Class<C> type, Consumer<C> consumer) {
-        
+            final Class<C> type,
+            final Consumer<C> consumer
+    ) {
         injectorBuilder.before(resolved(ProjectComponent.class)
             .withExecute(projComp -> 
                 DocumentDbUtil.traverseOver(projComp.getProject(), type)
@@ -172,7 +175,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withParam(String key, String value) {
+    public BUILDER withParam(final String key, final String value) {
         requireNonNull(key);
         requireNonNull(value);
         injectorBuilder.withParam(key, value);
@@ -180,7 +183,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withPassword(char[] password) {
+    public BUILDER withPassword(final char[] password) {
         // password nullable
         injectorBuilder.before(started(PasswordComponent.class)
             .withStateResolved(ProjectComponent.class)
@@ -195,7 +198,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withPassword(String dbmsName, char[] password) {
+    public BUILDER withPassword(final String dbmsName, final char[] password) {
         requireNonNull(dbmsName);
         // password nullable
         
@@ -207,13 +210,13 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withPassword(String password) {
+    public BUILDER withPassword(final String password) {
         // password nullable
         return withPassword(password == null ? null : password.toCharArray());
     }
 
     @Override
-    public BUILDER withPassword(String dbmsName, String password) {
+    public BUILDER withPassword(final String dbmsName, final String password) {
         requireNonNull(dbmsName);
         // password nullable
         return withPassword(dbmsName, 
@@ -222,14 +225,14 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withUsername(String username) {
+    public BUILDER withUsername(final String username) {
         // username nullable
         with(Dbms.class, dbms -> dbms.mutator().setUsername(username));
         return self();
     }
 
     @Override
-    public BUILDER withUsername(String dbmsName, String username) {
+    public BUILDER withUsername(final String dbmsName, final String username) {
         requireNonNull(dbmsName);
         // username nullable
         with(Dbms.class, dbmsName, d -> d.mutator().setUsername(username));
@@ -237,14 +240,14 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withIpAddress(String ipAddress) {
+    public BUILDER withIpAddress(final String ipAddress) {
         requireNonNull(ipAddress);
         with(Dbms.class, d -> d.mutator().setIpAddress(ipAddress));
         return self();
     }
 
     @Override
-    public BUILDER withIpAddress(String dbmsName, String ipAddress) {
+    public BUILDER withIpAddress(final String dbmsName, final String ipAddress) {
         requireNonNull(dbmsName);
         requireNonNull(ipAddress);
         with(Dbms.class, dbmsName, d -> d.mutator().setIpAddress(ipAddress));
@@ -252,20 +255,20 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withPort(int port) {
+    public BUILDER withPort(final int port) {
         with(Dbms.class, d -> d.mutator().setPort(port));
         return self();
     }
 
     @Override
-    public BUILDER withPort(String dbmsName, int port) {
+    public BUILDER withPort(final String dbmsName, final int port) {
         requireNonNull(dbmsName);
         with(Dbms.class, dbmsName, d -> d.mutator().setPort(port));
         return self();
     }
 
     @Override
-    public BUILDER withSchema(String schemaName) {
+    public BUILDER withSchema(final String schemaName) {
         requireNonNull(schemaName);
         with(Schema.class, s -> {
             // This makes sure that old json files with no id
@@ -278,7 +281,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withSchema(String oldSchemaName, String schemaName) {
+    public BUILDER withSchema(final String oldSchemaName, final String schemaName) {
         requireNonNull(oldSchemaName);
         requireNonNull(schemaName);
         with(Schema.class, oldSchemaName, s -> {
@@ -292,20 +295,20 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withConnectionUrl(String connectionUrl) {
+    public BUILDER withConnectionUrl(final String connectionUrl) {
         with(Dbms.class, d -> d.mutator().setConnectionUrl(connectionUrl));
         return self();
     }
 
     @Override
-    public BUILDER withConnectionUrl(String dbmsName, String connectionUrl) {
+    public BUILDER withConnectionUrl(final String dbmsName, final String connectionUrl) {
         requireNonNull(dbmsName);
         with(Dbms.class, dbmsName, s -> s.mutator().setConnectionUrl(connectionUrl));
         return self();
     }
 
     @Override
-    public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
+    public <M extends Manager<?>> BUILDER withManager(final Class<M> managerImplType) {
         requireNonNull(managerImplType);
         withInjectable(injectorBuilder, managerImplType);
         return self();
@@ -330,20 +333,20 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withBundle(Class<? extends InjectBundle> bundleClass) {
+    public BUILDER withBundle(final Class<? extends InjectBundle> bundleClass) {
         requireNonNull(bundleClass);
         injectorBuilder.withBundle(bundleClass);
         return self();
     }
 
     @Override
-    public BUILDER withComponent(Class<?> injectableClass) {
+    public BUILDER withComponent(final Class<?> injectableClass) {
         requireNonNull(injectableClass);
         injectorBuilder.withComponent(injectableClass);
         return self();
     }
 
-    public <T> BUILDER withComponent(Class<T> injectableClass, Supplier<T> supplier) {
+    public <T> BUILDER withComponent(final Class<T> injectableClass, final Supplier<T> supplier) {
         requireNonNull(injectableClass);
         requireNonNull(supplier);
         injectorBuilder.withComponent(injectableClass, supplier);
@@ -351,14 +354,14 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withInjectorProxy(InjectorProxy injectorProxy) {
+    public BUILDER withInjectorProxy(final InjectorProxy injectorProxy) {
         requireNonNull(injectorProxy);
         injectorBuilder.withInjectorProxy(injectorProxy);
         return self();
     }
 
     @Override
-    public BUILDER withLogging(HasLoggerName namer) {
+    public BUILDER withLogging(final HasLoggerName namer) {
         LoggerManager.getLogger(namer.getLoggerName()).setLevel(Level.DEBUG);
         
         if (LogType.APPLICATION_BUILDER.getLoggerName()
@@ -410,7 +413,7 @@ public abstract class AbstractApplicationBuilder<
      */
     protected abstract APP build(Injector injector);
 
-    protected void validateRuntimeConfig(Injector injector) {
+    protected void validateRuntimeConfig(final Injector injector) {
         LOGGER.debug("Validating Runtime Configuration");
         final Project project = injector.getOrThrow(ProjectComponent.class)
             .getProject();
@@ -441,7 +444,7 @@ public abstract class AbstractApplicationBuilder<
 
     }
 
-    protected void checkDatabaseConnectivity(Injector injector) {
+    protected void checkDatabaseConnectivity(final Injector injector) {
         LOGGER.debug("Checking Database Connectivity");
         final Project project = injector.getOrThrow(ProjectComponent.class)
             .getProject();
@@ -471,7 +474,7 @@ public abstract class AbstractApplicationBuilder<
      *
      * @param injector the injector to use
      */
-    protected void printWelcomeMessage(Injector injector) {
+    protected void printWelcomeMessage(final Injector injector) {
 
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);  // Get first
         final InfoComponent upstreamInfo = injector.stream(InfoComponent.class).reduce((first, second) -> second).orElseThrow(NoSuchElementException::new); // Get last
@@ -569,14 +572,14 @@ public abstract class AbstractApplicationBuilder<
     }
 
     private static <T> void withInjectable(
-            InjectorBuilder injector, 
-            Class<T> injectableImplType) {
-        
+            final InjectorBuilder injector,
+            final Class<T> injectableImplType
+    ) {
         requireNonNull(injectableImplType);
         injector.withComponent(injectableImplType);
     }
 
-    private void printStreamSupplierOrder(Injector injector) {
+    private void printStreamSupplierOrder(final Injector injector) {
         injector.get(StreamSupplierComponent.class).ifPresent(root -> {
             if (root.sourceStreamSupplierComponents().findAny().isPresent()) {
                 LOGGER.info("Current " + StreamSupplierComponent.class.getSimpleName() + " hierarchy:");
@@ -585,13 +588,13 @@ public abstract class AbstractApplicationBuilder<
         });
     }
 
-    private void printStreamSupplierOrder(StreamSupplierComponent ssc, int level) {
+    private void printStreamSupplierOrder(final StreamSupplierComponent ssc, final int level) {
         LOGGER.info("%s%s (0x%08x) %s", indent(level), ssc.getClass().getSimpleName(), ssc.hashCode(), ssc.isImmutable() ? "mutable" : "immutable");
         ssc.sourceStreamSupplierComponents()
             .forEachOrdered(child -> printStreamSupplierOrder(child, level + 1));
     }
 
-    private String indent(int level) {
+    private String indent(final int level) {
         return IntStream.range(0, level)
             .collect(StringBuilder::new, (sb, i) -> sb.append("    "), StringBuilder::append)
             .toString();
