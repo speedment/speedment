@@ -71,7 +71,7 @@ public interface Speedment {
     
    /**
      * Gracefully stops the Speedment instance and de-allocates any allocated resources.
-     * After close() has been called, the Speedment instance can not be called
+     * After stop() has been called, the Speedment instance can not be called
      * any more.
      */
     void stop();
