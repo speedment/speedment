@@ -59,6 +59,11 @@ final class ProjectTranslatorsTest {
         test(Projects.TYPE_MAPPER);
     }
 
+    @Test
+    void serveralDbmses() {
+        test(Projects.SEVERAL_DBMSES);
+    }
+
     void test(Projects projectHolder) {
         Stream.of(projectHolder)
             .map(Projects::project)

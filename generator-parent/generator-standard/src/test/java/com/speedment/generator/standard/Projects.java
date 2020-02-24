@@ -35,7 +35,8 @@ public enum Projects {
     SPRING_PLUGIN("spring-plugin.json"),
     DATA_STORE("data-store.json"),
     FOREIGN_KEY("foreign-key.json"),
-    TYPE_MAPPER("type-mapper.json")
+    TYPE_MAPPER("type-mapper.json"),
+    SEVERAL_DBMSES("several_dbms.json")
     ;
 
     private final String fileName;

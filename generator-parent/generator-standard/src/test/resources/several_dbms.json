@@ -1,0 +1,578 @@
+{
+  "config" : {
+    "speedmentVersion" : "Speedment:3.1.4",
+    "nameProtected" : false,
+    "expanded" : true,
+    "appId" : "eb9294aa-8447-46b9-89af-240aa22d18d6",
+    "companyName" : "company",
+    "name" : "fk_test",
+    "packageLocation" : "target/generated-sources/main/java/",
+    "id" : "fk_test",
+    "packageName" : "com.speedment.enterprise.test.foreignkey.db",
+    "dbmses" : [
+      {
+        "expanded" : true,
+        "port" : 3306,
+        "schemas" : [
+          {
+            "tables" : [
+              {
+                "nameProtected" : true,
+                "foreignKeys" : [
+                  {
+                    "expanded" : false,
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "expanded" : true,
+                        "name" : "b",
+                        "foreignColumnName" : "id",
+                        "id" : "b",
+                        "foreignTableName" : "table_b",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_1",
+                    "id" : "table_a_ibfk_1",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "expanded" : true,
+                        "name" : "c",
+                        "foreignColumnName" : "id",
+                        "id" : "c",
+                        "foreignTableName" : "table_c",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_2",
+                    "id" : "table_a_ibfk_2",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "expanded" : true,
+                        "name" : "d",
+                        "foreignColumnName" : "id",
+                        "id" : "d",
+                        "foreignTableName" : "table_d",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_3",
+                    "id" : "table_a_ibfk_3",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "expanded" : true,
+                        "name" : "e",
+                        "foreignColumnName" : "id",
+                        "id" : "e",
+                        "foreignTableName" : "table_e",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_4",
+                    "id" : "table_a_ibfk_4",
+                    "enabled" : true
+                  },
+                  {
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "name" : "e",
+                        "foreignColumnName" : "id",
+                        "id" : "e",
+                        "foreignTableName" : "table_c",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_5",
+                    "id" : "table_a_ibfk_5"
+                  }
+                ],
+                "expanded" : false,
+                "primaryKeyColumns" : [
+                  {
+                    "expanded" : true,
+                    "name" : "id",
+                    "id" : "id",
+                    "ordinalPosition" : 1,
+                    "enabled" : true
+                  }
+                ],
+                "indexes" : [
+                  {
+                    "expanded" : false,
+                    "unique" : true,
+                    "name" : "PRIMARY",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "id",
+                        "id" : "id",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "PRIMARY",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "b",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "b",
+                        "id" : "b",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "b",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "c",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "c",
+                        "id" : "c",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "c",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "d",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "d",
+                        "id" : "d",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "d",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "e",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "e",
+                        "id" : "e",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "e",
+                    "enabled" : true
+                  }
+                ],
+                "isView" : false,
+                "columns" : [
+                  {
+                    "databaseType" : "java.lang.Long",
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "autoIncrement" : true,
+                    "name" : "id",
+                    "id" : "id",
+                    "ordinalPosition" : 1,
+                    "enabled" : true
+                  },
+                  {
+                    "nameProtected" : true,
+                    "nullable" : false,
+                    "unindexed" : false,
+                    "lowCardinality" : false,
+                    "autoIncrement" : false,
+                    "biDirectional" : false,
+                    "ordinalPosition" : 2,
+                    "enabled" : true,
+                    "databaseType" : "java.lang.Long",
+                    "expanded" : true,
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "name" : "b",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "b",
+                    "hashIndex" : false
+                  },
+                  {
+                    "nameProtected" : true,
+                    "nullable" : false,
+                    "unindexed" : false,
+                    "lowCardinality" : false,
+                    "autoIncrement" : false,
+                    "biDirectional" : false,
+                    "ordinalPosition" : 3,
+                    "enabled" : true,
+                    "databaseType" : "java.lang.Long",
+                    "expanded" : true,
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "name" : "c",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "c",
+                    "hashIndex" : false
+                  },
+                  {
+                    "nameProtected" : true,
+                    "nullable" : true,
+                    "unindexed" : false,
+                    "lowCardinality" : false,
+                    "autoIncrement" : false,
+                    "biDirectional" : false,
+                    "ordinalPosition" : 4,
+                    "enabled" : true,
+                    "databaseType" : "java.lang.Long",
+                    "expanded" : true,
+                    "name" : "d",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "d",
+                    "hashIndex" : false
+                  },
+                  {
+                    "databaseType" : "java.lang.Long",
+                    "expanded" : true,
+                    "nullable" : true,
+                    "name" : "e",
+                    "id" : "e",
+                    "ordinalPosition" : 5,
+                    "enabled" : true
+                  }
+                ],
+                "name" : "table_a",
+                "id" : "table_a",
+                "packageName" : "com.speedment.enterprise.test.foreignkey.db.a",
+                "enabled" : true
+              }
+            ],
+            "expanded" : true,
+            "name" : "fk_test",
+            "id" : "fk_test",
+            "enabled" : true
+          }
+        ],
+        "typeName" : "MySQL",
+        "ipAddress" : "first.com",
+        "name" : "first",
+        "id" : "first",
+        "enabled" : true,
+        "username" : "root"
+      },
+      {
+        "expanded" : true,
+        "port" : 3306,
+        "schemas" : [
+          {
+            "tables" : [
+              {
+                "nameProtected" : true,
+                "foreignKeys" : [
+                  {
+                    "expanded" : false,
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "expanded" : true,
+                        "name" : "b",
+                        "foreignColumnName" : "id",
+                        "id" : "b",
+                        "foreignTableName" : "table_b",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_1",
+                    "id" : "table_a_ibfk_1",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "expanded" : true,
+                        "name" : "c",
+                        "foreignColumnName" : "id",
+                        "id" : "c",
+                        "foreignTableName" : "table_c",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_2",
+                    "id" : "table_a_ibfk_2",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "expanded" : true,
+                        "name" : "d",
+                        "foreignColumnName" : "id",
+                        "id" : "d",
+                        "foreignTableName" : "table_d",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_3",
+                    "id" : "table_a_ibfk_3",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "expanded" : true,
+                        "name" : "e",
+                        "foreignColumnName" : "id",
+                        "id" : "e",
+                        "foreignTableName" : "table_e",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_4",
+                    "id" : "table_a_ibfk_4",
+                    "enabled" : true
+                  },
+                  {
+                    "foreignKeyColumns" : [
+                      {
+                        "foreignDatabaseName" : "fk_test",
+                        "foreignSchemaName" : "fk_test",
+                        "name" : "e",
+                        "foreignColumnName" : "id",
+                        "id" : "e",
+                        "foreignTableName" : "table_c",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "name" : "table_a_ibfk_5",
+                    "id" : "table_a_ibfk_5"
+                  }
+                ],
+                "expanded" : false,
+                "primaryKeyColumns" : [
+                  {
+                    "expanded" : true,
+                    "name" : "id",
+                    "id" : "id",
+                    "ordinalPosition" : 1,
+                    "enabled" : true
+                  }
+                ],
+                "indexes" : [
+                  {
+                    "expanded" : false,
+                    "unique" : true,
+                    "name" : "PRIMARY",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "id",
+                        "id" : "id",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "PRIMARY",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "b",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "b",
+                        "id" : "b",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "b",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "c",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "c",
+                        "id" : "c",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "c",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "d",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "d",
+                        "id" : "d",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "d",
+                    "enabled" : true
+                  },
+                  {
+                    "expanded" : false,
+                    "unique" : false,
+                    "name" : "e",
+                    "indexColumns" : [
+                      {
+                        "orderType" : "ASC",
+                        "expanded" : true,
+                        "name" : "e",
+                        "id" : "e",
+                        "ordinalPosition" : 1
+                      }
+                    ],
+                    "id" : "e",
+                    "enabled" : true
+                  }
+                ],
+                "isView" : false,
+                "columns" : [
+                  {
+                    "databaseType" : "java.lang.Long",
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "expanded" : true,
+                    "nullable" : false,
+                    "autoIncrement" : true,
+                    "name" : "id",
+                    "id" : "id",
+                    "ordinalPosition" : 1,
+                    "enabled" : true
+                  },
+                  {
+                    "nameProtected" : true,
+                    "nullable" : false,
+                    "unindexed" : false,
+                    "lowCardinality" : false,
+                    "autoIncrement" : false,
+                    "biDirectional" : false,
+                    "ordinalPosition" : 2,
+                    "enabled" : true,
+                    "databaseType" : "java.lang.Long",
+                    "expanded" : true,
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "name" : "b",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "b",
+                    "hashIndex" : false
+                  },
+                  {
+                    "nameProtected" : true,
+                    "nullable" : false,
+                    "unindexed" : false,
+                    "lowCardinality" : false,
+                    "autoIncrement" : false,
+                    "biDirectional" : false,
+                    "ordinalPosition" : 3,
+                    "enabled" : true,
+                    "databaseType" : "java.lang.Long",
+                    "expanded" : true,
+                    "typeMapper" : "com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper",
+                    "name" : "c",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "c",
+                    "hashIndex" : false
+                  },
+                  {
+                    "nameProtected" : true,
+                    "nullable" : true,
+                    "unindexed" : false,
+                    "lowCardinality" : false,
+                    "autoIncrement" : false,
+                    "biDirectional" : false,
+                    "ordinalPosition" : 4,
+                    "enabled" : true,
+                    "databaseType" : "java.lang.Long",
+                    "expanded" : true,
+                    "name" : "d",
+                    "nullableImplementation" : "OPTIONAL",
+                    "id" : "d",
+                    "hashIndex" : false
+                  },
+                  {
+                    "databaseType" : "java.lang.Long",
+                    "expanded" : true,
+                    "nullable" : true,
+                    "name" : "e",
+                    "id" : "e",
+                    "ordinalPosition" : 5,
+                    "enabled" : true
+                  }
+                ],
+                "name" : "table_a",
+                "id" : "table_a",
+                "packageName" : "com.speedment.enterprise.test.foreignkey.db.a",
+                "enabled" : true
+              }
+            ],
+            "expanded" : true,
+            "name" : "fk_test",
+            "id" : "fk_test",
+            "enabled" : true
+          }
+        ],
+        "typeName" : "MySQL",
+        "ipAddress" : "second.com",
+        "name" : "second",
+        "id" : "second",
+        "enabled" : true,
+        "username" : "root"
+      }
+    ],
+    "enabled" : true
+  }
+}
