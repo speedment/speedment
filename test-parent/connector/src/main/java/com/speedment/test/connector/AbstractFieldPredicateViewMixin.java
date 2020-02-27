@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @author Mislav Milicevic
  * @since 3.2.9
  */
-public abstract class AbstractFieldPredicateViewMixin<T extends AbstractFieldPredicateView> implements FieldPredicateViewMixin {
+public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateViewMixin {
 
     @Override
     public Stream<DynamicTest> transformTests() {
@@ -42,7 +42,7 @@ public abstract class AbstractFieldPredicateViewMixin<T extends AbstractFieldPre
      *
      * @return instance of the {@link com.speedment.runtime.core.db.FieldPredicateView}
      */
-    protected abstract T getFieldPredicateViewInstance();
+    protected abstract AbstractFieldPredicateView getFieldPredicateViewInstance();
 
     protected abstract List<Predicate<SqlPredicateFragment>> alwaysTrueConditions();
 
