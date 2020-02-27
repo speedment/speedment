@@ -39,4 +39,11 @@
         Test Connector
     </description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-core</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
+    </dependencies>
 </project>

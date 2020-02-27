@@ -16,4 +16,6 @@
  */
 module com.speedment.test.connector {
     exports com.speedment.test.connector;
+
+    requires transitive com.speedment.runtime.core;
 }
