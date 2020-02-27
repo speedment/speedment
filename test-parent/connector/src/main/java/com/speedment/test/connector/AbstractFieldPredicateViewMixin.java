@@ -17,11 +17,25 @@
 
 package com.speedment.test.connector;
 
-import com.speedment.runtime.core.abstracts.AbstractFieldPredicateView;
-import com.speedment.runtime.core.db.SqlPredicateFragment;
-import org.junit.jupiter.api.DynamicTest;
+import static com.speedment.runtime.field.predicate.PredicateType.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import com.speedment.runtime.core.db.FieldPredicateView;
+import com.speedment.runtime.core.db.SqlPredicateFragment;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.PredicateType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -31,9 +45,59 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateViewMixin {
 
+    private final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> transformConditions = new HashMap<>();
+    
+    @BeforeEach
+    void registerTransformConditions() {
+        transformConditions.put(ALWAYS_TRUE, alwaysTrueConditions());
+        transformConditions.put(ALWAYS_FALSE, alwaysFalseConditions());
+        transformConditions.put(IS_NULL, isNullConditions());
+        transformConditions.put(IS_NOT_NULL, isNotNullConditions());
+        transformConditions.put(IS_EMPTY, isEmptyConditions());
+        transformConditions.put(IS_NOT_EMPTY, isNotEmptyConditions());
+        transformConditions.put(EQUAL, equalsConditions());
+        transformConditions.put(NOT_EQUAL, notEqualsConditions());
+        transformConditions.put(GREATER_THAN, greaterThanConditions());
+        transformConditions.put(GREATER_OR_EQUAL, greaterOrEqualConditions());
+        transformConditions.put(LESS_THAN, lessThanConditions());
+        transformConditions.put(LESS_OR_EQUAL, lessOrEqualConditions());
+        transformConditions.put(BETWEEN, betweenConditions());
+        transformConditions.put(NOT_BETWEEN, notBetweenConditions());
+        transformConditions.put(IN, inConditions());
+        transformConditions.put(NOT_IN, notInConditions());
+        transformConditions.put(EQUAL_IGNORE_CASE, equalsIgnoreCaseConditions());
+        transformConditions.put(NOT_EQUAL_IGNORE_CASE, notEqualsIgnoreCaseConditions());
+        transformConditions.put(STARTS_WITH, startsWithConditions());
+        transformConditions.put(STARTS_WITH_IGNORE_CASE, startsWithIgnoreCaseConditions());
+        transformConditions.put(NOT_STARTS_WITH, notStartsWithConditions());
+        transformConditions.put(NOT_STARTS_WITH_IGNORE_CASE, notStartsWithIgnoreCaseConditions());
+        transformConditions.put(ENDS_WITH, endsWithConditions());
+        transformConditions.put(ENDS_WITH_IGNORE_CASE, endsWithIgnoreCaseConditions());
+        transformConditions.put(NOT_ENDS_WITH, notEndsWithConditions());
+        transformConditions.put(NOT_ENDS_WITH_IGNORE_CASE, notEndsWithIgnoreCaseConditions());
+        transformConditions.put(CONTAINS, containsConditions());
+        transformConditions.put(CONTAINS_IGNORE_CASE, containsIgnoreCaseConditions());
+        transformConditions.put(NOT_CONTAINS, notContainsConditions());
+        transformConditions.put(NOT_CONTAINS_IGNORE_CASE, notContainsIgnoreCaseConditions());
+    }
+    
     @Override
+    @TestFactory
     public Stream<DynamicTest> transformTests() {
-        return null;
+        final FieldPredicateView fieldPredicateView = getFieldPredicateViewInstance();
+
+        final Function<Field<String>, String> columnNamer = field -> "column";
+        final Function<Field<String>, Class<?>> dbType = field -> String.class;
+
+        return transformConditions.entrySet().stream().map(entry ->
+                dynamicTest(entry.getKey().toString(), () -> {
+            final PredicateType predicateType = entry.getKey();
+            final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
+            final FieldPredicate<String> fieldPredicate = mockFieldPredicate(predicateType);
+
+            conditions.forEach(condition -> assertTrue(
+                    condition.test(fieldPredicateView.transform(columnNamer, dbType, fieldPredicate))));
+        }));
     }
 
     /**
@@ -42,7 +106,7 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
      *
      * @return instance of the {@link com.speedment.runtime.core.db.FieldPredicateView}
      */
-    protected abstract AbstractFieldPredicateView getFieldPredicateViewInstance();
+    protected abstract FieldPredicateView getFieldPredicateViewInstance();
 
     protected abstract List<Predicate<SqlPredicateFragment>> alwaysTrueConditions();
 
@@ -103,4 +167,13 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
     protected abstract List<Predicate<SqlPredicateFragment>> isEmptyConditions();
 
     protected abstract List<Predicate<SqlPredicateFragment>> isNotEmptyConditions();
+
+    @SuppressWarnings("unchecked")
+    private FieldPredicate<String> mockFieldPredicate(PredicateType predicateType) {
+        final FieldPredicate<String> fieldPredicate = (FieldPredicate<String>) mock(FieldPredicate.class);
+
+        when(fieldPredicate.getPredicateType()).thenReturn(predicateType);
+
+        return fieldPredicate;
+    }
 }
