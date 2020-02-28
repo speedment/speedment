@@ -59,7 +59,6 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.test.connector.type.TestReadyFieldPredicate;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.mockito.internal.util.collections.Sets;
@@ -81,8 +80,7 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
     private final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> transformConditions = new HashMap<>();
     private final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> collectionTransformConditions = new HashMap<>();
     
-    @BeforeEach
-    void registerTransformConditions() {
+    private void registerTransformConditions() {
         transformConditions.put(ALWAYS_TRUE, alwaysTrueConditions());
         transformConditions.put(ALWAYS_FALSE, alwaysFalseConditions());
         transformConditions.put(IS_NULL, isNullConditions());
@@ -119,6 +117,8 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
     @Override
     @TestFactory
     public Stream<DynamicTest> transformTests() {
+        registerTransformConditions();
+
         final FieldPredicateView fieldPredicateView = getFieldPredicateViewInstance();
 
         final Stream<DynamicTest> transformTests = transformConditions.entrySet().stream().map(entry ->
