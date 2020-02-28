@@ -58,7 +58,7 @@ public final class MySqlSpeedmentPredicateView
     @Override
     protected SqlPredicateFragment
     equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of(compare(cn, " = ?", collationName), negated)
+        return of(compare(cn, "= ?", collationName), negated)
             .add(getFirstOperandAsRaw(model));
     }
 
