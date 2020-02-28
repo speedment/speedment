@@ -150,16 +150,16 @@ public abstract class DefaultFieldPredicateViewMixin extends AbstractFieldPredic
             switch ((int) sqlPredicateFragment.objects().count()) {
                 case 0:
                     return alwaysTrueConditions().stream()
-                            .reduce($ -> true, Predicate::and)
-                            .test(sqlPredicateFragment);
+                        .reduce($ -> true, Predicate::and)
+                        .test(sqlPredicateFragment);
                 case 1:
                     return notEqualsConditions().stream()
-                            .reduce($ -> true, Predicate::and)
-                            .test(sqlPredicateFragment);
+                        .reduce($ -> true, Predicate::and)
+                        .test(sqlPredicateFragment);
                 default:
                      return notWrapper(fullInConditions()).stream()
-                            .reduce(x -> true, Predicate::and)
-                            .test(sqlPredicateFragment);
+                        .reduce(x -> true, Predicate::and)
+                        .test(sqlPredicateFragment);
             }
         };
         return Collections.singletonList(predicate);
