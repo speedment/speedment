@@ -17,7 +17,36 @@
 
 package com.speedment.test.connector;
 
-import static com.speedment.runtime.field.predicate.PredicateType.*;
+import static com.speedment.runtime.field.predicate.PredicateType.ALWAYS_FALSE;
+import static com.speedment.runtime.field.predicate.PredicateType.ALWAYS_TRUE;
+import static com.speedment.runtime.field.predicate.PredicateType.BETWEEN;
+import static com.speedment.runtime.field.predicate.PredicateType.CONTAINS;
+import static com.speedment.runtime.field.predicate.PredicateType.CONTAINS_IGNORE_CASE;
+import static com.speedment.runtime.field.predicate.PredicateType.ENDS_WITH;
+import static com.speedment.runtime.field.predicate.PredicateType.ENDS_WITH_IGNORE_CASE;
+import static com.speedment.runtime.field.predicate.PredicateType.EQUAL;
+import static com.speedment.runtime.field.predicate.PredicateType.EQUAL_IGNORE_CASE;
+import static com.speedment.runtime.field.predicate.PredicateType.GREATER_OR_EQUAL;
+import static com.speedment.runtime.field.predicate.PredicateType.GREATER_THAN;
+import static com.speedment.runtime.field.predicate.PredicateType.IN;
+import static com.speedment.runtime.field.predicate.PredicateType.IS_EMPTY;
+import static com.speedment.runtime.field.predicate.PredicateType.IS_NOT_EMPTY;
+import static com.speedment.runtime.field.predicate.PredicateType.IS_NOT_NULL;
+import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
+import static com.speedment.runtime.field.predicate.PredicateType.LESS_OR_EQUAL;
+import static com.speedment.runtime.field.predicate.PredicateType.LESS_THAN;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_BETWEEN;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_CONTAINS;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_CONTAINS_IGNORE_CASE;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_ENDS_WITH;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_ENDS_WITH_IGNORE_CASE;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_EQUAL;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_EQUAL_IGNORE_CASE;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_IN;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_STARTS_WITH;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_STARTS_WITH_IGNORE_CASE;
+import static com.speedment.runtime.field.predicate.PredicateType.STARTS_WITH;
+import static com.speedment.runtime.field.predicate.PredicateType.STARTS_WITH_IGNORE_CASE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.Mockito.mock;
@@ -27,14 +56,18 @@ import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
+import com.speedment.test.connector.type.TestReadyFieldPredicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
+import org.mockito.internal.util.collections.Sets;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -46,6 +79,7 @@ import java.util.stream.Stream;
 public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateViewMixin {
 
     private final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> transformConditions = new HashMap<>();
+    private final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> collectionTransformConditions = new HashMap<>();
     
     @BeforeEach
     void registerTransformConditions() {
@@ -63,8 +97,6 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
         transformConditions.put(LESS_OR_EQUAL, lessOrEqualConditions());
         transformConditions.put(BETWEEN, betweenConditions());
         transformConditions.put(NOT_BETWEEN, notBetweenConditions());
-        transformConditions.put(IN, inConditions());
-        transformConditions.put(NOT_IN, notInConditions());
         transformConditions.put(EQUAL_IGNORE_CASE, equalsIgnoreCaseConditions());
         transformConditions.put(NOT_EQUAL_IGNORE_CASE, notEqualsIgnoreCaseConditions());
         transformConditions.put(STARTS_WITH, startsWithConditions());
@@ -79,6 +111,9 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
         transformConditions.put(CONTAINS_IGNORE_CASE, containsIgnoreCaseConditions());
         transformConditions.put(NOT_CONTAINS, notContainsConditions());
         transformConditions.put(NOT_CONTAINS_IGNORE_CASE, notContainsIgnoreCaseConditions());
+
+        collectionTransformConditions.put(IN, inConditions());
+        collectionTransformConditions.put(NOT_IN, notInConditions());
     }
     
     @Override
@@ -86,18 +121,42 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
     public Stream<DynamicTest> transformTests() {
         final FieldPredicateView fieldPredicateView = getFieldPredicateViewInstance();
 
-        final Function<Field<String>, String> columnNamer = field -> "column";
-        final Function<Field<String>, Class<?>> dbType = field -> String.class;
-
-        return transformConditions.entrySet().stream().map(entry ->
+        final Stream<DynamicTest> transformTests = transformConditions.entrySet().stream().map(entry ->
                 dynamicTest(entry.getKey().toString(), () -> {
+            final Function<Field<String>, Class<?>> dbType = field -> String.class;
+            final Function<Field<String>, String> columnNamer = field -> "column";
+
             final PredicateType predicateType = entry.getKey();
             final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
-            final FieldPredicate<String> fieldPredicate = mockFieldPredicate(predicateType);
 
-            conditions.forEach(condition -> assertTrue(
-                    condition.test(fieldPredicateView.transform(columnNamer, dbType, fieldPredicate))));
+            final FieldPredicate<String> fieldPredicate = mockFieldPredicate(predicateType, "value");
+
+            final SqlPredicateFragment fragment = fieldPredicateView.transform(columnNamer, dbType, fieldPredicate);
+            conditions.forEach(condition -> assertTrue(condition.test(fragment)));
         }));
+
+        final Stream<DynamicTest> collectionTransformTests = collectionTransformConditions.entrySet().stream().map(entry ->
+                dynamicTest(entry.getKey().toString(), () -> {
+            final Function<Field<Set<String>>, Class<?>> dbType = field -> Set.class;
+            final Function<Field<Set<String>>, String> columnNamer = field -> "column";
+
+            final PredicateType predicateType = entry.getKey();
+            final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
+
+            Stream.of(
+                    Sets.newSet(),
+                    Sets.newSet("value"),
+                    Sets.newSet("value", "anotherValue")
+            ).forEach(set -> {
+                @SuppressWarnings("unchecked")
+                final FieldPredicate<Set<String>> fieldPredicate = mockFieldPredicate(predicateType, (Set<String>) set);
+
+                final SqlPredicateFragment fragment = fieldPredicateView.transform(columnNamer, dbType, fieldPredicate);
+                conditions.forEach(condition -> assertTrue(condition.test(fragment)));
+            });
+        }));
+
+        return Stream.concat(transformTests, collectionTransformTests);
     }
 
     /**
@@ -169,11 +228,13 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
     protected abstract List<Predicate<SqlPredicateFragment>> isNotEmptyConditions();
 
     @SuppressWarnings("unchecked")
-    private FieldPredicate<String> mockFieldPredicate(PredicateType predicateType) {
-        final FieldPredicate<String> fieldPredicate = (FieldPredicate<String>) mock(FieldPredicate.class);
+    private <ENTITY> FieldPredicate<ENTITY> mockFieldPredicate(PredicateType predicateType, ENTITY value) {
+        final TestReadyFieldPredicate<ENTITY> predicate = (TestReadyFieldPredicate<ENTITY>) mock(TestReadyFieldPredicate.class);
 
-        when(fieldPredicate.getPredicateType()).thenReturn(predicateType);
+        when(predicate.getPredicateType()).thenReturn(predicateType);
+        when(predicate.get(0)).thenReturn(value);
+        when(predicate.getInclusion()).thenReturn(Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
 
-        return fieldPredicate;
+        return predicate;
     }
 }
