@@ -40,6 +40,7 @@
 	
     <modules>
         <module>connector</module>
+        <module>connector-mysql</module>
     </modules>
 
     <dependencies>
