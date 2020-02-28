@@ -16,6 +16,13 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRaw;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRawSet;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getInclusionOperand;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getSecondOperand;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+
 import com.speedment.runtime.core.abstracts.AbstractFieldPredicateView;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
@@ -23,10 +30,6 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 
 import java.util.Set;
-
-import static com.speedment.runtime.field.util.PredicateOperandUtil.*;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -261,7 +264,7 @@ public final class MySqlSpeedmentPredicateView
     private SqlPredicateFragment
     equalHelper(String cn, Class<?> dbType, Object argument) {
         if (dbType.equals(String.class)) { // Use collation for string types
-            return of(compare(cn, " = ?", binaryCollationName))
+            return of(compare(cn, "= ?", binaryCollationName))
                 .add(argument);
         } else {
             return of("(" + cn + " = ?)").add(argument);
@@ -271,7 +274,7 @@ public final class MySqlSpeedmentPredicateView
     private SqlPredicateFragment
     notEqualHelper(String cn, Class<?> dbType, Object argument) {
         if (dbType.equals(String.class)) { // Use collation for string types
-            return of("(NOT " + compare(cn, " = ?", binaryCollationName) + ")")
+            return of("(NOT " + compare(cn, "= ?", binaryCollationName) + ")")
                 .add(argument);
         } else {
             return of("(NOT (" + cn + " = ?))").add(argument);
