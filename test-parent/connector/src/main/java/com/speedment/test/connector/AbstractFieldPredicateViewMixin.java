@@ -144,9 +144,9 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
             final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
 
             Stream.of(
-                    Sets.newSet(),
-                    Sets.newSet("value"),
-                    Sets.newSet("value", "anotherValue")
+                Sets.newSet(),
+                Sets.newSet("value"),
+                Sets.newSet("value", "anotherValue")
             ).forEach(set -> {
                 @SuppressWarnings("unchecked")
                 final FieldPredicate<Set<String>> fieldPredicate = mockFieldPredicate(predicateType, (Set<String>) set);
