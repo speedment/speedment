@@ -15,9 +15,8 @@
  * the License.
  */
 
-package com.speedment.test.connector.mysql;
+package com.speedment.runtime.connector.mysql.internal;
 
-import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateView;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.test.connector.abstracts.DefaultFieldPredicateViewMixin;
