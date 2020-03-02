@@ -15,7 +15,7 @@
  * the License.
  */
 
-package com.speedment.test.connector;
+package com.speedment.test.connector.abstracts;
 
 import static com.speedment.runtime.field.predicate.PredicateType.ALWAYS_FALSE;
 import static com.speedment.runtime.field.predicate.PredicateType.ALWAYS_TRUE;
@@ -58,6 +58,7 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
+import com.speedment.test.connector.FieldPredicateViewMixin;
 import com.speedment.test.connector.type.TestReadyFieldPredicate;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

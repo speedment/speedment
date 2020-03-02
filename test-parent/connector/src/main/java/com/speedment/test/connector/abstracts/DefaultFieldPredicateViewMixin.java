@@ -15,7 +15,7 @@
  * the License.
  */
 
-package com.speedment.test.connector;
+package com.speedment.test.connector.abstracts;
 
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 

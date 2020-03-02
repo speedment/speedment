@@ -21,7 +21,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.stream.Stream;
 
-interface FieldPredicateViewMixin {
+public interface FieldPredicateViewMixin {
 
     @TestFactory
     Stream<DynamicTest> transformTests();

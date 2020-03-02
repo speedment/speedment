@@ -20,7 +20,7 @@ package com.speedment.test.connector.mysql;
 import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateView;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.test.connector.DefaultFieldPredicateViewMixin;
+import com.speedment.test.connector.abstracts.DefaultFieldPredicateViewMixin;
 
 import java.util.Collections;
 import java.util.List;
