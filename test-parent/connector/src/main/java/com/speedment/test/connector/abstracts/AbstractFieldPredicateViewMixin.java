@@ -47,24 +47,25 @@ import static com.speedment.runtime.field.predicate.PredicateType.NOT_STARTS_WIT
 import static com.speedment.runtime.field.predicate.PredicateType.NOT_STARTS_WITH_IGNORE_CASE;
 import static com.speedment.runtime.field.predicate.PredicateType.STARTS_WITH;
 import static com.speedment.runtime.field.predicate.PredicateType.STARTS_WITH_IGNORE_CASE;
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
+import com.speedment.runtime.field.predicate.trait.HasInclusion;
 import com.speedment.test.connector.FieldPredicateViewMixin;
-import com.speedment.test.connector.type.TestReadyFieldPredicate;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.mockito.internal.util.collections.Sets;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -106,46 +107,38 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
         final FieldPredicateView fieldPredicateView = getFieldPredicateViewInstance();
 
         final Stream<DynamicTest> transformTests = transformConditions.entrySet().stream().map(entry ->
-                dynamicTest(entry.getKey().toString(), () -> {
-            TRANSFORM_DATABASE_TYPES.forEach(clazz -> {
+            dynamicTest(entry.getKey().toString(), () -> TRANSFORM_DATABASE_TYPES.forEach(clazz -> {
                 final Function<Field<String>, Class<?>> dbType = field -> clazz;
                 final Function<Field<String>, String> columnNamer = field -> "column";
 
                 final PredicateType predicateType = entry.getKey();
                 final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
 
-                Arrays.asList(Inclusion.values()).forEach(inclusion -> {
+                asList(Inclusion.values()).forEach(inclusion -> {
                     final FieldPredicate<String> fieldPredicate = mockFieldPredicate(predicateType, "value", inclusion);
-
                     final SqlPredicateFragment fragment = fieldPredicateView.transform(columnNamer, dbType, fieldPredicate);
+
                     conditions.forEach(condition -> assertTrue(condition.test(fragment)));
                 });
-            });
-        }));
+            })));
 
         final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> collectionTransformConditions = getCollectionTransformConditions();
 
         final Stream<DynamicTest> collectionTransformTests = collectionTransformConditions.entrySet().stream().map(entry ->
-                dynamicTest(entry.getKey().toString(), () -> {
-            COLLECTION_TRANSFORM_DATABASE_TYPES.forEach(clazz -> {
+            dynamicTest(entry.getKey().toString(), () -> COLLECTION_TRANSFORM_DATABASE_TYPES.forEach(clazz -> {
                 final Function<Field<Set<String>>, Class<?>> dbType = field -> clazz;
                 final Function<Field<Set<String>>, String> columnNamer = field -> "column";
 
                 final PredicateType predicateType = entry.getKey();
                 final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
 
-                COLLECTION_TRANSFORM_VALUES.forEach(set ->
-                        Arrays.asList(Inclusion.values()).forEach(inclusion -> {
-                    @SuppressWarnings("unchecked")
-                    final FieldPredicate<Set<String>> fieldPredicate =
-                            mockFieldPredicate(predicateType, set, inclusion);
+                COLLECTION_TRANSFORM_VALUES.forEach(set -> asList(Inclusion.values()).forEach(inclusion -> {
+                    final FieldPredicate<Set<String>> fieldPredicate = mockFieldPredicate(predicateType, set, inclusion);
+                    final SqlPredicateFragment fragment = fieldPredicateView.transform(columnNamer, dbType, fieldPredicate);
 
-                    final SqlPredicateFragment fragment = fieldPredicateView
-                            .transform(columnNamer, dbType, fieldPredicate);
                     conditions.forEach(condition -> assertTrue(condition.test(fragment)));
                 }));
-            });
-        }));
+            })));
 
         return Stream.concat(transformTests, collectionTransformTests);
     }
@@ -218,17 +211,6 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
 
     protected abstract List<Predicate<SqlPredicateFragment>> isNotEmptyConditions();
 
-    @SuppressWarnings("unchecked")
-    private <ENTITY> FieldPredicate<ENTITY> mockFieldPredicate(PredicateType predicateType, ENTITY value, Inclusion inclusion) {
-        final TestReadyFieldPredicate<ENTITY> predicate = (TestReadyFieldPredicate<ENTITY>) mock(TestReadyFieldPredicate.class);
-
-        when(predicate.getPredicateType()).thenReturn(predicateType);
-        when(predicate.get(0)).thenReturn(value);
-        when(predicate.getInclusion()).thenReturn(inclusion);
-
-        return predicate;
-    }
-
     private Map<PredicateType, List<Predicate<SqlPredicateFragment>>> getTransformConditions() {
         final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> transformConditions = new HashMap<>();
 
@@ -271,5 +253,19 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
         collectionTransformConditions.put(NOT_IN, notInConditions());
 
         return Collections.unmodifiableMap(collectionTransformConditions);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <ENTITY> FieldPredicate<ENTITY> mockFieldPredicate(PredicateType predicateType, ENTITY value, Inclusion inclusion) {
+        final TestReadyFieldPredicate<ENTITY> predicate = (TestReadyFieldPredicate<ENTITY>) mock(TestReadyFieldPredicate.class);
+
+        when(predicate.getPredicateType()).thenReturn(predicateType);
+        when(predicate.get(0)).thenReturn(value);
+        when(predicate.getInclusion()).thenReturn(inclusion);
+
+        return predicate;
+    }
+
+    private interface TestReadyFieldPredicate<ENTITY> extends FieldPredicate<ENTITY>, Tuple1<ENTITY>, HasInclusion {
     }
 }
