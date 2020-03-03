@@ -64,7 +64,10 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.mockito.internal.util.collections.Sets;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -78,82 +81,69 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateViewMixin {
 
-    private final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> transformConditions = new HashMap<>();
-    private final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> collectionTransformConditions = new HashMap<>();
-    
-    private void registerTransformConditions() {
-        transformConditions.put(ALWAYS_TRUE, alwaysTrueConditions());
-        transformConditions.put(ALWAYS_FALSE, alwaysFalseConditions());
-        transformConditions.put(IS_NULL, isNullConditions());
-        transformConditions.put(IS_NOT_NULL, isNotNullConditions());
-        transformConditions.put(IS_EMPTY, isEmptyConditions());
-        transformConditions.put(IS_NOT_EMPTY, isNotEmptyConditions());
-        transformConditions.put(EQUAL, equalsConditions());
-        transformConditions.put(NOT_EQUAL, notEqualsConditions());
-        transformConditions.put(GREATER_THAN, greaterThanConditions());
-        transformConditions.put(GREATER_OR_EQUAL, greaterOrEqualConditions());
-        transformConditions.put(LESS_THAN, lessThanConditions());
-        transformConditions.put(LESS_OR_EQUAL, lessOrEqualConditions());
-        transformConditions.put(BETWEEN, betweenConditions());
-        transformConditions.put(NOT_BETWEEN, notBetweenConditions());
-        transformConditions.put(EQUAL_IGNORE_CASE, equalsIgnoreCaseConditions());
-        transformConditions.put(NOT_EQUAL_IGNORE_CASE, notEqualsIgnoreCaseConditions());
-        transformConditions.put(STARTS_WITH, startsWithConditions());
-        transformConditions.put(STARTS_WITH_IGNORE_CASE, startsWithIgnoreCaseConditions());
-        transformConditions.put(NOT_STARTS_WITH, notStartsWithConditions());
-        transformConditions.put(NOT_STARTS_WITH_IGNORE_CASE, notStartsWithIgnoreCaseConditions());
-        transformConditions.put(ENDS_WITH, endsWithConditions());
-        transformConditions.put(ENDS_WITH_IGNORE_CASE, endsWithIgnoreCaseConditions());
-        transformConditions.put(NOT_ENDS_WITH, notEndsWithConditions());
-        transformConditions.put(NOT_ENDS_WITH_IGNORE_CASE, notEndsWithIgnoreCaseConditions());
-        transformConditions.put(CONTAINS, containsConditions());
-        transformConditions.put(CONTAINS_IGNORE_CASE, containsIgnoreCaseConditions());
-        transformConditions.put(NOT_CONTAINS, notContainsConditions());
-        transformConditions.put(NOT_CONTAINS_IGNORE_CASE, notContainsIgnoreCaseConditions());
+    private static final Set<Class<?>> TRANSFORM_DATABASE_TYPES = new HashSet<>();
+    private static final Set<Class<?>> COLLECTION_TRANSFORM_DATABASE_TYPES = new HashSet<>();
+    private static final Set<Set<String>> COLLECTION_TRANSFORM_VALUES = new HashSet<>();
 
-        collectionTransformConditions.put(IN, inConditions());
-        collectionTransformConditions.put(NOT_IN, notInConditions());
+    static {
+        TRANSFORM_DATABASE_TYPES.add(String.class);
+        TRANSFORM_DATABASE_TYPES.add(Integer.class);
+
+        COLLECTION_TRANSFORM_DATABASE_TYPES.add(Set.class);
+        COLLECTION_TRANSFORM_DATABASE_TYPES.add(String.class);
+        COLLECTION_TRANSFORM_DATABASE_TYPES.add(Integer.class);
+
+        COLLECTION_TRANSFORM_VALUES.add(Sets.newSet());
+        COLLECTION_TRANSFORM_VALUES.add(Sets.newSet("value"));
+        COLLECTION_TRANSFORM_VALUES.add(Sets.newSet("value", "anotherValue"));
     }
-    
+
     @Override
     @TestFactory
     public Stream<DynamicTest> transformTests() {
-        registerTransformConditions();
+        final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> transformConditions = getTransformConditions();
 
         final FieldPredicateView fieldPredicateView = getFieldPredicateViewInstance();
 
         final Stream<DynamicTest> transformTests = transformConditions.entrySet().stream().map(entry ->
                 dynamicTest(entry.getKey().toString(), () -> {
-            final Function<Field<String>, Class<?>> dbType = field -> String.class;
-            final Function<Field<String>, String> columnNamer = field -> "column";
+            TRANSFORM_DATABASE_TYPES.forEach(clazz -> {
+                final Function<Field<String>, Class<?>> dbType = field -> clazz;
+                final Function<Field<String>, String> columnNamer = field -> "column";
 
-            final PredicateType predicateType = entry.getKey();
-            final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
+                final PredicateType predicateType = entry.getKey();
+                final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
 
-            final FieldPredicate<String> fieldPredicate = mockFieldPredicate(predicateType, "value");
+                Arrays.asList(Inclusion.values()).forEach(inclusion -> {
+                    final FieldPredicate<String> fieldPredicate = mockFieldPredicate(predicateType, "value", inclusion);
 
-            final SqlPredicateFragment fragment = fieldPredicateView.transform(columnNamer, dbType, fieldPredicate);
-            conditions.forEach(condition -> assertTrue(condition.test(fragment)));
+                    final SqlPredicateFragment fragment = fieldPredicateView.transform(columnNamer, dbType, fieldPredicate);
+                    conditions.forEach(condition -> assertTrue(condition.test(fragment)));
+                });
+            });
         }));
+
+        final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> collectionTransformConditions = getCollectionTransformConditions();
 
         final Stream<DynamicTest> collectionTransformTests = collectionTransformConditions.entrySet().stream().map(entry ->
                 dynamicTest(entry.getKey().toString(), () -> {
-            final Function<Field<Set<String>>, Class<?>> dbType = field -> Set.class;
-            final Function<Field<Set<String>>, String> columnNamer = field -> "column";
+            COLLECTION_TRANSFORM_DATABASE_TYPES.forEach(clazz -> {
+                final Function<Field<Set<String>>, Class<?>> dbType = field -> clazz;
+                final Function<Field<Set<String>>, String> columnNamer = field -> "column";
 
-            final PredicateType predicateType = entry.getKey();
-            final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
+                final PredicateType predicateType = entry.getKey();
+                final List<Predicate<SqlPredicateFragment>> conditions = entry.getValue();
 
-            Stream.of(
-                Sets.newSet(),
-                Sets.newSet("value"),
-                Sets.newSet("value", "anotherValue")
-            ).forEach(set -> {
-                @SuppressWarnings("unchecked")
-                final FieldPredicate<Set<String>> fieldPredicate = mockFieldPredicate(predicateType, (Set<String>) set);
+                COLLECTION_TRANSFORM_VALUES.forEach(set ->
+                        Arrays.asList(Inclusion.values()).forEach(inclusion -> {
+                    @SuppressWarnings("unchecked")
+                    final FieldPredicate<Set<String>> fieldPredicate =
+                            mockFieldPredicate(predicateType, set, inclusion);
 
-                final SqlPredicateFragment fragment = fieldPredicateView.transform(columnNamer, dbType, fieldPredicate);
-                conditions.forEach(condition -> assertTrue(condition.test(fragment)));
+                    final SqlPredicateFragment fragment = fieldPredicateView
+                            .transform(columnNamer, dbType, fieldPredicate);
+                    conditions.forEach(condition -> assertTrue(condition.test(fragment)));
+                }));
             });
         }));
 
@@ -229,13 +219,57 @@ public abstract class AbstractFieldPredicateViewMixin implements FieldPredicateV
     protected abstract List<Predicate<SqlPredicateFragment>> isNotEmptyConditions();
 
     @SuppressWarnings("unchecked")
-    private <ENTITY> FieldPredicate<ENTITY> mockFieldPredicate(PredicateType predicateType, ENTITY value) {
+    private <ENTITY> FieldPredicate<ENTITY> mockFieldPredicate(PredicateType predicateType, ENTITY value, Inclusion inclusion) {
         final TestReadyFieldPredicate<ENTITY> predicate = (TestReadyFieldPredicate<ENTITY>) mock(TestReadyFieldPredicate.class);
 
         when(predicate.getPredicateType()).thenReturn(predicateType);
         when(predicate.get(0)).thenReturn(value);
-        when(predicate.getInclusion()).thenReturn(Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
+        when(predicate.getInclusion()).thenReturn(inclusion);
 
         return predicate;
+    }
+
+    private Map<PredicateType, List<Predicate<SqlPredicateFragment>>> getTransformConditions() {
+        final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> transformConditions = new HashMap<>();
+
+        transformConditions.put(ALWAYS_TRUE, alwaysTrueConditions());
+        transformConditions.put(ALWAYS_FALSE, alwaysFalseConditions());
+        transformConditions.put(IS_NULL, isNullConditions());
+        transformConditions.put(IS_NOT_NULL, isNotNullConditions());
+        transformConditions.put(IS_EMPTY, isEmptyConditions());
+        transformConditions.put(IS_NOT_EMPTY, isNotEmptyConditions());
+        transformConditions.put(EQUAL, equalsConditions());
+        transformConditions.put(NOT_EQUAL, notEqualsConditions());
+        transformConditions.put(GREATER_THAN, greaterThanConditions());
+        transformConditions.put(GREATER_OR_EQUAL, greaterOrEqualConditions());
+        transformConditions.put(LESS_THAN, lessThanConditions());
+        transformConditions.put(LESS_OR_EQUAL, lessOrEqualConditions());
+        transformConditions.put(BETWEEN, betweenConditions());
+        transformConditions.put(NOT_BETWEEN, notBetweenConditions());
+        transformConditions.put(EQUAL_IGNORE_CASE, equalsIgnoreCaseConditions());
+        transformConditions.put(NOT_EQUAL_IGNORE_CASE, notEqualsIgnoreCaseConditions());
+        transformConditions.put(STARTS_WITH, startsWithConditions());
+        transformConditions.put(STARTS_WITH_IGNORE_CASE, startsWithIgnoreCaseConditions());
+        transformConditions.put(NOT_STARTS_WITH, notStartsWithConditions());
+        transformConditions.put(NOT_STARTS_WITH_IGNORE_CASE, notStartsWithIgnoreCaseConditions());
+        transformConditions.put(ENDS_WITH, endsWithConditions());
+        transformConditions.put(ENDS_WITH_IGNORE_CASE, endsWithIgnoreCaseConditions());
+        transformConditions.put(NOT_ENDS_WITH, notEndsWithConditions());
+        transformConditions.put(NOT_ENDS_WITH_IGNORE_CASE, notEndsWithIgnoreCaseConditions());
+        transformConditions.put(CONTAINS, containsConditions());
+        transformConditions.put(CONTAINS_IGNORE_CASE, containsIgnoreCaseConditions());
+        transformConditions.put(NOT_CONTAINS, notContainsConditions());
+        transformConditions.put(NOT_CONTAINS_IGNORE_CASE, notContainsIgnoreCaseConditions());
+
+        return Collections.unmodifiableMap(transformConditions);
+    }
+
+    private Map<PredicateType, List<Predicate<SqlPredicateFragment>>> getCollectionTransformConditions() {
+        final Map<PredicateType, List<Predicate<SqlPredicateFragment>>> collectionTransformConditions = new HashMap<>();
+
+        collectionTransformConditions.put(IN, inConditions());
+        collectionTransformConditions.put(NOT_IN, notInConditions());
+
+        return Collections.unmodifiableMap(collectionTransformConditions);
     }
 }
