@@ -19,6 +19,7 @@ package com.speedment.test.connector.support;
 
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.DbmsUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ public final class Dummies {
         data.put(DbmsUtil.IP_ADDRESS, "localhost");
         data.put(DbmsUtil.PORT, 3066);
         data.put(DbmsUtil.USERNAME, "username");
+        data.put(HasNameUtil.NAME, "name");
 
         return Dbms.create(null, data);
     }
