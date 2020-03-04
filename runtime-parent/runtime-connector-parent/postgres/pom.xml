@@ -64,7 +64,13 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
             <version>${speedment.version}</version>
-        </dependency>    
-        
+        </dependency>
+
+        <dependency>
+            <groupId>com.speedment.test</groupId>
+            <artifactId>connector</artifactId>
+            <version>${speedment.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
