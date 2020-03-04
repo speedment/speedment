@@ -17,7 +17,17 @@
 
 package com.speedment.test.connector;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import com.speedment.runtime.core.db.ConnectionUrlGenerator;
+import com.speedment.runtime.core.db.DatabaseNamingConvention;
+import com.speedment.runtime.core.db.DbmsColumnHandler;
+import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.test.connector.support.Dummies;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 /**
  * @author Mislav Milicevic
@@ -25,63 +35,159 @@ import org.junit.jupiter.api.Test;
  */
 public interface DbmsTypeMixin {
 
-    @Test
-    void getDefaultSchemaName();
+    DbmsType getDbmsTypeInstance();
 
     @Test
-    void hasSchemaNames();
+    default void getDefaultSchemaName() {
+        assertNotNull(getDbmsTypeInstance().getDefaultSchemaName());
+    }
 
     @Test
-    void hasDatabaseNames();
+    default void getDefaultDbmsName() {
+        assertNotNull(getDbmsTypeInstance().getDefaultDbmsName());
+    }
 
     @Test
-    void hasDatabaseUsers();
+    default void getDataTypes() {
+        assertNotNull(getDbmsTypeInstance().getDataTypes());
+    }
 
     @Test
-    void hasServerNames();
+    default void hasSchemaNames() {
+        assertDoesNotThrow(() -> getDbmsTypeInstance().hasSchemaNames());
+    }
 
     @Test
-    void getConnectionType();
+    default void hasDatabaseNames() {
+        assertDoesNotThrow(() -> getDbmsTypeInstance().hasDatabaseNames());
+    }
 
     @Test
-    void getDefaultServerName();
+    default void hasDatabaseUsers() {
+        assertDoesNotThrow(() -> getDbmsTypeInstance().hasDatabaseUsers());
+    }
 
     @Test
-    void getCollateFragment();
+    default void hasServerNames() {
+        assertDoesNotThrow(() -> getDbmsTypeInstance().hasServerNames());
+    }
 
     @Test
-    void create();
+    default void getConnectionType() {
+        assertNotNull(getDbmsTypeInstance().getConnectionType());
+    }
 
     @Test
-    void getName();
+    default void getDefaultServerName() {
+        assertNotNull(getDbmsTypeInstance().getDefaultServerName());
+    }
 
     @Test
-    void getDriverManagerName();
+    default void getCollateFragment() {
+        assertNotNull(getDbmsTypeInstance().getCollateFragment());
+    }
 
     @Test
-    void getDefaultPort();
+    default void getName() {
+        assertNotNull(getDbmsTypeInstance().getName());
+    }
 
     @Test
-    void getDbmsNameMeaning();
+    default void getDriverManagerName() {
+        assertNotNull(getDbmsTypeInstance().getDriverManagerName());
+    }
 
     @Test
-    void getDriverName();
+    default void getDefaultPort() {
+        assertDoesNotThrow(() -> getDbmsTypeInstance().getDefaultPort());
+    }
 
     @Test
-    void getMetadataHandler();
+    default void getDbmsNameMeaning() {
+        assertNotNull(getDbmsTypeInstance().getDbmsNameMeaning());
+    }
 
     @Test
-    void getOperationHandler();
+    default void getDriverName() {
+        assertNotNull(getDbmsTypeInstance().getDriverName());
+    }
 
     @Test
-    void getConnectionUrlGenerator();
+    default void getMetadataHandler() {
+        assertNotNull(getDbmsTypeInstance().getMetadataHandler());
+    }
 
     @Test
-    void getDatabaseNamingConvention();
+    default void getColumnHandler() {
+        final DbmsColumnHandler dbmsColumnHandler = getDbmsTypeInstance().getColumnHandler();
+
+        assertNotNull(dbmsColumnHandler);
+        assertNotNull(dbmsColumnHandler.excludedInInsertStatement());
+        assertNotNull(dbmsColumnHandler.excludedInUpdateStatement());
+    }
 
     @Test
-    void getFieldPredicateView();
+    default void getOperationHandler() {
+        assertNotNull(getDbmsTypeInstance().getOperationHandler());
+    }
 
     @Test
-    void isSupported();
+    default void getConnectionUrlGenerator() {
+        final ConnectionUrlGenerator connectionUrlGenerator = getDbmsTypeInstance().getConnectionUrlGenerator();
+
+        assertNotNull(connectionUrlGenerator);
+        assertNotNull(connectionUrlGenerator.from(Dummies.dbms()));
+    }
+
+    @Test
+    default void getDatabaseNamingConvention() {
+        final DatabaseNamingConvention namingConvention = getDbmsTypeInstance().getDatabaseNamingConvention();
+        assertNotNull(namingConvention);
+        assertNotNull(namingConvention.getSchemaExcludeSet());
+    }
+
+    @Test
+    default void getFieldPredicateView() {
+        assertNotNull(getDbmsTypeInstance().getFieldPredicateView());
+    }
+
+    @Test
+    default void isSupported() {
+        assertDoesNotThrow(() -> getDbmsTypeInstance().isSupported());
+    }
+
+    @Test
+    default void getInitialQuery() {
+        assertNotNull(getDbmsTypeInstance().getInitialQuery());
+    }
+
+    @Test
+    default void getSchemaTableDelimiter() {
+        assertNotNull(getDbmsTypeInstance().getSchemaTableDelimiter());
+    }
+
+    @Test
+    default void getResultSetTableSchema() {
+        assertNotNull(getDbmsTypeInstance().getResultSetTableSchema());
+    }
+
+    @Test
+    default void getSkipLimitSupport() {
+        assertNotNull(getDbmsTypeInstance().getSkipLimitSupport());
+    }
+
+    @Test
+    default void applySkipLimit() {
+        assertNotNull(getDbmsTypeInstance().applySkipLimit("SELECT * FROM table", new ArrayList<>(), 0, 0));
+    }
+
+    @Test
+    default void getSubSelectAlias() {
+        assertNotNull(getDbmsTypeInstance().getSubSelectAlias());
+    }
+
+    @Test
+    default void getSortByNullOrderInsertion() {
+        assertNotNull(getDbmsTypeInstance().getSortByNullOrderInsertion());
+    }
 }
