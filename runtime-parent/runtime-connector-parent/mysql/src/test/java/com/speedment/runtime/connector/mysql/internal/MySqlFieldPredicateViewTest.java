@@ -37,10 +37,10 @@ final class MySqlFieldPredicateViewTest extends DefaultFieldPredicateViewMixin {
 
     @Override
     protected List<Predicate<SqlPredicateFragment>> compareConditions() {
-        Predicate<SqlPredicateFragment> regularPredicate =
-                sqlPredicateFragment -> COMPARE_PATTERN.matcher(sqlPredicateFragment.getSql()).find();
-        Predicate<SqlPredicateFragment> collationPredicate =
-                sqlPredicateFragment -> COMPARE_COLLATE_PATTERN.matcher(sqlPredicateFragment.getSql()).find();
+        final Predicate<SqlPredicateFragment> regularPredicate =
+            sqlPredicateFragment -> COMPARE_PATTERN.matcher(sqlPredicateFragment.getSql()).find();
+        final Predicate<SqlPredicateFragment> collationPredicate =
+            sqlPredicateFragment -> COMPARE_COLLATE_PATTERN.matcher(sqlPredicateFragment.getSql()).find();
 
         return Collections.singletonList(regularPredicate.or(collationPredicate));
     }
