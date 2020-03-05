@@ -48,6 +48,7 @@ public final class StandardTranslatorKey {
     public static final TranslatorKey<Project, Class> GENERATED_APPLICATION_BUILDER = TranslatorKey.of("GeneratedApplicationBuilder", Class.class);
     public static final TranslatorKey<Project, Class> GENERATED_METADATA            = TranslatorKey.of("GeneratedMetadata", Class.class);
     public static final TranslatorKey<Project, Class> INJECTOR_PROXY                = TranslatorKey.of("InjectorProxy", Class.class);
+    public static final TranslatorKey<Project, Class> ENTRY_POINT                   = TranslatorKey.of("EntryPoint", Class.class);
     
     public static final TranslatorKey<Table, Interface> ENTITY = TranslatorKey.of("Entity", Interface.class);
     public static final TranslatorKey<Table, Interface> MANAGER = TranslatorKey.of("Manager", Interface.class);
@@ -72,7 +73,7 @@ public final class StandardTranslatorKey {
             APPLICATION, GENERATED_APPLICATION, 
             APPLICATION_IMPL, GENERATED_APPLICATION_IMPL,
             APPLICATION_BUILDER, GENERATED_APPLICATION_BUILDER,
-            GENERATED_METADATA, INJECTOR_PROXY
+            GENERATED_METADATA, INJECTOR_PROXY, ENTRY_POINT
         );
     }
     
