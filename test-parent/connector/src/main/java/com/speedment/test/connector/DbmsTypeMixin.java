@@ -144,6 +144,10 @@ public interface DbmsTypeMixin {
         final DatabaseNamingConvention namingConvention = getDbmsTypeInstance().getDatabaseNamingConvention();
         assertNotNull(namingConvention);
         assertNotNull(namingConvention.getSchemaExcludeSet());
+        assertNotNull(namingConvention.fullNameOf("schema", "table", "column"));
+        assertNotNull(namingConvention.fullNameOf("schema", "table"));
+        assertNotNull(namingConvention.quoteField("field"));
+        assertNotNull(namingConvention.encloseField("field"));
     }
 
     @Test
