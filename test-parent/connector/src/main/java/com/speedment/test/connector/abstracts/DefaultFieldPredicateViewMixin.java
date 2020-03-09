@@ -40,7 +40,7 @@ public abstract class DefaultFieldPredicateViewMixin extends AbstractFieldPredic
     protected List<Predicate<SqlPredicateFragment>> alwaysTrueConditions() {
         return Arrays.asList(
             sqlPredicateFragment -> sqlPredicateFragment.getSql().startsWith("("),
-            sqlPredicateFragment -> sqlPredicateFragment.getSql().contains("TRUE"),
+            sqlPredicateFragment -> sqlPredicateFragment.getSql().contains("TRUE") || sqlPredicateFragment.getSql().contains("true"),
             sqlPredicateFragment -> sqlPredicateFragment.getSql().endsWith(")")
         );
     }
@@ -49,7 +49,7 @@ public abstract class DefaultFieldPredicateViewMixin extends AbstractFieldPredic
     protected List<Predicate<SqlPredicateFragment>> alwaysFalseConditions() {
         return Arrays.asList(
             sqlPredicateFragment -> sqlPredicateFragment.getSql().startsWith("("),
-            sqlPredicateFragment -> sqlPredicateFragment.getSql().contains("FALSE"),
+            sqlPredicateFragment -> sqlPredicateFragment.getSql().contains("FALSE") || sqlPredicateFragment.getSql().contains("false"),
             sqlPredicateFragment -> sqlPredicateFragment.getSql().endsWith(")")
         );
     }
