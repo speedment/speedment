@@ -24,9 +24,6 @@ import static com.speedment.runtime.config.DbmsUtil.PORT;
 import static com.speedment.runtime.config.DbmsUtil.SERVER_NAME;
 import static com.speedment.runtime.config.DbmsUtil.TYPE_NAME;
 import static com.speedment.runtime.config.DbmsUtil.USERNAME;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonMap;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,89 +32,66 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import org.junit.jupiter.api.Test;
 
-final class DbmsTest {
+final class DbmsTest extends BaseConfigTest<Dbms> {
+
+    @Override
+    Dbms getDocumentInstance() {
+        return Dbms.create(null, map());
+    }
 
     @Test
     void getTypeName() {
-        final Dbms dbms = Dbms.create(null, singletonMap(TYPE_NAME, "dbms_type"));
+        final Dbms dbms = Dbms.create(null, map(entry(TYPE_NAME, "dbms_type")));
         assertNotNull(dbms.getTypeName());
 
-        final Dbms faultyDbms = Dbms.create(null, emptyMap());
-        assertThrows(SpeedmentConfigException.class, faultyDbms::getTypeName);
+        assertThrows(SpeedmentConfigException.class, getDocumentInstance()::getTypeName);
     }
 
     @Test
     void getIpAddress() {
-        final Dbms dbms = Dbms.create(null, singletonMap(IP_ADDRESS, "ip_address"));
+        final Dbms dbms = Dbms.create(null, map(entry(IP_ADDRESS, "ip_address")));
         assertTrue(dbms.getIpAddress().isPresent());
 
-        final Dbms faultyDbms = Dbms.create(null, emptyMap());
-        assertFalse(faultyDbms.getIpAddress().isPresent());
+        assertFalse(getDocumentInstance().getIpAddress().isPresent());
     }
 
     @Test
     void getPort() {
-        final Dbms dbms = Dbms.create(null, singletonMap(PORT, 0));
+        final Dbms dbms = Dbms.create(null, map(entry(PORT, 0)));
         assertTrue(dbms.getPort().isPresent());
 
-        final Dbms faultyDbms = Dbms.create(null, emptyMap());
-        assertFalse(faultyDbms.getPort().isPresent());
+        assertFalse(getDocumentInstance().getPort().isPresent());
     }
 
     @Test
     void getLocalPath() {
-        final Dbms dbms = Dbms.create(null, singletonMap(LOCAL_PATH, "/local/path"));
+        final Dbms dbms = Dbms.create(null, map(entry(LOCAL_PATH, "/local/path")));
         assertTrue(dbms.getLocalPath().isPresent());
 
-        final Dbms faultyDbms = Dbms.create(null, emptyMap());
-        assertFalse(faultyDbms.getLocalPath().isPresent());
+        assertFalse(getDocumentInstance().getLocalPath().isPresent());
     }
 
     @Test
     void getConnectionUrl() {
-        final Dbms dbms = Dbms.create(null, singletonMap(CONNECTION_URL, "https://connection.url/"));
+        final Dbms dbms = Dbms.create(null, map(entry(CONNECTION_URL, "https://connection.url/")));
         assertTrue(dbms.getConnectionUrl().isPresent());
 
-        final Dbms faultyDbms = Dbms.create(null, emptyMap());
-        assertFalse(faultyDbms.getConnectionUrl().isPresent());
+        assertFalse(getDocumentInstance().getConnectionUrl().isPresent());
     }
 
     @Test
     void getUsername() {
-        final Dbms dbms = Dbms.create(null, singletonMap(USERNAME, "username"));
+        final Dbms dbms = Dbms.create(null, map(entry(USERNAME, "username")));
         assertTrue(dbms.getUsername().isPresent());
 
-        final Dbms faultyDbms = Dbms.create(null, emptyMap());
-        assertFalse(faultyDbms.getUsername().isPresent());
+        assertFalse(getDocumentInstance().getUsername().isPresent());
     }
 
     @Test
     void getServerName() {
-        final Dbms dbms = Dbms.create(null, singletonMap(SERVER_NAME, "server"));
+        final Dbms dbms = Dbms.create(null, map(entry(SERVER_NAME, "server")));
         assertTrue(dbms.getServerName().isPresent());
 
-        final Dbms faultyDbms = Dbms.create(null, emptyMap());
-        assertFalse(faultyDbms.getServerName().isPresent());
-    }
-
-    @Test
-    void mainInterface() {
-        final Dbms dbms = Dbms.create(null, emptyMap());
-
-        assertEquals(Dbms.class, dbms.mainInterface());
-    }
-
-    @Test
-    void mutator() {
-        final Dbms dbms = Dbms.create(null, emptyMap());
-
-        assertNotNull(dbms.mutator());
-    }
-
-    @Test
-    void deepCopy() {
-        final Dbms dbms = Dbms.create(null, emptyMap());
-
-        assertNotNull(dbms.deepCopy());
+        assertFalse(getDocumentInstance().getServerName().isPresent());
     }
 }
