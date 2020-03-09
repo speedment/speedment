@@ -34,6 +34,7 @@ public final class Dummies {
         data.put(DbmsUtil.IP_ADDRESS, "localhost");
         data.put(DbmsUtil.PORT, 3066);
         data.put(DbmsUtil.USERNAME, "username");
+        data.put(DbmsUtil.SERVER_NAME, "server");
         data.put(HasNameUtil.NAME, "name");
 
         return Dbms.create(null, data);
