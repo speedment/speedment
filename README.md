@@ -115,7 +115,7 @@ Speedment Open Source comes with support for the following databases out-of-the-
 * PostgreSQL
 * SQLite
 
-Enterprise database connectors includes: 
+Enterprise database connectors include: 
 * AS400
 * Cassandra
 * DB2
