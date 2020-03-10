@@ -84,8 +84,8 @@ Speedment is equipped with the features listed below and more.
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
 
 #### Basics
-* [Tutorial 1 - Hello Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Hello-Speedment)
-* [Tutorial 2 - A First Stream from Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-A-First-Stream-from-Speedment)
+* [Tutorial 1 - Hello Speedment](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
+* [Tutorial 2 - A First Stream from Speedment](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
 
 #### Sample applications
 * [Tutorial 3 - Speedment Spring Boot Integration; REST assured - it is easy](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Spring-Boot-Integration)
