@@ -115,7 +115,16 @@ Speedment Open Source comes with support for the following databases out-of-the-
 * PostgreSQL
 * SQLite
 
-For Enterprise database connectors see [Speedment Licensing and Pricing](www.speedment.com/pricing). 
+Enterprise database connectors includes: 
+* AS400
+* Cassandra
+* DB2
+* Informix
+* Oracle
+* Snowflake
+* SQL Server
+
+For more information, see [Speedment Licensing and Pricing](https://speedment.com/pricing/). 
 
 ## Licenses
 * **Speedment Open Source** - This site covers the Speedment Open Source project available under the 
