@@ -88,20 +88,20 @@ The tutorials are divided into three sections. The basics are covered in the fir
 * [Tutorial 2 - A First Stream from Speedment](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
 
 #### Sample applications
-* [Tutorial 3 - Speedment Spring Boot Integration; REST assured - it is easy](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Spring-Boot-Integration)
-* [Tutorial 4 - Speedment filters based on Json Web Tokens](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Stream-Filters-Using-JWT-Data)
-* [Tutorial 5 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
-* [Tutorial 6 - Log errors in a database](https://github.com/speedment/speedment/wiki/Tutorial:-Log-errors-in-a-database)
-* [Tutorial 7 - Use Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
-* [Tutorial 8 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
+* [Tutorial 3 - Speedment Spring Boot Integration; REST assured - it is easy](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
+* [Tutorial 4 - Speedment filters based on Json Web Tokens](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
+* [Tutorial 5 - Log errors in a database](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-5---log-errors-in-a-database)
+* [Tutorial 6 - Use Speedment with Java EE](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-5---log-errors-in-a-database)
+* [Tutorial 7 - Create Event Sourced Systems](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-5---log-errors-in-a-database)
+* [Tutorial 8 - Writing Your Own Extensions](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-8---writing-your-own-extensions)
 
 #### Extending Speedment
-* [Tutorial 9 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
-* [Tutorial 10 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
+* [Tutorial 9 - Formatting Your Output as JSON](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-9---formatting-your-output-as-json)
+* [Tutorial 10 - Working with BLOBS and CLOBS](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-10---working-with-blobs-and-clobs)
 
 ## Resources 
-* **Documentation** - Read the [Speedment User Guide](https://speedment.github.io/speedment-doc/introduction.html).
-* **JavaDocs** - Latest [Speedment JavaDocs](http://www.javadoc.io/doc/com.speedment/runtime-deploy/3.1.0). 
+* **Documentation** - Read the [Speedment User Guide](https://speedment.github.io/speedment-doc/index.html).
+* **JavaDocs** - Latest [Speedment JavaDocs](https://www.javadoc.io/doc/com.speedment/runtime-deploy/latest/index.html). 
 * **Examples** - There are 15 detailed examples [here](https://github.com/speedment/speedment/tree/master/example-parent) and more can be found in the User Guide provided above. 
 * **Gitter Chatroom** - Reach out to the Speedment developers and other community members via [the Gitter chatroom](https://gitter.im/speedment/speedment). 
 * **Creating a Pull Request** - Pull requests and improvement suggestions from the community are gladly accepted. Find more information [here](https://github.com/speedment/speedment/blob/master/CONTRIBUTING.md).
