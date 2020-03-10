@@ -260,7 +260,7 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public InjectorBuilder newBuilder() {
-        return builder;
+        return new InjectorBuilderImpl(builder);
     }
 
     private <T> Stream<T> findAll(Class<T> type) {

@@ -102,6 +102,21 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         injectables.forEach(this::withComponent);
     }
 
+    InjectorBuilderImpl(final InjectorBuilder toCopy) {
+        requireNonNull(toCopy);
+        if (!(toCopy instanceof InjectorBuilderImpl)) {
+            throw new UnsupportedOperationException("Unable to copy " + toCopy.getClass() + " because only " + InjectorBuilderImpl.class.getSimpleName() + " is supported.");
+        }
+        final InjectorBuilderImpl other = (InjectorBuilderImpl)toCopy;
+        this.classLoader        = other.classLoader;
+        this.injectables        = new LinkedHashMap<>(other.injectables);
+        this.executions         = new LinkedList<>(other.executions);
+        this.overriddenParams   = new HashMap<>(other.overriddenParams);
+        this.proxies            = new LinkedList<>(other.proxies);
+        this.proxyCache         = new HashMap<>(); // Do not copy the other.proxyCache
+        this.configFileLocation = other.configFileLocation;
+    }
+
     @Override
     public InjectorBuilder withComponent(Class<?> injectableType) {
         requireNonNull(injectableType);
