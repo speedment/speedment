@@ -107,8 +107,10 @@ The tutorials are divided into three sections. The basics are covered in the fir
 * **Creating a Pull Request** - Pull requests and improvement suggestions from the community are gladly accepted. Find more information [here](https://github.com/speedment/speedment/blob/master/CONTRIBUTING.md).
 
 ## Requirements
+### Java Version
 Speedment requires `Java 8` or later. Make sure your IDE is configured to use JDK 8 (version 1.8.0_40 or newer).
 
+### Database Connectors
 Speedment Open Source comes with support for the following databases out-of-the-box:
 * MySQL
 * MariaDB
