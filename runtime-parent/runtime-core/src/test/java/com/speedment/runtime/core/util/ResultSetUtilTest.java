@@ -22,6 +22,7 @@ import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessH
 import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_BLOB;
 import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_BOOLEAN;
 import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_BYTE;
+import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_BYTES;
 import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_CLOB;
 import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_DATE;
 import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_DOUBLE;
@@ -39,6 +40,7 @@ import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessH
 import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_TIMESTAMP;
 import static com.speedment.runtime.core.util.ResultSetUtilTest.ResultSetAccessHelper.RS_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,137 +69,225 @@ import java.util.UUID;
 final class ResultSetUtilTest {
 
     private static final ResultSet RESULT_SET = mockResultSet();
+    private static final ResultSet NULL_RESULT_SET = mockNullResultSet();
 
     @Test
     void getObject() throws SQLException {
         assertEquals(RS_OBJECT.getValue(), ResultSetUtil.getObject(RESULT_SET, RS_OBJECT.getLabel()));
         assertEquals(RS_OBJECT.getValue(), ResultSetUtil.getObject(RESULT_SET, RS_OBJECT.getIndex()));
+
+        assertNull(ResultSetUtil.getObject(NULL_RESULT_SET, RS_OBJECT.getLabel()));
+        assertNull(ResultSetUtil.getObject(NULL_RESULT_SET, RS_OBJECT.getIndex()));
     }
 
     @Test
     void getBoolean() throws SQLException {
         assertEquals(RS_BOOLEAN.getValue(), ResultSetUtil.getBoolean(RESULT_SET, RS_BOOLEAN.getLabel()));
         assertEquals(RS_BOOLEAN.getValue(), ResultSetUtil.getBoolean(RESULT_SET, RS_BOOLEAN.getIndex()));
+
+        assertNull(ResultSetUtil.getBoolean(NULL_RESULT_SET, RS_BOOLEAN.getLabel()));
+        assertNull(ResultSetUtil.getBoolean(NULL_RESULT_SET, RS_BOOLEAN.getIndex()));
     }
 
     @Test
     void getByte() throws SQLException {
         assertEquals(RS_BYTE.getValue(), ResultSetUtil.getByte(RESULT_SET, RS_BYTE.getLabel()));
         assertEquals(RS_BYTE.getValue(), ResultSetUtil.getByte(RESULT_SET, RS_BYTE.getIndex()));
+
+        assertNull(ResultSetUtil.getByte(NULL_RESULT_SET, RS_BYTE.getLabel()));
+        assertNull(ResultSetUtil.getByte(NULL_RESULT_SET, RS_BYTE.getIndex()));
     }
 
     @Test
     void getShort() throws SQLException {
         assertEquals(RS_SHORT.getValue(), ResultSetUtil.getShort(RESULT_SET, RS_SHORT.getLabel()));
         assertEquals(RS_SHORT.getValue(), ResultSetUtil.getShort(RESULT_SET, RS_SHORT.getIndex()));
+
+        assertNull(ResultSetUtil.getShort(NULL_RESULT_SET, RS_SHORT.getLabel()));
+        assertNull(ResultSetUtil.getShort(NULL_RESULT_SET, RS_SHORT.getIndex()));
     }
 
     @Test
     void getInt() throws SQLException {
         assertEquals(RS_INT.getValue(), ResultSetUtil.getInt(RESULT_SET, RS_INT.getLabel()));
         assertEquals(RS_INT.getValue(), ResultSetUtil.getInt(RESULT_SET, RS_INT.getIndex()));
+
+        assertNull(ResultSetUtil.getInt(NULL_RESULT_SET, RS_INT.getLabel()));
+        assertNull(ResultSetUtil.getInt(NULL_RESULT_SET, RS_INT.getIndex()));
     }
 
     @Test
     void getLong() throws SQLException {
         assertEquals(RS_LONG.getValue(), ResultSetUtil.getLong(RESULT_SET, RS_LONG.getLabel()));
         assertEquals(RS_LONG.getValue(), ResultSetUtil.getLong(RESULT_SET, RS_LONG.getIndex()));
+
+        assertNull(ResultSetUtil.getLong(NULL_RESULT_SET, RS_LONG.getLabel()));
+        assertNull(ResultSetUtil.getLong(NULL_RESULT_SET, RS_LONG.getIndex()));
     }
 
     @Test
     void getFloat() throws SQLException {
         assertEquals(RS_FLOAT.getValue(), ResultSetUtil.getFloat(RESULT_SET, RS_FLOAT.getLabel()));
         assertEquals(RS_FLOAT.getValue(), ResultSetUtil.getFloat(RESULT_SET, RS_FLOAT.getIndex()));
+
+        assertNull(ResultSetUtil.getFloat(NULL_RESULT_SET, RS_FLOAT.getLabel()));
+        assertNull(ResultSetUtil.getFloat(NULL_RESULT_SET, RS_FLOAT.getIndex()));
     }
 
     @Test
     void getDouble() throws SQLException {
         assertEquals(RS_DOUBLE.getValue(), ResultSetUtil.getDouble(RESULT_SET, RS_DOUBLE.getLabel()));
         assertEquals(RS_DOUBLE.getValue(), ResultSetUtil.getDouble(RESULT_SET, RS_DOUBLE.getIndex()));
+
+        assertNull(ResultSetUtil.getDouble(NULL_RESULT_SET, RS_DOUBLE.getLabel()));
+        assertNull(ResultSetUtil.getDouble(NULL_RESULT_SET, RS_DOUBLE.getIndex()));
     }
 
     @Test
     void getString() throws SQLException {
         assertEquals(RS_STRING.getValue(), ResultSetUtil.getString(RESULT_SET, RS_STRING.getLabel()));
         assertEquals(RS_STRING.getValue(), ResultSetUtil.getString(RESULT_SET, RS_STRING.getIndex()));
+
+        assertNull(ResultSetUtil.getString(NULL_RESULT_SET, RS_STRING.getLabel()));
+        assertNull(ResultSetUtil.getString(NULL_RESULT_SET, RS_STRING.getIndex()));
     }
 
     @Test
     void getDate() throws SQLException {
         assertEquals(RS_DATE.getValue(), ResultSetUtil.getDate(RESULT_SET, RS_DATE.getLabel()));
         assertEquals(RS_DATE.getValue(), ResultSetUtil.getDate(RESULT_SET, RS_DATE.getIndex()));
+
+        assertNull(ResultSetUtil.getDate(NULL_RESULT_SET, RS_DATE.getLabel()));
+        assertNull(ResultSetUtil.getDate(NULL_RESULT_SET, RS_DATE.getIndex()));
     }
 
     @Test
     void getTime() throws SQLException {
         assertEquals(RS_TIME.getValue(), ResultSetUtil.getTime(RESULT_SET, RS_TIME.getLabel()));
         assertEquals(RS_TIME.getValue(), ResultSetUtil.getTime(RESULT_SET, RS_TIME.getIndex()));
+
+        assertNull(ResultSetUtil.getTime(NULL_RESULT_SET, RS_TIME.getLabel()));
+        assertNull(ResultSetUtil.getTime(NULL_RESULT_SET, RS_TIME.getIndex()));
     }
 
     @Test
     void getTimestamp() throws SQLException {
         assertEquals(RS_TIMESTAMP.getValue(), ResultSetUtil.getTimestamp(RESULT_SET, RS_TIMESTAMP.getLabel()));
         assertEquals(RS_TIMESTAMP.getValue(), ResultSetUtil.getTimestamp(RESULT_SET, RS_TIMESTAMP.getIndex()));
+
+        assertNull(ResultSetUtil.getTimestamp(NULL_RESULT_SET, RS_TIMESTAMP.getLabel()));
+        assertNull(ResultSetUtil.getTimestamp(NULL_RESULT_SET, RS_TIMESTAMP.getIndex()));
     }
 
     @Test
     void getBigDecimal() throws SQLException {
         assertEquals(RS_BIG_DECIMAL.getValue(), ResultSetUtil.getBigDecimal(RESULT_SET, RS_BIG_DECIMAL.getLabel()));
         assertEquals(RS_BIG_DECIMAL.getValue(), ResultSetUtil.getBigDecimal(RESULT_SET, RS_BIG_DECIMAL.getIndex()));
+
+        assertNull(ResultSetUtil.getBigDecimal(NULL_RESULT_SET, RS_BIG_DECIMAL.getLabel()));
+        assertNull(ResultSetUtil.getBigDecimal(NULL_RESULT_SET, RS_BIG_DECIMAL.getIndex()));
+    }
+
+    @Test
+    void getBigInteger() throws SQLException {
+        assertEquals(RS_BIG_DECIMAL.getValueAs(BigDecimal.class).toBigInteger(), ResultSetUtil.getBigInteger(RESULT_SET, RS_BIG_DECIMAL.getIndex()));
+
+        assertNull(ResultSetUtil.getBigInteger(NULL_RESULT_SET, RS_BIG_DECIMAL.getIndex()));
     }
 
     @Test
     void getBlob() throws SQLException {
         assertEquals(RS_BLOB.getValue(), ResultSetUtil.getBlob(RESULT_SET, RS_BLOB.getLabel()));
         assertEquals(RS_BLOB.getValue(), ResultSetUtil.getBlob(RESULT_SET, RS_BLOB.getIndex()));
+
+        assertNull(ResultSetUtil.getBlob(NULL_RESULT_SET, RS_BLOB.getLabel()));
+        assertNull(ResultSetUtil.getBlob(NULL_RESULT_SET, RS_BLOB.getIndex()));
     }
 
     @Test
     void getClob() throws SQLException {
         assertEquals(RS_CLOB.getValue(), ResultSetUtil.getClob(RESULT_SET, RS_CLOB.getLabel()));
         assertEquals(RS_CLOB.getValue(), ResultSetUtil.getClob(RESULT_SET, RS_CLOB.getIndex()));
+
+        assertNull(ResultSetUtil.getClob(NULL_RESULT_SET, RS_CLOB.getLabel()));
+        assertNull(ResultSetUtil.getClob(NULL_RESULT_SET, RS_CLOB.getIndex()));
     }
 
     @Test
     void getArray() throws SQLException {
         assertEquals(RS_ARRAY.getValue(), ResultSetUtil.getArray(RESULT_SET, RS_ARRAY.getLabel()));
         assertEquals(RS_ARRAY.getValue(), ResultSetUtil.getArray(RESULT_SET, RS_ARRAY.getIndex()));
+
+        assertNull(ResultSetUtil.getArray(NULL_RESULT_SET, RS_ARRAY.getLabel()));
+        assertNull(ResultSetUtil.getArray(NULL_RESULT_SET, RS_ARRAY.getIndex()));
     }
 
     @Test
     void getRef() throws SQLException {
         assertEquals(RS_REF.getValue(), ResultSetUtil.getRef(RESULT_SET, RS_REF.getLabel()));
         assertEquals(RS_REF.getValue(), ResultSetUtil.getRef(RESULT_SET, RS_REF.getIndex()));
+
+        assertNull(ResultSetUtil.getRef(NULL_RESULT_SET, RS_REF.getLabel()));
+        assertNull(ResultSetUtil.getRef(NULL_RESULT_SET, RS_REF.getIndex()));
     }
 
     @Test
     void getURL() throws SQLException {
         assertEquals(RS_URL.getValue(), ResultSetUtil.getURL(RESULT_SET, RS_URL.getLabel()));
         assertEquals(RS_URL.getValue(), ResultSetUtil.getURL(RESULT_SET, RS_URL.getIndex()));
+
+        assertNull(ResultSetUtil.getURL(NULL_RESULT_SET, RS_URL.getLabel()));
+        assertNull(ResultSetUtil.getURL(NULL_RESULT_SET, RS_URL.getIndex()));
     }
 
     @Test
     void getRowId() throws SQLException {
         assertEquals(RS_ROW_ID.getValue(), ResultSetUtil.getRowId(RESULT_SET, RS_ROW_ID.getLabel()));
         assertEquals(RS_ROW_ID.getValue(), ResultSetUtil.getRowId(RESULT_SET, RS_ROW_ID.getIndex()));
+
+        assertNull(ResultSetUtil.getRowId(NULL_RESULT_SET, RS_ROW_ID.getLabel()));
+        assertNull(ResultSetUtil.getRowId(NULL_RESULT_SET, RS_ROW_ID.getIndex()));
     }
 
     @Test
     void getNClob() throws SQLException {
         assertEquals(RS_NCLOB.getValue(), ResultSetUtil.getNClob(RESULT_SET, RS_NCLOB.getLabel()));
         assertEquals(RS_NCLOB.getValue(), ResultSetUtil.getNClob(RESULT_SET, RS_NCLOB.getIndex()));
+
+        assertNull(ResultSetUtil.getNClob(NULL_RESULT_SET, RS_NCLOB.getLabel()));
+        assertNull(ResultSetUtil.getNClob(NULL_RESULT_SET, RS_NCLOB.getIndex()));
     }
 
     @Test
     void getSQLXML() throws SQLException {
         assertEquals(RS_SQLXML.getValue(), ResultSetUtil.getSQLXML(RESULT_SET, RS_SQLXML.getLabel()));
         assertEquals(RS_SQLXML.getValue(), ResultSetUtil.getSQLXML(RESULT_SET, RS_SQLXML.getIndex()));
+
+        assertNull(ResultSetUtil.getSQLXML(NULL_RESULT_SET, RS_SQLXML.getLabel()));
+        assertNull(ResultSetUtil.getSQLXML(NULL_RESULT_SET, RS_SQLXML.getIndex()));
+    }
+
+    @Test
+    void getBytes() throws SQLException {
+        assertEquals(RS_BYTES.getValue(), ResultSetUtil.getBytes(RESULT_SET, RS_BYTES.getIndex()));
+
+        assertNull(ResultSetUtil.getBytes(NULL_RESULT_SET, RS_BYTES.getIndex()));
+    }
+
+    @Test
+    void getUUID() throws SQLException {
+        assertEquals(RS_OBJECT.getValue(), ResultSetUtil.getUUID(RESULT_SET, RS_OBJECT.getLabel()));
+        assertEquals(RS_OBJECT.getValue(), ResultSetUtil.getUUID(RESULT_SET, RS_OBJECT.getIndex()));
+
+        assertNull(ResultSetUtil.getUUID(NULL_RESULT_SET, RS_OBJECT.getLabel()));
+        assertNull(ResultSetUtil.getUUID(NULL_RESULT_SET, RS_OBJECT.getIndex()));
     }
 
     private static ResultSet mockResultSet() {
         final ResultSet resultSet = mock(ResultSet.class);
         try {
             when(resultSet.getObject(RS_OBJECT.getLabel())).thenReturn(RS_OBJECT.getValue());
+            when(resultSet.getObject(RS_OBJECT.getLabel(), UUID.class)).thenReturn(RS_OBJECT.getValueAs(UUID.class));
             when(resultSet.getBoolean(RS_BOOLEAN.getLabel())).thenReturn(RS_BOOLEAN.getValueAs(Boolean.class));
             when(resultSet.getByte(RS_BYTE.getLabel())).thenReturn(RS_BYTE.getValueAs(Byte.class));
             when(resultSet.getShort(RS_SHORT.getLabel())).thenReturn(RS_SHORT.getValueAs(Short.class));
@@ -218,6 +308,7 @@ final class ResultSetUtilTest {
             when(resultSet.getNClob(RS_NCLOB.getLabel())).thenReturn(RS_NCLOB.getValueAs(NClob.class));
             when(resultSet.getRowId(RS_ROW_ID.getLabel())).thenReturn(RS_ROW_ID.getValueAs(RowId.class));
             when(resultSet.getSQLXML(RS_SQLXML.getLabel())).thenReturn(RS_SQLXML.getValueAs(SQLXML.class));
+            when(resultSet.getBytes(RS_BYTES.getLabel())).thenReturn(RS_BYTES.getValueAs(byte[].class));
 
             when(resultSet.getObject(RS_OBJECT.getIndex())).thenReturn(RS_OBJECT.getValue());
             when(resultSet.getBoolean(RS_BOOLEAN.getIndex())).thenReturn(RS_BOOLEAN.getValueAs(Boolean.class));
@@ -240,6 +331,19 @@ final class ResultSetUtilTest {
             when(resultSet.getNClob(RS_NCLOB.getIndex())).thenReturn(RS_NCLOB.getValueAs(NClob.class));
             when(resultSet.getRowId(RS_ROW_ID.getIndex())).thenReturn(RS_ROW_ID.getValueAs(RowId.class));
             when(resultSet.getSQLXML(RS_SQLXML.getIndex())).thenReturn(RS_SQLXML.getValueAs(SQLXML.class));
+            when(resultSet.getBytes(RS_BYTES.getIndex())).thenReturn(RS_BYTES.getValueAs(byte[].class));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultSet;
+    }
+
+    private static ResultSet mockNullResultSet() {
+        final ResultSet resultSet = mock(ResultSet.class);
+        try {
+            when(resultSet.wasNull()).thenReturn(true);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -269,6 +373,7 @@ final class ResultSetUtilTest {
         RS_ROW_ID(newRowId()),
         RS_NCLOB(newNClob()),
         RS_SQLXML(newSQLXML()),
+        RS_BYTES("string".getBytes())
         ;
 
         private final String label;
