@@ -29,8 +29,8 @@ final class SqlTriConsumerTest {
     void wrap() {
         assertThrows(NullPointerException.class, () -> SqlTriConsumer.wrap(null));
 
-        TriConsumer<String, String, String> triConsumer = (i, j, k) -> System.out.println(i + j + k);
-        SqlTriConsumer<String, String, String> sqlTriConsumer = SqlTriConsumer.wrap(triConsumer);
+        final TriConsumer<String, String, String> triConsumer = (i, j, k) -> System.out.println(i + j + k);
+        final SqlTriConsumer<String, String, String> sqlTriConsumer = SqlTriConsumer.wrap(triConsumer);
 
         assertNotNull(sqlTriConsumer);
     }

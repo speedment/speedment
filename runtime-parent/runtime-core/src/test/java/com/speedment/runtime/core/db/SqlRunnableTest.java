@@ -35,10 +35,10 @@ final class SqlRunnableTest {
     void wrap(int input) throws SQLException {
         assertThrows(NullPointerException.class, () -> SqlRunnable.wrap(null));
 
-        List<Integer> tempStore = new ArrayList<>();
+        final List<Integer> tempStore = new ArrayList<>();
 
-        Runnable runnable = () -> tempStore.add(input);
-        SqlRunnable sqlRunnable = SqlRunnable.wrap(runnable);
+        final Runnable runnable = () -> tempStore.add(input);
+        final SqlRunnable sqlRunnable = SqlRunnable.wrap(runnable);
 
         assertNotNull(sqlRunnable);
 

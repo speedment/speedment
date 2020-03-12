@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,24 +15,21 @@
  * the License.
  */
 
-package com.speedment.runtime.core.db;
+package com.speedment.runtime.core.db.metadata;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.function.Consumer;
+import java.sql.ResultSet;
 
-final class SqlConsumerTest {
+final class ColumnMetaDataTest {
 
     @Test
-    void wrap() {
-        assertThrows(NullPointerException.class, () -> SqlConsumer.wrap(null));
+    void instance() {
+        final ResultSet resultSet = mock(ResultSet.class);
 
-        final Consumer<String> consumer = System.out::println;
-        final SqlConsumer<String> sqlConsumer = SqlConsumer.wrap(consumer);
-
-        assertNotNull(sqlConsumer);
+        assertNotNull(ColumnMetaData.of(resultSet));
     }
 }

@@ -34,8 +34,8 @@ final class SqlSupplierTest {
     void wrap(String input) throws SQLException {
         assertThrows(NullPointerException.class, () -> SqlSupplier.wrap(null));
 
-        Supplier<String> supplier = () -> input;
-        SqlSupplier<String> sqlSupplier = SqlSupplier.wrap(supplier);
+        final Supplier<String> supplier = () -> input;
+        final SqlSupplier<String> sqlSupplier = SqlSupplier.wrap(supplier);
 
         assertNotNull(sqlSupplier);
         assertEquals(input, sqlSupplier.get());

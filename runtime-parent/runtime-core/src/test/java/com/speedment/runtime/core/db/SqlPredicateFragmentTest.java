@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,21 +18,17 @@
 package com.speedment.runtime.core.db;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.function.Consumer;
+import java.util.Arrays;
 
-final class SqlConsumerTest {
+final class SqlPredicateFragmentTest {
 
     @Test
-    void wrap() {
-        assertThrows(NullPointerException.class, () -> SqlConsumer.wrap(null));
-
-        final Consumer<String> consumer = System.out::println;
-        final SqlConsumer<String> sqlConsumer = SqlConsumer.wrap(consumer);
-
-        assertNotNull(sqlConsumer);
+    void instance() {
+        assertNotNull(SqlPredicateFragment.of("SELECT * FROM table"));
+        assertNotNull(SqlPredicateFragment.of("SELECT * FROM table WHERE id > ?", 1));
+        assertNotNull(SqlPredicateFragment.of("SELECT * FROM table WHERE id > ? AND name = ?", Arrays.asList(1, "name")));
     }
 }

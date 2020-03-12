@@ -30,8 +30,8 @@ final class SqlBiConsumerTest {
     void wrap() {
         assertThrows(NullPointerException.class, () -> SqlBiConsumer.wrap(null));
 
-        BiConsumer<String, String> biConsumer = (k, v) -> System.out.println(k + v);
-        SqlBiConsumer<String, String> sqlBiConsumer = SqlBiConsumer.wrap(biConsumer);
+        final BiConsumer<String, String> biConsumer = (k, v) -> System.out.println(k + v);
+        final SqlBiConsumer<String, String> sqlBiConsumer = SqlBiConsumer.wrap(biConsumer);
 
         assertNotNull(sqlBiConsumer);
     }
