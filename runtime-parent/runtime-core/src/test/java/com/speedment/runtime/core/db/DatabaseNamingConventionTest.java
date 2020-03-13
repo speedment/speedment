@@ -26,22 +26,43 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.core.internal.db.DefaultDatabaseNamingConvention;
+import com.speedment.runtime.core.abstracts.AbstractDatabaseNamingConvention;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.Set;
+
 final class DatabaseNamingConventionTest {
+
+    private static final DatabaseNamingConvention DATABASE_NAMING_CONVENTION = new AbstractDatabaseNamingConvention() {
+        @Override
+        protected String getFieldEncloserStart() {
+            return "'";
+        }
+
+        @Override
+        protected String getFieldEncloserEnd() {
+            return "'";
+        }
+
+        @Override
+        public Set<String> getSchemaExcludeSet() {
+            return Collections.emptySet();
+        }
+    };
 
     @Test
     @SuppressWarnings("unchecked")
     void fullNameOf() {
-        final DatabaseNamingConvention databaseNamingConvention = new DefaultDatabaseNamingConvention();
+        assertNotNull(DATABASE_NAMING_CONVENTION.fullNameOf("schema", "table"));
+        assertNotNull(DATABASE_NAMING_CONVENTION.fullNameOf("schema", "table", "column"));
 
         final ColumnIdentifier<String> columnIdentifier = mock(ColumnIdentifier.class);
         when(columnIdentifier.getSchemaId()).thenReturn("schema");
         when(columnIdentifier.getTableId()).thenReturn("table");
         when(columnIdentifier.getColumnId()).thenReturn("column");
 
-        assertNotNull(databaseNamingConvention.fullNameOf(columnIdentifier));
+        assertNotNull(DATABASE_NAMING_CONVENTION.fullNameOf(columnIdentifier));
 
         final Schema schema = mock(Schema.class);
         when(schema.getName()).thenReturn("schema");
@@ -50,17 +71,27 @@ final class DatabaseNamingConventionTest {
         when(table.getName()).thenReturn("table");
         when(table.getParentOrThrow()).thenReturn(schema);
 
-        assertNotNull(databaseNamingConvention.fullNameOf(table));
+        assertNotNull(DATABASE_NAMING_CONVENTION.fullNameOf(table));
 
         final Column column = mock(Column.class);
         when(column.getName()).thenReturn("column");
         when(column.getParentOrThrow()).thenReturn(table);
 
-        assertNotNull(databaseNamingConvention.fullNameOf(column));
+        assertNotNull(DATABASE_NAMING_CONVENTION.fullNameOf(column));
 
         final PrimaryKeyColumn primaryKeyColumn = mock(PrimaryKeyColumn.class);
         when(primaryKeyColumn.findColumnOrThrow()).thenReturn(column);
 
-        assertNotNull(databaseNamingConvention.fullNameOf(primaryKeyColumn));
+        assertNotNull(DATABASE_NAMING_CONVENTION.fullNameOf(primaryKeyColumn));
+    }
+
+    @Test
+    void quoteField() {
+        assertNotNull(DATABASE_NAMING_CONVENTION.quoteField("field"));
+    }
+
+    @Test
+    void encloseField() {
+        assertNotNull(DATABASE_NAMING_CONVENTION.encloseField("field"));
     }
 }
