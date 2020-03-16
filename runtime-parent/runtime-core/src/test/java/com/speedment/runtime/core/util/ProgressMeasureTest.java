@@ -17,7 +17,10 @@
 
 package com.speedment.runtime.core.util;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -42,5 +45,21 @@ final class ProgressMeasureTest {
 
         progressMeasure.setProgress(1);
         assertTrue(progressMeasure.isDone());
+    }
+
+    @Test
+    void setAndGetCurrentAction() {
+        final ProgressMeasure progressMeasure = ProgressMeasure.create();
+
+        assertDoesNotThrow(() -> progressMeasure.setCurrentAction("action"));
+        assertEquals("action", progressMeasure.getCurrentAction());
+    }
+
+    @Test
+    void addListener() {
+        final ProgressMeasure progressMeasure = ProgressMeasure.create();
+
+        assertThrows(NullPointerException.class, () -> progressMeasure.addListener(null));
+        assertDoesNotThrow(() -> progressMeasure.addListener(measure -> {}));
     }
 }
