@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public final class SqlQueryLoggerUtil {
 
-    public SqlQueryLoggerUtil() {}
+    private SqlQueryLoggerUtil() {}
 
     public static void logOperation(Logger logger, final String sql, final List<?> values) {
         if (logger.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
