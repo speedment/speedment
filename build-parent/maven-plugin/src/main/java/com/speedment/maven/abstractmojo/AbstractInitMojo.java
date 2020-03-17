@@ -29,6 +29,7 @@ import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -89,6 +90,12 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
             getLog().error(err);
             throw new MojoExecutionException(err, ex);
         }
+    }
+
+    @Override
+    protected void configureBuilder(ApplicationBuilder<?, ?> builder) {
+        // https://github.com/speedment/speedment/issues/866
+        builder.withBundle(ToolBundle.class);
     }
 
     @Override
