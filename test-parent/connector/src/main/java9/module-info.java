@@ -16,6 +16,11 @@
  */
 module com.speedment.test.connector {
     exports com.speedment.test.connector;
+    exports com.speedment.test.connector.abstracts;
+    exports com.speedment.test.connector.support;
+
+    requires org.junit.jupiter.api;
+    requires org.mockito;
 
     requires transitive com.speedment.runtime.core;
 }
