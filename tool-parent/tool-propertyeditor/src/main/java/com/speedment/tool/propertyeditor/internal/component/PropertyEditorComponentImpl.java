@@ -16,25 +16,65 @@
  */
 package com.speedment.tool.propertyeditor.internal.component;
 
+import static com.speedment.common.injector.State.INITIALIZED;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.trait.*;
-import com.speedment.tool.config.*;
-import com.speedment.tool.config.trait.*;
+import com.speedment.runtime.config.ColumnUtil;
+import com.speedment.runtime.config.DbmsUtil;
+import com.speedment.runtime.config.ForeignKeyColumnUtil;
+import com.speedment.runtime.config.IndexUtil;
+import com.speedment.runtime.config.ProjectUtil;
+import com.speedment.runtime.config.TableUtil;
+import com.speedment.runtime.config.trait.HasAliasUtil;
+import com.speedment.runtime.config.trait.HasEnableUtil;
+import com.speedment.runtime.config.trait.HasNameUtil;
+import com.speedment.runtime.config.trait.HasNullableUtil;
+import com.speedment.runtime.config.trait.HasOrderTypeUtil;
+import com.speedment.runtime.config.trait.HasPackageNameUtil;
+import com.speedment.runtime.config.trait.HasTypeMapperUtil;
+import com.speedment.tool.config.ColumnProperty;
+import com.speedment.tool.config.DbmsProperty;
+import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.config.ForeignKeyColumnProperty;
+import com.speedment.tool.config.IndexProperty;
+import com.speedment.tool.config.ProjectProperty;
+import com.speedment.tool.config.TableProperty;
+import com.speedment.tool.config.trait.HasAliasProperty;
+import com.speedment.tool.config.trait.HasEnabledProperty;
+import com.speedment.tool.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.HasNullableProperty;
+import com.speedment.tool.config.trait.HasOrderTypeProperty;
+import com.speedment.tool.config.trait.HasPackageNameProperty;
+import com.speedment.tool.config.trait.HasTypeMapperProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.component.PropertyEditorComponent;
-import com.speedment.tool.propertyeditor.editor.*;
+import com.speedment.tool.propertyeditor.editor.AliasPropertyEditor;
+import com.speedment.tool.propertyeditor.editor.AutoIncrementPropertyEditor;
+import com.speedment.tool.propertyeditor.editor.CompanyNamePropertyEditor;
+import com.speedment.tool.propertyeditor.editor.ConnectionUrlPropertyEditor;
+import com.speedment.tool.propertyeditor.editor.DbmsTypePropertyEditor;
+import com.speedment.tool.propertyeditor.editor.EnabledPropertyEditor;
+import com.speedment.tool.propertyeditor.editor.ForeignKeyColumnEditor;
+import com.speedment.tool.propertyeditor.editor.ImplementsEditor;
+import com.speedment.tool.propertyeditor.editor.IpAdressPropertyEditor;
+import com.speedment.tool.propertyeditor.editor.NamePropertyEditor;
+import com.speedment.tool.propertyeditor.editor.NullablePropertyEditor;
+import com.speedment.tool.propertyeditor.editor.OrderTypePropertyEditor;
+import com.speedment.tool.propertyeditor.editor.PackageLocationPropertyEditor;
+import com.speedment.tool.propertyeditor.editor.PackageNameEditor;
+import com.speedment.tool.propertyeditor.editor.PortNumberEditor;
+import com.speedment.tool.propertyeditor.editor.TypeMapperPropertyEditor;
+import com.speedment.tool.propertyeditor.editor.UniquePropertyEditor;
+import com.speedment.tool.propertyeditor.editor.UsernamePropertyEditor;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static com.speedment.common.injector.State.INITIALIZED;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -74,8 +114,9 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
         install(ProjectProperty.class,       ProjectUtil.PACKAGE_LOCATION,       PackageLocationPropertyEditor::new);
         install(HasPackageNameProperty.class,   HasPackageNameUtil.PACKAGE_NAME,          PackageNameEditor::new);
         install(ForeignKeyColumnProperty.class, ForeignKeyColumnUtil.FOREIGN_COLUMN_NAME, ForeignKeyColumnEditor::new);
+        install(TableProperty.class, TableUtil.IMPLEMENTS, ImplementsEditor::new);
     }
-    
+
     @Override
     public <DOC extends DocumentProperty> Stream<PropertyEditor.Item> getUiVisibleProperties(DOC document) {
         return MapStream.of(factoryMap)                                         // MapStream<Class, Map<String, Supplier<PropertyEditor>>>

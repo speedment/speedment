@@ -16,11 +16,33 @@
  */
 package com.speedment.generator.standard.entity;
 
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
+import static com.speedment.common.codegen.constant.DefaultType.isPrimitive;
+import static com.speedment.common.codegen.constant.DefaultType.optional;
+import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
+import static com.speedment.common.codegen.util.Formatting.shortName;
+import static com.speedment.generator.standard.util.ColumnUtil.usesOptional;
+import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toMap;
+
 import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
+import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.EnumConstant;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.common.injector.Injector;
@@ -31,6 +53,7 @@ import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.TableUtil;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
@@ -41,20 +64,17 @@ import com.speedment.runtime.typemapper.TypeMapperComponent;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.stream.Stream;
-
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.common.codegen.constant.DefaultType.*;
-import static com.speedment.common.codegen.util.Formatting.shortName;
-import static com.speedment.generator.standard.util.ColumnUtil.usesOptional;
-import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toMap;
 
 /**
  *
@@ -113,8 +133,13 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             /*
              * General
              */
-            .forEveryTable((intrf, col) -> intrf.public_().add(identifierEnum))
-            
+            .forEveryTable((intrf, table) -> intrf.public_().add(identifierEnum))
+
+            /*
+             * Additional interfaces
+             */
+            .forEveryTable(this::addInterfaces)
+
             /*
              * Getters
              */
@@ -282,6 +307,18 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             ))
             )
         );
+    }
+
+    private void addInterfaces(Interface intrf, Table table) {
+        table.getAsString(TableUtil.IMPLEMENTS)
+            .ifPresent(string -> Arrays.stream(string.split(","))
+            .map(String::trim)
+            .forEach(iface -> {
+                final SimpleType interfaceType = SimpleType.create(iface);
+
+                intrf.add(Import.of(interfaceType));
+                intrf.add(interfaceType);
+            }));
     }
 
     @Override
