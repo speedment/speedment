@@ -313,6 +313,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
         table.getAsString(TableUtil.IMPLEMENTS)
             .ifPresent(string -> Arrays.stream(string.split(","))
             .map(String::trim)
+            .filter(trimmed -> !trimmed.isEmpty())
             .forEach(iface -> {
                 final SimpleType interfaceType = SimpleType.create(iface);
 
