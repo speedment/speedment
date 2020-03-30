@@ -55,22 +55,22 @@
         </VBox.margin>
 
         <!-- Database Type -->
-        <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" styleClass="form-label" text="Database Type" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+        <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" styleClass="form-label" text="Database Type" GridPane.halignment="RIGHT" GridPane.rowIndex="0">
          <GridPane.margin>
             <Insets right="8.0" />
          </GridPane.margin></Label>
-        <ComboBox fx:id="fieldType" maxWidth="1.7976931348623157E308" prefWidth="246.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <ComboBox fx:id="fieldType" maxWidth="1.7976931348623157E308" prefWidth="246.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
             <GridPane.margin>
                 <Insets bottom="4.0" top="4.0" />
             </GridPane.margin>
         </ComboBox>
 
         <!-- IP-Address and Port -->
-        <Label styleClass="form-label" text="Database Host" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+        <Label styleClass="form-label" text="Database Host" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets right="8.0" />
          </GridPane.margin></Label>
-        <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="240.0" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+        <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="240.0" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="CENTER">
             <GridPane.margin>
                 <Insets bottom="4.0" top="4.0" />
             </GridPane.margin>
@@ -87,11 +87,11 @@
         </HBox>
 
         <!-- Local File -->
-        <Label styleClass="form-label" text="Database File" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+        <Label styleClass="form-label" text="Database File" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets right="8.0" />
          </GridPane.margin></Label>
-        <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="240.0" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+        <HBox alignment="CENTER_LEFT" prefHeight="12.0" prefWidth="240.0" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="CENTER">
             <GridPane.margin>
                 <Insets bottom="4.0" top="4.0" />
             </GridPane.margin>
@@ -108,11 +108,11 @@
         </HBox>
 
         <!-- Username -->
-        <Label styleClass="form-label" text="Username" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+        <Label styleClass="form-label" text="Username" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets right="8.0" />
          </GridPane.margin></Label>
-        <TextField fx:id="fieldUser" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="4">
+        <TextField fx:id="fieldUser" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <tooltip>
                 <Tooltip text="The database username." />
             </tooltip>
@@ -122,11 +122,11 @@
         </TextField>
 
         <!-- Password -->
-        <Label styleClass="form-label" text="Password" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+        <Label styleClass="form-label" text="Password" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets right="8.0" />
          </GridPane.margin></Label>
-        <PasswordField fx:id="fieldPass" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <PasswordField fx:id="fieldPass" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="4">
             <tooltip>
                 <Tooltip text="The database password." />
             </tooltip>
@@ -136,11 +136,11 @@
         </PasswordField>
 
         <!-- Database name -->
-        <Label styleClass="form-label" text="Database Name" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+        <Label styleClass="form-label" text="Database Name" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets right="8.0" />
          </GridPane.margin></Label>
-        <TextField fx:id="fieldName" promptText="Database name" GridPane.columnIndex="1" GridPane.rowIndex="6">
+        <TextField fx:id="fieldName" promptText="Database name" GridPane.columnIndex="1" GridPane.rowIndex="5">
             <tooltip>
                 <Tooltip text="The name of the database." />
             </tooltip>
@@ -150,11 +150,11 @@
         </TextField>
 
         <!-- Schema name -->
-        <Label styleClass="form-label" text="Schema Name" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+        <Label styleClass="form-label" text="Schema Name" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
          <GridPane.margin>
             <Insets right="8.0" />
          </GridPane.margin></Label>
-        <TextField fx:id="fieldSchema" promptText="Schema name" GridPane.columnIndex="1" GridPane.rowIndex="7">
+        <TextField fx:id="fieldSchema" promptText="Schema name" GridPane.columnIndex="1" GridPane.rowIndex="6">
             <tooltip>
                 <Tooltip text="The database schema to generate code from." />
             </tooltip>
@@ -164,11 +164,11 @@
         </TextField>
 
         <!-- Server name -->
-        <Label styleClass="form-label" text="Server Name" GridPane.halignment="RIGHT" GridPane.rowIndex="8">
+        <Label styleClass="form-label" text="Server Name" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
             <GridPane.margin>
                 <Insets right="8.0" />
             </GridPane.margin></Label>
-        <TextField fx:id="fieldServer" promptText="Server name" GridPane.columnIndex="1" GridPane.rowIndex="8">
+        <TextField fx:id="fieldServer" promptText="Server name" GridPane.columnIndex="1" GridPane.rowIndex="7">
             <tooltip>
                 <Tooltip text="The database server to generate code from." />
             </tooltip>
@@ -178,7 +178,7 @@
         </TextField>
 
         <!-- Connection URL -->
-        <CheckBox fx:id="enableConnectionUrl" mnemonicParsing="false" text="Use Connection URL" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="TOP">
+        <CheckBox fx:id="enableConnectionUrl" mnemonicParsing="false" text="Use Connection URL" GridPane.halignment="RIGHT" GridPane.rowIndex="8" GridPane.valignment="TOP">
             <GridPane.margin>
                 <Insets right="8.0" top="8.0" />
             </GridPane.margin>
@@ -186,7 +186,7 @@
                 <Tooltip text="If a custom connection URL should be specified or if it should be generated automatically." />
             </tooltip>
         </CheckBox>
-        <TextArea fx:id="areaConnectionUrl" prefRowCount="3" prefWidth="240.0" promptText="Connection URL" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9">
+        <TextArea fx:id="areaConnectionUrl" prefRowCount="3" prefWidth="240.0" promptText="Connection URL" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8">
             <tooltip>
                 <Tooltip text="Connection URL to use when connecting to the database." />
             </tooltip>
@@ -196,11 +196,11 @@
         </TextArea>
 
         <!-- Connect Button -->
-        <Button fx:id="buttonConnect" defaultButton="true" disable="true" mnemonicParsing="false" text="Connect" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="12">
+        <Button fx:id="buttonConnect" defaultButton="true" disable="true" mnemonicParsing="false" text="Connect" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
             <padding>
                 <Insets bottom="4.0" left="16.0" right="16.0" top="4.0" />
             </padding>
         </Button>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="All fields are required unless URL is used." wrappingWidth="412.24560546875" GridPane.rowIndex="12" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="All fields are required unless URL is used." wrappingWidth="412.24560546875" GridPane.rowIndex="9" />
     </GridPane>
 </VBox>
