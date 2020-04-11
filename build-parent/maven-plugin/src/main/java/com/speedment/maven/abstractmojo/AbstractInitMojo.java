@@ -16,6 +16,7 @@
  */
 package com.speedment.maven.abstractmojo;
 
+import com.speedment.common.json.Json;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.DbmsUtil;
@@ -25,15 +26,11 @@ import com.speedment.runtime.config.trait.HasEnableUtil;
 import com.speedment.runtime.config.trait.HasIdUtil;
 import com.speedment.runtime.config.trait.HasNameUtil;
 import com.speedment.runtime.config.trait.HasPackageNameUtil;
+import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.tool.config.ProjectProperty;
-import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
 import com.speedment.tool.core.ToolBundle;
-import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
@@ -51,45 +48,51 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;
 
-    private @Parameter(defaultValue = "${debug}") Boolean debug;
-    private @Parameter(defaultValue = "${companyName}") String companyName;
-    private @Parameter(defaultValue = "${appName}") String appName;
-    private @Parameter(defaultValue = "${package.location}") String packageLocation;
-    private @Parameter(defaultValue = "${package.name}") String packageName;
-    private @Parameter(defaultValue = "${dbms.type}") String dbmsType;
-    private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
-    private @Parameter(defaultValue = "${dbms.port}") Integer dbmsPort;
-    private @Parameter(defaultValue = "${dbms.schemas}") String dbmsSchemas;
-    private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
-    private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
-    private @Parameter(defaultValue = "${parameters}") ConfigParam[] parameters;
-    private @Parameter(defaultValue = "${components}") String[] components;
-    private @Parameter(defaultValue = "${typeMappers}") Mapping[] typeMappers;
-    private @Parameter(defaultValue = "${configFile}") String configFile;
+    private @Parameter(defaultValue = "${debug}")
+    Boolean debug;
+    private @Parameter(defaultValue = "${companyName}")
+    String companyName;
+    private @Parameter(defaultValue = "${appName}")
+    String appName;
+    private @Parameter(defaultValue = "${package.location}")
+    String packageLocation;
+    private @Parameter(defaultValue = "${package.name}")
+    String packageName;
+    private @Parameter(defaultValue = "${dbms.type}")
+    String dbmsType;
+    private @Parameter(defaultValue = "${dbms.host}")
+    String dbmsHost;
+    private @Parameter(defaultValue = "${dbms.port}")
+    Integer dbmsPort;
+    private @Parameter(defaultValue = "${dbms.schemas}")
+    String dbmsSchemas;
+    private @Parameter(defaultValue = "${dbms.username}")
+    String dbmsUsername;
+    private @Parameter(defaultValue = "${dbms.password}")
+    String dbmsPassword;
+    private @Parameter(defaultValue = "${parameters}")
+    ConfigParam[] parameters;
+    private @Parameter(defaultValue = "${components}")
+    String[] components;
+    private @Parameter(defaultValue = "${typeMappers}")
+    Mapping[] typeMappers;
+    private @Parameter(defaultValue = "${configFile}")
+    String configFile;
 
-    protected AbstractInitMojo() {}
+    protected AbstractInitMojo() {
+    }
 
     protected AbstractInitMojo(Consumer<ApplicationBuilder<?, ?>> configurer) {
         super(configurer);
     }
 
     @Override
-    protected void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
+    protected void execute(Speedment speedment) {
         getLog().info("Saving default configuration from database to '" + configLocation().toAbsolutePath() + "'.");
 
-        final ConfigFileHelper helper = speedment.getOrThrow(ConfigFileHelper.class);
+        final Project project = createProject();
 
-        ProjectProperty project = createProject();
-
-        helper.saveProjectToCurrentlyOpenFile(project);
-
-        try {
-            helper.setCurrentlyOpenFile(configLocation().toFile());
-        } catch (final Exception ex) {
-            final String err = "An error occurred while reloading.";
-            getLog().error(err);
-            throw new MojoExecutionException(err, ex);
-        }
+        DocumentTranscoder.save(project, configLocation(), Json::toJson);
     }
 
     @Override
@@ -147,9 +150,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         return dbmsPassword;
     }
 
-    private ProjectProperty createProject() {
-        ProjectProperty projectProperty = new ProjectProperty();
-
+    private Project createProject() {
         Map<String, Object> projectData = new HashMap<>();
         addStringToMap(ProjectUtil.COMPANY_NAME, companyName, getCompanyNameFromMavenProject(), projectData);
         addStringToMap(HasNameUtil.NAME, appName, mavenProject.getArtifactId(), projectData);
@@ -160,9 +161,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addBooleanToMap(HasEnableUtil.ENABLED, Boolean.TRUE, projectData);
         addListToMap(ProjectUtil.DBMSES, createDbmses(), projectData);
 
-        projectProperty.merge(new DocumentPropertyComponentImpl(), Project.create(projectData));
-
-        return projectProperty;
+        return Project.create(projectData);
     }
 
     private String getCompanyNameFromMavenProject() {
@@ -197,7 +196,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         List<Map<String, Object>> schemas = new ArrayList<>();
         if (StringUtils.isNotBlank(dbmsSchemas)) {
             Arrays.stream(dbmsSchemas.split(",")).forEach(schema ->
-                schemas.add(createSchema(schema))
+                    schemas.add(createSchema(schema))
             );
         } else {
             if (StringUtils.isNotBlank(appName)) {
