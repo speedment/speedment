@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,20 +16,51 @@
  */
 package com.speedment.generator.standard.internal;
 
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.generator.standard.StandardTranslatorKey.APPLICATION;
+import static com.speedment.generator.standard.StandardTranslatorKey.APPLICATION_BUILDER;
+import static com.speedment.generator.standard.StandardTranslatorKey.APPLICATION_IMPL;
+import static com.speedment.generator.standard.StandardTranslatorKey.ENTITY;
+import static com.speedment.generator.standard.StandardTranslatorKey.ENTITY_IMPL;
+import static com.speedment.generator.standard.StandardTranslatorKey.ENTRY_POINT;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_APPLICATION;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_APPLICATION_BUILDER;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_APPLICATION_IMPL;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_ENTITY;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_ENTITY_IMPL;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_MANAGER;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_MANAGER_IMPL;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_METADATA;
+import static com.speedment.generator.standard.StandardTranslatorKey.GENERATED_SQL_ADAPTER;
+import static com.speedment.generator.standard.StandardTranslatorKey.INJECTOR_PROXY;
+import static com.speedment.generator.standard.StandardTranslatorKey.MANAGER;
+import static com.speedment.generator.standard.StandardTranslatorKey.MANAGER_IMPL;
+import static com.speedment.generator.standard.StandardTranslatorKey.SQL_ADAPTER;
+
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.standard.entity.EntityImplTranslator;
 import com.speedment.generator.standard.entity.EntityTranslator;
 import com.speedment.generator.standard.entity.GeneratedEntityImplTranslator;
 import com.speedment.generator.standard.entity.GeneratedEntityTranslator;
-import com.speedment.generator.standard.lifecycle.*;
-import com.speedment.generator.standard.manager.*;
+import com.speedment.generator.standard.lifecycle.ApplicationBuilderTranslator;
+import com.speedment.generator.standard.lifecycle.ApplicationImplTranslator;
+import com.speedment.generator.standard.lifecycle.ApplicationTranslator;
+import com.speedment.generator.standard.lifecycle.EntryPointTranslator;
+import com.speedment.generator.standard.lifecycle.GeneratedApplicationBuilderTranslator;
+import com.speedment.generator.standard.lifecycle.GeneratedApplicationImplTranslator;
+import com.speedment.generator.standard.lifecycle.GeneratedApplicationTranslator;
+import com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator;
+import com.speedment.generator.standard.lifecycle.InjectorProxyTranslator;
+import com.speedment.generator.standard.manager.GeneratedManagerImplTranslator;
+import com.speedment.generator.standard.manager.GeneratedManagerTranslator;
+import com.speedment.generator.standard.manager.GeneratedSqlAdapterTranslator;
+import com.speedment.generator.standard.manager.ManagerImplTranslator;
+import com.speedment.generator.standard.manager.ManagerTranslator;
+import com.speedment.generator.standard.manager.SqlAdapterTranslator;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
-
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.generator.standard.StandardTranslatorKey.*;
 
 /**
  *
@@ -58,5 +89,6 @@ public final class StandardTranslatorComponent {
         codeGen.put(Project.class, GENERATED_APPLICATION_BUILDER, GeneratedApplicationBuilderTranslator::new);
         codeGen.put(Project.class, GENERATED_METADATA, GeneratedMetadataTranslator::new);
         codeGen.put(Project.class, INJECTOR_PROXY, InjectorProxyTranslator::new);
+        codeGen.put(Project.class, ENTRY_POINT, EntryPointTranslator::new);
     }
 }

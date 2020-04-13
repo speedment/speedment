@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -100,6 +100,21 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
         withInjectorProxy(new StandardInjectorProxy()); // Use this as default proxy
         injectables.forEach(this::withComponent);
+    }
+
+    InjectorBuilderImpl(final InjectorBuilder toCopy) {
+        requireNonNull(toCopy);
+        if (!(toCopy instanceof InjectorBuilderImpl)) {
+            throw new UnsupportedOperationException("Unable to copy " + toCopy.getClass() + " because only " + InjectorBuilderImpl.class.getSimpleName() + " is supported.");
+        }
+        final InjectorBuilderImpl other = (InjectorBuilderImpl)toCopy;
+        this.classLoader        = other.classLoader;
+        this.injectables        = new LinkedHashMap<>(other.injectables);
+        this.executions         = new LinkedList<>(other.executions);
+        this.overriddenParams   = new HashMap<>(other.overriddenParams);
+        this.proxies            = new LinkedList<>(other.proxies);
+        this.proxyCache         = new HashMap<>(); // Do not copy the other.proxyCache
+        this.configFileLocation = other.configFileLocation;
     }
 
     @Override

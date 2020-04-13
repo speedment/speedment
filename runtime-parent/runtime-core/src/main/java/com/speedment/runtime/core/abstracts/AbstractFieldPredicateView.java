@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,13 @@
  */
 package com.speedment.runtime.core.abstracts;
 
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRaw;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRawSet;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getInclusionOperand;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getSecondOperand;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.field.Field;
@@ -26,10 +33,6 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import java.util.Collection;
 import java.util.Set;
 import java.util.function.Function;
-
-import static com.speedment.runtime.field.util.PredicateOperandUtil.*;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -333,7 +336,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
     }
 
     private SqlPredicateFragment predicate(String cn, FieldPredicate<?> model, boolean negated, String greaterThanWildcard, String lessThanWildcard) {
-        return of("(" + cn + greaterThanWildcard + " AND " + cn + lessThanWildcard + ")", negated)
+        return of("((" + cn + greaterThanWildcard + ") AND (" + cn + lessThanWildcard + "))", negated)
             .add(getFirstOperandAsRaw(model))
             .add(getSecondOperand(model));
     }

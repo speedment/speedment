@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.speedment.runtime.core.db;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,8 +33,8 @@ final class SqlSupplierTest {
     void wrap(String input) throws SQLException {
         assertThrows(NullPointerException.class, () -> SqlSupplier.wrap(null));
 
-        Supplier<String> supplier = () -> input;
-        SqlSupplier<String> sqlSupplier = SqlSupplier.wrap(supplier);
+        final Supplier<String> supplier = () -> input;
+        final SqlSupplier<String> sqlSupplier = SqlSupplier.wrap(supplier);
 
         assertNotNull(sqlSupplier);
         assertEquals(input, sqlSupplier.get());

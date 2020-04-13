@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,10 +16,22 @@
  */
 package com.speedment.generator.standard;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.standard.lifecycle.*;
+import com.speedment.generator.standard.lifecycle.ApplicationBuilderTranslator;
+import com.speedment.generator.standard.lifecycle.ApplicationImplTranslator;
+import com.speedment.generator.standard.lifecycle.ApplicationTranslator;
+import com.speedment.generator.standard.lifecycle.EntryPointTranslator;
+import com.speedment.generator.standard.lifecycle.GeneratedApplicationBuilderTranslator;
+import com.speedment.generator.standard.lifecycle.GeneratedApplicationImplTranslator;
+import com.speedment.generator.standard.lifecycle.GeneratedApplicationTranslator;
+import com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator;
+import com.speedment.generator.standard.lifecycle.InjectorProxyTranslator;
 import com.speedment.generator.translator.Translator;
 import com.speedment.runtime.config.Project;
 import org.junit.jupiter.api.Test;
@@ -27,8 +39,6 @@ import org.junit.jupiter.api.Test;
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 final class ProjectTranslatorsTest {
 
@@ -99,7 +109,8 @@ final class ProjectTranslatorsTest {
             GeneratedApplicationImplTranslator::new,
             GeneratedApplicationTranslator::new,
             GeneratedMetadataTranslator::new,
-            InjectorProxyTranslator::new
+            InjectorProxyTranslator::new,
+            EntryPointTranslator::new
         )
             .map(c -> c.apply(injector, project));
     }

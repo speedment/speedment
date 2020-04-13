@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.speedment.runtime.core.db;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,8 +29,8 @@ final class SqlBiConsumerTest {
     void wrap() {
         assertThrows(NullPointerException.class, () -> SqlBiConsumer.wrap(null));
 
-        BiConsumer<String, String> biConsumer = (k, v) -> System.out.println(k + v);
-        SqlBiConsumer<String, String> sqlBiConsumer = SqlBiConsumer.wrap(biConsumer);
+        final BiConsumer<String, String> biConsumer = (k, v) -> System.out.println(k + v);
+        final SqlBiConsumer<String, String> sqlBiConsumer = SqlBiConsumer.wrap(biConsumer);
 
         assertNotNull(sqlBiConsumer);
     }

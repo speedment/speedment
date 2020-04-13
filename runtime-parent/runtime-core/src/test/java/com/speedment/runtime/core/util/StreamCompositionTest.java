@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,16 +16,21 @@
  */
 package com.speedment.runtime.core.util;
 
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -57,15 +62,20 @@ final class StreamCompositionTest {
 
     @Test
     void testPureStream() {
-        printTestName();
         List<String> result = StreamComposition.concatAndAutoClose(a, b, c).collect(toList());
         assertEquals(Arrays.asList("A", "B", "C"), result);
         assertAllClosed();
     }
 
     @Test
+    void testParallelStream() {
+        List<String> result = StreamComposition.concatAndAutoClose(a.parallel(), b, c).collect(toList());
+        assertEquals(Arrays.asList("A", "B", "C"), result);
+        assertAllClosed();
+    }
+
+    @Test
     void testPartialIteration() {
-        printTestName();
         Optional<String> result = StreamComposition.concatAndAutoClose(a, b, c).findFirst();
         assertEquals(Optional.of("A"), result);
 
@@ -75,7 +85,6 @@ final class StreamCompositionTest {
 
     @Test
     void testException() {
-        printTestName();
         final AtomicBoolean fClosed = new AtomicBoolean();
         boolean gotException = false;
         final Stream<String> f = Stream.of("F").peek(this::produceException).onClose(() -> fClosed.set(true));
@@ -92,7 +101,6 @@ final class StreamCompositionTest {
 
     @Test
     void testExceptionInClose() {
-        printTestName();
         final AtomicBoolean fClosed = new AtomicBoolean();
         final AtomicBoolean gClosed = new AtomicBoolean();
         boolean gotException = false;
@@ -118,8 +126,6 @@ final class StreamCompositionTest {
 
     @Test
     void testChainedStreams() {
-        printTestName();
-
         // This test makes sure that "chained" streams gets closed all the way up to the "root"
         final AtomicBoolean fClosed = new AtomicBoolean();
 
@@ -139,12 +145,12 @@ final class StreamCompositionTest {
         assertTrue(fClosed.get());
     }
 
+    @Test
+    void concat() {
+        assertNotNull(StreamComposition.concat(a, b, c));
+    }
+
     private void assertAllClosed() {
         assertEquals(Arrays.asList(true, true, true), closeStatus); // Make sure all streams are AutoClosed
     }
-
-    private void printTestName() {
-        //System.out.println(name.getMethodName());
-    }
-
 }

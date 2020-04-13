@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -44,7 +44,7 @@ public final class InfoComponentImpl implements InfoComponent {
     @Override
     // This method must be formatted like this (in a single line) in order
     // to work with the version update script
-    public String getImplementationVersion() { return "3.2.7"; }
+    public String getImplementationVersion() { return "3.2.9-SNAPSHOT"; }
 
     @Override
     public String getVendor() {

@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -29,6 +29,7 @@ import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -89,6 +90,12 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
             getLog().error(err);
             throw new MojoExecutionException(err, ex);
         }
+    }
+
+    @Override
+    protected void configureBuilder(ApplicationBuilder<?, ?> builder) {
+        // https://github.com/speedment/speedment/issues/866
+        builder.withBundle(ToolBundle.class);
     }
 
     @Override

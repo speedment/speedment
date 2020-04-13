@@ -2,7 +2,7 @@
 <!--
 
 
-    Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+    Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License"); You may not
     use this file except in compliance with the License. You may obtain a copy of
@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.2.7</version>
+        <version>3.2.9-SNAPSHOT</version>
     </parent>
 
     <artifactId>runtime-core</artifactId>
@@ -110,5 +110,31 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-junit-jupiter</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <propertyName>surefireArgLine</propertyName>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>${surefireArgLine} --add-opens java.base/java.lang.reflect=com.speedment.runtime.core</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

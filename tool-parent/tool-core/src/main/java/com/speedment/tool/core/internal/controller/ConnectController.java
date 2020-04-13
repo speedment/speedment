@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -263,7 +263,8 @@ public final class ConnectController implements Initializable {
             ||      fieldType.getSelectionModel().isEmpty()
             ||     (fieldName.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseNames())
             ||     (fieldUser.textProperty().isEmpty().get() && dbmsType.get().hasDatabaseUsers())
-            ||     (fieldServer.textProperty().isEmpty().get() && dbmsType.get().hasServerNames()),
+            ||     (fieldServer.textProperty().isEmpty().get() && dbmsType.get().hasServerNames())
+            ||     (fieldSchema.textProperty().isEmpty().get() && dbmsType.get().hasSchemaNames()),
 
             fieldHost.textProperty(),
             fieldPort.textProperty(),
@@ -271,7 +272,8 @@ public final class ConnectController implements Initializable {
             fieldType.selectionModelProperty(),
             fieldName.textProperty(),
             fieldUser.textProperty(),
-            fieldServer.textProperty()
+            fieldServer.textProperty(),
+            fieldSchema.textProperty()
         ));
     }
 

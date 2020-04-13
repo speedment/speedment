@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,13 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.speedment.runtime.core.db;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.speedment.runtime.core.exception.SpeedmentException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -34,8 +34,8 @@ final class SqlFunctionTest {
     void wrap(String input) throws SQLException {
         assertThrows(NullPointerException.class, () -> SqlFunction.wrap(null));
 
-        Function<String, String> function = Function.identity();
-        SqlFunction<String, String> sqlFunction = SqlFunction.wrap(function);
+        final Function<String, String> function = Function.identity();
+        final SqlFunction<String, String> sqlFunction = SqlFunction.wrap(function);
 
         assertNotNull(sqlFunction);
         assertEquals(function.apply(input), sqlFunction.apply(input));
@@ -44,17 +44,24 @@ final class SqlFunctionTest {
     @ParameterizedTest
     @ValueSource(strings = "test")
     void unWrap(String input) throws SQLException {
-        SqlFunction<String, String> sqlFunction = SqlFunction.identity();
-        Function<String, String> function = sqlFunction.unWrap();
+        final SqlFunction<String, String> sqlFunction = SqlFunction.identity();
+        final Function<String, String> function = sqlFunction.unWrap();
 
         assertNotNull(function);
         assertEquals(sqlFunction.apply(input), function.apply(input));
+
+        final SqlFunction<String, String> throwingSqlFunction = string -> {
+            throw new SQLException();
+        };
+        final Function<String, String> throwingFunction = throwingSqlFunction.unWrap();
+
+        assertThrows(SpeedmentException.class, () -> throwingFunction.apply(input));
     }
 
     @ParameterizedTest
     @ValueSource(strings = "test")
     void identity(String input) throws SQLException {
-        SqlFunction<String, String> sqlFunction = SqlFunction.identity();
+        final SqlFunction<String, String> sqlFunction = SqlFunction.identity();
 
         assertEquals(input, sqlFunction.apply(input));
     }
@@ -62,12 +69,12 @@ final class SqlFunctionTest {
     @ParameterizedTest
     @ValueSource(strings = "test")
     void compose(String input) throws SQLException {
-        SqlFunction<String, String> prefixFunction = x -> "prefix" + x;
-        SqlFunction<String, String> suffixFunction = x -> x + "suffix";
+        final SqlFunction<String, String> prefixFunction = x -> "prefix" + x;
+        final SqlFunction<String, String> suffixFunction = x -> x + "suffix";
 
         assertThrows(NullPointerException.class, () -> suffixFunction.compose(null));
 
-        SqlFunction<String, String> composed = suffixFunction.compose(prefixFunction);
+        final SqlFunction<String, String> composed = suffixFunction.compose(prefixFunction);
 
         assertEquals("prefix" + input + "suffix", composed.apply(input));
     }
@@ -75,12 +82,12 @@ final class SqlFunctionTest {
     @ParameterizedTest
     @ValueSource(strings = "test")
     void andThen(String input) throws SQLException {
-        SqlFunction<String, String> prefixFunction = x -> "prefix" + x;
-        SqlFunction<String, String> suffixFunction = x -> x + "suffix";
+        final SqlFunction<String, String> prefixFunction = x -> "prefix" + x;
+        final SqlFunction<String, String> suffixFunction = x -> x + "suffix";
 
         assertThrows(NullPointerException.class, () -> suffixFunction.andThen(null));
 
-        SqlFunction<String, String> combined = prefixFunction.andThen(suffixFunction);
+        final SqlFunction<String, String> combined = prefixFunction.andThen(suffixFunction);
 
         assertEquals("prefix" + input + "suffix", combined.apply(input));
     }

@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="467.0" prefWidth="465.0" spacing="15.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.tool.core.internal.controller.ConnectController">
 
@@ -34,7 +35,7 @@
         </columnConstraints>
 
         <rowConstraints>
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />                   <!-- Dbms Type -->
+            <RowConstraints />                   <!-- Dbms Type -->
             <RowConstraints fx:id="hostRow" minHeight="10.0" vgrow="SOMETIMES" />   <!-- IP + Port -->
             <RowConstraints fx:id="fileRow" minHeight="10.0" vgrow="SOMETIMES" />   <!-- Local File -->
             <RowConstraints fx:id="userRow" minHeight="10.0" vgrow="SOMETIMES" />   <!-- Username -->
@@ -42,8 +43,11 @@
             <RowConstraints fx:id="dbmsRow" minHeight="10.0" vgrow="SOMETIMES" />   <!-- Dbms Name -->
             <RowConstraints fx:id="schemaRow" minHeight="10.0" vgrow="SOMETIMES" /> <!-- Schema Name -->
             <RowConstraints fx:id="serverRow" minHeight="10.0" vgrow="SOMETIMES" /> <!-- Server Name -->
-            <RowConstraints minHeight="10.0" vgrow="ALWAYS" />                      <!-- Connection URL -->
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />                   <!-- Connect Button -->
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />                      <!-- Connection URL -->
+            <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+         <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+         <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />                   <!-- Connect Button -->
         </rowConstraints>
 
         <VBox.margin>
@@ -51,7 +55,7 @@
         </VBox.margin>
 
         <!-- Database Type -->
-        <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" styleClass="form-label" text="Database Type" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="0">
+        <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" styleClass="form-label" text="Database Type" GridPane.halignment="RIGHT" GridPane.rowIndex="0">
          <GridPane.margin>
             <Insets right="8.0" />
          </GridPane.margin></Label>
@@ -197,5 +201,6 @@
                 <Insets bottom="4.0" left="16.0" right="16.0" top="4.0" />
             </padding>
         </Button>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="All fields are required unless URL is used." wrappingWidth="412.24560546875" GridPane.rowIndex="9" />
     </GridPane>
 </VBox>

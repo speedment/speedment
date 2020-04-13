@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -260,7 +260,7 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public InjectorBuilder newBuilder() {
-        return builder;
+        return new InjectorBuilderImpl(builder);
     }
 
     private <T> Stream<T> findAll(Class<T> type) {

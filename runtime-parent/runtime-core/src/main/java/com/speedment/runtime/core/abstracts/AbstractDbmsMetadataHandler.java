@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -66,7 +66,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     
     private static final Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
     private static final Class<?> DEFAULT_MAPPING = Object.class;
-    public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
+
+    // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
+    public static final boolean SHOW_METADATA = Boolean.getBoolean("speedment.metadata.show");
+
+    public static final boolean EXTRA_INFO = Boolean.getBoolean("speedment.metadata.info");
 
     private final ConnectionPoolComponent connectionPoolComponent;
     private final DbmsHandlerComponent dbmsHandlerComponent;
@@ -179,6 +183,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     ) {
         requireNonNulls(project, dbms, filterCriteria, progress);
 
+        extraInfo("readSchemaMetadata(%s, %s, ...)", project, dbms);
+
         final DbmsType dbmsType = dbmsTypeOf(dbmsHandlerComponent, dbms);
         final String action = actionName(dbms);
 
@@ -240,13 +246,15 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
                 while (catalogResultSet.next()) {
                     final String schemaName = catalogResultSet.getString(1);
-
                     boolean schemaWasUsed = false;
                     if (filterCriteria.test(schemaName) && !naming.getSchemaExcludeSet().contains(schemaName)) {
+                        extraInfo("loadCatalogs used %s", schemaName);
                         final Schema schema = dbms.mutator().addNewSchema();
                         schema.mutator().setId(schemaName);
                         schema.mutator().setName(schemaName);
                         schemaWasUsed = true;
+                    } else {
+                        extraInfo("loadCatalogs discarded %s", schemaName);
                     }
 
                     if (!schemaWasUsed) {
@@ -270,10 +278,13 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
                     boolean schemaWasUsed = false;
                     if (!naming.getSchemaExcludeSet().contains(name)&& filterCriteria.test(name)) {
+                        extraInfo("loadSchemas used %s", name);
                         final Schema schema = dbms.mutator().addNewSchema();
                         schema.mutator().setId(name);
                         schema.mutator().setName(name);
                         schemaWasUsed = true;
+                    } else {
+                        extraInfo("loadCatalogs discarded %s", name);
                     }
 
                     if (!schemaWasUsed) {
@@ -389,6 +400,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             table.mutator().setId(tableName);
             table.mutator().setName(tableName);
             table.mutator().setView("VIEW".equals(tableType));
+            extraInfo("readTables(%s, ...) read %s", schema.getId(), table);
         }
     }
 
@@ -470,7 +482,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
             setAutoIncrement(column, md);
             progressListener.setCurrentAction(actionName(column));
-
+            extraInfo("columns(,, %s, ...) read %s", table.getId(), column);
         };
 
         tableChilds(Column.class, table.mutator()::addNewColumn, supplier, mutator, progressListener);
@@ -503,6 +515,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             primaryKeyColumn.mutator().setId(columnName);
             primaryKeyColumn.mutator().setName(columnName);
             primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
+            extraInfo("primaryKeyColumns(, %s, ...) read %s", table.getId(), primaryKeyColumn);
         };
 
         tableChilds(PrimaryKeyColumn.class, table.mutator()::addNewPrimaryKeyColumn, supplier, mutator, progressListener);
@@ -555,6 +568,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             } else {
                 indexColumn.mutator().setOrderType(OrderType.NONE);
             }
+            extraInfo("indexes(, %s, ...) read %s", table.getId(), indexColumn);
         };
 
         final SqlPredicate<ResultSet> filter = rs -> {
@@ -599,6 +613,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             fkcMutator.setForeignSchemaName(
                 Optional.ofNullable(rs.getString("FKTABLE_SCHEM")).orElse(rs.getString("PKTABLE_CAT"))
             );
+            extraInfo("foreignKeys(, %s, ...) read %s", table.getId(), fkcMutator);
         };
 
         tableChilds(ForeignKey.class, table.mutator()::addNewForeignKey, supplier, mutator, progressListener);
@@ -880,6 +895,12 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     protected interface TableChildMutator<T, U> {
 
         void mutate(T t, U u) throws SQLException;
+    }
+
+    private void extraInfo(final String formatter, final Object... args) {
+        if (EXTRA_INFO) {
+            System.out.println(String.format(formatter, args));
+        }
     }
 
 }

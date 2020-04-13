@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2006-2019, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2020, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,30 +22,38 @@
 package com.speedment.runtime.config.identifier;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-/**
- *
- * @author Per Minborg
- */
 final class TableIdentifierTest {
 
+    private final TableIdentifier<String> tableIdentifier = TableIdentifier.of("dbms", "schema", "table");
+
     @Test
-    void testOf() {
-        final String db = "db";
-        final String sc = "sc";
-        final String ta = "ta";
+    void asSchemaIdentifier() {
+        assertNotNull(tableIdentifier.asSchemaIdentifier());
+    }
 
-        TableIdentifier<Integer> ti0 = TableIdentifier.of(db, sc, ta);
-        TableIdentifier<Integer> ti1 = TableIdentifier.of(db, sc, ta);
-        TableIdentifier<Integer> ti2 = TableIdentifier.of(db, sc, "Arne");
+    @Test
+    void asColumnIdentifier() {
+        assertNotNull(tableIdentifier.asColumnIdentifier("column"));
+    }
 
-        assertTrue(ti0 == ti1); // Make sure that the interface interns duplicates
-        assertFalse(ti0 == ti2);
+    @Test
+    void getDbmsId() {
+        assertEquals("dbms", tableIdentifier.getDbmsId());
+    }
 
+    @Test
+    void getSchemaId() {
+        assertEquals("schema", tableIdentifier.getSchemaId());
+    }
+
+    @Test
+    void getTableId() {
+        assertEquals("table", tableIdentifier.getTableId());
     }
 
 }
