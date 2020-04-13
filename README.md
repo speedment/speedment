@@ -84,43 +84,54 @@ Speedment is equipped with the features listed below and more.
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
 
 #### Basics
-* [Tutorial 1 - Hello Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Hello-Speedment)
-* [Tutorial 2 - A First Stream from Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-A-First-Stream-from-Speedment)
+* [Tutorial 1 - Hello Speedment](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
+* [Tutorial 2 - A First Stream from Speedment](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
 
 #### Sample applications
-* [Tutorial 3 - Speedment Spring Boot Integration; REST assured - it is easy](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Spring-Boot-Integration)
-* [Tutorial 4 - Speedment filters based on Json Web Tokens](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Stream-Filters-Using-JWT-Data)
-* [Tutorial 5 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
-* [Tutorial 6 - Log errors in a database](https://github.com/speedment/speedment/wiki/Tutorial:-Log-errors-in-a-database)
-* [Tutorial 7 - Use Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
-* [Tutorial 8 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
+* [Tutorial 3 - Speedment Spring Boot Integration; REST assured - it is easy](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
+* [Tutorial 4 - Speedment filters based on Json Web Tokens](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-1---hello-speedment)
+* [Tutorial 5 - Log errors in a database](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-5---log-errors-in-a-database)
+* [Tutorial 6 - Use Speedment with Java EE](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-5---log-errors-in-a-database)
+* [Tutorial 7 - Create Event Sourced Systems](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-5---log-errors-in-a-database)
+* [Tutorial 8 - Writing Your Own Extensions](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-8---writing-your-own-extensions)
 
 #### Extending Speedment
-* [Tutorial 9 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
-* [Tutorial 10 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
+* [Tutorial 9 - Formatting Your Output as JSON](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-9---formatting-your-output-as-json)
+* [Tutorial 10 - Working with BLOBS and CLOBS](https://speedment.github.io/speedment-doc/tutorials.html#tutorial-10---working-with-blobs-and-clobs)
 
 ## Resources 
-* **Documentation** - Read the [Speedment User Guide](https://speedment.github.io/speedment-doc/introduction.html).
-* **JavaDocs** - Latest [Speedment JavaDocs](http://www.javadoc.io/doc/com.speedment/runtime-deploy/3.1.0). 
+* **Documentation** - Read the [Speedment User Guide](https://speedment.github.io/speedment-doc/index.html).
+* **JavaDocs** - Latest [Speedment JavaDocs](https://www.javadoc.io/doc/com.speedment/runtime-deploy/latest/index.html). 
 * **Examples** - There are 15 detailed examples [here](https://github.com/speedment/speedment/tree/master/example-parent) and more can be found in the User Guide provided above. 
 * **Gitter Chatroom** - Reach out to the Speedment developers and other community members via [the Gitter chatroom](https://gitter.im/speedment/speedment). 
 * **Creating a Pull Request** - Pull requests and improvement suggestions from the community are gladly accepted. Find more information [here](https://github.com/speedment/speedment/blob/master/CONTRIBUTING.md).
 
 ## Requirements
+### Java Version
 Speedment requires `Java 8` or later. Make sure your IDE is configured to use JDK 8 (version 1.8.0_40 or newer).
 
+### Database Connectors
 Speedment Open Source comes with support for the following databases out-of-the-box:
 * MySQL
 * MariaDB
 * PostgreSQL
 * SQLite
 
-For Enterprise database connectors see [Speedment Licensing and Pricing](www.speedment.com/pricing). 
+Enterprise database connectors include: 
+* AS400
+* Cassandra
+* DB2
+* Informix
+* Oracle
+* Snowflake
+* SQL Server
+
+For more information, see [Speedment Licensing and Pricing](https://speedment.com/pricing/). 
 
 ## Licenses
 * **Speedment Open Source** - This site covers the Speedment Open Source project available under the 
 [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). 
-* **Speedment Stream** - The same great features as Speedment OSS with support for commercial databases (i.e. Oracle, MS SQL Server, DB2, AS400). Learn more at [speedment.com/stream](http://speedment.com/stream).
+* **Speedment Stream** - The same great features as Speedment OSS with support for commercial databases. Learn more at [speedment.com/stream](http://speedment.com/stream).
 * **Speedment HyperStream** - An extension av Speedment Stream which also includes hypersonic query performance enabled by a unique in-JVM-memory management model. Learn more at [speedment.com/hyperStream](http://speedment.com/hyperstream).
 
 ## Copyright
