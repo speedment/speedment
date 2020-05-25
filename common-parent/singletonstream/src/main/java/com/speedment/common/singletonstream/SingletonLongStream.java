@@ -16,18 +16,33 @@
  */
 package com.speedment.common.singletonstream;
 
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveIteratorOfLong;
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveSpliteratorOfLong;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.LongSummaryStatistics;
+import java.util.OptionalDouble;
+import java.util.OptionalLong;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongConsumer;
+import java.util.function.LongFunction;
+import java.util.function.LongPredicate;
+import java.util.function.LongToDoubleFunction;
+import java.util.function.LongToIntFunction;
+import java.util.function.LongUnaryOperator;
+import java.util.function.ObjLongConsumer;
+import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
-import static java.util.Objects.requireNonNull;
 
 /**
  * An implementation of a LongStream that takes exactly one element as its
@@ -48,6 +63,10 @@ import static java.util.Objects.requireNonNull;
 public class SingletonLongStream implements LongStream {
 
     private final long element;
+
+    private boolean parallel;
+
+    private List<Runnable> closeHandlers;
 
     private SingletonLongStream(long element) {
         this.element = element;
@@ -262,12 +281,14 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public LongStream sequential() {
+        this.parallel = false;
         return this;
     }
 
     @Override
     public LongStream parallel() {
-        return toStream().parallel();
+        this.parallel = true;
+        return this;
     }
 
     @Override
@@ -282,7 +303,7 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public boolean isParallel() {
-        return false;
+        return parallel;
     }
 
     @Override
@@ -292,16 +313,30 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public LongStream onClose(Runnable closeHandler) {
-        return toStream().onClose(closeHandler);
+        if (closeHandler == null) {
+            return this;
+        }
+
+        if (closeHandlers == null) {
+            this.closeHandlers = new ArrayList<>();
+        }
+
+        closeHandlers.add(closeHandler);
+        return this;
     }
 
     @Override
     public void close() {
-        // do nothing. OnClose createa a real Stream
+        if (closeHandlers == null || closeHandlers.isEmpty()) {
+            return;
+        }
+
+        closeHandlers.forEach(Runnable::run);
     }
 
     private LongStream toStream() {
-        return LongStream.of(element);
+        final LongStream stream = LongStream.of(this.element);
+        return parallel ? stream.parallel() : stream;
     }
 
     private OptionalLong toOptional() {

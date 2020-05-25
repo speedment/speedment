@@ -16,14 +16,16 @@
  */
 package com.speedment.common.singletonstream;
 
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.singletonstream.internal.SingletonIterator;
 import com.speedment.common.singletonstream.internal.SingletonSpliterator;
 
-import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
-
-import static java.util.Objects.requireNonNull;
+import java.util.List;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
@@ -65,6 +67,10 @@ import java.util.stream.Stream;
 public final class SingletonStream<T> implements Stream<T> {
 
     private final T element;
+
+    private boolean parallel;
+
+    private List<Runnable> closeHandlers;
 
     private SingletonStream(T element) {
         this.element = element;
@@ -339,17 +345,19 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public boolean isParallel() {
-        return false;
+        return parallel;
     }
 
     @Override
     public SingletonStream<T> sequential() {
+        this.parallel = false;
         return this;
     }
 
     @Override
     public Stream<T> parallel() {
-        return toStream().parallel();
+        this.parallel = true;
+        return this;
     }
 
     @Override
@@ -359,12 +367,25 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public Stream<T> onClose(Runnable closeHandler) {
-        return toStream().onClose(closeHandler);
+        if (closeHandler == null) {
+            return this;
+        }
+
+        if (closeHandlers == null) {
+            this.closeHandlers = new ArrayList<>();
+        }
+
+        closeHandlers.add(closeHandler);
+        return this;
     }
 
     @Override
     public void close() {
-        // do nothing. OnClose creates a real Stream
+        if (closeHandlers == null || closeHandlers.isEmpty()) {
+            return;
+        }
+
+        closeHandlers.forEach(Runnable::run);
     }
 
     /**
@@ -373,7 +394,8 @@ public final class SingletonStream<T> implements Stream<T> {
      * @return A "real" Stream with the single element
      */
     private Stream<T> toStream() {
-        return Stream.of(element);
+        final Stream<T> stream = Stream.of(element);
+        return parallel ? stream.parallel() : stream;
     }
 
     private Optional<T> toOptional() {

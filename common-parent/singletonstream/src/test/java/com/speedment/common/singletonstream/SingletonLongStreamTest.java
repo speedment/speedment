@@ -16,20 +16,31 @@
  */
 package com.speedment.common.singletonstream;
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.LongSummaryStatistics;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.LongConsumer;
+import java.util.function.LongUnaryOperator;
+import java.util.function.UnaryOperator;
 import java.util.stream.LongStream;
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.*;
 
 final class SingletonLongStreamTest {
 
@@ -78,7 +89,7 @@ final class SingletonLongStreamTest {
 
     @Test
     void mapToInt() {
-        assertEqualsApplying(s -> s.mapToInt(i -> (int) i).mapToLong(l -> (int) l));
+        assertEqualsApplying(s -> s.mapToInt(i -> (int) i).mapToLong(l -> l));
     }
 
     @Test
@@ -269,7 +280,6 @@ final class SingletonLongStreamTest {
     }
 
     @Test
-    @Disabled("https://github.com/speedment/speedment/issues/851")
     void mutableParallel() {
         instance.parallel();
         assertTrue(instance.isParallel());
@@ -281,7 +291,6 @@ final class SingletonLongStreamTest {
     }
 
     @Test
-    @Disabled("https://github.com/speedment/speedment/issues/851")
     void mutableOnClose() {
         instance.onClose(cnt::incrementAndGet);
         instance.close();

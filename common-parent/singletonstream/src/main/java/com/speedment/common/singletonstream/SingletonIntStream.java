@@ -16,18 +16,33 @@
  */
 package com.speedment.common.singletonstream;
 
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveIteratorOfInt;
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveSpliteratorOfInt;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
+import java.util.function.IntPredicate;
+import java.util.function.IntToDoubleFunction;
+import java.util.function.IntToLongFunction;
+import java.util.function.IntUnaryOperator;
+import java.util.function.ObjIntConsumer;
+import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
-import static java.util.Objects.requireNonNull;
 
 /**
  * An implementation of an IntStream that takes exactly one element as its
@@ -48,6 +63,10 @@ import static java.util.Objects.requireNonNull;
 public class SingletonIntStream implements IntStream {
 
     private final int element;
+
+    private boolean parallel;
+
+    private List<Runnable> closeHandlers;
 
     private SingletonIntStream(int element) {
         this.element = element;
@@ -267,12 +286,14 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public IntStream sequential() {
+        this.parallel = false;
         return this;
     }
 
     @Override
     public IntStream parallel() {
-        return toStream().parallel();
+        this.parallel = true;
+        return this;
     }
 
     @Override
@@ -287,7 +308,7 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public boolean isParallel() {
-        return false;
+        return parallel;
     }
 
     @Override
@@ -297,16 +318,30 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public IntStream onClose(Runnable closeHandler) {
-        return toStream().onClose(closeHandler);
+        if (closeHandler == null) {
+            return this;
+        }
+
+        if (closeHandlers == null) {
+            this.closeHandlers = new ArrayList<>();
+        }
+
+        closeHandlers.add(closeHandler);
+        return this;
     }
 
     @Override
     public void close() {
-       // do nothing. OnClose creates a real Stream
+        if (closeHandlers == null || closeHandlers.isEmpty()) {
+            return;
+        }
+
+        closeHandlers.forEach(Runnable::run);
     }
 
     private IntStream toStream() {
-        return IntStream.of(element);
+        final IntStream stream = IntStream.of(this.element);
+        return parallel ? stream.parallel() : stream;
     }
 
     private OptionalInt toOptional() {

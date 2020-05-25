@@ -16,6 +16,15 @@
  */
 package com.speedment.common.singletonstream;
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -27,12 +36,12 @@ import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
+import java.util.function.IntUnaryOperator;
+import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.*;
 
 final class SingletonIntStreamTest {
 
@@ -276,7 +285,6 @@ final class SingletonIntStreamTest {
     }
 
     @Test
-    @Disabled("https://github.com/speedment/speedment/issues/851")
     void mutableParallel() {
         instance.parallel();
         assertTrue(instance.isParallel());
@@ -288,7 +296,6 @@ final class SingletonIntStreamTest {
     }
 
     @Test
-    @Disabled("https://github.com/speedment/speedment/issues/851")
     void mutableOnClose() {
         instance.onClose(cnt::incrementAndGet);
         instance.close();

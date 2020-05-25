@@ -21,18 +21,35 @@
  */
 package com.speedment.common.singletonstream;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import java.util.stream.*;
-
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 /**
  *
@@ -339,6 +356,7 @@ final class SingletonStreamTest {
     }
 
     @Test
+    @SuppressWarnings({"unchecked", "rawtypes"})
     void spliteratorCharacteristicsOfNullElement() {
         final SingletonStream containsNull = SingletonStream.of(null);
         final Spliterator<String> spliterator = containsNull.spliterator();
@@ -392,7 +410,6 @@ final class SingletonStreamTest {
     }
 
     @Test
-    @Disabled("https://github.com/speedment/speedment/issues/851")
     void mutableParallel() {
         instance.parallel();
         assertTrue(instance.isParallel());
@@ -401,7 +418,7 @@ final class SingletonStreamTest {
     @Test
     void parallel() {
         final Stream<String> newStream = instance.parallel();
-        assertFalse(instance.isParallel());
+        assertTrue(newStream.isParallel());
     }
 
     @Test
@@ -415,7 +432,6 @@ final class SingletonStreamTest {
     }
 
     @Test
-    @Disabled("https://github.com/speedment/speedment/issues/851")
     void mutableOnClose() {
         final AtomicInteger cnt = new AtomicInteger();
         instance.onClose(cnt::incrementAndGet);
