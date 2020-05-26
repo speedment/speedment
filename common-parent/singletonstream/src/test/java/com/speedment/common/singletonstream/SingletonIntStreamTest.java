@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -146,22 +145,31 @@ final class SingletonIntStreamTest {
     void forEach() {
         instance.forEach(i -> cnt.incrementAndGet());
         assertEquals(1, cnt.get());
+
+        assertThrows(IllegalStateException.class, () -> instance.forEach(x -> {}));
     }
 
     @Test
     void forEachOrdered() {
         instance.forEachOrdered(i -> cnt.incrementAndGet());
         assertEquals(1, cnt.get());
+
+        assertThrows(IllegalStateException.class, () -> instance.forEachOrdered(x -> {}));
     }
 
     @Test
     void toArray() {
         assertArrayEquals(reference.toArray(), instance.toArray());
+
+        assertThrows(IllegalStateException.class, () -> instance.toArray());
     }
 
     @Test
     void reduce() {
         assertEqualsReducing(s -> s.reduce(Integer::sum));
+
+        assertThrows(IllegalStateException.class, () -> instance.reduce(Integer::sum));
+
     }
 
     @Test
@@ -172,64 +180,88 @@ final class SingletonIntStreamTest {
     @Test
     void collect() {
         assertEqualsReducing(s -> s.collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+
+        assertThrows(IllegalStateException.class, () -> instance.collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
     }
 
     @Test
     void sum() {
         assertEqualsReducing(IntStream::sum);
+
+        assertThrows(IllegalStateException.class, () -> instance.sum());
     }
 
     @Test
     void min() {
         assertEqualsReducing(IntStream::min);
+
+        assertThrows(IllegalStateException.class, () -> instance.min());
     }
 
     @Test
     void max() {
         assertEqualsReducing(IntStream::max);
+
+        assertThrows(IllegalStateException.class, () -> instance.max());
     }
 
     @Test
     void count() {
         assertEqualsReducing(IntStream::count);
+
+        assertThrows(IllegalStateException.class, () -> instance.count());
     }
 
     @Test
     void average() {
         assertEqualsReducing(IntStream::average);
+
+        assertThrows(IllegalStateException.class, () -> instance.average());
     }
 
     @Test
     void summaryStatistics() {
         assertSummaryStatisticsEquals(reference.summaryStatistics(), instance.summaryStatistics());
+
+        assertThrows(IllegalStateException.class, () -> instance.summaryStatistics());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
     void anyMatch(int value) {
         assertEqualsReducing(s -> s.anyMatch(i -> i == value));
+
+        assertThrows(IllegalStateException.class, () -> instance.anyMatch(i -> i == value));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
     void allMatch(int value) {
         assertEqualsReducing(s -> s.allMatch(i -> i == value));
+
+        assertThrows(IllegalStateException.class, () -> instance.allMatch(i -> i == value));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
     void noneMatch(int value) {
         assertEqualsReducing(s -> s.noneMatch(i -> i == value));
+
+        assertThrows(IllegalStateException.class, () -> instance.noneMatch(i -> i == value));
     }
 
     @Test
     void findFirst() {
         assertEqualsReducing(IntStream::findFirst);
+
+        assertThrows(IllegalStateException.class, () -> instance.findFirst());
     }
 
     @Test
     void findAny() {
         assertEqualsReducing(IntStream::findAny);
+
+        assertThrows(IllegalStateException.class, () -> instance.findAny());
     }
 
     @Test
@@ -258,6 +290,12 @@ final class SingletonIntStreamTest {
     }
 
     @Test
+    void iterator() {
+        assertDoesNotThrow(() -> instance.iterator());
+        assertThrows(IllegalStateException.class, () -> instance.iterator());
+    }
+
+    @Test
     void iteratorIntConsumer() {
         instance.iterator().forEachRemaining((IntConsumer) i -> cnt.incrementAndGet());
     }
@@ -265,6 +303,12 @@ final class SingletonIntStreamTest {
     @Test
     void iteratorConsumer() {
         instance.iterator().forEachRemaining((Consumer<Integer>) i -> cnt.incrementAndGet());
+    }
+
+    @Test
+    void spliterator() {
+        assertDoesNotThrow(() -> instance.spliterator());
+        assertThrows(IllegalStateException.class, () -> instance.spliterator());
     }
 
     @Test

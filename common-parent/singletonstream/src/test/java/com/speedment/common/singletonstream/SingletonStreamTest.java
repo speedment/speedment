@@ -222,6 +222,8 @@ final class SingletonStreamTest {
         final List<String> strings = new ArrayList<>();
         instance.forEach(strings::add);
         assertEquals(1, strings.size());
+
+        assertThrows(IllegalStateException.class, () -> instance.forEach(strings::add));
     }
 
     @Test
@@ -229,84 +231,117 @@ final class SingletonStreamTest {
         final List<String> strings = new ArrayList<>();
         instance.forEachOrdered(strings::add);
         assertEquals(1, strings.size());
+
+        assertThrows(IllegalStateException.class, () -> instance.forEachOrdered(strings::add));
     }
 
     @Test
     void toArray() {
         assertEquals(1, instance.toArray().length);
+
+        assertThrows(IllegalStateException.class, () -> instance.toArray());
     }
 
     @Test
     void toArrayGenerator() {
         assertEquals(1, instance.toArray(String[]::new).length);
+
+        assertThrows(IllegalStateException.class, () -> instance.toArray(String[]::new));
     }
 
     @Test
     void reduce() {
         assertEquals(Optional.of(ELEMENT), instance.reduce((a, b) -> a + b));
+
+        assertThrows(IllegalStateException.class, () -> instance.reduce((a, b) -> a + b));
     }
 
     @Test
     void reduce2Arg() {
         assertEquals(OTHER_ELEMENT + ELEMENT, instance.reduce(OTHER_ELEMENT, (a, b) -> a + b));
+
+        assertThrows(IllegalStateException.class, () -> instance.reduce(OTHER_ELEMENT, (a, b) -> a + b));
     }
 
     @Test
     void reduce3Arg() {
         assertEquals(OTHER_ELEMENT + ELEMENT, instance.reduce(OTHER_ELEMENT, (a, b) -> a + b, (a, b) -> a + b));
+
+        assertThrows(IllegalStateException.class, () -> instance.reduce(OTHER_ELEMENT, (a, b) -> a + b, (a, b) -> a + b));
     }
 
     @Test
     void collect() {
         assertEquals(ELEMENT, instance.collect(Collectors.joining()));
+
+        assertThrows(IllegalStateException.class, () -> instance.collect(Collectors.joining()));
     }
 
     @Test
     void collect3Arg() {
         assertEquals(singletonList(ELEMENT), instance.collect(ArrayList::new, List::add, ArrayList::addAll));
+
+        assertThrows(IllegalStateException.class, () -> instance.collect(ArrayList::new, List::add, ArrayList::addAll));
+
     }
 
     @Test
     void min() {
         assertEquals(Optional.of(ELEMENT), instance.min(Comparator.naturalOrder()));
+
+        assertThrows(IllegalStateException.class, () -> instance.min(Comparator.naturalOrder()));
     }
 
     @Test
     void max() {
         assertEquals(Optional.of(ELEMENT), instance.max(Comparator.naturalOrder()));
+
+        assertThrows(IllegalStateException.class, () -> instance.max(Comparator.naturalOrder()));
     }
 
     @Test
     void count() {
         assertEquals(1, instance.count());
+
+        assertThrows(IllegalStateException.class, () -> instance.count());
     }
 
     @Test
     void anyMatch() {
         assertTrue(instance.anyMatch(ELEMENT::equals));
         assertFalse(SingletonStream.of(OTHER_ELEMENT).anyMatch(ELEMENT::equals));
+
+        assertThrows(IllegalStateException.class, () -> instance.anyMatch(ELEMENT::equals));
     }
 
     @Test
     void allMatch() {
         assertTrue(instance.allMatch(ELEMENT::equals));
         assertFalse(SingletonStream.of(OTHER_ELEMENT).allMatch(ELEMENT::equals));
+
+        assertThrows(IllegalStateException.class, () -> instance.allMatch(ELEMENT::equals));
     }
 
     @Test
     void noneMatch() {
         assertFalse(instance.noneMatch(ELEMENT::equals));
         assertTrue(SingletonStream.of(OTHER_ELEMENT).noneMatch(ELEMENT::equals));
+
+        assertThrows(IllegalStateException.class, () -> instance.noneMatch(ELEMENT::equals));
     }
 
     @Test
     void findFirst() {
         assertEquals(Optional.of(ELEMENT), instance.findFirst());
+
+        assertThrows(IllegalStateException.class, () -> instance.findFirst());
     }
 
     @Test
     void findAny() {
         assertEquals(Optional.of(ELEMENT), instance.findAny());
+
+        assertThrows(IllegalStateException.class, () -> instance.findAny());
     }
 
     @Test
@@ -314,6 +349,9 @@ final class SingletonStreamTest {
         final AtomicInteger cnt = new AtomicInteger();
         instance.iterator().forEachRemaining(s -> cnt.incrementAndGet());
         assertEquals(1, cnt.get());
+
+        assertThrows(IllegalStateException.class, () -> instance.iterator());
+
     }
 
     @Test
@@ -353,6 +391,8 @@ final class SingletonStreamTest {
         final AtomicInteger cnt = new AtomicInteger();
         instance.spliterator().forEachRemaining(s -> cnt.incrementAndGet());
         assertEquals(1, cnt.get());
+
+        assertThrows(IllegalStateException.class, () -> instance.spliterator());
     }
 
     @Test

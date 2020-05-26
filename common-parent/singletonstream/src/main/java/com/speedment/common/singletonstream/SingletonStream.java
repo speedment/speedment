@@ -16,6 +16,7 @@
  */
 package com.speedment.common.singletonstream;
 
+import static com.speedment.common.singletonstream.internal.SingletonUtil.MESSAGE_STREAM_CONSUMED;
 import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
 import static java.util.Objects.requireNonNull;
 
@@ -69,6 +70,8 @@ public final class SingletonStream<T> implements Stream<T> {
     private final T element;
 
     private boolean parallel;
+
+    private boolean consumed;
 
     private List<Runnable> closeHandlers;
 
@@ -228,12 +231,14 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public void forEach(Consumer<? super T> action) {
+        checkConsumed();
         requireNonNull(action);
         action.accept(element);
     }
 
     @Override
     public void forEachOrdered(Consumer<? super T> action) {
+        checkConsumed();
         requireNonNull(action);
         action.accept(element);
     }
@@ -246,6 +251,7 @@ public final class SingletonStream<T> implements Stream<T> {
     @SuppressWarnings("unchecked")
     @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
+        checkConsumed();
         requireNonNull(generator);
         final A[] result = generator.apply(1);
         result[0] = (A) element;
@@ -254,18 +260,21 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public T reduce(T identity, BinaryOperator<T> accumulator) {
+        checkConsumed();
         requireNonNull(accumulator);
         return accumulator.apply(identity, element);
     }
 
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
+        checkConsumed();
         // Just one element so the accumulator is never called.
         return toOptional();
     }
 
     @Override
     public <U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner) {
+        checkConsumed();
         requireNonNull(accumulator);
         // the combiner is never used in a non-parallell stream
         return accumulator.apply(identity, element);
@@ -273,6 +282,7 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
+        checkConsumed();
         requireNonNull(supplier);
         requireNonNull(accumulator);
         final R value = supplier.get();
@@ -283,6 +293,7 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public <R, A> R collect(Collector<? super T, A, R> collector) {
+        checkConsumed();
         requireNonNull(collector);
         final A value = collector.supplier().get();
         collector.accumulator().accept(value, element);
@@ -292,54 +303,64 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public Optional<T> min(Comparator<? super T> comparator) {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public Optional<T> max(Comparator<? super T> comparator) {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public long count() {
+        checkConsumed();
         return 1;
     }
 
     @Override
     public boolean anyMatch(Predicate<? super T> predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
     public boolean allMatch(Predicate<? super T> predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
     public boolean noneMatch(Predicate<? super T> predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return !predicate.test(element);
     }
 
     @Override
     public Optional<T> findFirst() {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public Optional<T> findAny() {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public Iterator<T> iterator() {
+        checkConsumed();
         return new SingletonIterator<>(element);
     }
 
     @Override
     public Spliterator<T> spliterator() {
+        checkConsumed();
         return new SingletonSpliterator<>(element);
     }
 
@@ -367,6 +388,8 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public Stream<T> onClose(Runnable closeHandler) {
+        checkConsumed(false);
+
         if (closeHandler == null) {
             return this;
         }
@@ -381,11 +404,14 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public void close() {
+        consumed = true;
+
         if (closeHandlers == null || closeHandlers.isEmpty()) {
             return;
         }
 
         closeHandlers.forEach(Runnable::run);
+        closeHandlers = null;
     }
 
     /**
@@ -406,6 +432,20 @@ public final class SingletonStream<T> implements Stream<T> {
 
     private static <T> Stream<T> empty() {
         return Stream.empty();
+    }
+
+    private void checkConsumed() {
+        checkConsumed(true);
+    }
+
+    private void checkConsumed(boolean setConsumed) {
+        if (consumed) {
+            throw new IllegalStateException(MESSAGE_STREAM_CONSUMED);
+        }
+
+        if (setConsumed) {
+            consumed = true;
+        }
     }
 
     // Java 9 Stream features

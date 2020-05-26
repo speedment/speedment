@@ -27,4 +27,7 @@ public final class SingletonUtil {
 
     public static final boolean STRICT = true;
 
+    public static final String MESSAGE_STREAM_CONSUMED = "stream has already been operated upon or closed";
+
+
 }
