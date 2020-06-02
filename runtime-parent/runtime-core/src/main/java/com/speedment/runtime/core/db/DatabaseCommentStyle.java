@@ -27,7 +27,13 @@ import java.util.Optional;
  */
 public enum DatabaseCommentStyle {
 
+    /**
+     * Default SQL comment style
+     */
     SQL("--"),
+    /**
+     * Alternative SQL comment style, might not be supported by all DBMS types
+     */
     C_STYLE("/*", "*/");
 
     private final String prefix;

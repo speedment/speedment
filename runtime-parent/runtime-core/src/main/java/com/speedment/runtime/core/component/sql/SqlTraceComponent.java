@@ -27,8 +27,18 @@ import com.speedment.runtime.core.db.DatabaseCommentStyle;
 @InjectKey(SqlTraceComponent.class)
 public interface SqlTraceComponent {
 
+    /**
+     * Returns a comments that should be attached to SQL statements.
+     *
+     * @return comment to attach to SQL statements
+     */
     String getComment();
 
+    /**
+     * Returns a {@link DatabaseCommentStyle} that should be used to render the comment.
+     *
+     * @return comment style to use when attaching the comment.
+     */
     default DatabaseCommentStyle getCommentStyle() {
          return DatabaseCommentStyle.SQL;
     }
