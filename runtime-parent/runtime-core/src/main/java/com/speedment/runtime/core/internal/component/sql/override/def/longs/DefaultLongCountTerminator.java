@@ -16,11 +16,12 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.longs;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.longs.LongCountTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -41,7 +42,11 @@ public final class DefaultLongCountTerminator<ENTITY> implements LongCountTermin
         requireNonNull(info);
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
-        return sqlStreamTerminator.optimize(pipeline).getAsLongStream().count();
+
+        final LongPipeline optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        return sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsLongStream().count();
     }
 
     public static final LongCountTerminator<?> DEFAULT = new DefaultLongCountTerminator<>();

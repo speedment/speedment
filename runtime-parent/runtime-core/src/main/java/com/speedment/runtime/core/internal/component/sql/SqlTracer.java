@@ -15,7 +15,9 @@
  * the License.
  */
 
-package com.speedment.runtime.core.component.sql;
+package com.speedment.runtime.core.internal.component.sql;
+
+import com.speedment.runtime.core.component.sql.SqlTraceComponent;
 
 /**
  * @author Mislav Milicevic
@@ -23,5 +25,9 @@ package com.speedment.runtime.core.component.sql;
  */
 public interface SqlTracer {
 
+    String attachTraceData(final String sql);
 
+    static SqlTracer from(final SqlTraceComponent sqlTraceComponent) {
+        return new SqlTracerImpl(sqlTraceComponent);
+    }
 }

@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.doubles;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.doubles.DoubleCountTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -42,7 +42,11 @@ public final class DefaultDoubleCountTerminator<ENTITY> implements DoubleCountTe
         requireNonNull(info);
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
-        return sqlStreamTerminator.optimize(pipeline).getAsDoubleStream().count();
+
+        final DoublePipeline optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        return sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsDoubleStream().count();
     }
 
     public static final DoubleCountTerminator<?> DEFAULT = new DefaultDoubleCountTerminator<>();

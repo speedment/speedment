@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.reference;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.CollectTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
-import static java.util.Objects.requireNonNull;
+
 import java.util.stream.Collector;
 
 /**
@@ -44,8 +46,10 @@ public final class DefaultCollectTerminator<ENTITY> implements CollectTerminator
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
         requireNonNull(collector);
+
+        final ReferencePipeline<T> optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
         return sqlStreamTerminator
-            .optimize(pipeline)
+            .attachTraceData(optimizedPipeline)
             .getAsReferenceStream().collect(collector);
     }
 

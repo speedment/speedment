@@ -16,6 +16,12 @@
  */
 package com.speedment.runtime.core.manager.sql;
 
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
@@ -35,17 +41,11 @@ import com.speedment.runtime.test_support.MockEntityUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import static java.util.Collections.singletonList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 final class SqlStreamTerminatorTest {
 
@@ -130,6 +130,7 @@ final class SqlStreamTerminatorTest {
             asynchronousQueryResult,
             new SqlStreamOptimizerComponentImpl(),
             new SqlStreamTerminatorComponentImpl(),
+            null,
             true
         );
         return terminator.count(createPipeline(action));

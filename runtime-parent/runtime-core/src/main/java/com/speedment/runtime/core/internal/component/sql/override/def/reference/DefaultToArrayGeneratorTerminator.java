@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.reference;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.ToArrayGeneratorTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.IntFunction;
 
 /**
@@ -44,7 +46,11 @@ public final class DefaultToArrayGeneratorTerminator<ENTITY> implements ToArrayG
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
         requireNonNull(generator);
-        return sqlStreamTerminator.optimize(pipeline).getAsReferenceStream().toArray(generator);
+
+        final ReferencePipeline<T> optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        return sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsReferenceStream().toArray(generator);
     }
 
     public static final ToArrayGeneratorTerminator<?> DEFAULT = new DefaultToArrayGeneratorTerminator<>();

@@ -16,6 +16,13 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toMap;
+
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Column;
@@ -32,6 +39,7 @@ import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
+import com.speedment.runtime.core.component.sql.SqlTraceComponent;
 import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
@@ -48,17 +56,15 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 
 import java.sql.ResultSet;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
-
-import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
-import static java.lang.String.format;
-import static java.util.Objects.requireNonNull;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toMap;
 
 /**
  * Default implementation of the {@link SqlStreamSupplier}-interface.
@@ -80,6 +86,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
     private final String sqlTableReference;
     private final SqlStreamOptimizerComponent sqlStreamOptimizerComponent;
     private final SqlStreamTerminatorComponent sqlStreamTerminatorComponent;
+    private final SqlTraceComponent sqlTraceComponent;
     private final boolean allowIteratorAndSpliterator;
 
     SqlStreamSupplierImpl(
@@ -90,6 +97,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
         final ManagerComponent managerComponent,
         final SqlStreamOptimizerComponent sqlStreamOptimizerComponent,
         final SqlStreamTerminatorComponent sqlStreamTerminatorComponent,
+        final SqlTraceComponent sqlTraceComponent,
         final boolean allowIteratorAndSpliterator
     ) {
         requireNonNull(tableId);
@@ -100,6 +108,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
         this.entityMapper = requireNonNull(entityMapper);
         this.sqlStreamOptimizerComponent = requireNonNull(sqlStreamOptimizerComponent);
         this.sqlStreamTerminatorComponent = requireNonNull(sqlStreamTerminatorComponent);
+        this.sqlTraceComponent = sqlTraceComponent;
         this.allowIteratorAndSpliterator = allowIteratorAndSpliterator;
 
         final Project project = projectComponent.getProject();
@@ -172,11 +181,14 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
             this::sqlDatabaseTypeFunction
         );
 
+        final SqlTracer sqlTracer = SqlTracer.from(sqlTraceComponent);
+
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(
             info,
             asynchronousQueryResult,
             sqlStreamOptimizerComponent,
             sqlStreamTerminatorComponent,
+            sqlTracer,
             allowIteratorAndSpliterator
         );
 
