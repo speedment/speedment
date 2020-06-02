@@ -27,6 +27,7 @@ import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComp
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
+import com.speedment.runtime.core.internal.component.sql.SqlTracer;
 import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
 import com.speedment.runtime.core.internal.db.AsynchronousQueryResultImpl;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
@@ -120,7 +121,7 @@ final class Issue403TakeWhileDropWhileTest {
             asynchronousQueryResult,
             sqlStreamOptimizerComponent,
             sqlStreamTerminatorComponent,
-            null,
+            SqlTracer.from(null),
             true
         );
 
