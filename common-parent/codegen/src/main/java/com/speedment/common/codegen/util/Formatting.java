@@ -283,10 +283,11 @@ public final class Formatting {
      */
     public static String shortName(String longName) {
         String temp = longName.replace('$', '.');
+        final int openBrPos = temp.indexOf('<');
         String parameters = "";
-        if (temp.contains("<")) {
-            parameters = temp.substring(temp.indexOf("<"));
-            temp = temp.substring(0, temp.indexOf("<"));
+        if (openBrPos > 0) {
+            parameters = temp.substring(openBrPos);
+            temp = temp.substring(0, openBrPos);
         }
         if (temp.contains(".")) {
             temp = temp.substring(temp.lastIndexOf('.') + 1);
