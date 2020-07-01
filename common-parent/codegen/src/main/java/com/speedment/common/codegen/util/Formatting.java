@@ -274,18 +274,24 @@ public final class Formatting {
 
     /**
      * Returns the 'name' part of a long name. This is everything after the last
-     * dot.
+     * dot for non-parameterized types. For parameterized types the rule applies to
+     * the part proceeding the bracket enclosed parameters e.g. long name java.util.Map<String, java.util.Date>
+     * returns Map<String, java.util.Date>.
      *
      * @param longName The long name.
      * @return The name part.
      */
     public static String shortName(String longName) {
-        final String temp = longName.replace('$', '.');
-        if (temp.contains(".")) {
-            return temp.substring(temp.lastIndexOf('.') + 1);
-        } else {
-            return temp;
+        String temp = longName.replace('$', '.');
+        String parameters = "";
+        if (temp.contains("<")) {
+            parameters = temp.substring(temp.indexOf("<"));
+            temp = temp.substring(0, temp.indexOf("<"));
         }
+        if (temp.contains(".")) {
+            temp = temp.substring(temp.lastIndexOf('.') + 1);
+        }
+        return temp + parameters;
     }
 
     /**

@@ -188,7 +188,6 @@ public interface Generator {
         } else {
             m = model;
         }
-        
         return metaOn(m).map(Meta::getResult).findAny();
     }
 

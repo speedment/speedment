@@ -30,6 +30,8 @@ final class FormattingTest {
     private static final String B = "B";
     private static final String FOO_PACKAGE_NAME = "com.speedment.test";
     private static final String FOO_SIMPLE_NAME = "Foo";
+    private static final String FOO_GENERICS_SIMPLE_NAME = "Do<Re, java.util.Mi>";
+    private static final String FOO_GENERICS_NAME = FOO_PACKAGE_NAME + "." + FOO_GENERICS_SIMPLE_NAME;
     private static final String FOO_NAME = FOO_PACKAGE_NAME + "." + FOO_SIMPLE_NAME;
 
     @Test
@@ -166,6 +168,11 @@ final class FormattingTest {
     @Test
     void shortName() {
         assertEquals(FOO_SIMPLE_NAME, Formatting.shortName(FOO_NAME));
+    }
+
+    @Test
+    void shortName2() {
+        assertEquals(FOO_GENERICS_SIMPLE_NAME, Formatting.shortName(FOO_GENERICS_NAME));
     }
 
     @Test
