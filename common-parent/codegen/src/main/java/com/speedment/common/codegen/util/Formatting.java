@@ -275,8 +275,9 @@ public final class Formatting {
     /**
      * Returns the 'name' part of a long name. This is everything after the last
      * dot for non-parameterized types. For parameterized types the rule applies to
-     * the part proceeding the bracket enclosed parameters e.g. long name java.util.Map<String, java.util.Date>
-     * returns Map<String, java.util.Date>.
+     * the part proceeding the bracket enclosed parameters e.g.
+     * {@code long name java.util.Map<String, java.util.Date>}
+     * returns {@code Map<String, java.util.Date>}.
      *
      * @param longName The long name.
      * @return The name part.
