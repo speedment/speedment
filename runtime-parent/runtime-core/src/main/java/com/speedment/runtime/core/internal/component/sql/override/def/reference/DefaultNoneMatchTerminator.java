@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.reference;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.NoneMatchTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Predicate;
 
 /**
@@ -44,7 +46,11 @@ public final class DefaultNoneMatchTerminator<ENTITY> implements NoneMatchTermin
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
         requireNonNull(predicate);
-        return sqlStreamTerminator.optimize(pipeline).getAsReferenceStream().noneMatch(predicate);
+
+        final ReferencePipeline<T> optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        return sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsReferenceStream().noneMatch(predicate);
     }
 
     public static final NoneMatchTerminator<?> DEFAULT = new DefaultNoneMatchTerminator<>();

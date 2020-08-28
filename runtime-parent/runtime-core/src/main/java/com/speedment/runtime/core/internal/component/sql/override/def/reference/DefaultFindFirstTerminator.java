@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.reference;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.FindFirstTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
 
 /**
@@ -42,7 +44,11 @@ public final class DefaultFindFirstTerminator<ENTITY> implements FindFirstTermin
         requireNonNull(info);
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
-        return sqlStreamTerminator.optimize(pipeline).getAsReferenceStream().findFirst();
+
+        final ReferencePipeline<T> optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        return sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsReferenceStream().findFirst();
     }
 
     public static final FindFirstTerminator<?> DEFAULT = new DefaultFindFirstTerminator<>();

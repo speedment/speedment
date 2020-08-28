@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.reference;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.IteratorTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
+
 import java.util.Iterator;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -42,7 +44,11 @@ public final class DefaultIteratorTerminator<ENTITY> implements IteratorTerminat
         requireNonNull(info);
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
-        return sqlStreamTerminator.optimize(pipeline).getAsReferenceStream().iterator();
+
+        final ReferencePipeline<T> optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        return sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsReferenceStream().iterator();
     }
 
     public static final IteratorTerminator<?> DEFAULT = new DefaultIteratorTerminator<>();

@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.reference;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.ForEachOrderedTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Consumer;
 
 /**
@@ -44,7 +46,11 @@ public final class DefaultForEachOrderedTerminator<ENTITY> implements ForEachOrd
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
         requireNonNull(action);
-        sqlStreamTerminator.optimize(pipeline).getAsReferenceStream().forEachOrdered(action);
+
+        final ReferencePipeline<T> optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsReferenceStream().forEachOrdered(action);
     }
 
     public static final ForEachOrderedTerminator<?> DEFAULT = new DefaultForEachOrderedTerminator<>();

@@ -16,20 +16,31 @@
  */
 package com.speedment.common.singletonstream;
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.LongSummaryStatistics;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.LongConsumer;
+import java.util.function.LongUnaryOperator;
+import java.util.function.UnaryOperator;
 import java.util.stream.LongStream;
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.*;
 
 final class SingletonLongStreamTest {
 
@@ -78,7 +89,7 @@ final class SingletonLongStreamTest {
 
     @Test
     void mapToInt() {
-        assertEqualsApplying(s -> s.mapToInt(i -> (int) i).mapToLong(l -> (int) l));
+        assertEqualsApplying(s -> s.mapToInt(i -> (int) i).mapToLong(l -> l));
     }
 
     @Test
@@ -134,22 +145,30 @@ final class SingletonLongStreamTest {
     void forEach() {
         instance.forEach(i -> cnt.incrementAndGet());
         assertEquals(1, cnt.get());
+
+        assertThrows(IllegalStateException.class, () -> instance.forEach(x -> {}));
     }
 
     @Test
     void forEachOrdered() {
         instance.forEachOrdered(i -> cnt.incrementAndGet());
         assertEquals(1, cnt.get());
+
+        assertThrows(IllegalStateException.class, () -> instance.forEachOrdered(x -> {}));
     }
 
     @Test
     void toArray() {
         assertArrayEquals(reference.toArray(), instance.toArray());
+
+        assertThrows(IllegalStateException.class, () -> instance.toArray());
     }
 
     @Test
     void reduce() {
         assertEqualsReducing(s -> s.reduce(Long::sum));
+
+        assertThrows(IllegalStateException.class, () -> instance.reduce(Long::sum));
     }
 
     @Test
@@ -160,66 +179,89 @@ final class SingletonLongStreamTest {
     @Test
     void collect() {
         assertEqualsReducing(s -> s.collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+
+        assertThrows(IllegalStateException.class, () -> instance.collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
     }
 
     @Test
     void sum() {
         assertEqualsReducing(LongStream::sum);
+
+        assertThrows(IllegalStateException.class, () -> instance.sum());
     }
 
     @Test
     void min() {
         assertEqualsReducing(LongStream::min);
+
+        assertThrows(IllegalStateException.class, () -> instance.min());
     }
 
     @Test
     void max() {
         assertEqualsReducing(LongStream::max);
+
+        assertThrows(IllegalStateException.class, () -> instance.max());
     }
 
     @Test
     void count() {
         assertEqualsReducing(LongStream::count);
+
+        assertThrows(IllegalStateException.class, () -> instance.count());
     }
 
     @Test
     void average() {
         assertEqualsReducing(LongStream::average);
+
+        assertThrows(IllegalStateException.class, () -> instance.average());
     }
 
     @Test
     void summaryStatistics() {
         assertSummaryStatisticsEquals(reference.summaryStatistics(), instance.summaryStatistics());
+
+        assertThrows(IllegalStateException.class, () -> instance.summaryStatistics());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
     void anyMatch(int value) {
         assertEqualsReducing(s -> s.anyMatch(i -> i == value));
+
+        assertThrows(IllegalStateException.class, () -> instance.anyMatch(i -> i == value));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
     void allMatch(int value) {
         assertEqualsReducing(s -> s.allMatch(i -> i == value));
+
+        assertThrows(IllegalStateException.class, () -> instance.allMatch(i -> i == value));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
     void noneMatch(int value) {
         assertEqualsReducing(s -> s.noneMatch(i -> i == value));
+
+        assertThrows(IllegalStateException.class, () -> instance.noneMatch(i -> i == value));
     }
 
     @Test
     void findFirst() {
         assertEqualsReducing(LongStream::findFirst);
+
+        assertThrows(IllegalStateException.class, () -> instance.findFirst());
     }
 
     @Test
     void findAny() {
         assertEqualsReducing(LongStream::findAny);
-    }
 
+        assertThrows(IllegalStateException.class, () -> instance.findAny());
+    }
 
     @Test
     void asDoubleStream() {
@@ -242,6 +284,12 @@ final class SingletonLongStreamTest {
     }
 
     @Test
+    void iterator() {
+        assertDoesNotThrow(() -> instance.iterator());
+        assertThrows(IllegalStateException.class, () -> instance.iterator());
+    }
+
+    @Test
     void iteratorIntConsumer() {
         instance.iterator().forEachRemaining((LongConsumer) i -> cnt.incrementAndGet());
     }
@@ -249,6 +297,12 @@ final class SingletonLongStreamTest {
     @Test
     void iteratorConsumer() {
         instance.iterator().forEachRemaining((Consumer<Long>) i -> cnt.incrementAndGet());
+    }
+
+    @Test
+    void spliterator() {
+        assertDoesNotThrow(() -> instance.spliterator());
+        assertThrows(IllegalStateException.class, () -> instance.spliterator());
     }
 
     @Test
@@ -269,7 +323,6 @@ final class SingletonLongStreamTest {
     }
 
     @Test
-    @Disabled("https://github.com/speedment/speedment/issues/851")
     void mutableParallel() {
         instance.parallel();
         assertTrue(instance.isParallel());
@@ -281,7 +334,6 @@ final class SingletonLongStreamTest {
     }
 
     @Test
-    @Disabled("https://github.com/speedment/speedment/issues/851")
     void mutableOnClose() {
         instance.onClose(cnt::incrementAndGet);
         instance.close();

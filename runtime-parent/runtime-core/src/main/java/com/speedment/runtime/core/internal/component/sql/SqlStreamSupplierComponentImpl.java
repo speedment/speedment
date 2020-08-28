@@ -16,6 +16,9 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import static com.speedment.common.injector.State.STARTED;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
@@ -26,6 +29,7 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.sql.SqlTraceComponent;
 import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
@@ -34,9 +38,6 @@ import java.sql.ResultSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
-
-import static com.speedment.common.injector.State.STARTED;
-import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the
@@ -67,6 +68,8 @@ public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierCo
         final SqlStreamOptimizerComponent sqlStreamOptimizerComponent,
         final SqlStreamTerminatorComponent sqlStreamTerminatorComponent
     ) {
+        // the trace component is optional
+        final SqlTraceComponent sqlTraceComponent = injector.get(SqlTraceComponent.class).orElse(null);
 
         injector.stream(SqlAdapter.class)
             .forEach(sa -> {
@@ -78,6 +81,7 @@ public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierCo
                     managerComponent,
                     sqlStreamOptimizerComponent,
                     sqlStreamTerminatorComponent,
+                    sqlTraceComponent,
                     allowStreamIteratorAndSpliterator
                 );
                 supportMap.put(sa.identifier(), supplier);

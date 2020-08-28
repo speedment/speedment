@@ -14,20 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.singletonstream.internal;
+package com.speedment.common.codegen.controller.beta;
 
-/**
- *
- * @author Per Minborg
- * @since  1.0.0
- */
-public final class SingletonUtil {
-
-    private SingletonUtil() {}
-
-    public static final boolean STRICT = true;
-
-    public static final String MESSAGE_STREAM_CONSUMED = "stream has already been operated upon or closed";
-
-
+public class Foo {
 }

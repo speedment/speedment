@@ -16,17 +16,19 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.optimized.util;
 
+import static com.speedment.runtime.core.stream.action.Property.SIZE;
+import static com.speedment.runtime.core.stream.action.Verb.PRESERVE;
+import static java.util.Collections.emptyList;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsTypeDefault.SubSelectAlias;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
-import static com.speedment.runtime.core.stream.action.Property.SIZE;
-import static com.speedment.runtime.core.stream.action.Verb.PRESERVE;
-import static java.util.Collections.emptyList;
+
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 
@@ -79,7 +81,7 @@ public final class CountUtil {
                 }
                 @SuppressWarnings("unchecked")
                 final List<Object> values = (List<Object>) asynchronousQueryResult.getValues();
-                return info.getCounter().applyAsLong(sql.toString(), values);
+                return info.getCounter().applyAsLong(sqlStreamTerminator.attachTraceData(sql.toString()), values);
             } else {
                 // Iterate over all materialized ENTITIES....
                 return fallbackSupplier.getAsLong();

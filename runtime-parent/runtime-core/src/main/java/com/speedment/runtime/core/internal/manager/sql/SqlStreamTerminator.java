@@ -16,9 +16,12 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
+import com.speedment.runtime.core.internal.component.sql.SqlTracer;
 import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
@@ -28,9 +31,9 @@ import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipe
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.util.StreamComposition;
+
 import java.util.Comparator;
 import java.util.Iterator;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
@@ -66,6 +69,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
     private final SqlStreamTerminatorComponent sqlStreamTerminatorComponent;
     private final SqlStreamOptimizerComponent sqlStreamOptimizerComponent;
+    private final SqlTracer sqlTracer;
     private final SqlStreamOptimizerInfo<ENTITY> info;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
     private final boolean allowIteratorAndSpliterator;
@@ -75,12 +79,14 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         final AsynchronousQueryResult<ENTITY> asynchronousQueryResult,
         final SqlStreamOptimizerComponent sqlStreamOptimizerComponent,
         final SqlStreamTerminatorComponent sqlStreamTerminatorComponent,
+        final SqlTracer sqlTracer,
         final boolean allowIteratorAndSpliterator
     ) {
         this.info = requireNonNull(info);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
         this.sqlStreamOptimizerComponent = requireNonNull(sqlStreamOptimizerComponent);
         this.sqlStreamTerminatorComponent = requireNonNull(sqlStreamTerminatorComponent);
+        this.sqlTracer = sqlTracer;
         this.allowIteratorAndSpliterator = allowIteratorAndSpliterator;
     }
 
@@ -94,6 +100,22 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         requireNonNull(initialPipeline);
         final SqlStreamOptimizer<ENTITY> optimizer = sqlStreamOptimizerComponent.get(initialPipeline, info.getDbmsType());
         return optimizer.optimize(initialPipeline, info, asynchronousQueryResult);
+    }
+
+    @Override
+    public <P extends Pipeline> P attachTraceData(final P initialPipeline) {
+        requireNonNull(initialPipeline);
+
+        final String originalSql = asynchronousQueryResult.getSql();
+        final String finalSql = sqlTracer.attachTraceData(originalSql);
+        asynchronousQueryResult.setSql(finalSql);
+        
+        return initialPipeline;
+    }
+
+    @Override
+    public String attachTraceData(String sql) {
+        return sqlTracer.attachTraceData(requireNonNull(sql));
     }
 
     @Override

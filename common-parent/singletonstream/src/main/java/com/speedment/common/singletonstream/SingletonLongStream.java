@@ -16,18 +16,34 @@
  */
 package com.speedment.common.singletonstream;
 
+import static com.speedment.common.singletonstream.internal.SingletonUtil.MESSAGE_STREAM_CONSUMED;
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveIteratorOfLong;
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveSpliteratorOfLong;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.LongSummaryStatistics;
+import java.util.OptionalDouble;
+import java.util.OptionalLong;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongConsumer;
+import java.util.function.LongFunction;
+import java.util.function.LongPredicate;
+import java.util.function.LongToDoubleFunction;
+import java.util.function.LongToIntFunction;
+import java.util.function.LongUnaryOperator;
+import java.util.function.ObjLongConsumer;
+import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
-import static java.util.Objects.requireNonNull;
 
 /**
  * An implementation of a LongStream that takes exactly one element as its
@@ -48,6 +64,12 @@ import static java.util.Objects.requireNonNull;
 public class SingletonLongStream implements LongStream {
 
     private final long element;
+
+    private boolean parallel;
+
+    private boolean consumed;
+
+    private List<Runnable> closeHandlers;
 
     private SingletonLongStream(long element) {
         this.element = element;
@@ -151,18 +173,21 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public void forEach(LongConsumer action) {
+        checkConsumed();
         requireNonNull(action);
         action.accept(element);
     }
 
     @Override
     public void forEachOrdered(LongConsumer action) {
+        checkConsumed();
         requireNonNull(action);
         action.accept(element);
     }
 
     @Override
     public long[] toArray() {
+        checkConsumed();
         final long[] result = new long[1];
         result[0] = element;
         return result;
@@ -170,18 +195,21 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public long reduce(long identity, LongBinaryOperator op) {
+        checkConsumed();
         requireNonNull(op);
         return op.applyAsLong(identity, element);
     }
 
     @Override
     public OptionalLong reduce(LongBinaryOperator op) {
+        checkConsumed();
         // Just one element so the accumulator is never called.
         return toOptional();
     }
 
     @Override
     public <R> R collect(Supplier<R> supplier, ObjLongConsumer<R> accumulator, BiConsumer<R, R> combiner) {
+        checkConsumed();
         requireNonNull(supplier);
         requireNonNull(accumulator);
         final R value = supplier.get();
@@ -192,31 +220,37 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public long sum() {
+        checkConsumed();
         return element;
     }
 
     @Override
     public OptionalLong min() {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public OptionalLong max() {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public long count() {
+        checkConsumed();
         return 1;
     }
 
     @Override
     public OptionalDouble average() {
+        checkConsumed();
         return OptionalDouble.of(element);
     }
 
     @Override
     public LongSummaryStatistics summaryStatistics() {
+        checkConsumed();
         final LongSummaryStatistics result = new LongSummaryStatistics();
         result.accept(element);
         return result;
@@ -224,29 +258,34 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public boolean anyMatch(LongPredicate predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
     public boolean allMatch(LongPredicate predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
     public boolean noneMatch(LongPredicate predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return !predicate.test(element);
     }
 
     @Override
     public OptionalLong findFirst() {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public OptionalLong findAny() {
+        checkConsumed();
         return toOptional();
     }
 
@@ -262,27 +301,31 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public LongStream sequential() {
+        this.parallel = false;
         return this;
     }
 
     @Override
     public LongStream parallel() {
-        return toStream().parallel();
+        this.parallel = true;
+        return this;
     }
 
     @Override
     public PrimitiveIterator.OfLong iterator() {
+        checkConsumed();
         return new SingletonPrimitiveIteratorOfLong(element);
     }
 
     @Override
     public Spliterator.OfLong spliterator() {
+        checkConsumed();
         return new SingletonPrimitiveSpliteratorOfLong(element);
     }
 
     @Override
     public boolean isParallel() {
-        return false;
+        return parallel;
     }
 
     @Override
@@ -292,16 +335,35 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public LongStream onClose(Runnable closeHandler) {
-        return toStream().onClose(closeHandler);
+        checkConsumed(false);
+
+        if (closeHandler == null) {
+            return this;
+        }
+
+        if (closeHandlers == null) {
+            this.closeHandlers = new ArrayList<>();
+        }
+
+        closeHandlers.add(closeHandler);
+        return this;
     }
 
     @Override
     public void close() {
-        // do nothing. OnClose createa a real Stream
+        consumed = true;
+
+        if (closeHandlers == null || closeHandlers.isEmpty()) {
+            return;
+        }
+
+        closeHandlers.forEach(Runnable::run);
+        closeHandlers = null;
     }
 
     private LongStream toStream() {
-        return LongStream.of(element);
+        final LongStream stream = LongStream.of(this.element);
+        return parallel ? stream.parallel() : stream;
     }
 
     private OptionalLong toOptional() {
@@ -312,6 +374,20 @@ public class SingletonLongStream implements LongStream {
 
     private static LongStream empty() {
         return LongStream.empty();
+    }
+
+    private void checkConsumed() {
+        checkConsumed(true);
+    }
+
+    private void checkConsumed(boolean setConsumed) {
+        if (consumed) {
+            throw new IllegalStateException(MESSAGE_STREAM_CONSUMED);
+        }
+
+        if (setConsumed) {
+            consumed = true;
+        }
     }
 
     // Java 9 Stream features

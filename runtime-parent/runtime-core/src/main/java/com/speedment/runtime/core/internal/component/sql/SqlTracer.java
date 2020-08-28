@@ -14,20 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.singletonstream.internal;
+
+package com.speedment.runtime.core.internal.component.sql;
+
+import com.speedment.runtime.core.component.sql.SqlTraceComponent;
 
 /**
- *
- * @author Per Minborg
- * @since  1.0.0
+ * @author Mislav Milicevic
+ * @since 3.2.11
  */
-public final class SingletonUtil {
+public interface SqlTracer {
 
-    private SingletonUtil() {}
+    String attachTraceData(final String sql);
 
-    public static final boolean STRICT = true;
-
-    public static final String MESSAGE_STREAM_CONSUMED = "stream has already been operated upon or closed";
-
-
+    static SqlTracer from(final SqlTraceComponent sqlTraceComponent) {
+        return new SqlTracerImpl(sqlTraceComponent);
+    }
 }

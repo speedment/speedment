@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.reference;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.ReduceTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 
@@ -45,7 +47,11 @@ public final class DefaultReduceTerminator<ENTITY> implements ReduceTerminator<E
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
         requireNonNull(accumulator);
-        return sqlStreamTerminator.optimize(pipeline).getAsReferenceStream().reduce(accumulator);
+
+        final ReferencePipeline<T> optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        return sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsReferenceStream().reduce(accumulator);
     }
 
     public static final ReduceTerminator<?> DEFAULT = new DefaultReduceTerminator<>();

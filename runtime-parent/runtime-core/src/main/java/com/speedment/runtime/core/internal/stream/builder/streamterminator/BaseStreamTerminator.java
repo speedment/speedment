@@ -28,4 +28,12 @@ public interface BaseStreamTerminator {
         return initialPipeline;
     }
 
+    default <P extends Pipeline> P attachTraceData(P initialPipeline) {
+        return initialPipeline;
+    }
+
+    default String attachTraceData(final String sql) {
+        return sql;
+    }
+
 }

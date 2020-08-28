@@ -16,12 +16,18 @@
  */
 package com.speedment.runtime.core.issue;
 
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
+import com.speedment.runtime.core.internal.component.sql.SqlTracer;
 import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
 import com.speedment.runtime.core.internal.db.AsynchronousQueryResultImpl;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
@@ -46,11 +52,6 @@ import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
-import static java.util.stream.Collectors.toList;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -120,6 +121,7 @@ final class Issue403TakeWhileDropWhileTest {
             asynchronousQueryResult,
             sqlStreamOptimizerComponent,
             sqlStreamTerminatorComponent,
+            SqlTracer.from(null),
             true
         );
 

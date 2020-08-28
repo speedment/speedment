@@ -16,6 +16,11 @@
  */
 package com.speedment.runtime.connector.mysql.internal;
 
+import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
+
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
@@ -26,7 +31,16 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
-import com.speedment.runtime.core.db.*;
+import com.speedment.runtime.core.db.ConnectionUrlGenerator;
+import com.speedment.runtime.core.db.DatabaseNamingConvention;
+import com.speedment.runtime.core.db.DbmsColumnHandler;
+import com.speedment.runtime.core.db.DbmsMetadataHandler;
+import com.speedment.runtime.core.db.DbmsOperationHandler;
+import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.runtime.core.db.DbmsTypeDefault;
+import com.speedment.runtime.core.db.DriverComponent;
+import com.speedment.runtime.core.db.FieldPredicateView;
+import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.sql.Driver;
@@ -37,11 +51,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.db.SqlPredicateFragment.of;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
-
 /**
  *
  * @author Per Minborg
@@ -51,6 +60,7 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
 
     private static final String OLD_DRIVER = "com.mysql.jdbc.Driver";
     private static final String NEW_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final int DRIVER_FALLBACK_VERSION = 5;
 
     private final DbmsTypeDefault support;
     private final DriverComponent driverComponent;
@@ -312,16 +322,17 @@ public final class MySqlDbmsTypeImpl implements DbmsType {
         }
 
         private int driverVersion() {
-            return
-                Stream.of(
-                    driver(NEW_DRIVER),
-                    driver(OLD_DRIVER)
-                )
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .mapToInt(Driver::getMajorVersion)
-                    .findFirst()
-                    .orElse(5);  // Fallback. There is no driver so we just make up a version
+            return driverVersion(NEW_DRIVER, OLD_DRIVER);
+        }
+
+        private int driverVersion(String... versions) {
+            for (String version : versions) {
+                Optional<Integer> optionalVersion = driver(version).map(Driver::getMajorVersion);
+                if (optionalVersion.isPresent()) {
+                    return optionalVersion.get();
+                }
+            }
+            return DRIVER_FALLBACK_VERSION;
         }
 
     }

@@ -16,18 +16,34 @@
  */
 package com.speedment.common.singletonstream;
 
+import static com.speedment.common.singletonstream.internal.SingletonUtil.MESSAGE_STREAM_CONSUMED;
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveIteratorOfInt;
 import com.speedment.common.singletonstream.internal.SingletonPrimitiveSpliteratorOfInt;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.IntBinaryOperator;
+import java.util.function.IntConsumer;
+import java.util.function.IntFunction;
+import java.util.function.IntPredicate;
+import java.util.function.IntToDoubleFunction;
+import java.util.function.IntToLongFunction;
+import java.util.function.IntUnaryOperator;
+import java.util.function.ObjIntConsumer;
+import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
-import static java.util.Objects.requireNonNull;
 
 /**
  * An implementation of an IntStream that takes exactly one element as its
@@ -48,6 +64,12 @@ import static java.util.Objects.requireNonNull;
 public class SingletonIntStream implements IntStream {
 
     private final int element;
+
+    private boolean parallel;
+
+    private boolean consumed;
+
+    private List<Runnable> closeHandlers;
 
     private SingletonIntStream(int element) {
         this.element = element;
@@ -151,18 +173,21 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public void forEach(IntConsumer action) {
+        checkConsumed();
         requireNonNull(action);
         action.accept(element);
     }
 
     @Override
     public void forEachOrdered(IntConsumer action) {
+        checkConsumed();
         requireNonNull(action);
         action.accept(element);
     }
 
     @Override
     public int[] toArray() {
+        checkConsumed();
         final int[] result = new int[1];
         result[0] = element;
         return result;
@@ -170,18 +195,21 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public int reduce(int identity, IntBinaryOperator op) {
+        checkConsumed();
         requireNonNull(op);
         return op.applyAsInt(identity, element);
     }
 
     @Override
     public OptionalInt reduce(IntBinaryOperator op) {
+        checkConsumed();
         // Just one element so the accumulator is never called.
         return toOptional();
     }
 
     @Override
     public <R> R collect(Supplier<R> supplier, ObjIntConsumer<R> accumulator, BiConsumer<R, R> combiner) {
+        checkConsumed();
         requireNonNull(supplier);
         requireNonNull(accumulator);
         final R value = supplier.get();
@@ -192,31 +220,37 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public int sum() {
+        checkConsumed();
         return element;
     }
 
     @Override
     public OptionalInt min() {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public OptionalInt max() {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public long count() {
+        checkConsumed();
         return 1;
     }
 
     @Override
     public OptionalDouble average() {
+        checkConsumed();
         return OptionalDouble.of(element);
     }
 
     @Override
     public IntSummaryStatistics summaryStatistics() {
+        checkConsumed();
         final IntSummaryStatistics result = new IntSummaryStatistics();
         result.accept(element);
         return result;
@@ -224,29 +258,34 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public boolean anyMatch(IntPredicate predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
     public boolean allMatch(IntPredicate predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
     public boolean noneMatch(IntPredicate predicate) {
+        checkConsumed();
         requireNonNull(predicate);
         return !predicate.test(element);
     }
 
     @Override
     public OptionalInt findFirst() {
+        checkConsumed();
         return toOptional();
     }
 
     @Override
     public OptionalInt findAny() {
+        checkConsumed();
         return toOptional();
     }
 
@@ -267,27 +306,31 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public IntStream sequential() {
+        this.parallel = false;
         return this;
     }
 
     @Override
     public IntStream parallel() {
-        return toStream().parallel();
+        this.parallel = true;
+        return this;
     }
 
     @Override
     public PrimitiveIterator.OfInt iterator() {
+        checkConsumed();
         return new SingletonPrimitiveIteratorOfInt(element);
     }
 
     @Override
     public Spliterator.OfInt spliterator() {
+        checkConsumed();
         return new SingletonPrimitiveSpliteratorOfInt(element);
     }
 
     @Override
     public boolean isParallel() {
-        return false;
+        return parallel;
     }
 
     @Override
@@ -297,16 +340,35 @@ public class SingletonIntStream implements IntStream {
 
     @Override
     public IntStream onClose(Runnable closeHandler) {
-        return toStream().onClose(closeHandler);
+        checkConsumed(false);
+
+        if (closeHandler == null) {
+            return this;
+        }
+
+        if (closeHandlers == null) {
+            this.closeHandlers = new ArrayList<>();
+        }
+
+        closeHandlers.add(closeHandler);
+        return this;
     }
 
     @Override
     public void close() {
-       // do nothing. OnClose creates a real Stream
+        consumed = true;
+
+        if (closeHandlers == null || closeHandlers.isEmpty()) {
+            return;
+        }
+
+        closeHandlers.forEach(Runnable::run);
+        closeHandlers = null;
     }
 
     private IntStream toStream() {
-        return IntStream.of(element);
+        final IntStream stream = IntStream.of(this.element);
+        return parallel ? stream.parallel() : stream;
     }
 
     private OptionalInt toOptional() {
@@ -317,6 +379,20 @@ public class SingletonIntStream implements IntStream {
 
     private static IntStream empty() {
         return IntStream.empty();
+    }
+
+    private void checkConsumed() {
+        checkConsumed(true);
+    }
+
+    private void checkConsumed(boolean setConsumed) {
+        if (consumed) {
+            throw new IllegalStateException(MESSAGE_STREAM_CONSUMED);
+        }
+
+        if (setConsumed) {
+            consumed = true;
+        }
     }
 
     // Java 9 Stream features

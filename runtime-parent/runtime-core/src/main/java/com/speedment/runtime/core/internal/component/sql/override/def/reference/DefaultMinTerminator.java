@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.core.internal.component.sql.override.def.reference;
 
+import static java.util.Objects.requireNonNull;
+
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.reference.MinTerminator;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
+
 import java.util.Comparator;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
 /**
@@ -45,7 +47,11 @@ public final class DefaultMinTerminator<ENTITY> implements MinTerminator<ENTITY>
         requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
         requireNonNull(comparator);
-        return sqlStreamTerminator.optimize(pipeline).getAsReferenceStream().min(comparator);
+
+        final ReferencePipeline<T> optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+        return sqlStreamTerminator
+            .attachTraceData(optimizedPipeline)
+            .getAsReferenceStream().min(comparator);
     }
 
     public static final MinTerminator<?> DEFAULT = new DefaultMinTerminator<>();
