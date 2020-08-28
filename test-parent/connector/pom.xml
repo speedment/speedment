@@ -25,7 +25,7 @@
     <parent>
         <groupId>com.speedment.test</groupId>
         <artifactId>test-parent</artifactId>
-        <version>3.2.10</version>
+        <version>3.2.11-SNAPSHOT</version>
     </parent>
 
     <properties>
