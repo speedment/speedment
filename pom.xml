@@ -74,7 +74,7 @@
         <maven-javadoc-plugin-version>3.1.1</maven-javadoc-plugin-version>
         <maven-source-plugin-version>3.2.1</maven-source-plugin-version>
         <maven-dependency-plugin-version>3.1.1</maven-dependency-plugin-version>
-        <maven-shade-plugin-version>3.2.1</maven-shade-plugin-version>
+        <maven-shade-plugin-version>3.2.4</maven-shade-plugin-version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
     </properties>
     
