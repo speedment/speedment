@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix:
         # test against latest update of each major Java version, as well as specific updates of LTS versions:
-        java: [ 11, 12, 13]
+        java: [ 11 ]
     name: Java ${{ matrix.java }}
 
     steps:
