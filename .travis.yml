@@ -1,6 +1,6 @@
 language: java
 
-script: mvn test -B -P travis
+script: mvn test -B -P headless
 install: travis_wait 30 mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 jdk:
