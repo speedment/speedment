@@ -147,7 +147,7 @@
         </profile>
 
         <profile>
-            <id>travis</id>
+            <id>headless</id>
             <properties>
                 <maven.test.skip>true</maven.test.skip>
             </properties>
