@@ -65,7 +65,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <junit.jupiter.version>5.7.0</junit.jupiter.version>
         <junit.platform.provider.version>1.7.0</junit.platform.provider.version>
-        <mockito.version>3.5.10</mockito.version>
+        <mockito.version>3.5.13</mockito.version>
         <archunit.version>0.14.1</archunit.version>
         <speedment.version>${project.version}</speedment.version>
         <common.version>${project.version}</common.version>
