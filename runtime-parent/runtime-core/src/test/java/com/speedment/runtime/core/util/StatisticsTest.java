@@ -28,6 +28,8 @@ import static org.mockserver.model.HttpResponse.response;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.internal.util.testing.JavaVersionUtil;
+import com.speedment.runtime.core.internal.util.testing.JavaVersionUtil.JavaVersion;
 import com.speedment.runtime.core.util.Statistics.Event;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -50,6 +52,12 @@ final class StatisticsTest {
 
     @TestFactory
     Stream<DynamicTest> report(MockServerClient client) throws ReflectiveOperationException {
+        // Java 12+ doesn't support reflective access modifier changes, which is necessary in this
+        // test in order to change the pinging url.
+        if (JavaVersionUtil.isGreaterThanOrEqualTo(JavaVersion.TWELVE)) {
+            return Stream.empty();
+        }
+
         client
             .when(request()
                 .withPath("/stats")

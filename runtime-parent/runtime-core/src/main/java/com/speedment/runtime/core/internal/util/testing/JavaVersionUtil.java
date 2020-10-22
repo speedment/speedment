@@ -25,7 +25,7 @@ import static com.speedment.runtime.core.internal.util.testing.JavaVersionUtil.J
 public final class JavaVersionUtil {
 
     public enum JavaVersion {
-        UNKNOWN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN
+        UNKNOWN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN, FIFTEEN
     }
 
     public static boolean is8() {
@@ -56,6 +56,26 @@ public final class JavaVersionUtil {
         return getJavaVersion() == FOURTEEN;
     }
 
+    public static boolean is15() {
+        return getJavaVersion() == FIFTEEN;
+    }
+
+    public static boolean isLessThan(JavaVersion version) {
+        return getJavaVersion().ordinal() < version.ordinal();
+    }
+
+    public static boolean isLessThanOrEqualTo(JavaVersion version) {
+        return getJavaVersion().ordinal() <= version.ordinal();
+    }
+
+    public static boolean isGreaterThan(JavaVersion version) {
+        return getJavaVersion().ordinal() > version.ordinal();
+    }
+
+    public static boolean isGreaterThanOrEqualTo(JavaVersion version) {
+        return getJavaVersion().ordinal() >= version.ordinal();
+    }
+
     public static JavaVersion getJavaVersion() {
         final String version = System.getProperty("java.specification.version");
         if (version == null) {
@@ -81,6 +101,9 @@ public final class JavaVersionUtil {
         }
         if (version.startsWith("14")) {
             return FOURTEEN;
+        }
+        if (version.startsWith("15")) {
+            return FIFTEEN;
         }
         return UNKNOWN;
     }
