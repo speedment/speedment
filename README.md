@@ -47,7 +47,7 @@ SELECT
     `length`,`replacement_cost`,`rating`,`special_features`,
     `last_update` 
 FROM 
-     `sakila`.`film
+     `sakila`.`film`
 WHERE
     (`length` > 120)
 ```
