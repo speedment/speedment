@@ -1,7 +1,7 @@
 language: java
 
 script: mvn test -B -P headless
-install: travis_wait 30 mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 jdk:
   #- oraclejdk8
@@ -26,4 +26,6 @@ notifications:
       - dev@speedment.com
     on_success: never  # default: change
     on_failure: always # default: always
-
+cache:
+  directories:
+  - $HOME/.m2
