@@ -73,7 +73,7 @@
         <!-- later maven-javadoc-plugin versions does not support aggregate? -->
         <maven-javadoc-plugin-version>3.2.0</maven-javadoc-plugin-version>
         <maven-source-plugin-version>3.2.1</maven-source-plugin-version>
-        <maven-dependency-plugin-version>3.1.2</maven-dependency-plugin-version>
+        <maven-dependency-plugin-version>3.2.0</maven-dependency-plugin-version>
         <maven-shade-plugin-version>3.2.4</maven-shade-plugin-version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
     </properties>
@@ -719,7 +719,7 @@
                     <plugin>
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
-                        <version>3.7.0.1746</version>
+                        <version>3.9.1.2184</version>
                     </plugin>
                     
                     <!--The license-maven-plugin plugin MUST BE COMMENTED OUT DURING DEPLOYMENT, otherwise nexus-staging-maven-plugin will fail (sic!)-->
