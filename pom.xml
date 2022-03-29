@@ -73,7 +73,7 @@
         <!-- later maven-javadoc-plugin versions does not support aggregate? -->
         <maven-javadoc-plugin-version>3.3.2</maven-javadoc-plugin-version>
         <maven-source-plugin-version>3.2.1</maven-source-plugin-version>
-        <maven-dependency-plugin-version>3.2.0</maven-dependency-plugin-version>
+        <maven-dependency-plugin-version>3.3.0</maven-dependency-plugin-version>
         <maven-shade-plugin-version>3.2.4</maven-shade-plugin-version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
     </properties>
@@ -519,7 +519,7 @@
 
             <plugin>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M3</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
