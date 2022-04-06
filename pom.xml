@@ -75,7 +75,7 @@
         <maven-source-plugin-version>3.2.1</maven-source-plugin-version>
         <maven-dependency-plugin-version>3.3.0</maven-dependency-plugin-version>
         <maven-shade-plugin-version>3.3.0</maven-shade-plugin-version>
-        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
     </properties>
     
     <organization>
