@@ -34,7 +34,7 @@ jobs:
     name: Java ${{ matrix.java }}
 
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v3.0.0
     - name: Set up Java
       uses: actions/setup-java@v1
       with:
