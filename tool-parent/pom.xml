@@ -39,7 +39,7 @@
     </description>
 
     <properties>
-        <org.openjfx.version>15</org.openjfx.version>
+        <org.openjfx.version>18.0.1</org.openjfx.version>
     </properties>
 
     <modules>
