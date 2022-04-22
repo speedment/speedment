@@ -71,7 +71,7 @@
         <common.version>${project.version}</common.version>
 
         <!-- later maven-javadoc-plugin versions does not support aggregate? -->
-        <maven-javadoc-plugin-version>3.3.2</maven-javadoc-plugin-version>
+        <maven-javadoc-plugin-version>3.4.0</maven-javadoc-plugin-version>
         <maven-source-plugin-version>3.2.1</maven-source-plugin-version>
         <maven-dependency-plugin-version>3.3.0</maven-dependency-plugin-version>
         <maven-shade-plugin-version>3.3.0</maven-shade-plugin-version>
@@ -259,7 +259,7 @@
 
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>3.12.0</version>
                 </plugin>
 
                 <plugin>
