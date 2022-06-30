@@ -604,11 +604,11 @@
 
 
                         <configuration>
-                            <!--                                <source>8</source>-->
-                            <additionalOptions>
-                                <option>--add-modules</option>
+                            <source>8</source>
+<!--                            <additionalOptions>
+                                <option>&#45;&#45;add-modules</option>
                                 <option>${module-name}</option>
-                            </additionalOptions>
+                            </additionalOptions>-->
                             <groups>
                                 <group>
                                     <title>Code Generator</title>
