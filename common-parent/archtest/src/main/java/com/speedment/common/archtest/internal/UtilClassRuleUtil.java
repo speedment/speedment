@@ -30,6 +30,7 @@ final class UtilClassRuleUtil {
         ArchRuleDefinition.classes()
             .that().haveSimpleNameEndingWith(UTIL)
             .should().haveModifier(JavaModifier.FINAL)
+            .allowEmptyShould(true)
             .check(classes);
     }
 
@@ -37,6 +38,7 @@ final class UtilClassRuleUtil {
         ArchRuleDefinition.constructors()
             .that().areDeclaredInClassesThat().haveSimpleNameEndingWith(UTIL)
             .should().haveModifier(JavaModifier.PRIVATE)
+            .allowEmptyShould(true)
             .check(classes);
     }
 
@@ -44,6 +46,7 @@ final class UtilClassRuleUtil {
         ArchRuleDefinition.methods()
             .that().areDeclaredInClassesThat().haveSimpleNameEndingWith(UTIL)
             .should().haveModifier(JavaModifier.STATIC)
+            .allowEmptyShould(true)
             .check(classes);
     }
 
