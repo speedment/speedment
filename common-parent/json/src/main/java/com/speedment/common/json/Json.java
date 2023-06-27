@@ -168,6 +168,9 @@ public final class Json {
      *      <li>{@code null}
      * </ul>
      * 
+     * Use caution when parsing nested JSON strings. Deeply nested JSON 
+     * expressions can result in deep call chains, or even StackOverflowError. 
+     * 
      * @param json  the json to parse
      * @return      the created object
      * @throws JsonSyntaxException if there is a syntax error
@@ -193,6 +196,9 @@ public final class Json {
      *      <li>{@code Long}
      *      <li>{@code null}
      * </ul>
+     * 
+     * Use caution when parsing nested JSON strings. Deeply nested JSON 
+     * expressions can result in deep call chains, or even StackOverflowError. 
      * 
      * @param in  the json to parse
      * @return    the created object
