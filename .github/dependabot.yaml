@@ -22,7 +22,10 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "develop"
+    open-pull-requests-limit: 30
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 30
+
