@@ -24,8 +24,19 @@ import static com.speedment.runtime.core.internal.util.testing.JavaVersionUtil.J
  */
 public final class JavaVersionUtil {
 
+    // This is unfortunately what we decided early on ...
     public enum JavaVersion {
-        UNKNOWN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN, FIFTEEN
+        UNKNOWN(0), EIGHT(8), NINE(9), TEN(10), ELEVEN(11), TWELVE(12), THIRTEEN(13), FOURTEEN(14), FIFTEEN(15),
+        SIXTEEN(16), SEVENTEEN(17), EIGHTEEN(18), NINETEEN(19),
+        TWENTY(20), TWENTY_ONE(21), TWENTY_TWO(22), TWENTY_THREE(23), TWENTY_FOUR(24), TWENTY_FIVE(25), TWENTY_SIX(26),
+        TWENTY_SEVEN(27), TWENTY_EIGHT(28), TWENTY_NINE(29), THIRTY(30);
+        ;
+
+        private final int version;
+
+        JavaVersion(int version) {
+            this.version = version;
+        }
     }
 
     public static boolean is8() {
@@ -104,6 +115,51 @@ public final class JavaVersionUtil {
         }
         if (version.startsWith("15")) {
             return FIFTEEN;
+        }
+        if (version.startsWith("16")) {
+            return SIXTEEN;
+        }
+        if (version.startsWith("17")) {
+            return SEVENTEEN;
+        }
+        if (version.startsWith("18")) {
+            return EIGHTEEN;
+        }
+        if (version.startsWith("19")) {
+            return NINETEEN;
+        }
+        if (version.startsWith("20")) {
+            return TWENTY;
+        }
+        if (version.startsWith("21")) {
+            return TWENTY_ONE;
+        }
+        if (version.startsWith("22")) {
+            return TWENTY_TWO;
+        }
+        if (version.startsWith("23")) {
+            return TWENTY_THREE;
+        }
+        if (version.startsWith("24")) {
+            return TWENTY_FOUR;
+        }
+        if (version.startsWith("25")) {
+            return TWENTY_FIVE;
+        }
+        if (version.startsWith("26")) {
+            return TWENTY_SIX;
+        }
+        if (version.startsWith("27")) {
+            return TWENTY_SEVEN;
+        }
+        if (version.startsWith("28")) {
+            return TWENTY_EIGHT;
+        }
+        if (version.startsWith("29")) {
+            return TWENTY_NINE;
+        }
+        if (version.startsWith("30")) {
+            return THIRTY;
         }
         return UNKNOWN;
     }
